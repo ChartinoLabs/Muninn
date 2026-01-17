@@ -6,6 +6,7 @@ import pytest
 
 from muninn import registry
 from muninn.exceptions import ParserNotFoundError
+from muninn.os import OS, CiscoIOSXE, CiscoNXOS
 from muninn.parser import BaseParser
 
 
@@ -49,8 +50,8 @@ class TestNormalizeCommand:
 class TestRegister:
     """Tests for register decorator."""
 
-    def test_registers_parser_class(self) -> None:
-        """Decorator registers the parser class."""
+    def test_registers_parser_class_with_string(self) -> None:
+        """Decorator registers the parser class using string alias."""
 
         @registry.register("nxos", "show version")
         class ShowVersionParser(BaseParser):
@@ -58,8 +59,30 @@ class TestRegister:
             def parse(cls, output: str) -> dict[str, Any]:
                 return {"version": "1.0"}
 
-        assert ("nxos", "show version") in registry._registry
-        assert registry._registry[("nxos", "show version")] is ShowVersionParser
+        assert (OS.CISCO_NXOS, "show version") in registry._registry
+        assert registry._registry[(OS.CISCO_NXOS, "show version")] is ShowVersionParser
+
+    def test_registers_parser_class_with_enum(self) -> None:
+        """Decorator registers the parser class using OS enum."""
+
+        @registry.register(OS.CISCO_NXOS, "show version")
+        class ShowVersionParser(BaseParser):
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {"version": "1.0"}
+
+        assert (OS.CISCO_NXOS, "show version") in registry._registry
+
+    def test_registers_parser_class_with_os_class(self) -> None:
+        """Decorator registers the parser class using OperatingSystem class."""
+
+        @registry.register(CiscoNXOS, "show version")
+        class ShowVersionParser(BaseParser):
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {"version": "1.0"}
+
+        assert (OS.CISCO_NXOS, "show version") in registry._registry
 
     def test_returns_original_class(self) -> None:
         """Decorator returns the original class unchanged."""
@@ -81,22 +104,31 @@ class TestRegister:
             def parse(cls, output: str) -> dict[str, Any]:
                 return {}
 
-        assert ShowVersionParser.os == "nxos"
+        assert ShowVersionParser.os is OS.CISCO_NXOS
         assert ShowVersionParser.command == "show version"
 
     @pytest.mark.parametrize(
-        ("register_os", "register_cmd", "expected_key"),
+        ("register_os", "register_cmd", "expected_os"),
         [
-            ("NXOS", "show version", ("nxos", "show version")),
-            ("nxos", "  SHOW  VERSION  ", ("nxos", "show version")),
-            ("IOSXE", "  SHOW  IP  ROUTE  ", ("iosxe", "show ip route")),
+            ("NXOS", "show version", OS.CISCO_NXOS),
+            ("nx-os", "show version", OS.CISCO_NXOS),
+            ("iosxe", "  SHOW  VERSION  ", OS.CISCO_IOSXE),
+            (OS.CISCO_NXOS, "show version", OS.CISCO_NXOS),
+            (CiscoIOSXE, "show version", OS.CISCO_IOSXE),
         ],
-        ids=["normalizes_os", "normalizes_command", "normalizes_both"],
+        ids=[
+            "string_uppercase",
+            "string_hyphen",
+            "string_with_command_normalization",
+            "enum",
+            "class",
+        ],
     )
     def test_normalizes_on_registration(
-        self, register_os: str, register_cmd: str, expected_key: tuple[str, str]
+        self, register_os: str | OS, register_cmd: str, expected_os: OS
     ) -> None:
         """OS and command are normalized during registration."""
+        normalized_cmd = registry._normalize_command(register_cmd)
 
         @registry.register(register_os, register_cmd)
         class Parser(BaseParser):
@@ -104,7 +136,7 @@ class TestRegister:
             def parse(cls, output: str) -> dict[str, Any]:
                 return {}
 
-        assert expected_key in registry._registry
+        assert (expected_os, normalized_cmd) in registry._registry
 
 
 class TestGetParser:
@@ -139,12 +171,22 @@ class TestGetParser:
         ("lookup_os", "lookup_cmd"),
         [
             ("NXOS", "show version"),
+            ("nx-os", "show version"),
             ("nxos", "  SHOW  VERSION  "),
-            ("NXOS", "  SHOW  VERSION  "),
+            (OS.CISCO_NXOS, "show version"),
+            (CiscoNXOS, "show version"),
         ],
-        ids=["normalizes_os", "normalizes_command", "normalizes_both"],
+        ids=[
+            "string_uppercase",
+            "string_hyphen",
+            "command_whitespace",
+            "enum",
+            "class",
+        ],
     )
-    def test_normalizes_on_lookup(self, lookup_os: str, lookup_cmd: str) -> None:
+    def test_normalizes_on_lookup(
+        self, lookup_os: str | OS | type, lookup_cmd: str
+    ) -> None:
         """OS and command are normalized during lookup."""
 
         @registry.register("nxos", "show version")
@@ -161,7 +203,7 @@ class TestGetParser:
         with pytest.raises(ParserNotFoundError) as exc_info:
             registry.get_parser("nxos", "show version")
 
-        assert exc_info.value.os == "nxos"
+        assert exc_info.value.os == "cisco_nxos"
         assert exc_info.value.command == "show version"
 
     def test_raises_for_wrong_os(self) -> None:
@@ -185,7 +227,7 @@ class TestListParsers:
         assert registry.list_parsers() == []
 
     def test_returns_registered_parsers(self) -> None:
-        """Returns list of registered (os, command) tuples."""
+        """Returns list of registered (OS, command) tuples."""
 
         @registry.register("nxos", "show version")
         class NxosVersionParser(BaseParser):
@@ -201,5 +243,5 @@ class TestListParsers:
 
         parsers = registry.list_parsers()
         assert len(parsers) == 2
-        assert ("nxos", "show version") in parsers
-        assert ("iosxe", "show ip route") in parsers
+        assert (OS.CISCO_NXOS, "show version") in parsers
+        assert (OS.CISCO_IOSXE, "show ip route") in parsers

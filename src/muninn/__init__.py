@@ -2,16 +2,20 @@
 
 from muninn.core import parse
 from muninn.exceptions import MuninnError, ParseError, ParserNotFoundError
+from muninn.os import OS, OperatingSystem, resolve_os
 from muninn.parser import BaseParser
 from muninn.registry import get_parser, list_parsers, register
 
 __all__ = [
     "BaseParser",
     "MuninnError",
+    "OS",
+    "OperatingSystem",
     "ParseError",
     "ParserNotFoundError",
     "get_parser",
     "list_parsers",
     "parse",
     "register",
+    "resolve_os",
 ]

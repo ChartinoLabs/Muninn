@@ -1,7 +1,10 @@
 """Base parser class for all Muninn parsers."""
 
 from abc import ABC, abstractmethod
-from typing import Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
+
+if TYPE_CHECKING:
+    from muninn.os import OS
 
 
 class BaseParser(ABC):
@@ -11,11 +14,11 @@ class BaseParser(ABC):
     raw CLI output into structured data.
 
     Attributes:
-        os: Operating system identifier (e.g., "nxos", "iosxe").
+        os: Operating system this parser is registered for.
         command: The command this parser handles.
     """
 
-    os: ClassVar[str]
+    os: ClassVar["OS"]
     command: ClassVar[str]
 
     @classmethod
