@@ -33,23 +33,23 @@ Features that complement Huginn integration may be desirable, but Muninn must be
 
 **Muninn's Approach**: One parser per file (or logical grouping of very closely related parsers). Code reuse through shared parsing utilities is encouraged - many CLI commands share sections of identical output that benefit from shared parsing logic - but bundling entire feature sets into single files is avoided.
 
-Proposed structure:
+Structure:
 ```
-muninn/
+src/muninn/
 ├── parsers/
-│   ├── nxos/
-│   │   ├── ospf/
-│   │   │   ├── show_ip_ospf.py
-│   │   │   ├── show_ip_ospf_neighbor.py
-│   │   │   └── show_ip_ospf_interface.py
-│   │   └── bgp/
-│   │       ├── show_ip_bgp_summary.py
-│   │       └── ...
-│   └── iosxe/
+│   ├── __init__.py      # Auto-discovers all parser modules
+│   ├── iosxe/
+│   │   ├── __init__.py
+│   │   ├── show_clock.py
+│   │   ├── show_privilege.py
+│   │   └── ...
+│   └── nxos/
 │       └── ...
 └── common/
-    └── patterns.py  # Shared regex patterns, parsing utilities
+    └── patterns.py  # Shared regex patterns, parsing utilities (future)
 ```
+
+Parsers are auto-discovered at import time using `pkgutil.walk_packages`. Adding a new parser only requires creating the file - no `__init__.py` maintenance needed.
 
 ### 3. Native Python Typing Over Custom Schema Engines
 
@@ -57,13 +57,33 @@ muninn/
 
 **Muninn's Approach**: Leverage native Python type hints where practical. The goal is to provide structure and documentation benefits without requiring exotic dependencies.
 
-**Important constraint**: Parsers return raw dictionaries, not Pydantic models or dataclass instances. While it would be ideal to provide full IDE autocompletion for parsed output, this is not feasible while simultaneously returning JSON-serializable dictionaries. The priority is:
+**Important constraint**: Parsers return raw dictionaries, not Pydantic models or dataclass instances. The priority is:
 
 1. Return plain `dict` objects (JSON-serializable, no special types)
-2. Use type hints in parser code for internal clarity
-3. Document expected output schemas clearly in docstrings/docs
+2. Use `TypedDict` to define parser output schemas for IDE support
+3. Document expected output schemas in the TypedDict definitions
 
-Future consideration: We may explore whether `TypedDict` can provide some IDE benefits without changing the runtime return type.
+Each parser defines a `TypedDict` for its return type, providing IDE autocompletion while maintaining JSON-serializable output:
+
+```python
+from typing import TypedDict
+
+class ShowClockResult(TypedDict):
+    time: str
+    timezone: str
+    day_of_week: str
+    month: str
+    day: str
+    year: str
+
+@register(OS.CISCO_IOSXE, "show clock")
+class ShowClockParser(BaseParser):
+    @classmethod
+    def parse(cls, output: str) -> ShowClockResult:
+        ...
+```
+
+Users who want type hints can import the TypedDict or parser class directly.
 
 ### 4. Dictionaries of Dictionaries Output Pattern
 
@@ -134,11 +154,8 @@ The following are acknowledged but not primary concerns:
 | Test metadata      | None                          | Platform/version/source tracking      |
 | Parser interface   | `device.parse("command")`     | `muninn.parse(os, command, output)`   |
 
-## Next Steps
+## Related Documents
 
-This document will evolve as we make implementation decisions. Related documents to create:
-
-- Parser authoring guide (how to write a new parser)
-- Testing patterns (test file structure, metadata format)
-- Output schema conventions (naming, nesting patterns)
-- Supported platforms and commands registry
+- [Testing Strategy](02-testing-strategy.md) - Test file structure and metadata format
+- Parser authoring guide (TODO)
+- Output schema conventions (TODO)

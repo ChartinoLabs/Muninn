@@ -15,28 +15,23 @@ Tests are organized by OS and command, mirroring the parser structure. Each test
 
 ```txt
 tests/
-├── nxos/
-│   ├── ospf/
-│   │   ├── show_ip_ospf_neighbor/
-│   │   │   ├── 001_basic/
-│   │   │   │   ├── metadata.yaml
-│   │   │   │   ├── input.txt
-│   │   │   │   └── expected.json
-│   │   │   ├── 002_multiple_vrfs/
-│   │   │   │   ├── metadata.yaml
-│   │   │   │   ├── input.txt
-│   │   │   │   └── expected.json
-│   │   │   └── 003_empty_output/
-│   │   │       ├── metadata.yaml
-│   │   │       ├── input.txt
-│   │   │       └── expected.json
-│   │   └── show_ip_ospf/
-│   │       └── ...
-│   └── bgp/
-│       └── ...
-├── iosxe/
-│   └── ...
-└── conftest.py
+└── parsers/
+    ├── conftest.py          # Test discovery and parametrization
+    ├── test_parsers.py      # Actual test function
+    ├── iosxe/
+    │   ├── show_clock/
+    │   │   ├── 001_basic/
+    │   │   │   ├── metadata.yaml
+    │   │   │   ├── input.txt
+    │   │   │   └── expected.json
+    │   │   ├── 002_with_asterisk/
+    │   │   │   └── ...
+    │   │   └── 003_with_dot/
+    │   │       └── ...
+    │   └── show_privilege/
+    │       └── ...
+    └── nxos/
+        └── ...
 ```
 
 ## Test Case Format
@@ -104,14 +99,13 @@ Separate files keep each format clean and native:
 
 ## Metadata Fields
 
-### Required Fields
-
 | Field              | Description                                | Example                                          |
 | ------------------ | ------------------------------------------ | ------------------------------------------------ |
 | `description`      | Brief description of what this test covers | "OSPF neighbors across multiple VRFs"            |
-| `platform`         | Hardware model                             | "Nexus 9336C-FX2", "Catalyst 9300", "ASR 1001-X" |
-| `software_version` | OS version string                          | "NX-OS 10.3(2)", "IOS-XE 17.12.1"                |
-| `source`           | How the output was obtained                | See source types below                           |
+| `platform`         | Hardware model (or "Unknown")              | "Nexus 9336C-FX2", "Catalyst 9300", "Unknown"    |
+| `software_version` | OS version string (or "Unknown")           | "NX-OS 10.3(2)", "IOS-XE 17.12.1", "Unknown"     |
+
+When importing test data from external sources (e.g., Genie parsers) where provenance is unknown, use "Unknown" for platform and software_version.
 
 ## Test Categories
 
@@ -130,7 +124,6 @@ R1#
 ```
 
 ```json
-// expected.json
 {}
 ```
 
@@ -146,17 +139,18 @@ description: Neighbor with extremely long interface name
 ## Running Tests
 
 ```bash
-# Run all tests
-pytest tests/
+# Run all parser tests
+pytest tests/parsers/
 
 # Run tests for specific OS
-pytest tests/nxos/
+pytest tests/parsers/iosxe/
 
-# Run tests for specific parser
-pytest tests/nxos/ospf/show_ip_ospf_neighbor/
+# Run tests for specific command (use -k for pattern matching)
+pytest tests/parsers/ -k "show_clock"
 
-# Run tests for specific platform
-pytest --platform "Nexus 9300"
+# Verbose output with test IDs
+pytest tests/parsers/ -v
+# Output: test_parser[iosxe/show_clock/001_basic] PASSED
 ```
 
 ## Contributing Test Data
@@ -169,60 +163,26 @@ When contributing test data:
 
 ## Test Implementation
 
-Tests are implemented using pytest with a custom fixture that discovers and loads test case directories:
+Tests use pytest's `pytest_generate_tests` hook to dynamically discover and parametrize test cases.
 
+**conftest.py** handles discovery:
+- Walks `tests/parsers/<os>/<command>/<test_case>/` directories
+- Loads `input.txt`, `expected.json`, and `metadata.yaml`
+- Generates readable test IDs like `iosxe/show_clock/001_basic`
+
+**test_parsers.py** is minimal:
 ```python
-# Conceptual implementation (actual implementation TBD)
-import json
-import pytest
-from pathlib import Path
-
-import yaml
-
-
-def discover_test_cases(base_path: Path):
-    """Discover all test case directories."""
-    for metadata_file in base_path.rglob("metadata.yaml"):
-        test_dir = metadata_file.parent
-        yield test_dir
-
-
-def load_test_case(test_dir: Path) -> dict:
-    """Load a test case from its directory."""
-    with open(test_dir / "metadata.yaml") as f:
-        metadata = yaml.safe_load(f)
-
-    with open(test_dir / "input.txt") as f:
-        input_text = f.read()
-
-    with open(test_dir / "expected.json") as f:
-        expected = json.load(f)
-
-    return {
-        "metadata": metadata,
-        "input": input_text,
-        "expected": expected,
-        "path": test_dir,
-    }
-
-
-# Pytest collects test cases dynamically
-@pytest.fixture(params=list(discover_test_cases(Path("tests"))))
-def test_case(request):
-    return load_test_case(request.param)
-
-
-def test_parser(test_case):
-    from muninn import parse
-
-    # Extract OS and command from path (e.g., tests/nxos/ospf/show_ip_ospf_neighbor/001_basic)
-    parts = test_case["path"].parts
-    os_name = parts[1]  # nxos
-    command = parts[3].replace("_", " ")  # show_ip_ospf_neighbor -> show ip ospf neighbor
-
-    result = parse(os_name, command, test_case["input"])
-    assert result == test_case["expected"]
+def test_parser(parser_test_case: ParserTestCase) -> None:
+    """Test that parser produces expected output."""
+    result = muninn.parse(
+        parser_test_case["os"],
+        parser_test_case["command"],
+        parser_test_case["input"],
+    )
+    assert result == parser_test_case["expected"]
 ```
+
+The command name is derived from the directory name (underscores converted to spaces).
 
 ## Leveraging Genie Parser Test Data
 
