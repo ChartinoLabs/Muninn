@@ -1,5 +1,7 @@
 """Muninn: A standalone CLI output parser library for network devices."""
 
+# Import parsers to trigger registration
+from muninn import parsers as _parsers  # noqa: F401
 from muninn.core import parse
 from muninn.exceptions import MuninnError, ParseError, ParserNotFoundError
 from muninn.os import OS, OperatingSystem, resolve_os
