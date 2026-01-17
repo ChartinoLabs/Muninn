@@ -48,5 +48,5 @@ class ShowPrivilegeParser(BaseParser):
                     current_privilege_level=int(match.group("level")),
                 )
 
-        msg = "Could not parse 'show privilege' output"
+        msg = "No matching privilege line found"
         raise ValueError(msg)

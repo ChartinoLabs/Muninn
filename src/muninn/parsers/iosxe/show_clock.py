@@ -71,5 +71,5 @@ class ShowClockParser(BaseParser):
                     year=match.group("year"),
                 )
 
-        msg = "Could not parse 'show clock' output"
+        msg = "No matching clock line found"
         raise ValueError(msg)

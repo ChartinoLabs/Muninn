@@ -2,7 +2,8 @@
 
 from typing import Any
 
-from muninn.os import OS, OperatingSystem
+from muninn.exceptions import ParseError
+from muninn.os import OS, OperatingSystem, resolve_os
 from muninn.registry import get_parser
 
 
@@ -38,4 +39,11 @@ def parse(
         >>> result = muninn.parse(OS.CISCO_NXOS, "show ip ospf neighbor", raw_output)
     """
     parser_cls = get_parser(os, command)
-    return parser_cls.parse(output)
+
+    try:
+        return parser_cls.parse(output)
+    except ParseError:
+        raise
+    except Exception as e:
+        resolved_os = resolve_os(os)
+        raise ParseError(resolved_os.value.name, command, str(e)) from e
