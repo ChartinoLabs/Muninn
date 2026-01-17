@@ -1,0 +1,144 @@
+# Muninn Design Principles
+
+This document captures the core design principles guiding Muninn's development. These principles are informed by lessons learned from existing parser libraries, particularly Cisco's Genie parsers, and aim to avoid repeating known technical debt patterns.
+
+## Guiding Philosophy
+
+Muninn is a **standalone CLI output parser library**. It transforms unstructured text output from network devices into structured Python dictionaries. Nothing more, nothing less.
+
+## Core Principles
+
+### 1. Complete Independence from Huginn
+
+**Problem in Genie**: Genie parsers are arguably the most malleable and customizable community-driven parser system in the network automation ecosystem. However, they've severely limited their usability by tightly coupling to the PyATS/Genie ecosystem. Users cannot use Genie parsers without installing PyATS, creating mock device objects, and navigating framework abstractions.
+
+**Muninn's Approach**: Muninn has zero knowledge of or dependency on Huginn. The interface is deliberately simple:
+
+```python
+import muninn
+
+result = muninn.parse("nxos", "show ip ospf neighbor", raw_output_string)
+```
+
+- No device objects required
+- No connection handling
+- No framework concepts
+- Just: OS identifier + command + raw text → structured dict
+
+Features that complement Huginn integration may be desirable, but Muninn must be fully usable without ever installing Huginn. A user should be able to `pip install muninn` and use it in any Python project.
+
+### 2. Modular Parser Organization
+
+**Problem in Genie**: Monolithic parser files where a single file like `show_ospf.py` contains 15+ different command parsers. This makes maintenance difficult, increases cognitive load, and complicates testing.
+
+**Muninn's Approach**: One parser per file (or logical grouping of very closely related parsers). Code reuse through shared parsing utilities is encouraged - many CLI commands share sections of identical output that benefit from shared parsing logic - but bundling entire feature sets into single files is avoided.
+
+Proposed structure:
+```
+muninn/
+├── parsers/
+│   ├── nxos/
+│   │   ├── ospf/
+│   │   │   ├── show_ip_ospf.py
+│   │   │   ├── show_ip_ospf_neighbor.py
+│   │   │   └── show_ip_ospf_interface.py
+│   │   └── bgp/
+│   │       ├── show_ip_bgp_summary.py
+│   │       └── ...
+│   └── iosxe/
+│       └── ...
+└── common/
+    └── patterns.py  # Shared regex patterns, parsing utilities
+```
+
+### 3. Native Python Typing Over Custom Schema Engines
+
+**Problem in Genie**: Uses a custom schema engine (`Schema`, `Any()`, `Optional()`) that exists primarily to generate documentation for the Genie parser website. This provides no IDE support, no standard validation, and requires learning non-standard patterns.
+
+**Muninn's Approach**: Leverage native Python type hints where practical. The goal is to provide structure and documentation benefits without requiring exotic dependencies.
+
+**Important constraint**: Parsers return raw dictionaries, not Pydantic models or dataclass instances. While it would be ideal to provide full IDE autocompletion for parsed output, this is not feasible while simultaneously returning JSON-serializable dictionaries. The priority is:
+
+1. Return plain `dict` objects (JSON-serializable, no special types)
+2. Use type hints in parser code for internal clarity
+3. Document expected output schemas clearly in docstrings/docs
+
+Future consideration: We may explore whether `TypedDict` can provide some IDE benefits without changing the runtime return type.
+
+### 4. Dictionaries of Dictionaries Output Pattern
+
+**Observation from Genie**: The "dictionaries of dictionaries" pattern for representing parsed data is actually quite good. It provides a clean, predictable, and easy-to-consume structure.
+
+**Muninn's Approach**: Adopt this pattern. Parsed output should be keyed by meaningful identifiers (neighbor IDs, interface names, VRF names) rather than returning lists of objects that require iteration to find specific entries.
+
+For example, prefer this:
+
+```json
+{
+    "10.1.1.1": {"state": "FULL", "interface": "Ethernet1/1"},
+    "10.1.1.2": {"state": "FULL", "interface": "Ethernet1/2"}
+}
+```
+
+Instead of this:
+
+```json
+[
+    {"neighbor_id": "10.1.1.1", "state": "FULL", "interface": "Ethernet1/1"},
+    {"neighbor_id": "10.1.1.2", "state": "FULL", "interface": "Ethernet1/2"}
+]
+```
+
+The nested structure depth will sometimes be significant - this is unavoidable when CLI output itself contains deeply hierarchical data. We're constrained by vendor CLI implementations.
+
+### 5. Test Metadata for Platform/Version Tracking
+
+**Problem in Genie**: Test data exists (golden input/output files), but there's no metadata indicating which hardware platforms or software versions the test data came from. Users have no visibility into parser coverage or reliability for their specific environment.
+
+**Muninn's Approach**: Every test case should include metadata:
+
+- **Platform**: Hardware model (e.g., "Nexus 9300", "Catalyst 9400", "ASR 1000")
+- **Software Version**: OS version (e.g., "NX-OS 10.3(2)", "IOS-XE 17.12.1")
+
+This metadata serves multiple purposes:
+
+1. **User confidence**: Users can see at a glance whether their platform/version is tested
+2. **Coverage tracking**: Maintainers can identify gaps (e.g., "no tests for IOS 15.x")
+3. **Regression context**: When a parser breaks, metadata helps identify if it's a version-specific issue
+
+Example test metadata structure (format TBD):
+
+```yaml
+# tests/nxos/ospf/show_ip_ospf_neighbor/test_001.yaml
+metadata:
+  platform: Nexus 9336C-FX2
+  software_version: NX-OS 10.3(2)
+```
+
+### 6. Items We're Not Prioritizing
+
+The following are acknowledged but not primary concerns:
+
+**Regex compilation location**: Genie compiles 40+ regex patterns inside methods (on every call). While not optimal, this is a minor performance consideration compared to architectural decisions. We may optimize later but won't obsess over it initially.
+
+**Verbose nested dict construction**: The `if key not in dict` pattern repeated throughout Genie parsers is verbose but functional. If cleaner patterns emerge naturally (helper functions, `defaultdict`, etc.), we'll use them, but this isn't a primary driver.
+
+## Summary
+
+| Aspect             | Genie Approach                | Muninn Approach                       |
+| ------------------ | ----------------------------- | ------------------------------------- |
+| Framework coupling | Requires PyATS/device objects | Zero dependencies, pure function      |
+| File organization  | Monolithic feature files      | One parser per file, shared utilities |
+| Type system        | Custom schema engine          | Native Python typing                  |
+| Output format      | Dict of dicts                 | Dict of dicts (same, it's good)       |
+| Test metadata      | None                          | Platform/version/source tracking      |
+| Parser interface   | `device.parse("command")`     | `muninn.parse(os, command, output)`   |
+
+## Next Steps
+
+This document will evolve as we make implementation decisions. Related documents to create:
+
+- Parser authoring guide (how to write a new parser)
+- Testing patterns (test file structure, metadata format)
+- Output schema conventions (naming, nesting patterns)
+- Supported platforms and commands registry
