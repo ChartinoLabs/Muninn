@@ -6,6 +6,7 @@ import pytest
 
 from muninn import registry
 from muninn.exceptions import ParserNotFoundError
+from muninn.parser import BaseParser
 
 
 @pytest.fixture(autouse=True)
@@ -48,24 +49,40 @@ class TestNormalizeCommand:
 class TestRegister:
     """Tests for register decorator."""
 
-    def test_registers_parser(self) -> None:
-        """Decorator registers the parser function."""
+    def test_registers_parser_class(self) -> None:
+        """Decorator registers the parser class."""
 
         @registry.register("nxos", "show version")
-        def parse_show_version(output: str) -> dict[str, Any]:
-            return {"version": "1.0"}
+        class ShowVersionParser(BaseParser):
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {"version": "1.0"}
 
         assert ("nxos", "show version") in registry._registry
-        assert registry._registry[("nxos", "show version")] is parse_show_version
+        assert registry._registry[("nxos", "show version")] is ShowVersionParser
 
-    def test_returns_original_function(self) -> None:
-        """Decorator returns the original function unchanged."""
+    def test_returns_original_class(self) -> None:
+        """Decorator returns the original class unchanged."""
 
-        def parse_show_version(output: str) -> dict[str, Any]:
-            return {"version": "1.0"}
+        class ShowVersionParser(BaseParser):
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {"version": "1.0"}
 
-        decorated = registry.register("nxos", "show version")(parse_show_version)
-        assert decorated is parse_show_version
+        decorated = registry.register("nxos", "show version")(ShowVersionParser)
+        assert decorated is ShowVersionParser
+
+    def test_sets_os_and_command_attributes(self) -> None:
+        """Decorator sets os and command class attributes."""
+
+        @registry.register("nxos", "show version")
+        class ShowVersionParser(BaseParser):
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {}
+
+        assert ShowVersionParser.os == "nxos"
+        assert ShowVersionParser.command == "show version"
 
     @pytest.mark.parametrize(
         ("register_os", "register_cmd", "expected_key"),
@@ -82,8 +99,10 @@ class TestRegister:
         """OS and command are normalized during registration."""
 
         @registry.register(register_os, register_cmd)
-        def parser(output: str) -> dict[str, Any]:
-            return {}
+        class Parser(BaseParser):
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {}
 
         assert expected_key in registry._registry
 
@@ -91,15 +110,30 @@ class TestRegister:
 class TestGetParser:
     """Tests for get_parser function."""
 
-    def test_returns_registered_parser(self) -> None:
-        """Returns the registered parser function."""
+    def test_returns_registered_parser_class(self) -> None:
+        """Returns the registered parser class."""
 
         @registry.register("nxos", "show version")
-        def parse_show_version(output: str) -> dict[str, Any]:
-            return {"version": "1.0"}
+        class ShowVersionParser(BaseParser):
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {"version": "1.0"}
 
-        parser = registry.get_parser("nxos", "show version")
-        assert parser is parse_show_version
+        parser_cls = registry.get_parser("nxos", "show version")
+        assert parser_cls is ShowVersionParser
+
+    def test_returned_parser_is_callable(self) -> None:
+        """Returned parser class can parse output."""
+
+        @registry.register("nxos", "show version")
+        class ShowVersionParser(BaseParser):
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {"version": "1.0"}
+
+        parser_cls = registry.get_parser("nxos", "show version")
+        result = parser_cls.parse("some output")
+        assert result == {"version": "1.0"}
 
     @pytest.mark.parametrize(
         ("lookup_os", "lookup_cmd"),
@@ -114,11 +148,13 @@ class TestGetParser:
         """OS and command are normalized during lookup."""
 
         @registry.register("nxos", "show version")
-        def parse_show_version(output: str) -> dict[str, Any]:
-            return {}
+        class ShowVersionParser(BaseParser):
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {}
 
-        parser = registry.get_parser(lookup_os, lookup_cmd)
-        assert parser is parse_show_version
+        parser_cls = registry.get_parser(lookup_os, lookup_cmd)
+        assert parser_cls is ShowVersionParser
 
     def test_raises_parser_not_found_error(self) -> None:
         """Raises ParserNotFoundError when parser doesn't exist."""
@@ -132,8 +168,10 @@ class TestGetParser:
         """Raises ParserNotFoundError when OS doesn't match."""
 
         @registry.register("nxos", "show version")
-        def parse_show_version(output: str) -> dict[str, Any]:
-            return {}
+        class ShowVersionParser(BaseParser):
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {}
 
         with pytest.raises(ParserNotFoundError):
             registry.get_parser("iosxe", "show version")
@@ -150,12 +188,16 @@ class TestListParsers:
         """Returns list of registered (os, command) tuples."""
 
         @registry.register("nxos", "show version")
-        def parse_nxos_version(output: str) -> dict[str, Any]:
-            return {}
+        class NxosVersionParser(BaseParser):
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {}
 
         @registry.register("iosxe", "show ip route")
-        def parse_iosxe_route(output: str) -> dict[str, Any]:
-            return {}
+        class IosxeRouteParser(BaseParser):
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {}
 
         parsers = registry.list_parsers()
         assert len(parsers) == 2
