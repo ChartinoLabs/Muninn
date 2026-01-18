@@ -291,6 +291,9 @@ wheels = [
 name = "muninn"
 version = "0.1.0"
 source = { editable = "." }
+dependencies = [
+    { name = "netutils" },
+]
 
 [package.dev-dependencies]
 dev = [
@@ -305,6 +308,7 @@ dev = [
 ]
 
 [package.metadata]
+requires-dist = [{ name = "netutils", specifier = ">=1.15.2" }]
 
 [package.metadata.requires-dev]
 dev = [
@@ -316,6 +320,15 @@ dev = [
     { name = "ruff", specifier = ">=0.14.13" },
     { name = "ty", specifier = ">=0.0.12" },
     { name = "xenon", specifier = ">=0.9.3" },
+]
+
+[[package]]
+name = "netutils"
+version = "1.15.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/ff/cb/a7fe8abe49d874cc50909d3bb451037dd8e2489e78d2e9da53baca5ab91b/netutils-1.15.2.tar.gz", hash = "sha256:9877d997155ca0c570eb70ec3b382e458f3b8ea209869093c6dca31554fa029e", size = 519059 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ad/78/e2999ac6a64c98a52abb1a471515bbd1696ad2d9149c19a68e03fea2f567/netutils-1.15.2-py3-none-any.whl", hash = "sha256:a79c84ff248c9cd8f872aa195155e08dd2d1395ff695dbac51b7ff32923f0cdf", size = 533673 },
 ]
 
 [[package]]
