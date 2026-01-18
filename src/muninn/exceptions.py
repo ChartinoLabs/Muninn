@@ -34,3 +34,18 @@ class ParseError(MuninnError):
         self.os = os
         self.command = command
         super().__init__(f"Failed to parse os={os!r}, command={command!r}: {message}")
+
+
+class EmptyOutputError(MuninnError):
+    """Raised when CLI output is empty or whitespace only."""
+
+    def __init__(self, os: str, command: str) -> None:
+        """Initialize the exception.
+
+        Args:
+            os: The operating system identifier.
+            command: The command that produced the output.
+        """
+        self.os = os
+        self.command = command
+        super().__init__(f"Empty output for os={os!r}, command={command!r}")

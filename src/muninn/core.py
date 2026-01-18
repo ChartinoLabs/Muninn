@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from muninn.exceptions import ParseError
+from muninn.exceptions import EmptyOutputError, ParseError
 from muninn.os import OS, OperatingSystem, resolve_os
 from muninn.registry import get_parser
 
@@ -26,6 +26,7 @@ def parse(
     Raises:
         ParserNotFoundError: No parser exists for the OS/command combination.
         ParseError: The parser failed to parse the output.
+        EmptyOutputError: The CLI output is empty or whitespace only.
         ValueError: If the OS input cannot be resolved.
 
     Example:
@@ -39,11 +40,14 @@ def parse(
         >>> result = muninn.parse(OS.CISCO_NXOS, "show ip ospf neighbor", raw_output)
     """
     parser_cls = get_parser(os, command)
+    resolved_os = resolve_os(os)
+
+    if not output.strip():
+        raise EmptyOutputError(resolved_os.value.name, command)
 
     try:
         return parser_cls.parse(output)
     except ParseError:
         raise
     except Exception as e:
-        resolved_os = resolve_os(os)
         raise ParseError(resolved_os.value.name, command, str(e)) from e
