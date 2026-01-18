@@ -3,6 +3,8 @@
 import re
 from typing import TypedDict
 
+from netutils.interface import canonical_interface_name
+
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
@@ -42,6 +44,10 @@ class ShowIpDhcpSnoopingBindingParser(BaseParser[ShowIpDhcpSnoopingBindingResult
         r"^Total\s+number\s+of\s+bindings:\s+(?P<count>\d+)$", re.I
     )
 
+    @staticmethod
+    def _normalize_interface(interface: str) -> str:
+        return canonical_interface_name(interface)
+
     @classmethod
     def parse(cls, output: str) -> ShowIpDhcpSnoopingBindingResult:
         """Parse 'show ip dhcp snooping binding' output.
@@ -79,7 +85,7 @@ class ShowIpDhcpSnoopingBindingParser(BaseParser[ShowIpDhcpSnoopingBindingResult
             entry_match = cls._ENTRY_PATTERN.match(line)
             if entry_match:
                 interfaces = result.setdefault("interfaces", {})
-                interface = entry_match.group("interface")
+                interface = cls._normalize_interface(entry_match.group("interface"))
                 vlan = entry_match.group("vlan")
                 interface_entry = interfaces.setdefault(interface, {"vlan": {}})
                 interface_entry["vlan"][vlan] = {
