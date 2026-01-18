@@ -10,12 +10,12 @@ if TYPE_CHECKING:
     from muninn.parser import BaseParser
 
 # Registry: maps (OS enum, normalized_command) -> parser class
-_registry: dict[tuple[OS, str], type["BaseParser"]] = {}
+_registry: dict[tuple[OS, str], type["BaseParser[object]"]] = {}
 
 
 def register(
     os: str | OS | type[OperatingSystem], command: str
-) -> Callable[[type["BaseParser"]], type["BaseParser"]]:
+) -> Callable[[type["BaseParser[object]"]], type["BaseParser[object]"]]:
     """Class decorator to register a parser.
 
     Args:
@@ -43,7 +43,7 @@ def register(
     resolved_os = resolve_os(os)
     normalized_command = _normalize_command(command)
 
-    def decorator(cls: type["BaseParser"]) -> type["BaseParser"]:
+    def decorator(cls: type["BaseParser[object]"]) -> type["BaseParser[object]"]:
         cls.os = resolved_os
         cls.command = normalized_command
         _registry[(resolved_os, normalized_command)] = cls
@@ -54,7 +54,7 @@ def register(
 
 def get_parser(
     os: str | OS | type[OperatingSystem], command: str
-) -> type["BaseParser"]:
+) -> type["BaseParser[object]"]:
     """Look up a parser class by OS and command.
 
     Args:

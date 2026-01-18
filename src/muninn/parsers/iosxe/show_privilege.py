@@ -15,7 +15,7 @@ class ShowPrivilegeResult(TypedDict):
 
 
 @register(OS.CISCO_IOSXE, "show privilege")
-class ShowPrivilegeParser(BaseParser):
+class ShowPrivilegeParser(BaseParser[ShowPrivilegeResult]):
     """Parser for 'show privilege' command.
 
     Example output:

@@ -21,7 +21,7 @@ class ShowVlanFilterResult(TypedDict):
 
 
 @register(OS.CISCO_NXOS, "show vlan filter")
-class ShowVlanFilterParser(BaseParser):
+class ShowVlanFilterParser(BaseParser[ShowVlanFilterResult]):
     """Parser for 'show vlan filter' command.
 
     Example output:

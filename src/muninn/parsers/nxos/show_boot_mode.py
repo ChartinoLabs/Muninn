@@ -15,7 +15,7 @@ class ShowBootModeResult(TypedDict):
 
 
 @register(OS.CISCO_NXOS, "show boot mode")
-class ShowBootModeParser(BaseParser):
+class ShowBootModeParser(BaseParser[ShowBootModeResult]):
     """Parser for 'show boot mode' command.
 
     Example output:

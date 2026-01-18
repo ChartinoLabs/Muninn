@@ -16,7 +16,7 @@ class ShowLacpSystemIdentifierResult(TypedDict):
 
 
 @register(OS.CISCO_NXOS, "show lacp system-identifier")
-class ShowLacpSystemIdentifierParser(BaseParser):
+class ShowLacpSystemIdentifierParser(BaseParser[ShowLacpSystemIdentifierResult]):
     """Parser for 'show lacp system-identifier' command.
 
     Example output:

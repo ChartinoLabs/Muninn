@@ -25,7 +25,7 @@ ShowHsrpDelayResult: TypeAlias = dict[str, InterfaceDelay]
 
 
 @register(OS.CISCO_NXOS, "show hsrp delay")
-class ShowHsrpDelayParser(BaseParser):
+class ShowHsrpDelayParser(BaseParser[ShowHsrpDelayResult]):
     """Parser for 'show hsrp delay' command.
 
     Example output:

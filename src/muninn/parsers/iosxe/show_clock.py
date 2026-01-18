@@ -20,7 +20,7 @@ class ShowClockResult(TypedDict):
 
 
 @register(OS.CISCO_IOSXE, "show clock")
-class ShowClockParser(BaseParser):
+class ShowClockParser(BaseParser[ShowClockResult]):
     """Parser for 'show clock' command.
 
     Parses the system clock output into structured components.

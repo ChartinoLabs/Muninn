@@ -1,7 +1,7 @@
 """Parser for 'show lldp timers' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -20,7 +20,7 @@ class ShowLldpTimersResult(TypedDict):
 
 
 @register(OS.CISCO_NXOS, "show lldp timers")
-class ShowLldpTimersParser(BaseParser):
+class ShowLldpTimersParser(BaseParser[ShowLldpTimersResult]):
     """Parser for 'show lldp timers' command.
 
     Example output:
@@ -95,4 +95,4 @@ class ShowLldpTimersParser(BaseParser):
             msg = f"Missing required timer fields: {', '.join(missing)}"
             raise ValueError(msg)
 
-        return ShowLldpTimersResult(**result)
+        return cast(ShowLldpTimersResult, result)

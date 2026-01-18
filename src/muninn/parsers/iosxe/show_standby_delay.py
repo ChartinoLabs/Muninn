@@ -25,7 +25,7 @@ ShowStandbyDelayResult: TypeAlias = dict[str, InterfaceDelay]
 
 
 @register(OS.CISCO_IOSXE, "show standby delay")
-class ShowStandbyDelayParser(BaseParser):
+class ShowStandbyDelayParser(BaseParser[ShowStandbyDelayResult]):
     """Parser for 'show standby delay' command.
 
     Example output:

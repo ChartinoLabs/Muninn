@@ -22,7 +22,7 @@ class ShowVdcCurrentResult(TypedDict):
 
 
 @register(OS.CISCO_NXOS, "show vdc current-vdc")
-class ShowVdcCurrentParser(BaseParser):
+class ShowVdcCurrentParser(BaseParser[ShowVdcCurrentResult]):
     """Parser for 'show vdc current-vdc' command.
 
     Example output:

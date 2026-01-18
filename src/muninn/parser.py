@@ -1,13 +1,16 @@
 """Base parser class for all Muninn parsers."""
 
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, ClassVar
+from typing import TYPE_CHECKING, ClassVar, Generic, TypeVar
 
 if TYPE_CHECKING:
     from muninn.os import OS
 
 
-class BaseParser(ABC):
+T_co = TypeVar("T_co", covariant=True)
+
+
+class BaseParser(ABC, Generic[T_co]):
     """Abstract base class for all parsers.
 
     Subclasses must implement the `parse` classmethod to transform
@@ -23,7 +26,7 @@ class BaseParser(ABC):
 
     @classmethod
     @abstractmethod
-    def parse(cls, output: str) -> dict[str, Any]:
+    def parse(cls, output: str) -> T_co:
         """Parse CLI output into structured data.
 
         Args:
