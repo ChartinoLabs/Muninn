@@ -1,7 +1,7 @@
 """Parser for 'show ip dhcp snooping binding' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import NotRequired, TypedDict
 
 from netutils.interface import canonical_interface_name
 
@@ -25,11 +25,11 @@ class DhcpSnoopingInterface(TypedDict):
     vlan: dict[str, DhcpSnoopingBindingEntry]
 
 
-class ShowIpDhcpSnoopingBindingResult(TypedDict, total=False):
+class ShowIpDhcpSnoopingBindingResult(TypedDict):
     """Schema for 'show ip dhcp snooping binding' parsed output."""
 
-    interfaces: dict[str, DhcpSnoopingInterface]
     total_bindings: int
+    interfaces: NotRequired[dict[str, DhcpSnoopingInterface]]
 
 
 @register(OS.CISCO_IOSXE, "show ip dhcp snooping binding")

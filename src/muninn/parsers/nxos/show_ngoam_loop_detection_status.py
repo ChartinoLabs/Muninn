@@ -1,7 +1,7 @@
 """Parser for 'show ngoam loop-detection status' command on NX-OS."""
 
 import re
-from typing import TypedDict
+from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -17,11 +17,14 @@ class LoopDetectionEntry(TypedDict):
     last_cleared: str
 
 
-class ShowNgoamLoopDetectionStatusResult(TypedDict, total=False):
-    """Schema for 'show ngoam loop-detection status' parsed output."""
+class ShowNgoamLoopDetectionStatusResult(TypedDict):
+    """Schema for 'show ngoam loop-detection status' parsed output.
 
-    error: str
-    vlans: dict[str, dict[str, LoopDetectionEntry]]
+    Note: Either 'error' or 'vlans' will be present, but not both.
+    """
+
+    error: NotRequired[str]
+    vlans: NotRequired[dict[str, dict[str, LoopDetectionEntry]]]
 
 
 @register(OS.CISCO_NXOS, "show ngoam loop-detection status")

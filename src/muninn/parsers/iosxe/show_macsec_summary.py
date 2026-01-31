@@ -1,7 +1,7 @@
 """Parser for 'show macsec summary' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import NotRequired, TypedDict
 
 from netutils.interface import canonical_interface_name
 
@@ -17,11 +17,11 @@ class MacsecSummaryInterface(TypedDict):
     receive_sc: int
 
 
-class MacsecCapableInterface(TypedDict, total=False):
+class MacsecCapableInterface(TypedDict):
     """Schema for MACsec-capable interface details."""
 
     extension: str
-    installed_rx_sc: int
+    installed_rx_sc: NotRequired[int]
 
 
 class MacsecEnabledInterface(TypedDict):

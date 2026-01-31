@@ -1,18 +1,18 @@
 """Parser for 'show vtp password' command on IOS."""
 
 import re
-from typing import TypedDict
+from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 
 
-class VtpStatus(TypedDict, total=False):
+class VtpStatus(TypedDict):
     """Schema for VTP password status."""
 
     configured: bool
-    password: str
+    password: NotRequired[str]
 
 
 class ShowVtpPasswordResult(TypedDict):
