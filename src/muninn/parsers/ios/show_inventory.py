@@ -26,6 +26,7 @@ class ShowInventoryResult(TypedDict):
 
 @register(OS.CISCO_IOS, "show inventory")
 @register(OS.CISCO_IOSXE, "show inventory")
+@register(OS.CISCO_NXOS, "show inventory")
 class ShowInventoryParser(BaseParser[ShowInventoryResult]):
     """Parser for 'show inventory' command.
 
