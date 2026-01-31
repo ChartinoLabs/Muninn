@@ -26,6 +26,7 @@ class ShowLldpNeighborsResult(TypedDict):
 
 
 @register(OS.CISCO_IOS, "show lldp neighbors")
+@register(OS.CISCO_IOSXE, "show lldp neighbors")
 class ShowLldpNeighborsParser(BaseParser[ShowLldpNeighborsResult]):
     """Parser for 'show lldp neighbors' command.
 
