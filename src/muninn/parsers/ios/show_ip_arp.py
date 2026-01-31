@@ -1,7 +1,7 @@
 """Parser for 'show ip arp' command on IOS."""
 
 import re
-from typing import TypedDict
+from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -11,10 +11,10 @@ from muninn.registry import register
 class ArpEntry(TypedDict):
     """Schema for a single ARP entry."""
 
-    age: int | None
     hardware_addr: str
     type: str
-    interface: str | None
+    age: NotRequired[int]
+    interface: NotRequired[str]
 
 
 class ShowIpArpResult(TypedDict):
@@ -72,15 +72,19 @@ class ShowIpArpParser(BaseParser[ShowIpArpResult]):
                 entry_type = match.group("type")
                 interface = match.group("interface")
 
-                # Convert age: "-" means local entry (no aging), convert to None
-                age: int | None = None if age_str == "-" else int(age_str)
+                entry: ArpEntry = {
+                    "hardware_addr": hardware_addr,
+                    "type": entry_type,
+                }
 
-                arp_entries[address] = ArpEntry(
-                    age=age,
-                    hardware_addr=hardware_addr,
-                    type=entry_type,
-                    interface=interface,
-                )
+                # Add age only if not "-" (local entry)
+                if age_str != "-":
+                    entry["age"] = int(age_str)
+
+                if interface:
+                    entry["interface"] = interface
+
+                arp_entries[address] = entry
 
         if not arp_entries:
             msg = "No ARP entries found in output"

@@ -1,7 +1,7 @@
 """Parser for 'show inventory' command on IOS."""
 
 import re
-from typing import TypedDict
+from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -13,9 +13,9 @@ class InventoryItem(TypedDict):
 
     name: str
     description: str
-    pid: str | None
-    vid: str | None
-    serial_number: str | None
+    pid: NotRequired[str]
+    vid: NotRequired[str]
+    serial_number: NotRequired[str]
 
 
 class ShowInventoryResult(TypedDict):
@@ -99,13 +99,18 @@ class ShowInventoryParser(BaseParser[ShowInventoryResult]):
                 vid = cls._normalize_value(pid_match.group("vid"))
                 sn = cls._normalize_value(pid_match.group("sn"))
 
-                inventory[current_name] = InventoryItem(
-                    name=current_name,
-                    description=current_descr or "",
-                    pid=pid,
-                    vid=vid,
-                    serial_number=sn,
-                )
+                item: InventoryItem = {
+                    "name": current_name,
+                    "description": current_descr or "",
+                }
+                if pid:
+                    item["pid"] = pid
+                if vid:
+                    item["vid"] = vid
+                if sn:
+                    item["serial_number"] = sn
+
+                inventory[current_name] = item
 
                 # Reset for next item
                 current_name = None

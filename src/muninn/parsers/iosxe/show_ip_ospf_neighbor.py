@@ -1,7 +1,7 @@
 """Parser for 'show ip ospf neighbor' command on IOS/IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import NotRequired, TypedDict
 
 from netutils.interface import canonical_interface_name
 
@@ -10,14 +10,14 @@ from muninn.parser import BaseParser
 from muninn.registry import register
 
 
-class OspfNeighborEntry(TypedDict, total=False):
+class OspfNeighborEntry(TypedDict):
     """Schema for a single OSPF neighbor entry."""
 
     priority: int
     state: str
-    role: str
     dead_time: str
     address: str
+    role: NotRequired[str]
 
 
 class ShowIpOspfNeighborResult(TypedDict):

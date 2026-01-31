@@ -1,7 +1,7 @@
 """Parser for 'show lldp neighbors' command on IOS."""
 
 import re
-from typing import TypedDict
+from typing import NotRequired, TypedDict
 
 from netutils.interface import canonical_interface_name
 
@@ -14,8 +14,8 @@ class LldpNeighborEntry(TypedDict):
     """Schema for a single LLDP neighbor entry."""
 
     hold_time: int
-    capabilities: str | None
     port_id: str
+    capabilities: NotRequired[str]
 
 
 class ShowLldpNeighborsResult(TypedDict):
@@ -99,19 +99,19 @@ class ShowLldpNeighborsParser(BaseParser[ShowLldpNeighborsResult]):
                 capability = match.group("capability")
                 port_id = match.group("port_id")
 
-                # Normalize empty capability to None
-                if not capability:
-                    capability = None
-
                 # Initialize interface dict if needed
                 if local_intf not in neighbors:
                     neighbors[local_intf] = {}
 
-                neighbors[local_intf][device_id] = LldpNeighborEntry(
-                    hold_time=hold_time,
-                    capabilities=capability,
-                    port_id=port_id,
-                )
+                entry: LldpNeighborEntry = {
+                    "hold_time": hold_time,
+                    "port_id": port_id,
+                }
+
+                if capability:
+                    entry["capabilities"] = capability
+
+                neighbors[local_intf][device_id] = entry
 
         if not neighbors:
             msg = "No LLDP neighbors found in output"
