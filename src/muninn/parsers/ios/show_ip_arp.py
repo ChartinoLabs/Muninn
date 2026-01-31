@@ -24,6 +24,7 @@ class ShowIpArpResult(TypedDict):
 
 
 @register(OS.CISCO_IOS, "show ip arp")
+@register(OS.CISCO_IOSXE, "show ip arp")
 class ShowIpArpParser(BaseParser[ShowIpArpResult]):
     """Parser for 'show ip arp' command.
 
