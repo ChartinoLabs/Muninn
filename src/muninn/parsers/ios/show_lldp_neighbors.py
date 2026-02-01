@@ -59,6 +59,20 @@ class ShowLldpNeighborsParser(BaseParser[ShowLldpNeighborsResult]):
     # Pattern for total entries line
     _TOTAL_PATTERN = re.compile(r"^Total entries displayed:\s*(?P<total>\d+)", re.I)
 
+    # Pattern to detect if port_id looks like an interface
+    _INTERFACE_PATTERN = re.compile(
+        r"^(?:Gi(?:g(?:abit)?)?|Fa(?:s(?:t)?)?|Eth?|Te(?:n)?|Fo(?:r(?:ty)?)?|"
+        r"Hu(?:n(?:dred)?)?|mgmt|Lo|Vlan|Po|Tu|Se|nve)(?:Ethernet)?\d",
+        re.IGNORECASE,
+    )
+
+    @classmethod
+    def _normalize_port_id(cls, port_id: str) -> str:
+        """Normalize port_id if it looks like an interface name."""
+        if cls._INTERFACE_PATTERN.match(port_id):
+            return canonical_interface_name(port_id)
+        return port_id
+
     @classmethod
     def parse(cls, output: str) -> ShowLldpNeighborsResult:
         """Parse 'show lldp neighbors' output.
@@ -97,7 +111,7 @@ class ShowLldpNeighborsParser(BaseParser[ShowLldpNeighborsResult]):
                 local_intf = canonical_interface_name(match.group("local_intf"))
                 hold_time = int(match.group("hold_time"))
                 capability = match.group("capability")
-                port_id = match.group("port_id")
+                port_id = cls._normalize_port_id(match.group("port_id"))
 
                 # Initialize interface dict if needed
                 if local_intf not in neighbors:

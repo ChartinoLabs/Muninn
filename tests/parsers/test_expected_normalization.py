@@ -16,9 +16,31 @@ JSONValue: TypeAlias = (
 
 
 def _looks_like_interface(value: str) -> bool:
-    return any(char.isdigit() for char in value) and any(
-        char.isalpha() for char in value
+    """Check if a string looks like a network interface name.
+
+    Matches common Cisco interface naming patterns like:
+    - GigabitEthernet0/0/0, Gi0/0/0
+    - FastEthernet0/1, Fa0/1
+    - Ethernet1/1, Eth1/1
+    - TenGigabitEthernet1/0/1, Te1/0/1
+    - Management0, mgmt0
+    - Loopback0, Lo0
+    - Vlan100
+    - Port-channel1, Po1
+    - Tunnel1, Tu1
+    """
+    import re
+
+    # Pattern for common interface prefixes followed by numbers/slashes
+    interface_pattern = re.compile(
+        r"^(?:Gi(?:gabitEthernet)?|Fa(?:stEthernet)?|Eth(?:ernet)?|"
+        r"Te(?:nGigabitEthernet)?|Fo(?:rtyGigabitEthernet)?|"
+        r"Hu(?:ndredGigE)?|mgmt|Management|Lo(?:opback)?|"
+        r"Vlan|Po(?:rt-channel)?|Tu(?:nnel)?|Se(?:rial)?|"
+        r"nve|BDI|Twe(?:ntyFiveGigE)?)\d",
+        re.IGNORECASE,
     )
+    return bool(interface_pattern.match(value))
 
 
 def _normalize_string(value: str) -> str:
