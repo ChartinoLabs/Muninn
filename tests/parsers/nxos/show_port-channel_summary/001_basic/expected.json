@@ -1,0 +1,42 @@
+{
+    "port_channels": {
+        "Port-channel1": {
+            "group": 1,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+                "Ethernet1/1": {
+                    "status": "up",
+                    "flags": "P"
+                },
+                "Ethernet1/2": {
+                    "status": "up",
+                    "flags": "P"
+                }
+            }
+        },
+        "Port-channel2": {
+            "group": 2,
+            "mode": "switched",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+                "Ethernet1/3": {
+                    "status": "up",
+                    "flags": "P"
+                },
+                "Ethernet1/4": {
+                    "status": "up",
+                    "flags": "P"
+                },
+                "Ethernet1/5": {
+                    "status": "hot_standby",
+                    "flags": "H"
+                }
+            }
+        }
+    }
+}
