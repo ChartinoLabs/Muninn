@@ -1,0 +1,98 @@
+{
+    "vrf": "Red",
+    "entry_count": 7,
+    "routes": {
+        "2001:192:168:2::/64": {
+            "protocol": "C",
+            "network": "2001:192:168:2::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+                {
+                    "type": "directly connected",
+                    "interface": "Vlan11"
+                }
+            ]
+        },
+        "2001:192:168:2::1/128": {
+            "protocol": "B",
+            "network": "2001:192:168:2::1/128",
+            "admin_distance": 20,
+            "metric": 0,
+            "next_hops": [
+                {
+                    "type": "via",
+                    "next_hop": "33.33.33.33",
+                    "next_hop_vrf": "default",
+                    "interface": "Vlan100",
+                    "interface_vrf": "default"
+                }
+            ],
+            "tag": 1
+        },
+        "2001:192:168:2::100/128": {
+            "protocol": "L",
+            "network": "2001:192:168:2::100/128",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+                {
+                    "type": "receive",
+                    "interface": "Vlan11"
+                }
+            ]
+        },
+        "2001:192:168:255::/64": {
+            "protocol": "C",
+            "network": "2001:192:168:255::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+                {
+                    "type": "directly connected",
+                    "interface": "Vlan4000"
+                }
+            ]
+        },
+        "2001:192:168:255::1/128": {
+            "protocol": "B",
+            "network": "2001:192:168:255::1/128",
+            "admin_distance": 20,
+            "metric": 0,
+            "next_hops": [
+                {
+                    "type": "via",
+                    "next_hop": "33.33.33.33",
+                    "next_hop_vrf": "default",
+                    "interface": "Vlan100",
+                    "interface_vrf": "default"
+                }
+            ],
+            "tag": 1
+        },
+        "2001:192:168:255::100/128": {
+            "protocol": "L",
+            "network": "2001:192:168:255::100/128",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+                {
+                    "type": "receive",
+                    "interface": "Vlan4000"
+                }
+            ]
+        },
+        "FF00::/8": {
+            "protocol": "L",
+            "network": "FF00::/8",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+                {
+                    "type": "receive",
+                    "interface": "Null0"
+                }
+            ]
+        }
+    }
+}
