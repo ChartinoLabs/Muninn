@@ -1,0 +1,86 @@
+{
+    "interfaces": {
+        "Loopback0": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "10.4.1.1/32",
+            "interface_id": 11,
+            "area": "0.0.0.0",
+            "attached_via": "Interface Enable",
+            "process_id": 1,
+            "router_id": "10.4.1.1",
+            "network_type": "LOOPBACK",
+            "cost": 1,
+            "topology": {
+                "0": {
+                    "cost": 1,
+                    "disabled": false,
+                    "shutdown": false,
+                    "name": "Base"
+                }
+            },
+            "stub_host": true
+        },
+        "GigabitEthernet2": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "10.1.2.1/24",
+            "interface_id": 8,
+            "area": "0.0.0.0",
+            "attached_via": "Interface Enable",
+            "process_id": 1,
+            "router_id": "10.4.1.1",
+            "network_type": "BROADCAST",
+            "cost": 1,
+            "transmit_delay": 1,
+            "state": "DR",
+            "priority": 1,
+            "dr_router_id": "10.4.1.1",
+            "dr_address": "10.1.2.1",
+            "bdr_router_id": "10.16.2.2",
+            "bdr_address": "10.1.2.2",
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "oob_resync_timeout": 40,
+            "hello_due_in": "00:00:05",
+            "topology": {
+                "0": {
+                    "cost": 1,
+                    "disabled": false,
+                    "shutdown": false,
+                    "name": "Base"
+                }
+            },
+            "lls": true,
+            "prefix_suppression": true,
+            "ipfrr_protected": true,
+            "ipfrr_candidate": true,
+            "ti_lfa_protected": false,
+            "graceful_restart": {
+                "cisco_nsf": true,
+                "ietf_nsf": true
+            },
+            "authentication": {
+                "type": "simple"
+            },
+            "neighbor_count": 1,
+            "adjacent_neighbor_count": 1,
+            "neighbors": {
+                "10.16.2.2": {
+                    "role": "Backup Designated Router"
+                }
+            },
+            "suppress_hello_count": 0,
+            "flood_stats": {
+                "index": "1/3/3",
+                "queue_length": 0,
+                "last_scan_length": 1,
+                "max_scan_length": 3,
+                "last_scan_time_msec": 0,
+                "max_scan_time_msec": 1
+            }
+        }
+    }
+}
