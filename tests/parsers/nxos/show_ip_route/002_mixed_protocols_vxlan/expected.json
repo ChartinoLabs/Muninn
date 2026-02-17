@@ -1,0 +1,335 @@
+{
+    "vrfs": {
+        "default": {
+            "routes": {
+                "0.0.0.0/0": {
+                    "prefix": "0.0.0.0",
+                    "mask": 0,
+                    "ubest": 1,
+                    "mbest": 0,
+                    "attached": false,
+                    "direct": false,
+                    "pervasive": false,
+                    "pending": false,
+                    "next_hops": [
+                        {
+                            "best": true,
+                            "best_ucast": true,
+                            "best_mcast": false,
+                            "next_hop": "10.1.100.1",
+                            "preference": 1,
+                            "metric": 0,
+                            "uptime": "6d02h",
+                            "protocol": "static",
+                            "next_hop_vrf": "management"
+                        }
+                    ]
+                },
+                "1.1.1.1/32": {
+                    "prefix": "1.1.1.1",
+                    "mask": 32,
+                    "ubest": 2,
+                    "mbest": 0,
+                    "attached": true,
+                    "direct": false,
+                    "pervasive": false,
+                    "pending": false,
+                    "next_hops": [
+                        {
+                            "best": true,
+                            "best_ucast": true,
+                            "best_mcast": false,
+                            "next_hop": "1.1.1.1",
+                            "preference": 0,
+                            "metric": 0,
+                            "uptime": "6d00h",
+                            "protocol": "local",
+                            "interface": "Loopback1"
+                        },
+                        {
+                            "best": true,
+                            "best_ucast": true,
+                            "best_mcast": false,
+                            "next_hop": "1.1.1.1",
+                            "preference": 0,
+                            "metric": 0,
+                            "uptime": "6d00h",
+                            "protocol": "direct",
+                            "interface": "Loopback1"
+                        }
+                    ]
+                },
+                "2.2.2.2/32": {
+                    "prefix": "2.2.2.2",
+                    "mask": 32,
+                    "ubest": 2,
+                    "mbest": 0,
+                    "attached": false,
+                    "direct": false,
+                    "pervasive": false,
+                    "pending": false,
+                    "next_hops": [
+                        {
+                            "best": true,
+                            "best_ucast": true,
+                            "best_mcast": false,
+                            "next_hop": "10.10.30.2",
+                            "preference": 110,
+                            "metric": 3,
+                            "uptime": "5d18h",
+                            "protocol": "ospf",
+                            "interface": "Ethernet2/2",
+                            "process": "10",
+                            "route_type": "intra"
+                        },
+                        {
+                            "best": true,
+                            "best_ucast": true,
+                            "best_mcast": false,
+                            "next_hop": "10.10.40.2",
+                            "preference": 110,
+                            "metric": 3,
+                            "uptime": "5d18h",
+                            "protocol": "ospf",
+                            "interface": "Ethernet2/4",
+                            "process": "10",
+                            "route_type": "intra"
+                        }
+                    ]
+                },
+                "7.7.7.7/32": {
+                    "prefix": "7.7.7.7",
+                    "mask": 32,
+                    "ubest": 1,
+                    "mbest": 0,
+                    "attached": false,
+                    "direct": false,
+                    "pervasive": false,
+                    "pending": false,
+                    "next_hops": [
+                        {
+                            "best": true,
+                            "best_ucast": true,
+                            "best_mcast": false,
+                            "next_hop": "10.10.50.1",
+                            "preference": 1,
+                            "metric": 0,
+                            "uptime": "1d21h",
+                            "protocol": "static"
+                        }
+                    ]
+                },
+                "8.8.8.8/32": {
+                    "prefix": "8.8.8.8",
+                    "mask": 32,
+                    "ubest": 1,
+                    "mbest": 0,
+                    "attached": false,
+                    "direct": false,
+                    "pervasive": false,
+                    "pending": true,
+                    "next_hops": [
+                        {
+                            "best": true,
+                            "best_ucast": true,
+                            "best_mcast": false,
+                            "next_hop": "10.66.120.1",
+                            "preference": 1,
+                            "metric": 0,
+                            "uptime": "00:00:01",
+                            "protocol": "static",
+                            "interface": "Vlan1220",
+                            "tag": 100
+                        }
+                    ]
+                },
+                "10.0.255.1/32": {
+                    "prefix": "10.0.255.1",
+                    "mask": 32,
+                    "ubest": 3,
+                    "mbest": 0,
+                    "attached": false,
+                    "direct": false,
+                    "pervasive": false,
+                    "pending": false,
+                    "next_hops": [
+                        {
+                            "best": true,
+                            "best_ucast": true,
+                            "best_mcast": false,
+                            "next_hop": "10.24.1.74",
+                            "preference": 170,
+                            "metric": 51712,
+                            "uptime": "4w4d",
+                            "protocol": "eigrp",
+                            "interface": "Ethernet1/1",
+                            "process": "NAMED",
+                            "route_type": "external",
+                            "tag": 65422
+                        },
+                        {
+                            "best": true,
+                            "best_ucast": true,
+                            "best_mcast": false,
+                            "next_hop": "10.24.2.76",
+                            "preference": 170,
+                            "metric": 51712,
+                            "uptime": "4w4d",
+                            "protocol": "eigrp",
+                            "interface": "Ethernet1/3",
+                            "process": "NAMED",
+                            "route_type": "external",
+                            "tag": 65422
+                        },
+                        {
+                            "best": true,
+                            "best_ucast": true,
+                            "best_mcast": false,
+                            "next_hop": "10.24.2.154",
+                            "preference": 170,
+                            "metric": 51712,
+                            "uptime": "3w4d",
+                            "protocol": "eigrp",
+                            "interface": "Ethernet2/11",
+                            "process": "NAMED",
+                            "route_type": "external",
+                            "tag": 65422
+                        }
+                    ]
+                },
+                "10.71.0.0/21": {
+                    "prefix": "10.71.0.0",
+                    "mask": 21,
+                    "ubest": 1,
+                    "mbest": 0,
+                    "attached": false,
+                    "direct": false,
+                    "pervasive": false,
+                    "pending": false,
+                    "next_hops": [
+                        {
+                            "best": true,
+                            "best_ucast": true,
+                            "best_mcast": false,
+                            "next_hop": "Null0",
+                            "preference": 220,
+                            "metric": 10,
+                            "uptime": "2y49w",
+                            "protocol": "ospf",
+                            "process": "1",
+                            "route_type": "discard"
+                        }
+                    ]
+                },
+                "10.151.0.0/16": {
+                    "prefix": "10.151.0.0",
+                    "mask": 16,
+                    "ubest": 1,
+                    "mbest": 0,
+                    "attached": false,
+                    "direct": false,
+                    "pervasive": false,
+                    "pending": false,
+                    "next_hops": [
+                        {
+                            "best": true,
+                            "best_ucast": true,
+                            "best_mcast": false,
+                            "next_hop": "172.24.0.240",
+                            "preference": 150,
+                            "metric": 51712,
+                            "uptime": "3d17h",
+                            "protocol": "bgp",
+                            "next_hop_vrf": "default",
+                            "process": "65004",
+                            "route_type": "internal",
+                            "tunnelid": "0xac1800f0",
+                            "encap": "VXLAN",
+                            "tag": 65004,
+                            "segid": 10000
+                        }
+                    ]
+                },
+                "10.218.139.240/29": {
+                    "prefix": "10.218.139.240",
+                    "mask": 29,
+                    "ubest": 2,
+                    "mbest": 0,
+                    "attached": false,
+                    "direct": false,
+                    "pervasive": false,
+                    "pending": false,
+                    "next_hops": [
+                        {
+                            "best": true,
+                            "best_ucast": true,
+                            "best_mcast": false,
+                            "next_hop": "10.62.2.30",
+                            "preference": 110,
+                            "metric": 10,
+                            "uptime": "0.000000",
+                            "protocol": "ospf",
+                            "interface": "Port-channel1",
+                            "process": "1",
+                            "route_type": "type-2",
+                            "tag": 888
+                        },
+                        {
+                            "best": true,
+                            "best_ucast": true,
+                            "best_mcast": false,
+                            "next_hop": "10.62.2.34",
+                            "preference": 110,
+                            "metric": 10,
+                            "uptime": "0.000000",
+                            "protocol": "ospf",
+                            "interface": "Port-channel1",
+                            "process": "1",
+                            "route_type": "type-2",
+                            "tag": 888
+                        }
+                    ]
+                }
+            }
+        },
+        "BYPASS": {
+            "routes": {
+                "0.0.0.0/0": {
+                    "prefix": "0.0.0.0",
+                    "mask": 0,
+                    "ubest": 1,
+                    "mbest": 0,
+                    "attached": false,
+                    "direct": false,
+                    "pervasive": false,
+                    "pending": false,
+                    "next_hops": [
+                        {
+                            "best": true,
+                            "best_ucast": true,
+                            "best_mcast": false,
+                            "next_hop": "172.16.0.67",
+                            "preference": 20,
+                            "metric": 0,
+                            "uptime": "15w5d",
+                            "protocol": "bgp",
+                            "process": "64512",
+                            "route_type": "external",
+                            "tag": 24436
+                        },
+                        {
+                            "best": false,
+                            "best_ucast": false,
+                            "best_mcast": false,
+                            "next_hop": "Null0",
+                            "preference": 254,
+                            "metric": 0,
+                            "uptime": "1y16w",
+                            "protocol": "static"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
