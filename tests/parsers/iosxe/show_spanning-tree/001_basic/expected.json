@@ -1,0 +1,91 @@
+{
+    "instances": {
+        "VLAN0010": {
+            "name": "VLAN0010",
+            "protocol": "rstp",
+            "root_id": {
+                "priority": 32778,
+                "address": "00a5.bf53.d400",
+                "hello_time": 2,
+                "max_age": 20,
+                "forward_delay": 15
+            },
+            "bridge_id": {
+                "priority": 32778,
+                "priority_base": 32768,
+                "sys_id_ext": 10,
+                "address": "00a5.bf53.d400",
+                "hello_time": 2,
+                "max_age": 20,
+                "forward_delay": 15,
+                "aging_time": 300,
+                "is_root": true
+            },
+            "interfaces": {
+                "GigabitEthernet1/0/4": {
+                    "name": "GigabitEthernet1/0/4",
+                    "role": "designated",
+                    "status": "forwarding",
+                    "cost": 20000,
+                    "priority": 128,
+                    "port_number": 4,
+                    "type": "P2p Edge"
+                },
+                "Port-channel1": {
+                    "name": "Port-channel1",
+                    "role": "designated",
+                    "status": "forwarding",
+                    "cost": 10000,
+                    "priority": 128,
+                    "port_number": 3049,
+                    "type": "P2p"
+                }
+            }
+        },
+        "VLAN0200": {
+            "name": "VLAN0200",
+            "protocol": "rstp",
+            "root_id": {
+                "priority": 24776,
+                "address": "58bf.eaff.e5b6",
+                "cost": 3,
+                "port_number": 2390,
+                "port_name": "Port-channel14",
+                "hello_time": 2,
+                "max_age": 20,
+                "forward_delay": 15
+            },
+            "bridge_id": {
+                "priority": 28872,
+                "priority_base": 28672,
+                "sys_id_ext": 200,
+                "address": "ecbd.1dff.5f89",
+                "hello_time": 2,
+                "max_age": 20,
+                "forward_delay": 15,
+                "aging_time": 300,
+                "is_root": false
+            },
+            "interfaces": {
+                "GigabitEthernet1/0/5": {
+                    "name": "GigabitEthernet1/0/5",
+                    "role": "designated",
+                    "status": "forwarding",
+                    "cost": 4,
+                    "priority": 128,
+                    "port_number": 5,
+                    "type": "P2p Peer(STP)"
+                },
+                "Port-channel14": {
+                    "name": "Port-channel14",
+                    "role": "root",
+                    "status": "forwarding",
+                    "cost": 3,
+                    "priority": 128,
+                    "port_number": 2390,
+                    "type": "P2p"
+                }
+            }
+        }
+    }
+}

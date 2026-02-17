@@ -1,0 +1,58 @@
+{
+    "instances": {
+        "VLAN0001": {
+            "name": "VLAN0001",
+            "protocol": "ieee",
+            "root_id": {
+                "priority": 32769,
+                "address": "fa16.3e57.336f",
+                "cost": 8,
+                "port_number": 4,
+                "port_name": "GigabitEthernet0/3",
+                "hello_time": 2,
+                "max_age": 20,
+                "forward_delay": 15
+            },
+            "bridge_id": {
+                "priority": 32769,
+                "priority_base": 32768,
+                "sys_id_ext": 1,
+                "address": "fa16.3e77.b50c",
+                "hello_time": 2,
+                "max_age": 20,
+                "forward_delay": 15,
+                "aging_time": 300,
+                "is_root": false
+            },
+            "interfaces": {
+                "GigabitEthernet0/2": {
+                    "name": "GigabitEthernet0/2",
+                    "role": "designated",
+                    "status": "forwarding",
+                    "cost": 4,
+                    "priority": 128,
+                    "port_number": 3,
+                    "type": "Shr"
+                },
+                "GigabitEthernet0/3": {
+                    "name": "GigabitEthernet0/3",
+                    "role": "root",
+                    "status": "forwarding",
+                    "cost": 4,
+                    "priority": 128,
+                    "port_number": 4,
+                    "type": "Shr"
+                },
+                "GigabitEthernet1/0": {
+                    "name": "GigabitEthernet1/0",
+                    "role": "alternate",
+                    "status": "blocking",
+                    "cost": 4,
+                    "priority": 128,
+                    "port_number": 5,
+                    "type": "Shr"
+                }
+            }
+        }
+    }
+}
