@@ -1,6 +1,7 @@
 """Parser for 'show macsec summary' command on IOS-XE."""
 
 import re
+from collections.abc import Callable
 from typing import NotRequired, TypedDict
 
 from netutils.interface import canonical_interface_name
@@ -74,7 +75,7 @@ class ShowMacsecSummaryParser(BaseParser[ShowMacsecSummaryResult]):
         if len(parts) < 2:
             return False
         interface = cls._normalize_interface(parts[0].strip())
-        entry: dict[str, object] = {"extension": parts[1].strip()}
+        entry: MacsecCapableInterface = {"extension": parts[1].strip()}
         if len(parts) >= 3 and parts[2].strip():
             entry["installed_rx_sc"] = int(parts[2].strip())
         result["macsec_capable"][interface] = entry
@@ -94,6 +95,52 @@ class ShowMacsecSummaryParser(BaseParser[ShowMacsecSummaryResult]):
             "vlan": int(parts[2].strip()),
         }
         return True
+
+    _HEADER_MODE_MAP: list[tuple[re.Pattern[str], str]] = [
+        (_SUMMARY_HEADER, "summary"),
+        (_CAPABLE_HEADER, "capable"),
+        (_ENABLED_HEADER, "enabled"),
+    ]
+
+    @classmethod
+    def _match_header(cls, line: str) -> str | None:
+        """Return the mode name if line matches a section header."""
+        for pattern, mode in cls._HEADER_MODE_MAP:
+            if pattern.match(line):
+                return mode
+        return None
+
+    @classmethod
+    def _has_data(cls, result: ShowMacsecSummaryResult) -> bool:
+        """Check if any MACsec data was parsed."""
+        return bool(
+            result["summary_interfaces"]
+            or result["macsec_capable"]
+            or result["macsec_enabled"]
+        )
+
+    @classmethod
+    def _process_line(
+        cls,
+        line: str,
+        mode: str | None,
+        result: ShowMacsecSummaryResult,
+        handlers: dict[str, Callable[[list[str], ShowMacsecSummaryResult], bool]],
+    ) -> tuple[str | None, bool]:
+        """Process a single line. Returns (new_mode, should_return_early)."""
+        if cls._NO_CHANNELS_PATTERN.match(line):
+            result["has_secure_channels"] = False
+            return mode, True
+
+        header_mode = cls._match_header(line)
+        if header_mode is not None:
+            return header_mode, False
+
+        parts = re.split(r"\s{2,}", line)
+        if mode in handlers:
+            handlers[mode](parts, result)
+
+        return mode, False
 
     @classmethod
     def parse(cls, output: str) -> ShowMacsecSummaryResult:
@@ -123,37 +170,14 @@ class ShowMacsecSummaryParser(BaseParser[ShowMacsecSummaryResult]):
 
         for line in output.splitlines():
             line = line.strip()
-            if not line:
+            if not line or cls._SEPARATOR.match(line):
                 continue
 
-            if cls._NO_CHANNELS_PATTERN.match(line):
-                result["has_secure_channels"] = False
+            mode, early_return = cls._process_line(line, mode, result, handlers)
+            if early_return:
                 return result
 
-            if cls._SUMMARY_HEADER.match(line):
-                mode = "summary"
-                continue
-
-            if cls._CAPABLE_HEADER.match(line):
-                mode = "capable"
-                continue
-
-            if cls._ENABLED_HEADER.match(line):
-                mode = "enabled"
-                continue
-
-            if cls._SEPARATOR.match(line):
-                continue
-
-            parts = re.split(r"\s{2,}", line)
-            if mode in handlers and handlers[mode](parts, result):
-                continue
-
-        if (
-            result["summary_interfaces"]
-            or result["macsec_capable"]
-            or result["macsec_enabled"]
-        ):
+        if cls._has_data(result):
             return result
 
         msg = "No MACsec summary data found"
