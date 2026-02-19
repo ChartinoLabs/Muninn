@@ -1,0 +1,73 @@
+{
+    "vrf": "default",
+    "entry_count": 6,
+    "routes": {
+        "2A05:C100:2A::/64": {
+            "protocol": "C",
+            "network": "2A05:C100:2A::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+                {
+                    "type": "directly connected",
+                    "interface": "Vlan1"
+                }
+            ]
+        },
+        "2001:DB8:4::2/48": {
+            "protocol": "B",
+            "network": "2001:DB8:4::2/48",
+            "admin_distance": 20,
+            "metric": 0,
+            "next_hops": [
+                {
+                    "type": "via",
+                    "next_hop": "FE80::A8BB:CCFF:FE02:8B00",
+                    "interface": "Serial6/0"
+                },
+                {
+                    "type": "via",
+                    "next_hop": "A8BB::FE80:CCFF:FE02:8B00",
+                    "interface": "Serial4/0"
+                }
+            ]
+        },
+        "FF00::/8": {
+            "protocol": "L",
+            "network": "FF00::/8",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+                {
+                    "type": "receive",
+                    "interface": "Null0"
+                }
+            ]
+        },
+        "5555:4444::4/128": {
+            "protocol": "S",
+            "network": "5555:4444::4/128",
+            "admin_distance": 1,
+            "metric": 0,
+            "next_hops": [
+                {
+                    "type": "via",
+                    "next_hop": "2A05:C100:2A::56"
+                },
+                {
+                    "type": "via",
+                    "next_hop": "2A05:C100:2A::5765"
+                },
+                {
+                    "type": "via",
+                    "next_hop": "2A05:C100:2A::3:344",
+                    "interface": "Vlan1"
+                },
+                {
+                    "type": "directly connected",
+                    "interface": "Vlan1"
+                }
+            ]
+        }
+    }
+}
