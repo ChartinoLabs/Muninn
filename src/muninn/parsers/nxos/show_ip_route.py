@@ -91,47 +91,20 @@ def _parse_flags(flags_str: str) -> dict[str, bool]:
     }
 
 
-def _parse_protocol_info(
-    proto_info: str,
-) -> dict[str, str | int | None]:
-    """Parse protocol, process, route_type, tag, and VXLAN fields."""
-    result: dict[str, str | int | None] = {"protocol": ""}
+def _extract_field(proto_info: str, pattern: str) -> tuple[str, str | None]:
+    """Extract a named field from protocol info and return cleaned string + value."""
+    match = re.search(pattern, proto_info)
+    if not match:
+        return proto_info, None
+    value = match.group(1)
+    proto_info = proto_info[: match.start()] + proto_info[match.end() :]
+    return proto_info, value
 
-    # Remove eLB marker
-    proto_info = re.sub(r",?\s*eLB\b", "", proto_info)
 
-    # Remove parenthetical modifiers like (evpn), (hidden)
-    proto_info = re.sub(r"\s*\([^)]+\)", "", proto_info)
-
-    # Extract encap: VXLAN
-    encap_match = re.search(r"encap:\s*(\S+)", proto_info)
-    if encap_match:
-        result["encap"] = encap_match.group(1)
-        before = proto_info[: encap_match.start()]
-        proto_info = before + proto_info[encap_match.end() :]
-
-    # Extract tunnelid: 0x...
-    tunnel_match = re.search(r"tunnelid:\s*(\S+)", proto_info)
-    if tunnel_match:
-        result["tunnelid"] = tunnel_match.group(1)
-        before = proto_info[: tunnel_match.start()]
-        proto_info = before + proto_info[tunnel_match.end() :]
-
-    # Extract segid: NNN
-    segid_match = re.search(r"segid:\s*(\d+)", proto_info)
-    if segid_match:
-        result["segid"] = int(segid_match.group(1))
-        before = proto_info[: segid_match.start()]
-        proto_info = before + proto_info[segid_match.end() :]
-
-    # Extract tag NNN
-    tag_match = re.search(r"tag\s+(\d+)", proto_info)
-    if tag_match:
-        result["tag"] = int(tag_match.group(1))
-        before = proto_info[: tag_match.start()]
-        proto_info = before + proto_info[tag_match.end() :]
-
-    # Remaining tokens: protocol-process, route_type
+def _parse_protocol_tokens(
+    proto_info: str, result: dict[str, str | int | None]
+) -> None:
+    """Parse remaining protocol tokens into protocol, process, and route_type."""
     tokens = [t.strip() for t in proto_info.split(",") if t.strip()]
 
     if tokens:
@@ -145,6 +118,35 @@ def _parse_protocol_info(
         if route_type:
             result["route_type"] = route_type
 
+
+def _parse_protocol_info(
+    proto_info: str,
+) -> dict[str, str | int | None]:
+    """Parse protocol, process, route_type, tag, and VXLAN fields."""
+    result: dict[str, str | int | None] = {"protocol": ""}
+
+    # Remove eLB marker and parenthetical modifiers like (evpn), (hidden)
+    proto_info = re.sub(r",?\s*eLB\b", "", proto_info)
+    proto_info = re.sub(r"\s*\([^)]+\)", "", proto_info)
+
+    # Extract key:value fields
+    proto_info, encap = _extract_field(proto_info, r"encap:\s*(\S+)")
+    if encap:
+        result["encap"] = encap
+
+    proto_info, tunnelid = _extract_field(proto_info, r"tunnelid:\s*(\S+)")
+    if tunnelid:
+        result["tunnelid"] = tunnelid
+
+    proto_info, segid = _extract_field(proto_info, r"segid:\s*(\d+)")
+    if segid:
+        result["segid"] = int(segid)
+
+    proto_info, tag = _extract_field(proto_info, r"tag\s+(\d+)")
+    if tag:
+        result["tag"] = int(tag)
+
+    _parse_protocol_tokens(proto_info, result)
     return result
 
 
@@ -189,6 +191,47 @@ def _build_nexthop(
     return nexthop
 
 
+def _is_skippable(line: str) -> bool:
+    """Check if a line should be skipped during parsing."""
+    stripped = line.strip()
+    return not stripped or stripped.startswith("'") or stripped.startswith("%")
+
+
+def _add_route(route_match: re.Match[str], routes: dict[str, Route]) -> str:
+    """Create a Route from a prefix match and add it to the routes dict."""
+    prefix = route_match.group("prefix")
+    mask = int(route_match.group("mask"))
+    route_key = f"{prefix}/{mask}"
+    flags = _parse_flags(route_match.group("flags"))
+
+    routes[route_key] = Route(
+        prefix=prefix,
+        mask=mask,
+        ubest=int(route_match.group("ubest")),
+        mbest=int(route_match.group("mbest")),
+        attached=flags["attached"],
+        direct=flags["direct"],
+        pervasive=flags["pervasive"],
+        pending=flags["pending"],
+        next_hops=[],
+    )
+    return route_key
+
+
+def _process_nexthop(
+    line: str,
+    current_route_key: str | None,
+    routes: dict[str, Route],
+) -> str | None:
+    """Try to parse a next-hop line and append it to the current route."""
+    nh_match = _NEXTHOP_PATTERN.match(line)
+    if nh_match and current_route_key and current_route_key in routes:
+        proto_fields = _parse_protocol_info(nh_match.group("protocol_info"))
+        nexthop = _build_nexthop(nh_match, proto_fields)
+        routes[current_route_key]["next_hops"].append(nexthop)
+    return current_route_key
+
+
 @register(OS.CISCO_NXOS, "show ip route")
 class ShowIpRouteParser(BaseParser[ShowIpRouteResult]):
     """Parser for 'show ip route' command on NX-OS.
@@ -225,39 +268,17 @@ class ShowIpRouteParser(BaseParser[ShowIpRouteResult]):
                 current_route_key = None
                 continue
 
-            stripped = line.strip()
-            if not stripped or stripped.startswith("'"):
-                continue
-
-            # Skip prompt lines (e.g., "hostname# show ip route")
-            if stripped.startswith("%"):
+            if _is_skippable(line):
                 continue
 
             route_match = _ROUTE_PREFIX_PATTERN.match(line)
             if route_match:
-                prefix = route_match.group("prefix")
-                mask = int(route_match.group("mask"))
-                current_route_key = f"{prefix}/{mask}"
-                flags = _parse_flags(route_match.group("flags"))
-
-                current_routes[current_route_key] = Route(
-                    prefix=prefix,
-                    mask=mask,
-                    ubest=int(route_match.group("ubest")),
-                    mbest=int(route_match.group("mbest")),
-                    attached=flags["attached"],
-                    direct=flags["direct"],
-                    pervasive=flags["pervasive"],
-                    pending=flags["pending"],
-                    next_hops=[],
-                )
+                current_route_key = _add_route(route_match, current_routes)
                 continue
 
-            nh_match = _NEXTHOP_PATTERN.match(line)
-            if nh_match and current_route_key and current_route_key in current_routes:
-                proto_fields = _parse_protocol_info(nh_match.group("protocol_info"))
-                nexthop = _build_nexthop(nh_match, proto_fields)
-                current_routes[current_route_key]["next_hops"].append(nexthop)
+            current_route_key = _process_nexthop(
+                line, current_route_key, current_routes
+            )
 
         # Save last VRF
         if current_vrf is not None:
