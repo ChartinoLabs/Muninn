@@ -208,58 +208,91 @@ def _safe_interface(name: str) -> str:
     return canonical_interface_name(name)
 
 
+def _classify_age_or_interface(token: str, hop: NextHopEntry) -> None:
+    """Classify a trailing token as either an age or interface and set it on hop."""
+    if re.match(r"\d+[wdhms:]|\d+:\d+", token):
+        hop["age"] = token
+    else:
+        hop["outgoing_interface"] = _safe_interface(token)
+
+
+def _set_trailing_tokens(
+    hop: NextHopEntry, token1: str | None, token2: str | None
+) -> None:
+    """Set age and interface from one or two optional trailing tokens."""
+    if token1 and token2:
+        hop["age"] = token1
+        hop["outgoing_interface"] = _safe_interface(token2)
+    elif token1:
+        _classify_age_or_interface(token1, hop)
+
+
+def _parse_summary(rest: str) -> NextHopEntry | None:
+    """Try to parse 'is a summary' route."""
+    m = _SUMMARY_RE.search(rest)
+    if not m:
+        return None
+    return {"age": m.group(1), "outgoing_interface": _safe_interface(m.group(2))}
+
+
+def _parse_directly_connected(rest: str) -> NextHopEntry | None:
+    """Try to parse 'is directly connected' route."""
+    m = _DIRECTLY_CONNECTED_RE.search(rest)
+    if not m:
+        return None
+    hop: NextHopEntry = {"outgoing_interface": _safe_interface(m.group(2))}
+    if m.group(1):
+        hop["age"] = m.group(1)
+    return hop
+
+
+def _parse_metric_no_via(rest: str) -> NextHopEntry | None:
+    """Try to parse [AD/metric], AGE, INTERFACE (no 'via', e.g. BGP to Null0)."""
+    if "via" in rest:
+        return None
+    m = _METRIC_AGE_INTF_RE.search(rest)
+    if not m:
+        return None
+    return {
+        "admin_distance": int(m.group(1)),
+        "metric": int(m.group(2)),
+        "age": m.group(3),
+        "outgoing_interface": _safe_interface(m.group(4)),
+    }
+
+
+def _parse_via_nexthop(rest: str) -> NextHopEntry | None:
+    """Try to parse [AD/metric] via NEXTHOP route."""
+    m = _NEXTHOP_VIA_RE.search(rest)
+    if not m:
+        return None
+    hop: NextHopEntry = {
+        "admin_distance": int(m.group(1)),
+        "metric": int(m.group(2)),
+        "next_hop": m.group(3),
+    }
+    if m.group(4):
+        hop["vrf_leak"] = m.group(4)
+    _set_trailing_tokens(hop, m.group(5), m.group(6))
+    return hop
+
+
+# Ordered list of nexthop parsers to try
+_NEXTHOP_PARSERS = [
+    _parse_summary,
+    _parse_directly_connected,
+    _parse_metric_no_via,
+    _parse_via_nexthop,
+]
+
+
 def _parse_nexthop_rest(rest: str) -> NextHopEntry:
     """Parse the rest of a route line after the prefix."""
-    hop: NextHopEntry = {}
-
-    # Check for "is a summary"
-    m = _SUMMARY_RE.search(rest)
-    if m:
-        age, intf = m.group(1), m.group(2)
-        hop["age"] = age
-        hop["outgoing_interface"] = _safe_interface(intf)
-        return hop
-
-    # Check for "is directly connected"
-    m = _DIRECTLY_CONNECTED_RE.search(rest)
-    if m:
-        age_or_intf = m.group(1)
-        intf = m.group(2)
-        hop["outgoing_interface"] = _safe_interface(intf)
-        if age_or_intf:
-            hop["age"] = age_or_intf
-        return hop
-
-    # Check for [AD/metric], AGE, INTERFACE (no "via", e.g. BGP to Null0)
-    m = _METRIC_AGE_INTF_RE.search(rest)
-    if m and "via" not in rest:
-        hop["admin_distance"] = int(m.group(1))
-        hop["metric"] = int(m.group(2))
-        hop["age"] = m.group(3)
-        hop["outgoing_interface"] = _safe_interface(m.group(4))
-        return hop
-
-    # Check for [AD/metric] via NEXTHOP
-    m = _NEXTHOP_VIA_RE.search(rest)
-    if m:
-        hop["admin_distance"] = int(m.group(1))
-        hop["metric"] = int(m.group(2))
-        hop["next_hop"] = m.group(3)
-        if m.group(4):
-            hop["vrf_leak"] = m.group(4)
-        if m.group(5) and m.group(6):
-            hop["age"] = m.group(5)
-            hop["outgoing_interface"] = _safe_interface(m.group(6))
-        elif m.group(5):
-            # Only one trailing token - could be age or interface
-            token = m.group(5)
-            if re.match(r"\d+[wdhms:]|\d+:\d+", token):
-                hop["age"] = token
-            else:
-                hop["outgoing_interface"] = _safe_interface(token)
-        return hop
-
-    return hop
+    for parser in _NEXTHOP_PARSERS:
+        result = parser(rest)
+        if result is not None:
+            return result
+    return {}
 
 
 def _parse_continuation(line: str) -> NextHopEntry | None:
@@ -274,15 +307,7 @@ def _parse_continuation(line: str) -> NextHopEntry | None:
     }
     if m.group(4):
         hop["vrf_leak"] = m.group(4)
-    if m.group(5) and m.group(6):
-        hop["age"] = m.group(5)
-        hop["outgoing_interface"] = _safe_interface(m.group(6))
-    elif m.group(5):
-        token = m.group(5)
-        if re.match(r"\d+[wdhms:]|\d+:\d+", token):
-            hop["age"] = token
-        else:
-            hop["outgoing_interface"] = _safe_interface(token)
+    _set_trailing_tokens(hop, m.group(5), m.group(6))
     return hop
 
 
@@ -517,6 +542,19 @@ def _process_route(stripped: str, state: _ParseState) -> bool:
     return True
 
 
+def _process_line(line: str, stripped: str, state: _ParseState) -> None:
+    """Process a single non-empty, non-codes line."""
+    if _PROMPT_RE.match(stripped) or _DEBUG_PREFIX_RE.match(stripped):
+        return
+    if _process_header_line(stripped, state):
+        return
+    if _process_subnet_summary(line, state):
+        return
+    if _process_continuation(line, stripped, state):
+        return
+    _process_route(stripped, state)
+
+
 def _parse_routes(lines: list[str]) -> ShowIpRouteResult:
     """Parse all lines into a single VRF routing result."""
     state = _ParseState()
@@ -536,17 +574,7 @@ def _parse_routes(lines: list[str]) -> ShowIpRouteResult:
         if codes_result is False:
             state.in_codes = False
 
-        # Skip prompt and debug lines
-        if _PROMPT_RE.match(stripped) or _DEBUG_PREFIX_RE.match(stripped):
-            continue
-
-        if _process_header_line(stripped, state):
-            continue
-        if _process_subnet_summary(line, state):
-            continue
-        if _process_continuation(line, stripped, state):
-            continue
-        _process_route(stripped, state)
+        _process_line(line, stripped, state)
 
     result: ShowIpRouteResult = {
         "vrf": state.vrf,
