@@ -62,6 +62,27 @@ class ShowInventoryParser(BaseParser[ShowInventoryResult]):
         return value
 
     @classmethod
+    def _build_item(
+        cls, name: str, descr: str, pid_match: re.Match[str]
+    ) -> InventoryItem:
+        """Build an InventoryItem from a PID/VID/SN regex match."""
+        pid = cls._normalize_value(pid_match.group("pid"))
+        vid = cls._normalize_value(pid_match.group("vid"))
+        sn = cls._normalize_value(pid_match.group("sn"))
+
+        item: InventoryItem = {
+            "name": name,
+            "description": descr,
+        }
+        if pid:
+            item["pid"] = pid
+        if vid:
+            item["vid"] = vid
+        if sn:
+            item["serial_number"] = sn
+        return item
+
+    @classmethod
     def parse(cls, output: str) -> ShowInventoryResult:
         """Parse 'show inventory' output.
 
@@ -75,44 +96,25 @@ class ShowInventoryParser(BaseParser[ShowInventoryResult]):
             ValueError: If no inventory items found.
         """
         inventory: dict[str, InventoryItem] = {}
-        lines = output.splitlines()
-
         current_name: str | None = None
         current_descr: str | None = None
 
-        for line in lines:
+        for line in output.splitlines():
             line = line.strip()
             if not line:
                 continue
 
-            # Try to match NAME/DESCR line
             name_match = cls._NAME_DESCR_PATTERN.match(line)
             if name_match:
                 current_name = name_match.group("name")
                 current_descr = name_match.group("descr")
                 continue
 
-            # Try to match PID/VID/SN line
             pid_match = cls._PID_VID_SN_PATTERN.match(line)
             if pid_match and current_name is not None:
-                pid = cls._normalize_value(pid_match.group("pid"))
-                vid = cls._normalize_value(pid_match.group("vid"))
-                sn = cls._normalize_value(pid_match.group("sn"))
-
-                item: InventoryItem = {
-                    "name": current_name,
-                    "description": current_descr or "",
-                }
-                if pid:
-                    item["pid"] = pid
-                if vid:
-                    item["vid"] = vid
-                if sn:
-                    item["serial_number"] = sn
-
-                inventory[current_name] = item
-
-                # Reset for next item
+                inventory[current_name] = cls._build_item(
+                    current_name, current_descr or "", pid_match
+                )
                 current_name = None
                 current_descr = None
 
