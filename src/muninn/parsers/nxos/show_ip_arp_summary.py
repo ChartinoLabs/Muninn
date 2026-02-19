@@ -18,17 +18,36 @@ class ShowIpArpSummaryResult(TypedDict):
     total: int
 
 
+_RESOLVED_PATTERN = re.compile(r"^Resolved\s*:\s*(?P<value>\d+)$", re.I)
+_INCOMPLETE_PATTERN = re.compile(
+    r"^Incomplete\s*:\s*(?P<value>\d+)\s*\(Throttled\s*:\s*(?P<throttled>\d+)\)$",
+    re.I,
+)
+_UNKNOWN_PATTERN = re.compile(r"^Unknown\s*:\s*(?P<value>\d+)$", re.I)
+_TOTAL_PATTERN = re.compile(r"^Total\s*:\s*(?P<value>\d+)$", re.I)
+
+# Maps each pattern to a list of (group_name, result_key) pairs to extract
+_FIELD_PATTERNS: list[tuple[re.Pattern[str], list[tuple[str, str]]]] = [
+    (_RESOLVED_PATTERN, [("value", "resolved")]),
+    (_INCOMPLETE_PATTERN, [("value", "incomplete"), ("throttled", "throttled")]),
+    (_UNKNOWN_PATTERN, [("value", "unknown")]),
+    (_TOTAL_PATTERN, [("value", "total")]),
+]
+
+
+def _match_arp_line(line: str, result: dict[str, int]) -> None:
+    """Try matching a line against all ARP summary patterns."""
+    for pattern, fields in _FIELD_PATTERNS:
+        m = pattern.match(line)
+        if m:
+            for group_name, key in fields:
+                result[key] = int(m.group(group_name))
+            return
+
+
 @register(OS.CISCO_NXOS, "show ip arp summary")
 class ShowIpArpSummaryParser(BaseParser[ShowIpArpSummaryResult]):
     """Parser for 'show ip arp summary' command."""
-
-    _RESOLVED_PATTERN = re.compile(r"^Resolved\s*:\s*(?P<value>\d+)$", re.I)
-    _INCOMPLETE_PATTERN = re.compile(
-        r"^Incomplete\s*:\s*(?P<value>\d+)\s*\(Throttled\s*:\s*(?P<throttled>\d+)\)$",
-        re.I,
-    )
-    _UNKNOWN_PATTERN = re.compile(r"^Unknown\s*:\s*(?P<value>\d+)$", re.I)
-    _TOTAL_PATTERN = re.compile(r"^Total\s*:\s*(?P<value>\d+)$", re.I)
 
     @classmethod
     def parse(cls, output: str) -> ShowIpArpSummaryResult:
@@ -49,27 +68,7 @@ class ShowIpArpSummaryParser(BaseParser[ShowIpArpSummaryResult]):
             line = line.strip()
             if not line:
                 continue
-
-            match = cls._RESOLVED_PATTERN.match(line)
-            if match:
-                result["resolved"] = int(match.group("value"))
-                continue
-
-            match = cls._INCOMPLETE_PATTERN.match(line)
-            if match:
-                result["incomplete"] = int(match.group("value"))
-                result["throttled"] = int(match.group("throttled"))
-                continue
-
-            match = cls._UNKNOWN_PATTERN.match(line)
-            if match:
-                result["unknown"] = int(match.group("value"))
-                continue
-
-            match = cls._TOTAL_PATTERN.match(line)
-            if match:
-                result["total"] = int(match.group("value"))
-                continue
+            _match_arp_line(line, result)
 
         required = ("resolved", "incomplete", "throttled", "unknown", "total")
         missing = [key for key in required if key not in result]
