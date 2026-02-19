@@ -60,6 +60,68 @@ class ShowIpInterfaceBriefParser(BaseParser[ShowIpInterfaceBriefResult]):
     _UNNUMBERED_SOURCE_PATTERN = re.compile(r"^\s+\((?P<source>\S+)\)\s*$")
 
     @classmethod
+    def _handle_vrf_header(cls, line: str, vrfs: dict[str, VrfEntry]) -> str | None:
+        """Match a VRF header and initialize it. Returns VRF name or None."""
+        vrf_match = cls._VRF_PATTERN.search(line)
+        if not vrf_match:
+            return None
+        name = vrf_match.group("vrf_name")
+        vrfs[name] = VrfEntry(vrf_id=int(vrf_match.group("vrf_id")), interfaces={})
+        return name
+
+    @classmethod
+    def _handle_interface(
+        cls, stripped: str, vrfs: dict[str, VrfEntry], current_vrf: str
+    ) -> str | None:
+        """Match an interface entry and add it. Returns interface name or None."""
+        intf_match = cls._INTERFACE_PATTERN.match(stripped)
+        if not intf_match:
+            return None
+        interface = canonical_interface_name(intf_match.group("interface"))
+        entry: InterfaceBriefEntry = {
+            "ip_address": intf_match.group("ip_address"),
+            "protocol_status": intf_match.group("protocol").lower(),
+            "link_status": intf_match.group("link").lower(),
+            "admin_status": intf_match.group("admin").lower(),
+        }
+        vrfs[current_vrf]["interfaces"][interface] = entry
+        return interface
+
+    @classmethod
+    def _is_skip_line(cls, stripped: str) -> bool:
+        """Check if a line should be skipped."""
+        return not stripped or ("Interface" in stripped and "IP Address" in stripped)
+
+    @classmethod
+    def _handle_unnumbered(
+        cls,
+        line: str,
+        vrfs: dict[str, VrfEntry],
+        current_vrf: str,
+        last_interface: str,
+    ) -> bool:
+        """Handle unnumbered source continuation line. Returns True if matched."""
+        unnumbered_match = cls._UNNUMBERED_SOURCE_PATTERN.match(line)
+        if not unnumbered_match:
+            return False
+        source = unnumbered_match.group("source")
+        vrfs[current_vrf]["interfaces"][last_interface]["unnumbered_source"] = (
+            canonical_interface_name(source)
+        )
+        return True
+
+    @staticmethod
+    def _validate_result(vrfs: dict[str, VrfEntry]) -> None:
+        """Validate that parsed data contains VRFs and interfaces."""
+        if not vrfs:
+            msg = "No VRFs found in output"
+            raise ValueError(msg)
+        total_interfaces = sum(len(v["interfaces"]) for v in vrfs.values())
+        if total_interfaces == 0:
+            msg = "No interfaces found in output"
+            raise ValueError(msg)
+
+    @classmethod
     def parse(cls, output: str) -> ShowIpInterfaceBriefResult:
         """Parse 'show ip interface brief' output on NX-OS.
 
@@ -74,57 +136,27 @@ class ShowIpInterfaceBriefParser(BaseParser[ShowIpInterfaceBriefResult]):
         """
         vrfs: dict[str, VrfEntry] = {}
         current_vrf: str | None = None
-        current_vrf_id: int | None = None
         last_interface: str | None = None
 
         for line in output.splitlines():
-            # Skip empty lines and headers
             stripped = line.strip()
-            if not stripped or "Interface" in stripped and "IP Address" in stripped:
+            if cls._is_skip_line(stripped):
                 continue
 
-            # Try to match VRF header
-            vrf_match = cls._VRF_PATTERN.search(line)
-            if vrf_match:
-                current_vrf = vrf_match.group("vrf_name")
-                current_vrf_id = int(vrf_match.group("vrf_id"))
-                vrfs[current_vrf] = VrfEntry(vrf_id=current_vrf_id, interfaces={})
+            vrf_name = cls._handle_vrf_header(line, vrfs)
+            if vrf_name is not None:
+                current_vrf = vrf_name
                 last_interface = None
                 continue
 
-            # Try to match unnumbered source continuation line
-            unnumbered_match = cls._UNNUMBERED_SOURCE_PATTERN.match(line)
-            if unnumbered_match and current_vrf and last_interface:
-                source = unnumbered_match.group("source")
-                vrfs[current_vrf]["interfaces"][last_interface]["unnumbered_source"] = (
-                    canonical_interface_name(source)
-                )
-                continue
+            if current_vrf and last_interface:
+                if cls._handle_unnumbered(line, vrfs, current_vrf, last_interface):
+                    continue
 
-            # Try to match interface entry
-            intf_match = cls._INTERFACE_PATTERN.match(stripped)
-            if intf_match and current_vrf:
-                interface = canonical_interface_name(intf_match.group("interface"))
-                ip_address = intf_match.group("ip_address")
+            if current_vrf:
+                intf = cls._handle_interface(stripped, vrfs, current_vrf)
+                if intf is not None:
+                    last_interface = intf
 
-                entry: InterfaceBriefEntry = {
-                    "ip_address": ip_address,
-                    "protocol_status": intf_match.group("protocol").lower(),
-                    "link_status": intf_match.group("link").lower(),
-                    "admin_status": intf_match.group("admin").lower(),
-                }
-
-                vrfs[current_vrf]["interfaces"][interface] = entry
-                last_interface = interface
-
-        if not vrfs:
-            msg = "No VRFs found in output"
-            raise ValueError(msg)
-
-        # Check if any interfaces were found
-        total_interfaces = sum(len(v["interfaces"]) for v in vrfs.values())
-        if total_interfaces == 0:
-            msg = "No interfaces found in output"
-            raise ValueError(msg)
-
+        cls._validate_result(vrfs)
         return ShowIpInterfaceBriefResult(vrfs=vrfs)
