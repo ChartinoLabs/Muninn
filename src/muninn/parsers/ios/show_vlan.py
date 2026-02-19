@@ -144,9 +144,36 @@ def _handle_wrapped_name(
     return _col_field(line, _NAME_COL), "", "", i
 
 
-def _parse_basic_table(lines: list[str]) -> dict[str, dict]:
+def _parse_vlan_line(line: str, lines: list[str], i: int) -> tuple[str, VlanEntry, int]:
+    """Parse a new VLAN line, handling wrapped names.
+
+    Returns (vlan_id, entry, new_index).
+    """
+    vlan_field = line[:4].strip()
+    name = _col_field(line, _NAME_COL, _STATUS_COL)
+    status = _col_field(line, _STATUS_COL, _PORTS_COL)
+    ports_str = _col_field(line, _PORTS_COL)
+
+    if name and status not in _VALID_STATUSES:
+        name, status, ports_str, i = _handle_wrapped_name(line, lines, i)
+
+    entry: VlanEntry = {
+        "vlan_id": int(vlan_field),
+        "name": name,
+        "status": status,
+        "ports": _normalize_ports(ports_str),
+        "type": "",
+        "said": 0,
+        "mtu": 0,
+        "trans1": 0,
+        "trans2": 0,
+    }
+    return vlan_field, entry, i
+
+
+def _parse_basic_table(lines: list[str]) -> dict[str, VlanEntry]:
     """Parse the basic VLAN table (Name/Status/Ports)."""
-    vlans: dict[str, dict] = {}
+    vlans: dict[str, VlanEntry] = {}
     current_vlan_id: str | None = None
 
     i = 0
@@ -161,19 +188,8 @@ def _parse_basic_table(lines: list[str]) -> dict[str, dict]:
 
         vlan_field = line[:4].strip()
         if vlan_field and vlan_field.isdigit():
-            name = _col_field(line, _NAME_COL, _STATUS_COL)
-            status = _col_field(line, _STATUS_COL, _PORTS_COL)
-            ports_str = _col_field(line, _PORTS_COL)
-
-            if name and status not in _VALID_STATUSES:
-                name, status, ports_str, i = _handle_wrapped_name(line, lines, i)
-
-            vlans[vlan_field] = {
-                "vlan_id": int(vlan_field),
-                "name": name,
-                "status": status,
-                "ports": _normalize_ports(ports_str),
-            }
+            vlan_field, entry, i = _parse_vlan_line(line, lines, i)
+            vlans[vlan_field] = entry
             current_vlan_id = vlan_field
         elif current_vlan_id is not None:
             ports_str = _col_field(line, _PORTS_COL)
@@ -185,20 +201,20 @@ def _parse_basic_table(lines: list[str]) -> dict[str, dict]:
     return vlans
 
 
-def _set_optional_int(entry: dict, key: str, value: int | None) -> None:
-    """Set an optional integer field, omitting if None."""
-    if value is not None:
-        entry[key] = value
-
-
-def _merge_extended_fields(entry: dict, parts: list[str]) -> None:
+def _merge_extended_fields(entry: VlanEntry, parts: list[str]) -> None:
     """Merge extended table fields into a VLAN entry."""
     entry["type"] = parts[1]
     entry["said"] = int(parts[2])
     entry["mtu"] = int(parts[3])
-    _set_optional_int(entry, "parent", _to_int_or_none(parts[4]))
-    _set_optional_int(entry, "ring_no", _to_int_or_none(parts[5]))
-    _set_optional_int(entry, "bridge_no", _to_int_or_none(parts[6]))
+    parent = _to_int_or_none(parts[4])
+    if parent is not None:
+        entry["parent"] = parent
+    ring_no = _to_int_or_none(parts[5])
+    if ring_no is not None:
+        entry["ring_no"] = ring_no
+    bridge_no = _to_int_or_none(parts[6])
+    if bridge_no is not None:
+        entry["bridge_no"] = bridge_no
     if parts[7] != "-":
         entry["stp"] = parts[7]
     if parts[8] != "-":
@@ -207,7 +223,7 @@ def _merge_extended_fields(entry: dict, parts: list[str]) -> None:
     entry["trans2"] = int(parts[10])
 
 
-def _parse_extended_table(lines: list[str], vlans: dict[str, dict]) -> None:
+def _parse_extended_table(lines: list[str], vlans: dict[str, VlanEntry]) -> None:
     """Parse the extended VLAN table and merge into vlans dict."""
     for line in lines:
         stripped = line.strip()
@@ -229,7 +245,7 @@ def _parse_extended_table(lines: list[str], vlans: dict[str, dict]) -> None:
             _merge_extended_fields(entry, parts)
 
 
-def _parse_arehops(lines: list[str], vlans: dict[str, dict]) -> None:
+def _parse_arehops(lines: list[str], vlans: dict[str, VlanEntry]) -> None:
     """Parse the AREHops/STEHops/Backup CRF table."""
     for line in lines:
         stripped = line.strip()
@@ -262,6 +278,30 @@ def _parse_remote_span(lines: list[str]) -> list[int]:
     return sorted(result)
 
 
+def _parse_private_vlan_line(
+    line: str, pri_col: int, sec_col: int, type_col: int, ports_col: int
+) -> PrivateVlanEntry | None:
+    """Parse a single private VLAN data line into an entry."""
+    padded = line.ljust(ports_col + 80)
+    pri_str = padded[pri_col:sec_col].strip()
+    sec_str = padded[sec_col:type_col].strip()
+    type_str = padded[type_col:ports_col].strip()
+    ports_str = padded[ports_col:].strip()
+
+    if not sec_str or not sec_str.isdigit():
+        return None
+
+    entry: PrivateVlanEntry = {
+        "secondary": int(sec_str),
+        "type": type_str,
+        "ports": _normalize_ports(ports_str),
+    }
+    if pri_str and pri_str.lower() != "none":
+        entry["primary"] = int(pri_str)
+
+    return entry
+
+
 def _parse_private_vlans(
     lines: list[str],
 ) -> list[PrivateVlanEntry]:
@@ -288,24 +328,9 @@ def _parse_private_vlans(
         if not stripped or _SEPARATOR.match(stripped):
             continue
 
-        padded = line.ljust(ports_col + 80)
-        pri_str = padded[pri_col:sec_col].strip()
-        sec_str = padded[sec_col:type_col].strip()
-        type_str = padded[type_col:ports_col].strip()
-        ports_str = padded[ports_col:].strip()
-
-        if not sec_str or not sec_str.isdigit():
-            continue
-
-        entry: PrivateVlanEntry = {
-            "secondary": int(sec_str),
-            "type": type_str,
-            "ports": _normalize_ports(ports_str),
-        }
-        if pri_str and pri_str.lower() != "none":
-            entry["primary"] = int(pri_str)
-
-        entries.append(entry)
+        entry = _parse_private_vlan_line(line, pri_col, sec_col, type_col, ports_col)
+        if entry is not None:
+            entries.append(entry)
 
     return entries
 
