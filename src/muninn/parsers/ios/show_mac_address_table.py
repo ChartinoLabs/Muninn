@@ -90,12 +90,8 @@ _SPECIAL_PORTS = frozenset(
         "drop",
         "router",
         "switch",
-        "vpc peer-link",
     }
 )
-
-# Multi-word special port patterns (matched before splitting on spaces)
-_MULTI_WORD_PORTS_RE = re.compile(r"vPC Peer-Link", re.IGNORECASE)
 
 
 class MacEntry(TypedDict):
@@ -145,22 +141,13 @@ def _parse_port_list(raw_ports: str) -> list[str]:
     """Parse a ports string into a list of normalized port names.
 
     Handles space-separated, comma-separated, and mixed formats.
-    Preserves multi-word special values like 'vPC Peer-Link'.
     """
     if not raw_ports or not raw_ports.strip():
         return []
-    result: list[str] = []
-    remaining = raw_ports.strip()
 
-    # Extract multi-word special ports first
-    for m in _MULTI_WORD_PORTS_RE.finditer(remaining):
-        result.append(m.group(0))
-    remaining = _MULTI_WORD_PORTS_RE.sub("", remaining)
-
-    # Split remainder on commas and/or whitespace
-    tokens = re.split(r"[,\s]+", remaining.strip())
-    result.extend(_normalize_port(t) for t in tokens if t)
-    return result
+    # Split on commas and/or whitespace
+    tokens = re.split(r"[,\s]+", raw_ports.strip())
+    return [_normalize_port(t) for t in tokens if t]
 
 
 def _is_header_or_separator(line: str) -> bool:
