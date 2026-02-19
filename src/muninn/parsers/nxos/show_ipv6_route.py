@@ -97,6 +97,63 @@ def _has_attached(line: str) -> bool:
     return ", attached" in line
 
 
+class _ParseState:
+    """Mutable state container for the line-by-line parser."""
+
+    __slots__ = ("vrfs", "current_vrf", "current_next_hops")
+
+    def __init__(self) -> None:
+        self.vrfs: dict[str, VrfRoutes] = {}
+        self.current_vrf: str | None = None
+        self.current_next_hops: list[NextHop] = []
+
+
+def _handle_vrf_line(state: _ParseState, stripped: str) -> bool:
+    """Try to match a VRF header line and update state.
+
+    Returns True if matched.
+    """
+    vrf_match = _VRF_PATTERN.search(stripped)
+    if not vrf_match:
+        return False
+    state.current_vrf = vrf_match.group("vrf")
+    state.vrfs[state.current_vrf] = {"routes": {}}
+    return True
+
+
+def _handle_route_line(state: _ParseState, stripped: str) -> bool:
+    """Try to match a route prefix line and update state.
+
+    Returns True if matched.
+    """
+    route_match = _ROUTE_PATTERN.match(stripped)
+    if not route_match or state.current_vrf is None:
+        return False
+    prefix = route_match.group("prefix")
+    state.current_next_hops = []
+    route: RouteEntry = {
+        "ubest": int(route_match.group("ubest")),
+        "mbest": int(route_match.group("mbest")),
+        "next_hops": state.current_next_hops,
+    }
+    if _has_attached(stripped):
+        route["attached"] = True
+    state.vrfs[state.current_vrf]["routes"][prefix] = route
+    return True
+
+
+def _handle_nexthop_line(state: _ParseState, stripped: str) -> bool:
+    """Try to match a next-hop line and update state.
+
+    Returns True if matched.
+    """
+    nh_match = _NEXTHOP_PATTERN.match(stripped)
+    if not nh_match:
+        return False
+    state.current_next_hops.append(_build_next_hop(nh_match))
+    return True
+
+
 @register(OS.CISCO_NXOS, "show ipv6 route")
 class ShowIpv6RouteParser(BaseParser[ShowIpv6RouteResult]):
     """Parser for 'show ipv6 route' command on NX-OS.
@@ -117,63 +174,26 @@ class ShowIpv6RouteParser(BaseParser[ShowIpv6RouteResult]):
         Raises:
             ValueError: If no VRF routing tables found.
         """
-        vrfs: dict[str, VrfRoutes] = {}
-        current_vrf: str | None = None
-        current_prefix: str | None = None
-        current_next_hops: list[NextHop] = []
-        current_route: RouteEntry | None = None
+        state = _ParseState()
 
-        lines = output.splitlines()
-        for line in lines:
+        for line in output.splitlines():
             stripped = line.strip()
             if not stripped:
                 continue
 
-            # Check for VRF header
-            vrf_match = _VRF_PATTERN.search(stripped)
-            if vrf_match:
-                current_vrf = vrf_match.group("vrf")
-                vrfs[current_vrf] = {"routes": {}}
-                current_prefix = None
-                current_route = None
+            if _handle_vrf_line(state, stripped):
                 continue
-
-            if current_vrf is None:
+            if _handle_route_line(state, stripped):
                 continue
-
-            # Check for route prefix line
-            route_match = _ROUTE_PATTERN.match(stripped)
-            if route_match:
-                current_prefix = route_match.group("prefix")
-                current_next_hops = []
-                current_route = {
-                    "ubest": int(route_match.group("ubest")),
-                    "mbest": int(route_match.group("mbest")),
-                    "next_hops": current_next_hops,
-                }
-                if _has_attached(stripped):
-                    current_route["attached"] = True
-                vrfs[current_vrf]["routes"][current_prefix] = current_route
+            if _handle_nexthop_line(state, stripped):
                 continue
+            _parse_continuation(stripped, state.current_next_hops)
 
-            if current_prefix is None or current_route is None:
-                continue
-
-            # Check for next-hop line
-            nh_match = _NEXTHOP_PATTERN.match(stripped)
-            if nh_match:
-                hop = _build_next_hop(nh_match)
-                current_next_hops.append(hop)
-                continue
-
-            # Check for continuation lines (tag, VXLAN attributes)
-            _parse_continuation(stripped, current_next_hops)
-
-        if not vrfs:
+        if not state.vrfs:
             msg = "No IPv6 routing tables found in output"
             raise ValueError(msg)
 
-        return ShowIpv6RouteResult(vrfs=vrfs)
+        return ShowIpv6RouteResult(vrfs=state.vrfs)
 
 
 # Pattern to extract route_type from the tail (first alphabetic word after comma,
