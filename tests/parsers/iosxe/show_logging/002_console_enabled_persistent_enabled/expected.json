@@ -1,0 +1,57 @@
+{
+    "syslog": {
+        "enabled": true,
+        "messages_dropped": 0,
+        "messages_rate_limited": 3,
+        "flushes": 0,
+        "overruns": 0,
+        "xml_disabled": true,
+        "filtering_disabled": true
+    },
+    "console_logging": {
+        "level": "debugging",
+        "messages_logged": 9789,
+        "xml_disabled": true
+    },
+    "monitor_logging": {
+        "level": "debugging",
+        "messages_logged": 0,
+        "xml_disabled": true,
+        "filtering_disabled": true
+    },
+    "buffer_logging": {
+        "level": "debugging",
+        "messages_logged": 9789,
+        "xml_disabled": true,
+        "filtering_disabled": true
+    },
+    "count_and_timestamp_logging": false,
+    "trap_logging": {
+        "level": "informational",
+        "message_lines_logged": 9780
+    },
+    "log_buffer_size_bytes": 512000,
+    "logs": [
+        {
+            "timestamp": "*Oct 15 09:12:40.734",
+            "message": "%SYS-6-LOGOUT: User admin has exited tty session 866(192.168.1.31)",
+            "facility": "SYS",
+            "severity": 6,
+            "mnemonic": "LOGOUT"
+        },
+        {
+            "timestamp": "*Oct 15 09:13:24.005",
+            "message": "%SELINUX-3-MISMATCH: R0/0: audispd: type=AVC msg=audit(1602753204.003:5355): avc:  denied  { mounton } for  pid=11284 comm=\"DNS\" path=\"/sys\" dev=\"overlay\" ino=27798 scontext=system_u:system_r:polaris_vdaemon_t:s0 tcontext=system_u:object_r:tmp_t:s0 tclass=dir permissive=1",
+            "facility": "SELINUX",
+            "severity": 3,
+            "mnemonic": "MISMATCH"
+        }
+    ],
+    "exception_logging": {
+        "size_bytes": 4096
+    },
+    "persistent_logging": {
+        "enabled": true,
+        "url": "bootflash:/syslog,"
+    }
+}
