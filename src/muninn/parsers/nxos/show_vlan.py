@@ -112,56 +112,61 @@ def _is_section_end(line: str) -> bool:
     )
 
 
-def _parse_basic_table(lines: list[str]) -> dict[str, dict]:
+def _fix_overflowed_status(line: str, name: str, status: str) -> tuple[str, str]:
+    """Fix VLAN name/status when the name overflows into the status column."""
+    if not name or status in _VALID_STATUSES:
+        return name, status
+    combined = _col_field(line, _NAME_COL)
+    for valid_status in _VALID_STATUSES:
+        if combined.endswith(valid_status):
+            return combined[: -len(valid_status)].strip(), valid_status
+    return name, status
+
+
+def _parse_basic_line(line: str) -> VlanEntry | None:
+    """Parse a single VLAN line from the basic table."""
+    vlan_field = line[:4].strip()
+    if not vlan_field or not vlan_field.isdigit():
+        return None
+    name = _col_field(line, _NAME_COL, _STATUS_COL)
+    status = _col_field(line, _STATUS_COL, _PORTS_COL)
+    ports_str = _col_field(line, _PORTS_COL)
+    name, status = _fix_overflowed_status(line, name, status)
+    return {
+        "vlan_id": int(vlan_field),
+        "name": name,
+        "status": status,
+        "ports": _normalize_ports(ports_str),
+        "type": "",
+        "vlan_mode": "",
+    }
+
+
+def _parse_basic_table(lines: list[str]) -> dict[str, VlanEntry]:
     """Parse the basic VLAN table (Name/Status/Ports)."""
-    vlans: dict[str, dict] = {}
+    vlans: dict[str, VlanEntry] = {}
     current_vlan_id: str | None = None
 
-    i = 0
-    while i < len(lines):
-        line = lines[i]
-
+    for line in lines:
         if _is_section_end(line):
             break
         if _SEPARATOR.match(line) or not line.strip():
-            i += 1
             continue
 
-        vlan_field = line[:4].strip()
-        if vlan_field and vlan_field.isdigit():
-            name = _col_field(line, _NAME_COL, _STATUS_COL)
-            status = _col_field(line, _STATUS_COL, _PORTS_COL)
-            ports_str = _col_field(line, _PORTS_COL)
-
-            # Handle VLAN names that overflow into the status column
-            if name and status not in _VALID_STATUSES:
-                combined = _col_field(line, _NAME_COL)
-                # Try to find the status by splitting from the right
-                for valid_status in _VALID_STATUSES:
-                    if combined.endswith(valid_status):
-                        name = combined[: -len(valid_status)].strip()
-                        status = valid_status
-                        break
-
-            vlans[vlan_field] = {
-                "vlan_id": int(vlan_field),
-                "name": name,
-                "status": status,
-                "ports": _normalize_ports(ports_str),
-            }
+        entry = _parse_basic_line(line)
+        if entry is not None:
+            vlan_field = line[:4].strip()
+            vlans[vlan_field] = entry
             current_vlan_id = vlan_field
         elif current_vlan_id is not None:
-            # Continuation line for ports
             ports_str = _col_field(line, _PORTS_COL)
             if ports_str:
                 vlans[current_vlan_id]["ports"].extend(_normalize_ports(ports_str))
 
-        i += 1
-
     return vlans
 
 
-def _parse_type_table(lines: list[str], vlans: dict[str, dict]) -> None:
+def _parse_type_table(lines: list[str], vlans: dict[str, VlanEntry]) -> None:
     """Parse the VLAN Type/Vlan-mode table and merge into vlans dict."""
     for line in lines:
         stripped = line.strip()
@@ -201,7 +206,7 @@ def _find_pv_header(lines: list[str]) -> int:
 
 
 def _apply_secondary_pv(
-    vlans: dict[str, dict],
+    vlans: dict[str, VlanEntry],
     sec_str: str,
     pri_str: str,
     type_str: str,
@@ -219,7 +224,7 @@ def _apply_secondary_pv(
         sec_entry["ports"] = _normalize_ports(ports_str)
 
 
-def _apply_primary_pv(vlans: dict[str, dict], pri_str: str, sec_str: str) -> None:
+def _apply_primary_pv(vlans: dict[str, VlanEntry], pri_str: str, sec_str: str) -> None:
     """Add secondary VLAN reference to a primary VLAN entry."""
     if not pri_str or not pri_str.isdigit():
         return
@@ -231,10 +236,11 @@ def _apply_primary_pv(vlans: dict[str, dict], pri_str: str, sec_str: str) -> Non
     pri_pv = pri_entry["private_vlan"]
     if "secondary_vlans" not in pri_pv:
         pri_pv["secondary_vlans"] = []
-    pri_pv["secondary_vlans"].append(sec_str)
+    sec_list: list[str] = pri_pv["secondary_vlans"]
+    sec_list.append(sec_str)
 
 
-def _parse_private_vlans(lines: list[str], vlans: dict[str, dict]) -> None:
+def _parse_private_vlans(lines: list[str], vlans: dict[str, VlanEntry]) -> None:
     """Parse Private VLAN associations and merge into vlans dict."""
     header_idx = _find_pv_header(lines)
     if header_idx < 0:
