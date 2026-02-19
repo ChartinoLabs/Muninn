@@ -1,0 +1,48 @@
+{
+    "instances": {
+        "MST03": {
+            "name": "MST03",
+            "protocol": "mstp",
+            "root_id": {
+                "priority": 32771,
+                "address": "0050.14ff.1cbb",
+                "cost": 20000,
+                "port_number": 136,
+                "port_name": "GigabitEthernet3/8",
+                "hello_time": 2,
+                "max_age": 20,
+                "forward_delay": 15
+            },
+            "bridge_id": {
+                "is_root": false,
+                "priority": 32771,
+                "priority_base": 32768,
+                "sys_id_ext": 3,
+                "address": "00d0.00ff.c73f",
+                "hello_time": 2,
+                "max_age": 20,
+                "forward_delay": 15
+            },
+            "interfaces": {
+                "GigabitEthernet3/8": {
+                    "name": "GigabitEthernet3/8",
+                    "role": "root",
+                    "status": "forwarding",
+                    "cost": 20000,
+                    "priority": 128,
+                    "port_number": 136,
+                    "type": "P2p"
+                },
+                "Port-channel1": {
+                    "name": "Port-channel1",
+                    "role": "designated",
+                    "status": "forwarding",
+                    "cost": 20000,
+                    "priority": 128,
+                    "port_number": 833,
+                    "type": "P2p"
+                }
+            }
+        }
+    }
+}

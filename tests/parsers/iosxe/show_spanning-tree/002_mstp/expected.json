@@ -1,0 +1,80 @@
+{
+    "instances": {
+        "MST0": {
+            "name": "MST0",
+            "protocol": "mstp",
+            "root_id": {
+                "priority": 32768,
+                "address": "3820.56ff.e15b",
+                "cost": 20000,
+                "port_number": 5,
+                "port_name": "GigabitEthernet1/0/5",
+                "hello_time": 10,
+                "max_age": 35,
+                "forward_delay": 30
+            },
+            "bridge_id": {
+                "is_root": false,
+                "priority": 32768,
+                "priority_base": 32768,
+                "sys_id_ext": 0,
+                "address": "ecbd.1dff.5f89",
+                "hello_time": 7,
+                "max_age": 12,
+                "forward_delay": 15
+            },
+            "interfaces": {
+                "GigabitEthernet1/0/5": {
+                    "name": "GigabitEthernet1/0/5",
+                    "role": "root",
+                    "status": "forwarding",
+                    "cost": 20000,
+                    "priority": 128,
+                    "port_number": 5,
+                    "type": "P2p Bound(RSTP)"
+                },
+                "Port-channel24": {
+                    "name": "Port-channel24",
+                    "role": "designated",
+                    "status": "forwarding",
+                    "cost": 6660,
+                    "priority": 128,
+                    "port_number": 2400,
+                    "type": "P2p Bound(PVST)"
+                }
+            }
+        },
+        "MST10": {
+            "name": "MST10",
+            "protocol": "mstp",
+            "root_id": {
+                "priority": 61450,
+                "address": "ecbd.1dff.5f89",
+                "hello_time": 10,
+                "max_age": 35,
+                "forward_delay": 30
+            },
+            "bridge_id": {
+                "is_root": true,
+                "priority": 61450,
+                "priority_base": 61440,
+                "sys_id_ext": 10,
+                "address": "ecbd.1dff.5f89",
+                "hello_time": 7,
+                "max_age": 12,
+                "forward_delay": 15
+            },
+            "interfaces": {
+                "GigabitEthernet1/0/5": {
+                    "name": "GigabitEthernet1/0/5",
+                    "role": "master",
+                    "status": "forwarding",
+                    "cost": 20000,
+                    "priority": 128,
+                    "port_number": 5,
+                    "type": "P2p Bound(RSTP)"
+                }
+            }
+        }
+    }
+}
