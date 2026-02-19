@@ -1,0 +1,482 @@
+{
+    "vrf": "default",
+    "routes": {
+        "1.1.1.1/32": {
+            "network": "1.1.1.1",
+            "mask": "32",
+            "protocol": "static",
+            "protocol_code": "S",
+            "next_hops": [
+                {
+                    "admin_distance": 1,
+                    "metric": 0,
+                    "next_hop": "212.0.0.1"
+                },
+                {
+                    "admin_distance": 1,
+                    "metric": 0,
+                    "next_hop": "192.168.0.1"
+                }
+            ]
+        },
+        "2.2.2.0/24": {
+            "network": "2.2.2.0",
+            "mask": "24",
+            "protocol": "static",
+            "protocol_code": "S",
+            "next_hops": [
+                {
+                    "outgoing_interface": "FastEthernet0/0.100"
+                }
+            ]
+        },
+        "4.4.0.0/16": {
+            "network": "4.4.0.0",
+            "mask": "16",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+                {
+                    "admin_distance": 110,
+                    "metric": 20,
+                    "next_hop": "194.0.0.2",
+                    "age": "1d18h",
+                    "outgoing_interface": "FastEthernet0/0.100"
+                }
+            ],
+            "type_code": "E2",
+            "type": "external-type-2"
+        },
+        "5.5.5.0/24": {
+            "network": "5.5.5.0",
+            "mask": "24",
+            "protocol": "eigrp",
+            "protocol_code": "D",
+            "next_hops": [
+                {
+                    "admin_distance": 170,
+                    "metric": 2297856,
+                    "next_hop": "10.0.1.2",
+                    "age": "00:12:01",
+                    "outgoing_interface": "Serial0/0"
+                }
+            ],
+            "type_code": "EX",
+            "type": "external"
+        },
+        "6.6.0.0/16": {
+            "network": "6.6.0.0",
+            "mask": "16",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+                {
+                    "admin_distance": 200,
+                    "metric": 0,
+                    "next_hop": "195.0.0.1",
+                    "age": "00:00:04"
+                }
+            ]
+        },
+        "172.16.1.0/26": {
+            "network": "172.16.1.0",
+            "mask": "26",
+            "protocol": "isis",
+            "protocol_code": "i",
+            "next_hops": [
+                {
+                    "admin_distance": 115,
+                    "metric": 10,
+                    "next_hop": "10.0.1.2",
+                    "outgoing_interface": "Serial0/0"
+                }
+            ],
+            "type_code": "L2",
+            "type": "level-2"
+        },
+        "172.20.1.1/32": {
+            "network": "172.20.1.1",
+            "mask": "32",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+                {
+                    "admin_distance": 110,
+                    "metric": 11,
+                    "next_hop": "194.0.0.2",
+                    "age": "00:05:45",
+                    "outgoing_interface": "FastEthernet0/0.100"
+                }
+            ]
+        },
+        "172.20.3.1/32": {
+            "network": "172.20.3.1",
+            "mask": "32",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+                {
+                    "admin_distance": 110,
+                    "metric": 11,
+                    "next_hop": "194.0.0.2",
+                    "age": "00:05:45",
+                    "outgoing_interface": "FastEthernet0/0.100"
+                }
+            ]
+        },
+        "172.20.2.1/32": {
+            "network": "172.20.2.1",
+            "mask": "32",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+                {
+                    "admin_distance": 110,
+                    "metric": 11,
+                    "next_hop": "194.0.0.2",
+                    "age": "00:05:45",
+                    "outgoing_interface": "FastEthernet0/0.100"
+                }
+            ]
+        },
+        "10.0.1.0/24": {
+            "network": "10.0.1.0",
+            "mask": "24",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+                {
+                    "outgoing_interface": "Serial0/0"
+                }
+            ]
+        },
+        "10.0.5.0/26": {
+            "network": "10.0.5.0",
+            "mask": "26",
+            "protocol": "eigrp",
+            "protocol_code": "D",
+            "next_hops": [
+                {
+                    "admin_distance": 90,
+                    "metric": 2297856,
+                    "next_hop": "10.0.1.2",
+                    "age": "00:12:03",
+                    "outgoing_interface": "Serial0/0"
+                }
+            ]
+        },
+        "10.0.5.64/26": {
+            "network": "10.0.5.64",
+            "mask": "26",
+            "protocol": "eigrp",
+            "protocol_code": "D",
+            "next_hops": [
+                {
+                    "admin_distance": 90,
+                    "metric": 2297856,
+                    "next_hop": "10.0.1.2",
+                    "age": "00:12:03",
+                    "outgoing_interface": "Serial0/0"
+                }
+            ]
+        },
+        "10.0.5.128/26": {
+            "network": "10.0.5.128",
+            "mask": "26",
+            "protocol": "eigrp",
+            "protocol_code": "D",
+            "next_hops": [
+                {
+                    "admin_distance": 90,
+                    "metric": 2297856,
+                    "next_hop": "10.0.1.2",
+                    "age": "00:12:03",
+                    "outgoing_interface": "Serial0/0"
+                }
+            ]
+        },
+        "10.0.5.192/27": {
+            "network": "10.0.5.192",
+            "mask": "27",
+            "protocol": "eigrp",
+            "protocol_code": "D",
+            "next_hops": [
+                {
+                    "admin_distance": 90,
+                    "metric": 2297856,
+                    "next_hop": "10.0.1.2",
+                    "age": "00:12:03",
+                    "outgoing_interface": "Serial0/0"
+                }
+            ]
+        },
+        "11.1.0.0/17": {
+            "network": "11.1.0.0",
+            "mask": "17",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+                {
+                    "admin_distance": 200,
+                    "metric": 0,
+                    "age": "2w0d",
+                    "outgoing_interface": "Null0"
+                }
+            ]
+        },
+        "12.0.0.0/16": {
+            "network": "12.0.0.0",
+            "mask": "16",
+            "protocol": "static",
+            "protocol_code": "S",
+            "next_hops": [
+                {
+                    "outgoing_interface": "Null0"
+                }
+            ]
+        },
+        "13.14.128.0/17": {
+            "network": "13.14.128.0",
+            "mask": "17",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+                {
+                    "age": "7w0d",
+                    "outgoing_interface": "Null0"
+                }
+            ],
+            "type": "summary"
+        },
+        "192.168.0.1/32": {
+            "network": "192.168.0.1",
+            "mask": "32",
+            "protocol": "eigrp",
+            "protocol_code": "D",
+            "next_hops": [
+                {
+                    "admin_distance": 90,
+                    "metric": 2297856,
+                    "next_hop": "10.0.1.2",
+                    "age": "00:12:03",
+                    "outgoing_interface": "Serial0/0"
+                }
+            ]
+        },
+        "192.168.10.168/29": {
+            "network": "192.168.10.168",
+            "mask": "29",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+                {
+                    "admin_distance": 110,
+                    "metric": 20,
+                    "next_hop": "7.7.7.170",
+                    "age": "12:54:35",
+                    "outgoing_interface": "TenGigabitEthernet7/4"
+                }
+            ],
+            "type_code": "E2",
+            "type": "external-type-2"
+        },
+        "10.63.184.0/23": {
+            "network": "10.63.184.0",
+            "mask": "23",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+                {
+                    "admin_distance": 110,
+                    "metric": 20,
+                    "next_hop": "10.62.4.29",
+                    "age": "12:55:19",
+                    "outgoing_interface": "TenGigabitEthernet1/15"
+                },
+                {
+                    "admin_distance": 110,
+                    "metric": 20,
+                    "next_hop": "10.62.3.29",
+                    "age": "12:55:19",
+                    "outgoing_interface": "TenGigabitEthernet1/16"
+                }
+            ],
+            "type_code": "E2",
+            "type": "external-type-2"
+        },
+        "192.168.12.0/27": {
+            "network": "192.168.12.0",
+            "mask": "27",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+                {
+                    "admin_distance": 110,
+                    "metric": 20,
+                    "next_hop": "10.64.3.13",
+                    "age": "12:54:36",
+                    "outgoing_interface": "Port-channel202"
+                },
+                {
+                    "admin_distance": 110,
+                    "metric": 20,
+                    "next_hop": "10.64.1.9",
+                    "age": "12:54:36",
+                    "outgoing_interface": "Port-channel201"
+                }
+            ],
+            "type_code": "E2",
+            "type": "external-type-2"
+        },
+        "10.64.4.88/30": {
+            "network": "10.64.4.88",
+            "mask": "30",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+                {
+                    "outgoing_interface": "Serial0/0/0:0"
+                }
+            ]
+        },
+        "10.6.234.0/24": {
+            "network": "10.6.234.0",
+            "mask": "24",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+                {
+                    "admin_distance": 110,
+                    "metric": 20,
+                    "next_hop": "10.64.4.90",
+                    "age": "12:54:53",
+                    "outgoing_interface": "Serial0/0/0:0"
+                }
+            ],
+            "type_code": "E2",
+            "type": "external-type-2"
+        },
+        "7.7.7.168/30": {
+            "network": "7.7.7.168",
+            "mask": "30",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+                {
+                    "outgoing_interface": "TenGigabitEthernet7/4"
+                }
+            ]
+        },
+        "10.64.3.12/30": {
+            "network": "10.64.3.12",
+            "mask": "30",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+                {
+                    "outgoing_interface": "Port-channel202"
+                }
+            ]
+        },
+        "10.64.1.8/30": {
+            "network": "10.64.1.8",
+            "mask": "30",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+                {
+                    "outgoing_interface": "Port-channel201"
+                }
+            ]
+        },
+        "10.62.4.28/30": {
+            "network": "10.62.4.28",
+            "mask": "30",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+                {
+                    "outgoing_interface": "TenGigabitEthernet1/15"
+                }
+            ]
+        },
+        "10.62.3.28/30": {
+            "network": "10.62.3.28",
+            "mask": "30",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+                {
+                    "outgoing_interface": "TenGigabitEthernet1/16"
+                }
+            ]
+        },
+        "195.0.0.0/24": {
+            "network": "195.0.0.0",
+            "mask": "24",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+                {
+                    "admin_distance": 110,
+                    "metric": 11,
+                    "next_hop": "194.0.0.2",
+                    "age": "00:05:45",
+                    "outgoing_interface": "FastEthernet0/0.100"
+                }
+            ],
+            "type_code": "IA",
+            "type": "inter-area"
+        },
+        "0.0.0.0/0": {
+            "network": "0.0.0.0",
+            "mask": "0",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+                {
+                    "admin_distance": 110,
+                    "metric": 1,
+                    "next_hop": "194.0.0.2",
+                    "age": "00:05:35",
+                    "outgoing_interface": "FastEthernet0/0.100"
+                }
+            ],
+            "type_code": "E2",
+            "type": "external-type-2",
+            "candidate_default": true
+        },
+        "212.0.0.0/8": {
+            "network": "212.0.0.0",
+            "mask": "8",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+                {
+                    "admin_distance": 110,
+                    "metric": 20,
+                    "next_hop": "194.0.0.2",
+                    "age": "00:05:35",
+                    "outgoing_interface": "FastEthernet0/0.100"
+                }
+            ],
+            "type_code": "E2",
+            "type": "external-type-2"
+        },
+        "194.0.0.0/16": {
+            "network": "194.0.0.0",
+            "mask": "16",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+                {
+                    "outgoing_interface": "FastEthernet0/0.100"
+                }
+            ]
+        }
+    },
+    "gateway_of_last_resort": {
+        "next_hop": "194.0.0.2",
+        "destination": "0.0.0.0"
+    }
+}

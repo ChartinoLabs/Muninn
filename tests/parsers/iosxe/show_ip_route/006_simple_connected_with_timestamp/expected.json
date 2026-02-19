@@ -1,0 +1,31 @@
+{
+    "vrf": "default",
+    "routes": {
+        "192.168.1.0/24": {
+            "network": "192.168.1.0",
+            "mask": "24",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+                {
+                    "outgoing_interface": "vasileft1"
+                }
+            ]
+        },
+        "192.168.1.1/32": {
+            "network": "192.168.1.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+                {
+                    "outgoing_interface": "vasileft1"
+                }
+            ]
+        }
+    },
+    "gateway_of_last_resort": {
+        "next_hop": "192.168.1.2",
+        "destination": "0.0.0.0"
+    }
+}
