@@ -1,0 +1,19 @@
+N95_1# show mac address-table
+Legend:
+    * - primary entry, G - Gateway MAC, (R) - Routed MAC, O - Overlay MAC
+    age - seconds since last seen,+ - primary entry using vPC Peer-Link,
+    (T) - True, (F) - False, C - ControlPlane MAC, ~ - vsan
+   VLAN     MAC Address      Type      age     Secure NTFY Ports
+---------+-----------------+--------+---------+------+----+---------------
+*   10     aaaa.bbff.8888   static   -         F      F    Eth1/2
+*   20     aaaa.bbff.8888   static   -         F      F    Drop
+*   30     aaaa.bbff.8888   static   -         F      F    Drop
+G    -     0000.deff.6c9d   static   -         F      F    sup-eth1(R)
+G    -     5e00.c0ff.0007   static   -         F      F     (R)
+G    -     5e00.c0ff.0007   static   -         F      F  sup-eth1(R) (Lo0)
+G  100     5e00.c0ff.0007   static   -         F      F    sup-eth1(R)
+G  101     5e00.c0ff.0007   static   -         F      F    sup-eth1(R)
+G  102     5e00.c0ff.0007   static   -         F      F    sup-eth1(R)
+  2000     7e00.c0ff.0007    static       -       F    F  vPC Peer-Link(R)
+  3000     5e00.c0ff.0007   static   -         F      F    sup-eth1(R)
+  4000     5e00.c0ff.0007   static   ~~~         F      F    sup-eth1(R)
