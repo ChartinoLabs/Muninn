@@ -61,7 +61,7 @@ class ShowIpDhcpSnoopingBindingParser(BaseParser[ShowIpDhcpSnoopingBindingResult
         Raises:
             ValueError: If the output cannot be parsed.
         """
-        result: ShowIpDhcpSnoopingBindingResult = {}
+        result: ShowIpDhcpSnoopingBindingResult = {"total_bindings": 0}
 
         for line in output.splitlines():
             line = line.strip()

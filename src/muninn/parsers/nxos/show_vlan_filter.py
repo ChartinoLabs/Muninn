@@ -35,6 +35,16 @@ class ShowVlanFilterParser(BaseParser[ShowVlanFilterResult]):
     )
 
     @classmethod
+    def _expand_vlans(
+        cls, vlan_str: str, tag: str, vlan_id: dict[str, VlanFilterEntry]
+    ) -> None:
+        """Expand a comma-separated VLAN string and add entries."""
+        for v in vlan_str.split(","):
+            v = v.strip()
+            if v:
+                vlan_id[v] = {"access_map_tag": tag}
+
+    @classmethod
     def parse(cls, output: str) -> ShowVlanFilterResult:
         """Parse 'show vlan filter' output.
 
@@ -62,11 +72,9 @@ class ShowVlanFilterParser(BaseParser[ShowVlanFilterResult]):
 
             match = cls._VLANS_PATTERN.match(line)
             if match and access_map_tag:
-                vlans = [
-                    v.strip() for v in match.group("vlans").split(",") if v.strip()
-                ]
-                for vlan_id in vlans:
-                    result["vlan_id"][vlan_id] = {"access_map_tag": access_map_tag}
+                cls._expand_vlans(
+                    match.group("vlans"), access_map_tag, result["vlan_id"]
+                )
 
         if not result["vlan_id"]:
             msg = "No matching VLAN filter entries found"
