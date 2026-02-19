@@ -44,6 +44,27 @@ class ShowIpVrfParser(BaseParser[ShowIpVrfResult]):
     _CONTINUATION_PATTERN = re.compile(r"^\s+(?P<interface>\S+)\s*$")
 
     @classmethod
+    def _is_skip_line(cls, line: str) -> bool:
+        """Check if a line should be skipped (header, empty, prompt)."""
+        stripped = line.strip()
+        if not stripped or "Default RD" in line or line.startswith("#"):
+            return True
+        return "#" in line and "show" in line
+
+    @classmethod
+    def _process_vrf_match(cls, match: re.Match[str]) -> VrfEntry:
+        """Build a VrfEntry from a VRF pattern match."""
+        default_rd = match.group("default_rd").strip()
+        interface = match.group("interface")
+
+        entry: VrfEntry = {
+            "interfaces": [canonical_interface_name(interface)],
+        }
+        if default_rd != "<not set>":
+            entry["default_rd"] = default_rd
+        return entry
+
+    @classmethod
     def parse(cls, output: str) -> ShowIpVrfResult:
         """Parse 'show ip vrf' output.
 
@@ -60,34 +81,16 @@ class ShowIpVrfParser(BaseParser[ShowIpVrfResult]):
         current_vrf: str | None = None
 
         for line in output.splitlines():
-            # Skip header and empty lines
-            if not line.strip() or "Default RD" in line or line.startswith("#"):
+            if cls._is_skip_line(line):
                 continue
 
-            # Skip prompt lines
-            if "#" in line and "show" in line:
-                continue
-
-            # Try to match a new VRF entry
             match = cls._VRF_PATTERN.match(line)
             if match:
                 name = match.group("name")
-                default_rd = match.group("default_rd").strip()
-                interface = match.group("interface")
-
-                entry: VrfEntry = {
-                    "interfaces": [canonical_interface_name(interface)],
-                }
-
-                # Only include default_rd if it's set
-                if default_rd != "<not set>":
-                    entry["default_rd"] = default_rd
-
-                vrfs[name] = entry
+                vrfs[name] = cls._process_vrf_match(match)
                 current_vrf = name
                 continue
 
-            # Try to match a continuation line
             cont_match = cls._CONTINUATION_PATTERN.match(line)
             if cont_match and current_vrf:
                 interface = cont_match.group("interface")
