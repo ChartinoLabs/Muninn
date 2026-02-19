@@ -182,6 +182,33 @@ def _build_fan_entry(match: re.Match[str], direction: str | None = None) -> FanE
     return entry
 
 
+def _try_match_fan_metadata(line: str, result: dict) -> bool:
+    """Try to match fan zone speed or air filter lines. Returns True if matched."""
+    if match := _FAN_ZONE_SPEED.match(line):
+        result["fan_zone_speed"] = match.group("value").strip()
+        return True
+    if match := _FAN_AIR_FILTER.match(line):
+        result["fan_air_filter"] = match.group("value").strip()
+        return True
+    return False
+
+
+def _try_match_fan_row(
+    line: str, has_direction: bool, fans: dict[str, FanEntry]
+) -> bool | None:
+    """Try to match a fan data row.
+
+    Returns True if directional, False if non-directional, None if no match.
+    """
+    if match := _FAN_WITH_DIR.match(line):
+        fans[match.group("name")] = _build_fan_entry(match, match.group("direction"))
+        return True
+    if not has_direction and (match := _FAN_NO_DIR.match(line)):
+        fans[match.group("name")] = _build_fan_entry(match)
+        return False
+    return None
+
+
 def _parse_fan_section(lines: list[str], idx: int, result: dict) -> int:
     """Parse the Fan section. Returns the new line index."""
     fans: dict[str, FanEntry] = {}
@@ -194,26 +221,13 @@ def _parse_fan_section(lines: list[str], idx: int, result: dict) -> int:
             idx += 1
             continue
 
-        if match := _FAN_ZONE_SPEED.match(line):
-            result["fan_zone_speed"] = match.group("value").strip()
+        if _try_match_fan_metadata(line, result):
             idx += 1
             continue
 
-        if match := _FAN_AIR_FILTER.match(line):
-            result["fan_air_filter"] = match.group("value").strip()
-            idx += 1
-            continue
-
-        if match := _FAN_WITH_DIR.match(line):
-            has_direction = True
-            fans[match.group("name")] = _build_fan_entry(
-                match, match.group("direction")
-            )
-            idx += 1
-            continue
-
-        if not has_direction and (match := _FAN_NO_DIR.match(line)):
-            fans[match.group("name")] = _build_fan_entry(match)
+        fan_match = _try_match_fan_row(line, has_direction, fans)
+        if fan_match is not None:
+            has_direction = has_direction or fan_match
             idx += 1
             continue
 
@@ -222,6 +236,30 @@ def _parse_fan_section(lines: list[str], idx: int, result: dict) -> int:
     if fans:
         result["fans"] = fans
     return idx
+
+
+def _build_ps_entry(match: re.Match[str], has_input: bool) -> PowerSupplyEntry:
+    """Build a PowerSupplyEntry from a regex match."""
+    entry: PowerSupplyEntry = {"status": match.group("status")}
+    model = _normalize(match.group("model"))
+    if model:
+        entry["model"] = model
+    entry["actual_output_watts"] = int(match.group("output"))
+    if has_input:
+        entry["actual_input_watts"] = int(match.group("input"))
+    entry["total_capacity_watts"] = int(match.group("capacity"))
+    return entry
+
+
+def _try_match_ps_row(line: str, supplies: dict[str, PowerSupplyEntry]) -> bool:
+    """Try to match a power supply data row. Returns True if matched."""
+    if match := _PS_WITH_INPUT.match(line):
+        supplies[match.group("id")] = _build_ps_entry(match, has_input=True)
+        return True
+    if match := _PS_NO_INPUT.match(line):
+        supplies[match.group("id")] = _build_ps_entry(match, has_input=False)
+        return True
+    return False
 
 
 def _parse_power_supply_section(lines: list[str], idx: int, result: dict) -> int:
@@ -240,28 +278,7 @@ def _parse_power_supply_section(lines: list[str], idx: int, result: dict) -> int
             idx += 1
             continue
 
-        if match := _PS_WITH_INPUT.match(line):
-            ps_id = match.group("id")
-            entry: PowerSupplyEntry = {"status": match.group("status")}
-            model = _normalize(match.group("model"))
-            if model:
-                entry["model"] = model
-            entry["actual_output_watts"] = int(match.group("output"))
-            entry["actual_input_watts"] = int(match.group("input"))
-            entry["total_capacity_watts"] = int(match.group("capacity"))
-            supplies[ps_id] = entry
-            idx += 1
-            continue
-
-        if match := _PS_NO_INPUT.match(line):
-            ps_id = match.group("id")
-            entry = {"status": match.group("status")}
-            model = _normalize(match.group("model"))
-            if model:
-                entry["model"] = model
-            entry["actual_output_watts"] = int(match.group("output"))
-            entry["total_capacity_watts"] = int(match.group("capacity"))
-            supplies[ps_id] = entry
+        if _try_match_ps_row(line, supplies):
             idx += 1
             continue
 
