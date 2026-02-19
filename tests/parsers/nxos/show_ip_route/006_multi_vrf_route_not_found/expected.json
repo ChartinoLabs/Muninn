@@ -1,0 +1,66 @@
+{
+    "vrfs": {
+        "default": {
+            "routes": {}
+        },
+        "DMZ": {
+            "routes": {
+                "0.0.0.0/0": {
+                    "prefix": "0.0.0.0",
+                    "mask": 0,
+                    "ubest": 1,
+                    "mbest": 0,
+                    "attached": false,
+                    "direct": false,
+                    "pervasive": false,
+                    "pending": false,
+                    "next_hops": [
+                        {
+                            "best": true,
+                            "best_ucast": true,
+                            "best_mcast": false,
+                            "next_hop": "169.254.0.1",
+                            "preference": 20,
+                            "metric": 0,
+                            "uptime": "41w6d",
+                            "protocol": "bgp",
+                            "process": "64512",
+                            "route_type": "external",
+                            "tag": 64512
+                        }
+                    ]
+                }
+            }
+        },
+        "Users": {
+            "routes": {
+                "0.0.0.0/0": {
+                    "prefix": "0.0.0.0",
+                    "mask": 0,
+                    "ubest": 1,
+                    "mbest": 0,
+                    "attached": false,
+                    "direct": false,
+                    "pervasive": false,
+                    "pending": false,
+                    "next_hops": [
+                        {
+                            "best": true,
+                            "best_ucast": true,
+                            "best_mcast": false,
+                            "next_hop": "169.254.0.1",
+                            "preference": 20,
+                            "metric": 0,
+                            "uptime": "41w6d",
+                            "protocol": "bgp",
+                            "next_hop_vrf": "DMZ",
+                            "process": "64512",
+                            "route_type": "external",
+                            "tag": 64512
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
