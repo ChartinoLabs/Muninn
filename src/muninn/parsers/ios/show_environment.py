@@ -196,6 +196,36 @@ class ShowEnvironmentParser(BaseParser[ShowEnvironmentResult]):
         return entry
 
     @classmethod
+    def _parse_sensor_line(
+        cls,
+        line: str,
+        has_thresholds: bool,
+        cols: tuple[int, int, int, int] | None,
+    ) -> tuple[str, str, SensorEntry] | None:
+        """Parse a single sensor data line.
+
+        Returns (slot, sensor_name, entry) or None if the line is not valid.
+        """
+        threshold_str: str | None = None
+
+        if has_thresholds and cols is not None:
+            parsed = cls._parse_line_columns(line, cols)
+            if parsed is None:
+                return None
+            slot, sensor_name, state, reading_str, threshold_str = parsed
+        else:
+            parsed_split = cls._parse_line_split(line)
+            if parsed_split is None:
+                return None
+            slot, sensor_name, state, reading_str = parsed_split
+
+        entry = cls._build_entry(state, reading_str, threshold_str)
+        if entry is None:
+            return None
+
+        return slot, sensor_name, entry
+
+    @classmethod
     def _parse_sensors(
         cls,
         lines: list[str],
@@ -211,23 +241,11 @@ class ShowEnvironmentParser(BaseParser[ShowEnvironmentResult]):
             if line.strip().startswith("Power") and "Supply" in line:
                 break
 
-            threshold_str: str | None = None
-
-            if has_thresholds and cols is not None:
-                parsed = cls._parse_line_columns(line, cols)
-                if parsed is None:
-                    continue
-                slot, sensor_name, state, reading_str, threshold_str = parsed
-            else:
-                parsed_split = cls._parse_line_split(line)
-                if parsed_split is None:
-                    continue
-                slot, sensor_name, state, reading_str = parsed_split
-
-            entry = cls._build_entry(state, reading_str, threshold_str)
-            if entry is None:
+            result = cls._parse_sensor_line(line, has_thresholds, cols)
+            if result is None:
                 continue
 
+            slot, sensor_name, entry = result
             if slot not in sensors:
                 sensors[slot] = {}
             sensors[slot][sensor_name] = entry

@@ -6,7 +6,7 @@ import pytest
 
 from muninn import registry
 from muninn.exceptions import ParserNotFoundError
-from muninn.os import OS, CiscoIOSXE, CiscoNXOS
+from muninn.os import OS, CiscoIOSXE, CiscoNXOS, OperatingSystem
 from muninn.parser import BaseParser
 
 
@@ -185,7 +185,7 @@ class TestGetParser:
         ],
     )
     def test_normalizes_on_lookup(
-        self, lookup_os: str | OS | type, lookup_cmd: str
+        self, lookup_os: str | OS | type[OperatingSystem], lookup_cmd: str
     ) -> None:
         """OS and command are normalized during lookup."""
 
