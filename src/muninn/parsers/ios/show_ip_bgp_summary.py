@@ -316,36 +316,38 @@ def _parse_address_family(lines: list[str], af_name: str) -> AddressFamilyEntry 
     return entry
 
 
+def _is_noise_line(stripped: str) -> bool:
+    """Return True if a stripped line is a leading prompt/noise line."""
+    if not stripped:
+        return True
+    if stripped.endswith("#") or "#show " in stripped.lower():
+        return True
+    return stripped.startswith("Load for ") or stripped.startswith("Time source ")
+
+
+def _dedent_lines(lines: list[str]) -> list[str]:
+    """Remove common leading whitespace from non-empty lines."""
+    indents = [len(line) - len(line.lstrip()) for line in lines if line.strip()]
+    min_indent = min(indents, default=0)
+    if min_indent > 0:
+        return [
+            line[min_indent:] if len(line) >= min_indent else line for line in lines
+        ]
+    return lines
+
+
 def _strip_prompt_lines(lines: list[str]) -> list[str]:
     """Strip leading prompt/noise lines, preserving relative indentation."""
     content: list[str] = []
     started = False
     for line in lines:
-        stripped = line.strip()
         if not started:
-            if not stripped:
-                continue
-            if stripped.endswith("#") or "#show " in stripped.lower():
-                continue
-            if stripped.startswith("Load for ") or stripped.startswith("Time source "):
+            if _is_noise_line(line.strip()):
                 continue
             started = True
         content.append(line)
 
-    # Dedent: find minimum indentation of non-empty lines
-    min_indent = None
-    for line in content:
-        if not line.strip():
-            continue
-        indent = len(line) - len(line.lstrip())
-        if min_indent is None or indent < min_indent:
-            min_indent = indent
-    if min_indent and min_indent > 0:
-        content = [
-            line[min_indent:] if len(line) >= min_indent else line for line in content
-        ]
-
-    return content
+    return _dedent_lines(content)
 
 
 def _split_address_families(lines: list[str]) -> list[tuple[str, list[str]]]:
