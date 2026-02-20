@@ -1,0 +1,98 @@
+{
+    "vrf": "default",
+    "routes": {
+        "10.34.0.1/32": {
+            "network": "10.34.0.1",
+            "mask": "32",
+            "protocol": "static",
+            "protocol_code": "S",
+            "next_hops": [
+                {
+                    "admin_distance": 1,
+                    "metric": 0,
+                    "next_hop": "192.168.16.1"
+                }
+            ],
+            "next_hop_override": true
+        },
+        "10.34.0.2/32": {
+            "network": "10.34.0.2",
+            "mask": "32",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+                {
+                    "outgoing_interface": "Loopback0"
+                }
+            ],
+            "pfr_override": true
+        },
+        "10.69.0.0/16": {
+            "network": "10.69.0.0",
+            "mask": "16",
+            "protocol": "static",
+            "protocol_code": "S",
+            "next_hops": [
+                {
+                    "admin_distance": 1,
+                    "metric": 0,
+                    "next_hop": "10.34.0.1"
+                }
+            ],
+            "replicated_local_override": true
+        },
+        "10.186.1.0/24": {
+            "network": "10.186.1.0",
+            "mask": "24",
+            "protocol": "static",
+            "protocol_code": "S",
+            "next_hops": [
+                {
+                    "admin_distance": 1,
+                    "metric": 0,
+                    "next_hop": "10.144.0.1",
+                    "vrf_leak": "red"
+                }
+            ],
+            "replicated": true
+        },
+        "192.168.16.0/24": {
+            "network": "192.168.16.0",
+            "mask": "24",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+                {
+                    "outgoing_interface": "Ethernet0/1"
+                }
+            ]
+        },
+        "192.168.16.2/32": {
+            "network": "192.168.16.2",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+                {
+                    "outgoing_interface": "Ethernet0/1"
+                }
+            ]
+        },
+        "10.55.0.0/24": {
+            "network": "10.55.0.0",
+            "mask": "24",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+                {
+                    "admin_distance": 20,
+                    "metric": 0,
+                    "next_hop": "10.144.0.1",
+                    "vrf_leak": "red",
+                    "age": "00:00:09"
+                }
+            ],
+            "replicated": true
+        }
+    }
+}
