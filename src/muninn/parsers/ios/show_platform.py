@@ -227,30 +227,30 @@ def _find_slot_section(
 
 def _merge_cpld_firmware(lines: list[str], slots: dict[str, SlotEntry]) -> None:
     """Merge CPLD/firmware version data into existing slot entries."""
-    in_cpld = False
+    cpld_lines = _extract_cpld_lines(lines)
+    for line in cpld_lines:
+        m = _CPLD_FW_RE.match(line)
+        if not m or m.group(1) not in slots:
+            continue
+        slot = slots[m.group(1)]
+        if m.group(2) != _NA_VALUE:
+            slot["cpld_version"] = m.group(2)
+        if m.group(3) != _NA_VALUE:
+            slot["firmware_version"] = m.group(3)
 
+
+def _extract_cpld_lines(lines: list[str]) -> list[str]:
+    """Extract data lines from the CPLD/firmware section."""
+    in_cpld = False
+    result: list[str] = []
     for line in lines:
         if _SLOT_HEADER_RE.match(line) and "CPLD" in line:
             in_cpld = True
             continue
-        if not in_cpld:
+        if not in_cpld or _SEPARATOR_RE.match(line) or not line.strip():
             continue
-        if _SEPARATOR_RE.match(line):
-            continue
-        if not line.strip():
-            continue
-
-        m = _CPLD_FW_RE.match(line)
-        if m:
-            slot_name = m.group(1)
-            cpld = m.group(2)
-            firmware = m.group(3)
-
-            if slot_name in slots:
-                if cpld != _NA_VALUE:
-                    slots[slot_name]["cpld_version"] = cpld
-                if firmware != _NA_VALUE:
-                    slots[slot_name]["firmware_version"] = firmware
+        result.append(line)
+    return result
 
 
 def _parse_switch_table(lines: list[str]) -> dict[str, SwitchEntry]:
