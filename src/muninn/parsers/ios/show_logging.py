@@ -251,11 +251,11 @@ def _apply_persistent_flags(line: str, entry: PersistentLoggingEntry) -> None:
         if opt_m.group(1):
             entry["threshold_capacity"] = int(opt_m.group(1))
         token = opt_m.group(0).strip()
-        if token == "immediate":
+        if token == "immediate":  # nosec B105
             entry["immediate"] = True
-        elif token == "protected":
+        elif token == "protected":  # nosec B105
             entry["protected"] = True
-        elif token == "notify":
+        elif token == "notify":  # nosec B105
             entry["notify"] = True
 
 
@@ -481,6 +481,62 @@ def _parse_logs(lines: list[str]) -> list[LogMessageEntry]:
     return logs
 
 
+def _default_syslog() -> SyslogEntry:
+    """Return a default SyslogEntry for when syslog header is missing."""
+    return SyslogEntry(
+        enabled=False,
+        messages_dropped=0,
+        messages_rate_limited=0,
+        flushes=0,
+        overruns=0,
+        xml_disabled=True,
+        filtering_disabled=True,
+    )
+
+
+def _split_sections(
+    lines: list[str],
+) -> tuple[list[str], list[str], int]:
+    """Split output into config lines, log lines, and buffer size."""
+    for i, line in enumerate(lines):
+        m = _LOG_BUFFER_RE.match(line)
+        if m:
+            return lines[:i], lines[i + 1 :], int(m.group(1))
+    return lines, [], 0
+
+
+def _build_result(
+    syslog: SyslogEntry,
+    config: dict,
+    logs: list[LogMessageEntry],
+    log_buffer_size: int,
+) -> ShowLoggingResult:
+    """Assemble the final ShowLoggingResult from parsed sections."""
+    result: ShowLoggingResult = {
+        "syslog": syslog,
+        "console_logging": config.get("console_logging", {"enabled": False}),
+        "monitor_logging": config.get("monitor_logging", {}),
+        "buffer_logging": config.get("buffer_logging", {}),
+        "count_and_timestamp_logging": config.get("count_and_timestamp_logging", False),
+        "trap_logging": config.get(
+            "trap_logging",
+            {"level": "informational", "message_lines_logged": 0},
+        ),
+        "log_buffer_size_bytes": log_buffer_size,
+        "logs": logs,
+    }
+    optional_keys = (
+        "exception_logging",
+        "file_logging",
+        "persistent_logging",
+        "source_interfaces",
+    )
+    for key in optional_keys:
+        if key in config:
+            result[key] = config[key]
+    return result
+
+
 @register(OS.CISCO_IOS, "show logging")
 @register(OS.CISCO_IOSXE, "show logging")
 class ShowLoggingParser(BaseParser[ShowLoggingResult]):
@@ -490,67 +546,8 @@ class ShowLoggingParser(BaseParser[ShowLoggingResult]):
     def parse(cls, output: str) -> ShowLoggingResult:
         """Parse 'show logging' output."""
         lines = output.splitlines()
-
-        # Find log buffer boundary
-        buffer_start = -1
-        for i, line in enumerate(lines):
-            m = _LOG_BUFFER_RE.match(line)
-            if m:
-                buffer_start = i
-                break
-
-        # Parse syslog header
-        syslog = _parse_syslog_header(output)
-        if syslog is None:
-            syslog = {
-                "enabled": False,
-                "messages_dropped": 0,
-                "messages_rate_limited": 0,
-                "flushes": 0,
-                "overruns": 0,
-                "xml_disabled": True,
-                "filtering_disabled": True,
-            }
-
-        # Split config vs log sections
-        if buffer_start >= 0:
-            config_lines = lines[:buffer_start]
-            log_lines = lines[buffer_start + 1 :]
-            # Extract buffer size
-            m = _LOG_BUFFER_RE.match(lines[buffer_start])
-            log_buffer_size = int(m.group(1)) if m else 0
-        else:
-            config_lines = lines
-            log_lines = []
-            log_buffer_size = 0
-
+        syslog = _parse_syslog_header(output) or _default_syslog()
+        config_lines, log_lines, log_buffer_size = _split_sections(lines)
         config = _parse_config_section(config_lines)
         logs = _parse_logs(log_lines)
-
-        result: ShowLoggingResult = {
-            "syslog": syslog,
-            "console_logging": config.get("console_logging", {"enabled": False}),
-            "monitor_logging": config.get("monitor_logging", {}),
-            "buffer_logging": config.get("buffer_logging", {}),
-            "count_and_timestamp_logging": config.get(
-                "count_and_timestamp_logging", False
-            ),
-            "trap_logging": config.get(
-                "trap_logging",
-                {"level": "informational", "message_lines_logged": 0},
-            ),
-            "log_buffer_size_bytes": log_buffer_size,
-            "logs": logs,
-        }
-
-        # Add optional fields
-        if "exception_logging" in config:
-            result["exception_logging"] = config["exception_logging"]
-        if "file_logging" in config:
-            result["file_logging"] = config["file_logging"]
-        if "persistent_logging" in config:
-            result["persistent_logging"] = config["persistent_logging"]
-        if "source_interfaces" in config:
-            result["source_interfaces"] = config["source_interfaces"]
-
-        return result
+        return _build_result(syslog, config, logs, log_buffer_size)
