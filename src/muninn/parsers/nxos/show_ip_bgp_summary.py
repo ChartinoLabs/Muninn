@@ -242,6 +242,29 @@ def _complete_neighbor(
     }
 
 
+def _extract_neighbor_lines(lines: list[str]) -> list[str]:
+    """Extract only the neighbor table lines (after the header)."""
+    result: list[str] = []
+    in_section = False
+    for line in lines:
+        if _NEIGHBOR_HEADER_RE.match(line):
+            in_section = True
+            continue
+        if in_section:
+            result.append(line)
+    return result
+
+
+def _flush_neighbor(
+    neighbors: dict[str, NeighborEntry],
+    addr: str | None,
+    tokens: list[str],
+) -> None:
+    """Flush a pending neighbor entry if complete."""
+    if addr and tokens:
+        _complete_neighbor(neighbors, addr, tokens)
+
+
 def _parse_neighbors(lines: list[str]) -> dict[str, NeighborEntry]:
     """Parse the neighbor table from lines after the header.
 
@@ -252,52 +275,58 @@ def _parse_neighbors(lines: list[str]) -> dict[str, NeighborEntry]:
     - Triple wrap: address alone, then V + AS, then remaining fields
     """
     neighbors: dict[str, NeighborEntry] = {}
-    in_neighbor_section = False
     current_addr: str | None = None
     current_tokens: list[str] = []
 
-    for line in lines:
-        if _NEIGHBOR_HEADER_RE.match(line):
-            in_neighbor_section = True
-            continue
-
-        if not in_neighbor_section:
-            continue
-
+    for line in _extract_neighbor_lines(lines):
         stripped = line.strip()
         if not stripped:
-            # Blank line - flush any pending neighbor
-            if current_addr and current_tokens:
-                _complete_neighbor(neighbors, current_addr, current_tokens)
+            _flush_neighbor(neighbors, current_addr, current_tokens)
             current_addr = None
             current_tokens = []
             continue
 
-        is_continuation = line[0] in (" ", "\t")
-
-        if not is_continuation:
-            # New non-indented line - flush previous neighbor if complete
-            if current_addr and current_tokens:
-                _complete_neighbor(neighbors, current_addr, current_tokens)
-
+        if line[0] not in (" ", "\t"):
+            # New non-indented line - flush previous, start new neighbor
+            _flush_neighbor(neighbors, current_addr, current_tokens)
             tokens = stripped.split()
             current_addr = tokens[0]
             current_tokens = tokens[1:]
         else:
-            # Continuation line - append tokens to current neighbor
             current_tokens.extend(stripped.split())
 
-    # Flush last neighbor
-    if current_addr and current_tokens:
-        _complete_neighbor(neighbors, current_addr, current_tokens)
-
+    _flush_neighbor(neighbors, current_addr, current_tokens)
     return neighbors
 
 
-def _parse_section(
-    lines: list[str],
-) -> AddressFamilyEntry | None:
-    """Parse a single VRF/AF section."""
+class _SectionHeader:
+    """Parsed header fields from a VRF/AF section."""
+
+    __slots__ = (
+        "router_id",
+        "local_as",
+        "table_version",
+        "config_peers",
+        "capable_peers",
+    )
+
+    def __init__(
+        self,
+        router_id: str,
+        local_as: str,
+        table_version: int,
+        config_peers: int,
+        capable_peers: int,
+    ) -> None:
+        self.router_id = router_id
+        self.local_as = local_as
+        self.table_version = table_version
+        self.config_peers = config_peers
+        self.capable_peers = capable_peers
+
+
+def _parse_section_header(lines: list[str]) -> _SectionHeader | None:
+    """Extract router ID, local AS, and table version from section lines."""
     router_id: str | None = None
     local_as: str | None = None
     table_version: int | None = None
@@ -308,38 +337,40 @@ def _parse_section(
         if m := _ROUTER_ID_RE.match(line):
             router_id = m.group(1)
             local_as = m.group(2)
-            continue
-
-        if m := _TABLE_VERSION_RE.match(line):
+        elif m := _TABLE_VERSION_RE.match(line):
             table_version = int(m.group(1))
             config_peers = int(m.group(2))
             capable_peers = int(m.group(3))
-            continue
 
-    # Skip empty sections (header only, no router ID)
     if router_id is None or local_as is None:
         return None
     if table_version is None or config_peers is None or capable_peers is None:
         return None
 
-    memory = _parse_memory(lines)
-    dampening = _parse_dampening(lines)
-    received_paths = _parse_received_paths(lines)
-    neighbors = _parse_neighbors(lines)
+    return _SectionHeader(
+        router_id, local_as, table_version, config_peers, capable_peers
+    )
+
+
+def _parse_section(lines: list[str]) -> AddressFamilyEntry | None:
+    """Parse a single VRF/AF section."""
+    header = _parse_section_header(lines)
+    if header is None:
+        return None
 
     entry: AddressFamilyEntry = {
-        "router_id": router_id,
-        "local_as": local_as,
-        "table_version": table_version,
-        "config_peers": config_peers,
-        "capable_peers": capable_peers,
-        "memory": memory,
-        "neighbors": neighbors,
+        "router_id": header.router_id,
+        "local_as": header.local_as,
+        "table_version": header.table_version,
+        "config_peers": header.config_peers,
+        "capable_peers": header.capable_peers,
+        "memory": _parse_memory(lines),
+        "neighbors": _parse_neighbors(lines),
     }
 
-    if dampening is not None:
+    if (dampening := _parse_dampening(lines)) is not None:
         entry["dampening"] = dampening
-    if received_paths is not None:
+    if (received_paths := _parse_received_paths(lines)) is not None:
         entry["received_paths"] = received_paths
 
     return entry
