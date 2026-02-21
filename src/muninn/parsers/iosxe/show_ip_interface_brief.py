@@ -1,4 +1,4 @@
-"""Parser for 'show ip interface brief' command on IOS-XE."""
+"""Parser for 'show ip interface brief' command on IOS and IOS-XE."""
 
 import re
 from typing import TypedDict
