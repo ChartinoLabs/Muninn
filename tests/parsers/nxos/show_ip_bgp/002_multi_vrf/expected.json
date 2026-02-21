@@ -1,0 +1,109 @@
+{
+    "vrfs": {
+        "default": {
+            "address_families": {
+                "IPv4 Unicast": {
+                    "table_version": 4,
+                    "router_id": "10.253.253.253",
+                    "routes": {
+                        "10.253.253.253/32": {
+                            "paths": [
+                                {
+                                    "status_codes": "*>",
+                                    "path_type": "l",
+                                    "next_hop": "0.0.0.0",
+                                    "locprf": 100,
+                                    "weight": 32768,
+                                    "as_path": "",
+                                    "origin": "i"
+                                }
+                            ]
+                        },
+                        "10.254.254.254/32": {
+                            "paths": [
+                                {
+                                    "status_codes": "*>",
+                                    "path_type": "e",
+                                    "next_hop": "10.255.255.254",
+                                    "weight": 0,
+                                    "as_path": "65535",
+                                    "origin": "i"
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "vrf_a": {
+            "address_families": {
+                "IPv4 Unicast": {
+                    "table_version": 7,
+                    "router_id": "10.0.0.0",
+                    "routes": {
+                        "10.0.0.0/32": {
+                            "paths": [
+                                {
+                                    "status_codes": "*>",
+                                    "path_type": "l",
+                                    "next_hop": "0.0.0.0",
+                                    "locprf": 100,
+                                    "weight": 32768,
+                                    "as_path": "",
+                                    "origin": "i"
+                                }
+                            ]
+                        },
+                        "10.1.1.1/32": {
+                            "paths": [
+                                {
+                                    "status_codes": "*>",
+                                    "path_type": "e",
+                                    "next_hop": "10.255.255.2",
+                                    "weight": 0,
+                                    "as_path": "65535",
+                                    "origin": "i"
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "vrf_b": {
+            "address_families": {
+                "IPv4 Unicast": {
+                    "table_version": 8,
+                    "router_id": "10.0.2.0",
+                    "routes": {
+                        "10.0.2.0/32": {
+                            "paths": [
+                                {
+                                    "status_codes": "*>",
+                                    "path_type": "l",
+                                    "next_hop": "0.0.0.0",
+                                    "locprf": 100,
+                                    "weight": 32768,
+                                    "as_path": "",
+                                    "origin": "i"
+                                }
+                            ]
+                        },
+                        "10.3.3.1/32": {
+                            "paths": [
+                                {
+                                    "status_codes": "*>",
+                                    "path_type": "e",
+                                    "next_hop": "10.255.255.6",
+                                    "weight": 0,
+                                    "as_path": "65535",
+                                    "origin": "i"
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
