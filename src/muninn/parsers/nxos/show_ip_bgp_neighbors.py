@@ -568,19 +568,17 @@ def _try_parse_timer_msg_fields(line: str, entry: NeighborEntry) -> bool:
     return False
 
 
-def _parse_neighbor_block(lines: list[str]) -> NeighborEntry:
-    """Parse a single neighbor block into a NeighborEntry."""
-    header_m = _NEIGHBOR_HEADER_RE.match(lines[0])
-    if not header_m:
-        msg = f"Invalid neighbor header: {lines[0]}"
-        raise ValueError(msg)
+_DEFAULT_ROUTER_ID = "0.0.0.0"  # nosec B104 - BGP default, not a bind address
 
-    entry: NeighborEntry = {
+
+def _build_initial_entry(header_m: re.Match[str]) -> NeighborEntry:
+    """Build an initial NeighborEntry from a parsed header match."""
+    return {
         "remote_as": int(header_m.group("remote_as")),
         "link_type": header_m.group("link_type"),
         "peer_index": int(header_m.group("peer_index")),
         "bgp_version": 4,
-        "router_id": "0.0.0.0",
+        "router_id": _DEFAULT_ROUTER_ID,
         "bgp_state": "Unknown",
         "hold_time": 0,
         "keepalive_interval": 0,
@@ -598,6 +596,14 @@ def _parse_neighbor_block(lines: list[str]) -> NeighborEntry:
         "address_families": {},
     }
 
+
+def _scan_neighbor_lines(
+    lines: list[str], entry: NeighborEntry
+) -> tuple[int | None, int | None]:
+    """Scan neighbor lines for field values and section boundaries.
+
+    Returns (msg_stats_start, af_start) indices.
+    """
     msg_stats_start: int | None = None
     af_start: int | None = None
 
@@ -606,16 +612,26 @@ def _parse_neighbor_block(lines: list[str]) -> NeighborEntry:
             msg_stats_start = idx
             continue
 
-        if _AF_HEADER_RE.match(line) and af_start is None:
+        if _AF_HEADER_RE.match(line):
             af_start = idx
             break
 
-        if _try_parse_header_fields(line, entry):
-            continue
-        if _try_parse_transport_fields(line, entry):
-            continue
-        if _try_parse_timer_msg_fields(line, entry):
-            continue
+        _try_parse_header_fields(line, entry)
+        _try_parse_transport_fields(line, entry)
+        _try_parse_timer_msg_fields(line, entry)
+
+    return msg_stats_start, af_start
+
+
+def _parse_neighbor_block(lines: list[str]) -> NeighborEntry:
+    """Parse a single neighbor block into a NeighborEntry."""
+    header_m = _NEIGHBOR_HEADER_RE.match(lines[0])
+    if not header_m:
+        msg = f"Invalid neighbor header: {lines[0]}"
+        raise ValueError(msg)
+
+    entry = _build_initial_entry(header_m)
+    msg_stats_start, af_start = _scan_neighbor_lines(lines, entry)
 
     if msg_stats_start is not None:
         entry["message_stats"] = _parse_message_stats(lines, msg_stats_start)
