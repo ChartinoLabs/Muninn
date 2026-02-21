@@ -3,6 +3,8 @@
 import re
 from typing import Any, NotRequired, TypedDict
 
+from netutils.interface import canonical_interface_name
+
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
@@ -142,7 +144,7 @@ def _parse_peer_link_line(stripped: str) -> tuple[str, PeerLinkEntry] | None:
     active_vlans = m.group(4).strip()
 
     entry: PeerLinkEntry = {
-        "port": m.group(2),
+        "port": canonical_interface_name(m.group(2)),
         "status": m.group(3),
     }
     if active_vlans and active_vlans != "-":
