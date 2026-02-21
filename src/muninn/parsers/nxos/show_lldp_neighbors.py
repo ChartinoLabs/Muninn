@@ -258,6 +258,40 @@ class ShowLldpNeighborsParser(BaseParser[ShowLldpNeighborsResult]):
         return False
 
     @classmethod
+    def _process_line(
+        cls,
+        line: str,
+        stripped: str,
+        pending_device_id: str | None,
+        detail_state: dict[str, str | int | None],
+        neighbors: dict[str, dict[str, LldpNeighborEntry]],
+    ) -> tuple[int | None, str | None]:
+        """Process a single line of output.
+
+        Returns a tuple of (total_entries_if_found, updated_pending_device_id).
+        total_entries_if_found is an int when the total line is matched, else None.
+        """
+        total_match = cls._TOTAL_PATTERN.match(stripped)
+        if total_match:
+            cls._flush_detail_entry(detail_state, neighbors)
+            return int(total_match.group("total")), None
+
+        if cls._parse_wrapped_continuation_line(line, pending_device_id, neighbors):
+            return None, None
+
+        if cls._parse_summary_line(stripped, neighbors):
+            return None, None
+
+        if cls._consume_detail_line(stripped, detail_state, neighbors):
+            return None, pending_device_id
+
+        device_only_match = cls._WRAPPED_DEVICE_PATTERN.match(stripped)
+        if device_only_match and stripped.lower() != "show lldp neighbors detail":
+            return None, device_only_match.group("device_id")
+
+        return None, pending_device_id
+
+    @classmethod
     def parse(cls, output: str) -> ShowLldpNeighborsResult:
         """Parse 'show lldp neighbors' output on NX-OS."""
         neighbors: dict[str, dict[str, LldpNeighborEntry]] = {}
@@ -270,27 +304,11 @@ class ShowLldpNeighborsParser(BaseParser[ShowLldpNeighborsResult]):
                 continue
 
             stripped = line.strip()
-
-            total_match = cls._TOTAL_PATTERN.match(stripped)
-            if total_match:
-                cls._flush_detail_entry(detail_state, neighbors)
-                total_entries = int(total_match.group("total"))
-                continue
-
-            if cls._parse_wrapped_continuation_line(line, pending_device_id, neighbors):
-                pending_device_id = None
-                continue
-
-            if cls._parse_summary_line(stripped, neighbors):
-                pending_device_id = None
-                continue
-
-            if cls._consume_detail_line(stripped, detail_state, neighbors):
-                continue
-
-            device_only_match = cls._WRAPPED_DEVICE_PATTERN.match(stripped)
-            if device_only_match and stripped.lower() != "show lldp neighbors detail":
-                pending_device_id = device_only_match.group("device_id")
+            found_total, pending_device_id = cls._process_line(
+                line, stripped, pending_device_id, detail_state, neighbors
+            )
+            if found_total is not None:
+                total_entries = found_total
 
         cls._flush_detail_entry(detail_state, neighbors)
 
