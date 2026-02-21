@@ -3,6 +3,8 @@
 import re
 from typing import NotRequired, TypedDict
 
+from netutils.interface import canonical_interface_name
+
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
@@ -65,6 +67,12 @@ class ShowCdpNeighborsDetailParser(BaseParser[ShowCdpNeighborsDetailResult]):
     _ENTRY_ADDR_HEADER = re.compile(r"^Entry address\(es\):")
     _MGMT_ADDR_HEADER = re.compile(r"^Management address\(es\):")
 
+    @staticmethod
+    def _flush_block(blocks: list[str], current_lines: list[str]) -> None:
+        """Append accumulated lines as a block if any exist."""
+        if current_lines:
+            blocks.append("\n".join(current_lines))
+
     @classmethod
     def _split_into_blocks(cls, output: str) -> list[str]:
         """Split output into per-neighbor text blocks.
@@ -80,22 +88,20 @@ class ShowCdpNeighborsDetailParser(BaseParser[ShowCdpNeighborsDetailResult]):
             stripped = line.strip()
 
             if cls._DEVICE_ID_PATTERN.match(stripped):
-                if in_block and current_lines:
-                    blocks.append("\n".join(current_lines))
+                if in_block:
+                    cls._flush_block(blocks, current_lines)
                 current_lines = [line]
                 in_block = True
             elif cls._SEPARATOR_PATTERN.match(stripped):
-                if in_block and current_lines:
-                    blocks.append("\n".join(current_lines))
-                    current_lines = []
-                    in_block = False
+                if in_block:
+                    cls._flush_block(blocks, current_lines)
+                current_lines = []
+                in_block = False
             elif in_block:
                 current_lines.append(line)
 
-        # Flush last block
-        if in_block and current_lines:
-            blocks.append("\n".join(current_lines))
-
+        if in_block:
+            cls._flush_block(blocks, current_lines)
         return blocks
 
     @classmethod
@@ -180,56 +186,21 @@ class ShowCdpNeighborsDetailParser(BaseParser[ShowCdpNeighborsDetailResult]):
         return "\n".join(version_lines)
 
     @classmethod
-    def _parse_block(cls, block: str) -> CdpNeighborDetailEntry | None:
-        """Parse a single neighbor block into a structured entry."""
-        device_match = cls._DEVICE_ID_PATTERN.search(block)
-        if not device_match:
-            return None
-
-        device_id = device_match.group(1).strip()
-
-        # Entry addresses
-        entry_addresses = cls._extract_addresses(block, cls._ENTRY_ADDR_HEADER)
-
-        # Platform and capabilities
-        platform = ""
-        capabilities = ""
+    def _extract_platform_capabilities(cls, block: str) -> tuple[str, str]:
+        """Extract platform and capabilities strings from a block."""
         plat_cap_match = cls._PLATFORM_CAPABILITIES_PATTERN.search(block)
         if plat_cap_match:
-            platform = plat_cap_match.group(1).strip()
-            capabilities = plat_cap_match.group(2).strip()
-        else:
-            plat_match = cls._PLATFORM_ONLY_PATTERN.search(block)
-            if plat_match:
-                platform = plat_match.group(1).strip().rstrip(",")
+            return plat_cap_match.group(1).strip(), plat_cap_match.group(2).strip()
 
-        # Interface and port ID
-        intf_match = cls._INTERFACE_PATTERN.search(block)
-        if not intf_match:
-            return None
+        plat_match = cls._PLATFORM_ONLY_PATTERN.search(block)
+        if plat_match:
+            return plat_match.group(1).strip().rstrip(","), ""
 
-        local_interface = intf_match.group(1)
-        port_id = intf_match.group(2)
+        return "", ""
 
-        # Hold time
-        hold_match = cls._HOLDTIME_PATTERN.search(block)
-        hold_time = int(hold_match.group(1)) if hold_match else 0
-
-        # Version
-        version = cls._extract_version(block)
-
-        entry: CdpNeighborDetailEntry = {
-            "device_id": device_id,
-            "entry_addresses": entry_addresses,
-            "platform": platform,
-            "capabilities": capabilities,
-            "local_interface": local_interface,
-            "port_id": port_id,
-            "hold_time": hold_time,
-            "version": version,
-        }
-
-        # Optional fields
+    @classmethod
+    def _add_optional_fields(cls, entry: CdpNeighborDetailEntry, block: str) -> None:
+        """Populate optional fields on the entry from the block text."""
         adv_match = cls._ADV_VERSION_PATTERN.search(block)
         if adv_match:
             entry["advertisement_version"] = int(adv_match.group(1))
@@ -246,11 +217,36 @@ class ShowCdpNeighborsDetailParser(BaseParser[ShowCdpNeighborsDetailResult]):
         if vtp_match:
             entry["vtp_management_domain"] = vtp_match.group(1)
 
-        # Management addresses
         mgmt_addresses = cls._extract_addresses(block, cls._MGMT_ADDR_HEADER)
         if mgmt_addresses:
             entry["management_addresses"] = mgmt_addresses
 
+    @classmethod
+    def _parse_block(cls, block: str) -> CdpNeighborDetailEntry | None:
+        """Parse a single neighbor block into a structured entry."""
+        device_match = cls._DEVICE_ID_PATTERN.search(block)
+        if not device_match:
+            return None
+
+        intf_match = cls._INTERFACE_PATTERN.search(block)
+        if not intf_match:
+            return None
+
+        platform, capabilities = cls._extract_platform_capabilities(block)
+        hold_match = cls._HOLDTIME_PATTERN.search(block)
+
+        entry: CdpNeighborDetailEntry = {
+            "device_id": device_match.group(1).strip(),
+            "entry_addresses": cls._extract_addresses(block, cls._ENTRY_ADDR_HEADER),
+            "platform": platform,
+            "capabilities": capabilities,
+            "local_interface": canonical_interface_name(intf_match.group(1)),
+            "port_id": canonical_interface_name(intf_match.group(2)),
+            "hold_time": int(hold_match.group(1)) if hold_match else 0,
+            "version": cls._extract_version(block),
+        }
+
+        cls._add_optional_fields(entry, block)
         return entry
 
     @classmethod
