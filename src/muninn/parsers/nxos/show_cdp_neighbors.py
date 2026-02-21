@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class CdpNeighborEntry(TypedDict):
@@ -73,7 +72,7 @@ class ShowCdpNeighborsParser(BaseParser[ShowCdpNeighborsResult]):
     def _normalize_port_id(cls, port_id: str) -> str:
         """Normalize port_id if it looks like an interface name."""
         if cls._INTERFACE_PATTERN.match(port_id):
-            return canonical_interface_name(port_id)
+            return canonical_interface_name(port_id, os=OS.CISCO_NXOS)
         return port_id
 
     @classmethod
@@ -115,7 +114,9 @@ class ShowCdpNeighborsParser(BaseParser[ShowCdpNeighborsResult]):
         match: re.Match[str],
     ) -> tuple[str, CdpNeighborEntry]:
         """Parse common fields from a CDP neighbor match."""
-        local_intf = canonical_interface_name(match.group("local_intf"))
+        local_intf = canonical_interface_name(
+            match.group("local_intf"), os=OS.CISCO_NXOS
+        )
         hold_time = int(match.group("hold_time"))
         capability = cls._normalize_capabilities(match.group("capability"))
         platform = match.group("platform")

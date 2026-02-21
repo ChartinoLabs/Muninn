@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 # Separator patterns that indicate header/divider lines to skip
 _HEADER_RE = re.compile(
@@ -132,7 +131,7 @@ def _normalize_port(port: str) -> str:
         return stripped
     # Try canonical_interface_name for interface-like values
     try:
-        return canonical_interface_name(stripped)
+        return canonical_interface_name(stripped, os=OS.CISCO_IOS)
     except Exception:
         return stripped
 

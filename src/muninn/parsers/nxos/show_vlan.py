@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class PrivateVlanInfo(TypedDict):
@@ -74,7 +73,9 @@ def _normalize_ports(port_str: str) -> list[str]:
     if not port_str:
         return []
     return [
-        canonical_interface_name(p.strip()) for p in port_str.split(",") if p.strip()
+        canonical_interface_name(p.strip(), os=OS.CISCO_NXOS)
+        for p in port_str.split(",")
+        if p.strip()
     ]
 
 

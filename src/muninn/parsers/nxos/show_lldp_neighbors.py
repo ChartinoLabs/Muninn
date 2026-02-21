@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class LldpNeighborEntry(TypedDict):
@@ -73,7 +72,7 @@ class ShowLldpNeighborsParser(BaseParser[ShowLldpNeighborsResult]):
             lowered = port_id.lower()
             if lowered.startswith("ethernet"):
                 port_id = "Eth" + port_id[8:]
-            return canonical_interface_name(port_id)
+            return canonical_interface_name(port_id, os=OS.CISCO_NXOS)
         return port_id
 
     @classmethod
@@ -138,7 +137,9 @@ class ShowLldpNeighborsParser(BaseParser[ShowLldpNeighborsResult]):
         if not match:
             return False
 
-        local_intf = canonical_interface_name(match.group("local_intf"))
+        local_intf = canonical_interface_name(
+            match.group("local_intf"), os=OS.CISCO_NXOS
+        )
         device_id = match.group("device_id").strip()
         entry = cls._build_entry(
             hold_time=int(match.group("hold_time")),
@@ -162,7 +163,9 @@ class ShowLldpNeighborsParser(BaseParser[ShowLldpNeighborsResult]):
         if not match:
             return False
 
-        local_intf = canonical_interface_name(match.group("local_intf"))
+        local_intf = canonical_interface_name(
+            match.group("local_intf"), os=OS.CISCO_NXOS
+        )
         entry = cls._build_entry(
             hold_time=int(match.group("hold_time")),
             port_id=match.group("port_id"),
@@ -198,7 +201,7 @@ class ShowLldpNeighborsParser(BaseParser[ShowLldpNeighborsResult]):
         ):
             device_id = detail_state["system_name"] or detail_state["chassis_id"]
             if isinstance(device_id, str) and device_id.lower() != "not advertised":
-                local_intf = canonical_interface_name(local_port)
+                local_intf = canonical_interface_name(local_port, os=OS.CISCO_NXOS)
                 entry = cls._build_entry(
                     hold_time=hold_time,
                     port_id=port_id,

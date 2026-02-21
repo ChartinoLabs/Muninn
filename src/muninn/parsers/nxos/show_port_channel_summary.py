@@ -3,11 +3,10 @@
 import re
 from typing import TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class PortChannelMember(TypedDict):
@@ -106,7 +105,9 @@ class ShowPortChannelSummaryParser(BaseParser[ShowPortChannelSummaryResult]):
             return members
 
         for match in cls._MEMBER_PATTERN.finditer(members_str):
-            interface = canonical_interface_name(match.group("interface"))
+            interface = canonical_interface_name(
+                match.group("interface"), os=OS.CISCO_NXOS
+            )
             flag = match.group("flag")
             status = _MEMBER_STATUS_MAP.get(flag, flag.lower())
 
@@ -165,7 +166,9 @@ class ShowPortChannelSummaryParser(BaseParser[ShowPortChannelSummaryResult]):
             po_match = cls._PORT_CHANNEL_PATTERN.match(line)
             if po_match:
                 group = int(po_match.group("group"))
-                name = canonical_interface_name(po_match.group("name"))
+                name = canonical_interface_name(
+                    po_match.group("name"), os=OS.CISCO_NXOS
+                )
                 flags = po_match.group("flags")
                 po_type = po_match.group("type")
                 protocol = po_match.group("protocol")

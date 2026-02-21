@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 # Header: "IPv6 Routing Table - {vrf} - {count} entries"
 _HEADER_RE = re.compile(r"^IPv6 Routing Table\s*-\s*(\S+)\s*-\s*(\d+)\s+entries\s*$")
@@ -62,14 +61,14 @@ def _parse_via(via_text: str) -> NextHopEntry:
     if via_text.endswith(", directly connected"):
         entry["type"] = "directly connected"
         iface_part = via_text.removesuffix(", directly connected").strip()
-        entry["interface"] = canonical_interface_name(iface_part)
+        entry["interface"] = canonical_interface_name(iface_part, os=OS.CISCO_IOS)
         return entry
 
     # Check for "receive" suffix
     if via_text.endswith(", receive"):
         entry["type"] = "receive"
         iface_part = via_text.removesuffix(", receive").strip()
-        entry["interface"] = canonical_interface_name(iface_part)
+        entry["interface"] = canonical_interface_name(iface_part, os=OS.CISCO_IOS)
         return entry
 
     # Split on ", " to separate next-hop from interface
@@ -99,10 +98,10 @@ def _apply_interface(entry: NextHopEntry, raw: str) -> None:
     """Extract interface name and optional VRF from raw string."""
     if "%" in raw:
         iface, vrf = raw.split("%", maxsplit=1)
-        entry["interface"] = canonical_interface_name(iface)
+        entry["interface"] = canonical_interface_name(iface, os=OS.CISCO_IOS)
         entry["interface_vrf"] = vrf
     else:
-        entry["interface"] = canonical_interface_name(raw)
+        entry["interface"] = canonical_interface_name(raw, os=OS.CISCO_IOS)
 
 
 def _parse_header(line: str) -> tuple[str, int] | None:

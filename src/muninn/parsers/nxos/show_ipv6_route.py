@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class NextHop(TypedDict):
@@ -226,7 +225,7 @@ def _build_next_hop(match: re.Match[str]) -> NextHop:
 
     interface = match.group("interface")
     if interface:
-        hop["interface"] = canonical_interface_name(interface)
+        hop["interface"] = canonical_interface_name(interface, os=OS.CISCO_NXOS)
 
     # Parse the trailing portion after protocol for route_type and tag
     tail = match.group("tail") or ""

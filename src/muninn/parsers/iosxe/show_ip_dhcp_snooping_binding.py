@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class DhcpSnoopingBindingEntry(TypedDict):
@@ -46,7 +45,7 @@ class ShowIpDhcpSnoopingBindingParser(BaseParser[ShowIpDhcpSnoopingBindingResult
 
     @staticmethod
     def _normalize_interface(interface: str) -> str:
-        return canonical_interface_name(interface)
+        return canonical_interface_name(interface, os=OS.CISCO_IOSXE)
 
     @classmethod
     def parse(cls, output: str) -> ShowIpDhcpSnoopingBindingResult:

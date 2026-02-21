@@ -6,9 +6,16 @@ import json
 from pathlib import Path
 from typing import TypeAlias
 
-from netutils.interface import canonical_interface_name
+from muninn.os import OS
+from muninn.utils import canonical_interface_name
 
 PARSERS_TEST_DIR = Path(__file__).parent
+
+_DIR_TO_OS: dict[str, OS] = {
+    "ios": OS.CISCO_IOS,
+    "iosxe": OS.CISCO_IOSXE,
+    "nxos": OS.CISCO_NXOS,
+}
 
 JSONValue: TypeAlias = (
     dict[str, "JSONValue"] | list["JSONValue"] | str | int | float | bool | None
@@ -43,23 +50,23 @@ def _looks_like_interface(value: str) -> bool:
     return bool(interface_pattern.match(value))
 
 
-def _normalize_string(value: str) -> str:
+def _normalize_string(value: str, *, os: OS | None = None) -> str:
     if _looks_like_interface(value):
-        return canonical_interface_name(value)
+        return canonical_interface_name(value, os=os)
     return value
 
 
-def _normalize(value: JSONValue) -> JSONValue:
+def _normalize(value: JSONValue, *, os: OS | None = None) -> JSONValue:
     if isinstance(value, dict):
         normalized: dict[str, JSONValue] = {}
         for key, item in value.items():
-            norm_key = _normalize_string(key) if isinstance(key, str) else key
-            normalized[norm_key] = _normalize(item)
+            norm_key = _normalize_string(key, os=os) if isinstance(key, str) else key
+            normalized[norm_key] = _normalize(item, os=os)
         return normalized
     if isinstance(value, list):
-        return [_normalize(item) for item in value]
+        return [_normalize(item, os=os) for item in value]
     if isinstance(value, str):
-        return _normalize_string(value)
+        return _normalize_string(value, os=os)
     return value
 
 
@@ -124,7 +131,10 @@ def test_expected_outputs_use_canonical_interfaces() -> None:
 
     for expected_path in _discover_expected_files():
         expected = json.loads(expected_path.read_text())
-        normalized = _normalize(expected)
+        rel = expected_path.relative_to(PARSERS_TEST_DIR)
+        os_dir = rel.parts[0] if rel.parts else ""
+        os_val = _DIR_TO_OS.get(os_dir)
+        normalized = _normalize(expected, os=os_val)
         if normalized != expected:
             failures.append(str(expected_path.relative_to(PARSERS_TEST_DIR)))
 

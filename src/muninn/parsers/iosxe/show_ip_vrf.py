@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class VrfEntry(TypedDict):
@@ -58,7 +57,7 @@ class ShowIpVrfParser(BaseParser[ShowIpVrfResult]):
         interface = match.group("interface")
 
         entry: VrfEntry = {
-            "interfaces": [canonical_interface_name(interface)],
+            "interfaces": [canonical_interface_name(interface, os=OS.CISCO_IOSXE)],
         }
         if default_rd != "<not set>":
             entry["default_rd"] = default_rd
@@ -95,7 +94,7 @@ class ShowIpVrfParser(BaseParser[ShowIpVrfResult]):
             if cont_match and current_vrf:
                 interface = cont_match.group("interface")
                 vrfs[current_vrf]["interfaces"].append(
-                    canonical_interface_name(interface)
+                    canonical_interface_name(interface, os=OS.CISCO_IOSXE)
                 )
 
         if not vrfs:
