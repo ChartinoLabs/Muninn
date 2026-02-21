@@ -3,11 +3,30 @@
 import re
 from typing import NotRequired, TypedDict
 
+from netutils.interface import canonical_interface_name
+
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 
 _NOT_ADVERTISED = "- not advertised"
+
+_INTERFACE_RE = re.compile(
+    r"^(?:Gi(?:gabitEthernet)?|Fa(?:stEthernet)?|Eth(?:ernet)?|"
+    r"Te(?:nGigabitEthernet)?|Fo(?:rtyGigabitEthernet)?|"
+    r"Hu(?:ndredGigE)?|mgmt|Management|Lo(?:opback)?|"
+    r"Vlan|Po(?:rt-channel)?|Tu(?:nnel)?|Se(?:rial)?|"
+    r"nve|BDI|Twe(?:ntyFiveGigE)?)\d",
+    re.IGNORECASE,
+)
+
+
+def _canonicalize_if_interface(value: str) -> str:
+    """Return canonical form if value looks like an interface name."""
+    if _INTERFACE_RE.match(value):
+        return canonical_interface_name(value)
+    return value
+
 
 # Key prefixes that may have "- not advertised" appended
 _OPTIONAL_FIELD_PREFIXES = (
@@ -61,7 +80,7 @@ def _build_entry(
 
     entry: LldpNeighborDetailEntry = {
         "chassis_id": str(chassis_id),
-        "port_id": str(port_id),
+        "port_id": _canonicalize_if_interface(str(port_id)),
         "time_remaining": int(time_remaining),  # type: ignore[arg-type]
     }
 
@@ -75,7 +94,7 @@ def _build_entry(
     for key in _optional_str_fields:
         val = fields.get(key)
         if val is not None:
-            entry[key] = str(val)  # type: ignore[literal-required]
+            entry[key] = _canonicalize_if_interface(str(val))  # type: ignore[literal-required]
 
     mgmt = fields.get("management_addresses")
     if mgmt:
@@ -332,7 +351,11 @@ class ShowLldpNeighborsDetailParser(
             local_intf, entry = cls._parse_block(block)
             if entry is None:
                 continue
-            key = local_intf if local_intf is not None else "unknown"
+            key = (
+                canonical_interface_name(local_intf)
+                if local_intf is not None
+                else "unknown"
+            )
             neighbors.setdefault(key, []).append(entry)
 
         if not neighbors:
