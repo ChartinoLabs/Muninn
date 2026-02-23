@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class MessageStats(TypedDict):
@@ -492,12 +491,18 @@ def _try_parse_transport_fields(line: str, entry: NeighborEntry) -> bool:
     """Try to match transport/interface lines. Return True if matched."""
     m = _UPDATE_SOURCE_RE.match(line)
     if m:
-        entry["update_source"] = canonical_interface_name(m.group("source"))
+        entry["update_source"] = canonical_interface_name(
+            m.group("source"),
+            os=OS.CISCO_NXOS,
+        )
         return True
 
     m = _ATTACHED_INTF_RE.match(line)
     if m:
-        entry["attached_interface"] = canonical_interface_name(m.group("intf"))
+        entry["attached_interface"] = canonical_interface_name(
+            m.group("intf"),
+            os=OS.CISCO_NXOS,
+        )
         return True
 
     m = _MD5_AUTH_RE.match(line)
