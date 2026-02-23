@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 # Header line that marks the start of tabular data
 _HEADER_RE = re.compile(
@@ -98,7 +97,7 @@ def _parse_data_lines(lines: list[str]) -> list[HsrpGroupEntry]:
 
         raw_interface = data_match.group("interface")
         if raw_interface:
-            last_interface = canonical_interface_name(raw_interface)
+            last_interface = canonical_interface_name(raw_interface, os=OS.CISCO_IOS)
         interface = last_interface or ""
 
         entry: HsrpGroupEntry = {

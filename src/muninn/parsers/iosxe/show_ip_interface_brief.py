@@ -3,11 +3,10 @@
 import re
 from typing import TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class InterfaceBriefEntry(TypedDict):
@@ -70,7 +69,9 @@ class ShowIpInterfaceBriefParser(BaseParser[ShowIpInterfaceBriefResult]):
 
             match = cls._INTERFACE_PATTERN.match(line)
             if match:
-                interface = canonical_interface_name(match.group("interface"))
+                interface = canonical_interface_name(
+                    match.group("interface"), os=OS.CISCO_IOSXE
+                )
                 interfaces[interface] = InterfaceBriefEntry(
                     ip_address=match.group("ip_address"),
                     ok=match.group("ok").upper(),

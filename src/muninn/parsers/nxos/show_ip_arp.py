@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class ArpEntry(TypedDict):
@@ -71,7 +70,7 @@ class ShowIpArpParser(BaseParser[ShowIpArpResult]):
                 interface = match.group("interface")
 
                 entry: ArpEntry = {
-                    "interface": canonical_interface_name(interface),
+                    "interface": canonical_interface_name(interface, os=OS.CISCO_NXOS),
                 }
 
                 # Add age only if not "-" (static entry)

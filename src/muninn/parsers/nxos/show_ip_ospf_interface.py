@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class OspfInterfaceEntry(TypedDict):
@@ -178,7 +177,9 @@ def _parse_address_and_process(lines: list[str], entry: dict) -> None:
 
         m = _UNNUMBERED_RE.match(line)
         if m:
-            entry["unnumbered_interface"] = canonical_interface_name(m.group(1))
+            entry["unnumbered_interface"] = canonical_interface_name(
+                m.group(1), os=OS.CISCO_NXOS
+            )
             entry["ip_address"] = m.group(2)
             continue
 
@@ -323,7 +324,7 @@ def _normalize_interface_name(raw_name: str) -> str:
     # be passed through canonical_interface_name
     if raw_name.startswith(("SL", "VL")):
         return raw_name
-    return canonical_interface_name(raw_name)
+    return canonical_interface_name(raw_name, os=OS.CISCO_NXOS)
 
 
 @register(OS.CISCO_NXOS, "show ip ospf interface")

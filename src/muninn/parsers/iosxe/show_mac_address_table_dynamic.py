@@ -3,11 +3,10 @@
 import re
 from typing import TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class MacAddressEntry(TypedDict):
@@ -39,7 +38,7 @@ class ShowMacAddressTableDynamicParser(BaseParser[ShowMacAddressTableDynamicResu
 
     @staticmethod
     def _normalize_interface(interface: str) -> str:
-        return canonical_interface_name(interface)
+        return canonical_interface_name(interface, os=OS.CISCO_IOSXE)
 
     @classmethod
     def parse(cls, output: str) -> ShowMacAddressTableDynamicResult:

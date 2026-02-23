@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class InterfaceStatusEntry(TypedDict):
@@ -94,7 +93,7 @@ class ShowInterfaceStatusParser(BaseParser[ShowInterfaceStatusResult]):
 
             match = cls._INTERFACE_PATTERN.match(stripped)
             if match:
-                port = canonical_interface_name(match.group("port"))
+                port = canonical_interface_name(match.group("port"), os=OS.CISCO_NXOS)
                 name = cls._normalize_value(match.group("name"))
                 status = match.group("status")
                 vlan = cls._normalize_value(match.group("vlan"))

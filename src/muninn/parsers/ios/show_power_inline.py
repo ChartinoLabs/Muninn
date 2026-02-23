@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 # Null-equivalent values for device and class fields
 _NULL_VALUES = frozenset({"n/a", "none", ""})
@@ -106,7 +105,7 @@ def _parse_interface_line(
     if raw_name.lower() in ("interface", "module"):
         return None
 
-    name = canonical_interface_name(raw_name)
+    name = canonical_interface_name(raw_name, os=OS.CISCO_IOS)
     entry: InterfaceEntry = {
         "admin": m.group(2).lower(),
         "oper": m.group(3).lower(),

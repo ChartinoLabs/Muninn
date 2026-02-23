@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class OspfNeighborEntry(TypedDict):
@@ -70,7 +69,9 @@ class ShowIpOspfNeighborParser(BaseParser[ShowIpOspfNeighborResult]):
 
             match = cls._NEIGHBOR_PATTERN.match(line)
             if match:
-                interface = canonical_interface_name(match.group("interface"))
+                interface = canonical_interface_name(
+                    match.group("interface"), os=OS.CISCO_IOSXE
+                )
                 neighbor_id = match.group("neighbor_id")
                 role = match.group("role")
 

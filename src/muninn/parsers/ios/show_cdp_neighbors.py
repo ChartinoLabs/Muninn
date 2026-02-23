@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class CdpNeighborEntry(TypedDict):
@@ -40,7 +39,7 @@ def _normalize_interface(intf: str) -> str:
     """Normalize IOS-style interface (e.g. 'Gig 0/0') to canonical form."""
     collapsed = _COLLAPSE_SPACE.sub(r"\1\2", intf.strip())
     collapsed = _REMAP_SER.sub(r"Se\1", collapsed)
-    return canonical_interface_name(collapsed)
+    return canonical_interface_name(collapsed, os=OS.CISCO_IOS)
 
 
 @register(OS.CISCO_IOS, "show cdp neighbors")

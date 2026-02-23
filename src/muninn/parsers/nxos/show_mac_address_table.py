@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 # Entry flag character to descriptive string mapping
 _ENTRY_FLAG_MAP: dict[str, str] = {
@@ -96,7 +95,7 @@ class ShowMacAddressTableParser(BaseParser[ShowMacAddressTableResult]):
         # Normalize interface abbreviations (Eth -> Ethernet, Po -> Port-channel)
         # but leave special values like Drop, sup-eth1(R), vPC Peer-Link(R) as-is
         if _INTERFACE_PORT_PATTERN.match(port_raw):
-            port_raw = canonical_interface_name(port_raw)
+            port_raw = canonical_interface_name(port_raw, os=OS.CISCO_NXOS)
 
         entry: MacTableEntry = {
             "mac_address": match.group("mac").lower(),

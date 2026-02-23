@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 # --- Role and status normalization maps ---
 _ROLE_MAP: dict[str, str] = {
@@ -152,7 +151,7 @@ def _parse_root_id(lines: list[str]) -> tuple[RootIdEntry, bool]:
         m = _PORT_RE.match(line)
         if m:
             root["port_number"] = int(m.group(1))
-            root["port_name"] = canonical_interface_name(m.group(2))
+            root["port_name"] = canonical_interface_name(m.group(2), os=OS.CISCO_IOS)
             continue
 
         m = _TIMERS_RE.match(line)
@@ -209,7 +208,7 @@ def _parse_interfaces(lines: list[str]) -> dict[str, InterfaceEntry]:
             continue
 
         raw_name = m.group(1)
-        name = canonical_interface_name(raw_name)
+        name = canonical_interface_name(raw_name, os=OS.CISCO_IOS)
         role_abbr = m.group(2).lower()
         status_abbr = m.group(3).rstrip("*").lower()
 

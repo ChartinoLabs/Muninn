@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class InputQueueEntry(TypedDict):
@@ -550,7 +549,9 @@ def _apply_tunnel_source(m: re.Match[str], tunnel: TunnelInfo) -> None:
     """Apply tunnel source/destination fields from a match."""
     tunnel["source"] = m.group(1)
     if m.group(2):
-        tunnel["source_interface"] = canonical_interface_name(m.group(2))
+        tunnel["source_interface"] = canonical_interface_name(
+            m.group(2), os=OS.CISCO_IOS
+        )
     if m.group(3):
         tunnel["destination"] = m.group(3)
 
@@ -626,7 +627,7 @@ def _parse_port_channel(lines: list[str]) -> PortChannelInfo:
         if m:
             pc["members"].append(
                 {
-                    "interface": canonical_interface_name(m.group(1)),
+                    "interface": canonical_interface_name(m.group(1), os=OS.CISCO_IOS),
                     "duplex": m.group(2).strip(),
                     "speed": m.group(3),
                 }
@@ -645,7 +646,7 @@ def _parse_port_channel(lines: list[str]) -> PortChannelInfo:
             for name in member_str.split():
                 pc["members"].append(
                     {
-                        "interface": canonical_interface_name(name),
+                        "interface": canonical_interface_name(name, os=OS.CISCO_IOS),
                         "duplex": "",
                         "speed": "",
                     }
@@ -699,7 +700,9 @@ def _parse_header_fields(line: str, entry: dict) -> bool:
 
     m = _UNNUMBERED_RE.match(line)
     if m:
-        entry["unnumbered_interface"] = canonical_interface_name(m.group(1))
+        entry["unnumbered_interface"] = canonical_interface_name(
+            m.group(1), os=OS.CISCO_IOS
+        )
         entry["ip_address"] = m.group(2)
         return True
 
@@ -886,7 +889,7 @@ class ShowInterfacesParser(BaseParser[ShowInterfacesResult]):
             parsed = _parse_block(block_lines)
             if parsed is None:
                 continue
-            name = canonical_interface_name(raw_name)
+            name = canonical_interface_name(raw_name, os=OS.CISCO_IOS)
             interfaces[name] = parsed
 
         return {"interfaces": interfaces}

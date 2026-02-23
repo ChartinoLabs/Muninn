@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 # --- Protocol code to name mapping ---
 _PROTOCOL_MAP: dict[str, str] = {
@@ -205,7 +204,7 @@ def _safe_interface(name: str) -> str:
     # Some values like age strings should not be normalized
     if re.match(r"^\d+[wdhms:]", name):
         return name
-    return canonical_interface_name(name)
+    return canonical_interface_name(name, os=OS.CISCO_IOS)
 
 
 def _classify_age_or_interface(token: str, hop: NextHopEntry) -> None:

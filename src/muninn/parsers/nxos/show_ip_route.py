@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class NextHop(TypedDict):
@@ -176,7 +175,7 @@ def _build_nexthop(
 
     interface = nh_match.group("interface")
     if interface:
-        nexthop["interface"] = canonical_interface_name(interface)
+        nexthop["interface"] = canonical_interface_name(interface, os=OS.CISCO_NXOS)
 
     for key in ("process", "route_type", "tunnelid", "encap"):
         val = proto_fields.get(key)

@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class TopologyEntry(TypedDict):
@@ -278,7 +277,9 @@ def _parse_address_area(lines: list[str], entry: dict) -> None:
 
         m = _UNNUMBERED_ADDR_RE.match(line)
         if m:
-            entry["unnumbered_interface"] = canonical_interface_name(m.group(1))
+            entry["unnumbered_interface"] = canonical_interface_name(
+                m.group(1), os=OS.CISCO_IOS
+            )
             entry["unnumbered_address"] = m.group(2)
 
 
@@ -549,7 +550,7 @@ class ShowIpOspfInterfaceParser(BaseParser[ShowIpOspfInterfaceResult]):
             parsed = _parse_block(block_lines)
             if parsed is None:
                 continue
-            name = canonical_interface_name(raw_name)
+            name = canonical_interface_name(raw_name, os=OS.CISCO_IOS)
             interfaces[name] = parsed
 
         return {"interfaces": interfaces}
