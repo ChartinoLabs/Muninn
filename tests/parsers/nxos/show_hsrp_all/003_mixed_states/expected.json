@@ -1,0 +1,96 @@
+{
+    "groups": {
+        "Vlan123/123": {
+            "interface": "Vlan123",
+            "group": 123,
+            "version": 2,
+            "address_family": "IPv4",
+            "local_state": "Active",
+            "priority": 200,
+            "configured_priority": 200,
+            "preempt": true,
+            "forwarding_threshold_lower": 0,
+            "forwarding_threshold_upper": 200,
+            "hellotime": 3,
+            "holdtime": 10,
+            "virtual_ip": "10.0.2.1",
+            "active_router": {
+                "address": "local"
+            },
+            "standby_router": {
+                "address": "10.0.2.3",
+                "priority": 100
+            },
+            "virtual_mac_address": "0000.0c9f.1234",
+            "state_changes": 2,
+            "last_state_change": "24w0d",
+            "ip_redundancy_name": "hsrp-Vlan123-123",
+            "preemption_delay": {
+                "minimum": 180
+            },
+            "authentication_type": "MD5, key-chain",
+            "authentication_value": "HSRP-AUTH"
+        },
+        "Vlan456/456": {
+            "interface": "Vlan456",
+            "group": 456,
+            "version": 2,
+            "address_family": "IPv4",
+            "local_state": "Initial(Interface Down)",
+            "priority": 200,
+            "configured_priority": 200,
+            "preempt": true,
+            "forwarding_threshold_lower": 0,
+            "forwarding_threshold_upper": 200,
+            "hellotime": 3,
+            "holdtime": 10,
+            "virtual_ip": "10.0.3.1",
+            "active_router": {
+                "address": "unknown"
+            },
+            "standby_router": {
+                "address": "unknown"
+            },
+            "virtual_mac_address": "0000.0c9f.1235",
+            "state_changes": 0,
+            "last_state_change": "never",
+            "ip_redundancy_name": "hsrp-Vlan456-456",
+            "preemption_delay": {
+                "minimum": 180
+            },
+            "authentication_type": "MD5, key-chain",
+            "authentication_value": "HSRP-AUTH"
+        },
+        "Vlan789/789": {
+            "interface": "Vlan789",
+            "group": 789,
+            "version": 2,
+            "address_family": "IPv4",
+            "local_state": "Standby",
+            "priority": 100,
+            "configured_priority": 100,
+            "preempt": true,
+            "forwarding_threshold_lower": 0,
+            "forwarding_threshold_upper": 100,
+            "hellotime": 3,
+            "holdtime": 10,
+            "virtual_ip": "10.0.4.254",
+            "active_router": {
+                "address": "10.0.4.253",
+                "priority": 200
+            },
+            "standby_router": {
+                "address": "local"
+            },
+            "virtual_mac_address": "0000.0c9f.1236",
+            "state_changes": 1,
+            "last_state_change": "24w0d",
+            "ip_redundancy_name": "hsrp-Vlan789-789",
+            "preemption_delay": {
+                "minimum": 180
+            },
+            "authentication_type": "MD5, key-chain",
+            "authentication_value": "HSRP-AUTH"
+        }
+    }
+}
