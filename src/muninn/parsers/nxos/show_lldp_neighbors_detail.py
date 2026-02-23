@@ -3,11 +3,10 @@
 import re
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 _NOT_ADVERTISED = "not advertised"
 
@@ -51,7 +50,7 @@ def _normalize_interface_description(value: str) -> str:
     """Normalize a port description, canonicalizing if it looks like an interface."""
     stripped = value.strip()
     if _INTERFACE_LIKE_PATTERN.match(stripped):
-        return canonical_interface_name(stripped)
+        return canonical_interface_name(stripped, os=OS.CISCO_NXOS)
     return stripped
 
 
@@ -136,7 +135,7 @@ class ShowLldpNeighborsDetailParser(BaseParser[ShowLldpNeighborsDetailResult]):
     def _normalize_port_id(cls, port_id: str) -> str:
         """Normalize port_id if it looks like an interface name."""
         if cls._INTERFACE_PATTERN.match(port_id):
-            return canonical_interface_name(port_id)
+            return canonical_interface_name(port_id, os=OS.CISCO_NXOS)
         return port_id
 
     @classmethod
@@ -213,7 +212,10 @@ class ShowLldpNeighborsDetailParser(BaseParser[ShowLldpNeighborsDetailResult]):
         # Local Port ID
         match = cls._LOCAL_PORT_PATTERN.match(stripped)
         if match:
-            local_port = canonical_interface_name(match.group("value").strip())
+            local_port = canonical_interface_name(
+                match.group("value").strip(),
+                os=OS.CISCO_NXOS,
+            )
             return current_entry, local_port, None
 
         # Try table-driven field patterns, then optional address/vlan patterns
