@@ -4,11 +4,10 @@ import re
 from dataclasses import dataclass, field
 from typing import NotRequired, TypedDict
 
-from netutils.interface import canonical_interface_name
-
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class CdpNeighborDetailEntry(TypedDict):
@@ -167,7 +166,7 @@ class ShowCdpNeighborsDetailParser(
     def _normalize_port_id(cls, port_id: str) -> str:
         """Normalize port_id if it looks like an interface name."""
         if cls._INTF_DETECT_PATTERN.match(port_id):
-            return canonical_interface_name(port_id)
+            return canonical_interface_name(port_id, os=OS.CISCO_NXOS)
         return port_id
 
     @classmethod
@@ -339,6 +338,7 @@ class ShowCdpNeighborsDetailParser(
         if intf_match:
             state.local_intf = canonical_interface_name(
                 intf_match.group(1).strip(),
+                os=OS.CISCO_NXOS,
             )
             state.fields["port_id"] = intf_match.group(2).strip()
             return True
