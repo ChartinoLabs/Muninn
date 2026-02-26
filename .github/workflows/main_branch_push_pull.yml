@@ -11,6 +11,34 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
+  check-changelog-fragment:
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Check for changelog fragment
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          PR_NUMBER: ${{ github.event.number }}
+        run: |
+          FRAGMENT_TYPES="parser_added|parser_updated|parser_fixed|core_added|core_fixed|breaking|internal"
+          FRAGMENTS=$(git diff --name-only --diff-filter=A \
+            "origin/${BASE_REF}...HEAD" \
+            -- 'changes/*' \
+            | grep -E "\.(${FRAGMENT_TYPES})$" || true)
+          if [ -z "$FRAGMENTS" ]; then
+            echo "::error::No changelog fragment found. Add a fragment file in" \
+              "changes/ (for example, changes/${PR_NUMBER}.core_fixed)." \
+              "See changes/README.md for details."
+            exit 1
+          fi
+          echo "Found changelog fragment(s):"
+          echo "$FRAGMENTS"
   format:
     runs-on: ubuntu-latest
     steps:

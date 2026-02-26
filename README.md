@@ -31,6 +31,10 @@ result = muninn.parse("nxos", "show ip ospf neighbor", raw_output)
 ## Documentation
 
 - [Design Principles](docs/01-design-principles.md) - Core philosophy and technical decisions
+- [Testing Strategy](docs/02-testing-strategy.md) - Test structure and metadata requirements
+- [Changelog](CHANGELOG.md) - Release history built from changelog fragments
+- [Changelog Fragments Guide](changes/README.md) - How to add release-note fragments
+- [Releasing](RELEASING.md) - How to compile release notes and cut a release
 
 ## Status
 
