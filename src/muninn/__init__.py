@@ -4,10 +4,14 @@
 from muninn import parsers as _parsers  # noqa: F401
 from muninn.config import (
     configuration,
-    get_setting,
+    get_feature_enabled,
+    get_parser_backend,
+    get_retries,
     get_settings,
     load_config,
-    set_setting,
+    set_feature_enabled,
+    set_parser_backend,
+    set_retries,
 )
 from muninn.core import parse
 from muninn.exceptions import (
@@ -29,7 +33,9 @@ __all__ = [
     "ParseError",
     "ParserNotFoundError",
     "configuration",
-    "get_setting",
+    "get_feature_enabled",
+    "get_parser_backend",
+    "get_retries",
     "get_settings",
     "get_parser",
     "list_parsers",
@@ -37,5 +43,7 @@ __all__ = [
     "parse",
     "register",
     "resolve_os",
-    "set_setting",
+    "set_feature_enabled",
+    "set_parser_backend",
+    "set_retries",
 ]

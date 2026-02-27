@@ -2,25 +2,20 @@
 
 from __future__ import annotations
 
-import json
-from typing import Annotated, TypeVar
-
-from pydantic import Field, ValidationError, field_validator
 from pydantic_settings import (
     BaseSettings,
-    NoDecode,
     PydanticBaseSettingsSource,
     PyprojectTomlConfigSettingsSource,
     SettingsConfigDict,
 )
 
-T = TypeVar("T")
-
 
 class _RuntimeSettings(BaseSettings):
     """Settings resolved from environment and pyproject."""
 
-    settings: Annotated[dict[str, object], NoDecode] = Field(default_factory=dict)
+    parser_backend: str = "native"
+    retries: int = 0
+    feature_enabled: bool = False
 
     model_config = SettingsConfigDict(
         env_prefix="MUNINN_",
@@ -28,23 +23,6 @@ class _RuntimeSettings(BaseSettings):
         pyproject_toml_depth=8,
         extra="ignore",
     )
-
-    @field_validator("settings", mode="before")
-    @classmethod
-    def _parse_settings(cls, value: object) -> object:
-        if value is None:
-            return {}
-        if isinstance(value, str):
-            try:
-                parsed = json.loads(value)
-            except json.JSONDecodeError as exc:
-                msg = "MUNINN_SETTINGS must be valid JSON"
-                raise ValueError(msg) from exc
-            if not isinstance(parsed, dict):
-                msg = "MUNINN_SETTINGS JSON must decode to an object"
-                raise ValueError(msg)
-            return parsed
-        return value
 
     @classmethod
     def settings_customise_sources(
@@ -75,18 +53,36 @@ class Configuration:
 
     def reload(self) -> None:
         """Reload settings from environment and pyproject, preserving API overrides."""
-        loaded = _RuntimeSettings().settings
+        loaded = _RuntimeSettings().model_dump()
         merged = {**loaded, **self._api_overrides}
         self._settings = merged
 
-    def set(self, name: str, value: object) -> None:
-        """Set an API override value for a named setting."""
-        self._api_overrides[name] = value
+    def set_parser_backend(self, value: str) -> None:
+        """Set parser backend as an API override."""
+        self._api_overrides["parser_backend"] = value
         self.reload()
 
-    def get(self, name: str, default: T | None = None) -> object | T | None:
-        """Get a setting value by name."""
-        return self._settings.get(name, default)
+    def get_parser_backend(self) -> str:
+        """Get resolved parser backend."""
+        return str(self._settings["parser_backend"])
+
+    def set_retries(self, value: int) -> None:
+        """Set retry count as an API override."""
+        self._api_overrides["retries"] = value
+        self.reload()
+
+    def get_retries(self) -> int:
+        """Get resolved retry count."""
+        return int(self._settings["retries"])
+
+    def set_feature_enabled(self, value: bool) -> None:
+        """Set feature toggle as an API override."""
+        self._api_overrides["feature_enabled"] = value
+        self.reload()
+
+    def get_feature_enabled(self) -> bool:
+        """Get resolved feature toggle."""
+        return bool(self._settings["feature_enabled"])
 
     def as_dict(self) -> dict[str, object]:
         """Return a copy of all resolved settings."""
@@ -109,24 +105,36 @@ def load_config() -> None:
         raise ValueError(str(exc)) from exc
 
 
-def set_setting(name: str, value: object) -> None:
-    """Set a named setting through the global configuration object."""
-    configuration.set(name, value)
+def set_parser_backend(value: str) -> None:
+    """Set parser backend through the global configuration object."""
+    configuration.set_parser_backend(value)
 
 
-def get_setting(name: str, default: T | None = None) -> object | T | None:
-    """Get a named setting through the global configuration object."""
-    return configuration.get(name, default)
+def get_parser_backend() -> str:
+    """Get parser backend through the global configuration object."""
+    return configuration.get_parser_backend()
+
+
+def set_retries(value: int) -> None:
+    """Set retry count through the global configuration object."""
+    configuration.set_retries(value)
+
+
+def get_retries() -> int:
+    """Get retry count through the global configuration object."""
+    return configuration.get_retries()
+
+
+def set_feature_enabled(value: bool) -> None:
+    """Set feature toggle through the global configuration object."""
+    configuration.set_feature_enabled(value)
+
+
+def get_feature_enabled() -> bool:
+    """Get feature toggle through the global configuration object."""
+    return configuration.get_feature_enabled()
 
 
 def get_settings() -> dict[str, object]:
     """Get all resolved settings through the global configuration object."""
     return configuration.as_dict()
-
-
-def validate_config() -> None:
-    """Validate settings sources and raise ValueError on invalid data."""
-    try:
-        _RuntimeSettings()
-    except ValidationError as exc:
-        raise ValueError(str(exc)) from exc

@@ -39,15 +39,16 @@ Muninn supports three configuration sources in descending precedence:
 ```python
 import muninn
 
-muninn.set_setting("parser_backend", "native")
-muninn.set_setting("retries", 2)
+muninn.set_parser_backend("native")
+muninn.set_retries(2)
+muninn.set_feature_enabled(True)
 ```
 
 Current source mapping:
 
-- API: `muninn.set_setting("name", value)`
-- Env: `MUNINN_SETTINGS` (JSON object)
-- Pyproject: `[tool.muninn] settings = { ... }`
+- API: dedicated getters/setters per item
+- Env: `MUNINN_PARSER_BACKEND`, `MUNINN_RETRIES`, `MUNINN_FEATURE_ENABLED`
+- Pyproject: `[tool.muninn]` fields like `parser_backend = "native"`
 
 This PR only introduces layered configuration management; runtime parser policy
 settings are intentionally out of scope.

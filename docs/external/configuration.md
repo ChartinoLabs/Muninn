@@ -6,44 +6,56 @@ Muninn resolves runtime settings from three sources, in this order:
 2. Environment variables
 3. `pyproject.toml` under `[tool.muninn]`
 
-This change introduces source layering and a centralized configuration singleton.
-It does not introduce parser-policy options (those remain in a separate PR).
+This PR introduces source layering and a centralized configuration singleton.
+It keeps parser policy behavior out of scope.
 
-## Configuration Shape
+## Configuration Items
 
-All user-defined settings are key/value pairs.
+### `parser_backend`
 
-API:
-
-```python
-import muninn
-
-muninn.set_setting("parser_backend", "native")
-muninn.set_setting("retries", 2)
-
-value = muninn.get_setting("parser_backend")
-all_values = muninn.get_settings()
-```
-
-Environment variable:
-
-```bash
-export MUNINN_SETTINGS='{"parser_backend":"native","retries":2}'
-```
-
-`pyproject.toml`:
+- Type: string
+- Default: `"native"`
+- API: `muninn.set_parser_backend("native")`, `muninn.get_parser_backend()`
+- Env: `MUNINN_PARSER_BACKEND`
+- Pyproject:
 
 ```toml
 [tool.muninn]
-settings = { parser_backend = "native", retries = 2 }
+parser_backend = "native"
+```
+
+### `retries`
+
+- Type: integer
+- Default: `0`
+- API: `muninn.set_retries(2)`, `muninn.get_retries()`
+- Env: `MUNINN_RETRIES`
+- Pyproject:
+
+```toml
+[tool.muninn]
+retries = 2
+```
+
+### `feature_enabled`
+
+- Type: boolean
+- Default: `false`
+- API: `muninn.set_feature_enabled(True)`, `muninn.get_feature_enabled()`
+- Env: `MUNINN_FEATURE_ENABLED`
+- Pyproject:
+
+```toml
+[tool.muninn]
+feature_enabled = true
 ```
 
 ## Precedence Example
 
 Given:
 
-- `pyproject.toml`: `settings = { retries = 1 }`
-- `MUNINN_SETTINGS='{"retries": 2}'`
-- `muninn.set_setting("retries", 3)`
+- `pyproject.toml`: `retries = 1`
+- `MUNINN_RETRIES=2`
+- `muninn.set_retries(3)`
 
 Resolved value for `retries` is `3`.
