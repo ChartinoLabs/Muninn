@@ -60,7 +60,10 @@ class TestRegister:
                 return {"version": "1.0"}
 
         assert (OS.CISCO_NXOS, "show version") in registry._registry
-        assert registry._registry[(OS.CISCO_NXOS, "show version")] is ShowVersionParser
+        assert (
+            registry._registry[(OS.CISCO_NXOS, "show version")][0].parser_cls
+            is ShowVersionParser
+        )
 
     def test_registers_parser_class_with_enum(self) -> None:
         """Decorator registers the parser class using OS enum."""
@@ -217,6 +220,70 @@ class TestGetParser:
 
         with pytest.raises(ParserNotFoundError):
             registry.get_parser("iosxe", "show version")
+
+    def test_get_parser_prefers_local_by_default(self) -> None:
+        """Lookup prefers local parser over built-in parser by default."""
+
+        @registry.register("nxos", "show version")
+        class BuiltInParser(BaseParser):
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {"source": "built_in"}
+
+        with registry.registration_source("local"):
+
+            @registry.register("nxos", "show version")
+            class LocalParser(BaseParser):
+                @classmethod
+                def parse(cls, output: str) -> dict[str, Any]:
+                    return {"source": "local"}
+
+        parser_cls = registry.get_parser("nxos", "show version")
+        assert parser_cls is LocalParser
+
+    def test_get_parser_candidates_uses_requested_source_order(self) -> None:
+        """Candidate ordering follows explicit source order."""
+
+        @registry.register("nxos", "show version")
+        class BuiltInParser(BaseParser):
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {"source": "built_in"}
+
+        with registry.registration_source("local"):
+
+            @registry.register("nxos", "show version")
+            class LocalParser(BaseParser):
+                @classmethod
+                def parse(cls, output: str) -> dict[str, Any]:
+                    return {"source": "local"}
+
+        candidates = registry.get_parser_candidates(
+            "nxos", "show version", source_order=("built_in", "local")
+        )
+        assert [candidate.parser_cls for candidate in candidates] == [
+            BuiltInParser,
+            LocalParser,
+        ]
+
+    def test_register_parser_records_source(self) -> None:
+        """Explicit registration preserves parser source metadata."""
+
+        class LocalParser(BaseParser):
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {"source": "local"}
+
+        registry.register_parser(
+            os="nxos",
+            command="show version",
+            parser_cls=LocalParser,
+            source="local",
+        )
+
+        candidate = registry._registry[(OS.CISCO_NXOS, "show version")][0]
+        assert candidate.source == "local"
+        assert candidate.parser_cls is LocalParser
 
 
 class TestListParsers:
