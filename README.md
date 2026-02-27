@@ -32,32 +32,25 @@ result = muninn.parse("nxos", "show ip ospf neighbor", raw_output)
 
 Muninn supports three configuration sources in descending precedence:
 
-1. API overrides via `muninn.configuration` or convenience setters
+1. API overrides via `muninn.configuration` or helper functions
 2. Environment variables
 3. `[tool.muninn]` in `pyproject.toml`
 
 ```python
 import muninn
 
-muninn.configuration.set_execution_mode(muninn.ExecutionMode.LOCAL_ONLY)
-muninn.configuration.set_fallback_on_invalid_result(False)
-muninn.configuration.set_parser_paths(["./local_parsers"])
+muninn.set_setting("parser_backend", "native")
+muninn.set_setting("retries", 2)
 ```
 
-### Execution Modes
+Current source mapping:
 
-- `ExecutionMode.LOCAL_FIRST_FALLBACK` (default)
-- `ExecutionMode.CENTRALIZED_FIRST_FALLBACK`
-- `ExecutionMode.LOCAL_ONLY`
+- API: `muninn.set_setting("name", value)`
+- Env: `MUNINN_SETTINGS` (JSON object)
+- Pyproject: `[tool.muninn] settings = { ... }`
 
-Fallback occurs when a parser raises an exception, returns `None`, or returns `{}`.
-
-### Environment Variables
-
-- `MUNINN_PARSER_PATHS`: parser search paths separated by `:` (or platform separator)
-- `MUNINN_PARSER_EXECUTION_MODE`: `centralized_first_fallback`,
-  `local_first_fallback`, or `local_only`
-- `MUNINN_FALLBACK_ON_INVALID_RESULT`: boolean toggle for fallback on `None` / `{}`
+This PR only introduces layered configuration management; runtime parser policy
+settings are intentionally out of scope.
 
 ## Documentation
 

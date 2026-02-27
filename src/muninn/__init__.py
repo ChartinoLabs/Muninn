@@ -3,14 +3,11 @@
 # Import parsers to trigger registration
 from muninn import parsers as _parsers  # noqa: F401
 from muninn.config import (
-    ExecutionMode,
     configuration,
-    get_execution_mode,
-    get_fallback_on_invalid_result,
-    get_parser_paths,
-    set_execution_mode,
-    set_fallback_on_invalid_result,
-    set_parser_paths,
+    get_setting,
+    get_settings,
+    load_config,
+    set_setting,
 )
 from muninn.core import parse
 from muninn.exceptions import (
@@ -29,19 +26,16 @@ __all__ = [
     "OS",
     "OperatingSystem",
     "EmptyOutputError",
-    "ExecutionMode",
     "ParseError",
     "ParserNotFoundError",
     "configuration",
-    "get_execution_mode",
-    "get_fallback_on_invalid_result",
+    "get_setting",
+    "get_settings",
     "get_parser",
-    "get_parser_paths",
     "list_parsers",
+    "load_config",
     "parse",
     "register",
     "resolve_os",
-    "set_execution_mode",
-    "set_fallback_on_invalid_result",
-    "set_parser_paths",
+    "set_setting",
 ]

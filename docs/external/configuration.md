@@ -1,113 +1,49 @@
 # Muninn Configuration
 
-Muninn supports three configuration sources. Values are resolved in this order:
+Muninn resolves runtime settings from three sources, in this order:
 
 1. API overrides (highest precedence)
 2. Environment variables
 3. `pyproject.toml` under `[tool.muninn]`
 
-If a value is not supplied by any source, Muninn uses a built-in default.
+This change introduces source layering and a centralized configuration singleton.
+It does not introduce parser-policy options (those remain in a separate PR).
 
-## Configuration Items
+## Configuration Shape
 
-### `parser_execution_mode`
-
-Controls parser candidate order and fallback strategy.
-
-- Allowed values:
-  - `local_first_fallback`
-  - `centralized_first_fallback`
-  - `local_only`
-- Default: `local_first_fallback`
+All user-defined settings are key/value pairs.
 
 API:
 
 ```python
 import muninn
 
-muninn.configuration.set_execution_mode(muninn.ExecutionMode.LOCAL_ONLY)
-# or
-muninn.set_execution_mode("local_only")
+muninn.set_setting("parser_backend", "native")
+muninn.set_setting("retries", 2)
+
+value = muninn.get_setting("parser_backend")
+all_values = muninn.get_settings()
 ```
 
 Environment variable:
 
 ```bash
-export MUNINN_PARSER_EXECUTION_MODE=local_only
+export MUNINN_SETTINGS='{"parser_backend":"native","retries":2}'
 ```
 
 `pyproject.toml`:
 
 ```toml
 [tool.muninn]
-parser_execution_mode = "local_only"
+settings = { parser_backend = "native", retries = 2 }
 ```
 
-### `fallback_on_invalid_result`
+## Precedence Example
 
-Controls whether parser fallback is triggered when a parser returns `None` or `{}`.
+Given:
 
-- Allowed values: boolean
-- Default: `true`
+- `pyproject.toml`: `settings = { retries = 1 }`
+- `MUNINN_SETTINGS='{"retries": 2}'`
+- `muninn.set_setting("retries", 3)`
 
-API:
-
-```python
-import muninn
-
-muninn.configuration.set_fallback_on_invalid_result(False)
-# or
-muninn.set_fallback_on_invalid_result(False)
-```
-
-Environment variable:
-
-```bash
-export MUNINN_FALLBACK_ON_INVALID_RESULT=false
-```
-
-`pyproject.toml`:
-
-```toml
-[tool.muninn]
-fallback_on_invalid_result = false
-```
-
-### `parser_paths`
-
-External parser package search paths for local overlays.
-
-- Allowed values: list of paths
-- Default: empty list
-
-API:
-
-```python
-import muninn
-
-muninn.configuration.set_parser_paths(["./local_parsers", "./vendor/parsers"])
-# or
-muninn.set_parser_paths(["./local_parsers", "./vendor/parsers"])
-```
-
-Environment variable (path separator based on operating system):
-
-```bash
-export MUNINN_PARSER_PATHS="./local_parsers:./vendor/parsers"
-```
-
-`pyproject.toml`:
-
-```toml
-[tool.muninn]
-parser_paths = ["./local_parsers", "./vendor/parsers"]
-```
-
-## Complete Example
-
-```toml
-[tool.muninn]
-parser_execution_mode = "local_first_fallback"
-fallback_on_invalid_result = true
-parser_paths = ["./local_parsers"]
-```
+Resolved value for `retries` is `3`.

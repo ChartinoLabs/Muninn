@@ -1,13 +1,11 @@
-"""Runtime configuration for parser execution and local overlays."""
+"""Centralized runtime configuration with layered sources."""
 
 from __future__ import annotations
 
-import os
-from enum import StrEnum
-from pathlib import Path
-from typing import Annotated, Any
+import json
+from typing import Annotated, TypeVar
 
-from pydantic import field_validator
+from pydantic import Field, ValidationError, field_validator
 from pydantic_settings import (
     BaseSettings,
     NoDecode,
@@ -16,21 +14,13 @@ from pydantic_settings import (
     SettingsConfigDict,
 )
 
-
-class ExecutionMode(StrEnum):
-    """Parser execution order and fallback behavior."""
-
-    CENTRALIZED_FIRST_FALLBACK = "centralized_first_fallback"
-    LOCAL_FIRST_FALLBACK = "local_first_fallback"
-    LOCAL_ONLY = "local_only"
+T = TypeVar("T")
 
 
 class _RuntimeSettings(BaseSettings):
-    """Settings resolved from API overrides, environment, and pyproject."""
+    """Settings resolved from environment and pyproject."""
 
-    parser_paths: Annotated[tuple[Path, ...], NoDecode] = ()
-    parser_execution_mode: ExecutionMode = ExecutionMode.LOCAL_FIRST_FALLBACK
-    fallback_on_invalid_result: bool = True
+    settings: Annotated[dict[str, object], NoDecode] = Field(default_factory=dict)
 
     model_config = SettingsConfigDict(
         env_prefix="MUNINN_",
@@ -39,19 +29,22 @@ class _RuntimeSettings(BaseSettings):
         extra="ignore",
     )
 
-    @field_validator("parser_paths", mode="before")
+    @field_validator("settings", mode="before")
     @classmethod
-    def _split_parser_paths(cls, value: object) -> object:
+    def _parse_settings(cls, value: object) -> object:
         if value is None:
-            return ()
+            return {}
         if isinstance(value, str):
-            return [path for path in value.split(os.pathsep) if path.strip()]
+            try:
+                parsed = json.loads(value)
+            except json.JSONDecodeError as exc:
+                msg = "MUNINN_SETTINGS must be valid JSON"
+                raise ValueError(msg) from exc
+            if not isinstance(parsed, dict):
+                msg = "MUNINN_SETTINGS JSON must decode to an object"
+                raise ValueError(msg)
+            return parsed
         return value
-
-    @field_validator("parser_paths", mode="after")
-    @classmethod
-    def _normalize_parser_paths(cls, paths: tuple[Path, ...]) -> tuple[Path, ...]:
-        return tuple(Path(path).expanduser().resolve() for path in paths)
 
     @classmethod
     def settings_customise_sources(
@@ -72,49 +65,35 @@ class _RuntimeSettings(BaseSettings):
 
 
 class Configuration:
-    """Centralized runtime configuration singleton."""
+    """Configuration singleton with API > env > pyproject precedence."""
 
     def __init__(self) -> None:
-        """Initialize configuration state and API override storage."""
-        self._api_overrides: dict[str, Any] = {}
-        self._settings = _RuntimeSettings()
+        """Initialize API overrides and the resolved settings cache."""
+        self._api_overrides: dict[str, object] = {}
+        self._settings: dict[str, object] = {}
+        self.reload()
 
     def reload(self) -> None:
-        """Reload settings from configured sources."""
-        self._settings = _RuntimeSettings(**self._api_overrides)
+        """Reload settings from environment and pyproject, preserving API overrides."""
+        loaded = _RuntimeSettings().settings
+        merged = {**loaded, **self._api_overrides}
+        self._settings = merged
 
-    def set_execution_mode(self, mode: ExecutionMode | str) -> None:
-        """Set parser execution mode as an API override."""
-        self._api_overrides["parser_execution_mode"] = ExecutionMode(mode)
+    def set(self, name: str, value: object) -> None:
+        """Set an API override value for a named setting."""
+        self._api_overrides[name] = value
         self.reload()
 
-    def get_execution_mode(self) -> ExecutionMode:
-        """Get current parser execution mode."""
-        return self._settings.parser_execution_mode
+    def get(self, name: str, default: T | None = None) -> object | T | None:
+        """Get a setting value by name."""
+        return self._settings.get(name, default)
 
-    def set_fallback_on_invalid_result(self, enabled: bool) -> None:
-        """Enable or disable fallback on None/empty dict parser results."""
-        self._api_overrides["fallback_on_invalid_result"] = enabled
-        self.reload()
-
-    def get_fallback_on_invalid_result(self) -> bool:
-        """Return whether fallback on None/empty dict is enabled."""
-        return self._settings.fallback_on_invalid_result
-
-    def set_parser_paths(
-        self, paths: list[str | Path] | tuple[str | Path, ...]
-    ) -> None:
-        """Set parser overlay search paths as an API override."""
-        normalized = tuple(Path(path).expanduser().resolve() for path in paths)
-        self._api_overrides["parser_paths"] = normalized
-        self.reload()
-
-    def get_parser_paths(self) -> tuple[Path, ...]:
-        """Get configured parser overlay search paths."""
-        return self._settings.parser_paths
+    def as_dict(self) -> dict[str, object]:
+        """Return a copy of all resolved settings."""
+        return dict(self._settings)
 
     def reset_api_overrides(self) -> None:
-        """Clear API overrides and reload source-backed settings."""
+        """Clear API overrides and reload source-backed values."""
         self._api_overrides.clear()
         self.reload()
 
@@ -122,36 +101,32 @@ class Configuration:
 configuration = Configuration()
 
 
-def load_env_config() -> None:
+def load_config() -> None:
     """Reload configuration from API/env/pyproject sources."""
-    configuration.reload()
+    try:
+        configuration.reload()
+    except Exception as exc:  # noqa: BLE001
+        raise ValueError(str(exc)) from exc
 
 
-def set_execution_mode(mode: ExecutionMode | str) -> None:
-    """Set parser execution mode for candidate ordering and fallback."""
-    configuration.set_execution_mode(mode)
+def set_setting(name: str, value: object) -> None:
+    """Set a named setting through the global configuration object."""
+    configuration.set(name, value)
 
 
-def get_execution_mode() -> ExecutionMode:
-    """Get current parser execution mode."""
-    return configuration.get_execution_mode()
+def get_setting(name: str, default: T | None = None) -> object | T | None:
+    """Get a named setting through the global configuration object."""
+    return configuration.get(name, default)
 
 
-def set_fallback_on_invalid_result(enabled: bool) -> None:
-    """Enable or disable fallback on None/empty dict parser results."""
-    configuration.set_fallback_on_invalid_result(enabled)
+def get_settings() -> dict[str, object]:
+    """Get all resolved settings through the global configuration object."""
+    return configuration.as_dict()
 
 
-def get_fallback_on_invalid_result() -> bool:
-    """Return whether fallback on None/empty dict is enabled."""
-    return configuration.get_fallback_on_invalid_result()
-
-
-def set_parser_paths(paths: list[str | Path] | tuple[str | Path, ...]) -> None:
-    """Set parser overlay search paths used by load_local_parsers."""
-    configuration.set_parser_paths(paths)
-
-
-def get_parser_paths() -> tuple[Path, ...]:
-    """Get configured parser overlay search paths."""
-    return configuration.get_parser_paths()
+def validate_config() -> None:
+    """Validate settings sources and raise ValueError on invalid data."""
+    try:
+        _RuntimeSettings()
+    except ValidationError as exc:
+        raise ValueError(str(exc)) from exc
