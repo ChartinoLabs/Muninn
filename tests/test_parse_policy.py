@@ -143,3 +143,27 @@ def test_parse_error_when_all_candidates_fail() -> None:
 
     with pytest.raises(ParseError):
         parse("nxos", "show version", "show version output")
+
+
+def test_execution_mode_is_loaded_from_environment(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Execution mode env var is honored without API configuration."""
+    monkeypatch.setenv("MUNINN_PARSER_EXECUTION_MODE", "centralized_first_fallback")
+
+    @registry.register("nxos", "show version")
+    class BuiltInParser(BaseParser):
+        @classmethod
+        def parse(cls, output: str) -> dict[str, Any]:
+            return {"source": "built_in"}
+
+    with registry.registration_source("local"):
+
+        @registry.register("nxos", "show version")
+        class LocalParser(BaseParser):
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {"source": "local"}
+
+    result = parse("nxos", "show version", "show version output")
+    assert result == {"source": "built_in"}
