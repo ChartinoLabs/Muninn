@@ -64,13 +64,3 @@ want to gate optional behavior behind a single on/off flag.
 [tool.muninn]
 feature_enabled = true
 ```
-
-## Precedence Example
-
-Given:
-
-- `pyproject.toml`: `retries = 1`
-- `MUNINN_RETRIES=2`
-- `muninn.set_retries(3)`
-
-Resolved value for `retries` is `3`.
