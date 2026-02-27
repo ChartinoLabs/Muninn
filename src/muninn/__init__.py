@@ -19,13 +19,9 @@ from muninn.exceptions import (
     ParseError,
     ParserNotFoundError,
 )
-from muninn.loader import load_local_parsers
 from muninn.os import OS, OperatingSystem, resolve_os
 from muninn.parser import BaseParser
 from muninn.registry import get_parser, list_parsers, register
-
-if get_parser_paths():
-    load_local_parsers()
 
 __all__ = [
     "BaseParser",
@@ -42,7 +38,6 @@ __all__ = [
     "get_parser",
     "get_parser_paths",
     "list_parsers",
-    "load_local_parsers",
     "parse",
     "register",
     "resolve_os",
