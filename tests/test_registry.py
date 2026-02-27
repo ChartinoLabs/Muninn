@@ -60,7 +60,9 @@ class TestRegister:
                 return {"version": "1.0"}
 
         assert (OS.CISCO_NXOS, "show version") in registry._registry
-        assert registry._registry[(OS.CISCO_NXOS, "show version")] is ShowVersionParser
+        candidates = registry._registry[(OS.CISCO_NXOS, "show version")]
+        assert candidates[0].parser_cls is ShowVersionParser
+        assert candidates[0].source == "built_in"
 
     def test_registers_parser_class_with_enum(self) -> None:
         """Decorator registers the parser class using OS enum."""
