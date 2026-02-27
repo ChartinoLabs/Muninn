@@ -6,9 +6,6 @@ Muninn resolves runtime settings from three sources, in this order:
 2. Environment variables
 3. `pyproject.toml` under `[tool.muninn]`
 
-This PR introduces source layering and a centralized configuration singleton.
-It keeps parser policy behavior out of scope.
-
 ## Configuration Items
 
 ### `parser_backend`

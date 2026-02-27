@@ -50,9 +50,6 @@ Current source mapping:
 - Env: `MUNINN_PARSER_BACKEND`, `MUNINN_RETRIES`, `MUNINN_FEATURE_ENABLED`
 - Pyproject: `[tool.muninn]` fields like `parser_backend = "native"`
 
-This PR only introduces layered configuration management; runtime parser policy
-settings are intentionally out of scope.
-
 ## Documentation
 
 - [Design Principles](docs/01-design-principles.md) - Core philosophy and technical decisions
