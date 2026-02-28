@@ -5,7 +5,6 @@ from __future__ import annotations
 import os
 from enum import StrEnum
 from pathlib import Path
-from typing import Any
 
 from pydantic import field_validator
 from pydantic_settings import (
@@ -48,7 +47,7 @@ class _RuntimeSettings(BaseSettings):
 
     @field_validator("parser_paths", mode="before")
     @classmethod
-    def _parse_parser_paths(cls, value: Any) -> Any:
+    def _parse_parser_paths(cls, value: object) -> object:
         if isinstance(value, str):
             return tuple(
                 Path(path).expanduser().resolve()
@@ -83,7 +82,7 @@ class Configuration:
     def __init__(self) -> None:
         """Initialize and validate configured sources."""
         self._settings = _RuntimeSettings()
-        self._overrides: dict[str, Any] = {}
+        self._overrides: dict[str, object] = {}
 
     def reload(self) -> None:
         """Reload and validate configuration from all sources."""
@@ -98,7 +97,8 @@ class Configuration:
     def set_execution_mode(self, mode: ExecutionMode | str) -> None:
         """Set parser execution mode as an API override."""
         if isinstance(mode, str):
-            self._overrides["parser_execution_mode"] = ExecutionMode(mode.strip().lower())
+            normalized_mode = ExecutionMode(mode.strip().lower())
+            self._overrides["parser_execution_mode"] = normalized_mode
             return
         self._overrides["parser_execution_mode"] = mode
 
@@ -116,11 +116,17 @@ class Configuration:
         """Get parser overlay search paths from overrides or sources."""
         return self._overrides.get("parser_paths", self._settings.parser_paths)
 
-    def set_parser_paths(self, paths: list[str | Path] | tuple[str | Path, ...]) -> None:
+    def set_parser_paths(
+        self, paths: list[str | Path] | tuple[str | Path, ...]
+    ) -> None:
         """Set parser overlay search paths as an API override."""
         self._overrides["parser_paths"] = tuple(
             Path(path).expanduser().resolve() for path in paths
         )
+
+    def clear_api_overrides(self) -> None:
+        """Remove all API overrides and use source-resolved values."""
+        self._overrides.clear()
 
 
 configuration = Configuration()
@@ -159,3 +165,8 @@ def get_parser_paths() -> tuple[Path, ...]:
 def set_parser_paths(paths: list[str | Path] | tuple[str | Path, ...]) -> None:
     """Set parser overlay search paths used by load_local_parsers."""
     configuration.set_parser_paths(paths)
+
+
+def clear_api_overrides() -> None:
+    """Clear all API-level config overrides."""
+    configuration.clear_api_overrides()

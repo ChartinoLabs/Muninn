@@ -9,6 +9,8 @@ import pytest
 from muninn import registry
 from muninn.config import (
     ExecutionMode,
+    clear_api_overrides,
+    load_env_config,
     set_execution_mode,
     set_fallback_on_invalid_result,
 )
@@ -21,6 +23,8 @@ from muninn.parser import BaseParser
 def reset_registry_and_config() -> None:
     """Reset parser registry and runtime policy before each test."""
     registry._registry.clear()
+    clear_api_overrides()
+    load_env_config()
     set_execution_mode(ExecutionMode.LOCAL_FIRST_FALLBACK)
     set_fallback_on_invalid_result(True)
 
@@ -149,6 +153,7 @@ def test_execution_mode_is_loaded_from_environment(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Execution mode env var is honored without API configuration."""
+    clear_api_overrides()
     monkeypatch.setenv("MUNINN_PARSER_EXECUTION_MODE", "centralized_first_fallback")
 
     @registry.register("nxos", "show version")
