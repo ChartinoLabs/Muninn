@@ -28,10 +28,23 @@ result = muninn.parse("nxos", "show ip ospf neighbor", raw_output)
 # Returns structured dict keyed by neighbor ID
 ```
 
+## Configuration
+
+Muninn supports three configuration sources in descending precedence:
+
+1. API overrides
+2. Environment variables
+3. `[tool.muninn]` in `pyproject.toml`
+
+Muninn does not currently expose user-facing runtime configuration items.
+This precedence model is in place so future options follow a predictable source
+order.
+
 ## Documentation
 
 - [Design Principles](docs/01-design-principles.md) - Core philosophy and technical decisions
 - [Testing Strategy](docs/02-testing-strategy.md) - Test structure and metadata requirements
+- [External Configuration](docs/external/configuration.md) - User-facing settings and precedence
 - [Changelog](CHANGELOG.md) - Release history built from changelog fragments
 - [Changelog Fragments Guide](changes/README.md) - How to add release-note fragments
 - [Releasing](RELEASING.md) - How to compile release notes and cut a release
