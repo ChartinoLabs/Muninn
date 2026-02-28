@@ -2,17 +2,7 @@
 
 # Import parsers to trigger registration
 from muninn import parsers as _parsers  # noqa: F401
-from muninn.config import (
-    configuration,
-    get_feature_enabled,
-    get_parser_backend,
-    get_retries,
-    get_settings,
-    load_config,
-    set_feature_enabled,
-    set_parser_backend,
-    set_retries,
-)
+from muninn.config import configuration, load_config
 from muninn.core import parse
 from muninn.exceptions import (
     EmptyOutputError,
@@ -33,17 +23,10 @@ __all__ = [
     "ParseError",
     "ParserNotFoundError",
     "configuration",
-    "get_feature_enabled",
-    "get_parser_backend",
-    "get_retries",
-    "get_settings",
     "get_parser",
     "list_parsers",
     "load_config",
     "parse",
     "register",
     "resolve_os",
-    "set_feature_enabled",
-    "set_parser_backend",
-    "set_retries",
 ]

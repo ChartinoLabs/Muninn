@@ -32,23 +32,13 @@ result = muninn.parse("nxos", "show ip ospf neighbor", raw_output)
 
 Muninn supports three configuration sources in descending precedence:
 
-1. API overrides via `muninn.configuration` or helper functions
+1. API overrides
 2. Environment variables
 3. `[tool.muninn]` in `pyproject.toml`
 
-```python
-import muninn
-
-muninn.set_parser_backend("native")
-muninn.set_retries(2)
-muninn.set_feature_enabled(True)
-```
-
-Current source mapping:
-
-- API: dedicated getters/setters per item
-- Env: `MUNINN_PARSER_BACKEND`, `MUNINN_RETRIES`, `MUNINN_FEATURE_ENABLED`
-- Pyproject: `[tool.muninn]` fields like `parser_backend = "native"`
+Muninn does not currently expose user-facing runtime configuration items.
+This precedence model is in place so future options follow a predictable source
+order.
 
 ## Documentation
 
