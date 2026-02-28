@@ -10,8 +10,7 @@ from pytest import LogCaptureFixture
 from muninn import registry
 from muninn.config import (
     ExecutionMode,
-    set_execution_mode,
-    set_fallback_on_invalid_result,
+    configuration,
 )
 from muninn.core import parse
 from muninn.parser import BaseParser
@@ -22,8 +21,8 @@ def test_logs_fallback_reason_and_selected_parser(
 ) -> None:
     """Fallback and final parser selection are logged at debug level."""
     registry._registry.clear()
-    set_execution_mode(ExecutionMode.LOCAL_FIRST_FALLBACK)
-    set_fallback_on_invalid_result(True)
+    configuration.set_execution_mode(ExecutionMode.LOCAL_FIRST_FALLBACK)
+    configuration.set_fallback_on_invalid_result(True)
 
     @registry.register("nxos", "show version")
     class BuiltInParser(BaseParser):

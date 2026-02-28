@@ -5,9 +5,7 @@ from typing import Any
 
 from muninn.config import (
     ExecutionMode,
-    get_execution_mode,
-    get_fallback_on_invalid_result,
-    load_env_config,
+    configuration,
 )
 from muninn.exceptions import EmptyOutputError, ParseError, ParserNotFoundError
 from muninn.os import OS, OperatingSystem, resolve_os
@@ -65,11 +63,11 @@ def parse(
     if not output.strip():
         raise EmptyOutputError(resolved_os.value.name, command)
 
-    load_env_config()
-    execution_mode = get_execution_mode()
+    configuration.reload()
+    execution_mode = configuration.get_execution_mode()
     source_order = _source_order_for_mode(execution_mode)
     candidates = get_parser_candidates(os, command, source_order=source_order)
-    fallback_on_invalid_result = get_fallback_on_invalid_result()
+    fallback_on_invalid_result = configuration.get_fallback_on_invalid_result()
 
     if not candidates:
         raise ParserNotFoundError(resolved_os.value.name, command)

@@ -6,7 +6,7 @@ from pathlib import Path
 from uuid import uuid4
 
 from muninn import registry
-from muninn.config import ExecutionMode, set_execution_mode
+from muninn.config import ExecutionMode, configuration
 from muninn.core import parse
 from muninn.loader import load_local_parsers
 from muninn.parser import BaseParser
@@ -15,7 +15,7 @@ from muninn.parser import BaseParser
 def test_load_local_parsers_from_path(tmp_path: Path) -> None:
     """Local parser modules can be loaded from an external path."""
     registry._registry.clear()
-    set_execution_mode(ExecutionMode.LOCAL_FIRST_FALLBACK)
+    configuration.set_execution_mode(ExecutionMode.LOCAL_FIRST_FALLBACK)
 
     @registry.register("nxos", "show version")
     class BuiltInParser(BaseParser):

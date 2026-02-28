@@ -58,7 +58,7 @@ behavior is controlled by `ExecutionMode`:
 ```python
 import muninn
 
-muninn.set_execution_mode(muninn.ExecutionMode.LOCAL_ONLY)
+muninn.configuration.set_execution_mode(muninn.ExecutionMode.LOCAL_ONLY)
 ```
 
 Fallback occurs when a parser raises an exception, returns `None`, or returns `{}`.

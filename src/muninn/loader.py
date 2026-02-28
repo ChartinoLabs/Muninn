@@ -7,7 +7,7 @@ import pkgutil
 import sys
 from pathlib import Path
 
-from muninn.config import get_parser_paths
+from muninn.config import configuration
 from muninn.registry import registration_source
 
 
@@ -24,7 +24,9 @@ def load_local_parsers(
         List of imported module names.
     """
     overlay_paths = (
-        get_parser_paths() if paths is None else tuple(Path(path) for path in paths)
+        configuration.get_parser_paths()
+        if paths is None
+        else tuple(Path(path) for path in paths)
     )
     imported_modules: list[str] = []
 

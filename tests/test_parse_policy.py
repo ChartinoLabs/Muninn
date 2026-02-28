@@ -9,10 +9,7 @@ import pytest
 from muninn import registry
 from muninn.config import (
     ExecutionMode,
-    clear_api_overrides,
-    load_env_config,
-    set_execution_mode,
-    set_fallback_on_invalid_result,
+    configuration,
 )
 from muninn.core import parse
 from muninn.exceptions import ParseError, ParserNotFoundError
@@ -23,10 +20,10 @@ from muninn.parser import BaseParser
 def reset_registry_and_config() -> None:
     """Reset parser registry and runtime policy before each test."""
     registry._registry.clear()
-    clear_api_overrides()
-    load_env_config()
-    set_execution_mode(ExecutionMode.LOCAL_FIRST_FALLBACK)
-    set_fallback_on_invalid_result(True)
+    configuration.clear_api_overrides()
+    configuration.reload()
+    configuration.set_execution_mode(ExecutionMode.LOCAL_FIRST_FALLBACK)
+    configuration.set_fallback_on_invalid_result(True)
 
 
 def test_local_first_falls_back_to_built_in_on_exception() -> None:
@@ -52,7 +49,7 @@ def test_local_first_falls_back_to_built_in_on_exception() -> None:
 
 def test_centralized_first_uses_built_in_before_local() -> None:
     """Centralized-first mode prioritizes built-in parser."""
-    set_execution_mode(ExecutionMode.CENTRALIZED_FIRST_FALLBACK)
+    configuration.set_execution_mode(ExecutionMode.CENTRALIZED_FIRST_FALLBACK)
 
     @registry.register("nxos", "show version")
     class BuiltInParser(BaseParser):
@@ -74,7 +71,7 @@ def test_centralized_first_uses_built_in_before_local() -> None:
 
 def test_local_only_ignores_built_in_parsers() -> None:
     """Local-only mode does not execute centralized parser candidates."""
-    set_execution_mode(ExecutionMode.LOCAL_ONLY)
+    configuration.set_execution_mode(ExecutionMode.LOCAL_ONLY)
 
     @registry.register("nxos", "show version")
     class BuiltInParser(BaseParser):
@@ -153,7 +150,7 @@ def test_execution_mode_is_loaded_from_environment(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Execution mode env var is honored without API configuration."""
-    clear_api_overrides()
+    configuration.clear_api_overrides()
     monkeypatch.setenv("MUNINN_PARSER_EXECUTION_MODE", "centralized_first_fallback")
 
     @registry.register("nxos", "show version")
