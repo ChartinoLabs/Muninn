@@ -6,15 +6,15 @@ from pathlib import Path
 
 import pytest
 
-from muninn.config import load_config
+from muninn.config import configuration
 
 
-def test_load_config_succeeds_with_no_values() -> None:
+def test_reload_succeeds_with_no_values() -> None:
     """Configuration loading succeeds when no values are provided."""
-    load_config()
+    configuration.reload()
 
 
-def test_load_config_accepts_tool_muninn_section(
+def test_reload_accepts_tool_muninn_section(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     """Configuration loading accepts a [tool.muninn] section."""
@@ -25,4 +25,4 @@ def test_load_config_accepts_tool_muninn_section(
     )
     monkeypatch.chdir(tmp_path)
 
-    load_config()
+    configuration.reload()

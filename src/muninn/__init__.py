@@ -2,7 +2,7 @@
 
 # Import parsers to trigger registration
 from muninn import parsers as _parsers  # noqa: F401
-from muninn.config import configuration, load_config
+from muninn.config import configuration
 from muninn.core import parse
 from muninn.exceptions import (
     EmptyOutputError,
@@ -25,7 +25,6 @@ __all__ = [
     "configuration",
     "get_parser",
     "list_parsers",
-    "load_config",
     "parse",
     "register",
     "resolve_os",

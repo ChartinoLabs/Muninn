@@ -51,11 +51,3 @@ class Configuration:
 
 
 configuration = Configuration()
-
-
-def load_config() -> None:
-    """Reload configuration from environment and pyproject."""
-    try:
-        configuration.reload()
-    except Exception as exc:  # noqa: BLE001
-        raise ValueError(str(exc)) from exc
