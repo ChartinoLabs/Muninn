@@ -9,7 +9,7 @@ Muninn transforms unstructured CLI output from network devices into structured P
 ## Design Goals
 
 - **Standalone**: No framework dependencies. Just `pip install muninn` and use it.
-- **Simple API**: `muninn.parse(os, command, output)` → `dict`
+- **Simple API**: `MuninnRuntime().parse(os, command, output)` → `dict`
 - **Well-tested**: Comprehensive test coverage with platform/version metadata
 - **Type-aware**: Native Python type hints for clarity
 
@@ -18,13 +18,15 @@ Muninn transforms unstructured CLI output from network devices into structured P
 ```python
 import muninn
 
+runtime = muninn.MuninnRuntime()
+
 raw_output = """
 Neighbor ID     Pri   State           Dead Time   Address         Interface
 10.1.1.1          1   FULL/DR         00:00:38    192.168.1.1     Ethernet1/1
 10.1.1.2          1   FULL/BDR        00:00:33    192.168.1.2     Ethernet1/2
 """
 
-result = muninn.parse("nxos", "show ip ospf neighbor", raw_output)
+result = runtime.parse("nxos", "show ip ospf neighbor", raw_output)
 # Returns structured dict keyed by neighbor ID
 ```
 
@@ -44,8 +46,9 @@ installed package.
 ```python
 import muninn
 
-muninn.load_local_parsers(paths=["/path/to/local-parsers"])
-result = muninn.parse("nxos", "show ip ospf neighbor", raw_output)
+runtime = muninn.MuninnRuntime()
+runtime.load_local_parsers(paths=["/path/to/local-parsers"])
+result = runtime.parse("nxos", "show ip ospf neighbor", raw_output)
 ```
 
 When both built-in and local parsers exist for the same OS and command, execution
@@ -58,7 +61,8 @@ behavior is controlled by `ExecutionMode`:
 ```python
 import muninn
 
-muninn.configuration.set_execution_mode(muninn.ExecutionMode.LOCAL_ONLY)
+runtime = muninn.MuninnRuntime()
+runtime.configuration.set_execution_mode(muninn.ExecutionMode.LOCAL_ONLY)
 ```
 
 Fallback occurs when a parser raises an exception, returns `None`, or returns `{}`.

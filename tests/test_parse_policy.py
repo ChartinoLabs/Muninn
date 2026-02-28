@@ -6,166 +6,171 @@ from typing import Any
 
 import pytest
 
-from muninn import registry
-from muninn.config import (
-    ExecutionMode,
-    configuration,
-)
-from muninn.core import parse
+from muninn.config import ExecutionMode
 from muninn.exceptions import ParseError, ParserNotFoundError
 from muninn.parser import BaseParser
+from muninn.registry import register
+from muninn.runtime import MuninnRuntime
 
 
-@pytest.fixture(autouse=True)
-def reset_registry_and_config() -> None:
-    """Reset parser registry and runtime policy before each test."""
-    registry._registry.clear()
-    configuration.clear_api_overrides()
-    configuration.reload()
-    configuration.set_execution_mode(ExecutionMode.LOCAL_FIRST_FALLBACK)
-    configuration.set_fallback_on_invalid_result(True)
+@pytest.fixture
+def runtime() -> MuninnRuntime:
+    """Create an isolated runtime for each test."""
+    return MuninnRuntime(autoload_builtins=False)
 
 
-def test_local_first_falls_back_to_built_in_on_exception() -> None:
+def test_local_first_falls_back_to_built_in_on_exception(
+    runtime: MuninnRuntime,
+) -> None:
     """Local-first mode falls back to built-in on local exception."""
+    runtime.configuration.set_execution_mode(ExecutionMode.LOCAL_FIRST_FALLBACK)
 
-    @registry.register("nxos", "show version")
+    @register("nxos", "show version")
     class BuiltInParser(BaseParser):
         @classmethod
         def parse(cls, output: str) -> dict[str, Any]:
             return {"source": "built_in"}
 
-    with registry.registration_source("local"):
+    @register("nxos", "show version")
+    class LocalParser(BaseParser):
+        @classmethod
+        def parse(cls, output: str) -> dict[str, Any]:
+            raise RuntimeError("boom")
 
-        @registry.register("nxos", "show version")
-        class LocalParser(BaseParser):
-            @classmethod
-            def parse(cls, output: str) -> dict[str, Any]:
-                raise RuntimeError("boom")
+    runtime.registry.register_parser("nxos", "show version", BuiltInParser, "built_in")
+    runtime.registry.register_parser("nxos", "show version", LocalParser, "local")
 
-    result = parse("nxos", "show version", "show version output")
+    result = runtime.parse("nxos", "show version", "show version output")
     assert result == {"source": "built_in"}
 
 
-def test_centralized_first_uses_built_in_before_local() -> None:
+def test_centralized_first_uses_built_in_before_local(runtime: MuninnRuntime) -> None:
     """Centralized-first mode prioritizes built-in parser."""
-    configuration.set_execution_mode(ExecutionMode.CENTRALIZED_FIRST_FALLBACK)
+    runtime.configuration.set_execution_mode(ExecutionMode.CENTRALIZED_FIRST_FALLBACK)
 
-    @registry.register("nxos", "show version")
+    @register("nxos", "show version")
     class BuiltInParser(BaseParser):
         @classmethod
         def parse(cls, output: str) -> dict[str, Any]:
             return {"source": "built_in"}
 
-    with registry.registration_source("local"):
+    @register("nxos", "show version")
+    class LocalParser(BaseParser):
+        @classmethod
+        def parse(cls, output: str) -> dict[str, Any]:
+            return {"source": "local"}
 
-        @registry.register("nxos", "show version")
-        class LocalParser(BaseParser):
-            @classmethod
-            def parse(cls, output: str) -> dict[str, Any]:
-                return {"source": "local"}
+    runtime.registry.register_parser("nxos", "show version", BuiltInParser, "built_in")
+    runtime.registry.register_parser("nxos", "show version", LocalParser, "local")
 
-    result = parse("nxos", "show version", "show version output")
+    result = runtime.parse("nxos", "show version", "show version output")
     assert result == {"source": "built_in"}
 
 
-def test_local_only_ignores_built_in_parsers() -> None:
+def test_local_only_ignores_built_in_parsers(runtime: MuninnRuntime) -> None:
     """Local-only mode does not execute centralized parser candidates."""
-    configuration.set_execution_mode(ExecutionMode.LOCAL_ONLY)
+    runtime.configuration.set_execution_mode(ExecutionMode.LOCAL_ONLY)
 
-    @registry.register("nxos", "show version")
+    @register("nxos", "show version")
     class BuiltInParser(BaseParser):
         @classmethod
         def parse(cls, output: str) -> dict[str, Any]:
             return {"source": "built_in"}
+
+    runtime.registry.register_parser("nxos", "show version", BuiltInParser, "built_in")
 
     with pytest.raises(ParserNotFoundError):
-        parse("nxos", "show version", "show version output")
+        runtime.parse("nxos", "show version", "show version output")
 
 
-def test_fallback_on_none_result() -> None:
+def test_fallback_on_none_result(runtime: MuninnRuntime) -> None:
     """Parser result of None triggers fallback."""
 
-    @registry.register("nxos", "show version")
+    @register("nxos", "show version")
     class BuiltInParser(BaseParser):
         @classmethod
         def parse(cls, output: str) -> dict[str, Any]:
             return {"source": "built_in"}
 
-    with registry.registration_source("local"):
+    @register("nxos", "show version")
+    class LocalParser(BaseParser):
+        @classmethod
+        def parse(cls, output: str) -> dict[str, Any] | None:
+            return None
 
-        @registry.register("nxos", "show version")
-        class LocalParser(BaseParser):
-            @classmethod
-            def parse(cls, output: str) -> dict[str, Any] | None:
-                return None
+    runtime.registry.register_parser("nxos", "show version", BuiltInParser, "built_in")
+    runtime.registry.register_parser("nxos", "show version", LocalParser, "local")
 
-    result = parse("nxos", "show version", "show version output")
+    result = runtime.parse("nxos", "show version", "show version output")
     assert result == {"source": "built_in"}
 
 
-def test_fallback_on_empty_dict_result() -> None:
+def test_fallback_on_empty_dict_result(runtime: MuninnRuntime) -> None:
     """Parser result of empty dict triggers fallback."""
 
-    @registry.register("nxos", "show version")
+    @register("nxos", "show version")
     class BuiltInParser(BaseParser):
         @classmethod
         def parse(cls, output: str) -> dict[str, Any]:
             return {"source": "built_in"}
 
-    with registry.registration_source("local"):
+    @register("nxos", "show version")
+    class LocalParser(BaseParser):
+        @classmethod
+        def parse(cls, output: str) -> dict[str, Any]:
+            return {}
 
-        @registry.register("nxos", "show version")
-        class LocalParser(BaseParser):
-            @classmethod
-            def parse(cls, output: str) -> dict[str, Any]:
-                return {}
+    runtime.registry.register_parser("nxos", "show version", BuiltInParser, "built_in")
+    runtime.registry.register_parser("nxos", "show version", LocalParser, "local")
 
-    result = parse("nxos", "show version", "show version output")
+    result = runtime.parse("nxos", "show version", "show version output")
     assert result == {"source": "built_in"}
 
 
-def test_parse_error_when_all_candidates_fail() -> None:
+def test_parse_error_when_all_candidates_fail(runtime: MuninnRuntime) -> None:
     """Raise ParseError when all parser candidates fail."""
 
-    @registry.register("nxos", "show version")
+    @register("nxos", "show version")
     class BuiltInParser(BaseParser):
         @classmethod
         def parse(cls, output: str) -> dict[str, Any]:
             raise RuntimeError("built-in failure")
 
-    with registry.registration_source("local"):
+    @register("nxos", "show version")
+    class LocalParser(BaseParser):
+        @classmethod
+        def parse(cls, output: str) -> dict[str, Any]:
+            return {}
 
-        @registry.register("nxos", "show version")
-        class LocalParser(BaseParser):
-            @classmethod
-            def parse(cls, output: str) -> dict[str, Any]:
-                return {}
+    runtime.registry.register_parser("nxos", "show version", BuiltInParser, "built_in")
+    runtime.registry.register_parser("nxos", "show version", LocalParser, "local")
 
     with pytest.raises(ParseError):
-        parse("nxos", "show version", "show version output")
+        runtime.parse("nxos", "show version", "show version output")
 
 
 def test_execution_mode_is_loaded_from_environment(
     monkeypatch: pytest.MonkeyPatch,
+    runtime: MuninnRuntime,
 ) -> None:
     """Execution mode env var is honored without API configuration."""
-    configuration.clear_api_overrides()
+    runtime.configuration.clear_api_overrides()
     monkeypatch.setenv("MUNINN_PARSER_EXECUTION_MODE", "centralized_first_fallback")
 
-    @registry.register("nxos", "show version")
+    @register("nxos", "show version")
     class BuiltInParser(BaseParser):
         @classmethod
         def parse(cls, output: str) -> dict[str, Any]:
             return {"source": "built_in"}
 
-    with registry.registration_source("local"):
+    @register("nxos", "show version")
+    class LocalParser(BaseParser):
+        @classmethod
+        def parse(cls, output: str) -> dict[str, Any]:
+            return {"source": "local"}
 
-        @registry.register("nxos", "show version")
-        class LocalParser(BaseParser):
-            @classmethod
-            def parse(cls, output: str) -> dict[str, Any]:
-                return {"source": "local"}
+    runtime.registry.register_parser("nxos", "show version", BuiltInParser, "built_in")
+    runtime.registry.register_parser("nxos", "show version", LocalParser, "local")
 
-    result = parse("nxos", "show version", "show version output")
+    result = runtime.parse("nxos", "show version", "show version output")
     assert result == {"source": "built_in"}

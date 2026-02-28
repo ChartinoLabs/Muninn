@@ -6,14 +6,15 @@ Muninn resolves runtime configuration from three sources, in this order:
 2. Environment variables
 3. `pyproject.toml` under `[tool.muninn]`
 
-Programmatic overrides are set through the shared `configuration` object:
+Programmatic overrides are set through a runtime's `configuration` object:
 
 ```python
 import muninn
 
-muninn.configuration.set_execution_mode("local_only")
-muninn.configuration.set_fallback_on_invalid_result(True)
-muninn.configuration.set_parser_paths(["/path/to/local/parsers"])
+runtime = muninn.MuninnRuntime()
+runtime.configuration.set_execution_mode("local_only")
+runtime.configuration.set_fallback_on_invalid_result(True)
+runtime.configuration.set_parser_paths(["/path/to/local/parsers"])
 ```
 
 ## Available Settings
@@ -22,7 +23,7 @@ muninn.configuration.set_parser_paths(["/path/to/local/parsers"])
 
 - `parser_paths` (`MUNINN_PARSER_PATHS`)
   - Path-separated list of directories containing local parser modules.
-  - Loaded at import time to register local parser candidates.
+  - Used by `runtime.load_local_parsers()` when `paths` is not provided.
 
 ### Parser execution mode
 

@@ -1,7 +1,8 @@
-"""Parser registry for discovering and invoking parsers."""
+"""Parser registry primitives and parser registration metadata."""
 
-from collections.abc import Callable, Iterator
-from contextlib import contextmanager
+from __future__ import annotations
+
+from collections.abc import Callable
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Literal
 
@@ -18,155 +19,101 @@ ParserSource = Literal["built_in", "local"]
 class ParserCandidate:
     """Registered parser candidate with source metadata."""
 
-    parser_cls: type["BaseParser[object]"]
+    parser_cls: type[BaseParser[object]]
     source: ParserSource
-
-
-# Registry: maps (OS enum, normalized_command) -> ordered parser candidates
-_registry: dict[tuple[OS, str], list[ParserCandidate]] = {}
-
-# Registration source used by @register (default is built-in parsers)
-_active_registration_source: ParserSource = "built_in"
-
-
-@contextmanager
-def registration_source(source: ParserSource) -> Iterator[None]:
-    """Temporarily set parser source for decorator-based registration."""
-    global _active_registration_source
-
-    previous_source = _active_registration_source
-    _active_registration_source = source
-    try:
-        yield
-    finally:
-        _active_registration_source = previous_source
 
 
 def register(
     os: str | OS | type[OperatingSystem], command: str
-) -> Callable[[type["BaseParser[object]"]], type["BaseParser[object]"]]:
-    """Class decorator to register a parser.
+) -> Callable[[type[BaseParser[object]]], type[BaseParser[object]]]:
+    """Class decorator that annotates parser classes with registration metadata."""
+    resolved_os = resolve_os(os)
+    normalized_command = _normalize_command(command)
 
-    Args:
-        os: Operating system identifier. Can be:
-            - A string alias (e.g., "nxos", "ios-xe")
-            - An OS enum member (e.g., OS.CISCO_NXOS)
-            - An OperatingSystem class (e.g., CiscoNXOS)
-        command: The command this parser handles (e.g., "show ip ospf neighbor").
-
-    Returns:
-        Decorator function that registers the parser class.
-
-    Example:
-        @register("nxos", "show ip ospf neighbor")
-        class ShowIpOspfNeighborParser(BaseParser):
-            @classmethod
-            def parse(cls, output: str) -> dict[str, Any]:
-                ...
-
-        # Or with enum:
-        @register(OS.CISCO_NXOS, "show ip ospf neighbor")
-        class ShowIpOspfNeighborParser(BaseParser):
-            ...
-    """
-
-    def decorator(cls: type["BaseParser[object]"]) -> type["BaseParser[object]"]:
-        register_parser(
-            os=os,
-            command=command,
-            parser_cls=cls,
-            source=_active_registration_source,
+    def decorator(cls: type[BaseParser[object]]) -> type[BaseParser[object]]:
+        cls.os = resolved_os
+        cls.command = normalized_command
+        registrations = (
+            list(cls._muninn_registrations)
+            if hasattr(cls, "_muninn_registrations")
+            else []
         )
+        registration = (resolved_os, normalized_command)
+        if registration not in registrations:
+            registrations.append(registration)
+        cls._muninn_registrations = registrations
         return cls
 
     return decorator
 
 
-def register_parser(
-    os: str | OS | type[OperatingSystem],
-    command: str,
-    parser_cls: type["BaseParser[object]"],
-    source: ParserSource,
-) -> None:
-    """Register a parser class with explicit source metadata."""
-    resolved_os = resolve_os(os)
-    normalized_command = _normalize_command(command)
-    key = (resolved_os, normalized_command)
+class RuntimeRegistry:
+    """Runtime-owned parser registry without module-level mutable state."""
 
-    parser_cls.os = resolved_os
-    parser_cls.command = normalized_command
+    def __init__(self) -> None:
+        """Initialize an empty parser registry."""
+        self._registry: dict[tuple[OS, str], list[ParserCandidate]] = {}
 
-    candidates = _registry.setdefault(key, [])
-    candidates.append(ParserCandidate(parser_cls=parser_cls, source=source))
+    def clear(self) -> None:
+        """Clear all registered parser candidates."""
+        self._registry.clear()
 
+    def register_parser(
+        self,
+        os: str | OS | type[OperatingSystem],
+        command: str,
+        parser_cls: type[BaseParser[object]],
+        source: ParserSource,
+    ) -> None:
+        """Register a parser class with explicit source metadata."""
+        resolved_os = resolve_os(os)
+        normalized_command = _normalize_command(command)
+        key = (resolved_os, normalized_command)
 
-def get_parser(
-    os: str | OS | type[OperatingSystem], command: str
-) -> type["BaseParser[object]"]:
-    """Look up a parser class by OS and command.
+        parser_cls.os = resolved_os
+        parser_cls.command = normalized_command
 
-    Args:
-        os: Operating system identifier. Can be:
-            - A string alias (e.g., "nxos", "ios-xe")
-            - An OS enum member (e.g., OS.CISCO_NXOS)
-            - An OperatingSystem class (e.g., CiscoNXOS)
-        command: The command to find a parser for.
+        candidates = self._registry.setdefault(key, [])
+        already_registered = any(
+            candidate.parser_cls is parser_cls and candidate.source == source
+            for candidate in candidates
+        )
+        if not already_registered:
+            candidates.append(ParserCandidate(parser_cls=parser_cls, source=source))
 
-    Returns:
-        The parser class.
+    def get_parser_candidates(
+        self,
+        os: str | OS | type[OperatingSystem],
+        command: str,
+        source_order: tuple[ParserSource, ...] = ("local", "built_in"),
+    ) -> list[ParserCandidate]:
+        """Get ordered parser candidates for an OS/command pair."""
+        resolved_os = resolve_os(os)
+        normalized_command = _normalize_command(command)
+        key = (resolved_os, normalized_command)
 
-    Raises:
-        ParserNotFoundError: If no parser is registered for the OS/command.
-        ValueError: If the OS input cannot be resolved.
-    """
-    candidates = get_parser_candidates(os, command)
-    return candidates[0].parser_cls
+        if key not in self._registry:
+            raise ParserNotFoundError(resolved_os.value.name, command)
 
+        candidates = self._registry[key]
+        grouped: dict[ParserSource, list[ParserCandidate]] = {
+            "local": [],
+            "built_in": [],
+        }
+        for candidate in candidates:
+            grouped[candidate.source].append(candidate)
 
-def get_parser_candidates(
-    os: str | OS | type[OperatingSystem],
-    command: str,
-    source_order: tuple[ParserSource, ...] = ("local", "built_in"),
-) -> list[ParserCandidate]:
-    """Get ordered parser candidates for an OS/command pair."""
-    resolved_os = resolve_os(os)
-    normalized_command = _normalize_command(command)
-    key = (resolved_os, normalized_command)
+        ordered: list[ParserCandidate] = []
+        for source in source_order:
+            ordered.extend(grouped[source])
 
-    if key not in _registry:
-        raise ParserNotFoundError(resolved_os.value.name, command)
+        return ordered
 
-    candidates = _registry[key]
-    grouped: dict[ParserSource, list[ParserCandidate]] = {
-        "local": [],
-        "built_in": [],
-    }
-    for candidate in candidates:
-        grouped[candidate.source].append(candidate)
-
-    ordered: list[ParserCandidate] = []
-    for source in source_order:
-        ordered.extend(grouped[source])
-
-    return ordered
+    def list_parsers(self) -> list[tuple[OS, str]]:
+        """List all registered parser keys."""
+        return list(self._registry.keys())
 
 
 def _normalize_command(command: str) -> str:
-    """Normalize a command string for consistent registry lookup.
-
-    Args:
-        command: The command string to normalize.
-
-    Returns:
-        Normalized command string.
-    """
+    """Normalize a command string for consistent registry lookup."""
     return " ".join(command.lower().split())
-
-
-def list_parsers() -> list[tuple[OS, str]]:
-    """List all registered parsers.
-
-    Returns:
-        List of (OS, command) tuples for all registered parsers.
-    """
-    return list(_registry.keys())

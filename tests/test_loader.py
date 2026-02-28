@@ -5,23 +5,24 @@ from __future__ import annotations
 from pathlib import Path
 from uuid import uuid4
 
-from muninn import registry
-from muninn.config import ExecutionMode, configuration
-from muninn.core import parse
-from muninn.loader import load_local_parsers
+from muninn.config import ExecutionMode
 from muninn.parser import BaseParser
+from muninn.registry import register
+from muninn.runtime import MuninnRuntime
 
 
 def test_load_local_parsers_from_path(tmp_path: Path) -> None:
     """Local parser modules can be loaded from an external path."""
-    registry._registry.clear()
-    configuration.set_execution_mode(ExecutionMode.LOCAL_FIRST_FALLBACK)
+    runtime = MuninnRuntime(autoload_builtins=False)
+    runtime.configuration.set_execution_mode(ExecutionMode.LOCAL_FIRST_FALLBACK)
 
-    @registry.register("nxos", "show version")
+    @register("nxos", "show version")
     class BuiltInParser(BaseParser):
         @classmethod
         def parse(cls, output: str) -> dict[str, str]:
             return {"source": "built_in"}
+
+    runtime.registry.register_parser("nxos", "show version", BuiltInParser, "built_in")
 
     package_name = f"local_parsers_{uuid4().hex}"
     package_dir = tmp_path / package_name
@@ -39,11 +40,11 @@ def test_load_local_parsers_from_path(tmp_path: Path) -> None:
         encoding="utf-8",
     )
 
-    imported_modules = load_local_parsers([tmp_path])
+    imported_modules = runtime.load_local_parsers([tmp_path])
     assert any(module.endswith("show_version") for module in imported_modules)
 
-    result = parse("nxos", "show version", "show version output")
+    result = runtime.parse("nxos", "show version", "show version output")
     assert result == {"source": "local"}
 
-    candidates = registry.get_parser_candidates("nxos", "show version")
+    candidates = runtime.registry.get_parser_candidates("nxos", "show version")
     assert candidates[0].source == "local"

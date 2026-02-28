@@ -77,7 +77,7 @@ class _RuntimeSettings(BaseSettings):
 
 
 class Configuration:
-    """Configuration singleton for source loading and validation."""
+    """Runtime configuration for source loading and validation."""
 
     def __init__(self) -> None:
         """Initialize and validate configured sources."""
@@ -127,6 +127,3 @@ class Configuration:
     def clear_api_overrides(self) -> None:
         """Remove all API overrides and use source-resolved values."""
         self._overrides.clear()
-
-
-configuration = Configuration()
