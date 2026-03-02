@@ -17,11 +17,24 @@ runtime.configuration.set_fallback_on_invalid_result(True)
 runtime.configuration.set_parser_paths(["/path/to/local/parsers"])
 ```
 
+If you are using local parser files, the typical startup flow is: create a runtime,
+load your local parsers once, then parse normally. This is usually done at app
+startup, not before every parse call.
+
+```python
+import muninn
+
+runtime = muninn.MuninnRuntime()
+runtime.load_local_parsers()
+
+result = runtime.parse("nxos", "show ip ospf neighbor", raw_output)
+```
+
 ## Available Settings
 
 ### `parser_paths`
 
-`parser_paths` defines where Muninn should look for local parser modules when `runtime.load_local_parsers()` is called without an explicit `paths=` argument. This setting controls discovery only; it does not automatically import overlays unless your application calls `runtime.load_local_parsers()`. Use this when you want a stable default overlay path policy across environments.
+`parser_paths` tells Muninn where your local parser files live. This is most useful when you want one stable configuration that works across machines and environments without hard-coding paths in application code. After setting it (via env or `pyproject.toml`), call `runtime.load_local_parsers()` once at startup and Muninn will discover parsers from those locations.
 
 Environment variable:
 
@@ -44,7 +57,7 @@ runtime.configuration.set_parser_paths(["/opt/muninn/parsers", "/srv/team-overla
 
 ### `parser_execution_mode`
 
-`parser_execution_mode` controls candidate ordering and whether built-in parsers are considered at all. `local_first_fallback` (default) tries local overlays before built-ins, `centralized_first_fallback` does the reverse, and `local_only` disables built-in candidates entirely. This setting directly changes which parser wins for the same `(os, command)` key.
+`parser_execution_mode` controls which parser Muninn prefers when both a built-in parser and a local parser can handle the same command. `local_first_fallback` (default) prefers your local parser, `centralized_first_fallback` prefers the built-in parser, and `local_only` uses only local parsers. Choose this setting based on whether you want local customizations to override built-ins or only fill in gaps.
 
 Environment variable:
 
@@ -67,7 +80,7 @@ runtime.configuration.set_execution_mode("local_only")
 
 ### `fallback_on_invalid_result`
 
-`fallback_on_invalid_result` determines whether Muninn should continue to the next parser candidate when the current parser returns `None` or `{}`. When enabled (default: `true`), empty/none results are treated similarly to parse failures for fallback purposes; when disabled, only raised exceptions trigger fallback. This is useful when teams want strict handling for intentionally empty outputs.
+`fallback_on_invalid_result` controls what happens when a parser returns no useful data (`None` or `{}`). When this is `true` (default), Muninn will try the next eligible parser, which is usually what you want for resilience. When this is `false`, only raised exceptions trigger fallback, so an empty return is treated as a final result from that parser.
 
 Environment variable:
 
