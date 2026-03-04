@@ -34,7 +34,7 @@ result = runtime.parse("nxos", "show ip ospf neighbor", raw_output)
 
 ### `parser_paths`
 
-`parser_paths` tells Muninn where your local parser files live. This is most useful when you want one stable configuration that works across machines and environments without hard-coding paths in application code. After setting it (via env or `pyproject.toml`), call `runtime.load_local_parsers()` once at startup and Muninn will discover parsers from those locations.
+`parser_paths` tells Muninn where your local parser files live. This is most useful when you want one stable configuration that works across machines and environments without hard-coding paths in application code.
 
 Environment variable:
 
@@ -57,7 +57,7 @@ runtime.configuration.set_parser_paths(["/opt/muninn/parsers", "/srv/team-overla
 
 ### `parser_execution_mode`
 
-`parser_execution_mode` controls which parser Muninn prefers when both a built-in parser and a local parser can handle the same command. `local_first_fallback` (default) prefers your local parser, `centralized_first_fallback` prefers the built-in parser, and `local_only` uses only local parsers. Choose this setting based on whether you want local customizations to override built-ins or only fill in gaps.
+`parser_execution_mode` controls which parser Muninn prefers when both a built-in parser and a local parser can handle the same command. `local_first_fallback` (default) prefers your local parser, `centralized_first_fallback` prefers the built-in parser, and `local_only` uses only local parsers.
 
 Environment variable:
 
