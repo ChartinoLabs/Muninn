@@ -18,7 +18,7 @@ Muninn transforms unstructured CLI output from network devices into structured P
 ```python
 import muninn
 
-runtime = muninn.Muninn()
+mn = muninn.Muninn()
 
 raw_output = """
 Neighbor ID     Pri   State           Dead Time   Address         Interface
@@ -26,7 +26,7 @@ Neighbor ID     Pri   State           Dead Time   Address         Interface
 10.1.1.2          1   FULL/BDR        00:00:33    192.168.1.2     Ethernet1/2
 """
 
-result = runtime.parse("nxos", "show ip ospf neighbor", raw_output)
+result = mn.parse("nxos", "show ip ospf neighbor", raw_output)
 # Returns structured dict keyed by neighbor ID
 ```
 
@@ -46,9 +46,9 @@ installed package.
 ```python
 import muninn
 
-runtime = muninn.Muninn()
-runtime.load_local_parsers(paths=["/path/to/local-parsers"])
-result = runtime.parse("nxos", "show ip ospf neighbor", raw_output)
+mn = muninn.Muninn()
+mn.load_local_parsers(paths=["/path/to/local-parsers"])
+result = mn.parse("nxos", "show ip ospf neighbor", raw_output)
 ```
 
 You can also use the class-level convenience call:
@@ -67,8 +67,8 @@ behavior is controlled by `ExecutionMode`:
 ```python
 import muninn
 
-runtime = muninn.Muninn()
-runtime.configuration.set_execution_mode(muninn.ExecutionMode.LOCAL_ONLY)
+mn = muninn.Muninn()
+mn.configuration.set_execution_mode(muninn.ExecutionMode.LOCAL_ONLY)
 ```
 
 Fallback occurs when a parser raises an exception, returns `None`, or returns `{}`.
