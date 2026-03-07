@@ -37,8 +37,11 @@ class TestRegisterDecorator:
     def test_sets_os_command_and_metadata(self) -> None:
         """Decorator annotates parser class metadata."""
 
+        class _RegistrableParser(BaseParser):
+            _muninn_registrations: list[tuple[OS, str]]
+
         @register("nxos", "  SHOW VERSION  ")
-        class ShowVersionParser(BaseParser):
+        class ShowVersionParser(_RegistrableParser):
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
                 return {}

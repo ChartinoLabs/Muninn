@@ -14,7 +14,7 @@ from muninn.config import Configuration, ExecutionMode
 from muninn.exceptions import EmptyOutputError, ParseError, ParserNotFoundError
 from muninn.os import OS, OperatingSystem, resolve_os
 from muninn.parser import BaseParser
-from muninn.registry import ParserSource, RuntimeRegistry
+from muninn.registry import ParserCandidate, ParserSource, RuntimeRegistry
 
 logger = logging.getLogger(__name__)
 
@@ -104,19 +104,13 @@ class MuninnRuntime:
 
         return imported_modules
 
-    def parse(
+    def _prepare_parse_candidates(
         self,
         os: str | OS | type[OperatingSystem],
         command: str,
-        output: str,
-    ) -> dict[str, Any]:
-        """Parse CLI output into structured data with policy-based fallback."""
+    ) -> tuple[ExecutionMode, list[tuple[str, str]], list[ParserCandidate], bool]:
         if self._autoload_builtins and not self._builtins_loaded:
             self.load_builtin_parsers()
-
-        resolved_os = resolve_os(os)
-        if not output.strip():
-            raise EmptyOutputError(resolved_os.value.name, command)
 
         self.configuration.reload()
         execution_mode = self.configuration.get_execution_mode()
@@ -124,69 +118,118 @@ class MuninnRuntime:
         candidates = self.registry.get_parser_candidates(
             os, command, source_order=source_order
         )
-        fallback_on_invalid_result = self.configuration.get_fallback_on_invalid_result()
-
-        if not candidates:
-            raise ParserNotFoundError(resolved_os.value.name, command)
-
         candidate_order = [
-            f"{candidate.source}:{candidate.parser_cls.__name__}"
+            (candidate.source, candidate.parser_cls.__name__)
             for candidate in candidates
         ]
+        fallback_on_invalid_result = self.configuration.get_fallback_on_invalid_result()
+        return (
+            execution_mode,
+            candidate_order,
+            candidates,
+            fallback_on_invalid_result,
+        )
+
+    def _log_candidate_order(
+        self,
+        resolved_os: OS,
+        command: str,
+        execution_mode: ExecutionMode,
+        candidate_order: list[tuple[str, str]],
+    ) -> None:
         logger.debug(
             "Parser candidate order for os=%s command=%r mode=%s: %s",
             resolved_os.value.name,
             command,
             execution_mode.value,
-            candidate_order,
+            [f"{source}:{name}" for source, name in candidate_order],
         )
+
+    def _try_candidate(
+        self,
+        candidate: ParserCandidate,
+        resolved_os: OS,
+        command: str,
+        output: str,
+        fallback_on_invalid_result: bool,
+    ) -> tuple[dict[str, Any] | None, str | None]:
+        parser_cls = candidate.parser_cls
+        source = candidate.source
+        logger.debug(
+            "Attempting parser %s source=%s for os=%s command=%r",
+            parser_cls.__name__,
+            source,
+            resolved_os.value.name,
+            command,
+        )
+
+        try:
+            result = parser_cls.parse(output)
+        except Exception as exc:
+            reason = f"exception:{type(exc).__name__}"
+            logger.debug(
+                "Fallback triggered for parser %s source=%s reason=%s",
+                parser_cls.__name__,
+                source,
+                reason,
+                exc_info=True,
+            )
+            return None, f"{source}:{parser_cls.__name__}:{reason}"
+
+        if fallback_on_invalid_result and _is_invalid_result(result):
+            reason = "invalid_result"
+            logger.debug(
+                "Fallback triggered for parser %s source=%s reason=%s",
+                parser_cls.__name__,
+                source,
+                reason,
+            )
+            return None, f"{source}:{parser_cls.__name__}:{reason}"
+
+        logger.debug(
+            "Parser selected %s source=%s for os=%s command=%r",
+            parser_cls.__name__,
+            source,
+            resolved_os.value.name,
+            command,
+        )
+        return cast(dict[str, Any], result), None
+
+    def parse(
+        self,
+        os: str | OS | type[OperatingSystem],
+        command: str,
+        output: str,
+    ) -> dict[str, Any]:
+        """Parse CLI output into structured data with policy-based fallback."""
+        resolved_os = resolve_os(os)
+        if not output.strip():
+            raise EmptyOutputError(resolved_os.value.name, command)
+
+        execution_mode, candidate_order, candidates, fallback_on_invalid_result = (
+            self._prepare_parse_candidates(os, command)
+        )
+
+        if not candidates:
+            raise ParserNotFoundError(resolved_os.value.name, command)
+
+        self._log_candidate_order(resolved_os, command, execution_mode, candidate_order)
 
         failure_reasons: list[str] = []
 
         for candidate in candidates:
-            parser_cls = candidate.parser_cls
-            source = candidate.source
-            logger.debug(
-                "Attempting parser %s source=%s for os=%s command=%r",
-                parser_cls.__name__,
-                source,
-                resolved_os.value.name,
+            result, failure_reason = self._try_candidate(
+                candidate,
+                resolved_os,
                 command,
+                output,
+                fallback_on_invalid_result,
             )
-
-            try:
-                result = parser_cls.parse(output)
-            except Exception as exc:
-                reason = f"exception:{type(exc).__name__}"
-                failure_reasons.append(f"{source}:{parser_cls.__name__}:{reason}")
-                logger.debug(
-                    "Fallback triggered for parser %s source=%s reason=%s",
-                    parser_cls.__name__,
-                    source,
-                    reason,
-                    exc_info=True,
-                )
+            if failure_reason is not None:
+                failure_reasons.append(failure_reason)
                 continue
-
-            if fallback_on_invalid_result and _is_invalid_result(result):
-                reason = "invalid_result"
-                failure_reasons.append(f"{source}:{parser_cls.__name__}:{reason}")
-                logger.debug(
-                    "Fallback triggered for parser %s source=%s reason=%s",
-                    parser_cls.__name__,
-                    source,
-                    reason,
-                )
-                continue
-
-            logger.debug(
-                "Parser selected %s source=%s for os=%s command=%r",
-                parser_cls.__name__,
-                source,
-                resolved_os.value.name,
-                command,
-            )
-            return cast(dict[str, Any], result)
+            if result is not None:
+                return result
 
         failure_summary = "; ".join(failure_reasons)
         if not failure_summary:
