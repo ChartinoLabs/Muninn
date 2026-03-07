@@ -1,9 +1,6 @@
 """Muninn: A standalone CLI output parser library for network devices."""
 
-# Import parsers to trigger registration
-from muninn import parsers as _parsers  # noqa: F401
-from muninn.config import configuration
-from muninn.core import parse
+from muninn.config import Configuration, ExecutionMode
 from muninn.exceptions import (
     EmptyOutputError,
     MuninnError,
@@ -12,20 +9,21 @@ from muninn.exceptions import (
 )
 from muninn.os import OS, OperatingSystem, resolve_os
 from muninn.parser import BaseParser
-from muninn.registry import get_parser, list_parsers, register
+from muninn.registry import RuntimeRegistry, register
+from muninn.runtime import Muninn
 
 __all__ = [
     "BaseParser",
+    "Configuration",
+    "EmptyOutputError",
+    "ExecutionMode",
     "MuninnError",
+    "Muninn",
     "OS",
     "OperatingSystem",
-    "EmptyOutputError",
     "ParseError",
     "ParserNotFoundError",
-    "configuration",
-    "get_parser",
-    "list_parsers",
-    "parse",
+    "RuntimeRegistry",
     "register",
     "resolve_os",
 ]

@@ -6,11 +6,12 @@ from pathlib import Path
 
 import pytest
 
-from muninn.config import configuration
+from muninn.config import Configuration
 
 
 def test_reload_succeeds_with_no_values() -> None:
     """Configuration loading succeeds when no values are provided."""
+    configuration = Configuration()
     configuration.reload()
 
 
@@ -18,6 +19,7 @@ def test_reload_accepts_tool_muninn_section(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     """Configuration loading accepts a [tool.muninn] section."""
+    configuration = Configuration()
     pyproject = tmp_path / "pyproject.toml"
     pyproject.write_text(
         '[tool.muninn]\nplaceholder = "value"\n',

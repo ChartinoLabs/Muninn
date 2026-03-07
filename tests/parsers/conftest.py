@@ -14,6 +14,8 @@ from typing import Any, TypedDict
 import pytest
 import yaml
 
+from muninn.runtime import Muninn
+
 
 class ParserTestCase(TypedDict):
     """Structure for a parser test case."""
@@ -128,3 +130,11 @@ def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
             ids.append(generate_test_id(os_name, command, test_case_path))
 
         metafunc.parametrize("parser_test_case", params, ids=ids)
+
+
+@pytest.fixture(scope="session")
+def runtime() -> Muninn:
+    """Shared runtime instance with built-in parsers loaded."""
+    runtime = Muninn()
+    runtime.load_builtin_parsers()
+    return runtime

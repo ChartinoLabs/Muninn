@@ -403,7 +403,7 @@ def _build_route_entry(
             entry["type"] = type_name
 
     flag_dict = _parse_flags(flags)
-    entry.update(flag_dict)  # type: ignore[typeddict-item]
+    entry.update(flag_dict)
 
     return entry
 

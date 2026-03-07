@@ -2,15 +2,18 @@
 
 from typing import TYPE_CHECKING
 
-import muninn
+from muninn.runtime import Muninn
 
 if TYPE_CHECKING:
     from tests.parsers.conftest import ParserTestCase
 
 
-def test_parser(parser_test_case: "ParserTestCase") -> None:
+def test_parser(
+    parser_test_case: "ParserTestCase",
+    runtime: Muninn,
+) -> None:
     """Test that parser produces expected output."""
-    result = muninn.parse(
+    result = runtime.parse(
         parser_test_case["os"],
         parser_test_case["command"],
         parser_test_case["input"],

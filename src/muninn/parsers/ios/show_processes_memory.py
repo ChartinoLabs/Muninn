@@ -137,7 +137,7 @@ class ShowProcessesMemoryParser(BaseParser["ShowProcessesMemoryResult"]):
             elif in_table:
                 process_lines.append(line)
 
-        result: ShowProcessesMemoryResult = {}  # type: ignore[typeddict-item]
+        result: ShowProcessesMemoryResult = {}
 
         # Add pool summaries as top-level keys
         pools = _parse_pool_lines(pool_lines)

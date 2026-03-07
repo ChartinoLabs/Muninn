@@ -9,7 +9,7 @@ Muninn transforms unstructured CLI output from network devices into structured P
 ## Design Goals
 
 - **Standalone**: No framework dependencies. Just `pip install muninn` and use it.
-- **Simple API**: `muninn.parse(os, command, output)` → `dict`
+- **Simple API**: `Muninn().parse(os, command, output)` → `dict`
 - **Well-tested**: Comprehensive test coverage with platform/version metadata
 - **Type-aware**: Native Python type hints for clarity
 
@@ -18,13 +18,15 @@ Muninn transforms unstructured CLI output from network devices into structured P
 ```python
 import muninn
 
+mn = muninn.Muninn()
+
 raw_output = """
 Neighbor ID     Pri   State           Dead Time   Address         Interface
 10.1.1.1          1   FULL/DR         00:00:38    192.168.1.1     Ethernet1/1
 10.1.1.2          1   FULL/BDR        00:00:33    192.168.1.2     Ethernet1/2
 """
 
-result = muninn.parse("nxos", "show ip ospf neighbor", raw_output)
+result = mn.parse("nxos", "show ip ospf neighbor", raw_output)
 # Returns structured dict keyed by neighbor ID
 ```
 
@@ -36,9 +38,47 @@ Muninn supports three configuration sources in descending precedence:
 2. Environment variables
 3. `[tool.muninn]` in `pyproject.toml`
 
-Muninn does not currently expose user-facing runtime configuration items.
-This precedence model is in place so future options follow a predictable source
-order.
+## Local Parser Overlays
+
+Muninn supports loading parser modules from local project paths without modifying the
+installed package.
+
+```python
+import muninn
+
+mn = muninn.Muninn()
+mn.load_local_parsers(paths=["/path/to/local-parsers"])
+result = mn.parse("nxos", "show ip ospf neighbor", raw_output)
+```
+
+You can also use the class-level convenience call:
+
+```python
+result = muninn.Muninn.parse("nxos", "show ip ospf neighbor", raw_output)
+```
+
+When both built-in and local parsers exist for the same OS and command, execution
+behavior is controlled by `ExecutionMode`:
+
+- `ExecutionMode.LOCAL_FIRST_FALLBACK` (default)
+- `ExecutionMode.CENTRALIZED_FIRST_FALLBACK`
+- `ExecutionMode.LOCAL_ONLY`
+
+```python
+import muninn
+
+mn = muninn.Muninn()
+mn.configuration.set_execution_mode(muninn.ExecutionMode.LOCAL_ONLY)
+```
+
+Fallback occurs when a parser raises an exception, returns `None`, or returns `{}`.
+
+### Environment Variables
+
+- `MUNINN_PARSER_PATHS`: parser search paths separated by `:` (or platform path separator)
+- `MUNINN_PARSER_EXECUTION_MODE`: one of `centralized_first_fallback`,
+  `local_first_fallback`, `local_only`
+- `MUNINN_FALLBACK_ON_INVALID_RESULT`: boolean toggle for fallback on `None` / `{}`
 
 ## Documentation
 
