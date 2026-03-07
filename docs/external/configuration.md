@@ -11,7 +11,7 @@ Programmatic overrides are set through a runtime's `configuration` object:
 ```python
 import muninn
 
-runtime = muninn.MuninnRuntime()
+runtime = muninn.Muninn()
 runtime.configuration.set_execution_mode("local_only")
 runtime.configuration.set_fallback_on_invalid_result(True)
 runtime.configuration.set_parser_paths(["/path/to/local/parsers"])
@@ -24,7 +24,7 @@ startup, not before every parse call.
 ```python
 import muninn
 
-runtime = muninn.MuninnRuntime()
+runtime = muninn.Muninn()
 runtime.load_local_parsers()
 
 result = runtime.parse("nxos", "show ip ospf neighbor", raw_output)

@@ -6,19 +6,19 @@ import pytest
 
 from muninn.exceptions import EmptyOutputError
 from muninn.os import OS
-from muninn.runtime import MuninnRuntime
+from muninn.runtime import Muninn
 
 
 @pytest.fixture(scope="session")
-def runtime() -> MuninnRuntime:
+def runtime() -> Muninn:
     """Shared runtime instance with built-in parsers loaded."""
-    runtime = MuninnRuntime()
+    runtime = Muninn()
     runtime.load_builtin_parsers()
     return runtime
 
 
 def _all_parsers() -> list[tuple[OS, str]]:
-    runtime = MuninnRuntime()
+    runtime = Muninn()
     runtime.load_builtin_parsers()
     return runtime.registry.list_parsers()
 
@@ -36,7 +36,7 @@ def test_empty_output_raises(
     os_name: OS,
     command: str,
     output: str,
-    runtime: MuninnRuntime,
+    runtime: Muninn,
 ) -> None:
     """Raise EmptyOutputError when output is empty or whitespace."""
     with pytest.raises(EmptyOutputError):

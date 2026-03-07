@@ -10,17 +10,17 @@ from muninn.config import ExecutionMode
 from muninn.exceptions import ParseError, ParserNotFoundError
 from muninn.parser import BaseParser
 from muninn.registry import register
-from muninn.runtime import MuninnRuntime
+from muninn.runtime import Muninn
 
 
 @pytest.fixture
-def runtime() -> MuninnRuntime:
+def runtime() -> Muninn:
     """Create an isolated runtime for each test."""
-    return MuninnRuntime(autoload_builtins=False)
+    return Muninn(autoload_builtins=False)
 
 
 def test_local_first_falls_back_to_built_in_on_exception(
-    runtime: MuninnRuntime,
+    runtime: Muninn,
 ) -> None:
     """Local-first mode falls back to built-in on local exception."""
     runtime.configuration.set_execution_mode(ExecutionMode.LOCAL_FIRST_FALLBACK)
@@ -44,7 +44,7 @@ def test_local_first_falls_back_to_built_in_on_exception(
     assert result == {"source": "built_in"}
 
 
-def test_centralized_first_uses_built_in_before_local(runtime: MuninnRuntime) -> None:
+def test_centralized_first_uses_built_in_before_local(runtime: Muninn) -> None:
     """Centralized-first mode prioritizes built-in parser."""
     runtime.configuration.set_execution_mode(ExecutionMode.CENTRALIZED_FIRST_FALLBACK)
 
@@ -67,7 +67,7 @@ def test_centralized_first_uses_built_in_before_local(runtime: MuninnRuntime) ->
     assert result == {"source": "built_in"}
 
 
-def test_local_only_ignores_built_in_parsers(runtime: MuninnRuntime) -> None:
+def test_local_only_ignores_built_in_parsers(runtime: Muninn) -> None:
     """Local-only mode does not execute centralized parser candidates."""
     runtime.configuration.set_execution_mode(ExecutionMode.LOCAL_ONLY)
 
@@ -83,7 +83,7 @@ def test_local_only_ignores_built_in_parsers(runtime: MuninnRuntime) -> None:
         runtime.parse("nxos", "show version", "show version output")
 
 
-def test_fallback_on_none_result(runtime: MuninnRuntime) -> None:
+def test_fallback_on_none_result(runtime: Muninn) -> None:
     """Parser result of None triggers fallback."""
 
     @register("nxos", "show version")
@@ -105,7 +105,7 @@ def test_fallback_on_none_result(runtime: MuninnRuntime) -> None:
     assert result == {"source": "built_in"}
 
 
-def test_fallback_on_empty_dict_result(runtime: MuninnRuntime) -> None:
+def test_fallback_on_empty_dict_result(runtime: Muninn) -> None:
     """Parser result of empty dict triggers fallback."""
 
     @register("nxos", "show version")
@@ -127,7 +127,7 @@ def test_fallback_on_empty_dict_result(runtime: MuninnRuntime) -> None:
     assert result == {"source": "built_in"}
 
 
-def test_parse_error_when_all_candidates_fail(runtime: MuninnRuntime) -> None:
+def test_parse_error_when_all_candidates_fail(runtime: Muninn) -> None:
     """Raise ParseError when all parser candidates fail."""
 
     @register("nxos", "show version")
@@ -151,7 +151,7 @@ def test_parse_error_when_all_candidates_fail(runtime: MuninnRuntime) -> None:
 
 def test_execution_mode_is_loaded_from_environment(
     monkeypatch: pytest.MonkeyPatch,
-    runtime: MuninnRuntime,
+    runtime: Muninn,
 ) -> None:
     """Execution mode env var is honored without API configuration."""
     runtime.configuration.clear_api_overrides()

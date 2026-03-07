@@ -10,7 +10,7 @@ from muninn.exceptions import (
 from muninn.os import OS, OperatingSystem, resolve_os
 from muninn.parser import BaseParser
 from muninn.registry import RuntimeRegistry, register
-from muninn.runtime import MuninnRuntime
+from muninn.runtime import Muninn
 
 __all__ = [
     "BaseParser",
@@ -18,7 +18,7 @@ __all__ = [
     "EmptyOutputError",
     "ExecutionMode",
     "MuninnError",
-    "MuninnRuntime",
+    "Muninn",
     "OS",
     "OperatingSystem",
     "ParseError",

@@ -9,7 +9,7 @@ Muninn transforms unstructured CLI output from network devices into structured P
 ## Design Goals
 
 - **Standalone**: No framework dependencies. Just `pip install muninn` and use it.
-- **Simple API**: `MuninnRuntime().parse(os, command, output)` → `dict`
+- **Simple API**: `Muninn().parse(os, command, output)` → `dict`
 - **Well-tested**: Comprehensive test coverage with platform/version metadata
 - **Type-aware**: Native Python type hints for clarity
 
@@ -18,7 +18,7 @@ Muninn transforms unstructured CLI output from network devices into structured P
 ```python
 import muninn
 
-runtime = muninn.MuninnRuntime()
+runtime = muninn.Muninn()
 
 raw_output = """
 Neighbor ID     Pri   State           Dead Time   Address         Interface
@@ -46,9 +46,15 @@ installed package.
 ```python
 import muninn
 
-runtime = muninn.MuninnRuntime()
+runtime = muninn.Muninn()
 runtime.load_local_parsers(paths=["/path/to/local-parsers"])
 result = runtime.parse("nxos", "show ip ospf neighbor", raw_output)
+```
+
+You can also use the class-level convenience call:
+
+```python
+result = muninn.Muninn.parse("nxos", "show ip ospf neighbor", raw_output)
 ```
 
 When both built-in and local parsers exist for the same OS and command, execution
@@ -61,7 +67,7 @@ behavior is controlled by `ExecutionMode`:
 ```python
 import muninn
 
-runtime = muninn.MuninnRuntime()
+runtime = muninn.Muninn()
 runtime.configuration.set_execution_mode(muninn.ExecutionMode.LOCAL_ONLY)
 ```
 

@@ -2,7 +2,7 @@
 
 from typing import TYPE_CHECKING
 
-from muninn.runtime import MuninnRuntime
+from muninn.runtime import Muninn
 
 if TYPE_CHECKING:
     from tests.parsers.conftest import ParserTestCase
@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 def test_parser(
     parser_test_case: "ParserTestCase",
-    runtime: MuninnRuntime,
+    runtime: Muninn,
 ) -> None:
     """Test that parser produces expected output."""
     result = runtime.parse(

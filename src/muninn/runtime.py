@@ -6,6 +6,7 @@ import importlib
 import logging
 import pkgutil
 import sys
+from collections.abc import Callable
 from pathlib import Path
 from types import ModuleType
 from typing import Any
@@ -196,3 +197,39 @@ class MuninnRuntime:
             command,
             f"all parser candidates failed. {failure_summary}",
         )
+
+
+class _ParseDispatcher:
+    """Descriptor enabling `Muninn.parse(...)` and `mn.parse(...)` usage."""
+
+    def __get__(
+        self,
+        instance: Muninn | None,
+        owner: type[Muninn],
+    ) -> Callable[[str | OS | type[OperatingSystem], str, str], dict[str, Any]]:
+        if instance is None:
+
+            def parse_via_class(
+                os: str | OS | type[OperatingSystem],
+                command: str,
+                output: str,
+            ) -> dict[str, Any]:
+                return owner()._parse(os, command, output)
+
+            return parse_via_class
+
+        return instance._parse
+
+
+class Muninn(MuninnRuntime):
+    """User-facing parser engine for local and built-in parsers."""
+
+    parse = _ParseDispatcher()
+
+    def _parse(
+        self,
+        os: str | OS | type[OperatingSystem],
+        command: str,
+        output: str,
+    ) -> dict[str, Any]:
+        return super().parse(os, command, output)

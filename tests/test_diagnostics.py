@@ -10,14 +10,14 @@ from pytest import LogCaptureFixture
 from muninn.config import ExecutionMode
 from muninn.parser import BaseParser
 from muninn.registry import register
-from muninn.runtime import MuninnRuntime
+from muninn.runtime import Muninn
 
 
 def test_logs_fallback_reason_and_selected_parser(
     caplog: LogCaptureFixture,
 ) -> None:
     """Fallback and final parser selection are logged at debug level."""
-    runtime = MuninnRuntime(autoload_builtins=False)
+    runtime = Muninn(autoload_builtins=False)
     runtime.configuration.set_execution_mode(ExecutionMode.LOCAL_FIRST_FALLBACK)
     runtime.configuration.set_fallback_on_invalid_result(True)
 
