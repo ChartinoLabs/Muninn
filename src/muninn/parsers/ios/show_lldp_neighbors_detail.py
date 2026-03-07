@@ -94,7 +94,7 @@ def _build_entry(
     for key in _optional_str_fields:
         val = fields.get(key)
         if val is not None:
-            entry[key] = _canonicalize_if_interface(str(val))  # type: ignore[literal-required]
+            entry[key] = _canonicalize_if_interface(str(val))
 
     mgmt = fields.get("management_addresses")
     if mgmt:

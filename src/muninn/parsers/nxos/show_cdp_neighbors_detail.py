@@ -206,11 +206,11 @@ class ShowCdpNeighborsDetailParser(
         """Add optional fields to an entry if present."""
         for key in _OPTIONAL_STR_FIELDS:
             if key in fields:
-                entry[key] = str(fields[key])  # type: ignore[literal-required]
+                entry[key] = str(fields[key])
 
         for key in _OPTIONAL_INT_FIELDS:
             if key in fields:
-                entry[key] = int(str(fields[key]))  # type: ignore[literal-required]
+                entry[key] = int(str(fields[key]))
 
         for key in _OPTIONAL_LIST_FIELDS:
             if fields.get(key):

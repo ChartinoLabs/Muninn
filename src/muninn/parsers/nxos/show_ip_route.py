@@ -185,7 +185,7 @@ def _build_nexthop(
     for key in ("tag", "segid"):
         val = proto_fields.get(key)
         if val is not None:
-            nexthop[key] = int(val)  # type: ignore[literal-required]
+            nexthop[key] = int(val)
 
     return nexthop
 
