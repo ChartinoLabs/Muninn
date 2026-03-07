@@ -161,7 +161,7 @@ class ShowMacsecSummaryParser(BaseParser[ShowMacsecSummaryResult]):
             "macsec_enabled": {},
         }
         mode: str | None = None
-        handlers = {
+        handlers: dict[str, Callable[[list[str], ShowMacsecSummaryResult], bool]] = {
             "summary": cls._parse_summary_parts,
             "capable": cls._parse_capable_parts,
             "enabled": cls._parse_enabled_parts,

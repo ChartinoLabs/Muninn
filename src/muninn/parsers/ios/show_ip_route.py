@@ -1,12 +1,21 @@
 """Parser for 'show ip route' command on IOS/IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import Literal, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.utils import canonical_interface_name
+
+RouteFlagKey = Literal[
+    "candidate_default",
+    "replicated",
+    "next_hop_override",
+    "pfr_override",
+    "replicated_local_override",
+]
+
 
 # --- Protocol code to name mapping ---
 _PROTOCOL_MAP: dict[str, str] = {
@@ -168,9 +177,9 @@ _METRIC_AGE_INTF_RE = re.compile(r"\[(\d+)/(\d+)\],?\s*(\S+),\s*(\S+)\s*$")
 _CODES_RE = re.compile(r"^Codes:\s")
 
 
-def _parse_flags(flag_str: str) -> dict[str, bool]:
+def _parse_flags(flag_str: str) -> dict[RouteFlagKey, bool]:
     """Extract boolean flags from flag characters."""
-    flags: dict[str, bool] = {}
+    flags: dict[RouteFlagKey, bool] = {}
     if _FLAG_CANDIDATE_DEFAULT in flag_str:
         flags["candidate_default"] = True
     if _FLAG_REPLICATED in flag_str:

@@ -177,15 +177,29 @@ def _build_nexthop(
     if interface:
         nexthop["interface"] = canonical_interface_name(interface, os=OS.CISCO_NXOS)
 
-    for key in ("process", "route_type", "tunnelid", "encap"):
-        val = proto_fields.get(key)
-        if val is not None:
-            nexthop[key] = val  # type: ignore[literal-required]
+    process = proto_fields.get("process")
+    if process is not None:
+        nexthop["process"] = str(process)
 
-    for key in ("tag", "segid"):
-        val = proto_fields.get(key)
-        if val is not None:
-            nexthop[key] = int(val)
+    route_type = proto_fields.get("route_type")
+    if route_type is not None:
+        nexthop["route_type"] = str(route_type)
+
+    tunnelid = proto_fields.get("tunnelid")
+    if tunnelid is not None:
+        nexthop["tunnelid"] = str(tunnelid)
+
+    encap = proto_fields.get("encap")
+    if encap is not None:
+        nexthop["encap"] = str(encap)
+
+    tag = proto_fields.get("tag")
+    if tag is not None:
+        nexthop["tag"] = int(tag)
+
+    segid = proto_fields.get("segid")
+    if segid is not None:
+        nexthop["segid"] = int(segid)
 
     return nexthop
 

@@ -188,7 +188,12 @@ class ShowHsrpAllParser(BaseParser[ShowHsrpAllResult]):
         for dv_match in cls._DELAY_VALUE_PATTERN.finditer(delays_str):
             key = dv_match.group("key").lower()
             value = int(dv_match.group("value"))
-            delay_values[key] = value
+            if key == "reload":
+                delay_values["reload"] = value
+            elif key == "minimum":
+                delay_values["minimum"] = value
+            elif key == "sync":
+                delay_values["sync"] = value
         return delay_values
 
     @classmethod

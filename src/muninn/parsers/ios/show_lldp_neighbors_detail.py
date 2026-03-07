@@ -1,7 +1,7 @@
 """Parser for 'show lldp neighbors detail' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import Literal, NotRequired, TypedDict
 
 from netutils.interface import canonical_interface_name
 
@@ -19,6 +19,15 @@ _INTERFACE_RE = re.compile(
     r"nve|BDI|Twe(?:ntyFiveGigE)?)\d",
     re.IGNORECASE,
 )
+
+
+OptionalStrField = Literal[
+    "port_description",
+    "system_name",
+    "system_description",
+    "system_capabilities",
+    "enabled_capabilities",
+]
 
 
 def _canonicalize_if_interface(value: str) -> str:
@@ -84,7 +93,7 @@ def _build_entry(
         "time_remaining": int(time_remaining),  # type: ignore[arg-type]
     }
 
-    _optional_str_fields = (
+    _optional_str_fields: tuple[OptionalStrField, ...] = (
         "port_description",
         "system_name",
         "system_description",
