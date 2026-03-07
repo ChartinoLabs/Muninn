@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Literal, Protocol, cast
 
 from muninn.exceptions import ParserNotFoundError
 from muninn.os import OS, OperatingSystem, resolve_os
@@ -13,6 +13,15 @@ if TYPE_CHECKING:
     from muninn.parser import BaseParser
 
 ParserSource = Literal["built_in", "local"]
+Registration = tuple[OS, str]
+
+
+class _RegistrableParserClass(Protocol):
+    """Parser class protocol with registration metadata attributes."""
+
+    os: OS
+    command: str
+    _muninn_registrations: list[Registration]
 
 
 @dataclass(frozen=True)
@@ -33,15 +42,14 @@ def register(
     def decorator(cls: type[BaseParser[object]]) -> type[BaseParser[object]]:
         cls.os = resolved_os
         cls.command = normalized_command
-        registrations = (
-            list(cls._muninn_registrations)
-            if hasattr(cls, "_muninn_registrations")
-            else []
-        )
+        registrable_cls = cast(_RegistrableParserClass, cls)
+        registrations = []
+        if hasattr(registrable_cls, "_muninn_registrations"):
+            registrations = list(registrable_cls._muninn_registrations)
         registration = (resolved_os, normalized_command)
         if registration not in registrations:
             registrations.append(registration)
-        cls._muninn_registrations = registrations
+        registrable_cls._muninn_registrations = registrations
         return cls
 
     return decorator

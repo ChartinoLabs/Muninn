@@ -6,10 +6,9 @@ import importlib
 import logging
 import pkgutil
 import sys
-from collections.abc import Callable
 from pathlib import Path
 from types import ModuleType
-from typing import Any
+from typing import Any, Protocol, cast
 
 from muninn.config import Configuration, ExecutionMode
 from muninn.exceptions import EmptyOutputError, ParseError, ParserNotFoundError
@@ -187,7 +186,7 @@ class MuninnRuntime:
                 resolved_os.value.name,
                 command,
             )
-            return result
+            return cast(dict[str, Any], result)
 
         failure_summary = "; ".join(failure_reasons)
         if not failure_summary:
@@ -199,6 +198,18 @@ class MuninnRuntime:
         )
 
 
+class ParseCallable(Protocol):
+    """Callable protocol preserving parse parameter names for type checkers."""
+
+    def __call__(
+        self,
+        os: str | OS | type[OperatingSystem],
+        command: str,
+        output: str,
+    ) -> dict[str, Any]:
+        """Parse CLI output using positional or keyword arguments."""
+
+
 class _ParseDispatcher:
     """Descriptor enabling `Muninn.parse(...)` and `mn.parse(...)` usage."""
 
@@ -206,7 +217,7 @@ class _ParseDispatcher:
         self,
         instance: Muninn | None,
         owner: type[Muninn],
-    ) -> Callable[[str | OS | type[OperatingSystem], str, str], dict[str, Any]]:
+    ) -> ParseCallable:
         if instance is None:
 
             def parse_via_class(

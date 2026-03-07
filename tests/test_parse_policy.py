@@ -174,3 +174,41 @@ def test_execution_mode_is_loaded_from_environment(
 
     result = runtime.parse("nxos", "show version", "show version output")
     assert result == {"source": "built_in"}
+
+
+def test_instance_parse_accepts_keyword_arguments(runtime: Muninn) -> None:
+    """Instance parse supports keyword arguments."""
+
+    @register("nxos", "show version")
+    class BuiltInParser(BaseParser):
+        @classmethod
+        def parse(cls, output: str) -> dict[str, Any]:
+            return {"source": "built_in"}
+
+    runtime.registry.register_parser("nxos", "show version", BuiltInParser, "built_in")
+
+    result = runtime.parse(
+        os="nxos",
+        command="show version",
+        output="show version output",
+    )
+    assert result == {"source": "built_in"}
+
+
+def test_class_parse_accepts_keyword_arguments() -> None:
+    """Class parse supports keyword arguments."""
+    result = Muninn.parse(
+        os="iosxe",
+        command="show lldp neighbors",
+        output=(
+            "Capability codes:\n"
+            "R - Router, B - Bridge, T - Telephone, C - DOCSIS Cable Device\n"
+            "W - WLAN Access Point, P - Repeater, S - Station, O - Other\n"
+            "\n"
+            "Device ID    Local Intf     Hold-time  Capability  Port ID\n"
+            "switch-1     Gi0/1          120        B,R         Gi1/0/24\n"
+            "\n"
+            "Total entries displayed: 1\n"
+        ),
+    )
+    assert result["total_entries"] == 1

@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 from enum import StrEnum
 from pathlib import Path
+from typing import TypeAlias, cast
 
 from pydantic import field_validator
 from pydantic_settings import (
@@ -55,7 +56,12 @@ class _RuntimeSettings(BaseSettings):
                 if path.strip()
             )
         if isinstance(value, list):
-            return tuple(Path(path).expanduser().resolve() for path in value)
+            parsed_paths: list[Path] = []
+            for path in value:
+                if not isinstance(path, str | Path):
+                    return value
+                parsed_paths.append(Path(path).expanduser().resolve())
+            return tuple(parsed_paths)
         return value
 
     @classmethod
@@ -76,13 +82,16 @@ class _RuntimeSettings(BaseSettings):
         )
 
 
+ConfigurationOverride: TypeAlias = ExecutionMode | bool | tuple[Path, ...]
+
+
 class Configuration:
     """Runtime configuration for source loading and validation."""
 
     def __init__(self) -> None:
         """Initialize and validate configured sources."""
         self._settings = _RuntimeSettings()
-        self._overrides: dict[str, object] = {}
+        self._overrides: dict[str, ConfigurationOverride] = {}
 
     def reload(self) -> None:
         """Reload and validate configuration from all sources."""
@@ -90,9 +99,10 @@ class Configuration:
 
     def get_execution_mode(self) -> ExecutionMode:
         """Get parser execution mode from overrides or loaded sources."""
-        return self._overrides.get(
-            "parser_execution_mode", self._settings.parser_execution_mode
-        )
+        override = self._overrides.get("parser_execution_mode")
+        if override is None:
+            return self._settings.parser_execution_mode
+        return cast(ExecutionMode, override)
 
     def set_execution_mode(self, mode: ExecutionMode | str) -> None:
         """Set parser execution mode as an API override."""
@@ -104,9 +114,10 @@ class Configuration:
 
     def get_fallback_on_invalid_result(self) -> bool:
         """Get fallback-on-invalid-result setting from overrides or sources."""
-        return self._overrides.get(
-            "fallback_on_invalid_result", self._settings.fallback_on_invalid_result
-        )
+        override = self._overrides.get("fallback_on_invalid_result")
+        if override is None:
+            return self._settings.fallback_on_invalid_result
+        return cast(bool, override)
 
     def set_fallback_on_invalid_result(self, enabled: bool) -> None:
         """Set fallback-on-invalid-result as an API override."""
@@ -114,7 +125,10 @@ class Configuration:
 
     def get_parser_paths(self) -> tuple[Path, ...]:
         """Get parser overlay search paths from overrides or sources."""
-        return self._overrides.get("parser_paths", self._settings.parser_paths)
+        override = self._overrides.get("parser_paths")
+        if override is None:
+            return self._settings.parser_paths
+        return cast(tuple[Path, ...], override)
 
     def set_parser_paths(
         self, paths: list[str | Path] | tuple[str | Path, ...]
