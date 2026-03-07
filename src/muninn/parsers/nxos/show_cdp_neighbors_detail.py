@@ -2,12 +2,24 @@
 
 import re
 from dataclasses import dataclass, field
-from typing import NotRequired, TypedDict
+from typing import Literal, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.utils import canonical_interface_name
+
+OptionalStringField = Literal[
+    "system_name",
+    "duplex",
+    "physical_location",
+    "vtp_management_domain",
+    "local_interface_mac",
+    "remote_interface_mac",
+]
+
+OptionalIntField = Literal["native_vlan", "mtu"]
+OptionalListField = Literal["interface_addresses", "mgmt_addresses"]
 
 
 class CdpNeighborDetailEntry(TypedDict):
@@ -50,7 +62,7 @@ _REQUIRED_FIELDS = (
 )
 
 # Optional string fields copied directly from parsed fields
-_OPTIONAL_STR_FIELDS = (
+_OPTIONAL_STR_FIELDS: tuple[OptionalStringField, ...] = (
     "system_name",
     "duplex",
     "physical_location",
@@ -60,10 +72,13 @@ _OPTIONAL_STR_FIELDS = (
 )
 
 # Optional integer fields that need int() conversion
-_OPTIONAL_INT_FIELDS = ("native_vlan", "mtu")
+_OPTIONAL_INT_FIELDS: tuple[OptionalIntField, ...] = ("native_vlan", "mtu")
 
 # Optional list fields copied as lists
-_OPTIONAL_LIST_FIELDS = ("interface_addresses", "mgmt_addresses")
+_OPTIONAL_LIST_FIELDS: tuple[OptionalListField, ...] = (
+    "interface_addresses",
+    "mgmt_addresses",
+)
 
 
 @dataclass

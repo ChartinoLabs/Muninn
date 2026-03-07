@@ -1,7 +1,7 @@
 """Parser for 'show processes memory' command on IOS/IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -137,16 +137,16 @@ class ShowProcessesMemoryParser(BaseParser["ShowProcessesMemoryResult"]):
             elif in_table:
                 process_lines.append(line)
 
-        result: ShowProcessesMemoryResult = {}
+        result: dict[str, object] = {}
 
         # Add pool summaries as top-level keys
         pools = _parse_pool_lines(pool_lines)
         for key, value in pools.items():
-            result[key] = value  # type: ignore[literal-required]
+            result[key] = value
 
         # Add processes
         processes = _parse_process_lines(process_lines)
         if processes:
             result["processes"] = processes
 
-        return result
+        return cast(ShowProcessesMemoryResult, result)
