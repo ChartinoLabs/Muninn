@@ -1,0 +1,20 @@
+route-map RM_OSPF_REDISTRIBUTE, permit, sequence 10
+  Match clauses:
+    ip address prefix-lists: PL_CONNECTED
+    route-type: external type 1
+  Set clauses:
+    metric 100
+    metric-type type-1
+    tag 65000
+  Policy routing matches: 1234 packets, 567890 bytes
+route-map RM_OSPF_REDISTRIBUTE, permit, sequence 20
+  Match clauses:
+    ip address prefix-lists: PL_STATIC
+  Set clauses:
+    metric 200
+    metric-type type-2
+  Policy routing matches: 0 packets, 0 bytes
+route-map RM_OSPF_REDISTRIBUTE, deny, sequence 30
+  Match clauses:
+  Set clauses:
+  Policy routing matches: 0 packets, 0 bytes

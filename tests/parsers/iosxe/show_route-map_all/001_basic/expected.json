@@ -1,0 +1,29 @@
+{
+    "route_maps": {
+        "RM_BGP_IN": {
+            "10": {
+                "action": "permit",
+                "match_clauses": [
+                    "ip address (access-lists): AL_BGP_IN"
+                ],
+                "policy_routing_bytes": 0,
+                "policy_routing_packets": 0,
+                "sequence": 10,
+                "set_clauses": [
+                    "local-preference 200"
+                ]
+            }
+        },
+        "RM_BGP_OUT": {
+            "10": {
+                "action": "deny",
+                "match_clauses": [
+                    "ip address prefix-lists: PL_DEFAULT"
+                ],
+                "policy_routing_bytes": 0,
+                "policy_routing_packets": 0,
+                "sequence": 10
+            }
+        }
+    }
+}
