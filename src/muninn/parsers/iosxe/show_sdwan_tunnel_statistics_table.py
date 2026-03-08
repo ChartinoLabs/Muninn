@@ -12,8 +12,6 @@ class TunnelStatisticsEntry(TypedDict):
     """Schema for a single tunnel statistics entry."""
 
     protocol: str
-    source_ip: str
-    dest_ip: str
     source_port: int
     dest_port: int
     system_ip: str
@@ -38,7 +36,7 @@ class TunnelStatisticsEntry(TypedDict):
 class ShowSdwanTunnelStatisticsTableResult(TypedDict):
     """Schema for 'show sdwan tunnel statistics table' parsed output."""
 
-    tunnels: list[TunnelStatisticsEntry]
+    tunnels: dict[str, dict[str, TunnelStatisticsEntry]]
 
 
 def _is_header_or_separator(line: str) -> bool:
@@ -96,12 +94,12 @@ class ShowSdwanTunnelStatisticsTableParser(
             output: Raw CLI output from 'show sdwan tunnel statistics table' command.
 
         Returns:
-            Parsed data with a list of tunnel statistics entries.
+            Parsed data keyed by source IP and destination IP.
 
         Raises:
             ValueError: If no tunnel entries are found in the output.
         """
-        tunnels: list[TunnelStatisticsEntry] = []
+        tunnels: dict[str, dict[str, TunnelStatisticsEntry]] = {}
 
         for line in output.splitlines():
             line = line.strip()
@@ -112,7 +110,9 @@ class ShowSdwanTunnelStatisticsTableParser(
             if not match:
                 continue
 
-            tunnels.append(_build_entry(match))
+            source_ip = match.group("source_ip")
+            dest_ip = match.group("dest_ip")
+            tunnels.setdefault(source_ip, {})[dest_ip] = _build_entry(match)
 
         if not tunnels:
             msg = "No tunnel statistics entries found in output"
@@ -125,8 +125,6 @@ def _build_entry(match: re.Match[str]) -> TunnelStatisticsEntry:
     """Build a TunnelStatisticsEntry from a regex match."""
     return TunnelStatisticsEntry(
         protocol=match.group("protocol"),
-        source_ip=match.group("source_ip"),
-        dest_ip=match.group("dest_ip"),
         source_port=int(match.group("source_port")),
         dest_port=int(match.group("dest_port")),
         system_ip=match.group("system_ip"),
