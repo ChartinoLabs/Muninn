@@ -184,6 +184,15 @@ def test_parser(parser_test_case: ParserTestCase) -> None:
 
 The command name is derived from the directory name (underscores converted to spaces).
 
+For regex-registered parsers, tests still use concrete command instances in `metadata.yaml` and test directory names. Registration patterns are an internal routing detail; parser tests should represent the real command text that was executed on the device.
+
+Examples:
+
+- register pattern: `show ip ospf (?P<process_id>\d+)`
+- test command: `show ip ospf 1`
+- register pattern: `show ip ospf (?P<process_id>\d+) vrf (?P<vrf_name>\S+)`
+- test command: `show ip ospf 1 vrf RED`
+
 ## Leveraging Genie Parser Test Data
 
 The Genie parser project contains extensive real-world CLI output samples under a permissive license. We can extract and reformat this data for Muninn tests:
