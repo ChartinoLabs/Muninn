@@ -51,6 +51,13 @@ src/muninn/
 
 Parsers are auto-discovered at import time using `pkgutil.walk_packages`. Adding a new parser only requires creating the file - no `__init__.py` maintenance needed.
 
+Parser classes register command support with `@register(...)`. Registrations may be either:
+
+- exact literal commands such as `show clock`
+- named-group regex command patterns such as `show ip ospf (?P<process_id>\d+)`
+
+Literal commands are resolved before regex patterns, and regex matching always happens against normalized whole-command input. See [Parser Registration](03-parser-registration.md) for the authoring rules and validation behavior.
+
 ### 3. Native Python Typing Over Custom Schema Engines
 
 **Problem in Genie**: Uses a custom schema engine (`Schema`, `Any()`, `Optional()`) that exists primarily to generate documentation for the Genie parser website. This provides no IDE support, no standard validation, and requires learning non-standard patterns.
@@ -157,5 +164,5 @@ The following are acknowledged but not primary concerns:
 ## Related Documents
 
 - [Testing Strategy](02-testing-strategy.md) - Test file structure and metadata format
-- Parser authoring guide (TODO)
+- [Parser Registration](03-parser-registration.md) - Literal and regex command registration rules
 - Output schema conventions (TODO)
