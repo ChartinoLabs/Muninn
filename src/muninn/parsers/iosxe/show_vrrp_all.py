@@ -1,4 +1,4 @@
-"""Parser for 'show vrrp all' command on IOS-XE."""
+"""Parser for 'show vrrp all' and 'show vrrp detail' commands on IOS-XE."""
 
 import re
 from typing import NotRequired, TypedDict
@@ -262,6 +262,7 @@ _FIELD_DISPATCH: dict[str, _FieldApplier] = {
 
 
 @register(OS.CISCO_IOSXE, "show vrrp all")
+@register(OS.CISCO_IOSXE, "show vrrp detail")
 class ShowVrrpAllParser(BaseParser[ShowVrrpAllResult]):
     """Parser for 'show vrrp all' command.
 
