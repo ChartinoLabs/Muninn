@@ -1,0 +1,38 @@
+{
+    "prefix_lists": {
+        "INBOUND": {
+            "count": 3,
+            "entries": {
+                "5": {
+                    "action": "permit",
+                    "network": "192.168.1.0/24",
+                    "seq": 5
+                },
+                "10": {
+                    "action": "permit",
+                    "le": 24,
+                    "network": "172.16.0.0/12",
+                    "seq": 10
+                },
+                "15": {
+                    "action": "deny",
+                    "le": 32,
+                    "network": "0.0.0.0/0",
+                    "seq": 15
+                }
+            }
+        },
+        "OUTBOUND": {
+            "count": 1,
+            "entries": {
+                "10": {
+                    "action": "permit",
+                    "ge": 16,
+                    "le": 24,
+                    "network": "10.0.0.0/8",
+                    "seq": 10
+                }
+            }
+        }
+    }
+}
