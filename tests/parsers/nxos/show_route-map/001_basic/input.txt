@@ -1,0 +1,29 @@
+route-map RM-TEST-OUT, permit, sequence 10
+  Match clauses:
+    as-path (as-path filter): AS-TEST
+  Set clauses:
+route-map RM-BGP-TO-OSPF, deny, sequence 10
+  Match clauses:
+    tag: 12345
+  Set clauses:
+route-map RM-BGP-TO-OSPF, permit, sequence 20
+  Match clauses:
+  Set clauses:
+route-map RM-ISP1-IN, permit, sequence 1000
+  Match clauses:
+  Set clauses:
+    local-preference 300
+route-map RM-ISP1-OUT, permit, sequence 1000
+  Match clauses:
+    as-path (as-path filter): AS-ISP2
+  Set clauses:
+route-map TEST_THIS, permit, sequence 10
+  Match clauses:
+    ip address (access-lists): AL_TEST_TEST
+  Set clauses:
+    ip next-hop 2.2.2.2
+route-map RM-N3K1-TO-N3K2, permit, sequence 10
+  Match clauses:
+    ip address prefix-lists: PF-N3K1-TO-N3K2
+  Set clauses:
+    extcommunity RT:100:1
