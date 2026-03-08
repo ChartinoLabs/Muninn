@@ -70,7 +70,7 @@ class ShowEnvironmentTemperatureParser(
 
             if match := _TEMP_ROW.match(line):
                 module = match.group("module")
-                sensor = match.group("sensor").strip()
+                sensor = " ".join(match.group("sensor").split())
                 sensor_entry: TemperatureSensorEntry = {
                     "major_threshold_celsius": int(match.group("major")),
                     "minor_threshold_celsius": int(match.group("minor")),
