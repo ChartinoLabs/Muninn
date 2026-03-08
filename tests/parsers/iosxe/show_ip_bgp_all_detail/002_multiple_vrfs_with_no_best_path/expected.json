@@ -1,0 +1,87 @@
+{
+    "address_families": {
+        "VPNv4 Unicast": {
+            "route_distinguishers": {
+                "101:101": {
+                    "default_vrf": "vrf_1",
+                    "rd": "101:101",
+                    "routes": {
+                        "10.64.4.0/22": {
+                            "no_best_path": true,
+                            "not_advertised_to_any_peer": true,
+                            "paths": [
+                                {
+                                    "as_path": "65000 65201 4400004007 4400004507 4400004001",
+                                    "best": false,
+                                    "community": "65100:106 65100:500 65100:601 65361:3",
+                                    "extended_community": "RT:65000:31838",
+                                    "external": true,
+                                    "from_peer": "10.9.3.4",
+                                    "localpref": 100,
+                                    "next_hop": "10.9.3.4",
+                                    "origin": "IGP",
+                                    "received_only": true,
+                                    "refresh_epoch": 1,
+                                    "router_id": "10.9.3.4",
+                                    "rx_pathid": "0",
+                                    "tx_pathid": "0",
+                                    "valid": true,
+                                    "via": "vrf vrf_1"
+                                }
+                            ],
+                            "paths_available": 1,
+                            "version": 0
+                        },
+                        "10.64.4.0/24": {
+                            "advertised_to_update_groups": [
+                                2,
+                                3,
+                                47
+                            ],
+                            "best_path": 2,
+                            "paths": [
+                                {
+                                    "as_path": "65000 65211 4400002007",
+                                    "best": false,
+                                    "community": "9:9 65100:106 65100:508 65100:704 65371:2",
+                                    "extended_community": "RT:65000:31838",
+                                    "external": true,
+                                    "from_peer": "10.9.3.4",
+                                    "localpref": 100,
+                                    "next_hop": "10.9.3.4",
+                                    "origin": "IGP",
+                                    "received_only": true,
+                                    "refresh_epoch": 1,
+                                    "router_id": "10.9.3.4",
+                                    "rx_pathid": "0",
+                                    "tx_pathid": "0",
+                                    "valid": true,
+                                    "via": "vrf vrf_1"
+                                },
+                                {
+                                    "as_path": "65000 65211 4400002007",
+                                    "best": true,
+                                    "community": "9:9 65100:106 65100:508 65100:700 65100:704 65371:2",
+                                    "external": true,
+                                    "from_peer": "10.105.3.80",
+                                    "localpref": 100,
+                                    "next_hop": "10.105.3.80",
+                                    "origin": "IGP",
+                                    "refresh_epoch": 1,
+                                    "router_id": "10.105.2.26",
+                                    "rx_pathid": "0",
+                                    "tx_pathid": "0x0",
+                                    "valid": true,
+                                    "via": "vrf vrf_1"
+                                }
+                            ],
+                            "paths_available": 2,
+                            "table": "vrf_1",
+                            "version": 1863365
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
