@@ -128,6 +128,19 @@ _NON_INTERFACE_KEYWORDS = (
 )
 
 
+def _is_interface_line(line: str, stripped: str) -> bool:
+    """Return True if the line contains interface names to parse."""
+    if not stripped:
+        return False
+    if not line.startswith(" ") and not line.startswith("\t"):
+        return False
+    if stripped.startswith("Address family") or stripped.startswith("VRF "):
+        return False
+    if any(kw in stripped for kw in _NON_INTERFACE_KEYWORDS):
+        return False
+    return bool(stripped.split())
+
+
 def _parse_interfaces(lines: list[str], idx: int) -> tuple[list[str], int]:
     """Parse interface lines following an Interfaces: header.
 
@@ -137,17 +150,11 @@ def _parse_interfaces(lines: list[str], idx: int) -> tuple[list[str], int]:
     while idx < len(lines):
         line = lines[idx]
         stripped = line.strip()
-        if not stripped or (not line.startswith(" ") and not line.startswith("\t")):
+        if not _is_interface_line(line, stripped):
             break
-        if stripped.startswith("Address family") or stripped.startswith("VRF "):
-            break
-        tokens = stripped.split()
-        if tokens and not any(kw in stripped for kw in _NON_INTERFACE_KEYWORDS):
-            for token in tokens:
-                interfaces.append(canonical_interface_name(token, os=OS.CISCO_IOSXE))
-            idx += 1
-            continue
-        break
+        for token in stripped.split():
+            interfaces.append(canonical_interface_name(token, os=OS.CISCO_IOSXE))
+        idx += 1
     return interfaces, idx
 
 
