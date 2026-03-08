@@ -43,10 +43,22 @@ class VrrpGroupEntry(TypedDict):
     state_change_reason: NotRequired[str]
 
 
+class VrrpGroupContainer(TypedDict):
+    """Schema for VRRP address families under a group."""
+
+    address_families: dict[str, VrrpGroupEntry]
+
+
+class VrrpInterfaceEntry(TypedDict):
+    """Schema for VRRP groups under an interface."""
+
+    groups: dict[str, VrrpGroupContainer]
+
+
 class ShowVrrpResult(TypedDict):
     """Schema for 'show vrrp' parsed output."""
 
-    interfaces: dict[str, dict[str, VrrpGroupEntry]]
+    interfaces: dict[str, VrrpInterfaceEntry]
 
 
 # Header: "GigabitEthernet3.420 - Group 10" or with address family
@@ -316,12 +328,12 @@ class ShowVrrpParser(BaseParser[ShowVrrpResult]):
             output: Raw CLI output from 'show vrrp' command.
 
         Returns:
-            Parsed VRRP data keyed by interface and group number.
+            Parsed VRRP data keyed by interface, group, and address family.
 
         Raises:
             ValueError: If no VRRP entries found in output.
         """
-        interfaces: dict[str, dict[str, VrrpGroupEntry]] = {}
+        interfaces: dict[str, VrrpInterfaceEntry] = {}
         current_entry: VrrpGroupEntry | None = None
 
         for line in output.splitlines():
@@ -347,14 +359,14 @@ class ShowVrrpParser(BaseParser[ShowVrrpResult]):
 
 
 def _start_new_entry(
-    interfaces: dict[str, dict[str, VrrpGroupEntry]],
+    interfaces: dict[str, VrrpInterfaceEntry],
     match: re.Match[str],
 ) -> VrrpGroupEntry:
     """Create a new VRRP group entry from a header match."""
     raw_intf = match.group("interface")
     interface = canonical_interface_name(raw_intf, os=OS.CISCO_IOSXE)
     group = match.group("group")
-    af = match.group("af")
+    af = match.group("af") or "IPv4"
 
     entry = VrrpGroupEntry(
         state="",
@@ -365,15 +377,13 @@ def _start_new_entry(
         priority=0,
     )
 
-    if af:
-        entry["address_family"] = af
-
-    # Use "group/AF" as key when address family is present to avoid collisions
-    key = f"{group}/{af}" if af else group
+    entry["address_family"] = af
 
     if interface not in interfaces:
-        interfaces[interface] = {}
-    interfaces[interface][key] = entry
+        interfaces[interface] = VrrpInterfaceEntry(groups={})
+    if group not in interfaces[interface]["groups"]:
+        interfaces[interface]["groups"][group] = VrrpGroupContainer(address_families={})
+    interfaces[interface]["groups"][group]["address_families"][af] = entry
     return entry
 
 
