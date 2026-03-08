@@ -104,6 +104,57 @@ class ShowVrrpBriefParser(BaseParser[ShowVrrpBriefResult]):
     """
 
     @classmethod
+    def _get_row_pattern(cls, output: str) -> tuple[re.Pattern[str], bool]:
+        """Select the row pattern for the detected VRRP format."""
+        is_v3 = _VRRPV3_HEADER_PATTERN.search(output) is not None
+        row_pattern = _VRRPV3_ROW_PATTERN if is_v3 else _VRRPV2_ROW_PATTERN
+        return row_pattern, is_v3
+
+    @classmethod
+    def _build_entry(
+        cls,
+        match: re.Match[str],
+        *,
+        is_v3: bool,
+    ) -> tuple[str, str, VrrpBriefEntry]:
+        """Build a normalized interface/group entry from a row match."""
+        interface = canonical_interface_name(
+            match.group("interface"), os=OS.CISCO_IOSXE
+        )
+        group = match.group("group")
+        owner = match.group("owner")
+
+        entry = VrrpBriefEntry(
+            group=int(group),
+            priority=int(match.group("priority")),
+            time=int(match.group("time")),
+            owner=_parse_owner(owner) if owner else False,
+            preempt=_parse_preempt(match.group("preempt")),
+            state=match.group("state").lower(),
+            master_address=_strip_local_suffix(match.group("master")),
+            group_address=match.group("group_addr"),
+        )
+
+        if is_v3:
+            entry["address_family"] = match.group("af")
+
+        return interface, group, entry
+
+    @classmethod
+    def _store_entry(
+        cls,
+        interfaces: dict[str, VrrpInterfaceEntry],
+        interface: str,
+        group: str,
+        entry: VrrpBriefEntry,
+    ) -> None:
+        """Store a VRRP group entry under its interface key."""
+        interface_entry = interfaces.setdefault(
+            interface, VrrpInterfaceEntry(groups={})
+        )
+        interface_entry["groups"][group] = entry
+
+    @classmethod
     def parse(cls, output: str) -> ShowVrrpBriefResult:
         """Parse 'show vrrp brief' output.
 
@@ -116,8 +167,7 @@ class ShowVrrpBriefParser(BaseParser[ShowVrrpBriefResult]):
         Raises:
             ValueError: If no VRRP entries found in output.
         """
-        is_v3 = _VRRPV3_HEADER_PATTERN.search(output) is not None
-        row_pattern = _VRRPV3_ROW_PATTERN if is_v3 else _VRRPV2_ROW_PATTERN
+        row_pattern, is_v3 = cls._get_row_pattern(output)
 
         interfaces: dict[str, VrrpInterfaceEntry] = {}
         for line in output.splitlines():
@@ -128,31 +178,8 @@ class ShowVrrpBriefParser(BaseParser[ShowVrrpBriefResult]):
             if not match:
                 continue
 
-            interface = canonical_interface_name(
-                match.group("interface"), os=OS.CISCO_IOSXE
-            )
-            group = int(match.group("group"))
-
-            entry = VrrpBriefEntry(
-                group=group,
-                priority=int(match.group("priority")),
-                time=int(match.group("time")),
-                owner=_parse_owner(match.group("owner"))
-                if match.group("owner")
-                else False,
-                preempt=_parse_preempt(match.group("preempt")),
-                state=match.group("state").lower(),
-                master_address=_strip_local_suffix(match.group("master")),
-                group_address=match.group("group_addr"),
-            )
-
-            if is_v3:
-                entry["address_family"] = match.group("af")
-
-            if interface not in interfaces:
-                interfaces[interface] = VrrpInterfaceEntry(groups={})
-
-            interfaces[interface]["groups"][str(group)] = entry
+            interface, group, entry = cls._build_entry(match, is_v3=is_v3)
+            cls._store_entry(interfaces, interface, group, entry)
 
         if not interfaces:
             msg = "No VRRP entries found in output"
