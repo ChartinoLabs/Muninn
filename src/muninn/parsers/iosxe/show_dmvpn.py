@@ -80,9 +80,9 @@ def _is_skip_line(line: str) -> bool:
     return False
 
 
-def _build_peer_key(nbma: str, tunnel: str) -> str:
-    """Build a unique key for a peer entry."""
-    return f"{nbma}_{tunnel}"
+def _build_peer_key(entry_number: int) -> str:
+    """Build a stable key for a peer entry."""
+    return str(entry_number)
 
 
 @register(OS.CISCO_IOSXE, "show dmvpn")
@@ -158,6 +158,7 @@ def _parse_interface_section(
     peers: dict[str, DmvpnPeerEntry] = {}
     pending_nbma: str | None = None
     pending_ent: int = 0
+    peer_index = 1
 
     while idx < len(lines):
         stripped = lines[idx].strip()
@@ -169,12 +170,13 @@ def _parse_interface_section(
             idx += 1
             continue
 
-        idx, pending_nbma, pending_ent = _parse_peer_line(
+        idx, pending_nbma, pending_ent, peer_index = _parse_peer_line(
             stripped,
             peers,
             pending_nbma,
             pending_ent,
             idx,
+            peer_index,
         )
 
     entry = DmvpnInterfaceEntry(
@@ -195,43 +197,52 @@ def _parse_peer_line(
     pending_nbma: str | None,
     pending_ent: int,
     idx: int,
-) -> tuple[int, str | None, int]:
-    """Parse a single peer data line. Returns (next_idx, pending_nbma, pending_ent)."""
+    peer_index: int,
+) -> tuple[int, str | None, int, int]:
+    """Parse a single peer data line.
+
+    Returns (next_idx, pending_nbma, pending_ent, next_peer_index).
+    """
     # Full peer row
     peer_match = _PEER_ROW_PATTERN.match(line)
     if peer_match:
-        _add_peer(peers, peer_match)
+        _add_peer(peers, peer_match, peer_index)
         nbma = peer_match.group("nbma")
         ent = int(peer_match.group("ent"))
-        return idx + 1, nbma, ent
+        return idx + 1, nbma, ent, peer_index + 1
 
     # Continuation row (additional tunnel for same NBMA, or tunnel after wrapped NBMA)
     cont_match = _CONTINUATION_PATTERN.match(line)
     if cont_match:
         nbma = pending_nbma or "UNKNOWN"
         ent = pending_ent or 1
-        _add_continuation_peer(peers, cont_match, nbma, ent)
-        return idx + 1, pending_nbma, pending_ent
+        _add_continuation_peer(peers, cont_match, nbma, ent, peer_index)
+        return idx + 1, pending_nbma, pending_ent, peer_index + 1
 
     # NBMA-only line (long address wraps)
     nbma_match = _NBMA_ONLY_PATTERN.match(line)
     if nbma_match:
-        return idx + 1, nbma_match.group("nbma"), int(nbma_match.group("ent"))
+        return (
+            idx + 1,
+            nbma_match.group("nbma"),
+            int(nbma_match.group("ent")),
+            peer_index,
+        )
 
-    return idx + 1, None, 0
+    return idx + 1, None, 0, peer_index
 
 
 def _add_peer(
     peers: dict[str, DmvpnPeerEntry],
     match: re.Match[str],
+    peer_index: int,
 ) -> None:
     """Add a peer entry from a full row match."""
     nbma = match.group("nbma")
-    tunnel = match.group("tunnel")
-    key = _build_peer_key(nbma, tunnel)
+    key = _build_peer_key(peer_index)
     peers[key] = DmvpnPeerEntry(
         peer_nbma_address=nbma,
-        peer_tunnel_address=tunnel,
+        peer_tunnel_address=match.group("tunnel"),
         state=match.group("state"),
         uptime=match.group("uptime"),
         attribute=match.group("attrb"),
@@ -244,13 +255,13 @@ def _add_continuation_peer(
     match: re.Match[str],
     nbma: str,
     ent: int,
+    peer_index: int,
 ) -> None:
     """Add a peer entry from a continuation line."""
-    tunnel = match.group("tunnel")
-    key = _build_peer_key(nbma, tunnel)
+    key = _build_peer_key(peer_index)
     peers[key] = DmvpnPeerEntry(
         peer_nbma_address=nbma,
-        peer_tunnel_address=tunnel,
+        peer_tunnel_address=match.group("tunnel"),
         state=match.group("state"),
         uptime=match.group("uptime"),
         attribute=match.group("attrb"),
