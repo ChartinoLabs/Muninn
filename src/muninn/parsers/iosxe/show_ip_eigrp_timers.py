@@ -6,19 +6,31 @@ from typing import TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
-class TimerEntry(TypedDict):
-    """Schema for a single timer entry."""
+class TimerAttributes(TypedDict):
+    """Schema for timer attributes."""
 
     expiration: float
-    timer_type: str
+
+
+class InterfaceTimers(TypedDict):
+    """Schema for interface-scoped timers."""
+
+    interfaces: dict[str, TimerAttributes]
+
+
+class TimerEntries(TypedDict):
+    """Schema for timers represented as repeated entries."""
+
+    entries: list[TimerAttributes]
 
 
 class EigrpProcessTimers(TypedDict):
     """Schema for timers within a single EIGRP process section."""
 
-    timers: list[TimerEntry]
+    timers: dict[str, InterfaceTimers | TimerEntries]
 
 
 class EigrpInstanceTimers(TypedDict):
@@ -38,6 +50,9 @@ _COMMAND_LINE = "show ip eigrp timers"
 _AS_PATTERN = re.compile(r"^EIGRP-IPv[46]\s+Timers\s+for\s+AS\((?P<as_number>\d+)\)")
 _SECTION_PATTERN = re.compile(r"^(?P<section>Hello|Update|SIA)\s+Process$")
 _TIMER_PATTERN = re.compile(r"^\|?\s+\|?\s*(?P<expiration>\d+\.\d+)\s+(?P<type>.+)$")
+_INTERFACE_TIMER_PATTERN = re.compile(
+    r"^(?P<timer_type>.+?)\s+\((?P<interface>[^()]+)\)$"
+)
 
 
 def _is_skip_line(line: str) -> bool:
@@ -65,17 +80,35 @@ def _handle_section_line(match: re.Match[str], state: _ParserState) -> None:
     """Handle a process section header line."""
     state.current_section = match.group("section").lower()
     processes = state.instances[state.current_as]["processes"]  # type: ignore[index]
-    processes[state.current_section] = EigrpProcessTimers(timers=[])
+    processes[state.current_section] = EigrpProcessTimers(timers={})
+
+
+def _normalize_timer_name(timer_type: str) -> str:
+    """Normalize timer names to snake_case keys."""
+    return re.sub(r"[^a-z0-9]+", "_", timer_type.lower()).strip("_")
 
 
 def _handle_timer_line(match: re.Match[str], state: _ParserState) -> None:
     """Handle a timer entry line."""
-    entry = TimerEntry(
-        expiration=float(match.group("expiration")),
-        timer_type=match.group("type").strip(),
-    )
+    timer_type = match.group("type").strip()
+    timer_data = TimerAttributes(expiration=float(match.group("expiration")))
     processes = state.instances[state.current_as]["processes"]  # type: ignore[index]
-    processes[state.current_section]["timers"].append(entry)  # type: ignore[index]
+    timers = processes[state.current_section]["timers"]  # type: ignore[index]
+
+    interface_match = _INTERFACE_TIMER_PATTERN.match(timer_type)
+    if interface_match and interface_match.group("interface") != "parent":
+        timer_name = _normalize_timer_name(interface_match.group("timer_type"))
+        interface = canonical_interface_name(
+            interface_match.group("interface"), os=OS.CISCO_IOSXE
+        )
+
+        bucket = timers.setdefault(timer_name, InterfaceTimers(interfaces={}))
+        bucket["interfaces"][interface] = timer_data  # type: ignore[index]
+        return
+
+    timer_name = _normalize_timer_name(timer_type.strip("()"))
+    bucket = timers.setdefault(timer_name, TimerEntries(entries=[]))
+    bucket["entries"].append(timer_data)  # type: ignore[index]
 
 
 @register(OS.CISCO_IOSXE, "show ip eigrp timers")
@@ -98,7 +131,7 @@ class ShowIpEigrpTimersParser(BaseParser[ShowIpEigrpTimersResult]):
             output: Raw CLI output from 'show ip eigrp timers'.
 
         Returns:
-            Parsed timer data keyed by AS number and process.
+            Parsed timer data keyed by AS number, process, and timer type.
 
         Raises:
             ValueError: If no EIGRP timer data found in output.

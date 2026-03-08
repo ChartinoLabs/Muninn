@@ -3,40 +3,54 @@
         "100": {
             "processes": {
                 "hello": {
-                    "timers": [
-                        {
-                            "expiration": 2.985,
-                            "timer_type": "(parent)"
+                    "timers": {
+                        "hello": {
+                            "interfaces": {
+                                "TenGigabitEthernet0/0/4": {
+                                    "expiration": 2.985
+                                }
+                            }
                         },
-                        {
-                            "expiration": 2.985,
-                            "timer_type": "Hello (Te0/0/4)"
+                        "parent": {
+                            "entries": [
+                                {
+                                    "expiration": 2.985
+                                }
+                            ]
                         }
-                    ]
+                    }
                 },
                 "sia": {
-                    "timers": [
-                        {
-                            "expiration": 0.0,
-                            "timer_type": "(parent)"
+                    "timers": {
+                        "parent": {
+                            "entries": [
+                                {
+                                    "expiration": 0.0
+                                }
+                            ]
                         }
-                    ]
+                    }
                 },
                 "update": {
-                    "timers": [
-                        {
-                            "expiration": 13.19,
-                            "timer_type": "(parent)"
+                    "timers": {
+                        "parent": {
+                            "entries": [
+                                {
+                                    "expiration": 13.19
+                                },
+                                {
+                                    "expiration": 13.19
+                                }
+                            ]
                         },
-                        {
-                            "expiration": 13.19,
-                            "timer_type": "(parent)"
-                        },
-                        {
-                            "expiration": 13.19,
-                            "timer_type": "Peer holding"
+                        "peer_holding": {
+                            "entries": [
+                                {
+                                    "expiration": 13.19
+                                }
+                            ]
                         }
-                    ]
+                    }
                 }
             }
         }
