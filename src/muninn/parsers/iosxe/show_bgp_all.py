@@ -477,6 +477,7 @@ def _finalize_rd(
 
 
 @register(OS.CISCO_IOSXE, "show bgp all")
+@register(OS.CISCO_IOSXE, "show ip bgp all")
 class ShowBgpAllParser(BaseParser["ShowBgpAllResult"]):
     """Parser for 'show bgp all' command on IOS-XE.
 
