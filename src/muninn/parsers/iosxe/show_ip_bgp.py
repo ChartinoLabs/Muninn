@@ -383,6 +383,7 @@ def _parse_routes(
 
 
 @register(OS.CISCO_IOSXE, "show ip bgp")
+@register(OS.CISCO_IOSXE, "show ip bgp regexp ^$")
 class ShowIpBgpParser(BaseParser["ShowIpBgpResult"]):
     """Parser for 'show ip bgp' command on IOS-XE.
 
