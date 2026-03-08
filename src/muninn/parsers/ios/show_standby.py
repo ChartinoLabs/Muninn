@@ -166,12 +166,12 @@ def _match_track_line(stripped: str) -> TrackEntry | None:
 
     match = _TRACK_INTERFACE_RE.match(stripped)
     if match:
-        entry = {"type": "interface", "name": match.group("name")}
+        iface_entry: TrackEntry = {"type": "interface", "name": match.group("name")}
         if match.group("state"):
-            entry["state"] = match.group("state")
+            iface_entry["state"] = match.group("state")
         if match.group("decrement"):
-            entry["decrement"] = int(match.group("decrement"))
-        return entry
+            iface_entry["decrement"] = int(match.group("decrement"))
+        return iface_entry
 
     return None
 
