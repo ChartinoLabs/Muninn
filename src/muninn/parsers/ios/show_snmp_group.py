@@ -25,7 +25,7 @@ class SnmpGroupEntry(TypedDict):
 class ShowSnmpGroupResult(TypedDict):
     """Schema for 'show snmp group' parsed output."""
 
-    groups: dict[str, SnmpGroupEntry]
+    groups: dict[str, dict[str, SnmpGroupEntry]]
 
 
 _SEPARATOR_PATTERN = re.compile(r"^\s*$")
@@ -137,20 +137,20 @@ class ShowSnmpGroupParser(BaseParser[ShowSnmpGroupResult]):
             output: Raw CLI output from 'show snmp group' command.
 
         Returns:
-            Parsed data with groups keyed by 'group_name:security_model'.
+            Parsed data with groups keyed by group name, then security model.
 
         Raises:
             ValueError: If the output cannot be parsed.
         """
-        groups: dict[str, SnmpGroupEntry] = {}
+        groups: dict[str, dict[str, SnmpGroupEntry]] = {}
         current_block: list[str] = []
 
         for line in output.splitlines():
             if _SEPARATOR_PATTERN.match(line) and current_block:
                 entry = _parse_block(current_block)
                 if entry is not None:
-                    key = f"{entry['group_name']}:{entry['security_model']}"
-                    groups[key] = entry
+                    group_entries = groups.setdefault(entry["group_name"], {})
+                    group_entries[entry["security_model"]] = entry
                 current_block = []
             else:
                 current_block.append(line)
@@ -159,8 +159,8 @@ class ShowSnmpGroupParser(BaseParser[ShowSnmpGroupResult]):
         if current_block:
             entry = _parse_block(current_block)
             if entry is not None:
-                key = f"{entry['group_name']}:{entry['security_model']}"
-                groups[key] = entry
+                group_entries = groups.setdefault(entry["group_name"], {})
+                group_entries[entry["security_model"]] = entry
 
         if not groups:
             msg = "No SNMP group entries found in output"
