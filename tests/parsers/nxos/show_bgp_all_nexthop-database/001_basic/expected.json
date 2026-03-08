@@ -1,0 +1,92 @@
+{
+    "vrfs": {
+        "default": {
+            "address_families": {
+                "ipv4 mdt": {
+                    "nexthops": {
+                        "0.0.0.0": {
+                            "attached": false,
+                            "flags": "0x2",
+                            "igp_cost": 0,
+                            "igp_preference": 0,
+                            "igp_route_type": 0,
+                            "labeled": false,
+                            "local": true,
+                            "metric_next_advertise": "never",
+                            "reachable": false,
+                            "refcount": 1,
+                            "resolve_time": "never",
+                            "rib_route": "0.0.0.0/0",
+                            "rnh_epoch": 0
+                        }
+                    },
+                    "trigger_delay_critical_ms": 3000,
+                    "trigger_delay_non_critical_ms": 10000
+                },
+                "ipv4 unicast": {
+                    "nexthops": {
+                        "192.168.154.1": {
+                            "attached": false,
+                            "attached_nexthops": {
+                                "192.168.196.2": {
+                                    "interface": "Port-channel2.100"
+                                },
+                                "192.168.66.2": {
+                                    "interface": "Port-channel2.107"
+                                }
+                            },
+                            "flags": "0x41",
+                            "igp_cost": 3,
+                            "igp_preference": 110,
+                            "igp_route_type": 0,
+                            "labeled": true,
+                            "local": false,
+                            "metric_next_advertise": "never",
+                            "reachable": true,
+                            "refcount": 1,
+                            "resolve_time": "18:37:36",
+                            "rib_route": "192.168.154.1/32",
+                            "rnh_epoch": 1
+                        }
+                    },
+                    "trigger_delay_critical_ms": 3000,
+                    "trigger_delay_non_critical_ms": 10000
+                },
+                "ipv6 unicast": {
+                    "nexthops": {
+                        "2001:db8:400::3:1": {
+                            "attached": false,
+                            "attached_nexthops": {
+                                "fe80::6e9c:edff:fe4d:ff41": {
+                                    "interface": "Port-channel2.100"
+                                }
+                            },
+                            "flags": "0x1",
+                            "igp_cost": 2,
+                            "igp_preference": 110,
+                            "igp_route_type": 0,
+                            "labeled": false,
+                            "local": false,
+                            "metric_next_advertise": "never",
+                            "reachable": true,
+                            "refcount": 1,
+                            "resolve_time": "18:37:36",
+                            "rib_route": "2001:db8:400::3:1/128",
+                            "rnh_epoch": 1
+                        }
+                    },
+                    "trigger_delay_critical_ms": 3000,
+                    "trigger_delay_non_critical_ms": 10000
+                },
+                "vpnv4 unicast": {
+                    "trigger_delay_critical_ms": 3000,
+                    "trigger_delay_non_critical_ms": 10000
+                },
+                "vpnv6 unicast": {
+                    "trigger_delay_critical_ms": 3000,
+                    "trigger_delay_non_critical_ms": 10000
+                }
+            }
+        }
+    }
+}
