@@ -9,13 +9,62 @@ from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.utils import canonical_interface_name
 
-# Section header: "Interface - Group N (version V)" or "Interface - Group N"
+
+class PreemptionDelay(TypedDict):
+    """Schema for preemption delay values."""
+
+    minimum: NotRequired[int]
+    reload: NotRequired[int]
+    sync: NotRequired[int]
+
+
+class TrackObjectEntry(TypedDict):
+    """Schema for a tracked object."""
+
+    id: int
+    state: str
+
+
+class HsrpGroupEntry(TypedDict):
+    """Schema for a single HSRP group entry."""
+
+    state: str
+    hello_time: int
+    hold_time: int
+    preemption: bool
+    priority: int
+    version: NotRequired[int]
+    state_changes: NotRequired[int]
+    last_state_change: NotRequired[str]
+    track_object: NotRequired[TrackObjectEntry]
+    virtual_ip: NotRequired[str]
+    active_virtual_mac: NotRequired[str]
+    local_virtual_mac: NotRequired[str]
+    authentication: NotRequired[str]
+    auth_key_chain: NotRequired[str]
+    preemption_delay: NotRequired[PreemptionDelay]
+    active_router: NotRequired[str]
+    standby_router: NotRequired[str]
+    configured_priority: NotRequired[int]
+    group_name: NotRequired[str]
+
+
+class HsrpInterfaceEntry(TypedDict):
+    """Schema for HSRP groups under a single interface."""
+
+    groups: dict[str, HsrpGroupEntry]
+
+
+class ShowStandbyAllResult(TypedDict):
+    """Schema for 'show standby all' parsed output."""
+
+    interfaces: dict[str, HsrpInterfaceEntry]
+
+
 _SECTION_HEADER_RE = re.compile(
     r"^(?P<interface>\S+)\s+-\s+Group\s+(?P<group>\d+)"
     r"(?:\s+\(version\s+(?P<version>\d+)\))?\s*$"
 )
-
-# Individual field patterns for lines within a section
 _STATE_RE = re.compile(r"^\s*State\s+is\s+(?P<state>\S+)")
 _STATE_CHANGES_RE = re.compile(
     r"^\s*(?P<count>\d+)\s+state\s+change"
@@ -50,53 +99,6 @@ _PREEMPT_DELAY_RELOAD_RE = re.compile(r"reload\s+(?P<reload>\d+)")
 _PREEMPT_DELAY_SYNC_RE = re.compile(r"sync\s+(?P<sync>\d+)")
 
 
-class PreemptionDelay(TypedDict):
-    """Schema for preemption delay values."""
-
-    minimum: NotRequired[int]
-    reload: NotRequired[int]
-    sync: NotRequired[int]
-
-
-class TrackObject(TypedDict):
-    """Schema for a tracked object."""
-
-    id: int
-    state: str
-
-
-class HsrpGroupDetail(TypedDict):
-    """Schema for a single HSRP group detail entry."""
-
-    interface: str
-    group: int
-    version: NotRequired[int]
-    state: str
-    state_changes: NotRequired[int]
-    last_state_change: NotRequired[str]
-    track_object: NotRequired[TrackObject]
-    virtual_ip: NotRequired[str]
-    active_virtual_mac: NotRequired[str]
-    local_virtual_mac: NotRequired[str]
-    hello_time: int
-    hold_time: int
-    authentication: NotRequired[str]
-    auth_key_chain: NotRequired[str]
-    preemption: bool
-    preemption_delay: NotRequired[PreemptionDelay]
-    active_router: NotRequired[str]
-    standby_router: NotRequired[str]
-    priority: int
-    configured_priority: NotRequired[int]
-    group_name: NotRequired[str]
-
-
-class ShowStandbyAllResult(TypedDict):
-    """Schema for 'show standby all' parsed output."""
-
-    groups: list[HsrpGroupDetail]
-
-
 def _parse_preemption_delays(delay_str: str) -> PreemptionDelay:
     """Parse preemption delay values from the delay portion of the line."""
     delay: PreemptionDelay = {}
@@ -110,27 +112,27 @@ def _parse_preemption_delays(delay_str: str) -> PreemptionDelay:
 
 
 def _extract_router_address(value: str) -> str | None:
-    """Extract router IP or 'local' from active/standby router line value."""
-    value = value.strip()
-    if value.lower() in ("unknown", ""):
+    """Extract router IP or 'local' from active or standby router values."""
+    candidate = value.strip()
+    if candidate.lower() in {"", "unknown"}:
         return None
-    # Extract IP before any comma (handles "192.168.1.2, priority 100 ...")
-    return value.split(",")[0].strip()
+    return candidate.split(",", maxsplit=1)[0].strip()
 
 
-def _handle_state(entry: HsrpGroupDetail, match: re.Match[str]) -> None:
-    """Handle state and state-change lines."""
+def _handle_state(entry: HsrpGroupEntry, match: re.Match[str]) -> None:
+    """Handle state line."""
     entry["state"] = match.group("state")
 
 
-def _handle_state_changes(entry: HsrpGroupDetail, match: re.Match[str]) -> None:
-    """Handle state change count and last change timestamp."""
+def _handle_state_changes(entry: HsrpGroupEntry, match: re.Match[str]) -> None:
+    """Handle state changes line."""
     entry["state_changes"] = int(match.group("count"))
-    if match.group("last_change"):
-        entry["last_state_change"] = match.group("last_change")
+    last_change = match.group("last_change")
+    if last_change:
+        entry["last_state_change"] = last_change
 
 
-def _handle_track(entry: HsrpGroupDetail, match: re.Match[str]) -> None:
+def _handle_track(entry: HsrpGroupEntry, match: re.Match[str]) -> None:
     """Handle tracked object line."""
     entry["track_object"] = {
         "id": int(match.group("id")),
@@ -138,78 +140,79 @@ def _handle_track(entry: HsrpGroupDetail, match: re.Match[str]) -> None:
     }
 
 
-def _handle_virtual_ip(entry: HsrpGroupDetail, match: re.Match[str]) -> None:
-    """Handle virtual IP address line."""
-    vip = match.group("ip")
-    if vip.lower() != "unknown":
-        entry["virtual_ip"] = vip
+def _handle_virtual_ip(entry: HsrpGroupEntry, match: re.Match[str]) -> None:
+    """Handle virtual IP line."""
+    virtual_ip = match.group("ip")
+    if virtual_ip.lower() != "unknown":
+        entry["virtual_ip"] = virtual_ip
 
 
-def _handle_active_mac(entry: HsrpGroupDetail, match: re.Match[str]) -> None:
-    """Handle active virtual MAC address line."""
+def _handle_active_mac(entry: HsrpGroupEntry, match: re.Match[str]) -> None:
+    """Handle active MAC line."""
     mac = match.group("mac")
     if mac.lower() != "unknown":
         entry["active_virtual_mac"] = mac
 
 
-def _handle_local_mac(entry: HsrpGroupDetail, match: re.Match[str]) -> None:
-    """Handle local virtual MAC address line."""
+def _handle_local_mac(entry: HsrpGroupEntry, match: re.Match[str]) -> None:
+    """Handle local MAC line."""
     entry["local_virtual_mac"] = match.group("mac")
 
 
-def _handle_hello(entry: HsrpGroupDetail, match: re.Match[str]) -> None:
-    """Handle hello/hold timer line."""
+def _handle_hello(entry: HsrpGroupEntry, match: re.Match[str]) -> None:
+    """Handle hello and hold timers."""
     entry["hello_time"] = int(match.group("hello"))
     entry["hold_time"] = int(match.group("hold"))
 
 
-def _handle_auth(entry: HsrpGroupDetail, match: re.Match[str]) -> None:
+def _handle_auth(entry: HsrpGroupEntry, match: re.Match[str]) -> None:
     """Handle authentication line."""
     entry["authentication"] = match.group("auth_type")
-    if match.group("key_chain"):
-        entry["auth_key_chain"] = match.group("key_chain")
+    key_chain = match.group("key_chain")
+    if key_chain:
+        entry["auth_key_chain"] = key_chain
 
 
-def _handle_preemption(entry: HsrpGroupDetail, match: re.Match[str]) -> None:
-    """Handle preemption line with optional delays."""
+def _handle_preemption(entry: HsrpGroupEntry, match: re.Match[str]) -> None:
+    """Handle preemption line."""
     entry["preemption"] = match.group("preempt") == "enabled"
-    if match.group("delays"):
-        delays = _parse_preemption_delays(match.group("delays"))
-        if delays:
-            entry["preemption_delay"] = delays
+    delays = match.group("delays")
+    if delays:
+        parsed_delays = _parse_preemption_delays(delays)
+        if parsed_delays:
+            entry["preemption_delay"] = parsed_delays
 
 
-def _handle_active_router(entry: HsrpGroupDetail, match: re.Match[str]) -> None:
+def _handle_active_router(entry: HsrpGroupEntry, match: re.Match[str]) -> None:
     """Handle active router line."""
-    addr = _extract_router_address(match.group("active"))
-    if addr is not None:
-        entry["active_router"] = addr
+    active_router = _extract_router_address(match.group("active"))
+    if active_router is not None:
+        entry["active_router"] = active_router
 
 
-def _handle_standby_router(entry: HsrpGroupDetail, match: re.Match[str]) -> None:
+def _handle_standby_router(entry: HsrpGroupEntry, match: re.Match[str]) -> None:
     """Handle standby router line."""
-    addr = _extract_router_address(match.group("standby"))
-    if addr is not None:
-        entry["standby_router"] = addr
+    standby_router = _extract_router_address(match.group("standby"))
+    if standby_router is not None:
+        entry["standby_router"] = standby_router
 
 
-def _handle_priority(entry: HsrpGroupDetail, match: re.Match[str]) -> None:
+def _handle_priority(entry: HsrpGroupEntry, match: re.Match[str]) -> None:
     """Handle priority line."""
     entry["priority"] = int(match.group("priority"))
-    if match.group("configured"):
-        entry["configured_priority"] = int(match.group("configured"))
+    configured = match.group("configured")
+    if configured:
+        entry["configured_priority"] = int(configured)
 
 
-def _handle_group_name(entry: HsrpGroupDetail, match: re.Match[str]) -> None:
+def _handle_group_name(entry: HsrpGroupEntry, match: re.Match[str]) -> None:
     """Handle group name line."""
     entry["group_name"] = match.group("name")
 
 
-# Ordered list of (pattern, handler) tuples for section line matching
-_FIELD_HANDLERS: tuple[
-    tuple[re.Pattern[str], Callable[[HsrpGroupDetail, re.Match[str]], None]],
-    ...,
-] = (
+_FieldHandler = Callable[[HsrpGroupEntry, re.Match[str]], None]
+
+_FIELD_HANDLERS: tuple[tuple[re.Pattern[str], _FieldHandler], ...] = (
     (_STATE_RE, _handle_state),
     (_STATE_CHANGES_RE, _handle_state_changes),
     (_TRACK_RE, _handle_track),
@@ -228,14 +231,13 @@ _FIELD_HANDLERS: tuple[
 
 def _parse_section_lines(
     interface: str,
-    group: int,
+    group: str,
     version: int | None,
     lines: list[str],
-) -> HsrpGroupDetail:
-    """Parse the detail lines of a single HSRP group section."""
-    entry: HsrpGroupDetail = {
-        "interface": interface,
-        "group": group,
+    interfaces: dict[str, HsrpInterfaceEntry],
+) -> None:
+    """Parse a single HSRP section into the nested result structure."""
+    entry: HsrpGroupEntry = {
         "state": "",
         "hello_time": 0,
         "hold_time": 0,
@@ -251,19 +253,15 @@ def _parse_section_lines(
                 handler(entry, match)
                 break
 
-    return entry
+    interface_entry = interfaces.setdefault(interface, HsrpInterfaceEntry(groups={}))
+    interface_entry["groups"][group] = entry
 
 
-def _split_sections(
-    output: str,
-) -> list[tuple[str, int, int | None, list[str]]]:
-    """Split raw output into sections by HSRP group header lines.
-
-    Returns a list of (interface, group, version, detail_lines) tuples.
-    """
-    sections: list[tuple[str, int, int | None, list[str]]] = []
+def _split_sections(output: str) -> list[tuple[str, str, int | None, list[str]]]:
+    """Split raw output into interface/group sections."""
+    sections: list[tuple[str, str, int | None, list[str]]] = []
     current_interface: str | None = None
-    current_group: int | None = None
+    current_group: str | None = None
     current_version: int | None = None
     current_lines: list[str] = []
 
@@ -274,16 +272,18 @@ def _split_sections(
                 sections.append(
                     (current_interface, current_group, current_version, current_lines)
                 )
-            raw_intf = header_match.group("interface")
-            current_interface = canonical_interface_name(raw_intf, os=OS.CISCO_IOSXE)
-            current_group = int(header_match.group("group"))
-            version_str = header_match.group("version")
-            current_version = int(version_str) if version_str is not None else None
+            current_interface = canonical_interface_name(
+                header_match.group("interface"), os=OS.CISCO_IOSXE
+            )
+            current_group = header_match.group("group")
+            version = header_match.group("version")
+            current_version = int(version) if version is not None else None
             current_lines = []
-        elif current_interface is not None:
+            continue
+
+        if current_interface is not None:
             current_lines.append(line)
 
-    # Flush last section
     if current_interface is not None and current_group is not None:
         sections.append(
             (current_interface, current_group, current_version, current_lines)
@@ -299,7 +299,6 @@ class ShowStandbyAllParser(BaseParser[ShowStandbyAllResult]):
     Example output:
         Port-channel1 - Group 0 (version 2)
           State is Active
-            8 state changes, last state change 1w0d
           Virtual IP address is 192.168.1.254
           Priority 100 (default 100)
     """
@@ -312,19 +311,18 @@ class ShowStandbyAllParser(BaseParser[ShowStandbyAllResult]):
             output: Raw CLI output from 'show standby all' command.
 
         Returns:
-            Parsed HSRP group details.
+            Parsed HSRP data keyed by interface, then group.
 
         Raises:
             ValueError: If no HSRP groups are found in the output.
         """
         sections = _split_sections(output)
-        groups = [
-            _parse_section_lines(intf, grp, ver, lines)
-            for intf, grp, ver, lines in sections
-        ]
-
-        if not groups:
+        if not sections:
             msg = "No HSRP groups found in output"
             raise ValueError(msg)
 
-        return {"groups": groups}
+        interfaces: dict[str, HsrpInterfaceEntry] = {}
+        for interface, group, version, lines in sections:
+            _parse_section_lines(interface, group, version, lines, interfaces)
+
+        return {"interfaces": interfaces}
