@@ -1,4 +1,4 @@
-"""Parser for 'show clock' command on IOS-XE and NX-OS."""
+"""Parser for 'show clock' command on IOS-XE, IOS, and NX-OS."""
 
 import re
 from typing import TypedDict
@@ -20,6 +20,7 @@ class ShowClockResult(TypedDict):
 
 
 @register(OS.CISCO_NXOS, "show clock")
+@register(OS.CISCO_IOS, "show clock")
 @register(OS.CISCO_IOSXE, "show clock")
 class ShowClockParser(BaseParser[ShowClockResult]):
     """Parser for 'show clock' command.
