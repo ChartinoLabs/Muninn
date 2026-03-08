@@ -8,10 +8,9 @@ from muninn.parser import BaseParser
 from muninn.registry import register
 
 
-class SubmoduleEntry(TypedDict):
-    """Schema for a single sub-module entry."""
+class SubmoduleDetails(TypedDict):
+    """Schema for a single sub-module's details."""
 
-    sub_module: str
     model: str
     serial: str
     hw_ver: str
@@ -21,7 +20,7 @@ class SubmoduleEntry(TypedDict):
 class ShowModuleSubmoduleResult(TypedDict):
     """Schema for 'show module submodule' parsed output."""
 
-    submodules: dict[str, list[SubmoduleEntry]]
+    submodules: dict[str, dict[str, SubmoduleDetails]]
 
 
 @register(OS.CISCO_IOS, "show module submodule")
@@ -61,7 +60,7 @@ class ShowModuleSubmoduleParser(BaseParser[ShowModuleSubmoduleResult]):
         Raises:
             ValueError: If the output cannot be parsed.
         """
-        submodules: dict[str, list[SubmoduleEntry]] = {}
+        submodules: dict[str, dict[str, SubmoduleDetails]] = {}
 
         for line in output.splitlines():
             line = line.strip()
@@ -74,14 +73,14 @@ class ShowModuleSubmoduleParser(BaseParser[ShowModuleSubmoduleResult]):
             match = cls._ROW_PATTERN.match(line)
             if match:
                 mod = match.group("mod")
-                entry = SubmoduleEntry(
-                    sub_module=match.group("sub_module").strip(),
+                sub_module = match.group("sub_module").strip()
+                entry = SubmoduleDetails(
                     model=match.group("model"),
                     serial=match.group("serial"),
                     hw_ver=match.group("hw_ver"),
                     status=match.group("status"),
                 )
-                submodules.setdefault(mod, []).append(entry)
+                submodules.setdefault(mod, {})[sub_module] = entry
 
         if not submodules:
             msg = "No sub-module entries found in output"
