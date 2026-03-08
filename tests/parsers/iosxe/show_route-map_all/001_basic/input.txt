@@ -1,0 +1,11 @@
+route-map RM_BGP_IN, permit, sequence 10
+  Match clauses:
+    ip address (access-lists): AL_BGP_IN
+  Set clauses:
+    local-preference 200
+  Policy routing matches: 0 packets, 0 bytes
+route-map RM_BGP_OUT, deny, sequence 10
+  Match clauses:
+    ip address prefix-lists: PL_DEFAULT
+  Set clauses:
+  Policy routing matches: 0 packets, 0 bytes

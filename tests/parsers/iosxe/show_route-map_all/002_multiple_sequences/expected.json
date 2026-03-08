@@ -1,0 +1,40 @@
+{
+    "route_maps": {
+        "RM_OSPF_REDISTRIBUTE": {
+            "10": {
+                "action": "permit",
+                "match_clauses": [
+                    "ip address prefix-lists: PL_CONNECTED",
+                    "route-type: external type 1"
+                ],
+                "policy_routing_bytes": 567890,
+                "policy_routing_packets": 1234,
+                "sequence": 10,
+                "set_clauses": [
+                    "metric 100",
+                    "metric-type type-1",
+                    "tag 65000"
+                ]
+            },
+            "20": {
+                "action": "permit",
+                "match_clauses": [
+                    "ip address prefix-lists: PL_STATIC"
+                ],
+                "policy_routing_bytes": 0,
+                "policy_routing_packets": 0,
+                "sequence": 20,
+                "set_clauses": [
+                    "metric 200",
+                    "metric-type type-2"
+                ]
+            },
+            "30": {
+                "action": "deny",
+                "policy_routing_bytes": 0,
+                "policy_routing_packets": 0,
+                "sequence": 30
+            }
+        }
+    }
+}
