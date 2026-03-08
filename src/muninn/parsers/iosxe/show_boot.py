@@ -310,11 +310,49 @@ def _is_skip_line(line: str) -> bool:
     return bool(line.endswith("#"))
 
 
-def _is_section_header(line: str) -> bool:
-    """Return True if line is a section header to skip."""
+def _should_skip(line: str) -> bool:
+    """Return True if line should be skipped entirely."""
+    if not line or _is_skip_line(line):
+        return True
     if _CURRENT_BOOT_HEADER.match(line):
         return True
     return bool(_NEXT_RELOAD_HEADER.match(line))
+
+
+def _ensure_key(switches: dict[str, BootEntry], key: str) -> None:
+    """Ensure a key exists in switches dict."""
+    if key not in switches:
+        switches[key] = BootEntry()
+
+
+def _process_line(
+    line: str,
+    switches: dict[str, BootEntry],
+    current_key: str,
+    is_path_list: bool,
+) -> tuple[str, bool]:
+    """Process a single parsed line, updating switches in place.
+
+    Returns:
+        Tuple of (current_key, is_path_list) after processing.
+    """
+    match = _SWITCH_HEADER.match(line)
+    if match:
+        current_key = match.group("num")
+        _ensure_key(switches, current_key)
+        return current_key, is_path_list
+
+    if _PL_DETECT.match(line):
+        is_path_list = True
+
+    _ensure_key(switches, current_key)
+
+    if is_path_list:
+        _apply_patterns(line, _PL_PATTERNS, switches[current_key])
+    else:
+        current_key = _apply_var_patterns(line, switches, current_key)
+
+    return current_key, is_path_list
 
 
 @register(OS.CISCO_IOSXE, "show boot")
@@ -356,29 +394,12 @@ class ShowBootParser(BaseParser[ShowBootResult]):
 
         for line in output.splitlines():
             line = line.strip()
-            if not line or _is_skip_line(line):
+            if _should_skip(line):
                 continue
 
-            match = _SWITCH_HEADER.match(line)
-            if match:
-                current_key = match.group("num")
-                if current_key not in switches:
-                    switches[current_key] = BootEntry()
-                continue
-
-            if _is_section_header(line):
-                continue
-
-            if _PL_DETECT.match(line):
-                is_path_list = True
-
-            if current_key not in switches:
-                switches[current_key] = BootEntry()
-
-            if is_path_list:
-                _apply_patterns(line, _PL_PATTERNS, switches[current_key])
-            else:
-                current_key = _apply_var_patterns(line, switches, current_key)
+            current_key, is_path_list = _process_line(
+                line, switches, current_key, is_path_list
+            )
 
         if not switches:
             msg = "No boot information found in output"
