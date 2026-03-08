@@ -23,10 +23,16 @@ class VrrpBriefEntry(TypedDict):
     address_family: NotRequired[str]
 
 
+class VrrpInterfaceEntry(TypedDict):
+    """Schema for VRRP groups under a single interface."""
+
+    groups: dict[str, VrrpBriefEntry]
+
+
 class ShowVrrpBriefResult(TypedDict):
     """Schema for 'show vrrp brief' parsed output."""
 
-    entries: dict[str, VrrpBriefEntry]
+    interfaces: dict[str, VrrpInterfaceEntry]
 
 
 def _parse_owner(value: str) -> bool:
@@ -105,7 +111,7 @@ class ShowVrrpBriefParser(BaseParser[ShowVrrpBriefResult]):
             output: Raw CLI output from 'show vrrp brief' command.
 
         Returns:
-            Parsed VRRP brief data keyed by 'interface/group'.
+            Parsed VRRP brief data keyed by interface then group.
 
         Raises:
             ValueError: If no VRRP entries found in output.
@@ -113,7 +119,7 @@ class ShowVrrpBriefParser(BaseParser[ShowVrrpBriefResult]):
         is_v3 = _VRRPV3_HEADER_PATTERN.search(output) is not None
         row_pattern = _VRRPV3_ROW_PATTERN if is_v3 else _VRRPV2_ROW_PATTERN
 
-        entries: dict[str, VrrpBriefEntry] = {}
+        interfaces: dict[str, VrrpInterfaceEntry] = {}
         for line in output.splitlines():
             if not line.strip() or _HEADER_PATTERN.match(line):
                 continue
@@ -126,7 +132,6 @@ class ShowVrrpBriefParser(BaseParser[ShowVrrpBriefResult]):
                 match.group("interface"), os=OS.CISCO_IOSXE
             )
             group = int(match.group("group"))
-            key = f"{interface}/{group}"
 
             entry = VrrpBriefEntry(
                 group=group,
@@ -144,10 +149,13 @@ class ShowVrrpBriefParser(BaseParser[ShowVrrpBriefResult]):
             if is_v3:
                 entry["address_family"] = match.group("af")
 
-            entries[key] = entry
+            if interface not in interfaces:
+                interfaces[interface] = VrrpInterfaceEntry(groups={})
 
-        if not entries:
+            interfaces[interface]["groups"][str(group)] = entry
+
+        if not interfaces:
             msg = "No VRRP entries found in output"
             raise ValueError(msg)
 
-        return ShowVrrpBriefResult(entries=entries)
+        return ShowVrrpBriefResult(interfaces=interfaces)
