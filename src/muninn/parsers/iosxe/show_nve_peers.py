@@ -8,12 +8,10 @@ from muninn.parser import BaseParser
 from muninn.registry import register
 
 
-class NvePeerEntry(TypedDict):
-    """Schema for a single NVE peer entry."""
+class NvePeerVniEntry(TypedDict):
+    """Schema for a single NVE peer VNI entry."""
 
-    vni: int
     type: str
-    peer_ip: str
     rmac_num_rt: str
     evni: int
     state: str
@@ -24,7 +22,7 @@ class NvePeerEntry(TypedDict):
 class ShowNvePeersResult(TypedDict):
     """Schema for 'show nve peers' parsed output."""
 
-    peers: dict[str, list[NvePeerEntry]]
+    peers: dict[str, dict[str, dict[str, NvePeerVniEntry]]]
 
 
 @register(OS.CISCO_IOSXE, "show nve peers")
@@ -57,12 +55,12 @@ class ShowNvePeersParser(BaseParser[ShowNvePeersResult]):
             output: Raw CLI output from 'show nve peers' command.
 
         Returns:
-            Parsed data with peers keyed by interface name.
+            Parsed data keyed by interface name, peer IP, and VNI.
 
         Raises:
             ValueError: If the output cannot be parsed.
         """
-        peers: dict[str, list[NvePeerEntry]] = {}
+        peers: dict[str, dict[str, dict[str, NvePeerVniEntry]]] = {}
 
         for line in output.splitlines():
             line = line.strip()
@@ -74,10 +72,11 @@ class ShowNvePeersParser(BaseParser[ShowNvePeersResult]):
                 interface = match.group("interface")
                 flags = match.group("flags")
 
-                entry: NvePeerEntry = {
-                    "vni": int(match.group("vni")),
+                peer_ip = match.group("peer_ip")
+                vni = match.group("vni")
+
+                entry: NvePeerVniEntry = {
                     "type": match.group("type"),
-                    "peer_ip": match.group("peer_ip"),
                     "rmac_num_rt": match.group("rmac_num_rt"),
                     "evni": int(match.group("evni")),
                     "state": match.group("state"),
@@ -88,9 +87,11 @@ class ShowNvePeersParser(BaseParser[ShowNvePeersResult]):
                     entry["flags"] = flags
 
                 if interface not in peers:
-                    peers[interface] = []
+                    peers[interface] = {}
+                if peer_ip not in peers[interface]:
+                    peers[interface][peer_ip] = {}
 
-                peers[interface].append(entry)
+                peers[interface][peer_ip][vni] = entry
 
         if not peers:
             msg = "No NVE peers found in output"
