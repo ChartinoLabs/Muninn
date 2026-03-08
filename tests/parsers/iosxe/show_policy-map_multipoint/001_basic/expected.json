@@ -1,0 +1,96 @@
+{
+    "interfaces": {
+        "Tunnel1": {
+            "21.50.50.122": {
+                "service_policy": {
+                    "output": {
+                        "policy_name": {
+                            "spoke1_group": {
+                                "class_map": {
+                                    "abc": {
+                                        "bytes": 27520,
+                                        "match": [
+                                            "protocol ipv6-icmp"
+                                        ],
+                                        "match_evaluation": "match-any",
+                                        "packets": 215,
+                                        "qos_set": {
+                                            "dscp": {
+                                                "af43": {
+                                                    "marker_statistics": "Disabled"
+                                                }
+                                            }
+                                        },
+                                        "rate": {
+                                            "drop_rate_bps": 0,
+                                            "interval": 5,
+                                            "offered_rate_bps": 0
+                                        }
+                                    },
+                                    "class-default": {
+                                        "bytes": 16129,
+                                        "match": [
+                                            "any"
+                                        ],
+                                        "match_evaluation": "match-any",
+                                        "packets": 138,
+                                        "rate": {
+                                            "drop_rate_bps": 0,
+                                            "interval": 5,
+                                            "offered_rate_bps": 0
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "22.51.51.123": {
+                "service_policy": {
+                    "output": {
+                        "policy_name": {
+                            "spoke2_group": {
+                                "class_map": {
+                                    "abc": {
+                                        "bytes": 27520,
+                                        "match": [
+                                            "protocol ipv6-icmp"
+                                        ],
+                                        "match_evaluation": "match-any",
+                                        "packets": 215,
+                                        "qos_set": {
+                                            "dscp": {
+                                                "af11": {
+                                                    "marker_statistics": "Disabled"
+                                                }
+                                            }
+                                        },
+                                        "rate": {
+                                            "drop_rate_bps": 0,
+                                            "interval": 5,
+                                            "offered_rate_bps": 0
+                                        }
+                                    },
+                                    "class-default": {
+                                        "bytes": 15309,
+                                        "match": [
+                                            "any"
+                                        ],
+                                        "match_evaluation": "match-any",
+                                        "packets": 131,
+                                        "rate": {
+                                            "drop_rate_bps": 0,
+                                            "interval": 5,
+                                            "offered_rate_bps": 0
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
