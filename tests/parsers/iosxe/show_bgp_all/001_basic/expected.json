@@ -1,0 +1,101 @@
+{
+    "address_families": {
+        "L2VPN E-VPN": {
+            "route_distinguishers": {
+                "65535:1": {
+                    "default_vrf": "evpn1",
+                    "rd": "65535:1",
+                    "routes": {
+                        "[5][65535:1][0][24][10.1.1.0]/17": {
+                            "paths": [
+                                {
+                                    "as_path": "",
+                                    "metric": 0,
+                                    "next_hop": "0.0.0.0",
+                                    "origin": "?",
+                                    "path_type": "",
+                                    "status_codes": "*>",
+                                    "weight": 32768
+                                }
+                            ]
+                        },
+                        "[5][65535:1][0][24][10.36.3.0]/17": {
+                            "paths": [
+                                {
+                                    "as_path": "",
+                                    "metric": 0,
+                                    "next_hop": "0.0.0.0",
+                                    "origin": "?",
+                                    "path_type": "",
+                                    "status_codes": "*>",
+                                    "weight": 32768
+                                },
+                                {
+                                    "as_path": "65530",
+                                    "locprf": 0,
+                                    "next_hop": "10.36.3.254",
+                                    "origin": "?",
+                                    "path_type": "",
+                                    "status_codes": "*",
+                                    "weight": 0
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "router_id": "10.21.33.33",
+            "table_version": 4
+        },
+        "VPNv4 Unicast": {
+            "route_distinguishers": {
+                "65535:1": {
+                    "af_private_import_to_af": "L2VPN E-VPN",
+                    "default_vrf": "evpn1",
+                    "pfx_count": 2,
+                    "pfx_limit": 1000,
+                    "rd": "65535:1",
+                    "routes": {
+                        "10.1.1.0/24": {
+                            "paths": [
+                                {
+                                    "as_path": "",
+                                    "metric": 0,
+                                    "next_hop": "0.0.0.0",
+                                    "origin": "?",
+                                    "path_type": "",
+                                    "status_codes": "*>",
+                                    "weight": 32768
+                                }
+                            ]
+                        },
+                        "10.36.3.0/24": {
+                            "paths": [
+                                {
+                                    "as_path": "65530",
+                                    "locprf": 0,
+                                    "next_hop": "10.36.3.254",
+                                    "origin": "?",
+                                    "path_type": "",
+                                    "status_codes": "*",
+                                    "weight": 0
+                                },
+                                {
+                                    "as_path": "",
+                                    "metric": 0,
+                                    "next_hop": "0.0.0.0",
+                                    "origin": "?",
+                                    "path_type": "",
+                                    "status_codes": "*>",
+                                    "weight": 32768
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "router_id": "10.21.33.33",
+            "table_version": 5
+        }
+    }
+}
