@@ -6,6 +6,7 @@ from typing import NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class PeerTemplateEntry(TypedDict):
@@ -45,6 +46,7 @@ _MEMBERS_RE = re.compile(r"^Members of peer-template \S+:")
 _MEMBER_LINE_RE = re.compile(r"^\S+:\s+(\S+)")
 
 _INT_FIELDS = frozenset({"remote_as", "ebgp_multihop"})
+_INTERFACE_FIELDS = frozenset({"update_source"})
 
 _STR_FIELD_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
     (_REMOTE_AS_RE, "remote_as"),
@@ -64,14 +66,22 @@ _BOOL_FLAG_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
 )
 
 
+def _convert_field(field: str, value: str) -> str | int:
+    """Convert a field value to its appropriate type."""
+    if field in _INT_FIELDS:
+        return int(value)
+    if field in _INTERFACE_FIELDS:
+        return canonical_interface_name(value, os=OS.CISCO_NXOS)
+    return value
+
+
 def _apply_str_fields(lines: list[str], entry: PeerTemplateEntry) -> None:
     """Extract string and integer fields using capture-group patterns."""
     for pattern, field in _STR_FIELD_PATTERNS:
         for line in lines:
             m = pattern.match(line)
             if m:
-                value = m.group(1)
-                entry[field] = int(value) if field in _INT_FIELDS else value  # type: ignore[literal-required]
+                entry[field] = _convert_field(field, m.group(1))  # type: ignore[literal-required]
                 break
 
 
