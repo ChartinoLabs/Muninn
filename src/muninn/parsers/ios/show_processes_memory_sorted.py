@@ -16,7 +16,7 @@ class PoolSummary(TypedDict):
     free: int
 
 
-class ProcessEntry(TypedDict):
+class ProcessAttributes(TypedDict):
     """Schema for a single process memory entry."""
 
     tty: int
@@ -25,7 +25,6 @@ class ProcessEntry(TypedDict):
     holding: int
     getbufs: int
     retbufs: int
-    name: str
 
 
 class ShowProcessesMemorySortedResult(TypedDict):
@@ -36,7 +35,7 @@ class ShowProcessesMemorySortedResult(TypedDict):
     and a processes dict keyed by PID string.
     """
 
-    processes: NotRequired[dict[str, list[ProcessEntry]]]
+    processes: NotRequired[dict[str, dict[str, ProcessAttributes]]]
 
 
 # Pool summary line: "Processor Pool Total: X Used: Y Free: Z"
@@ -84,26 +83,26 @@ def _parse_pool_lines(lines: list[str]) -> dict[str, PoolSummary]:
 
 def _parse_process_lines(
     lines: list[str],
-) -> dict[str, list[ProcessEntry]]:
+) -> dict[str, dict[str, ProcessAttributes]]:
     """Parse process table lines from the output."""
-    processes: dict[str, list[ProcessEntry]] = {}
+    processes: dict[str, dict[str, ProcessAttributes]] = {}
     for line in lines:
         m = _PROCESS_RE.match(line)
         if not m:
             continue
         pid = m.group(1)
-        entry: ProcessEntry = {
+        process_name = m.group(8)
+        entry: ProcessAttributes = {
             "tty": int(m.group(2)),
             "allocated": int(m.group(3)),
             "freed": int(m.group(4)),
             "holding": int(m.group(5)),
             "getbufs": int(m.group(6)),
             "retbufs": int(m.group(7)),
-            "name": m.group(8),
         }
         if pid not in processes:
-            processes[pid] = []
-        processes[pid].append(entry)
+            processes[pid] = {}
+        processes[pid][process_name] = entry
     return processes
 
 
