@@ -1,0 +1,73 @@
+{
+    "vrfs": {
+        "Mgmt-vrf": {
+            "address_families": {
+                "ipv4 unicast": {
+                    "flags": "0x0",
+                    "label_allocation_mode": "per-prefix",
+                    "table_id": "0x1"
+                },
+                "ipv6 unicast": {
+                    "flags": "0x0",
+                    "label_allocation_mode": "per-prefix",
+                    "table_id": "0x1E000001"
+                }
+            },
+            "cli_format": "new",
+            "flags": "0x1808",
+            "interfaces": [
+                "GigabitEthernet0/0"
+            ],
+            "vrf_id": 1
+        },
+        "VRF1": {
+            "address_families": {
+                "ipv4 unicast": {
+                    "export_route_targets": [
+                        "RT:100:1",
+                        "RT:200:1"
+                    ],
+                    "flags": "0x2100",
+                    "global_export_route_map": "export_to_global_map",
+                    "global_export_route_map_prefix_limit": 1000,
+                    "import_route_map": "import_from_global_map",
+                    "import_route_map_prefix_limit": 1000,
+                    "import_route_targets": [
+                        "RT:100:1",
+                        "RT:200:1"
+                    ],
+                    "label_allocation_mode": "per-prefix",
+                    "route_current_count": 0,
+                    "route_warning_limit": 10000,
+                    "table_id": "0x1"
+                },
+                "ipv6 unicast": {
+                    "export_route_targets": [
+                        "RT:100:1",
+                        "RT:300:1"
+                    ],
+                    "flags": "0x100",
+                    "global_export_route_map": "export_to_global_map",
+                    "global_export_route_map_prefix_limit": 1000,
+                    "import_route_targets": [
+                        "RT:200:1",
+                        "RT:400:1"
+                    ],
+                    "label_allocation_mode": "per-prefix",
+                    "route_current_count": 1,
+                    "route_limit": 10000,
+                    "route_warning_limit": 7000,
+                    "route_warning_percent": 70,
+                    "table_id": "0x1E000001"
+                }
+            },
+            "cli_format": "new",
+            "default_rd": "100:1",
+            "flags": "0x180C",
+            "interfaces": [
+                "GigabitEthernet0/0"
+            ],
+            "vrf_id": 1
+        }
+    }
+}

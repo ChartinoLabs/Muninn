@@ -1,0 +1,65 @@
+{
+    "vrfs": {
+        "GENIE-BACKUP": {
+            "address_families": {
+                "ipv4 unicast": {
+                    "export_route_targets": [
+                        "RT:50998:1",
+                        "RT:50998:106"
+                    ],
+                    "flags": "0x0",
+                    "import_route_targets": [
+                        "RT:50998:106",
+                        "RT:50998:4094"
+                    ],
+                    "label_allocation_mode": "per-prefix",
+                    "table_id": "0xC"
+                }
+            },
+            "cli_format": "new",
+            "default_rd": "50998:106",
+            "description": "VPN for CHRH (Backup network)",
+            "flags": "0x180C",
+            "interfaces": [
+                "BD106"
+            ],
+            "vrf_id": 12
+        },
+        "GENIE-LAB": {
+            "address_families": {
+                "ipv4 unicast": {
+                    "export_route_targets": [
+                        "RT:50998:11"
+                    ],
+                    "flags": "0x0",
+                    "import_route_targets": [
+                        "RT:50998:11"
+                    ],
+                    "label_allocation_mode": "per-prefix",
+                    "table_id": "0x4C"
+                },
+                "ipv6 unicast": {
+                    "export_route_targets": [
+                        "RT:50998:11"
+                    ],
+                    "flags": "0x0",
+                    "import_route_targets": [
+                        "RT:50998:11"
+                    ],
+                    "label_allocation_mode": "per-prefix",
+                    "table_id": "0x1E000003"
+                }
+            },
+            "cli_format": "new",
+            "default_rd": "50998:11",
+            "description": "VPN for Internet Direct Link Out (Internal FW)",
+            "flags": "0x180C",
+            "interfaces": [
+                "TenGigabitEthernet0/1/1.11",
+                "vr92",
+                "vr110"
+            ],
+            "vrf_id": 76
+        }
+    }
+}
