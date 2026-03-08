@@ -51,10 +51,16 @@ class StandbyGroupEntry(TypedDict):
     tracks: NotRequired[list[TrackEntry]]
 
 
+class StandbyInterfaceEntry(TypedDict):
+    """Schema for HSRP groups under a single interface."""
+
+    groups: dict[str, StandbyGroupEntry]
+
+
 class ShowStandbyResult(TypedDict):
     """Schema for 'show standby' parsed output."""
 
-    groups: dict[str, StandbyGroupEntry]
+    interfaces: dict[str, StandbyInterfaceEntry]
 
 
 # Block header: "Vlan50 - Group 50 (version 2)" or "Vlan50 - Group 50"
@@ -178,15 +184,14 @@ def _match_track_line(stripped: str) -> TrackEntry | None:
 
 def _parse_block(
     header: re.Match[str], lines: list[str]
-) -> tuple[str, StandbyGroupEntry]:
+) -> tuple[str, str, StandbyGroupEntry]:
     """Parse a single interface/group block into a StandbyGroupEntry."""
     interface = canonical_interface_name(header.group("interface"), os=OS.CISCO_IOS)
-    group = int(header.group("group"))
-    key = f"{interface}|{group}"
+    group = header.group("group")
 
     entry: dict[str, object] = {
         "interface": interface,
-        "group": group,
+        "group": int(group),
     }
 
     if header.group("version"):
@@ -194,7 +199,18 @@ def _parse_block(
 
     _extract_fields(lines, entry)
 
-    return key, entry  # type: ignore[return-value]
+    return interface, group, entry  # type: ignore[return-value]
+
+
+def _store_group(
+    interfaces: dict[str, StandbyInterfaceEntry],
+    interface: str,
+    group: str,
+    entry: StandbyGroupEntry,
+) -> None:
+    """Store a parsed standby group underneath its interface."""
+    interface_entry = interfaces.setdefault(interface, StandbyInterfaceEntry(groups={}))
+    interface_entry["groups"][group] = entry
 
 
 @dataclass
@@ -416,9 +432,9 @@ class ShowStandbyParser(BaseParser[ShowStandbyResult]):
             msg = "No HSRP standby groups found in output"
             raise ValueError(msg)
 
-        groups: dict[str, StandbyGroupEntry] = {}
+        interfaces: dict[str, StandbyInterfaceEntry] = {}
         for header, lines in blocks:
-            key, entry = _parse_block(header, lines)
-            groups[key] = entry
+            interface, group, entry = _parse_block(header, lines)
+            _store_group(interfaces, interface, group, entry)
 
-        return {"groups": groups}
+        return {"interfaces": interfaces}
