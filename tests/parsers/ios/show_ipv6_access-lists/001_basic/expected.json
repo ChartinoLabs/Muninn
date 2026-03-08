@@ -1,0 +1,70 @@
+{
+    "access_lists": {
+        "OutFilter_IPv6": {
+            "entries": {
+                "110": {
+                    "action": "deny",
+                    "line": "deny ipv6 2001:db8:5254:1000::/35 2001:db8:5254:1000::/35 dscp default",
+                    "sequence": 110
+                },
+                "120": {
+                    "action": "permit",
+                    "line": "permit ipv6 any any",
+                    "matches": 3974749339,
+                    "sequence": 120
+                },
+                "30": {
+                    "action": "permit",
+                    "line": "permit icmp any any mld-query",
+                    "sequence": 30
+                },
+                "50": {
+                    "action": "deny",
+                    "line": "deny 103 any any",
+                    "sequence": 50
+                },
+                "80": {
+                    "action": "permit",
+                    "line": "permit ipv6 any 2001:db8:1d14::/16 log-input",
+                    "sequence": 80
+                }
+            }
+        },
+        "Virtual-Access2.1#427819008151": {
+            "entries": {
+                "1": {
+                    "action": "permit",
+                    "line": "permit tcp host 2001:DB8:1::32 eq bgp host 2001:DB8:2::32 eq 11000",
+                    "sequence": 1
+                },
+                "2": {
+                    "action": "permit",
+                    "line": "permit tcp host 2001:DB8:1::32 eq telnet host 2001:DB8:2::32 eq 11001",
+                    "sequence": 2
+                }
+            },
+            "per_user": true
+        },
+        "inbound": {
+            "entries": {
+                "10": {
+                    "action": "permit",
+                    "line": "permit tcp any any eq bgp",
+                    "matches": 8,
+                    "sequence": 10
+                },
+                "20": {
+                    "action": "permit",
+                    "line": "permit tcp any any eq telnet",
+                    "matches": 15,
+                    "sequence": 20
+                },
+                "30": {
+                    "action": "permit",
+                    "line": "permit udp any any",
+                    "sequence": 30
+                }
+            }
+        }
+    }
+}
