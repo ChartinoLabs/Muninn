@@ -1,7 +1,7 @@
 """Parser for 'show etherchannel summary' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -74,7 +74,7 @@ def _parse_port_channel_status(raw: str) -> tuple[str, str, str]:
     if not match:
         msg = f"Cannot parse port-channel status: {raw}"
         raise ValueError(msg)
-    name = match.group(1)
+    name = canonical_interface_name(match.group(1))
     flags = match.group(2)
     layer = _LAYER_MAP.get(flags[0], flags[0])
     status = _STATUS_MAP.get(flags[1], flags[1])
@@ -140,11 +140,8 @@ def _add_continuation_ports(
 def _validate_required_fields(
     num_channel_groups: int | None,
     num_aggregators: int | None,
-) -> tuple[int, int]:
+) -> None:
     """Validate that required summary fields were found.
-
-    Returns:
-        Tuple of (num_channel_groups, num_aggregators).
 
     Raises:
         ValueError: If required fields are missing.
@@ -157,7 +154,6 @@ def _validate_required_fields(
     if missing:
         msg = f"Missing required fields: {', '.join(missing)}"
         raise ValueError(msg)
-    return num_channel_groups, num_aggregators
 
 
 @register(OS.CISCO_IOS, "show etherchannel summary")
@@ -213,12 +209,10 @@ class ShowEtherchannelSummaryParser(BaseParser[ShowEtherchannelSummaryResult]):
             if current_group is not None and _CONTINUATION_PORT_PATTERN.match(line):
                 _add_continuation_ports(port_channels, current_group, stripped)
 
-        groups, aggregators = _validate_required_fields(
-            num_channel_groups, num_aggregators
-        )
+        _validate_required_fields(num_channel_groups, num_aggregators)
 
         return ShowEtherchannelSummaryResult(
-            num_channel_groups=groups,
-            num_aggregators=aggregators,
+            num_channel_groups=cast(int, num_channel_groups),
+            num_aggregators=cast(int, num_aggregators),
             port_channels=port_channels,
         )
