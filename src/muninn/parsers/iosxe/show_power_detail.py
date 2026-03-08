@@ -1,4 +1,4 @@
-"""Parser for 'show power detail' command on IOS-XE."""
+"""Parser for 'show power' and 'show power detail' commands on IOS-XE."""
 
 import re
 from typing import NotRequired, TypedDict
@@ -35,11 +35,12 @@ class SwitchPowerDetail(TypedDict):
 
 
 class ShowPowerDetailResult(TypedDict):
-    """Schema for 'show power detail' parsed output."""
+    """Schema for 'show power' and 'show power detail' parsed output."""
 
     switches: dict[str, SwitchPowerDetail]
 
 
+_COMMAND_LINE = re.compile(r"^show power(?: detail)?$", re.IGNORECASE)
 _SWITCH_HEADER = re.compile(r"^Switch:\s*(?P<switch_id>\d+)\s*$")
 
 # PS1     C9K-PWR-1500WAC-R     ac    1500 W    active     good  n.a.
@@ -116,9 +117,23 @@ def _parse_ft_row(match: re.Match[str]) -> tuple[str, FanTrayEntry]:
     return match.group("name"), entry
 
 
+def _ensure_switch(
+    switches: dict[str, SwitchPowerDetail],
+    switch_id: str | None,
+) -> str:
+    """Ensure a switch entry exists and return its ID."""
+    resolved_switch_id = switch_id or "1"
+    switches.setdefault(
+        resolved_switch_id,
+        SwitchPowerDetail(power_supplies={}, fan_trays={}),
+    )
+    return resolved_switch_id
+
+
+@register(OS.CISCO_IOSXE, "show power")
 @register(OS.CISCO_IOSXE, "show power detail")
 class ShowPowerDetailParser(BaseParser[ShowPowerDetailResult]):
-    """Parser for 'show power detail' command.
+    """Parser for 'show power' and 'show power detail' commands.
 
     Example output::
 
@@ -133,45 +148,40 @@ class ShowPowerDetailParser(BaseParser[ShowPowerDetailResult]):
 
     @classmethod
     def parse(cls, output: str) -> ShowPowerDetailResult:
-        """Parse 'show power detail' output.
+        """Parse 'show power' or 'show power detail' output.
 
         Args:
-            output: Raw CLI output from 'show power detail' command.
+            output: Raw CLI output from the command.
 
         Returns:
             Parsed power detail data keyed by switch number.
 
         Raises:
-            ValueError: If no switch sections are found in the output.
+            ValueError: If no power supply or fan tray entries are found.
         """
         switches: dict[str, SwitchPowerDetail] = {}
         current_switch: str | None = None
 
         for line in output.splitlines():
             line = line.strip()
-            if not line:
+            if not line or _COMMAND_LINE.match(line):
                 continue
 
             if m := _SWITCH_HEADER.match(line):
-                current_switch = m.group("switch_id")
-                switches[current_switch] = SwitchPowerDetail(
-                    power_supplies={},
-                    fan_trays={},
-                )
-                continue
-
-            if current_switch is None:
+                current_switch = _ensure_switch(switches, m.group("switch_id"))
                 continue
 
             if m := _PS_ROW.match(line):
+                current_switch = _ensure_switch(switches, current_switch)
                 name, entry = _parse_ps_row(m)
                 switches[current_switch]["power_supplies"][name] = entry
             elif m := _FT_ROW.match(line):
+                current_switch = _ensure_switch(switches, current_switch)
                 name, entry = _parse_ft_row(m)
                 switches[current_switch]["fan_trays"][name] = entry
 
         if not switches:
-            msg = "No switch sections found in output"
+            msg = "No power supply or fan tray entries found in output"
             raise ValueError(msg)
 
         return ShowPowerDetailResult(switches=switches)
