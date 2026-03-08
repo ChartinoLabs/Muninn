@@ -380,7 +380,7 @@ def _is_as_path_start(line: str, stripped: str) -> bool:
     if leading < _AS_PATH_MIN_INDENT or leading > _AS_PATH_MAX_INDENT:
         return False
     first_token = stripped.split(",")[0].split()[0]
-    return first_token == "Local" or first_token.isdigit()
+    return first_token == "Local" or first_token.isdigit()  # nosec B105
 
 
 def _is_path_boundary(line: str, stripped: str) -> bool:
