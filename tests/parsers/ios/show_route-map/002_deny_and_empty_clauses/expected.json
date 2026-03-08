@@ -1,37 +1,39 @@
 {
     "route_maps": {
-        "RM-FILTER-REDISTRIBUTED-DMVPN-ROUTES-IN:20": {
-            "action": "permit",
-            "match_clauses": [],
-            "name": "RM-FILTER-REDISTRIBUTED-DMVPN-ROUTES-IN",
-            "policy_routing_bytes": 0,
-            "policy_routing_packets": 0,
-            "sequence": 20,
-            "set_clauses": []
+        "RM-FILTER-REDISTRIBUTED-DMVPN-ROUTES-IN": {
+            "sequences": {
+                "20": {
+                    "action": "permit",
+                    "match_clauses": [],
+                    "policy_routing_bytes": 0,
+                    "policy_routing_packets": 0,
+                    "set_clauses": []
+                }
+            }
         },
-        "RM-PBR_APPS_TO_MPLS:10": {
-            "action": "permit",
-            "match_clauses": [
-                "ip address (access-lists): ACL-APPLICATION-SAP-DC"
-            ],
-            "name": "RM-PBR_APPS_TO_MPLS",
-            "policy_routing_bytes": 0,
-            "policy_routing_packets": 0,
-            "sequence": 10,
-            "set_clauses": [
-                "ip next-hop 172.16.154.94 172.16.154.102"
-            ]
-        },
-        "RM-PBR_APPS_TO_MPLS:5": {
-            "action": "deny",
-            "match_clauses": [
-                "ip address (access-lists): PBR-EXCLUSION-SITE-SUBNET"
-            ],
-            "name": "RM-PBR_APPS_TO_MPLS",
-            "policy_routing_bytes": 0,
-            "policy_routing_packets": 0,
-            "sequence": 5,
-            "set_clauses": []
+        "RM-PBR_APPS_TO_MPLS": {
+            "sequences": {
+                "10": {
+                    "action": "permit",
+                    "match_clauses": [
+                        "ip address (access-lists): ACL-APPLICATION-SAP-DC"
+                    ],
+                    "policy_routing_bytes": 0,
+                    "policy_routing_packets": 0,
+                    "set_clauses": [
+                        "ip next-hop 172.16.154.94 172.16.154.102"
+                    ]
+                },
+                "5": {
+                    "action": "deny",
+                    "match_clauses": [
+                        "ip address (access-lists): PBR-EXCLUSION-SITE-SUBNET"
+                    ],
+                    "policy_routing_bytes": 0,
+                    "policy_routing_packets": 0,
+                    "set_clauses": []
+                }
+            }
         }
     }
 }

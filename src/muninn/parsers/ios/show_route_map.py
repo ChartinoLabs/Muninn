@@ -1,6 +1,7 @@
 """Parser for 'show route-map' command on IOS."""
 
 import re
+from dataclasses import dataclass, field
 from typing import NotRequired, TypedDict
 
 from muninn.os import OS
@@ -8,16 +9,20 @@ from muninn.parser import BaseParser
 from muninn.registry import register
 
 
-class RouteMapEntry(TypedDict):
+class RouteMapSequenceEntry(TypedDict):
     """Schema for a single route-map sequence entry."""
 
-    name: str
     action: str
-    sequence: int
     match_clauses: list[str]
     set_clauses: list[str]
     policy_routing_packets: NotRequired[int]
     policy_routing_bytes: NotRequired[int]
+
+
+class RouteMapEntry(TypedDict):
+    """Schema for a single route-map with all its sequences."""
+
+    sequences: dict[str, RouteMapSequenceEntry]
 
 
 class ShowRouteMapResult(TypedDict):
@@ -44,6 +49,51 @@ _DYNAMIC_COUNT = re.compile(
 
 _MATCH_HEADER = re.compile(r"^\s*Match\s+clauses:\s*$")
 _SET_HEADER = re.compile(r"^\s*Set\s+clauses:\s*$")
+
+
+@dataclass
+class _ParseState:
+    """Mutable parser state for the current route-map sequence."""
+
+    route_maps: dict[str, RouteMapEntry] = field(default_factory=dict)
+    name: str | None = None
+    sequence: str | None = None
+    action: str | None = None
+    match_clauses: list[str] = field(default_factory=list)
+    set_clauses: list[str] = field(default_factory=list)
+    policy_routing_packets: int | None = None
+    policy_routing_bytes: int | None = None
+
+    def flush(self) -> None:
+        """Save the current route-map sequence into the result."""
+        if self.name is None or self.sequence is None or self.action is None:
+            return
+
+        if self.name not in self.route_maps:
+            self.route_maps[self.name] = RouteMapEntry(sequences={})
+
+        sequence_entry: RouteMapSequenceEntry = {
+            "action": self.action,
+            "match_clauses": list(self.match_clauses),
+            "set_clauses": list(self.set_clauses),
+        }
+        if self.policy_routing_packets is not None:
+            sequence_entry["policy_routing_packets"] = self.policy_routing_packets
+        if self.policy_routing_bytes is not None:
+            sequence_entry["policy_routing_bytes"] = self.policy_routing_bytes
+
+        self.route_maps[self.name]["sequences"][self.sequence] = sequence_entry
+
+    def start_new(self, name: str, sequence: str, action: str) -> None:
+        """Begin a new route-map sequence, flushing any current one."""
+        self.flush()
+        self.name = name
+        self.sequence = sequence
+        self.action = action
+        self.match_clauses = []
+        self.set_clauses = []
+        self.policy_routing_packets = None
+        self.policy_routing_bytes = None
 
 
 def _is_noise_line(line: str) -> bool:
@@ -114,7 +164,7 @@ class ShowRouteMapParser(BaseParser[ShowRouteMapResult]):
             ValueError: If the output cannot be parsed.
         """
         lines = output.splitlines()
-        route_maps: dict[str, RouteMapEntry] = {}
+        state = _ParseState()
         idx = 0
 
         while idx < len(lines):
@@ -130,27 +180,24 @@ class ShowRouteMapParser(BaseParser[ShowRouteMapResult]):
                 idx += 1
                 continue
 
-            entry: RouteMapEntry = {
-                "name": header_match.group("name"),
-                "action": header_match.group("action"),
-                "sequence": int(header_match.group("sequence")),
-                "match_clauses": [],
-                "set_clauses": [],
-            }
+            state.start_new(
+                name=header_match.group("name"),
+                sequence=header_match.group("sequence"),
+                action=header_match.group("action"),
+            )
             idx += 1
-            idx = _parse_entry_body(lines, idx, entry)
+            idx = _parse_entry_body(lines, idx, state)
 
-            key = f"{entry['name']}:{entry['sequence']}"
-            route_maps[key] = entry
+        state.flush()
 
-        if not route_maps:
+        if not state.route_maps:
             msg = "No route-map entries found in output"
             raise ValueError(msg)
 
-        return {"route_maps": route_maps}
+        return {"route_maps": state.route_maps}
 
 
-def _parse_entry_body(lines: list[str], idx: int, entry: RouteMapEntry) -> int:
+def _parse_entry_body(lines: list[str], idx: int, state: _ParseState) -> int:
     """Parse match clauses, set clauses, and policy routing for one entry."""
     while idx < len(lines):
         line = lines[idx]
@@ -169,19 +216,19 @@ def _parse_entry_body(lines: list[str], idx: int, entry: RouteMapEntry) -> int:
         if _MATCH_HEADER.match(line):
             idx += 1
             clauses, idx = _parse_clause_lines(lines, idx)
-            entry["match_clauses"] = clauses
+            state.match_clauses = clauses
             continue
 
         if _SET_HEADER.match(line):
             idx += 1
             clauses, idx = _parse_clause_lines(lines, idx)
-            entry["set_clauses"] = clauses
+            state.set_clauses = clauses
             continue
 
         policy_match = _POLICY_ROUTING.match(line)
         if policy_match:
-            entry["policy_routing_packets"] = int(policy_match.group("packets"))
-            entry["policy_routing_bytes"] = int(policy_match.group("bytes"))
+            state.policy_routing_packets = int(policy_match.group("packets"))
+            state.policy_routing_bytes = int(policy_match.group("bytes"))
             idx += 1
             break
 
