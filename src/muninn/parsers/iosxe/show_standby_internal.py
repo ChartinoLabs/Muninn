@@ -6,6 +6,7 @@ from typing import NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class VirtualIpEntry(TypedDict):
@@ -136,7 +137,7 @@ def _parse_vip_section(
         if m:
             entries[m.group("hash")] = {
                 "ip": m.group("ip"),
-                "interface": m.group("intf"),
+                "interface": canonical_interface_name(m.group("intf")),
                 "group": int(m.group("group")),
             }
             idx += 1
@@ -153,9 +154,7 @@ def _parse_mac_section(
     Returns the new line index and the entries dict.
     """
     entries: dict[str, MacAddressEntry] = {}
-    pending_hash: str | None = None
-    pending_intf: str | None = None
-    pending_mac: str | None = None
+    pending: tuple[str, str, str] | None = None
 
     while idx < len(lines):
         line = lines[idx].strip()
@@ -165,22 +164,23 @@ def _parse_mac_section(
 
         m = _MAC_HASH_ROW.match(line)
         if m:
-            pending_hash = m.group("hash")
-            pending_intf = m.group("intf")
-            pending_mac = m.group("mac")
+            pending = (
+                m.group("hash"),
+                canonical_interface_name(m.group("intf")),
+                m.group("mac"),
+            )
             idx += 1
             continue
 
         m = _MAC_GRP_ROW.match(line)
-        if m and pending_hash is not None:
-            entries[pending_hash] = {
-                "interface": pending_intf,  # type: ignore[typeddict-item]
-                "mac_address": pending_mac,  # type: ignore[typeddict-item]
+        if m and pending is not None:
+            hash_id, intf, mac = pending
+            entries[hash_id] = {
+                "interface": intf,
+                "mac_address": mac,
                 "group": int(m.group("group")),
             }
-            pending_hash = None
-            pending_intf = None
-            pending_mac = None
+            pending = None
             idx += 1
             continue
 
@@ -206,7 +206,7 @@ def _parse_table_sections(
             af_key = "ipv6" if af.upper() == "IPV6" else "ipv4"
             idx, entries = _parse_vip_section(lines, idx + 1, af_key)
             if entries:
-                vip_table[af_key] = entries  # type: ignore[literal-required]
+                vip_table[af_key] = entries
             continue
 
         if _MAC_SECTION_HEADER.match(line):
