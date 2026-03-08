@@ -1,0 +1,31 @@
+{
+    "route_maps": {
+        "equal": {
+            "sequences": {
+                "10": {
+                    "action": "permit",
+                    "match_clauses": [
+                        "length 150 200"
+                    ],
+                    "policy_routing_bytes": 0,
+                    "policy_routing_packets": 0,
+                    "set_clauses": [
+                        "ip next-hop 10.10.11.254"
+                    ]
+                },
+                "20": {
+                    "action": "permit",
+                    "match_clauses": [
+                        "ip address prefix-lists: PFX",
+                        "ip address (access-lists): 101"
+                    ],
+                    "policy_routing_bytes": 15190,
+                    "policy_routing_packets": 144,
+                    "set_clauses": [
+                        "ip next-hop 10.10.11.14"
+                    ]
+                }
+            }
+        }
+    }
+}

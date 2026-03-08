@@ -1,0 +1,18 @@
+STATIC routemaps
+route-map RM-PBR_APPS_TO_MPLS, deny, sequence 5
+  Match clauses:
+    ip address (access-lists): PBR-EXCLUSION-SITE-SUBNET
+  Set clauses:
+  Policy routing matches: 0 packets, 0 bytes
+route-map RM-PBR_APPS_TO_MPLS, permit, sequence 10
+  Match clauses:
+    ip address (access-lists): ACL-APPLICATION-SAP-DC
+  Set clauses:
+    ip next-hop 172.16.154.94 172.16.154.102
+  Policy routing matches: 0 packets, 0 bytes
+route-map RM-FILTER-REDISTRIBUTED-DMVPN-ROUTES-IN, permit, sequence 20
+  Match clauses:
+  Set clauses:
+  Policy routing matches: 0 packets, 0 bytes
+DYNAMIC routemaps
+Current active dynamic routemaps = 0

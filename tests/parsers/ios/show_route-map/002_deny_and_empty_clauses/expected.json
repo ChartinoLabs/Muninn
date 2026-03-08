@@ -1,0 +1,39 @@
+{
+    "route_maps": {
+        "RM-FILTER-REDISTRIBUTED-DMVPN-ROUTES-IN": {
+            "sequences": {
+                "20": {
+                    "action": "permit",
+                    "match_clauses": [],
+                    "policy_routing_bytes": 0,
+                    "policy_routing_packets": 0,
+                    "set_clauses": []
+                }
+            }
+        },
+        "RM-PBR_APPS_TO_MPLS": {
+            "sequences": {
+                "10": {
+                    "action": "permit",
+                    "match_clauses": [
+                        "ip address (access-lists): ACL-APPLICATION-SAP-DC"
+                    ],
+                    "policy_routing_bytes": 0,
+                    "policy_routing_packets": 0,
+                    "set_clauses": [
+                        "ip next-hop 172.16.154.94 172.16.154.102"
+                    ]
+                },
+                "5": {
+                    "action": "deny",
+                    "match_clauses": [
+                        "ip address (access-lists): PBR-EXCLUSION-SITE-SUBNET"
+                    ],
+                    "policy_routing_bytes": 0,
+                    "policy_routing_packets": 0,
+                    "set_clauses": []
+                }
+            }
+        }
+    }
+}
