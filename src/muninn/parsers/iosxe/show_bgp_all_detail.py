@@ -53,18 +53,24 @@ class RouteEntry(TypedDict):
     bestpath: NotRequired[str]
 
 
+class RouteDistinguisherEntry(TypedDict):
+    """Schema for a Route Distinguisher group."""
+
+    default_vrf: NotRequired[str]
+    routes: dict[str, RouteEntry]
+
+
 class AddressFamilyEntry(TypedDict):
     """Schema for routes within an address family."""
 
-    route_distinguisher: NotRequired[str]
-    default_vrf: NotRequired[str]
-    routes: dict[str, RouteEntry]
+    routes: NotRequired[dict[str, RouteEntry]]
+    route_distinguishers: NotRequired[dict[str, RouteDistinguisherEntry]]
 
 
 class ShowBgpAllDetailResult(TypedDict):
     """Schema for 'show bgp all detail' parsed output."""
 
-    address_families: dict[str, list[AddressFamilyEntry]]
+    address_families: dict[str, AddressFamilyEntry]
 
 
 # --- Compiled regex patterns ---
@@ -481,14 +487,14 @@ def _strip_rd_prefix(prefix: str) -> str:
 
 
 def _parse_address_family(
-    lines: list[str], idx: int, af_name: str
-) -> tuple[list[AddressFamilyEntry], int]:
+    lines: list[str], idx: int
+) -> tuple[AddressFamilyEntry | None, int]:
     """Parse all content within a single address family section.
 
-    Returns (list of AF entries, next line index).
-    Multiple entries can exist when there are multiple Route Distinguishers.
+    Returns (address family entry, next line index).
     """
-    entries: list[AddressFamilyEntry] = []
+    direct_routes: dict[str, RouteEntry] = {}
+    route_distinguishers: dict[str, RouteDistinguisherEntry] = {}
     current_rd: str | None = None
     current_vrf: str | None = None
     current_routes: dict[str, RouteEntry] = {}
@@ -507,10 +513,12 @@ def _parse_address_family(
         # Route Distinguisher
         rd_match = _RD_RE.match(stripped)
         if rd_match:
-            # Save previous RD block if it has routes
-            if current_rd is not None and current_routes:
-                entries.append(_build_af_entry(current_rd, current_vrf, current_routes))
-                current_routes = {}
+            current_routes = _flush_current_rd(
+                route_distinguishers,
+                current_rd,
+                current_vrf,
+                current_routes,
+            )
             current_rd = rd_match.group(1)
             current_vrf = rd_match.group(2)
             idx += 1
@@ -519,31 +527,98 @@ def _parse_address_family(
         # Route entry
         if stripped.startswith("BGP routing table entry"):
             prefix, route, idx = _parse_route_block(lines, idx)
-            current_routes[prefix] = route
+            if current_rd is None:
+                direct_routes[prefix] = route
+            else:
+                current_routes[prefix] = route
             continue
 
         # Skip noise
         idx += 1
 
-    # Save final block
-    if current_routes:
-        entries.append(_build_af_entry(current_rd, current_vrf, current_routes))
+    _flush_current_rd(route_distinguishers, current_rd, current_vrf, current_routes)
 
-    return entries, idx
+    entry: AddressFamilyEntry = {}
+    if direct_routes:
+        entry["routes"] = direct_routes
+    if route_distinguishers:
+        entry["route_distinguishers"] = route_distinguishers
+
+    return (entry or None), idx
 
 
-def _build_af_entry(
-    rd: str | None,
+def _build_rd_entry(
     vrf: str | None,
     routes: dict[str, RouteEntry],
-) -> AddressFamilyEntry:
-    """Build an AddressFamilyEntry with optional RD and VRF."""
-    entry: AddressFamilyEntry = {"routes": routes}
-    if rd is not None:
-        entry["route_distinguisher"] = rd
+) -> RouteDistinguisherEntry:
+    """Build a RouteDistinguisherEntry with optional VRF."""
+    entry: RouteDistinguisherEntry = {"routes": routes}
     if vrf is not None:
         entry["default_vrf"] = vrf
     return entry
+
+
+def _flush_current_rd(
+    route_distinguishers: dict[str, RouteDistinguisherEntry],
+    rd: str | None,
+    vrf: str | None,
+    routes: dict[str, RouteEntry],
+) -> dict[str, RouteEntry]:
+    """Store the current RD block if it has routes and reset state."""
+    if rd is not None and routes:
+        _merge_rd_entry(route_distinguishers, rd, vrf, routes)
+        return {}
+    return routes
+
+
+def _merge_rd_entry(
+    route_distinguishers: dict[str, RouteDistinguisherEntry],
+    rd: str,
+    vrf: str | None,
+    routes: dict[str, RouteEntry],
+) -> None:
+    """Merge routes into a Route Distinguisher entry."""
+    entry = route_distinguishers.setdefault(rd, {"routes": {}})
+    if vrf is not None:
+        entry["default_vrf"] = vrf
+    entry["routes"].update(routes)
+
+
+def _merge_address_family_entry(
+    current: AddressFamilyEntry,
+    new: AddressFamilyEntry,
+) -> AddressFamilyEntry:
+    """Merge parsed address family data from repeated sections."""
+    merged: AddressFamilyEntry = {}
+
+    if "routes" in current or "routes" in new:
+        merged["routes"] = {
+            **current.get("routes", {}),
+            **new.get("routes", {}),
+        }
+
+    merged_rds = {
+        rd: {
+            **rd_entry,
+            "routes": dict(rd_entry["routes"]),
+        }
+        for rd, rd_entry in current.get("route_distinguishers", {}).items()
+    }
+    for rd, rd_entry in new.get("route_distinguishers", {}).items():
+        if rd not in merged_rds:
+            merged_rds[rd] = {
+                **rd_entry,
+                "routes": dict(rd_entry["routes"]),
+            }
+            continue
+        if "default_vrf" in rd_entry:
+            merged_rds[rd]["default_vrf"] = rd_entry["default_vrf"]
+        merged_rds[rd]["routes"].update(rd_entry["routes"])
+
+    if merged_rds:
+        merged["route_distinguishers"] = merged_rds
+
+    return merged
 
 
 @register(OS.CISCO_IOSXE, "show bgp all detail")
@@ -572,7 +647,7 @@ class ShowBgpAllDetailParser(BaseParser["ShowBgpAllDetailResult"]):
             ValueError: If the output cannot be parsed.
         """
         lines = output.splitlines()
-        address_families: dict[str, list[AddressFamilyEntry]] = {}
+        address_families: dict[str, AddressFamilyEntry] = {}
         idx = 0
 
         while idx < len(lines):
@@ -586,11 +661,16 @@ class ShowBgpAllDetailParser(BaseParser["ShowBgpAllDetailResult"]):
             if af_match:
                 af_name = af_match.group(1)
                 idx += 1
-                af_entries, idx = _parse_address_family(lines, idx, af_name)
-                if af_entries:
-                    if af_name not in address_families:
-                        address_families[af_name] = []
-                    address_families[af_name].extend(af_entries)
+                af_entry, idx = _parse_address_family(lines, idx)
+                if af_entry:
+                    existing_entry = address_families.get(af_name)
+                    if existing_entry is None:
+                        address_families[af_name] = af_entry
+                    else:
+                        address_families[af_name] = _merge_address_family_entry(
+                            existing_entry,
+                            af_entry,
+                        )
                 continue
 
             idx += 1
