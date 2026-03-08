@@ -31,7 +31,7 @@ class ControlConnectionEntry(TypedDict):
 class ShowSdwanControlConnectionsResult(TypedDict):
     """Schema for 'show sdwan control connections' parsed output."""
 
-    connections: dict[str, ControlConnectionEntry]
+    connections: dict[str, dict[str, ControlConnectionEntry]]
 
 
 # Pattern for rows WITH organization column.
@@ -119,13 +119,12 @@ class ShowSdwanControlConnectionsParser(
             output: Raw CLI output from 'show sdwan control connections'.
 
         Returns:
-            Parsed control connection data keyed by system_ip/local_color.
+            Parsed control connection data keyed by peer system IP, then local color.
 
         Raises:
             ValueError: If no connections found in output.
         """
-        connections: dict[str, ControlConnectionEntry] = {}
-        counter: dict[str, int] = {}
+        connections: dict[str, dict[str, ControlConnectionEntry]] = {}
 
         for line in output.splitlines():
             line = line.strip()
@@ -141,11 +140,13 @@ class ShowSdwanControlConnectionsParser(
                     continue
                 entry = _build_entry(match, has_org=False)
 
-            base_key = f"{entry['peer_system_ip']}_{entry['local_color']}"
-            count = counter.get(base_key, 0)
-            counter[base_key] = count + 1
-            key = base_key if count == 0 else f"{base_key}_{count}"
-            connections[key] = entry
+            peer_system_ip = entry["peer_system_ip"]
+            local_color = entry["local_color"]
+
+            if peer_system_ip not in connections:
+                connections[peer_system_ip] = {}
+
+            connections[peer_system_ip][local_color] = entry
 
         if not connections:
             msg = "No control connections found in output"
