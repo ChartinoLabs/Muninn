@@ -8,6 +8,7 @@ from muninn.exceptions import ParserAmbiguityError, ParserNotFoundError
 from muninn.os import OS, CiscoIOSXE, CiscoNXOS, OperatingSystem
 from muninn.parser import BaseParser
 from muninn.registry import (
+    Registration,
     RuntimeRegistry,
     _generate_doc_template,
     _normalize_command,
@@ -63,7 +64,7 @@ class TestRegisterDecorator:
         """Decorator annotates parser class metadata."""
 
         class _RegistrableParser(BaseParser):
-            _muninn_registrations: list[object]
+            _muninn_registrations: list[Registration]
 
         @register("nxos", "  SHOW VERSION  ")
         class ShowVersionParser(_RegistrableParser):
