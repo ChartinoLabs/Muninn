@@ -597,19 +597,12 @@ def _merge_address_family_entry(
             **new.get("routes", {}),
         }
 
-    merged_rds = {
-        rd: {
-            **rd_entry,
-            "routes": dict(rd_entry["routes"]),
-        }
-        for rd, rd_entry in current.get("route_distinguishers", {}).items()
-    }
+    merged_rds: dict[str, RouteDistinguisherEntry] = {}
+    for rd, rd_entry in current.get("route_distinguishers", {}).items():
+        merged_rds[rd] = _copy_rd_entry(rd_entry)
     for rd, rd_entry in new.get("route_distinguishers", {}).items():
         if rd not in merged_rds:
-            merged_rds[rd] = {
-                **rd_entry,
-                "routes": dict(rd_entry["routes"]),
-            }
+            merged_rds[rd] = _copy_rd_entry(rd_entry)
             continue
         if "default_vrf" in rd_entry:
             merged_rds[rd]["default_vrf"] = rd_entry["default_vrf"]
@@ -619,6 +612,14 @@ def _merge_address_family_entry(
         merged["route_distinguishers"] = merged_rds
 
     return merged
+
+
+def _copy_rd_entry(rd_entry: RouteDistinguisherEntry) -> RouteDistinguisherEntry:
+    """Return a copy of a Route Distinguisher entry."""
+    copied: RouteDistinguisherEntry = {"routes": dict(rd_entry["routes"])}
+    if "default_vrf" in rd_entry:
+        copied["default_vrf"] = rd_entry["default_vrf"]
+    return copied
 
 
 @register(OS.CISCO_IOSXE, "show bgp all detail")
