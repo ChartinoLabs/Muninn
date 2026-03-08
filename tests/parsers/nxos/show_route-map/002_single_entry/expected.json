@@ -1,0 +1,17 @@
+{
+    "route_maps": {
+        "RM-SIMPLE": {
+            "sequences": {
+                "10": {
+                    "action": "permit",
+                    "match_clauses": [
+                        "ip address prefix-lists: PF-DEFAULT"
+                    ],
+                    "set_clauses": [
+                        "local-preference 200"
+                    ]
+                }
+            }
+        }
+    }
+}

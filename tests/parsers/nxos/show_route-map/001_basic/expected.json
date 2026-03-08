@@ -1,0 +1,79 @@
+{
+    "route_maps": {
+        "RM-BGP-TO-OSPF": {
+            "sequences": {
+                "10": {
+                    "action": "deny",
+                    "match_clauses": [
+                        "tag: 12345"
+                    ],
+                    "set_clauses": []
+                },
+                "20": {
+                    "action": "permit",
+                    "match_clauses": [],
+                    "set_clauses": []
+                }
+            }
+        },
+        "RM-ISP1-IN": {
+            "sequences": {
+                "1000": {
+                    "action": "permit",
+                    "match_clauses": [],
+                    "set_clauses": [
+                        "local-preference 300"
+                    ]
+                }
+            }
+        },
+        "RM-ISP1-OUT": {
+            "sequences": {
+                "1000": {
+                    "action": "permit",
+                    "match_clauses": [
+                        "as-path (as-path filter): AS-ISP2"
+                    ],
+                    "set_clauses": []
+                }
+            }
+        },
+        "RM-N3K1-TO-N3K2": {
+            "sequences": {
+                "10": {
+                    "action": "permit",
+                    "match_clauses": [
+                        "ip address prefix-lists: PF-N3K1-TO-N3K2"
+                    ],
+                    "set_clauses": [
+                        "extcommunity RT:100:1"
+                    ]
+                }
+            }
+        },
+        "RM-TEST-OUT": {
+            "sequences": {
+                "10": {
+                    "action": "permit",
+                    "match_clauses": [
+                        "as-path (as-path filter): AS-TEST"
+                    ],
+                    "set_clauses": []
+                }
+            }
+        },
+        "TEST_THIS": {
+            "sequences": {
+                "10": {
+                    "action": "permit",
+                    "match_clauses": [
+                        "ip address (access-lists): AL_TEST_TEST"
+                    ],
+                    "set_clauses": [
+                        "ip next-hop 2.2.2.2"
+                    ]
+                }
+            }
+        }
+    }
+}
