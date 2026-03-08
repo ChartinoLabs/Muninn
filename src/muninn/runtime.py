@@ -57,8 +57,14 @@ class MuninnRuntime:
                 continue
             if not hasattr(value, "_muninn_registrations"):
                 continue
-            for os_value, command in value._muninn_registrations:
-                self.registry.register_parser(os_value, command, value, source=source)
+            for registration in value._muninn_registrations:
+                self.registry.register_parser(
+                    registration.os,
+                    registration.command,
+                    value,
+                    source=source,
+                    doc_template=registration.doc_template,
+                )
 
     def load_builtin_parsers(self) -> list[str]:
         """Discover and register built-in parsers into this runtime."""

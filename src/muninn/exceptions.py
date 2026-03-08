@@ -20,6 +20,25 @@ class ParserNotFoundError(MuninnError):
         super().__init__(f"No parser found for os={os!r}, command={command!r}")
 
 
+class ParserAmbiguityError(MuninnError):
+    """Raised when multiple parser patterns match the same command."""
+
+    def __init__(self, os: str, command: str, matches: list[str]) -> None:
+        """Initialize the exception.
+
+        Args:
+            os: The operating system identifier.
+            command: The command that was attempted.
+            matches: Matching parser documentation templates.
+        """
+        self.os = os
+        self.command = command
+        self.matches = matches
+        super().__init__(
+            f"Ambiguous parser match for os={os!r}, command={command!r}: {matches!r}"
+        )
+
+
 class ParseError(MuninnError):
     """Raised when a parser fails to parse the given output."""
 

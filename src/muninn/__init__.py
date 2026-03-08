@@ -5,6 +5,7 @@ from muninn.exceptions import (
     EmptyOutputError,
     MuninnError,
     ParseError,
+    ParserAmbiguityError,
     ParserNotFoundError,
 )
 from muninn.os import OS, OperatingSystem, resolve_os
@@ -22,6 +23,7 @@ __all__ = [
     "OS",
     "OperatingSystem",
     "ParseError",
+    "ParserAmbiguityError",
     "ParserNotFoundError",
     "RuntimeRegistry",
     "register",
