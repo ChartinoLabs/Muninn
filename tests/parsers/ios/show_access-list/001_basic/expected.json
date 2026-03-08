@@ -1,0 +1,70 @@
+{
+    "access_lists": {
+        "1": {
+            "entries": {
+                "10": {
+                    "action": "permit",
+                    "line": "permit 10.1.2.3 log",
+                    "sequence": 10
+                },
+                "20": {
+                    "action": "deny",
+                    "line": "deny 10.1.1.1",
+                    "sequence": 20
+                },
+                "30": {
+                    "action": "deny",
+                    "line": "deny 192.168.1.0, wildcard bits 0.0.0.255",
+                    "sequence": 30
+                },
+                "40": {
+                    "action": "deny",
+                    "line": "deny any log",
+                    "sequence": 40
+                }
+            },
+            "type": "Standard IP access list"
+        },
+        "10": {
+            "entries": {
+                "10": {
+                    "action": "permit",
+                    "line": "permit 192.168.1.0, wildcard bits 0.0.0.255",
+                    "matches": 5177,
+                    "sequence": 10
+                }
+            },
+            "type": "Standard IP access list"
+        },
+        "102": {
+            "entries": {
+                "10": {
+                    "action": "permit",
+                    "line": "permit tcp any host 192.168.1.100 eq ftp",
+                    "sequence": 10
+                },
+                "20": {
+                    "action": "permit",
+                    "line": "permit tcp any host 192.168.1.100 gt 1024",
+                    "sequence": 20
+                }
+            },
+            "type": "Extended IP access list"
+        },
+        "VLAN-TEST": {
+            "entries": {
+                "10": {
+                    "action": "permit",
+                    "line": "permit ip any any",
+                    "sequence": 10
+                },
+                "20": {
+                    "action": "deny",
+                    "line": "deny ip any any",
+                    "sequence": 20
+                }
+            },
+            "type": "Extended IP access list"
+        }
+    }
+}
