@@ -55,6 +55,7 @@ class NeighborEntry(TypedDict):
     """Schema for a single BGP neighbor."""
 
     remote_as: int
+    local_as: NotRequired[int]
     link_type: str
     vrf: NotRequired[str]
     description: NotRequired[str]
@@ -90,6 +91,7 @@ _NEIGHBOR_HEADER_RE = re.compile(
     r"^BGP neighbor is (?P<neighbor>\S+),\s+"
     r"(?:vrf (?P<vrf>\S+),\s+)?"
     r"remote AS (?P<remote_as>\d+),\s+"
+    r"(?:local AS (?P<local_as>\d+),\s+)?"
     r"(?P<link_type>\S+) link"
 )
 
@@ -500,6 +502,9 @@ def _build_initial_entry(header_m: re.Match[str]) -> NeighborEntry:
     vrf = header_m.group("vrf")
     if vrf:
         entry["vrf"] = vrf
+    local_as = header_m.group("local_as")
+    if local_as:
+        entry["local_as"] = int(local_as)
     return entry
 
 
