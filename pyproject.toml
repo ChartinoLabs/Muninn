@@ -50,6 +50,10 @@ select = [
     "T",  # flake8-print (includes T201 for pdb, replacing debug-statements hook)
 ]
 
+[tool.ruff.lint.per-file-ignores]
+# Parser filenames preserve command hyphens for discoverability
+"src/muninn/parsers/**/*-*.py" = ["N999"]
+
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
