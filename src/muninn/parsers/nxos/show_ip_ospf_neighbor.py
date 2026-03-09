@@ -29,10 +29,11 @@ class ShowIpOspfNeighborResult(TypedDict):
 # Neighbor ID     Pri State            Up Time  Address         Interface
 # 192.168.1.8       1 FULL/ -          2y0w     192.168.2.2     Vlan2
 # 10.0.0.6          1 INIT/DROTHER     -        77.77.77.77     Po4
+# 10.0.0.7          1 FULL/            4d19h    88.88.88.88     Eth1/3
 _NEIGHBOR_PATTERN = re.compile(
     r"^(?P<neighbor_id>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+"
     r"(?P<priority>\d+)\s+"
-    r"(?P<state>\w+)/\s*(?P<role>DR|BDR|DROTHER|-)\s+"
+    r"(?P<state_role>.+?)\s{2,}"
     r"(?P<up_time>\S+)\s+"
     r"(?P<address>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+"
     r"(?P<interface>\S+)\s*$"
@@ -75,19 +76,19 @@ class ShowIpOspfNeighborParser(BaseParser[ShowIpOspfNeighborResult]):
                 match.group("interface"), os=OS.CISCO_NXOS
             )
             neighbor_id = match.group("neighbor_id")
-            role = match.group("role")
+            state, role = cls._parse_state_role(match.group("state_role"))
 
             if interface not in neighbors:
                 neighbors[interface] = {}
 
             entry: OspfNeighborEntry = {
                 "priority": int(match.group("priority")),
-                "state": match.group("state").upper(),
+                "state": state,
                 "up_time": match.group("up_time"),
                 "address": match.group("address"),
             }
 
-            if role != "-":
+            if role and role != "-":
                 entry["role"] = role
 
             neighbors[interface][neighbor_id] = entry
@@ -97,3 +98,8 @@ class ShowIpOspfNeighborParser(BaseParser[ShowIpOspfNeighborResult]):
             raise ValueError(msg)
 
         return ShowIpOspfNeighborResult(neighbors=neighbors)
+
+    @staticmethod
+    def _parse_state_role(state_role: str) -> tuple[str, str]:
+        state, _, role = state_role.partition("/")
+        return state.strip().upper(), role.strip()
