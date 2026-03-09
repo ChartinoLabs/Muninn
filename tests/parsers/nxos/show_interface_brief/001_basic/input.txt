@@ -1,0 +1,38 @@
+
+--------------------------------------------------------------------------------
+Port   VRF          Status IP Address                              Speed    MTU
+--------------------------------------------------------------------------------
+mgmt0  --           up     192.168.10.37                           1000     1500
+
+--------------------------------------------------------------------------------
+Ethernet      VLAN    Type Mode   Status  Reason                   Speed     Port
+Interface                                                                    Ch #
+--------------------------------------------------------------------------------
+Eth1/1        1      eth  trunk  up      none                       10G(D)  4000
+Eth1/2        1      eth  trunk  up      none                       10G(D)  4000
+Eth1/3        --     eth  routed down    SFP not inserted           1000(D) --
+Eth1/4        10     eth  access up      none                       1000(D) --
+Eth1/5        1      eth  f-path down    SFP not inserted           10G(D)  --
+Eth1/6        1      eth  fabric down    Link not connected         10G(D)  --
+
+--------------------------------------------------------------------------------
+Port-channel VLAN    Type Mode   Status  Reason                    Speed   Protocol
+Interface
+--------------------------------------------------------------------------------
+Po10         1      eth  trunk  up      none                       a-10G(D)  lacp
+Po4000       1      eth  trunk  up      none                       a-10G(D)  lacp
+Po20         --     eth  routed down    No operational members     auto(D)   lacp
+
+-------------------------------------------------------------------------------
+Interface                  Status    Description
+-------------------------------------------------------------------------------
+Lo0                        up        Router ID loopback
+Lo1                        up        --
+Lo100                      down      VTEP source
+
+-------------------------------------------------------------------------------
+Interface     Secondary VLAN(Type)                    Status Reason
+-------------------------------------------------------------------------------
+Vlan1         --                                      down   Administratively down
+Vlan10        --                                      up     --
+Vlan200       100(community)                          up     --
