@@ -1,0 +1,119 @@
+{
+    "sessions": {
+        "10.1.1.1": {
+            "peer_address": "10.1.1.1",
+            "peer_port": 500,
+            "status": "UP-ACTIVE",
+            "interface": "Tunnel0",
+            "uptime": "01:23:45",
+            "session_status": "UP-ACTIVE",
+            "fvrf": "none",
+            "phase1_id": "10.1.1.1",
+            "desc": "VPN to Branch1",
+            "ike_sa": {
+                "10.0.0.1/500-10.1.1.1/500": {
+                    "local_address": "10.0.0.1",
+                    "local_port": 500,
+                    "remote_address": "10.1.1.1",
+                    "remote_port": 500,
+                    "sa_status": "Active",
+                    "capabilities": "D",
+                    "connid": 1001,
+                    "lifetime": "23:55:10"
+                }
+            },
+            "ipsec_flow": {
+                "permit ip 192.168.1.0/255.255.255.0 192.168.2.0/255.255.255.0": {
+                    "active_sas": 2,
+                    "origin": "crypto map",
+                    "pkts_encaps": 14527,
+                    "pkts_encrypt": 14527,
+                    "pkts_digest": 14527,
+                    "pkts_decaps": 14526,
+                    "pkts_decrypt": 14526,
+                    "pkts_verify": 14526,
+                    "local_crypto_endpt": "10.0.0.1",
+                    "remote_crypto_endpt": "10.1.1.1",
+                    "path_mtu": 1500,
+                    "ip_mtu": 1500,
+                    "current_outbound_spi": "0xA1B2C3D4",
+                    "inbound_esp_sas": [
+                        {
+                            "spi": "0xD4C3B2A1",
+                            "transform": "esp-256-aes esp-sha-hmac",
+                            "in_use_settings": "Tunnel",
+                            "conn_id": 2001,
+                            "flow_id": "SW:1"
+                        }
+                    ],
+                    "outbound_esp_sas": [
+                        {
+                            "spi": "0xA1B2C3D4",
+                            "transform": "esp-256-aes esp-sha-hmac",
+                            "in_use_settings": "Tunnel",
+                            "conn_id": 2002,
+                            "flow_id": "SW:2"
+                        }
+                    ]
+                }
+            }
+        },
+        "10.2.2.2": {
+            "peer_address": "10.2.2.2",
+            "peer_port": 500,
+            "status": "UP-ACTIVE",
+            "interface": "Tunnel1",
+            "uptime": "00:45:30",
+            "session_status": "UP-ACTIVE",
+            "fvrf": "none",
+            "phase1_id": "10.2.2.2",
+            "ike_sa": {
+                "10.0.0.1/500-10.2.2.2/500": {
+                    "local_address": "10.0.0.1",
+                    "local_port": 500,
+                    "remote_address": "10.2.2.2",
+                    "remote_port": 500,
+                    "sa_status": "Active",
+                    "capabilities": "D",
+                    "connid": 1002,
+                    "lifetime": "23:14:30"
+                }
+            },
+            "ipsec_flow": {
+                "permit ip 192.168.1.0/255.255.255.0 172.16.0.0/255.255.0.0": {
+                    "active_sas": 2,
+                    "origin": "crypto map",
+                    "pkts_encaps": 8200,
+                    "pkts_encrypt": 8200,
+                    "pkts_digest": 8200,
+                    "pkts_decaps": 7845,
+                    "pkts_decrypt": 7845,
+                    "pkts_verify": 7845,
+                    "local_crypto_endpt": "10.0.0.1",
+                    "remote_crypto_endpt": "10.2.2.2",
+                    "path_mtu": 1500,
+                    "ip_mtu": 1500,
+                    "current_outbound_spi": "0xE5F6A7B8",
+                    "inbound_esp_sas": [
+                        {
+                            "spi": "0xB8A7F6E5",
+                            "transform": "esp-256-aes esp-sha-hmac",
+                            "in_use_settings": "Tunnel",
+                            "conn_id": 2003,
+                            "flow_id": "SW:3"
+                        }
+                    ],
+                    "outbound_esp_sas": [
+                        {
+                            "spi": "0xE5F6A7B8",
+                            "transform": "esp-256-aes esp-sha-hmac",
+                            "in_use_settings": "Tunnel",
+                            "conn_id": 2004,
+                            "flow_id": "SW:4"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
