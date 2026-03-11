@@ -1,0 +1,118 @@
+{
+    "vrfs": {
+        "VRF1": {
+            "ipv4 unicast": {
+                "trigger_delay_critical": 2222,
+                "trigger_delay_non_critical": 3333,
+                "next_hops": {
+                    "0.0.0.0": {
+                        "refcount": 4,
+                        "igp_cost": 0,
+                        "igp_route_type": 0,
+                        "igp_preference": 0,
+                        "attached": false,
+                        "local": true,
+                        "reachable": false,
+                        "labeled": false,
+                        "filtered": false,
+                        "pending_update": false,
+                        "resolve_time": "never",
+                        "rib_route": "0.0.0.0/0",
+                        "metric_next_advertise": "Never",
+                        "rnh_epoch": 0
+                    }
+                }
+            },
+            "ipv6 unicast": {
+                "trigger_delay_critical": 3000,
+                "trigger_delay_non_critical": 10000,
+                "next_hops": {
+                    "0::": {
+                        "refcount": 3,
+                        "igp_cost": 0,
+                        "igp_route_type": 0,
+                        "igp_preference": 0,
+                        "attached": false,
+                        "local": true,
+                        "reachable": false,
+                        "labeled": false,
+                        "filtered": false,
+                        "pending_update": false,
+                        "resolve_time": "never",
+                        "rib_route": "0::/0",
+                        "metric_next_advertise": "Never",
+                        "rnh_epoch": 0
+                    }
+                }
+            }
+        },
+        "default": {
+            "ipv4 unicast": {
+                "trigger_delay_critical": 3000,
+                "trigger_delay_non_critical": 10000
+            },
+            "ipv6 unicast": {
+                "trigger_delay_critical": 3000,
+                "trigger_delay_non_critical": 10000
+            },
+            "vpnv4 unicast": {
+                "trigger_delay_critical": 3000,
+                "trigger_delay_non_critical": 10000,
+                "next_hops": {
+                    "10.36.3.3": {
+                        "refcount": 1,
+                        "igp_cost": 41,
+                        "igp_route_type": 0,
+                        "igp_preference": 110,
+                        "attached": false,
+                        "local": false,
+                        "reachable": true,
+                        "labeled": true,
+                        "filtered": false,
+                        "pending_update": false,
+                        "resolve_time": "5w0d",
+                        "rib_route": "10.36.3.3/32",
+                        "metric_next_advertise": "Never",
+                        "rnh_epoch": 1,
+                        "attached_nexthops": {
+                            "10.1.3.3": {
+                                "interface": "Ethernet4/2"
+                            }
+                        }
+                    }
+                }
+            },
+            "vpnv6 unicast": {
+                "trigger_delay_critical": 3000,
+                "trigger_delay_non_critical": 10000,
+                "next_hops": {
+                    "::ffff:10.36.3.3": {
+                        "refcount": 1,
+                        "igp_cost": 41,
+                        "igp_route_type": 0,
+                        "igp_preference": 110,
+                        "attached": false,
+                        "local": false,
+                        "reachable": true,
+                        "labeled": true,
+                        "filtered": false,
+                        "pending_update": false,
+                        "resolve_time": "5w0d",
+                        "rib_route": "10.36.3.3/32",
+                        "metric_next_advertise": "Never",
+                        "rnh_epoch": 1,
+                        "attached_nexthops": {
+                            "10.1.3.3": {
+                                "interface": "Ethernet4/2"
+                            }
+                        }
+                    }
+                }
+            },
+            "ipv6 label unicast": {
+                "trigger_delay_critical": 3000,
+                "trigger_delay_non_critical": 10000
+            }
+        }
+    }
+}
