@@ -457,6 +457,28 @@ class TestRuntimeRegistry:
         )
         assert candidates[0].parser_cls is ShowIpOspfParser
 
+    def test_pattern_lookup_matches_filesystem_specific_command(
+        self,
+        runtime_registry: RuntimeRegistry,
+    ) -> None:
+        """Regex registration matches filesystem-specific command variants."""
+
+        @register("iosxe", r"dir (?P<filesystem>\S+)")
+        class DirFilesystemParser(BaseParser):
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {}
+
+        runtime_registry.register_parser(
+            "iosxe",
+            r"dir (?P<filesystem>\S+)",
+            DirFilesystemParser,
+            source="built_in",
+        )
+
+        candidates = runtime_registry.get_parser_candidates("iosxe", "dir crashinfo:")
+        assert candidates[0].parser_cls is DirFilesystemParser
+
     def test_rejects_invalid_regex_pattern(
         self,
         runtime_registry: RuntimeRegistry,
