@@ -479,6 +479,38 @@ class TestRuntimeRegistry:
         candidates = runtime_registry.get_parser_candidates("iosxe", "dir crashinfo:")
         assert candidates[0].parser_cls is DirFilesystemParser
 
+    def test_pattern_lookup_matches_regex_tail_command(
+        self,
+        runtime_registry: RuntimeRegistry,
+    ) -> None:
+        """Regex registrations can capture free-form command suffixes."""
+
+        @register("iosxe", r"show ip bgp regexp (?P<pattern>.*)")
+        class ShowIpBgpRegexpParser(BaseParser):
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {}
+
+        runtime_registry.register_parser(
+            "iosxe",
+            r"show ip bgp regexp (?P<pattern>.*)",
+            ShowIpBgpRegexpParser,
+            source="built_in",
+        )
+
+        empty_path_candidates = runtime_registry.get_parser_candidates(
+            "iosxe", "show ip bgp regexp ^$"
+        )
+        assert empty_path_candidates[0].parser_cls is ShowIpBgpRegexpParser
+
+        arbitrary_pattern_candidates = runtime_registry.get_parser_candidates(
+            "iosxe", r"show ip bgp regexp _65001$"
+        )
+        assert arbitrary_pattern_candidates[0].parser_cls is ShowIpBgpRegexpParser
+
+        specs = runtime_registry.list_command_specs()
+        assert specs[0].doc_template == "show ip bgp regexp <pattern>"
+
     def test_rejects_invalid_regex_pattern(
         self,
         runtime_registry: RuntimeRegistry,
