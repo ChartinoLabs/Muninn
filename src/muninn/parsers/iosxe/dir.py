@@ -1,4 +1,4 @@
-"""Parser for 'dir' and 'dir crashinfo:' commands on IOS-XE."""
+"""Parser for 'dir' commands on IOS-XE."""
 
 import re
 from typing import NotRequired, TypedDict
@@ -55,9 +55,9 @@ def _build_file_entry(match: re.Match[str]) -> FileEntry:
 
 
 @register(OS.CISCO_IOSXE, "dir")
-@register(OS.CISCO_IOSXE, "dir crashinfo:")
+@register(OS.CISCO_IOSXE, r"dir (?P<filesystem>\S+)")
 class DirParser(BaseParser[DirResult]):
-    """Parser for 'dir' command.
+    """Parser for 'dir' command output.
 
     Example output:
         Directory of bootflash:/
