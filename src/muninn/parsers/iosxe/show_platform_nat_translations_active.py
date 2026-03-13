@@ -22,10 +22,16 @@ class NatTranslationEntry(TypedDict):
     outside_global_port: NotRequired[int]
 
 
+NatTranslationTree = dict[
+    str,
+    dict[str, dict[str, dict[str, dict[str, NatTranslationEntry]]]],
+]
+
+
 class ShowPlatformNatTranslationsActiveResult(TypedDict):
     """Schema for 'show platform nat translations active' parsed output."""
 
-    translations: dict[str, NatTranslationEntry]
+    translations: NatTranslationTree
     total_translations: int
 
 
@@ -48,26 +54,12 @@ _TRANSLATION = re.compile(
 # Total line: "Total number of translations: 3"
 _TOTAL = re.compile(r"^Total\s+number\s+of\s+translations:\s+(?P<total>\d+)\s*$")
 
-# Header / separator lines to skip
 _SKIP = re.compile(r"^(?:Pro\s+Inside|---+\s+---)")
 
 
-def _build_translation_key(match: re.Match[str]) -> str:
-    """Build a unique key for a translation entry.
-
-    Uses protocol, inside global address:port, and outside global address:port
-    to form a composite key that uniquely identifies the translation.
-    """
-    protocol = match.group("protocol").lower()
-    inside_global = match.group("inside_global")
-    ig_port = match.group("ig_port")
-    outside_global = match.group("outside_global")
-    og_port = match.group("og_port")
-
-    ig_part = f"{inside_global}:{ig_port}" if ig_port else inside_global
-    og_part = f"{outside_global}:{og_port}" if og_port else outside_global
-
-    return f"{protocol}_{ig_part}_{og_part}"
+def _port_key(port: str | None) -> str:
+    """Return the dict key used for optional port hierarchy levels."""
+    return port if port is not None else "no_port"
 
 
 def _build_entry(match: re.Match[str]) -> NatTranslationEntry:
@@ -99,6 +91,31 @@ def _build_entry(match: re.Match[str]) -> NatTranslationEntry:
     return entry
 
 
+def _store_translation(
+    translations: NatTranslationTree,
+    match: re.Match[str],
+) -> None:
+    """Store a translation using hierarchical endpoint keys."""
+    protocol = match.group("protocol").lower()
+    inside_global = match.group("inside_global")
+    inside_global_port = _port_key(match.group("ig_port"))
+    outside_global = match.group("outside_global")
+    outside_global_port = _port_key(match.group("og_port"))
+
+    if protocol not in translations:
+        translations[protocol] = {}
+    if inside_global not in translations[protocol]:
+        translations[protocol][inside_global] = {}
+    if inside_global_port not in translations[protocol][inside_global]:
+        translations[protocol][inside_global][inside_global_port] = {}
+    if outside_global not in translations[protocol][inside_global][inside_global_port]:
+        translations[protocol][inside_global][inside_global_port][outside_global] = {}
+
+    translations[protocol][inside_global][inside_global_port][outside_global][
+        outside_global_port
+    ] = _build_entry(match)
+
+
 @register(OS.CISCO_IOSXE, "show platform nat translations active")
 class ShowPlatformNatTranslationsActiveParser(
     BaseParser[ShowPlatformNatTranslationsActiveResult],
@@ -122,12 +139,12 @@ class ShowPlatformNatTranslationsActiveParser(
             output: Raw CLI output from command.
 
         Returns:
-            Parsed NAT translation data keyed by composite identifier.
+            Parsed NAT translation data nested by protocol and endpoint values.
 
         Raises:
             ValueError: If no NAT translation data is found.
         """
-        translations: dict[str, NatTranslationEntry] = {}
+        translations: NatTranslationTree = {}
         total_translations = 0
         total_found = False
 
@@ -144,8 +161,7 @@ class ShowPlatformNatTranslationsActiveParser(
 
             trans_match = _TRANSLATION.match(stripped)
             if trans_match:
-                key = _build_translation_key(trans_match)
-                translations[key] = _build_entry(trans_match)
+                _store_translation(translations, trans_match)
 
         if not translations and not total_found:
             msg = "No NAT translation data found in output"
