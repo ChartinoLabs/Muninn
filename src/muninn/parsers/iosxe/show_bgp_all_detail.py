@@ -1,4 +1,4 @@
-"""Parser for 'show bgp all detail' command on IOS-XE."""
+"""Parser for 'show bgp all detail' / 'show ip bgp all detail' on IOS-XE."""
 
 import re
 from typing import NotRequired, TypedDict
@@ -623,8 +623,9 @@ def _copy_rd_entry(rd_entry: RouteDistinguisherEntry) -> RouteDistinguisherEntry
 
 
 @register(OS.CISCO_IOSXE, "show bgp all detail")
+@register(OS.CISCO_IOSXE, "show ip bgp all detail")
 class ShowBgpAllDetailParser(BaseParser["ShowBgpAllDetailResult"]):
-    """Parser for 'show bgp all detail' command.
+    """Parser for 'show bgp all detail' on IOS-XE.
 
     Example output:
         For address family: IPv4 Unicast
@@ -639,7 +640,7 @@ class ShowBgpAllDetailParser(BaseParser["ShowBgpAllDetailResult"]):
         """Parse 'show bgp all detail' output.
 
         Args:
-            output: Raw CLI output from 'show bgp all detail' command.
+            output: Raw CLI output from the command.
 
         Returns:
             Parsed data organized by address family.
