@@ -48,8 +48,12 @@ def discover_test_cases() -> list[tuple[str, str, Path]]:
             if not command_dir.is_dir() or command_dir.name.startswith("_"):
                 continue
 
-            # Convert directory name to command (underscores to spaces)
-            command = command_dir.name.replace("_", " ")
+            command_override = command_dir / "command.txt"
+            if command_override.exists():
+                command = command_override.read_text().strip()
+            else:
+                # Convert directory name to command (underscores to spaces)
+                command = command_dir.name.replace("_", " ")
 
             for test_case_dir in command_dir.iterdir():
                 if not test_case_dir.is_dir() or test_case_dir.name.startswith("_"):

@@ -1,4 +1,4 @@
-"""Parser for 'show port-security interface' command on IOS."""
+"""Parser for 'show port-security interface <interface>' on IOS."""
 
 import re
 from typing import NotRequired, TypedDict
@@ -9,7 +9,7 @@ from muninn.registry import register
 
 
 class ShowPortSecurityInterfaceResult(TypedDict):
-    """Schema for 'show port-security interface' parsed output.
+    """Schema for 'show port-security interface <interface>' parsed output.
 
     Flat dict representing port-security status for a single interface.
     """
@@ -103,11 +103,11 @@ def _parse_kv_line(line: str, result: dict[str, str | int]) -> None:
         result[key] = raw_value
 
 
-@register(OS.CISCO_IOS, "show port-security interface")
+@register(OS.CISCO_IOS, r"show port-security interface (?P<interface>\S+)")
 class ShowPortSecurityInterfaceParser(
     BaseParser[ShowPortSecurityInterfaceResult],
 ):
-    """Parser for 'show port-security interface' on IOS.
+    """Parser for 'show port-security interface <interface>' on IOS.
 
     Parses port-security details for a single interface including max MAC
     addresses, violation mode, aging settings, and security violation count.
@@ -115,7 +115,7 @@ class ShowPortSecurityInterfaceParser(
 
     @classmethod
     def parse(cls, output: str) -> ShowPortSecurityInterfaceResult:
-        """Parse 'show port-security interface' output into structured data."""
+        """Parse 'show port-security interface <interface>' output."""
         result: dict[str, str | int] = {}
 
         for line in output.splitlines():
