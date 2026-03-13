@@ -20,6 +20,7 @@ __all__ = ["ShowBgpAllSummaryParser"]
 
 
 @register(OS.CISCO_IOSXE, "show bgp all summary")
+@register(OS.CISCO_IOSXE, "show ip bgp all summary")
 class ShowBgpAllSummaryParser(BaseParser["ShowIpBgpSummaryResult"]):
     """Parser for 'show bgp all summary' command on IOS-XE.
 

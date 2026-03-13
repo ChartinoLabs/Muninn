@@ -1,0 +1,107 @@
+{
+    "policy_maps": {
+        "Control_Plane_In": {
+            "class_map": {
+                "BGP_Class": {
+                    "bytes": 2032,
+                    "match": [
+                        "access-group name BGP_Permit"
+                    ],
+                    "match_evaluation": "match-all",
+                    "packets": 32,
+                    "qos_set": {
+                        "ip precedence": {
+                            "6": {
+                                "marker_statistics": "Disabled"
+                            }
+                        }
+                    },
+                    "rate": {
+                        "drop_rate_bps": 0,
+                        "interval": 300,
+                        "offered_rate_bps": 0
+                    }
+                },
+                "ICMP_Class2": {
+                    "bytes": 482,
+                    "match": [
+                        "access-group name ICMP_Permit2"
+                    ],
+                    "match_evaluation": "match-all",
+                    "packets": 4,
+                    "police": {
+                        "cir_bc_bytes": 150000,
+                        "cir_bps": 12000000,
+                        "conformed": {
+                            "actions": {
+                                "transmit": true
+                            },
+                            "bps": 0,
+                            "bytes": 482,
+                            "packets": 4
+                        },
+                        "exceeded": {
+                            "actions": {
+                                "drop": true
+                            },
+                            "bps": 0,
+                            "bytes": 0,
+                            "packets": 0
+                        }
+                    },
+                    "rate": {
+                        "drop_rate_bps": 0,
+                        "interval": 300,
+                        "offered_rate_bps": 0
+                    }
+                },
+                "Ping_Class": {
+                    "bytes": 0,
+                    "match": [
+                        "access-group name Ping_Option"
+                    ],
+                    "match_evaluation": "match-all",
+                    "packets": 0,
+                    "police": {
+                        "cir_bc_bytes": 1500,
+                        "cir_bps": 8000,
+                        "conformed": {
+                            "actions": {
+                                "drop": true
+                            },
+                            "bps": 0,
+                            "bytes": 0,
+                            "packets": 0
+                        },
+                        "exceeded": {
+                            "actions": {
+                                "drop": true
+                            },
+                            "bps": 0,
+                            "bytes": 0,
+                            "packets": 0
+                        }
+                    },
+                    "rate": {
+                        "drop_rate_bps": 0,
+                        "interval": 300,
+                        "offered_rate_bps": 0
+                    }
+                },
+                "class-default": {
+                    "bytes": 16554,
+                    "match": [
+                        "any"
+                    ],
+                    "match_evaluation": "match-any",
+                    "packets": 276,
+                    "rate": {
+                        "drop_rate_bps": 0,
+                        "interval": 300,
+                        "offered_rate_bps": 0
+                    }
+                }
+            }
+        }
+    }
+}

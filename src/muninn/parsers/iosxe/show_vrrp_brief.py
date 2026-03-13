@@ -91,6 +91,7 @@ _HEADER_PATTERN = re.compile(r"^\s*Interface\s+Grp", re.IGNORECASE)
 
 
 @register(OS.CISCO_IOSXE, "show vrrp brief")
+@register(OS.CISCO_IOSXE, "show vrrp brief all")
 class ShowVrrpBriefParser(BaseParser[ShowVrrpBriefResult]):
     """Parser for 'show vrrp brief' command.
 
