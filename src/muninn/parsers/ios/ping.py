@@ -8,6 +8,12 @@ from muninn.parser import BaseParser
 from muninn.registry import register
 
 
+class PingPacketData(TypedDict):
+    """Per-packet ping result."""
+
+    result: str
+
+
 class PingResult(TypedDict):
     """Schema for 'ping' parsed output.
 
@@ -17,6 +23,7 @@ class PingResult(TypedDict):
     packets_sent: int
     packets_received: int
     success_rate_percent: int
+    packet_data: dict[str, PingPacketData]
     rtt_min_ms: NotRequired[int]
     rtt_avg_ms: NotRequired[int]
     rtt_max_ms: NotRequired[int]
@@ -33,6 +40,19 @@ _SUCCESS_RATE_RE = re.compile(
     r"(?:,\s*round-trip min/avg/max\s*=\s*"
     r"(?P<rtt_min>\d+)/(?P<rtt_avg>\d+)/(?P<rtt_max>\d+)\s*ms)?"
 )
+
+_PACKET_LINE_RE = re.compile(r"^[!.UQM&?]+$")
+
+
+_PACKET_RESULT_MAP = {
+    "!": "successful",
+    ".": "failed",
+    "U": "unreachable",
+    "Q": "source_quench",
+    "M": "cannot_fragment",
+    "&": "time_exceeded",
+    "?": "unknown",
+}
 
 
 @register(OS.CISCO_IOS, "ping")
@@ -60,6 +80,8 @@ class PingParser(BaseParser["PingResult"]):
         Raises:
             ValueError: If no success rate line is found in the output.
         """
+        packet_symbols: list[str] = []
+
         for line in output.splitlines():
             match = _SUCCESS_RATE_RE.search(line)
             if match:
@@ -67,6 +89,12 @@ class PingParser(BaseParser["PingResult"]):
                     "success_rate_percent": int(match.group("success_rate")),
                     "packets_received": int(match.group("received")),
                     "packets_sent": int(match.group("sent")),
+                    "packet_data": {
+                        str(index): {
+                            "result": _PACKET_RESULT_MAP.get(symbol, "unknown")
+                        }
+                        for index, symbol in enumerate(packet_symbols, start=1)
+                    },
                 }
 
                 if match.group("rtt_min") is not None:
@@ -75,6 +103,10 @@ class PingParser(BaseParser["PingResult"]):
                     result["rtt_max_ms"] = int(match.group("rtt_max"))
 
                 return result
+
+            stripped = line.strip()
+            if _PACKET_LINE_RE.fullmatch(stripped):
+                packet_symbols.extend(stripped)
 
         msg = "No success rate line found in ping output"
         raise ValueError(msg)
