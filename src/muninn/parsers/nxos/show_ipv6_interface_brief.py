@@ -9,14 +9,21 @@ from muninn.registry import register
 from muninn.utils import canonical_interface_name
 
 
+class IPv6AddressEntry(TypedDict):
+    """Schema for a single IPv6 address."""
+
+    address: str
+    flags: NotRequired[list[str]]
+
+
 class IPv6InterfaceBriefEntry(TypedDict):
     """Schema for a single IPv6 interface brief entry."""
 
-    ipv6_addresses: list[str]
+    ipv6_addresses: list[IPv6AddressEntry]
     protocol_status: str
     link_status: str
     admin_status: str
-    link_local: NotRequired[str]
+    link_local: NotRequired[IPv6AddressEntry]
 
 
 class VrfEntry(TypedDict):
@@ -41,6 +48,10 @@ _INTERFACE_LINE_PATTERN = re.compile(
     r"(?P<protocol>up|down)/(?P<link>up|down)/(?P<admin>up|down)$"
 )
 _ADDRESS_CONTINUATION_PATTERN = re.compile(r"^\s+(?P<address>\S+)$")
+_ADDRESS_WITH_FLAGS_PATTERN = re.compile(
+    r"^(?P<address>[^\[]+?)(?:\[(?P<flags>[A-Z]+)\])?$"
+)
+_ADDRESS_FLAG_MAP = {"T": "tentative"}
 
 
 def _is_skip_line(stripped: str) -> bool:
@@ -52,13 +63,27 @@ def _is_skip_line(stripped: str) -> bool:
     )
 
 
+def _parse_address(address: str) -> IPv6AddressEntry:
+    """Split an address token into address and optional flags."""
+    match = _ADDRESS_WITH_FLAGS_PATTERN.match(address)
+    if not match:
+        return {"address": address}
+
+    parsed: IPv6AddressEntry = {"address": match.group("address")}
+    flags = match.group("flags")
+    if flags:
+        parsed["flags"] = [_ADDRESS_FLAG_MAP.get(flag, flag) for flag in flags]
+    return parsed
+
+
 def _record_address(entry: IPv6InterfaceBriefEntry, address: str) -> None:
     """Store a global or link-local address on an interface entry."""
-    if address.lower().startswith("fe80:"):
-        entry["link_local"] = address
+    parsed_address = _parse_address(address)
+    if parsed_address["address"].lower().startswith("fe80:"):
+        entry["link_local"] = parsed_address
         return
-    if address not in entry["ipv6_addresses"]:
-        entry["ipv6_addresses"].append(address)
+    if parsed_address not in entry["ipv6_addresses"]:
+        entry["ipv6_addresses"].append(parsed_address)
 
 
 def _validate_result(vrfs: dict[str, VrfEntry]) -> None:
