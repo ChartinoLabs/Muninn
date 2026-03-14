@@ -1,0 +1,69 @@
+{
+    "access_lists": {
+        "ACL-OBJECTS": {
+            "entries": {
+                "10": {
+                    "action": "permit",
+                    "line": "permit ip object-group GENIE any log-input",
+                    "parsed": {
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "log_input": true,
+                        "protocol": "ip",
+                        "source": {
+                            "kind": "object-group",
+                            "name": "GENIE"
+                        }
+                    },
+                    "sequence": 10
+                },
+                "20": {
+                    "action": "deny",
+                    "line": "deny ip any object-group GENIE log-input",
+                    "parsed": {
+                        "destination": {
+                            "kind": "object-group",
+                            "name": "GENIE"
+                        },
+                        "log_input": true,
+                        "protocol": "ip",
+                        "source": {
+                            "kind": "any"
+                        }
+                    },
+                    "sequence": 20
+                },
+                "30": {
+                    "action": "permit",
+                    "line": "permit tcp any any match-all +syn -ack log",
+                    "parsed": {
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "log": true,
+                        "protocol": "tcp",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "tcp_flags": {
+                            "flags": [
+                                {
+                                    "flag": "syn",
+                                    "operator": "include"
+                                },
+                                {
+                                    "flag": "ack",
+                                    "operator": "exclude"
+                                }
+                            ],
+                            "mode": "match-all"
+                        }
+                    },
+                    "sequence": 30
+                }
+            },
+            "type": "Extended IP access list"
+        }
+    }
+}

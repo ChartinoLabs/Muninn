@@ -1,0 +1,65 @@
+{
+    "access_lists": {
+        "advanced": {
+            "entries": {
+                "20": {
+                    "action": "permit",
+                    "line": "permit esp any any dscp cs7 log",
+                    "parsed": {
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "dscp": "cs7",
+                        "log": true,
+                        "protocol": "esp",
+                        "source": {
+                            "kind": "any"
+                        }
+                    },
+                    "sequence": 20
+                },
+                "30": {
+                    "action": "permit",
+                    "line": "permit icmp any any router-advertisement time-range GO (inactive)",
+                    "parsed": {
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "icmp_message": "router-advertisement",
+                        "protocol": "icmp",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "time_range": {
+                            "name": "GO",
+                            "status": "inactive"
+                        }
+                    },
+                    "sequence": 30
+                },
+                "40": {
+                    "action": "permit",
+                    "line": "permit tcp any any range 1000 2000 log-input",
+                    "parsed": {
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "destination_port": {
+                            "operator": "range",
+                            "ports": [
+                                "1000",
+                                "2000"
+                            ]
+                        },
+                        "log_input": true,
+                        "protocol": "tcp",
+                        "source": {
+                            "kind": "any"
+                        }
+                    },
+                    "sequence": 40
+                }
+            }
+        }
+    }
+}

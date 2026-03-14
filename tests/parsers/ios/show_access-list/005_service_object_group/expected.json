@@ -1,0 +1,41 @@
+{
+    "access_lists": {
+        "ACL-SERVICE-GROUP": {
+            "entries": {
+                "10": {
+                    "action": "permit",
+                    "line": "permit object-group WEB-PORTS any host 192.0.2.10 log",
+                    "parsed": {
+                        "destination": {
+                            "kind": "host",
+                            "value": "192.0.2.10"
+                        },
+                        "log": true,
+                        "service_object_group": "WEB-PORTS",
+                        "source": {
+                            "kind": "any"
+                        }
+                    },
+                    "sequence": 10
+                },
+                "20": {
+                    "action": "deny",
+                    "line": "deny object-group APP-SVCS object-group SRC-NETS any log-input",
+                    "parsed": {
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "log_input": true,
+                        "service_object_group": "APP-SVCS",
+                        "source": {
+                            "kind": "object-group",
+                            "name": "SRC-NETS"
+                        }
+                    },
+                    "sequence": 20
+                }
+            },
+            "type": "Extended IP access list"
+        }
+    }
+}

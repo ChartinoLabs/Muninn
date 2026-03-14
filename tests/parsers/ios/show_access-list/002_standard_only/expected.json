@@ -5,11 +5,23 @@
                 "10": {
                     "action": "permit",
                     "line": "permit 4.5.6.0 log",
+                    "parsed": {
+                        "log": true,
+                        "source": {
+                            "kind": "address",
+                            "value": "4.5.6.0"
+                        }
+                    },
                     "sequence": 10
                 },
                 "20": {
                     "action": "permit",
                     "line": "permit any",
+                    "parsed": {
+                        "source": {
+                            "kind": "any"
+                        }
+                    },
                     "sequence": 20
                 }
             },
@@ -21,12 +33,25 @@
                     "action": "permit",
                     "line": "permit 0.0.0.0, wildcard bits 255.255.255.252 log",
                     "matches": 4556,
+                    "parsed": {
+                        "log": true,
+                        "source": {
+                            "kind": "network",
+                            "value": "0.0.0.0",
+                            "wildcard": "255.255.255.252"
+                        }
+                    },
                     "sequence": 10
                 },
                 "20": {
                     "action": "permit",
                     "line": "permit any",
                     "matches": 11665,
+                    "parsed": {
+                        "source": {
+                            "kind": "any"
+                        }
+                    },
                     "sequence": 20
                 }
             },

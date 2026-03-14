@@ -5,6 +5,7 @@ from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.parsers.ios._acl_common import AclParsedFields, parse_extended_ace_body
 from muninn.registry import register
 
 
@@ -14,6 +15,7 @@ class Ipv6AccessListEntry(TypedDict):
     sequence: int
     action: str
     line: str
+    parsed: AclParsedFields
     matches: NotRequired[int]
 
 
@@ -85,6 +87,7 @@ def _parse_ace_line(line: str) -> Ipv6AccessListEntry | None:
         "sequence": sequence,
         "action": action,
         "line": rest,
+        "parsed": parse_extended_ace_body(rest.split(None, 1)[1], ip_version=6),
     }
     if matches is not None:
         entry["matches"] = matches

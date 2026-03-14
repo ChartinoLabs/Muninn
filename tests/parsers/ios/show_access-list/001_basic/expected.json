@@ -5,21 +5,47 @@
                 "10": {
                     "action": "permit",
                     "line": "permit 10.1.2.3 log",
+                    "parsed": {
+                        "log": true,
+                        "source": {
+                            "kind": "address",
+                            "value": "10.1.2.3"
+                        }
+                    },
                     "sequence": 10
                 },
                 "20": {
                     "action": "deny",
                     "line": "deny 10.1.1.1",
+                    "parsed": {
+                        "source": {
+                            "kind": "address",
+                            "value": "10.1.1.1"
+                        }
+                    },
                     "sequence": 20
                 },
                 "30": {
                     "action": "deny",
                     "line": "deny 192.168.1.0, wildcard bits 0.0.0.255",
+                    "parsed": {
+                        "source": {
+                            "kind": "network",
+                            "value": "192.168.1.0",
+                            "wildcard": "0.0.0.255"
+                        }
+                    },
                     "sequence": 30
                 },
                 "40": {
                     "action": "deny",
                     "line": "deny any log",
+                    "parsed": {
+                        "log": true,
+                        "source": {
+                            "kind": "any"
+                        }
+                    },
                     "sequence": 40
                 }
             },
@@ -31,6 +57,13 @@
                     "action": "permit",
                     "line": "permit 192.168.1.0, wildcard bits 0.0.0.255",
                     "matches": 5177,
+                    "parsed": {
+                        "source": {
+                            "kind": "network",
+                            "value": "192.168.1.0",
+                            "wildcard": "0.0.0.255"
+                        }
+                    },
                     "sequence": 10
                 }
             },
@@ -41,11 +74,43 @@
                 "10": {
                     "action": "permit",
                     "line": "permit tcp any host 192.168.1.100 eq ftp",
+                    "parsed": {
+                        "destination": {
+                            "kind": "host",
+                            "value": "192.168.1.100"
+                        },
+                        "destination_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "ftp"
+                            ]
+                        },
+                        "protocol": "tcp",
+                        "source": {
+                            "kind": "any"
+                        }
+                    },
                     "sequence": 10
                 },
                 "20": {
                     "action": "permit",
                     "line": "permit tcp any host 192.168.1.100 gt 1024",
+                    "parsed": {
+                        "destination": {
+                            "kind": "host",
+                            "value": "192.168.1.100"
+                        },
+                        "destination_port": {
+                            "operator": "gt",
+                            "ports": [
+                                "1024"
+                            ]
+                        },
+                        "protocol": "tcp",
+                        "source": {
+                            "kind": "any"
+                        }
+                    },
                     "sequence": 20
                 }
             },
@@ -56,11 +121,29 @@
                 "10": {
                     "action": "permit",
                     "line": "permit ip any any",
+                    "parsed": {
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "protocol": "ip",
+                        "source": {
+                            "kind": "any"
+                        }
+                    },
                     "sequence": 10
                 },
                 "20": {
                     "action": "deny",
                     "line": "deny ip any any",
+                    "parsed": {
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "protocol": "ip",
+                        "source": {
+                            "kind": "any"
+                        }
+                    },
                     "sequence": 20
                 }
             },
