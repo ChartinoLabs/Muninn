@@ -12,38 +12,80 @@ from muninn.utils import canonical_interface_name
 class IPv6InterfaceBriefEntry(TypedDict):
     """Schema for a single IPv6 interface brief entry."""
 
-    ipv6_address: str
-    link_local: NotRequired[str]
+    ipv6_addresses: list[str]
     protocol_status: str
     link_status: str
     admin_status: str
+    link_local: NotRequired[str]
+
+
+class VrfEntry(TypedDict):
+    """Schema for a VRF entry."""
+
+    vrf_id: int
+    interfaces: dict[str, IPv6InterfaceBriefEntry]
 
 
 class ShowIPv6InterfaceBriefResult(TypedDict):
     """Schema for 'show ipv6 interface brief' parsed output."""
 
-    interfaces: dict[str, IPv6InterfaceBriefEntry]
+    vrfs: dict[str, VrfEntry]
 
 
-# Pattern for interface lines:
-#   Vlan44           2a01:3333:1:44::2                         up/up/up
+_VRF_PATTERN = re.compile(
+    r'^IPv6 Interface Status for VRF "(?P<vrf_name>[^"]+)"\((?P<vrf_id>\d+)\)$'
+)
 _INTERFACE_LINE_PATTERN = re.compile(
     r"^(?P<interface>\S+)\s+"
-    r"(?P<ipv6_address>\S+)\s+"
+    r"(?P<address>\S+)\s+"
     r"(?P<protocol>up|down)/(?P<link>up|down)/(?P<admin>up|down)$"
 )
+_ADDRESS_CONTINUATION_PATTERN = re.compile(r"^\s+(?P<address>\S+)$")
 
-# Pattern for link-local continuation lines:
-#                  fe80::333:4444:5555:8888
-_LINK_LOCAL_PATTERN = re.compile(r"^\s+(?P<link_local>fe80:\S+)$")
+
+def _is_skip_line(stripped: str) -> bool:
+    """Return True when the line is a header or otherwise non-data."""
+    return (
+        not stripped
+        or ("Interface" in stripped and "IPv6 Address/Link-local Address" in stripped)
+        or stripped == "prot/link/admin"
+    )
+
+
+def _record_address(entry: IPv6InterfaceBriefEntry, address: str) -> None:
+    """Store a global or link-local address on an interface entry."""
+    if address.lower().startswith("fe80:"):
+        entry["link_local"] = address
+        return
+    if address not in entry["ipv6_addresses"]:
+        entry["ipv6_addresses"].append(address)
+
+
+def _validate_result(vrfs: dict[str, VrfEntry]) -> None:
+    """Validate that parsed data contains VRFs and interfaces."""
+    if not vrfs:
+        msg = "No VRFs found in output"
+        raise ValueError(msg)
+
+    total_interfaces = sum(len(vrf["interfaces"]) for vrf in vrfs.values())
+    if total_interfaces == 0:
+        msg = "No interfaces found in output"
+        raise ValueError(msg)
 
 
 @register(OS.CISCO_NXOS, "show ipv6 interface brief")
+@register(
+    OS.CISCO_NXOS,
+    r"show ipv6 interface brief vrf (?P<vrf_name>\S+)",
+)
 class ShowIPv6InterfaceBriefParser(BaseParser[ShowIPv6InterfaceBriefResult]):
     """Parser for 'show ipv6 interface brief' command on NX-OS.
 
-    Parses IPv6 interface status including address, link-local address,
-    and protocol/link/admin status.
+    Example output:
+        IPv6 Interface Status for VRF "default"(1)
+        Vlan3002         79:1:1::2[T]                              down/down/up
+                         79:2:1::2[T]
+                         fe80::e6c7:22ff:fe10:afc1[T]
     """
 
     @classmethod
@@ -57,34 +99,50 @@ class ShowIPv6InterfaceBriefParser(BaseParser[ShowIPv6InterfaceBriefResult]):
             Parsed IPv6 interface brief data keyed by canonical interface name.
 
         Raises:
-            ValueError: If no interfaces found in output.
+            ValueError: If no VRFs or interfaces found in output.
         """
-        interfaces: dict[str, IPv6InterfaceBriefEntry] = {}
+        vrfs: dict[str, VrfEntry] = {}
+        current_vrf: str | None = None
         last_interface: str | None = None
 
         for line in output.splitlines():
+            stripped = line.strip()
+            vrf_match = _VRF_PATTERN.match(stripped)
+            if vrf_match:
+                current_vrf = vrf_match.group("vrf_name")
+                vrfs[current_vrf] = {
+                    "vrf_id": int(vrf_match.group("vrf_id")),
+                    "interfaces": {},
+                }
+                last_interface = None
+                continue
+
+            if _is_skip_line(stripped):
+                continue
+
             intf_match = _INTERFACE_LINE_PATTERN.match(line)
-            if intf_match:
+            if intf_match and current_vrf is not None:
                 name = canonical_interface_name(
                     intf_match.group("interface"), os=OS.CISCO_NXOS
                 )
                 entry: IPv6InterfaceBriefEntry = {
-                    "ipv6_address": intf_match.group("ipv6_address"),
+                    "ipv6_addresses": [],
                     "protocol_status": intf_match.group("protocol"),
                     "link_status": intf_match.group("link"),
                     "admin_status": intf_match.group("admin"),
                 }
-                interfaces[name] = entry
+                _record_address(entry, intf_match.group("address"))
+                vrfs[current_vrf]["interfaces"][name] = entry
                 last_interface = name
                 continue
 
-            ll_match = _LINK_LOCAL_PATTERN.match(line)
-            if ll_match and last_interface is not None:
-                interfaces[last_interface]["link_local"] = ll_match.group("link_local")
-                continue
+            cont_match = _ADDRESS_CONTINUATION_PATTERN.match(line)
+            if cont_match and current_vrf is not None and last_interface is not None:
+                _record_address(
+                    vrfs[current_vrf]["interfaces"][last_interface],
+                    cont_match.group("address"),
+                )
 
-        if not interfaces:
-            msg = "No interfaces found in output"
-            raise ValueError(msg)
+        _validate_result(vrfs)
 
-        return ShowIPv6InterfaceBriefResult(interfaces=interfaces)
+        return ShowIPv6InterfaceBriefResult(vrfs=vrfs)
