@@ -1,0 +1,125 @@
+{
+    "access_lists": {
+        "Virtual-Access2.1#427819008151": {
+            "entries": {
+                "1": {
+                    "action": "permit",
+                    "line": "permit tcp host 2001:DB8:1::32 eq bgp host 2001:DB8:2::32 eq 11000",
+                    "parsed": {
+                        "destination": {
+                            "kind": "host",
+                            "value": "2001:DB8:2::32"
+                        },
+                        "destination_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "11000"
+                            ]
+                        },
+                        "protocol": "tcp",
+                        "source": {
+                            "kind": "host",
+                            "value": "2001:DB8:1::32"
+                        },
+                        "source_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "bgp"
+                            ]
+                        }
+                    },
+                    "sequence": 1
+                },
+                "2": {
+                    "action": "permit",
+                    "line": "permit tcp host 2001:DB8:1::32 eq telnet host 2001:DB8:2::32 eq 11001",
+                    "parsed": {
+                        "destination": {
+                            "kind": "host",
+                            "value": "2001:DB8:2::32"
+                        },
+                        "destination_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "11001"
+                            ]
+                        },
+                        "protocol": "tcp",
+                        "source": {
+                            "kind": "host",
+                            "value": "2001:DB8:1::32"
+                        },
+                        "source_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "telnet"
+                            ]
+                        }
+                    },
+                    "sequence": 2
+                }
+            },
+            "per_user": true
+        },
+        "inbound": {
+            "entries": {
+                "10": {
+                    "action": "permit",
+                    "line": "permit tcp any any eq bgp",
+                    "matches": 8,
+                    "parsed": {
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "destination_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "bgp"
+                            ]
+                        },
+                        "protocol": "tcp",
+                        "source": {
+                            "kind": "any"
+                        }
+                    },
+                    "sequence": 10
+                },
+                "20": {
+                    "action": "permit",
+                    "line": "permit tcp any any eq telnet",
+                    "matches": 15,
+                    "parsed": {
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "destination_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "telnet"
+                            ]
+                        },
+                        "protocol": "tcp",
+                        "source": {
+                            "kind": "any"
+                        }
+                    },
+                    "sequence": 20
+                },
+                "30": {
+                    "action": "permit",
+                    "line": "permit udp any any",
+                    "parsed": {
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "protocol": "udp",
+                        "source": {
+                            "kind": "any"
+                        }
+                    },
+                    "sequence": 30
+                }
+            }
+        }
+    }
+}

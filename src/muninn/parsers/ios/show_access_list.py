@@ -5,6 +5,11 @@ from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.parsers.ios._acl_common import (
+    AclParsedFields,
+    parse_extended_ace_body,
+    parse_standard_ace_body,
+)
 from muninn.registry import register
 
 
@@ -14,6 +19,7 @@ class AccessListEntry(TypedDict):
     sequence: int
     action: str
     line: str
+    parsed: AclParsedFields
     matches: NotRequired[int]
 
 
@@ -44,11 +50,12 @@ _ACE_PATTERN = re.compile(
 _MATCH_COUNT_PATTERN = re.compile(r"\((\d+)\s+matches?\)$")
 
 
-def _parse_ace_line(line: str) -> AccessListEntry | None:
+def _parse_ace_line(line: str, acl_type: str) -> AccessListEntry | None:
     """Parse a single ACE line into an entry dict.
 
     Args:
         line: Stripped line from CLI output.
+        acl_type: ACL header type used to choose standard or extended parsing.
 
     Returns:
         Parsed ACE entry, or None if line does not match.
@@ -61,7 +68,6 @@ def _parse_ace_line(line: str) -> AccessListEntry | None:
     action = match.group("action")
     rest = match.group("rest").strip()
 
-    # Build the full action + rest as the line content
     full_line = f"{action} {rest}"
 
     # Check for match count and strip it from line
@@ -73,6 +79,7 @@ def _parse_ace_line(line: str) -> AccessListEntry | None:
             "sequence": sequence,
             "action": action,
             "line": full_line,
+            "parsed": _parse_ace_body(full_line, acl_type),
             "matches": matches,
         }
         return entry
@@ -81,7 +88,16 @@ def _parse_ace_line(line: str) -> AccessListEntry | None:
         "sequence": sequence,
         "action": action,
         "line": full_line,
+        "parsed": _parse_ace_body(full_line, acl_type),
     }
+
+
+def _parse_ace_body(full_line: str, acl_type: str) -> AclParsedFields:
+    """Parse the body of an ACL line into structured fields."""
+    body = full_line.split(None, 1)[1] if " " in full_line else ""
+    if acl_type.startswith("Standard"):
+        return parse_standard_ace_body(body)
+    return parse_extended_ace_body(body, ip_version=4)
 
 
 @register(OS.CISCO_IOS, "show access-list")
@@ -131,7 +147,10 @@ class ShowAccessListParser(BaseParser[ShowAccessListResult]):
             if current_name is None:
                 continue
 
-            entry = _parse_ace_line(line)
+            if current_type is None:
+                continue
+
+            entry = _parse_ace_line(line, current_type)
             if entry:
                 access_lists[current_name]["entries"][str(entry["sequence"])] = entry
 
