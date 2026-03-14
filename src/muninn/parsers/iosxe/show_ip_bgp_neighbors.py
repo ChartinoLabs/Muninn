@@ -564,6 +564,7 @@ def _parse_neighbor_block(lines: list[str]) -> NeighborEntry:
 @register(OS.CISCO_IOSXE, "show ip bgp all neighbors")
 @register(OS.CISCO_IOSXE, "show bgp neighbors")
 @register(OS.CISCO_IOSXE, "show bgp all neighbors")
+@register(OS.CISCO_IOS, "show ip bgp vpnv4 all neighbors")
 class ShowIpBgpNeighborsParser(BaseParser["ShowIpBgpNeighborsResult"]):
     """Parser for 'show ip bgp neighbors' on IOS-XE.
 
