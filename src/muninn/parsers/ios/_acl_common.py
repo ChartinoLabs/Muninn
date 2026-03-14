@@ -68,36 +68,69 @@ def _parse_address(
         return {"kind": "unknown"}, index
 
     token = tokens[index]
-    if token == "any":
-        return {"kind": "any"}, index + 1
+    special_address, next_index = _parse_special_address(tokens, index, token)
+    if special_address is not None:
+        return special_address, next_index
 
-    if token == "host" and index + 1 < len(tokens):
-        return {"kind": "host", "value": tokens[index + 1]}, index + 2
-
-    if token == "object-group" and index + 1 < len(tokens):
-        return {"kind": "object-group", "name": tokens[index + 1]}, index + 2
-
-    if ip_version == 4:
-        current = token.rstrip(",")
-        if index + 1 < len(tokens) and _looks_like_ipv4(tokens[index + 1]):
-            return {
-                "kind": "network",
-                "value": current,
-                "wildcard": tokens[index + 1],
-            }, index + 2
-        if (
-            index + 3 < len(tokens)
-            and tokens[index + 1] == "wildcard"
-            and tokens[index + 2] == "bits"
-        ):
-            return {
-                "kind": "network",
-                "value": current,
-                "wildcard": tokens[index + 3],
-            }, index + 4
+    ipv4_network, next_index = _parse_ipv4_network(tokens, index, token, ip_version)
+    if ipv4_network is not None:
+        return ipv4_network, next_index
 
     kind = "prefix" if "/" in token else "address"
     return {"kind": kind, "value": token}, index + 1
+
+
+def _parse_special_address(
+    tokens: list[str], index: int, token: str
+) -> tuple[AddressSpec | None, int]:
+    """Parse common ACL address keywords like any, host, and object-group."""
+    if token == "any":  # nosec B105
+        return {"kind": "any"}, index + 1
+
+    if token == "host" and index + 1 < len(tokens):  # nosec B105
+        return {"kind": "host", "value": tokens[index + 1]}, index + 2
+
+    if token == "object-group" and index + 1 < len(tokens):  # nosec B105
+        return {"kind": "object-group", "name": tokens[index + 1]}, index + 2
+
+    return None, index
+
+
+def _parse_ipv4_network(
+    tokens: list[str],
+    index: int,
+    token: str,
+    ip_version: Literal[4, 6],
+) -> tuple[AddressSpec | None, int]:
+    """Parse IPv4 network address forms."""
+    if ip_version != 4:
+        return None, index
+
+    current = token.rstrip(",")
+    if index + 1 < len(tokens) and _looks_like_ipv4(tokens[index + 1]):
+        return {
+            "kind": "network",
+            "value": current,
+            "wildcard": tokens[index + 1],
+        }, index + 2
+
+    if _has_wildcard_bits(tokens, index):
+        return {
+            "kind": "network",
+            "value": current,
+            "wildcard": tokens[index + 3],
+        }, index + 4
+
+    return None, index
+
+
+def _has_wildcard_bits(tokens: list[str], index: int) -> bool:
+    """Return whether tokens contain an IOS 'wildcard bits' sequence."""
+    return (
+        index + 3 < len(tokens)
+        and tokens[index + 1] == "wildcard"
+        and tokens[index + 2] == "bits"
+    )
 
 
 def _parse_port_spec(tokens: list[str], index: int) -> tuple[PortSpec | None, int]:
@@ -161,10 +194,10 @@ def _consume_simple_flag(
 ) -> int | None:
     """Consume simple boolean trailing modifiers."""
     token = tokens[index]
-    if token == "log":
+    if token == "log":  # nosec B105
         parsed["log"] = True
         return index + 1
-    if token == "log-input":
+    if token == "log-input":  # nosec B105
         parsed["log_input"] = True
         return index + 1
     return None
@@ -179,7 +212,7 @@ def _consume_value_modifier(
         parsed[token] = tokens[index + 1]
         return index + 2
 
-    if token == "ttl" and index + 1 < len(tokens):
+    if token == "ttl" and index + 1 < len(tokens):  # nosec B105
         ttl_spec: dict[str, object] = {}
         if index + 2 < len(tokens) and tokens[index + 1] in _PORT_OPERATORS:
             ttl_spec["operator"] = tokens[index + 1]
