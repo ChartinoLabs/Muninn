@@ -286,12 +286,13 @@ def _consume_tcp_flag_group(
         mode = tokens[next_index]
         next_index += 1
 
-    flags: list[dict[str, str]] = []
+    flags: dict[str, str] = {}
     while next_index < len(tokens):
         parsed_flag = _parse_signed_tcp_flag(tokens[next_index])
         if parsed_flag is None:
             break
-        flags.append(parsed_flag)
+        flag_name, flag_value = parsed_flag
+        flags[flag_name] = flag_value
         next_index += 1
 
     if not flags:
@@ -303,7 +304,7 @@ def _consume_tcp_flag_group(
     return tcp_flags, next_index
 
 
-def _parse_signed_tcp_flag(token: str) -> dict[str, str] | None:
+def _parse_signed_tcp_flag(token: str) -> tuple[str, str] | None:
     """Parse a signed TCP flag token like '+syn' or '-ack'."""
     operator = "include"
     flag = token
@@ -316,7 +317,7 @@ def _parse_signed_tcp_flag(token: str) -> dict[str, str] | None:
     if flag not in _TCP_FLAGS:
         return None
 
-    return {"operator": operator, "flag": flag}
+    return flag, operator
 
 
 def _looks_like_ipv4(token: str) -> bool:

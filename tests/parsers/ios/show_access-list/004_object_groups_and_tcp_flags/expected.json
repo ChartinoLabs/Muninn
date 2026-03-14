@@ -47,16 +47,10 @@
                             "kind": "any"
                         },
                         "tcp_flags": {
-                            "flags": [
-                                {
-                                    "flag": "syn",
-                                    "operator": "include"
-                                },
-                                {
-                                    "flag": "ack",
-                                    "operator": "exclude"
-                                }
-                            ],
+                            "flags": {
+                                "ack": "exclude",
+                                "syn": "include"
+                            },
                             "mode": "match-all"
                         }
                     },
