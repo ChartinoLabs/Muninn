@@ -1,6 +1,116 @@
 {
     "access_lists": {
-        "EDGE-FEATURES": {
+        "acl_name": {
+            "entries": {
+                "10": {
+                    "action": "permit",
+                    "line": "permit ip any any",
+                    "matches": 10031,
+                    "parsed": {
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "protocol": "ip",
+                        "source": {
+                            "kind": "any"
+                        }
+                    },
+                    "sequence": 10
+                }
+            },
+            "type": "Extended IP access list"
+        },
+        "ipv4_acl": {
+            "entries": {
+                "10": {
+                    "action": "permit",
+                    "line": "permit tcp any any eq www",
+                    "parsed": {
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "destination_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "www"
+                            ]
+                        },
+                        "protocol": "tcp",
+                        "source": {
+                            "kind": "any"
+                        }
+                    },
+                    "sequence": 10
+                },
+                "20": {
+                    "action": "permit",
+                    "line": "permit tcp any any eq 22",
+                    "parsed": {
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "destination_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "22"
+                            ]
+                        },
+                        "protocol": "tcp",
+                        "source": {
+                            "kind": "any"
+                        }
+                    },
+                    "sequence": 20
+                }
+            },
+            "type": "Extended IP access list"
+        },
+        "test1": {
+            "entries": {
+                "10": {
+                    "action": "permit",
+                    "line": "permit pim any any dscp default option 222 log",
+                    "parsed": {
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "dscp": "default",
+                        "extra": [
+                            "option",
+                            "222"
+                        ],
+                        "log": true,
+                        "protocol": "pim",
+                        "source": {
+                            "kind": "any"
+                        }
+                    },
+                    "sequence": 10
+                },
+                "20": {
+                    "action": "permit",
+                    "line": "permit icmp 0.1.1.1 255.0.0.0 any 10 66",
+                    "parsed": {
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "extra": [
+                            "10",
+                            "66"
+                        ],
+                        "protocol": "icmp",
+                        "source": {
+                            "kind": "network",
+                            "value": "0.1.1.1",
+                            "wildcard": "255.0.0.0"
+                        }
+                    },
+                    "sequence": 20
+                }
+            },
+            "type": "Extended IP access list"
+        },
+        "test22": {
             "entries": {
                 "10": {
                     "action": "permit",
@@ -27,11 +137,16 @@
                 },
                 "20": {
                     "action": "permit",
-                    "line": "permit tcp host 10.16.2.2 eq www any precedence network ttl eq 255",
+                    "line": "permit tcp host 10.16.2.2 eq www telnet 443 any precedence network ttl eq 255",
                     "parsed": {
                         "destination": {
-                            "kind": "any"
+                            "kind": "address",
+                            "value": "telnet"
                         },
+                        "extra": [
+                            "443",
+                            "any"
+                        ],
                         "precedence": "network",
                         "protocol": "tcp",
                         "source": {
@@ -52,39 +167,82 @@
                     "sequence": 20
                 },
                 "30": {
-                    "action": "permit",
-                    "line": "permit icmp any any router-advertisement time-range GO (inactive)",
+                    "action": "deny",
+                    "line": "deny ip any any",
                     "parsed": {
                         "destination": {
                             "kind": "any"
                         },
-                        "icmp_message": "router-advertisement",
-                        "protocol": "icmp",
+                        "protocol": "ip",
                         "source": {
                             "kind": "any"
-                        },
-                        "time_range": {
-                            "name": "GO",
-                            "status": "inactive"
                         }
                     },
                     "sequence": 30
                 },
                 "40": {
-                    "action": "deny",
-                    "line": "deny ip any any tos normal fragments",
+                    "action": "permit",
+                    "line": "permit tcp any range ftp-data bgp any",
                     "parsed": {
                         "destination": {
                             "kind": "any"
                         },
-                        "fragments": true,
-                        "protocol": "ip",
+                        "protocol": "tcp",
                         "source": {
                             "kind": "any"
                         },
-                        "tos": "normal"
+                        "source_port": {
+                            "operator": "range",
+                            "ports": [
+                                "ftp-data",
+                                "bgp"
+                            ]
+                        }
                     },
                     "sequence": 40
+                }
+            },
+            "type": "Extended IP access list"
+        },
+        "test33": {
+            "entries": {
+                "10": {
+                    "action": "permit",
+                    "line": "permit icmp any 10.120.194.64 0.0.0.63",
+                    "parsed": {
+                        "destination": {
+                            "kind": "network",
+                            "value": "10.120.194.64",
+                            "wildcard": "0.0.0.63"
+                        },
+                        "protocol": "icmp",
+                        "source": {
+                            "kind": "any"
+                        }
+                    },
+                    "sequence": 10
+                },
+                "20": {
+                    "action": "permit",
+                    "line": "permit tcp any eq 443 10.120.194.64 0.0.0.63",
+                    "parsed": {
+                        "destination": {
+                            "kind": "network",
+                            "value": "10.120.194.64",
+                            "wildcard": "0.0.0.63"
+                        },
+                        "protocol": "tcp",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "source_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "443"
+                            ]
+                        }
+                    },
+                    "sequence": 20
                 }
             },
             "type": "Extended IP access list"

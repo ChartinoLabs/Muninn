@@ -1,150 +1,69 @@
 {
     "access_lists": {
-        "1": {
+        "101": {
             "entries": {
                 "10": {
                     "action": "permit",
-                    "line": "permit 10.1.2.3 log",
+                    "line": "permit ip host 10.3.3.3 host 10.5.5.34",
                     "parsed": {
-                        "log": true,
+                        "destination": {
+                            "kind": "host",
+                            "value": "10.5.5.34"
+                        },
+                        "protocol": "ip",
                         "source": {
-                            "kind": "address",
-                            "value": "10.1.2.3"
+                            "kind": "host",
+                            "value": "10.3.3.3"
                         }
                     },
                     "sequence": 10
                 },
                 "20": {
-                    "action": "deny",
-                    "line": "deny 10.1.1.1",
+                    "action": "permit",
+                    "line": "permit icmp any any",
                     "parsed": {
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "protocol": "icmp",
                         "source": {
-                            "kind": "address",
-                            "value": "10.1.1.1"
+                            "kind": "any"
                         }
                     },
                     "sequence": 20
                 },
                 "30": {
-                    "action": "deny",
-                    "line": "deny 192.168.1.0, wildcard bits 0.0.0.255",
+                    "action": "permit",
+                    "line": "permit ip host 10.34.2.2 host 10.2.54.2",
                     "parsed": {
+                        "destination": {
+                            "kind": "host",
+                            "value": "10.2.54.2"
+                        },
+                        "protocol": "ip",
                         "source": {
-                            "kind": "network",
-                            "value": "192.168.1.0",
-                            "wildcard": "0.0.0.255"
+                            "kind": "host",
+                            "value": "10.34.2.2"
                         }
                     },
                     "sequence": 30
                 },
                 "40": {
-                    "action": "deny",
-                    "line": "deny any log",
+                    "action": "permit",
+                    "line": "permit ip host 10.3.4.31 host 10.3.32.3 log",
                     "parsed": {
+                        "destination": {
+                            "kind": "host",
+                            "value": "10.3.32.3"
+                        },
                         "log": true,
+                        "protocol": "ip",
                         "source": {
-                            "kind": "any"
+                            "kind": "host",
+                            "value": "10.3.4.31"
                         }
                     },
                     "sequence": 40
-                }
-            },
-            "type": "Standard IP access list"
-        },
-        "10": {
-            "entries": {
-                "10": {
-                    "action": "permit",
-                    "line": "permit 192.168.1.0, wildcard bits 0.0.0.255",
-                    "matches": 5177,
-                    "parsed": {
-                        "source": {
-                            "kind": "network",
-                            "value": "192.168.1.0",
-                            "wildcard": "0.0.0.255"
-                        }
-                    },
-                    "sequence": 10
-                }
-            },
-            "type": "Standard IP access list"
-        },
-        "102": {
-            "entries": {
-                "10": {
-                    "action": "permit",
-                    "line": "permit tcp any host 192.168.1.100 eq ftp",
-                    "parsed": {
-                        "destination": {
-                            "kind": "host",
-                            "value": "192.168.1.100"
-                        },
-                        "destination_port": {
-                            "operator": "eq",
-                            "ports": [
-                                "ftp"
-                            ]
-                        },
-                        "protocol": "tcp",
-                        "source": {
-                            "kind": "any"
-                        }
-                    },
-                    "sequence": 10
-                },
-                "20": {
-                    "action": "permit",
-                    "line": "permit tcp any host 192.168.1.100 gt 1024",
-                    "parsed": {
-                        "destination": {
-                            "kind": "host",
-                            "value": "192.168.1.100"
-                        },
-                        "destination_port": {
-                            "operator": "gt",
-                            "ports": [
-                                "1024"
-                            ]
-                        },
-                        "protocol": "tcp",
-                        "source": {
-                            "kind": "any"
-                        }
-                    },
-                    "sequence": 20
-                }
-            },
-            "type": "Extended IP access list"
-        },
-        "VLAN-TEST": {
-            "entries": {
-                "10": {
-                    "action": "permit",
-                    "line": "permit ip any any",
-                    "parsed": {
-                        "destination": {
-                            "kind": "any"
-                        },
-                        "protocol": "ip",
-                        "source": {
-                            "kind": "any"
-                        }
-                    },
-                    "sequence": 10
-                },
-                "20": {
-                    "action": "deny",
-                    "line": "deny ip any any",
-                    "parsed": {
-                        "destination": {
-                            "kind": "any"
-                        },
-                        "protocol": "ip",
-                        "source": {
-                            "kind": "any"
-                        }
-                    },
-                    "sequence": 20
                 }
             },
             "type": "Extended IP access list"

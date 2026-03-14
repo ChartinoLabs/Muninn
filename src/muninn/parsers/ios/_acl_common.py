@@ -7,24 +7,14 @@ PortSpec = dict[str, object]
 AclParsedFields = dict[str, object]
 
 _PORT_OPERATORS = frozenset({"eq", "neq", "lt", "gt", "range"})
-_TCP_FLAGS = frozenset(
-    {"ack", "established", "fin", "fragments", "psh", "rst", "syn", "urg"}
-)
-_TCP_FLAG_MODES = frozenset({"match-all", "match-any"})
+_TCP_FLAGS = frozenset({"established"})
 _ICMP_MESSAGES = frozenset(
     {
-        "administratively-prohibited",
         "echo",
         "echo-reply",
-        "mask-request",
         "mld-query",
         "packet-too-big",
-        "parameter-problem",
-        "port-unreachable",
-        "redirect",
         "router-advertisement",
-        "router-solicitation",
-        "time-exceeded",
         "ttl-exceeded",
         "unreachable",
     }
@@ -49,7 +39,8 @@ def parse_extended_ace_body(body: str, *, ip_version: Literal[4, 6]) -> AclParse
     if not tokens:
         return {}
 
-    parsed, index, protocol = _parse_protocol_or_service(tokens)
+    parsed: AclParsedFields = {"protocol": tokens[0]}
+    index = 1
 
     source, index = _parse_address(tokens, index, ip_version=ip_version)
     parsed["source"] = source
@@ -65,17 +56,8 @@ def parse_extended_ace_body(body: str, *, ip_version: Literal[4, 6]) -> AclParse
     if destination_port is not None:
         parsed["destination_port"] = destination_port
 
-    _parse_trailing_modifiers(parsed, tokens[index:], protocol=protocol)
+    _parse_trailing_modifiers(parsed, tokens[index:], protocol=tokens[0])
     return parsed
-
-
-def _parse_protocol_or_service(
-    tokens: list[str],
-) -> tuple[AclParsedFields, int, str | None]:
-    """Parse the protocol position, including service object-groups."""
-    if len(tokens) >= 2 and tokens[0] == "object-group":
-        return {"service_object_group": tokens[1]}, 2, None
-    return {"protocol": tokens[0]}, 1, tokens[0]
 
 
 def _parse_address(
@@ -185,9 +167,6 @@ def _consume_simple_flag(
     if token == "log-input":
         parsed["log_input"] = True
         return index + 1
-    if token == "fragments":
-        parsed["fragments"] = True
-        return index + 1
     return None
 
 
@@ -196,7 +175,7 @@ def _consume_value_modifier(
 ) -> int | None:
     """Consume key/value modifiers like dscp, precedence, tos, and ttl."""
     token = tokens[index]
-    if token in {"dscp", "precedence", "tos"} and index + 1 < len(tokens):
+    if token in {"dscp", "precedence"} and index + 1 < len(tokens):
         parsed[token] = tokens[index + 1]
         return index + 2
 
@@ -240,13 +219,8 @@ def _consume_protocol_modifier(
 ) -> int | None:
     """Consume protocol-specific trailing modifiers."""
     token = tokens[index]
-    tcp_flags, next_index = _consume_tcp_flag_group(tokens, index, protocol)
-    if tcp_flags is not None:
-        parsed["tcp_flags"] = tcp_flags
-        return next_index
-
     if protocol == "tcp" and token in _TCP_FLAGS:
-        parsed[token.replace("-", "_")] = True
+        parsed["tcp_flags"] = {"flags": {token: "include"}}
         return index + 1
 
     if protocol == "icmp" and token in _ICMP_MESSAGES and "icmp_message" not in parsed:
@@ -271,53 +245,6 @@ def _consume_parenthesized_status(tokens: list[str], index: int) -> tuple[str, i
         if part.endswith(")"):
             break
     return " ".join(parts), next_index
-
-
-def _consume_tcp_flag_group(
-    tokens: list[str], index: int, protocol: str | None
-) -> tuple[dict[str, object] | None, int]:
-    """Consume a TCP flag group such as 'match-all +syn -ack'."""
-    if protocol != "tcp":
-        return None, index
-
-    mode: str | None = None
-    next_index = index
-    if tokens[next_index] in _TCP_FLAG_MODES:
-        mode = tokens[next_index]
-        next_index += 1
-
-    flags: dict[str, str] = {}
-    while next_index < len(tokens):
-        parsed_flag = _parse_signed_tcp_flag(tokens[next_index])
-        if parsed_flag is None:
-            break
-        flag_name, flag_value = parsed_flag
-        flags[flag_name] = flag_value
-        next_index += 1
-
-    if not flags:
-        return None, index
-
-    tcp_flags: dict[str, object] = {"flags": flags}
-    if mode is not None:
-        tcp_flags["mode"] = mode
-    return tcp_flags, next_index
-
-
-def _parse_signed_tcp_flag(token: str) -> tuple[str, str] | None:
-    """Parse a signed TCP flag token like '+syn' or '-ack'."""
-    operator = "include"
-    flag = token
-    if token.startswith("+"):
-        flag = token[1:]
-    elif token.startswith("-"):
-        operator = "exclude"
-        flag = token[1:]
-
-    if flag not in _TCP_FLAGS:
-        return None
-
-    return flag, operator
 
 
 def _looks_like_ipv4(token: str) -> bool:
