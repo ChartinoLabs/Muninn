@@ -6,6 +6,7 @@ from typing import TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class DpidbEntry(TypedDict):
@@ -17,7 +18,7 @@ class DpidbEntry(TypedDict):
 class ShowPlatformSoftwareDpidbIndexResult(TypedDict):
     """Schema for 'show platform software dpidb index' parsed output.
 
-    Keyed by interface name (e.g., "Hu1/0/1", "Vl1", "Gi0/0").
+    Keyed by canonical interface name.
     """
 
     interfaces: dict[str, DpidbEntry]
@@ -49,7 +50,7 @@ class ShowPlatformSoftwareDpidbIndexParser(
             output: Raw CLI output from 'show platform software dpidb index'.
 
         Returns:
-            Parsed DPIDB index data keyed by interface name.
+            Parsed DPIDB index data keyed by canonical interface name.
 
         Raises:
             ValueError: If no DPIDB index entries are found.
@@ -63,7 +64,10 @@ class ShowPlatformSoftwareDpidbIndexParser(
 
             match = _ENTRY_PATTERN.match(line)
             if match:
-                interface = match.group("interface")
+                interface = canonical_interface_name(
+                    match.group("interface"),
+                    os=OS.CISCO_IOSXE,
+                )
                 interfaces[interface] = DpidbEntry(
                     index=int(match.group("index")),
                 )
