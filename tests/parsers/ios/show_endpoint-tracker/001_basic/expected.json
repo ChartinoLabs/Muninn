@@ -1,18 +1,29 @@
 {
-    "trackers": {
-        "trk_umbrella": {
-            "interface": "GigabitEthernet1",
-            "status": "UP",
-            "rtt_msec": 2,
-            "probe_id": 1,
-            "next_hop": "10.44.22.1"
+    "interfaces": {
+        "GigabitEthernet1": {
+            "trackers": {
+                "trk_umbrella": {
+                    "status": "UP",
+                    "rtt_msec": 2,
+                    "probe_id": 1,
+                    "next_hop": "10.44.22.1"
+                },
+                "trk_dns": {
+                    "status": "DOWN",
+                    "probe_id": 5,
+                    "next_hop": "10.44.22.2"
+                }
+            }
         },
-        "trk_goolge": {
-            "interface": "GigabitEthernet2",
-            "status": "UP",
-            "rtt_msec": 2,
-            "probe_id": 1,
-            "next_hop": "10.2.2.1"
+        "GigabitEthernet2": {
+            "trackers": {
+                "trk_goolge": {
+                    "status": "UP",
+                    "rtt_msec": 2,
+                    "probe_id": 1,
+                    "next_hop": "10.2.2.1"
+                }
+            }
         }
     }
 }

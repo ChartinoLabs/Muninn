@@ -26,17 +26,22 @@ _HEADER_RE = re.compile(r"^Interface\s+Record Name\s+Status")
 class EndpointTrackerEntry(TypedDict):
     """Schema for a single endpoint tracker entry."""
 
-    interface: str
     status: str
     rtt_msec: NotRequired[int]
     probe_id: int
     next_hop: str
 
 
+class InterfaceTrackersEntry(TypedDict):
+    """Schema for endpoint trackers on a specific interface."""
+
+    trackers: dict[str, EndpointTrackerEntry]
+
+
 class ShowEndpointTrackerResult(TypedDict):
     """Schema for 'show endpoint-tracker' parsed output."""
 
-    trackers: dict[str, EndpointTrackerEntry]
+    interfaces: dict[str, InterfaceTrackersEntry]
 
 
 @register(OS.CISCO_IOS, "show endpoint-tracker")
@@ -48,7 +53,7 @@ class ShowEndpointTrackerParser(
     Parses the endpoint tracker table showing interface, tracker name,
     endpoint, status (Up/Down), RTT, probe ID, and next hop.
 
-    Output is keyed by tracker (record) name.
+    Output is keyed by interface, then tracker (record) name.
     """
 
     @classmethod
@@ -59,12 +64,12 @@ class ShowEndpointTrackerParser(
             output: Raw CLI output from command.
 
         Returns:
-            Parsed endpoint tracker entries keyed by record name.
+            Parsed endpoint tracker entries keyed by interface, then record name.
 
         Raises:
             ValueError: If a data line cannot be parsed.
         """
-        trackers: dict[str, EndpointTrackerEntry] = {}
+        interfaces: dict[str, InterfaceTrackersEntry] = {}
 
         for line in output.splitlines():
             stripped = line.strip()
@@ -85,7 +90,6 @@ class ShowEndpointTrackerParser(
             next_hop = match.group("next_hop")
 
             entry: EndpointTrackerEntry = {
-                "interface": interface,
                 "status": status,
                 "probe_id": probe_id,
                 "next_hop": next_hop,
@@ -95,6 +99,9 @@ class ShowEndpointTrackerParser(
             if rtt_raw.lower() != "timeout":
                 entry["rtt_msec"] = int(rtt_raw)
 
-            trackers[record_name] = entry
+            if interface not in interfaces:
+                interfaces[interface] = {"trackers": {}}
 
-        return cast(ShowEndpointTrackerResult, {"trackers": trackers})
+            interfaces[interface]["trackers"][record_name] = entry
+
+        return cast(ShowEndpointTrackerResult, {"interfaces": interfaces})
