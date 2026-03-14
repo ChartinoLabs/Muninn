@@ -130,11 +130,12 @@ def _store_translation(
     ] = _build_entry(match)
 
 
+@register(OS.CISCO_IOS, "show ip nat translations")
 @register(OS.CISCO_IOSXE, "show platform nat translations active")
 class ShowPlatformNatTranslationsActiveParser(
     BaseParser[ShowPlatformNatTranslationsActiveResult],
 ):
-    """Parser for 'show platform nat translations active' command.
+    """Parser for NAT translation table commands on IOS and IOS-XE.
 
     Example output::
 
@@ -147,7 +148,7 @@ class ShowPlatformNatTranslationsActiveParser(
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformNatTranslationsActiveResult:
-        """Parse 'show platform nat translations active' output.
+        """Parse NAT translation table output.
 
         Args:
             output: Raw CLI output from command.
