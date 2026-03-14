@@ -19,10 +19,22 @@ class OspfNeighborEntry(TypedDict):
     role: NotRequired[str]
 
 
+class OspfProcessEntry(TypedDict):
+    """Schema for an OSPF process within a VRF."""
+
+    neighbors: dict[str, dict[str, OspfNeighborEntry]]
+
+
+class OspfVrfEntry(TypedDict):
+    """Schema for a VRF containing one or more OSPF processes."""
+
+    processes: dict[str, OspfProcessEntry]
+
+
 class ShowIpOspfNeighborResult(TypedDict):
     """Schema for 'show ip ospf neighbor' parsed output."""
 
-    neighbors: dict[str, dict[str, OspfNeighborEntry]]
+    vrfs: dict[str, OspfVrfEntry]
 
 
 # Pattern for neighbor table rows on NX-OS:
@@ -37,6 +49,10 @@ _NEIGHBOR_PATTERN = re.compile(
     r"(?P<up_time>\S+)\s+"
     r"(?P<address>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+"
     r"(?P<interface>\S+)\s*$"
+)
+
+_SECTION_PATTERN = re.compile(
+    r"^OSPF Process ID (?P<process_id>\S+) VRF (?P<vrf>\S+)\s*$"
 )
 
 
@@ -61,15 +77,25 @@ class ShowIpOspfNeighborParser(BaseParser[ShowIpOspfNeighborResult]):
         Raises:
             ValueError: If no neighbors found in output.
         """
-        neighbors: dict[str, dict[str, OspfNeighborEntry]] = {}
+        vrfs: dict[str, OspfVrfEntry] = {}
+        current_vrf: str | None = None
+        current_process_id: str | None = None
 
         for line in output.splitlines():
             line = line.strip()
             if not line:
                 continue
 
+            section = cls._parse_section(line, vrfs)
+            if section is not None:
+                current_vrf, current_process_id = section
+                continue
+
             match = _NEIGHBOR_PATTERN.match(line)
             if not match:
+                continue
+
+            if current_vrf is None or current_process_id is None:
                 continue
 
             interface = canonical_interface_name(
@@ -77,6 +103,7 @@ class ShowIpOspfNeighborParser(BaseParser[ShowIpOspfNeighborResult]):
             )
             neighbor_id = match.group("neighbor_id")
             state, role = cls._parse_state_role(match.group("state_role"))
+            neighbors = vrfs[current_vrf]["processes"][current_process_id]["neighbors"]
 
             if interface not in neighbors:
                 neighbors[interface] = {}
@@ -93,11 +120,31 @@ class ShowIpOspfNeighborParser(BaseParser[ShowIpOspfNeighborResult]):
 
             neighbors[interface][neighbor_id] = entry
 
-        if not neighbors:
+        if not vrfs:
             msg = "No OSPF neighbors found in output"
             raise ValueError(msg)
 
-        return ShowIpOspfNeighborResult(neighbors=neighbors)
+        return ShowIpOspfNeighborResult(vrfs=vrfs)
+
+    @staticmethod
+    def _parse_section(
+        line: str, vrfs: dict[str, OspfVrfEntry]
+    ) -> tuple[str, str] | None:
+        section_match = _SECTION_PATTERN.match(line)
+        if section_match is None:
+            return None
+
+        vrf = section_match.group("vrf")
+        process_id = section_match.group("process_id")
+
+        if vrf not in vrfs:
+            vrfs[vrf] = {"processes": {}}
+
+        processes = vrfs[vrf]["processes"]
+        if process_id not in processes:
+            processes[process_id] = {"neighbors": {}}
+
+        return vrf, process_id
 
     @staticmethod
     def _parse_state_role(state_role: str) -> tuple[str, str]:
