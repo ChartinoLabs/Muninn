@@ -37,6 +37,25 @@ jobs:
               "See changes/README.md for details."
             exit 1
           fi
+
+          EMPTY_FRAGMENTS=""
+          while IFS= read -r fragment; do
+            [ -n "$fragment" ] || continue
+
+            if ! grep -q '[^[:space:]]' "$fragment"; then
+              EMPTY_FRAGMENTS="${EMPTY_FRAGMENTS}${fragment}\n"
+            fi
+          done <<EOF
+          $FRAGMENTS
+          EOF
+
+          if [ -n "$EMPTY_FRAGMENTS" ]; then
+            echo "::error::Empty changelog fragment(s) found. Add a user-facing" \
+              "release note to each fragment file:"
+            printf '%b' "$EMPTY_FRAGMENTS"
+            exit 1
+          fi
+
           echo "Found changelog fragment(s):"
           echo "$FRAGMENTS"
   format:

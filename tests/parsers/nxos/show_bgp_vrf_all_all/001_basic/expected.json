@@ -1,0 +1,130 @@
+{
+    "vrfs": {
+        "PROD": {
+            "address_families": {
+                "IPv4 Unicast": {
+                    "router_id": "192.168.1.1",
+                    "routes": {
+                        "172.16.0.0/16": {
+                            "paths": [
+                                {
+                                    "as_path": "65001",
+                                    "locprf": 100,
+                                    "metric": 0,
+                                    "next_hop": "10.0.0.2",
+                                    "origin": "i",
+                                    "path_type": "i",
+                                    "status_codes": "*>",
+                                    "weight": 0
+                                }
+                            ]
+                        },
+                        "192.168.1.0/24": {
+                            "paths": [
+                                {
+                                    "as_path": "",
+                                    "locprf": 100,
+                                    "metric": 0,
+                                    "next_hop": "0.0.0.0",
+                                    "origin": "?",
+                                    "path_type": "r",
+                                    "status_codes": "*>",
+                                    "weight": 32768
+                                }
+                            ]
+                        }
+                    },
+                    "table_version": 55
+                }
+            }
+        },
+        "default": {
+            "address_families": {
+                "IPv4 Unicast": {
+                    "router_id": "10.10.0.1",
+                    "routes": {
+                        "10.10.0.1/32": {
+                            "paths": [
+                                {
+                                    "as_path": "",
+                                    "locprf": 100,
+                                    "next_hop": "0.0.0.0",
+                                    "origin": "i",
+                                    "path_type": "l",
+                                    "status_codes": "*>",
+                                    "weight": 32768
+                                }
+                            ]
+                        },
+                        "10.10.0.2/32": {
+                            "paths": [
+                                {
+                                    "as_path": "64102 64002",
+                                    "next_hop": "10.10.2.1",
+                                    "origin": "i",
+                                    "path_type": "e",
+                                    "status_codes": "*>",
+                                    "weight": 0
+                                }
+                            ]
+                        },
+                        "10.16.1.0/24": {
+                            "paths": [
+                                {
+                                    "as_path": "",
+                                    "locprf": 100,
+                                    "metric": 4444,
+                                    "next_hop": "0.0.0.0",
+                                    "origin": "?",
+                                    "path_type": "r",
+                                    "status_codes": "*>",
+                                    "weight": 32768
+                                }
+                            ]
+                        }
+                    },
+                    "table_version": 100
+                },
+                "VPNv4 Unicast": {
+                    "route_distinguishers": {
+                        "65000:100": {
+                            "rd_vrf": "PROD",
+                            "routes": {
+                                "172.16.0.0/16": {
+                                    "paths": [
+                                        {
+                                            "as_path": "65001",
+                                            "locprf": 100,
+                                            "metric": 0,
+                                            "next_hop": "10.0.0.2",
+                                            "origin": "i",
+                                            "path_type": "i",
+                                            "status_codes": "*>",
+                                            "weight": 0
+                                        }
+                                    ]
+                                },
+                                "192.168.1.0/24": {
+                                    "paths": [
+                                        {
+                                            "as_path": "",
+                                            "locprf": 100,
+                                            "metric": 0,
+                                            "next_hop": "0.0.0.0",
+                                            "origin": "?",
+                                            "path_type": "r",
+                                            "status_codes": "*>",
+                                            "weight": 32768
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "router_id": "10.10.0.1",
+                    "table_version": 200
+                }
+            }
+        }
+    }
+}
