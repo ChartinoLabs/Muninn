@@ -1,4 +1,7 @@
-"""Parser for 'show ip eigrp interfaces detail' command on IOS-XE."""
+"""Parser for 'show ip eigrp interfaces detail' on IOS-XE.
+
+Also handles 'show ipv6 eigrp interfaces detail'.
+"""
 
 import re
 from collections.abc import Callable
@@ -51,7 +54,7 @@ class ShowIpEigrpInterfacesDetailResult(TypedDict):
     interfaces: dict[str, EigrpInterfaceDetailEntry]
 
 
-_AS_PATTERN = re.compile(r"^EIGRP-IPv4 Interfaces for AS\((?P<as_number>\d+)\)")
+_AS_PATTERN = re.compile(r"^EIGRP-IPv[46] Interfaces for AS\((?P<as_number>\d+)\)")
 
 _INTERFACE_ROW_PATTERN = re.compile(
     r"^(?P<interface>\S+)\s+"
@@ -223,10 +226,13 @@ def _build_entry_from_row(match: re.Match[str]) -> dict[str, object]:
 
 
 @register(OS.CISCO_IOSXE, "show ip eigrp interfaces detail")
+@register(OS.CISCO_IOSXE, "show ipv6 eigrp interfaces detail")
 class ShowIpEigrpInterfacesDetailParser(
     BaseParser[ShowIpEigrpInterfacesDetailResult],
 ):
-    """Parser for 'show ip eigrp interfaces detail' command.
+    """Parser for EIGRP interface detail commands.
+
+    Handles both IPv4 and IPv6 variants.
 
     Example output:
         EIGRP-IPv4 Interfaces for AS(10)
@@ -237,7 +243,7 @@ class ShowIpEigrpInterfacesDetailParser(
 
     @classmethod
     def parse(cls, output: str) -> ShowIpEigrpInterfacesDetailResult:
-        """Parse 'show ip eigrp interfaces detail' output.
+        """Parse EIGRP interfaces detail output.
 
         Args:
             output: Raw CLI output from the command.
