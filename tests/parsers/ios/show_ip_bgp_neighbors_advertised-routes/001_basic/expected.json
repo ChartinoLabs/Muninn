@@ -1,0 +1,39 @@
+{
+    "local_router_id": "10.0.0.1",
+    "routes": {
+        "10.0.0.0/24": {
+            "metric": 0,
+            "next_hop": "0.0.0.0",
+            "origin": "i",
+            "path": "",
+            "status_codes": "*>",
+            "weight": 32768
+        },
+        "10.1.0.0/24": {
+            "metric": 0,
+            "next_hop": "0.0.0.0",
+            "origin": "i",
+            "path": "",
+            "status_codes": "*>",
+            "weight": 32768
+        },
+        "172.16.0.0/16": {
+            "local_pref": 100,
+            "metric": 100,
+            "next_hop": "10.0.0.2",
+            "origin": "i",
+            "path": "65001",
+            "status_codes": "*>",
+            "weight": 0
+        },
+        "192.168.1.0/24": {
+            "next_hop": "10.0.0.3",
+            "origin": "?",
+            "path": "65002 65003",
+            "status_codes": "*>",
+            "weight": 0
+        }
+    },
+    "table_version": 128,
+    "total_prefixes": 4
+}
