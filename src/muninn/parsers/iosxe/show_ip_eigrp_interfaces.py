@@ -163,6 +163,7 @@ def _build_result(
 
 
 @register(OS.CISCO_IOSXE, "show ip eigrp interfaces")
+@register(OS.CISCO_IOSXE, "show ipv6 eigrp interfaces")
 class ShowIpEigrpInterfacesParser(
     BaseParser[ShowIpEigrpInterfacesResult],
 ):

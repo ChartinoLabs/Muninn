@@ -364,7 +364,9 @@ def _parse_output(output: str) -> ShowMacAddressTableResult:
 
 
 @register(OS.CISCO_IOS, "show mac address-table")
+@register(OS.CISCO_IOS, "show mac-address-table")
 @register(OS.CISCO_IOSXE, "show mac address-table")
+@register(OS.CISCO_IOSXE, "show mac-address-table")
 class ShowMacAddressTableParser(BaseParser[ShowMacAddressTableResult]):
     """Parser for 'show mac address-table' on IOS/IOS-XE."""
 
