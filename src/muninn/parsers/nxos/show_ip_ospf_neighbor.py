@@ -91,34 +91,7 @@ class ShowIpOspfNeighborParser(BaseParser[ShowIpOspfNeighborResult]):
                 current_vrf, current_process_id = section
                 continue
 
-            match = _NEIGHBOR_PATTERN.match(line)
-            if not match:
-                continue
-
-            if current_vrf is None or current_process_id is None:
-                continue
-
-            interface = canonical_interface_name(
-                match.group("interface"), os=OS.CISCO_NXOS
-            )
-            neighbor_id = match.group("neighbor_id")
-            state, role = cls._parse_state_role(match.group("state_role"))
-            neighbors = vrfs[current_vrf]["processes"][current_process_id]["neighbors"]
-
-            if interface not in neighbors:
-                neighbors[interface] = {}
-
-            entry: OspfNeighborEntry = {
-                "priority": int(match.group("priority")),
-                "state": state,
-                "up_time": match.group("up_time"),
-                "address": match.group("address"),
-            }
-
-            if role and role != "-":
-                entry["role"] = role
-
-            neighbors[interface][neighbor_id] = entry
+            cls._parse_neighbor_line(line, vrfs, current_vrf, current_process_id)
 
         if not vrfs:
             msg = "No OSPF neighbors found in output"
@@ -145,6 +118,45 @@ class ShowIpOspfNeighborParser(BaseParser[ShowIpOspfNeighborResult]):
             processes[process_id] = {"neighbors": {}}
 
         return vrf, process_id
+
+    @classmethod
+    def _parse_neighbor_line(
+        cls,
+        line: str,
+        vrfs: dict[str, OspfVrfEntry],
+        current_vrf: str | None,
+        current_process_id: str | None,
+    ) -> None:
+        if current_vrf is None or current_process_id is None:
+            return
+
+        match = _NEIGHBOR_PATTERN.match(line)
+        if match is None:
+            return
+
+        interface = canonical_interface_name(match.group("interface"), os=OS.CISCO_NXOS)
+        neighbor_id = match.group("neighbor_id")
+        neighbors = vrfs[current_vrf]["processes"][current_process_id]["neighbors"]
+
+        if interface not in neighbors:
+            neighbors[interface] = {}
+
+        neighbors[interface][neighbor_id] = cls._build_neighbor_entry(match)
+
+    @classmethod
+    def _build_neighbor_entry(cls, match: re.Match[str]) -> OspfNeighborEntry:
+        state, role = cls._parse_state_role(match.group("state_role"))
+        entry: OspfNeighborEntry = {
+            "priority": int(match.group("priority")),
+            "state": state,
+            "up_time": match.group("up_time"),
+            "address": match.group("address"),
+        }
+
+        if role and role != "-":
+            entry["role"] = role
+
+        return entry
 
     @staticmethod
     def _parse_state_role(state_role: str) -> tuple[str, str]:
