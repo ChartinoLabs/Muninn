@@ -23,8 +23,7 @@ class SummaryEntry(TypedDict):
 class ContinuousEntry(TypedDict):
     """Schema for a single CLI logging continuous entry."""
 
-    date: str
-    time: str
+    timestamp: str
     command: str
 
 
@@ -201,8 +200,7 @@ class ShowLoggingOnboardRpActiveClilogDetailParser(
 
         seq += 1
         continuous[str(seq)] = {
-            "date": match.group("date"),
-            "time": match.group("time"),
+            "timestamp": f"{match.group('date')} {match.group('time')}",
             "command": match.group("command"),
         }
 
