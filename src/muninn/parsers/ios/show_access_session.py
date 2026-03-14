@@ -1,45 +1,11 @@
 """Parser for 'show access-session' command on IOS."""
 
-import re
 from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.parsers.ios._session_table import parse_session_table
 from muninn.registry import register
-from muninn.utils import canonical_interface_name
-
-# Matches a session line in either format:
-#   Interface  MAC Address     Method   Domain   Status         Session ID
-#   Interface  Identifier      Method   Domain   Status         Session ID
-#   Interface  MAC Address     Method   Domain   Status  Fg     Session ID
-# The status field may be one or two words (e.g. "Auth", "Authz Success").
-# The session ID is always a hex string at end of line.
-_SESSION_PATTERN = re.compile(
-    r"^(?P<interface>\S+)\s+"
-    r"(?P<mac_address>\S+)\s+"
-    r"(?P<method>\S+)\s+"
-    r"(?P<domain>\S+)\s+"
-    r"(?P<status>.+?)\s+"
-    r"(?P<session_id>[0-9A-Fa-f]{24,})\s*$"
-)
-
-# Lines to skip: headers, separator dashes, session count, key legend
-_SKIP_PATTERN = re.compile(
-    r"^(?:Interface\s|---|-{10,}|Session\s+count|Key\s+to\s+Session|"
-    r"\s+[A-Z]\s+-\s|$)"
-)
-
-# Known status values that may precede a single-char flag
-_KNOWN_STATUSES = frozenset(
-    {
-        "Auth",
-        "Unauth",
-        "Authz Success",
-        "Authz Failed",
-        "Running",
-        "Idle",
-    }
-)
 
 
 class AccessSessionEntry(TypedDict):
@@ -57,53 +23,6 @@ class ShowAccessSessionResult(TypedDict):
     """Schema for 'show access-session' parsed output."""
 
     sessions: dict[str, AccessSessionEntry]
-
-
-def _extract_status_and_flags(status_raw: str) -> tuple[str, str]:
-    """Separate the status text from an optional trailing flag character.
-
-    The "Fg" column, when present, appends a single uppercase letter
-    after the status text. This function detects that pattern and
-    returns (status, flags). If no flag is found, flags is empty.
-
-    Args:
-        status_raw: Raw status field from the regex match.
-
-    Returns:
-        Tuple of (status, flags).
-    """
-    parts = status_raw.rsplit(None, 1)
-    if len(parts) == 2 and len(parts[-1]) == 1 and parts[-1].isupper():
-        if parts[0] in _KNOWN_STATUSES:
-            return parts[0], parts[1]
-    return status_raw, ""
-
-
-def _build_entry(match: re.Match[str]) -> tuple[str, AccessSessionEntry]:
-    """Build a session entry from a regex match.
-
-    Args:
-        match: Successful regex match of a session line.
-
-    Returns:
-        Tuple of (session_id, entry dict).
-    """
-    session_id = match.group("session_id")
-    interface = canonical_interface_name(match.group("interface"))
-    status, flags = _extract_status_and_flags(match.group("status").strip())
-
-    entry: AccessSessionEntry = {
-        "interface": interface,
-        "mac_address": match.group("mac_address"),
-        "method": match.group("method"),
-        "domain": match.group("domain"),
-        "status": status,
-    }
-
-    if flags:
-        entry["flags"] = flags
-
-    return session_id, entry
 
 
 @register(OS.CISCO_IOS, "show access-session")
@@ -133,22 +52,25 @@ class ShowAccessSessionParser(BaseParser[ShowAccessSessionResult]):
         Raises:
             ValueError: If no sessions found in output.
         """
+        parsed = parse_session_table(
+            output,
+            missing_header_message="No access sessions header line found in output",
+            missing_sessions_message="No access sessions found in output",
+        )
+
         sessions: dict[str, AccessSessionEntry] = {}
+        for parsed_entry in parsed["sessions"]:
+            entry: AccessSessionEntry = {
+                "interface": parsed_entry["interface"],
+                "mac_address": parsed_entry["mac_address"],
+                "method": parsed_entry["method"],
+                "domain": parsed_entry["domain"],
+                "status": parsed_entry["status"],
+            }
 
-        for line in output.splitlines():
-            stripped = line.strip()
-            if not stripped or _SKIP_PATTERN.match(stripped):
-                continue
+            if "fg" in parsed_entry:
+                entry["flags"] = parsed_entry["fg"]
 
-            match = _SESSION_PATTERN.match(stripped)
-            if not match:
-                continue
-
-            session_id, entry = _build_entry(match)
-            sessions[session_id] = entry
-
-        if not sessions:
-            msg = "No access sessions found in output"
-            raise ValueError(msg)
+            sessions[parsed_entry["session_id"]] = entry
 
         return ShowAccessSessionResult(sessions=sessions)
