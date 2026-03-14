@@ -83,7 +83,7 @@ Fallback occurs when a parser raises an exception, returns `None`, or returns `{
 ## Documentation
 
 - [Design Principles](docs/01-design-principles.md) - Core philosophy and technical decisions
-- [Testing Strategy](docs/02-testing-strategy.md) - Test structure and metadata requirements
+- [Testing Strategy](docs/02-testing-strategy.md) - Test structure, metadata requirements, and fixture command overrides such as `command.txt`
 - [External Configuration](docs/external/configuration.md) - User-facing settings and precedence
 - [Changelog](CHANGELOG.md) - Release history built from changelog fragments
 - [Changelog Fragments Guide](changes/README.md) - How to add release-note fragments
