@@ -1,4 +1,4 @@
-"""Parser for 'show authentication sessions' command on IOS."""
+"""Parser for IOS authentication session summary commands."""
 
 from typing import NotRequired, TypedDict
 
@@ -25,11 +25,12 @@ class ShowAuthenticationSessionsResult(TypedDict):
     session_count: NotRequired[int]
 
 
+@register(OS.CISCO_IOS, "show access-session")
 @register(OS.CISCO_IOS, "show authentication sessions")
 class ShowAuthenticationSessionsParser(
     BaseParser[ShowAuthenticationSessionsResult],
 ):
-    """Parser for 'show authentication sessions' on IOS."""
+    """Parser for 'show authentication sessions' and 'show access-session'."""
 
     @classmethod
     def parse(cls, output: str) -> ShowAuthenticationSessionsResult:
