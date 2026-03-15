@@ -52,6 +52,9 @@ class SessionEntry(TypedDict):
     resultant_policy_sgt: NotRequired[int]
 
 
+ShowAuthenticationSessionsMethodDetailsResult = dict[str, list[SessionEntry]]
+
+
 # --- Session block separator ---
 _BLOCK_SEPARATOR_RE = re.compile(r"^-{3,}$")
 
@@ -291,7 +294,7 @@ def _parse_block(lines: list[str]) -> tuple[str, SessionEntry] | None:
     """Parse a single session block.
 
     Returns:
-        Tuple of (common_session_id, entry) or None if unparseable.
+        Tuple of (interface_name, entry) or None if unparseable.
     """
     if not lines or not any(line.strip() for line in lines):
         return None
@@ -299,43 +302,43 @@ def _parse_block(lines: list[str]) -> tuple[str, SessionEntry] | None:
     entry: dict = {}
     _parse_session_fields(lines, entry)
 
-    if "common_session_id" not in entry:
+    if "interface" not in entry:
         return None
 
     _parse_sections(lines, entry)
 
-    session_id = entry["common_session_id"]
-    return session_id, entry  # type: ignore[return-value]
+    interface = entry["interface"]
+    return interface, entry  # type: ignore[return-value]
 
 
 @register(OS.CISCO_IOS, "show authentication sessions method details")
 class ShowAuthenticationSessionsMethodDetailsParser(
-    BaseParser["dict[str, SessionEntry]"],
+    BaseParser[ShowAuthenticationSessionsMethodDetailsResult],
 ):
     """Parser for 'show authentication sessions method details' on IOS."""
 
     @classmethod
-    def parse(cls, output: str) -> dict[str, SessionEntry]:
+    def parse(cls, output: str) -> ShowAuthenticationSessionsMethodDetailsResult:
         """Parse 'show authentication sessions method details' output.
 
         Args:
             output: Raw CLI output from command.
 
         Returns:
-            Parsed authentication session details keyed by Common Session ID.
+            Parsed authentication session details keyed by interface name.
 
         Raises:
             ValueError: If no authentication session entries found in output.
         """
         blocks = _split_session_blocks(output)
-        sessions: dict[str, SessionEntry] = {}
+        sessions: ShowAuthenticationSessionsMethodDetailsResult = {}
 
         for block_lines in blocks:
             result = _parse_block(block_lines)
             if result is None:
                 continue
-            session_id, entry = result
-            sessions[session_id] = entry
+            interface, entry = result
+            sessions.setdefault(interface, []).append(entry)
 
         if not sessions:
             msg = "No authentication session entries found in output"
