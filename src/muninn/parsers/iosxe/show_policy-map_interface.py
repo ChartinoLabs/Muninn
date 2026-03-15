@@ -98,14 +98,13 @@ class ServicePolicyEntry(TypedDict):
     """Schema for a service-policy attached to an interface."""
 
     direction: str
-    policy_name: str
     classes: dict[str, ClassMapEntry]
 
 
 class InterfaceEntry(TypedDict):
     """Schema for an interface with service-policies."""
 
-    service_policies: list[ServicePolicyEntry]
+    service_policies: dict[str, ServicePolicyEntry]
 
 
 # Top-level result: interface name -> InterfaceEntry
@@ -804,7 +803,7 @@ def _parse_service_policy(
 def _save_interface(
     result: ShowPolicyMapInterfaceResult,
     interface: str | None,
-    policies: list[ServicePolicyEntry],
+    policies: dict[str, ServicePolicyEntry],
 ) -> None:
     """Save accumulated policies for an interface into the result dict."""
     if interface is not None and policies:
@@ -819,7 +818,7 @@ def _build_result(output: str) -> ShowPolicyMapInterfaceResult:
     idx = 0
 
     current_interface: str | None = None
-    current_policies: list[ServicePolicyEntry] = []
+    current_policies: dict[str, ServicePolicyEntry] = {}
 
     while idx < total:
         line = lines[idx]
@@ -833,12 +832,10 @@ def _build_result(output: str) -> ShowPolicyMapInterfaceResult:
         if sp_m:
             sp_indent = _get_indent(line)
             classes, idx = _parse_service_policy(lines, idx + 1, sp_indent)
-            current_policies.append(
-                ServicePolicyEntry(
-                    direction=sp_m.group(1),
-                    policy_name=sp_m.group(2),
-                    classes=classes,
-                )
+            policy_name = sp_m.group(2)
+            current_policies[policy_name] = ServicePolicyEntry(
+                direction=sp_m.group(1),
+                classes=classes,
             )
             continue
 
@@ -848,7 +845,7 @@ def _build_result(output: str) -> ShowPolicyMapInterfaceResult:
             current_interface = canonical_interface_name(
                 iface_m.group(1), os=OS.CISCO_IOSXE
             )
-            current_policies = []
+            current_policies = {}
             idx += 1
             continue
 
