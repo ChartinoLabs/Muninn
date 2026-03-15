@@ -6,6 +6,7 @@ from typing import NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class SVLLink(TypedDict):
@@ -70,11 +71,12 @@ def _add_port_to_link(
     port: str,
 ) -> None:
     """Add a port to a link, creating the link entry if needed."""
+    normalized = canonical_interface_name(port)
     links = switches[switch_num]["links"]
     if link_num not in links:
-        links[link_num] = SVLLink(ports=[port])
+        links[link_num] = SVLLink(ports=[normalized])
     else:
-        links[link_num]["ports"].append(port)
+        links[link_num]["ports"].append(normalized)
 
 
 def _handle_switch_link_row(
