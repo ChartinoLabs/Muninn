@@ -1,7 +1,7 @@
 """Parser for 'show ipv6 dhcp interface' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import Any, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -148,7 +148,7 @@ _NO_MATCH = "_no_match"
 
 def _handle_ia_header(
     m: re.Match[str],
-    server: dict[str, object],
+    server: dict[str, Any],
     ia_key: str,
 ) -> None:
     """Create an IA PD or IA NA sub-dict from a header match."""
@@ -161,7 +161,7 @@ def _handle_ia_header(
 
 def _handle_ia_detail(
     line: str,
-    server: dict[str, object],
+    server: dict[str, Any],
     current_ia_type: str | None,
 ) -> bool:
     """Handle Prefix, Address, and lifetime lines within an IA block.
@@ -189,7 +189,7 @@ def _handle_ia_detail(
 
 def _handle_server_scalar(
     line: str,
-    server: dict[str, object],
+    server: dict[str, Any],
 ) -> bool:
     """Handle simple scalar fields within a server block.
 
@@ -220,7 +220,7 @@ def _handle_server_scalar(
 
 def _parse_server_line(
     line: str,
-    server: dict[str, object],
+    server: dict[str, Any],
     current_ia_type: str | None,
 ) -> str | None:
     """Parse a single line within a known-server block.
@@ -248,7 +248,7 @@ def _parse_server_line(
 def _save_server(
     servers: dict[str, KnownServerEntry],
     addr: str | None,
-    data: dict[str, object] | None,
+    data: dict[str, Any] | None,
 ) -> None:
     """Flush a completed server entry into the servers dict."""
     if data is not None and addr is not None:
@@ -257,7 +257,7 @@ def _save_server(
 
 def _parse_client_entry_fields(
     line: str,
-    entry: dict[str, object],
+    entry: dict[str, Any],
 ) -> bool:
     """Handle interface-level fields for client mode.
 
@@ -288,9 +288,9 @@ def _parse_client_entry_fields(
 
 def _parse_client_block(lines: list[str]) -> ClientInterfaceEntry:
     """Parse an interface block operating in client mode."""
-    entry: dict[str, object] = {"mode": "client"}
+    entry: dict[str, Any] = {"mode": "client"}
     servers: dict[str, KnownServerEntry] = {}
-    current_server: dict[str, object] | None = None
+    current_server: dict[str, Any] | None = None
     current_server_addr: str | None = None
     current_ia_type: str | None = None
 
@@ -320,7 +320,7 @@ def _parse_client_block(lines: list[str]) -> ClientInterfaceEntry:
 
 def _parse_server_block(lines: list[str]) -> ServerInterfaceEntry:
     """Parse an interface block operating in server mode."""
-    entry: dict[str, object] = {"mode": "server"}
+    entry: dict[str, Any] = {"mode": "server"}
 
     for line in lines:
         if m := _USING_POOL.match(line):
@@ -337,7 +337,7 @@ def _parse_server_block(lines: list[str]) -> ServerInterfaceEntry:
 
 def _parse_relay_block(lines: list[str]) -> RelayInterfaceEntry:
     """Parse an interface block operating in relay mode."""
-    entry: dict[str, object] = {"mode": "relay"}
+    entry: dict[str, Any] = {"mode": "relay"}
     destinations: list[str] = []
     in_relay_dests = False
 
