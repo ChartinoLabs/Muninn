@@ -1,0 +1,40 @@
+Control Plane
+
+Service-policy input: Control_Plane_In
+
+    Class-map: Ping_Class (match-all)
+        0 packets, 0 bytes
+        5 minute offered rate 0000 bps, drop rate 0000 bps
+        Match: access-group name Ping_Option
+        police:
+            cir 8000 bps, bc 1500 bytes
+            conformed 0 packets, 0 bytes; actions:
+                drop
+            exceeded 0 packets, 0 bytes; actions:
+                drop
+            conformed 0000 bps, exceeded 0000 bps
+
+    Class-map: BGP_Class (match-all)
+        32 packets, 2032 bytes
+        5 minute offered rate 0000 bps, drop rate 0000 bps
+        Match: access-group name BGP_Permit
+        QoS Set
+            ip precedence 6
+            Marker statistics: Disabled
+
+    Class-map: ICMP_Class2 (match-all)
+        4 packets, 482 bytes
+        5 minute offered rate 0000 bps, drop rate 0000 bps
+        Match: access-group name ICMP_Permit2
+        police:
+            cir 12000000 bps, bc 150000 bytes
+            conformed 4 packets, 482 bytes; actions:
+                transmit
+            exceeded 0 packets, 0 bytes; actions:
+                drop
+            conformed 0000 bps, exceeded 0000 bps
+
+    Class-map: class-default (match-any)
+        276 packets, 16554 bytes
+        5 minute offered rate 0000 bps, drop rate 0000 bps
+        Match: any
