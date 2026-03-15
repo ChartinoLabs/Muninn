@@ -1,0 +1,91 @@
+Packet: 0           CBUG ID: 104
+Summary
+  Input     : INJ.2
+  Output    : GigabitEthernet1
+  State     : FWD
+  Timestamp
+    Start   : 19591545483878568 ns (07/27/2021 09:34:27.497712 UTC)
+    Stop    : 19591545483897048 ns (07/27/2021 09:34:27.497731 UTC)
+Path Trace
+  Feature: IPV4(Output)
+    Input       : internal0/0/rp:0
+    Output      : GigabitEthernet1
+    Source      : 172.20.2.54
+    Destination : 172.20.2.55
+    Protocol    : 6 (TCP)
+      SrcPort   : 22
+      DstPort   : 43520
+  Feature: CFT
+    API                   : cft_handle_pkt
+    packet capabilities   : 0x000000af
+Packet: 1           CBUG ID: 105
+Summary
+  Input     : GigabitEthernet1
+  Output    : internal0/0/rp:0
+  State     : PUNT 11  (For-us data)
+  Timestamp
+    Start   : 19591545484115512 ns (07/27/2021 09:34:27.497949 UTC)
+    Stop    : 19591545484138496 ns (07/27/2021 09:34:27.497972 UTC)
+Path Trace
+  Feature: IPV4(Input)
+    Input       : GigabitEthernet1
+    Output      : <unknown>
+    Source      : 172.20.2.55
+    Destination : 172.20.2.54
+    Protocol    : 6 (TCP)
+      SrcPort   : 43520
+      DstPort   : 22
+  Feature: QOS
+    Direction   : Ingress
+    Action      : SET
+    Fields      : DSCP
+
+IOSd Path Flow: Packet: 1    CBUG ID: 105
+  Feature: INFRA
+    Pkt Direction: IN
+    Packet Rcvd From DATAPLANE
+
+  Feature: IP
+    Pkt Direction: IN
+    Packet Enqueued in IP layer
+    Source      : 172.20.2.55
+    Destination : 172.20.2.54
+    Interface   : GigabitEthernet1
+
+  Feature: TCP
+    Pkt Direction: IN
+    tcp0: I NoTCB 172.20.2.55:43520 172.20.2.54:22 seq 1565917635 ACK 140302929  WIN 63840
+
+Packet: 2           CBUG ID: 106
+Summary
+  Input     : GigabitEthernet1
+  Output    : internal0/0/rp:0
+  State     : PUNT 3   (Layer2 control and legacy)
+  Timestamp
+    Start   : 19591545665723976 ns (07/27/2021 09:34:27.679557 UTC)
+    Stop    : 19591545665748044 ns (07/27/2021 09:34:27.679582 UTC)
+Path Trace
+  Feature: QOS
+    Direction   : Ingress
+    Action      : SET
+    Fields      : DSCP
+
+IOSd Path Flow: Packet: 2    CBUG ID: 106
+  Feature: INFRA
+    Pkt Direction: IN
+    Packet Rcvd From DATAPLANE
+Packet: 3           CBUG ID: 107
+Summary
+  Input     : GigabitEthernet1
+  Output    : GigabitEthernet1
+  State     : CONS Packet Consumed
+  Timestamp
+    Start   : 19591545845287552 ns (07/27/2021 09:34:27.859121 UTC)
+    Stop    : 19591545845364724 ns (07/27/2021 09:34:27.859198 UTC)
+Path Trace
+  Feature: IPV4(Input)
+    Input       : GigabitEthernet1
+    Output      : <unknown>
+    Source      : 172.20.2.68
+    Destination : 172.20.2.54
+    Protocol    : 1 (ICMP)
