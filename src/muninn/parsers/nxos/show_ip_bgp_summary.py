@@ -1,4 +1,8 @@
-"""Parser for 'show ip bgp summary' command on NX-OS."""
+"""Parser for 'show ip bgp summary' and 'show bgp l2vpn evpn summary' commands on NX-OS.
+
+Both commands produce the same "BGP summary information for VRF..." output
+format, so a single parser handles both.
+"""
 
 import re
 from typing import NotRequired, TypedDict
@@ -377,6 +381,7 @@ def _parse_section(lines: list[str]) -> AddressFamilyEntry | None:
 
 
 @register(OS.CISCO_NXOS, "show ip bgp summary")
+@register(OS.CISCO_NXOS, "show bgp l2vpn evpn summary")
 class ShowIpBgpSummaryParser(BaseParser["ShowIpBgpSummaryResult"]):
     """Parser for 'show ip bgp summary' on NX-OS."""
 

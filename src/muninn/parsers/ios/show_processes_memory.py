@@ -112,7 +112,9 @@ def _parse_process_lines(
 
 
 @register(OS.CISCO_IOS, "show processes memory")
+@register(OS.CISCO_IOS, "show processes memory sorted")
 @register(OS.CISCO_IOSXE, "show processes memory")
+@register(OS.CISCO_IOSXE, "show processes memory sorted")
 class ShowProcessesMemoryParser(BaseParser["ShowProcessesMemoryResult"]):
     """Parser for 'show processes memory' on IOS/IOS-XE."""
 
