@@ -1,0 +1,106 @@
+{
+    "vrfs": {
+        "default": {
+            "local_as": 65000,
+            "prefixes": {
+                "10.1.0.0/24": {
+                    "paths": {
+                        "1": {
+                            "as_path": "65001 65002",
+                            "best_path": true,
+                            "cluster_list": "10.0.0.5",
+                            "communities": "65001:100 65001:200",
+                            "local_preference": 100,
+                            "next_hop": "10.0.0.2",
+                            "origin": "IGP",
+                            "originator_id": "10.0.0.2",
+                            "source_id": "10.0.0.2",
+                            "status": "internal",
+                            "weight": 0
+                        },
+                        "2": {
+                            "as_path": "65001 65003",
+                            "best_path": false,
+                            "communities": "65001:100",
+                            "local_preference": 90,
+                            "metric": 50,
+                            "next_hop": "10.0.0.3",
+                            "origin": "IGP",
+                            "source_id": "10.0.0.3",
+                            "status": "internal",
+                            "weight": 0
+                        }
+                    },
+                    "version": 5
+                },
+                "10.2.0.0/24": {
+                    "paths": {
+                        "1": {
+                            "best_path": true,
+                            "local_preference": 100,
+                            "next_hop": "0.0.0.0",
+                            "origin": "IGP",
+                            "source_id": "0.0.0.0",
+                            "status": "local",
+                            "weight": 32768
+                        }
+                    },
+                    "version": 8
+                }
+            },
+            "router_id": "10.0.0.1"
+        },
+        "PROD": {
+            "local_as": 65000,
+            "prefixes": {
+                "172.16.0.0/16": {
+                    "paths": {
+                        "1": {
+                            "as_path": "65100",
+                            "best_path": true,
+                            "extended_communities": "RT:65000:100",
+                            "local_preference": 100,
+                            "metric": 100,
+                            "next_hop": "192.168.1.2",
+                            "origin": "IGP",
+                            "source_id": "192.168.1.2",
+                            "status": "external",
+                            "weight": 0
+                        }
+                    },
+                    "version": 3
+                },
+                "192.168.10.0/24": {
+                    "paths": {
+                        "1": {
+                            "as_path": "65200",
+                            "best_path": true,
+                            "local_preference": 150,
+                            "metric": 200,
+                            "multipath": true,
+                            "next_hop": "192.168.1.3",
+                            "origin": "incomplete",
+                            "source_id": "192.168.1.3",
+                            "status": "external",
+                            "weight": 0
+                        },
+                        "2": {
+                            "as_path": "65300",
+                            "best_path": false,
+                            "local_preference": 100,
+                            "metric": 300,
+                            "multipath": true,
+                            "next_hop": "192.168.1.4",
+                            "origin": "EGP",
+                            "source_id": "192.168.1.4",
+                            "status": "external",
+                            "weight": 0
+                        }
+                    },
+                    "version": 7
+                }
+            },
+            "router_id": "192.168.1.1"
+        }
+    }
+}
