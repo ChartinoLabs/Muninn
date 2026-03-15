@@ -241,10 +241,9 @@ def _parse_block(lines: list[str]) -> tuple[str, str, BfdSessionEntry] | None:
     if len(lines) > 1:
         _parse_detail_fields(lines[1:], entry)
 
-    # If local_address was not found in detail lines, remove the empty placeholder
+    # If local_address was not found in detail lines, fall back to neighbor address
     if entry.get("local_address") == "":
-        del entry["local_address"]
-        entry["local_address"] = neighbor_addr  # fallback
+        entry["local_address"] = neighbor_addr
 
     return neighbor_addr, interface_name, entry
 
