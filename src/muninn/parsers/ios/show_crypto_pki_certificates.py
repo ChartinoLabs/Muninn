@@ -292,7 +292,7 @@ def _parse_certificate_block(
     return cert_type, entry  # type: ignore[return-value]
 
 
-def _extract_trustpoint(entry: dict) -> str:
+def _extract_trustpoint(entry: CertificateEntry) -> str:
     """Extract trustpoint name from associated_trustpoints field.
 
     Returns the first trustpoint name (before any space or comma).
