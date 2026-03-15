@@ -21,7 +21,7 @@ class UserEntry(TypedDict):
 class ShowUsersResult(TypedDict):
     """Schema for 'show users' parsed output."""
 
-    lines: dict[str, UserEntry]
+    lines: dict[str, dict[str, UserEntry]]
 
 
 # Matches user table lines such as:
@@ -54,16 +54,33 @@ _WHITESPACE_RE = re.compile(r"\s+")
 _OPTIONAL_FIELDS = ("user", "host", "idle", "location")
 
 
-def _build_entry(match: re.Match[str]) -> tuple[str, UserEntry]:
+def _get_line_parts(raw_line_name: str) -> tuple[str, str]:
+    """Extract the line family and specific line identifier."""
+    parts = raw_line_name.split()
+
+    if len(parts) == 3:
+        _, line_type, line_id = parts
+        return line_type, line_id
+
+    if len(parts) == 2:
+        line_type, line_id = parts
+        return line_type, line_id
+
+    msg = f"Unable to parse line name: {raw_line_name}"
+    raise ValueError(msg)
+
+
+def _build_entry(match: re.Match[str]) -> tuple[str, str, UserEntry]:
     """Build a UserEntry from a regex match.
 
     Args:
         match: Successful regex match against a user line.
 
     Returns:
-        Tuple of (line_name, entry).
+        Tuple of (line_type, line_id, entry).
     """
     line_name = _WHITESPACE_RE.sub(" ", match.group("line").strip())
+    line_type, line_id = _get_line_parts(line_name)
 
     entry: UserEntry = {
         "active": match.group("active") == "*",
@@ -74,7 +91,7 @@ def _build_entry(match: re.Match[str]) -> tuple[str, UserEntry]:
         if value:
             entry[field] = value  # type: ignore[literal-required]
 
-    return line_name, entry
+    return line_type, line_id, entry
 
 
 @register(OS.CISCO_IOS, "show users")
@@ -99,12 +116,12 @@ class ShowUsersParser(BaseParser[ShowUsersResult]):
             output: Raw CLI output from 'show users' command.
 
         Returns:
-            Parsed user entries keyed by line name.
+            Parsed user entries keyed by line family and line identifier.
 
         Raises:
             ValueError: If no user entries found in output.
         """
-        lines: dict[str, UserEntry] = {}
+        lines: dict[str, dict[str, UserEntry]] = {}
 
         for raw_line in output.splitlines():
             stripped = raw_line.strip()
@@ -123,8 +140,8 @@ class ShowUsersParser(BaseParser[ShowUsersResult]):
             if not match:
                 continue
 
-            line_name, entry = _build_entry(match)
-            lines[line_name] = entry
+            line_type, line_id, entry = _build_entry(match)
+            lines.setdefault(line_type, {})[line_id] = entry
 
         if not lines:
             msg = "No user entries found in output"
