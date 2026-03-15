@@ -1,6 +1,7 @@
 """Parser for 'show logging onboard rp active counter detail' command on IOS-XE."""
 
 import re
+from collections.abc import Mapping
 from typing import NotRequired, TypedDict
 
 from muninn.os import OS
@@ -107,7 +108,7 @@ def _is_skip_line(line: str) -> bool:
     return False
 
 
-def _make_unique_key(base_key: str, existing: dict[str, object]) -> str:
+def _make_unique_key(base_key: str, existing: Mapping[str, object]) -> str:
     """Generate a unique key by appending a numeric suffix if needed."""
     if base_key not in existing:
         return base_key
@@ -257,12 +258,15 @@ def _process_continuous_line(
 
     match = _CONTINUOUS_DETAIL.match(line)
     if match and pending_key is not None and pending_entry is not None:
-        pending_entry["vid"] = match.group("vid")
-        pending_entry["pid"] = match.group("pid")
-        pending_entry["tan"] = match.group("tan")
-        pending_entry["serial_number"] = match.group("serial_no")
         continuous[pending_key] = CounterContinuousDeviceInfo(
-            **pending_entry,  # type: ignore[typeddict-item]
+            devname=str(pending_entry["devname"]),
+            slot=int(str(pending_entry["slot"])),
+            error_type=int(str(pending_entry["error_type"])),
+            count=int(str(pending_entry["count"])),
+            vid=match.group("vid"),
+            pid=match.group("pid"),
+            tan=match.group("tan"),
+            serial_number=match.group("serial_no"),
         )
         return None, None
 
