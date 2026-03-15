@@ -24,6 +24,13 @@ tests/
     │   │   │   ├── metadata.yaml
     │   │   │   ├── input.txt
     │   │   │   └── expected.json
+    │   │   └── ...
+    │   ├── dir_crashinfo/
+    │   │   ├── command.txt
+    │   │   └── 001_basic/
+    │   │       ├── metadata.yaml
+    │   │       ├── input.txt
+    │   │       └── expected.json
     │   │   ├── 002_with_asterisk/
     │   │   │   └── ...
     │   │   └── 003_with_dot/
@@ -36,7 +43,26 @@ tests/
 
 ## Test Case Format
 
-Each test case directory contains three files:
+Each test case directory contains three files. The command directory may also include an optional `command.txt` override.
+
+### command.txt (optional)
+
+By default, the test harness derives the CLI command from the command directory name by converting underscores to spaces:
+
+- `show_clock` -> `show clock`
+- `show_ip_route` -> `show ip route`
+
+When the real command contains characters that are awkward or illegal in directory names, add `command.txt` at the command-directory level with the exact command text:
+
+```txt
+tests/parsers/iosxe/dir_crashinfo/command.txt
+```
+
+```txt
+dir crashinfo:
+```
+
+That allows the fixture directory to stay filesystem-friendly while still testing the exact command that the runtime will receive.
 
 ### metadata.yaml
 
@@ -167,6 +193,7 @@ Tests use pytest's `pytest_generate_tests` hook to dynamically discover and para
 
 **conftest.py** handles discovery:
 - Walks `tests/parsers/<os>/<command>/<test_case>/` directories
+- Reads `command.txt` when present, otherwise derives the command from the directory name
 - Loads `input.txt`, `expected.json`, and `metadata.yaml`
 - Generates readable test IDs like `iosxe/show_clock/001_basic`
 
@@ -182,7 +209,18 @@ def test_parser(parser_test_case: ParserTestCase) -> None:
     assert result == parser_test_case["expected"]
 ```
 
-The command name is derived from the directory name (underscores converted to spaces).
+The command name is normally derived from the directory name (underscores converted to spaces).
+
+If a command needs characters that do not fit cleanly in a directory name, add `command.txt` with the exact command string. Example:
+
+```txt
+tests/parsers/iosxe/dir_crashinfo/
+├── command.txt          # contains: dir crashinfo:
+└── 001_basic/
+    ├── input.txt
+    ├── expected.json
+    └── metadata.yaml
+```
 
 For regex-registered parsers, tests still use concrete command instances in `metadata.yaml` and test directory names. Registration patterns are an internal routing detail; parser tests should represent the real command text that was executed on the device.
 
