@@ -111,7 +111,12 @@ def _build_direction_counters(
 ) -> DirectionCounters:
     """Build DirectionCounters with defaults for missing protocols."""
     return DirectionCounters(
-        **{name: counters.get(name, _ZERO_COUNTERS) for name in _PROTOCOL_NAMES}
+        infra=counters.get("infra", _ZERO_COUNTERS),
+        tcp=counters.get("tcp", _ZERO_COUNTERS),
+        udp=counters.get("udp", _ZERO_COUNTERS),
+        ip=counters.get("ip", _ZERO_COUNTERS),
+        ipv6=counters.get("ipv6", _ZERO_COUNTERS),
+        arp=counters.get("arp", _ZERO_COUNTERS),
     )
 
 
