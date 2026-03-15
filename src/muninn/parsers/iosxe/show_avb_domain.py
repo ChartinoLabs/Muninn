@@ -6,6 +6,7 @@ from typing import Any, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.utils import canonical_interface_name
 
 
 class AvbClassSummary(TypedDict):
@@ -191,7 +192,9 @@ def _parse_interfaces(lines: list[str]) -> dict[str, AvbInterfaceEntry]:
 
         intf_match = _INTERFACE_RE.match(line)
         if intf_match:
-            current_intf = intf_match.group("interface")
+            current_intf = canonical_interface_name(
+                intf_match.group("interface"), os=OS.CISCO_IOSXE
+            )
             interfaces[current_intf] = _build_interface_entry(intf_match)
             continue
 
