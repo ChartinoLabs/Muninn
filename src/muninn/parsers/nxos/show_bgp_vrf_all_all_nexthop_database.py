@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import NotRequired, TypedDict
+from typing import Any, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -118,7 +118,7 @@ def _parse_flags(flags_str: str) -> dict[str, bool]:
     return flags
 
 
-def _finalize_nexthop(nh_entry: dict[str, object]) -> NextHopEntry:
+def _finalize_nexthop(nh_entry: dict[str, Any]) -> NextHopEntry:
     """Build a NextHopEntry from collected fields, applying defaults."""
     result: NextHopEntry = {
         "refcount": int(nh_entry.get("refcount", 0)),
@@ -137,13 +137,13 @@ def _finalize_nexthop(nh_entry: dict[str, object]) -> NextHopEntry:
         "rnh_epoch": int(nh_entry.get("rnh_epoch", 0)),
     }
     if "attached_nexthops" in nh_entry:
-        result["attached_nexthops"] = nh_entry["attached_nexthops"]  # type: ignore[assignment]
+        result["attached_nexthops"] = nh_entry["attached_nexthops"]
     return result
 
 
 def _flush_nexthop(
     current_nh_addr: str | None,
-    current_nh: dict[str, object],
+    current_nh: dict[str, Any],
     next_hops: dict[str, NextHopEntry],
 ) -> None:
     """Flush the current next-hop entry into the next_hops dict."""
@@ -171,7 +171,7 @@ def _flush_af(
 
 def _parse_nexthop_line(
     stripped: str,
-    current_nh: dict[str, object],
+    current_nh: dict[str, Any],
 ) -> bool:
     """Try to parse a next-hop detail line. Returns True if consumed."""
     if m := _IGP_ROUTE_RE.match(stripped):
@@ -200,9 +200,9 @@ def _parse_nexthop_line(
     if m := _ATTACHED_NEXTHOP_RE.match(stripped):
         attached_nhs: dict[str, AttachedNexthopEntry] = current_nh.setdefault(
             "attached_nexthops",
-            {},  # type: ignore[arg-type]
+            {},
         )
-        attached_nhs[m.group(1)] = {"interface": m.group(2)}  # type: ignore[index]
+        attached_nhs[m.group(1)] = {"interface": m.group(2)}
         return True
 
     return False
@@ -219,7 +219,7 @@ class _ParserState:
         self.af_entry: AddressFamilyEntry | None = None
         self.next_hops: dict[str, NextHopEntry] = {}
         self.nh_addr: str | None = None
-        self.nh_fields: dict[str, object] = {}
+        self.nh_fields: dict[str, Any] = {}
 
 
 def _handle_vrf_af_header(
