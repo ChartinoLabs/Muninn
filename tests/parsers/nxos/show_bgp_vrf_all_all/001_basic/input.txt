@@ -1,0 +1,31 @@
+BGP routing table information for VRF default, address family IPv4 Unicast
+BGP table version is 100, local router ID is 10.10.0.1
+Status: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best
+Path type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-injected
+Origin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup
+
+   Network            Next Hop            Metric     LocPrf     Weight Path
+*>l10.10.0.1/32       0.0.0.0                           100      32768 i
+*>e10.10.0.2/32       10.10.2.1                                      0 64102 64002 i
+*>r10.16.1.0/24       0.0.0.0               4444        100      32768 ?
+
+BGP routing table information for VRF PROD, address family IPv4 Unicast
+BGP table version is 55, local router ID is 192.168.1.1
+Status: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best
+Path type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-injected
+Origin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup
+
+   Network            Next Hop            Metric     LocPrf     Weight Path
+*>i172.16.0.0/16      10.0.0.2                 0        100          0 65001 i
+*>r192.168.1.0/24     0.0.0.0                  0        100      32768 ?
+
+BGP routing table information for VRF default, address family VPNv4 Unicast
+BGP table version is 200, local router ID is 10.10.0.1
+Status: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best
+Path type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-injected
+Origin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup
+
+   Network            Next Hop            Metric     LocPrf     Weight Path
+Route Distinguisher: 65000:100     (VRF PROD)
+*>i172.16.0.0/16      10.0.0.2                 0        100          0 65001 i
+*>r192.168.1.0/24     0.0.0.0                  0        100      32768 ?

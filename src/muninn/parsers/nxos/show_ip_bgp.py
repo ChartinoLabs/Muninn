@@ -413,6 +413,7 @@ def _parse_section(lines: list[str]) -> AddressFamilyEntry | None:
     return entry
 
 
+@register(OS.CISCO_NXOS, "show bgp vrf all all")
 @register(OS.CISCO_NXOS, "show ip bgp")
 class ShowIpBgpParser(BaseParser["ShowIpBgpResult"]):
     """Parser for 'show ip bgp' on NX-OS."""
