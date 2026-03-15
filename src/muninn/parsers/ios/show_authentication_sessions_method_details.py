@@ -52,7 +52,7 @@ class SessionEntry(TypedDict):
     resultant_policy_sgt: NotRequired[int]
 
 
-ShowAuthenticationSessionsMethodDetailsResult = dict[str, list[SessionEntry]]
+ShowAuthenticationSessionsMethodDetailsResult = dict[str, dict[str, SessionEntry]]
 
 
 # --- Session block separator ---
@@ -290,11 +290,11 @@ def _parse_sections(lines: list[str], entry: dict) -> None:
         entry["methods"] = {}
 
 
-def _parse_block(lines: list[str]) -> tuple[str, SessionEntry] | None:
+def _parse_block(lines: list[str]) -> tuple[str, str, SessionEntry] | None:
     """Parse a single session block.
 
     Returns:
-        Tuple of (interface_name, entry) or None if unparseable.
+        Tuple of (interface_name, session_id, entry) or None if unparseable.
     """
     if not lines or not any(line.strip() for line in lines):
         return None
@@ -302,13 +302,14 @@ def _parse_block(lines: list[str]) -> tuple[str, SessionEntry] | None:
     entry: dict = {}
     _parse_session_fields(lines, entry)
 
-    if "interface" not in entry:
+    if "interface" not in entry or "common_session_id" not in entry:
         return None
 
     _parse_sections(lines, entry)
 
     interface = entry["interface"]
-    return interface, entry  # type: ignore[return-value]
+    session_id = entry["common_session_id"]
+    return interface, session_id, entry  # type: ignore[return-value]
 
 
 @register(OS.CISCO_IOS, "show authentication sessions method details")
@@ -337,8 +338,8 @@ class ShowAuthenticationSessionsMethodDetailsParser(
             result = _parse_block(block_lines)
             if result is None:
                 continue
-            interface, entry = result
-            sessions.setdefault(interface, []).append(entry)
+            interface, session_id, entry = result
+            sessions.setdefault(interface, {})[session_id] = entry
 
         if not sessions:
             msg = "No authentication session entries found in output"
