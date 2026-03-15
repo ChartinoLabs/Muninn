@@ -11,15 +11,21 @@
             "phase1_id": "10.1.1.1",
             "desc": "VPN to Branch1",
             "ike_sa": {
-                "10.0.0.1/500-10.1.1.1/500": {
-                    "local_address": "10.0.0.1",
-                    "local_port": 500,
-                    "remote_address": "10.1.1.1",
-                    "remote_port": 500,
-                    "sa_status": "Active",
-                    "capabilities": "D",
-                    "connid": 1001,
-                    "lifetime": "23:55:10"
+                "10.0.0.1": {
+                    "500": {
+                        "10.1.1.1": {
+                            "500": {
+                                "local_address": "10.0.0.1",
+                                "local_port": 500,
+                                "remote_address": "10.1.1.1",
+                                "remote_port": 500,
+                                "sa_status": "Active",
+                                "capabilities": "D",
+                                "connid": 1001,
+                                "lifetime": "23:55:10"
+                            }
+                        }
+                    }
                 }
             },
             "ipsec_flow": {
@@ -68,15 +74,21 @@
             "fvrf": "none",
             "phase1_id": "10.2.2.2",
             "ike_sa": {
-                "10.0.0.1/500-10.2.2.2/500": {
-                    "local_address": "10.0.0.1",
-                    "local_port": 500,
-                    "remote_address": "10.2.2.2",
-                    "remote_port": 500,
-                    "sa_status": "Active",
-                    "capabilities": "D",
-                    "connid": 1002,
-                    "lifetime": "23:14:30"
+                "10.0.0.1": {
+                    "500": {
+                        "10.2.2.2": {
+                            "500": {
+                                "local_address": "10.0.0.1",
+                                "local_port": 500,
+                                "remote_address": "10.2.2.2",
+                                "remote_port": 500,
+                                "sa_status": "Active",
+                                "capabilities": "D",
+                                "connid": 1002,
+                                "lifetime": "23:14:30"
+                            }
+                        }
+                    }
                 }
             },
             "ipsec_flow": {

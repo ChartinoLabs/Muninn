@@ -22,6 +22,9 @@ class IkeSaEntry(TypedDict):
     lifetime: NotRequired[str]
 
 
+IkeSaTree = dict[str, dict[str, dict[str, dict[str, IkeSaEntry]]]]
+
+
 class IpsecSaEntry(TypedDict):
     """Schema for an IPsec Security Association (inbound or outbound)."""
 
@@ -67,7 +70,7 @@ class CryptoSessionEntry(TypedDict):
     username: NotRequired[str]
     profile: NotRequired[str]
     ivrf: NotRequired[str]
-    ike_sa: NotRequired[dict[str, IkeSaEntry]]
+    ike_sa: NotRequired[IkeSaTree]
     ipsec_flow: NotRequired[dict[str, IpsecFlowEntry]]
 
 
@@ -221,11 +224,6 @@ def _split_session_blocks(output: str) -> list[list[str]]:
         blocks.append(current)
 
     return blocks
-
-
-def _make_ike_key(local: str, local_port: int, remote: str, remote_port: int) -> str:
-    """Create a unique key for an IKE SA entry."""
-    return f"{local}/{local_port}-{remote}/{remote_port}"
 
 
 def _try_parse_sa_fields(line: str, sa: dict) -> bool:
@@ -440,7 +438,29 @@ def _try_parse_peer_field(line: str, entry: dict) -> bool:
     return False
 
 
-def _parse_ike_sa(lines: list[str], idx: int, ike_sas: dict) -> int:
+def _store_ike_sa(
+    ike_sas: IkeSaTree,
+    local_addr: str,
+    local_port: int,
+    remote_addr: str,
+    remote_port: int,
+    ike_entry: IkeSaEntry,
+) -> None:
+    """Store an IKE SA using nested endpoint hierarchy keys."""
+    local_port_key = str(local_port)
+    remote_port_key = str(remote_port)
+
+    if local_addr not in ike_sas:
+        ike_sas[local_addr] = {}
+    if local_port_key not in ike_sas[local_addr]:
+        ike_sas[local_addr][local_port_key] = {}
+    if remote_addr not in ike_sas[local_addr][local_port_key]:
+        ike_sas[local_addr][local_port_key][remote_addr] = {}
+
+    ike_sas[local_addr][local_port_key][remote_addr][remote_port_key] = ike_entry
+
+
+def _parse_ike_sa(lines: list[str], idx: int, ike_sas: IkeSaTree) -> int:
     """Parse an IKE SA line and optional detail line.
 
     Returns the next line index.
@@ -454,9 +474,8 @@ def _parse_ike_sa(lines: list[str], idx: int, ike_sas: dict) -> int:
     remote_addr = m.group(3)
     remote_port = int(m.group(4))
     sa_status = m.group(5)
-    key = _make_ike_key(local_addr, local_port, remote_addr, remote_port)
 
-    ike_entry: dict = {
+    ike_entry: IkeSaEntry = {
         "local_address": local_addr,
         "local_port": local_port,
         "remote_address": remote_addr,
@@ -473,14 +492,21 @@ def _parse_ike_sa(lines: list[str], idx: int, ike_sas: dict) -> int:
             ike_entry["lifetime"] = dm.group(3)
             idx += 1
 
-    ike_sas[key] = ike_entry  # type: ignore[assignment]
+    _store_ike_sa(
+        ike_sas,
+        local_addr,
+        local_port,
+        remote_addr,
+        remote_port,
+        ike_entry,
+    )
     return idx + 1
 
 
 def _parse_peer_body(lines: list[str], start: int, entry: dict) -> None:
     """Parse lines after the Peer: header, populating entry in-place."""
     idx = start
-    ike_sas: dict[str, IkeSaEntry] = {}
+    ike_sas: IkeSaTree = {}
     ipsec_flows: dict[str, IpsecFlowEntry] = {}
 
     while idx < len(lines):
