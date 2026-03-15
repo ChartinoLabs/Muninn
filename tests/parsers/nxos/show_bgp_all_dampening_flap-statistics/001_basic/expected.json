@@ -1,0 +1,112 @@
+{
+    "vrfs": {
+        "PROD": {
+            "address_families": {
+                "IPv4 Unicast": {
+                    "networks": {
+                        "172.16.0.0/16": [
+                            {
+                                "duration": "8d14h",
+                                "flaps": 42,
+                                "path": "65010 65020 65030 i",
+                                "path_type": "external",
+                                "peer": "10.0.0.1",
+                                "reuse": "00:03:00",
+                                "status": "dampened"
+                            }
+                        ],
+                        "172.16.1.0/24": [
+                            {
+                                "duration": "12d01h",
+                                "flaps": 100,
+                                "path": "65010 i",
+                                "path_type": "external",
+                                "peer": "10.0.0.1",
+                                "reuse": "00:05:30",
+                                "status": "suppressed"
+                            }
+                        ],
+                        "172.16.2.0/24": [
+                            {
+                                "duration": "0d04h",
+                                "flaps": 8,
+                                "path": "65010 65021 i",
+                                "path_type": "external",
+                                "peer": "10.0.0.2",
+                                "reuse": "00:00:45",
+                                "status": "history"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "default": {
+            "address_families": {
+                "IPv4 Unicast": {
+                    "networks": {
+                        "10.1.0.0/24": [
+                            {
+                                "duration": "6d02h",
+                                "flaps": 35,
+                                "path": "65001 65002 i",
+                                "path_type": "external",
+                                "peer": "192.168.1.1",
+                                "reuse": "00:01:50",
+                                "status": "dampened"
+                            }
+                        ],
+                        "10.2.0.0/24": [
+                            {
+                                "duration": "3d05h",
+                                "flaps": 12,
+                                "path": "65001 i",
+                                "path_type": "external",
+                                "peer": "192.168.1.1",
+                                "reuse": "00:02:10",
+                                "status": "dampened"
+                            }
+                        ],
+                        "10.3.0.0/24": [
+                            {
+                                "duration": "1d12h",
+                                "flaps": 5,
+                                "path": "65003 i",
+                                "path_type": "internal",
+                                "peer": "192.168.1.2",
+                                "reuse": "00:00:30",
+                                "status": "valid"
+                            }
+                        ]
+                    }
+                },
+                "IPv6 Unicast": {
+                    "networks": {
+                        "2001:db8:1::/48": [
+                            {
+                                "duration": "2d08h",
+                                "flaps": 20,
+                                "path": "65001 65004 i",
+                                "path_type": "external",
+                                "peer": "2001:db8::1",
+                                "reuse": "00:01:00",
+                                "status": "dampened"
+                            }
+                        ],
+                        "2001:db8:2::/48": [
+                            {
+                                "duration": "0d06h",
+                                "flaps": 3,
+                                "path": "65005 i",
+                                "path_type": "internal",
+                                "peer": "2001:db8::2",
+                                "reuse": "00:00:15",
+                                "status": "valid"
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

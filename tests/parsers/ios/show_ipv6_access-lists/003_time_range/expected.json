@@ -1,0 +1,152 @@
+{
+    "access_lists": {
+        "time_based": {
+            "entries": {
+                "10": {
+                    "action": "permit",
+                    "line": "permit tcp host 2000::1 host 2002::1 time-range GO (active)",
+                    "parsed": {
+                        "destination": {
+                            "kind": "host",
+                            "value": "2002::1"
+                        },
+                        "protocol": "tcp",
+                        "source": {
+                            "kind": "host",
+                            "value": "2000::1"
+                        },
+                        "time_range": {
+                            "name": "GO",
+                            "status": "active"
+                        }
+                    },
+                    "sequence": 10
+                },
+                "20": {
+                    "action": "deny",
+                    "line": "deny udp host 2000::1 host 2002::1",
+                    "parsed": {
+                        "destination": {
+                            "kind": "host",
+                            "value": "2002::1"
+                        },
+                        "protocol": "udp",
+                        "source": {
+                            "kind": "host",
+                            "value": "2000::1"
+                        }
+                    },
+                    "sequence": 20
+                },
+                "30": {
+                    "action": "permit",
+                    "line": "permit tcp host 2000::1 host 2003::1",
+                    "parsed": {
+                        "destination": {
+                            "kind": "host",
+                            "value": "2003::1"
+                        },
+                        "protocol": "tcp",
+                        "source": {
+                            "kind": "host",
+                            "value": "2000::1"
+                        }
+                    },
+                    "sequence": 30
+                },
+                "40": {
+                    "action": "deny",
+                    "line": "deny udp host 2000::1 host 2003::1 time-range GO (active)",
+                    "parsed": {
+                        "destination": {
+                            "kind": "host",
+                            "value": "2003::1"
+                        },
+                        "protocol": "udp",
+                        "source": {
+                            "kind": "host",
+                            "value": "2000::1"
+                        },
+                        "time_range": {
+                            "name": "GO",
+                            "status": "active"
+                        }
+                    },
+                    "sequence": 40
+                },
+                "50": {
+                    "action": "permit",
+                    "line": "permit udp host 2000::1 host 2004::1 time-range GO (active)",
+                    "parsed": {
+                        "destination": {
+                            "kind": "host",
+                            "value": "2004::1"
+                        },
+                        "protocol": "udp",
+                        "source": {
+                            "kind": "host",
+                            "value": "2000::1"
+                        },
+                        "time_range": {
+                            "name": "GO",
+                            "status": "active"
+                        }
+                    },
+                    "sequence": 50
+                },
+                "60": {
+                    "action": "deny",
+                    "line": "deny tcp host 2000::1 host 2004::1",
+                    "parsed": {
+                        "destination": {
+                            "kind": "host",
+                            "value": "2004::1"
+                        },
+                        "protocol": "tcp",
+                        "source": {
+                            "kind": "host",
+                            "value": "2000::1"
+                        }
+                    },
+                    "sequence": 60
+                },
+                "70": {
+                    "action": "permit",
+                    "line": "permit udp host 2000::1 host 2004::1",
+                    "parsed": {
+                        "destination": {
+                            "kind": "host",
+                            "value": "2004::1"
+                        },
+                        "protocol": "udp",
+                        "source": {
+                            "kind": "host",
+                            "value": "2000::1"
+                        }
+                    },
+                    "sequence": 70
+                },
+                "80": {
+                    "action": "deny",
+                    "line": "deny tcp host 2000::1 host 2004::1 time-range GO (active)",
+                    "parsed": {
+                        "destination": {
+                            "kind": "host",
+                            "value": "2004::1"
+                        },
+                        "protocol": "tcp",
+                        "source": {
+                            "kind": "host",
+                            "value": "2000::1"
+                        },
+                        "time_range": {
+                            "name": "GO",
+                            "status": "active"
+                        }
+                    },
+                    "sequence": 80
+                }
+            }
+        }
+    }
+}

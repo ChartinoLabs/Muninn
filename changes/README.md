@@ -37,6 +37,7 @@ changes/+my-change.internal
 ## Writing Good Fragments
 
 Each fragment should contain one concise, user-facing statement.
+Empty or whitespace-only fragments fail CI.
 
 Good:
 
