@@ -1,7 +1,7 @@
 """Parser for 'show interface brief' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import NotRequired, TypeAlias, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -58,14 +58,11 @@ class VlanEntry(TypedDict):
     secondary_vlan: NotRequired[str]
 
 
-class ShowInterfaceBriefResult(TypedDict):
-    """Schema for 'show interface brief' parsed output."""
+ShowInterfaceBriefEntry: TypeAlias = (
+    EthernetEntry | PortChannelEntry | ManagementEntry | LoopbackEntry | VlanEntry
+)
 
-    ethernet: NotRequired[dict[str, EthernetEntry]]
-    port_channel: NotRequired[dict[str, PortChannelEntry]]
-    management: NotRequired[dict[str, ManagementEntry]]
-    loopback: NotRequired[dict[str, LoopbackEntry]]
-    vlan: NotRequired[dict[str, VlanEntry]]
+ShowInterfaceBriefResult: TypeAlias = dict[str, ShowInterfaceBriefEntry]
 
 
 # Separator line pattern
@@ -334,9 +331,7 @@ class ShowInterfaceBriefParser(BaseParser[ShowInterfaceBriefResult]):
         parsed = parser_fn(stripped)
         if parsed:
             intf_name, entry = parsed
-            if current_section not in result:
-                result[current_section] = {}  # type: ignore[literal-required]
-            result[current_section][intf_name] = entry  # type: ignore[literal-required]
+            result[intf_name] = entry
 
     @classmethod
     def parse(cls, output: str) -> ShowInterfaceBriefResult:
@@ -346,7 +341,7 @@ class ShowInterfaceBriefParser(BaseParser[ShowInterfaceBriefResult]):
             output: Raw CLI output from command.
 
         Returns:
-            Parsed interface data organized by interface type section.
+            Parsed interface data keyed by interface name.
 
         Raises:
             ValueError: If no interfaces found in output.
@@ -367,8 +362,7 @@ class ShowInterfaceBriefParser(BaseParser[ShowInterfaceBriefResult]):
             if current_section:
                 cls._process_data_line(stripped, current_section, result)
 
-        total = sum(len(v) for v in result.values())  # type: ignore[arg-type]
-        if total == 0:
+        if not result:
             msg = "No interfaces found in output"
             raise ValueError(msg)
 
