@@ -1,7 +1,7 @@
 """Parser for 'show logging onboard rp active environment detail' on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import Any, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -92,7 +92,7 @@ _SECTION_SUMMARY = "summary"
 _SECTION_CONTINUOUS = "continuous"
 
 
-def _make_unique_key(base_key: str, existing: dict[str, object]) -> str:
+def _make_unique_key(base_key: str, existing: dict[str, Any]) -> str:
     """Generate a unique key by appending a numeric suffix if needed."""
     if base_key not in existing:
         return base_key
