@@ -108,7 +108,7 @@ def _parse_lsa_line(line: str, is_external: bool) -> tuple[str, str, LsaEntry] |
 
     m = _LSA_NO_COUNT_RE.match(line)
     if m:
-        entry = {
+        entry: LsaEntry = {
             "age": int(m.group(3)),
             "seq": m.group(4),
             "checksum": m.group(5),
