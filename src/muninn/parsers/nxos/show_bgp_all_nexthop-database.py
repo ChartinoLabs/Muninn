@@ -5,7 +5,7 @@ identical output on NX-OS (the two commands are aliases for each other).
 """
 
 import re
-from typing import NotRequired, TypedDict, cast
+from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -109,21 +109,21 @@ def _parse_nexthop_flags(flags_str: str) -> dict[str, bool]:
 
     for token in tokens:
         token_lower = token.lower()
-        if token_lower == "attached":
+        if token_lower == "attached":  # nosec B105
             attached = True
-        elif token_lower == "not-attached":
+        elif token_lower == "not-attached":  # nosec B105
             attached = False
-        elif token_lower == "local":
+        elif token_lower == "local":  # nosec B105
             local = True
-        elif token_lower == "not-local":
+        elif token_lower == "not-local":  # nosec B105
             local = False
-        elif token_lower == "reachable":
+        elif token_lower == "reachable":  # nosec B105
             reachable = True
-        elif token_lower == "unreachable":
+        elif token_lower == "unreachable":  # nosec B105
             reachable = False
-        elif token_lower == "labeled":
+        elif token_lower == "labeled":  # nosec B105
             labeled = True
-        elif token_lower == "not-labeled":
+        elif token_lower == "not-labeled":  # nosec B105
             labeled = False
 
     return {
@@ -146,8 +146,8 @@ def _try_match_nexthop_detail(line: str, entry: NexthopEntry) -> bool:
     if m:
         attached_addr = m.group("addr")
         intf = canonical_interface_name(m.group("intf"), os=OS.CISCO_NXOS)
-        attached_nexthops = entry.get("attached_nexthops", {})
-        attached_nexthops[attached_addr] = {"interface": intf}
+        attached_nexthops = entry.get("attached_nexthops", {}).copy()
+        attached_nexthops[attached_addr] = AttachedNexthopEntry(interface=intf)
         entry["attached_nexthops"] = attached_nexthops
         return True
 
@@ -295,4 +295,4 @@ class ShowBgpAllNexthopDatabaseParser(
     @classmethod
     def parse(cls, output: str) -> ShowBgpAllNexthopDatabaseResult:
         """Parse 'show bgp all nexthop-database' output."""
-        return cast(ShowBgpAllNexthopDatabaseResult, _parse_output(output))
+        return _parse_output(output)
