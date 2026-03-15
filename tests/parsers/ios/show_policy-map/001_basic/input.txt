@@ -1,0 +1,24 @@
+  Policy Map QOS-POLICY
+    Class VOICE
+      Match: dscp ef
+      police cir 128000 bc 8000
+        conform-action transmit
+        exceed-action drop
+        conformed 15000 packets, 9600000 bytes
+        exceeded 500 packets, 320000 bytes
+    Class VIDEO
+      Match: dscp af41
+      Match: dscp cs4
+      bandwidth 256 (kbps)
+      queue-limit 64 packets
+    Class class-default
+      Match: any
+      shape average 1000000
+
+  Policy Map PARENT-POLICY
+    Class CRITICAL-DATA
+      Match: access-group name CRITICAL-ACL
+      bandwidth 30%
+      service-policy CHILD-POLICY
+    Class class-default
+      Match: any

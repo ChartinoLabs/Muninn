@@ -1,0 +1,62 @@
+{
+    "policy_maps": {
+        "PARENT-POLICY": {
+            "classes": {
+                "CRITICAL-DATA": {
+                    "bandwidth": {
+                        "percent": 30
+                    },
+                    "match": [
+                        "access-group name CRITICAL-ACL"
+                    ],
+                    "service_policy": "CHILD-POLICY"
+                },
+                "class-default": {
+                    "match": [
+                        "any"
+                    ]
+                }
+            }
+        },
+        "QOS-POLICY": {
+            "classes": {
+                "VIDEO": {
+                    "bandwidth": {
+                        "kbps": 256
+                    },
+                    "match": [
+                        "dscp af41",
+                        "dscp cs4"
+                    ],
+                    "queue_limit": {
+                        "packets": 64
+                    }
+                },
+                "VOICE": {
+                    "match": [
+                        "dscp ef"
+                    ],
+                    "police": {
+                        "bc_bytes": 8000,
+                        "cir_bps": 128000,
+                        "conform_action": "transmit",
+                        "conform_bytes": 9600000,
+                        "conform_packets": 15000,
+                        "exceed_action": "drop",
+                        "exceed_bytes": 320000,
+                        "exceed_packets": 500
+                    }
+                },
+                "class-default": {
+                    "match": [
+                        "any"
+                    ],
+                    "shape": {
+                        "cir_bps": 1000000,
+                        "type": "average"
+                    }
+                }
+            }
+        }
+    }
+}
