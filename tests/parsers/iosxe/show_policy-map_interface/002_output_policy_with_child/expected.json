@@ -1,0 +1,85 @@
+{
+    "TenGigabitEthernet0/0/0.101": {
+        "service_policies": {
+            "L3VPN_in": {
+                "classes": {
+                    "class-default": {
+                        "bytes": 0,
+                        "drop_rate_bps": 0,
+                        "match": [
+                            "any"
+                        ],
+                        "match_type": "match-any",
+                        "offered_rate_bps": 0,
+                        "packets": 0,
+                        "police": {
+                            "bc_bytes": 400000,
+                            "cir_bps": 400000,
+                            "conformed_action": "transmit",
+                            "conformed_bps": 0,
+                            "conformed_bytes": 0,
+                            "conformed_packets": 0,
+                            "exceeded_action": "drop",
+                            "exceeded_bps": 0,
+                            "exceeded_bytes": 0,
+                            "exceeded_packets": 0
+                        }
+                    }
+                },
+                "direction": "input"
+            },
+            "L3VPN_out": {
+                "classes": {
+                    "class-default": {
+                        "bytes": 121212,
+                        "child_classes": {
+                            "IPP67": {
+                                "bytes": 4567,
+                                "drop_rate_bps": 456456456,
+                                "match": [
+                                    "ip precedence 6  7"
+                                ],
+                                "match_type": "match-all",
+                                "offered_rate_bps": 123123123,
+                                "packets": 123,
+                                "queueing": {
+                                    "bandwidth_percent": 50,
+                                    "bytes_output": 819909328,
+                                    "no_buffer_drops": 0,
+                                    "pkts_output": 6612304,
+                                    "queue_depth": 63,
+                                    "queue_limit_packets": 64,
+                                    "total_drops": 2655550
+                                }
+                            }
+                        },
+                        "child_policy": "leeaf",
+                        "drop_rate_bps": 1118111,
+                        "match": [
+                            "any"
+                        ],
+                        "match_type": "match-any",
+                        "offered_rate_bps": 11111171,
+                        "packets": 2121212,
+                        "queueing": {
+                            "bytes_output": 111611,
+                            "no_buffer_drops": 0,
+                            "pkts_output": 11511,
+                            "queue_depth": 0,
+                            "queue_limit_packets": 64,
+                            "total_drops": 11111
+                        },
+                        "shape": {
+                            "bc": 2323,
+                            "be": 3434,
+                            "cir": 111222,
+                            "target_rate": 454545,
+                            "type": "average"
+                        }
+                    }
+                },
+                "direction": "output"
+            }
+        }
+    }
+}

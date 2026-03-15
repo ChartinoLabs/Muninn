@@ -1,0 +1,41 @@
+{
+    "HundredGigabitEthernet1/0/3": {
+        "service_policies": {
+            "map1_table": {
+                "classes": {
+                    "class-default": {
+                        "bytes": 0,
+                        "match": [
+                            "any"
+                        ],
+                        "match_type": "match-any",
+                        "packets": 2482448,
+                        "police": {
+                            "burst_bytes": 10240,
+                            "conformed_action": "transmit",
+                            "conformed_bps": 46055000,
+                            "conformed_bytes": 1865503500,
+                            "exceeded_action": "drop",
+                            "exceeded_bps": 45873000,
+                            "exceeded_bytes": 1858168500,
+                            "rate_bps": 500000000
+                        },
+                        "qos_set": [
+                            {
+                                "table": "t1",
+                                "type": "dscp",
+                                "value": "dscp"
+                            },
+                            {
+                                "table": "t1",
+                                "type": "traffic-class",
+                                "value": "dscp"
+                            }
+                        ]
+                    }
+                },
+                "direction": "input"
+            }
+        }
+    }
+}
