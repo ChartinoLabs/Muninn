@@ -198,7 +198,7 @@ class ShowInterfaceBriefParser(BaseParser[ShowInterfaceBriefResult]):
             "mode": match.group("mode"),
             "status": match.group("status"),
             "reason": match.group("reason").strip(),
-            "speed": match.group("speed"),
+            "speed": cls._normalize_speed(match.group("speed")),
         }
         if vlan != "--":
             entry["vlan"] = vlan
@@ -206,6 +206,11 @@ class ShowInterfaceBriefParser(BaseParser[ShowInterfaceBriefResult]):
             entry["port_channel"] = port_ch
 
         return interface, entry
+
+    @staticmethod
+    def _normalize_speed(speed: str) -> str:
+        """Remove unsupported NX-OS speed suffixes from speed values."""
+        return speed.removesuffix("(D)")
 
     @classmethod
     def _parse_port_channel(cls, line: str) -> tuple[str, PortChannelEntry] | None:
@@ -223,7 +228,7 @@ class ShowInterfaceBriefParser(BaseParser[ShowInterfaceBriefResult]):
             "mode": match.group("mode"),
             "status": match.group("status"),
             "reason": match.group("reason").strip(),
-            "speed": match.group("speed"),
+            "speed": cls._normalize_speed(match.group("speed")),
             "protocol": match.group("protocol"),
         }
         if vlan != "--":
