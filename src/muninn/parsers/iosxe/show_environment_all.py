@@ -1,7 +1,7 @@
 """Parser for 'show environment all' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -227,6 +227,8 @@ class ShowEnvironmentAllParser(BaseParser[ShowEnvironmentAllResult]):
         SW  PID                 Serial#     Status           Sys Pwr  PoE Pwr  Watts
         1A  PWR-C4-950WAC-R     GEN222700VU  OK              Good     n/a      950
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"environment", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowEnvironmentAllResult:

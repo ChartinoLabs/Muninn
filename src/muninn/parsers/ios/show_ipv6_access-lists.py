@@ -1,7 +1,7 @@
 """Parser for 'show ipv6 access-lists' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -107,6 +107,8 @@ class ShowIpv6AccessListsParser(BaseParser[ShowIpv6AccessListsResult]):
         IPv6 access list Virtual-Access2.1#427819008151 (per-user)
             permit tcp host 2001:DB8:1::32 eq bgp ... sequence 1
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"acl", "security"})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpv6AccessListsResult:

@@ -2,7 +2,7 @@
 
 import re
 from dataclasses import dataclass, field
-from typing import Literal, NotRequired, TypedDict
+from typing import ClassVar, Literal, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -119,6 +119,8 @@ class ShowCdpNeighborsDetailParser(
     Parses detailed CDP neighbor information showing connected devices
     with full platform, version, and address details.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"cdp"})
 
     _DEVICE_ID_PATTERN = re.compile(r"^Device ID:\s*(.+)$")
     _SYSTEM_NAME_PATTERN = re.compile(r"^System Name:\s*(.+)$")

@@ -1,7 +1,7 @@
 """Parser for 'show mac address-table' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -54,6 +54,8 @@ class ShowMacAddressTableParser(BaseParser[ShowMacAddressTableResult]):
     Parses the MAC address table showing L2 forwarding entries including
     VLAN, MAC address, type, age, security flags, and port information.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"mac", "switching"})
 
     # Match MAC table entry lines. The format is:
     # [flag] VLAN  MAC_ADDRESS  TYPE  AGE  SECURE  NTFY  PORTS [extra]

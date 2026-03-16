@@ -1,7 +1,7 @@
 """Parser for 'show policy-map multipoint' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -131,6 +131,8 @@ class ShowPolicyMapMultipointParser(BaseParser[ShowPolicyMapMultipointResult]):
               5 minute offered rate 0000 bps, drop rate 0000 bps
               Match: any
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"qos"})
 
     @classmethod
     def parse(cls, output: str) -> ShowPolicyMapMultipointResult:

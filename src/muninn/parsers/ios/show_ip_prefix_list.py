@@ -1,7 +1,7 @@
 """Parser for 'show ip prefix-list' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -40,6 +40,8 @@ class ShowIpPrefixListParser(BaseParser[ShowIpPrefixListResult]):
            seq 5 deny 10.0.0.0/24
            seq 10 permit 0.0.0.0/0 le 32
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"routing"})
 
     _HEADER_PATTERN = re.compile(
         r"^ip\s+prefix-list\s+(?P<name>\S+):\s+(?P<count>\d+)\s+entr",

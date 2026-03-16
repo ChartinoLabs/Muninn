@@ -1,6 +1,6 @@
 """Tests for muninn.registry module."""
 
-from typing import Any
+from typing import Any, ClassVar
 
 import pytest
 
@@ -8,12 +8,15 @@ from muninn.exceptions import ParserAmbiguityError, ParserNotFoundError
 from muninn.os import OS, CiscoIOSXE, CiscoNXOS, OperatingSystem
 from muninn.parser import BaseParser
 from muninn.registry import (
+    ParserInfo,
     Registration,
     RuntimeRegistry,
     _generate_doc_template,
     _normalize_command,
     register,
 )
+
+_TEST_TAGS: frozenset[str] = frozenset({"test"})
 
 
 class TestNormalizeCommand:
@@ -97,6 +100,8 @@ class TestRuntimeRegistry:
 
         @register("nxos", "show version")
         class ShowVersionParser(BaseParser):
+            tags = _TEST_TAGS
+
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
                 return {"version": "1.0"}
@@ -129,6 +134,8 @@ class TestRuntimeRegistry:
 
         @register(register_os, register_cmd)
         class Parser(BaseParser):
+            tags = _TEST_TAGS
+
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
                 return {}
@@ -148,6 +155,8 @@ class TestRuntimeRegistry:
 
         @register("nxos", "show version")
         class BuiltInParser(BaseParser):
+            tags = _TEST_TAGS
+
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
                 return {"source": "built_in"}
@@ -181,12 +190,16 @@ class TestRuntimeRegistry:
 
         @register("ios", "show ip ospf neighbors")
         class LiteralParser(BaseParser):
+            tags = _TEST_TAGS
+
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
                 return {"kind": "literal"}
 
         @register("ios", r"show ip ospf (?P<token>\S+)")
         class PatternParser(BaseParser):
+            tags = _TEST_TAGS
+
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
                 return {"kind": "pattern"}
@@ -214,6 +227,8 @@ class TestRuntimeRegistry:
 
         @register("ios", r"show ip ospf (?P<process_id>\d+)")
         class BuiltInParser(BaseParser):
+            tags = _TEST_TAGS
+
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
                 return {"source": "built_in"}
@@ -292,12 +307,16 @@ class TestRuntimeRegistry:
 
         @register("ios", r"show ip ospf (?P<token>\S+)")
         class BuiltInGenericParser(BaseParser):
+            tags = _TEST_TAGS
+
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
                 return {}
 
         @register("ios", r"show ip ospf (?P<process_id>\d+)")
         class BuiltInProcessParser(BaseParser):
+            tags = _TEST_TAGS
+
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
                 return {}
@@ -347,6 +366,8 @@ class TestRuntimeRegistry:
 
         @register("nxos", "show version")
         class ShowVersionParser(BaseParser):
+            tags = _TEST_TAGS
+
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
                 return {}
@@ -369,12 +390,16 @@ class TestRuntimeRegistry:
 
         @register("nxos", "show version")
         class FirstParser(BaseParser):
+            tags = _TEST_TAGS
+
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
                 return {}
 
         @register("nxos", "show version")
         class SecondParser(BaseParser):
+            tags = _TEST_TAGS
+
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
                 return {}
@@ -395,6 +420,8 @@ class TestRuntimeRegistry:
 
         @register(CiscoNXOS, "show version")
         class ShowVersionParser(BaseParser):
+            tags = _TEST_TAGS
+
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
                 return {}
@@ -415,6 +442,8 @@ class TestRuntimeRegistry:
 
         @register("nxos", "show version")
         class ShowVersionParser(BaseParser):
+            tags = _TEST_TAGS
+
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
                 return {}
@@ -441,6 +470,8 @@ class TestRuntimeRegistry:
 
         @register("ios", r"^show ip ospf (?P<process_id>\d+)$")
         class ShowIpOspfParser(BaseParser):
+            tags = _TEST_TAGS
+
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
                 return {}
@@ -465,6 +496,8 @@ class TestRuntimeRegistry:
 
         @register("iosxe", r"dir (?P<filesystem>\S+)")
         class DirFilesystemParser(BaseParser):
+            tags = _TEST_TAGS
+
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
                 return {}
@@ -487,6 +520,8 @@ class TestRuntimeRegistry:
 
         @register("iosxe", r"show ip bgp regexp (?P<pattern>.*)")
         class ShowIpBgpRegexpParser(BaseParser):
+            tags = _TEST_TAGS
+
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
                 return {}
@@ -519,6 +554,8 @@ class TestRuntimeRegistry:
 
         @register("ios", r"show ip ospf (?P<process_id>\d+")
         class BadParser(BaseParser):
+            tags = _TEST_TAGS
+
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
                 return {}
@@ -539,6 +576,8 @@ class TestRuntimeRegistry:
 
         @register("ios", r"show ip bgp(?: vrf (?P<vrf_name>\S+))? summary")
         class ComplexParser(BaseParser):
+            tags = _TEST_TAGS
+
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
                 return {}
@@ -559,6 +598,8 @@ class TestRuntimeRegistry:
 
         @register("ios", r"show ip ospf (?P<process_id>\d+)")
         class PatternParser(BaseParser):
+            tags = _TEST_TAGS
+
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
                 return {}
@@ -580,6 +621,8 @@ class TestRuntimeRegistry:
 
         @register("ios", r"show ip ospf (?P<process_id>\d+)")
         class PatternParser(BaseParser):
+            tags = _TEST_TAGS
+
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
                 return {}
@@ -597,3 +640,179 @@ class TestRuntimeRegistry:
         assert specs[0].command_text == r"show ip ospf (?P<process_id>\d+)"
         assert specs[0].match_text == r"show ip ospf (?P<process_id>\d+)"
         assert specs[0].is_pattern is True
+
+
+class TestParserTags:
+    """Tests for parser metadata tagging system."""
+
+    @pytest.fixture
+    def runtime_registry(self) -> RuntimeRegistry:
+        """Create an isolated runtime registry."""
+        return RuntimeRegistry()
+
+    def test_base_parser_default_tags_is_empty_frozenset(self) -> None:
+        """BaseParser default tags is an empty frozenset."""
+        assert BaseParser.tags == frozenset()
+
+    def test_subclass_inherits_empty_tags(self) -> None:
+        """Subclass without explicit tags inherits empty frozenset."""
+
+        class MyParser(BaseParser):
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {}
+
+        assert MyParser.tags == frozenset()
+
+    def test_subclass_can_override_tags(self) -> None:
+        """Subclass can set custom tags as a frozenset."""
+
+        class MyParser(BaseParser):
+            tags: ClassVar[frozenset[str]] = frozenset({"routing", "ospf"})
+
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {}
+
+        assert MyParser.tags == frozenset({"routing", "ospf"})
+
+    def test_built_in_registration_without_tags_raises_value_error(
+        self,
+        runtime_registry: RuntimeRegistry,
+    ) -> None:
+        """Built-in parser registration without tags raises ValueError."""
+
+        @register("nxos", "show version")
+        class NoTagsParser(BaseParser):
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {}
+
+        with pytest.raises(ValueError, match="must define non-empty tags"):
+            runtime_registry.register_parser(
+                "nxos", "show version", NoTagsParser, source="built_in"
+            )
+
+    def test_local_registration_without_tags_succeeds(
+        self,
+        runtime_registry: RuntimeRegistry,
+    ) -> None:
+        """Local parser registration without tags succeeds."""
+
+        @register("nxos", "show version")
+        class LocalParser(BaseParser):
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {}
+
+        runtime_registry.register_parser(
+            "nxos", "show version", LocalParser, source="local"
+        )
+
+        parsers = runtime_registry.list_parsers()
+        assert (OS.CISCO_NXOS, "show version") in parsers
+
+    def test_tags_propagated_to_command_spec(
+        self,
+        runtime_registry: RuntimeRegistry,
+    ) -> None:
+        """Tags from parser class are stored in CommandSpec."""
+
+        @register("nxos", "show ip ospf neighbor")
+        class OspfParser(BaseParser):
+            tags: ClassVar[frozenset[str]] = frozenset({"routing", "ospf"})
+
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {}
+
+        runtime_registry.register_parser(
+            "nxos", "show ip ospf neighbor", OspfParser, source="built_in"
+        )
+
+        specs = runtime_registry.list_command_specs()
+        assert len(specs) == 1
+        assert specs[0].tags == frozenset({"routing", "ospf"})
+
+    def test_list_parser_catalog_returns_parser_info_objects(
+        self,
+        runtime_registry: RuntimeRegistry,
+    ) -> None:
+        """list_parser_catalog returns ParserInfo with correct metadata."""
+
+        @register("nxos", "show version")
+        class VersionParser(BaseParser):
+            tags: ClassVar[frozenset[str]] = frozenset({"system", "inventory"})
+
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {}
+
+        @register("nxos", "show ip route")
+        class RouteParser(BaseParser):
+            tags: ClassVar[frozenset[str]] = frozenset({"routing"})
+
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {}
+
+        runtime_registry.register_parser(
+            "nxos", "show version", VersionParser, source="built_in"
+        )
+        runtime_registry.register_parser(
+            "nxos", "show ip route", RouteParser, source="built_in"
+        )
+
+        catalog = runtime_registry.list_parser_catalog()
+        assert len(catalog) == 2
+
+        catalog_by_cmd = {info.command_template: info for info in catalog}
+
+        version_info = catalog_by_cmd["show version"]
+        assert version_info.os is OS.CISCO_NXOS
+        assert version_info.tags == frozenset({"system", "inventory"})
+        assert version_info.source == "built_in"
+
+        route_info = catalog_by_cmd["show ip route"]
+        assert route_info.os is OS.CISCO_NXOS
+        assert route_info.tags == frozenset({"routing"})
+        assert route_info.source == "built_in"
+
+    def test_list_parser_catalog_includes_local_parsers(
+        self,
+        runtime_registry: RuntimeRegistry,
+    ) -> None:
+        """Catalog includes local parsers with empty tags."""
+
+        @register("nxos", "show version")
+        class LocalParser(BaseParser):
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {}
+
+        runtime_registry.register_parser(
+            "nxos", "show version", LocalParser, source="local"
+        )
+
+        catalog = runtime_registry.list_parser_catalog()
+        assert len(catalog) == 1
+        assert catalog[0].source == "local"
+        assert catalog[0].tags == frozenset()
+
+    def test_list_parser_catalog_empty_registry(
+        self,
+        runtime_registry: RuntimeRegistry,
+    ) -> None:
+        """Empty registry returns empty catalog."""
+        assert runtime_registry.list_parser_catalog() == []
+
+    def test_parser_info_is_frozen_dataclass(self) -> None:
+        """ParserInfo instances are immutable."""
+        info = ParserInfo(
+            os=OS.CISCO_NXOS,
+            command_template="show version",
+            tags=frozenset({"system"}),
+            source="built_in",
+        )
+        with pytest.raises(AttributeError):
+            info.os = OS.CISCO_IOSXE  # type: ignore[misc]

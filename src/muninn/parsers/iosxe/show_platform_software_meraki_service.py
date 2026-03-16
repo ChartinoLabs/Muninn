@@ -1,7 +1,7 @@
 """Parser for 'show platform software meraki-service' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -64,6 +64,8 @@ class ShowPlatformSoftwareMerakiServiceParser(
         IOS Console Service            : Running
         Nextunnel Packet Capture       : Not Running
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"platform", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformSoftwareMerakiServiceResult:

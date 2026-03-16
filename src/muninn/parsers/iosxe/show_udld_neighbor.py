@@ -1,7 +1,7 @@
 """Parser for 'show udld neighbor' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -32,6 +32,8 @@ class ShowUdldNeighborParser(BaseParser[ShowUdldNeighborResult]):
     Parses UDLD neighbor information showing connected devices and their
     bidirectional state.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"interfaces"})
 
     # Port           Device Name     Device ID    Port ID         Neighbor State
     # Gi1/0/7        A4B43937780     1            Gi1/0/6         Bidirectional

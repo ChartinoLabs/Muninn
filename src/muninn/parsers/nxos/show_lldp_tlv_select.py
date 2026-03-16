@@ -1,6 +1,6 @@
 """Parser for 'show lldp tlv-select' command on NX-OS."""
 
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -16,6 +16,8 @@ class ShowLldpTlvSelectResult(TypedDict):
 @register(OS.CISCO_NXOS, "show lldp tlv-select")
 class ShowLldpTlvSelectParser(BaseParser[ShowLldpTlvSelectResult]):
     """Parser for 'show lldp tlv-select' command."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"lldp"})
 
     @classmethod
     def parse(cls, output: str) -> ShowLldpTlvSelectResult:

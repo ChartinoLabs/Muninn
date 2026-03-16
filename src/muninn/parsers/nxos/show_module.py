@@ -1,7 +1,7 @@
 """Parser for 'show module' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -332,6 +332,8 @@ class ShowModuleParser(BaseParser[ShowModuleResult]):
         1    0      Supervisor Module-2                 N7K-SUP2           active *
         3    48     1/10 Gbps Ethernet Module           N7K-F248XP-25E     ok
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"inventory", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowModuleResult:

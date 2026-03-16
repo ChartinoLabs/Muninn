@@ -1,7 +1,7 @@
 """Parser for 'show bfd neighbors' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -78,6 +78,8 @@ class ShowBfdNeighborsParser(BaseParser["ShowBfdNeighborsResult"]):
 
     Parses BFD neighbor session information from tabular output.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"bfd", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowBfdNeighborsResult:

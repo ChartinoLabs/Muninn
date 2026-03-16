@@ -1,7 +1,7 @@
 """Parser for 'show mpls forwarding-table summary' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -19,6 +19,8 @@ class ShowMplsForwardingTableSummaryParser(
     BaseParser[ShowMplsForwardingTableSummaryResult]
 ):
     """Parser for 'show mpls forwarding-table summary' command."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"mpls"})
 
     _TOTAL_PATTERN = re.compile(r"^(?P<count>\d+)\s+total\s+labels$", re.I)
 

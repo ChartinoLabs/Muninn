@@ -1,7 +1,7 @@
 """Parser for 'show platform software audit ruleset' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -48,6 +48,8 @@ class ShowPlatformSoftwareAuditRulesetParser(
             kernel_module_mgmt :
                              :    -a exit,always -F arch=b64 -F path=/sbin/insmod ...
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"platform", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformSoftwareAuditRulesetResult:

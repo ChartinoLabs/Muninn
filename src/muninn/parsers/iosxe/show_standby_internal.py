@@ -1,7 +1,7 @@
 """Parser for 'show standby internal' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -250,6 +250,8 @@ class ShowStandbyInternalParser(BaseParser[ShowStandbyInternalResult]):
         HSRP Timer wheel running
         HSRP HA capable, v3 to v4 transform disabled
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"fhrp"})
 
     @classmethod
     def parse(cls, output: str) -> ShowStandbyInternalResult:

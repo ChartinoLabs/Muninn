@@ -1,7 +1,7 @@
 """Parser for 'show cisp summary' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -24,6 +24,8 @@ class ShowCispSummaryResult(TypedDict):
 @register(OS.CISCO_IOSXE, "show cisp summary")
 class ShowCispSummaryParser(BaseParser[ShowCispSummaryResult]):
     """Parser for 'show cisp summary' command."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"security"})
 
     _NOT_ENABLED_PATTERN = re.compile(r"^CISP\s+not\s+enabled$", re.I)
 

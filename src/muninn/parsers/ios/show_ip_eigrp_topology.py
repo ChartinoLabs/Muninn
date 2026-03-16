@@ -1,7 +1,7 @@
 """Parser for 'show ip eigrp topology' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -122,6 +122,8 @@ class ShowIpEigrpTopologyParser(BaseParser["ShowIpEigrpTopologyResult"]):
         P 66.128.208.232/32, 2 successors, FD is 264448
                 via 10.254.11.9, TenGigabitEthernet1/1
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"eigrp", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpEigrpTopologyResult:

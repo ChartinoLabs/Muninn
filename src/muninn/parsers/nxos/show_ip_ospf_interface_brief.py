@@ -1,7 +1,7 @@
 """Parser for 'show ip ospf interface brief' command on NX-OS."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -46,6 +46,8 @@ _TOTAL_RE = re.compile(r"^\s+Total number of interface:\s*\d+")
 @register(OS.CISCO_NXOS, "show ip ospf interface brief")
 class ShowIpOspfInterfaceBriefParser(BaseParser[ShowIpOspfInterfaceBriefResult]):
     """Parser for 'show ip ospf interface brief' on NX-OS."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"ospf", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpOspfInterfaceBriefResult:

@@ -1,7 +1,7 @@
 """Parser for 'show users' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -107,6 +107,8 @@ class ShowUsersParser(BaseParser[ShowUsersResult]):
          *  0 con 0                idle                 01:58
            10 vty 0                Virtual-Access2        0        1212321
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowUsersResult:

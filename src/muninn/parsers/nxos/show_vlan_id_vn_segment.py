@@ -1,7 +1,7 @@
 """Parser for 'show vlan id 1-4093 vn-segment' command on NX-OS."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -24,6 +24,8 @@ class ShowVlanIdVnSegmentResult(TypedDict):
 @register(OS.CISCO_NXOS, "show vlan id 1-4093 vn-segment")
 class ShowVlanIdVnSegmentParser(BaseParser[ShowVlanIdVnSegmentResult]):
     """Parser for 'show vlan id 1-4093 vn-segment' command."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"switching", "vlan"})
 
     _ROW_PATTERN = re.compile(r"^(?P<vlan>\d+)\s+(?P<segment>\d+)$")
 

@@ -1,7 +1,7 @@
 """Parser for 'show platform software dns-umbrella statistics' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -70,6 +70,8 @@ class ShowPlatformSoftwareDnsUmbrellaStatisticsParser(
          Aged queries                : 7628
          Dropped pkts                : 0
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"platform", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformSoftwareDnsUmbrellaStatisticsResult:

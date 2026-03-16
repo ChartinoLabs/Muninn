@@ -1,7 +1,7 @@
 """Parser for 'show ip ospf interface' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -330,6 +330,8 @@ def _normalize_interface_name(raw_name: str) -> str:
 @register(OS.CISCO_NXOS, "show ip ospf interface")
 class ShowIpOspfInterfaceParser(BaseParser[ShowIpOspfInterfaceResult]):
     """Parser for 'show ip ospf interface' on NX-OS."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"ospf", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpOspfInterfaceResult:

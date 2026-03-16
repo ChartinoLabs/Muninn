@@ -1,7 +1,7 @@
 """Parser for 'show ip eigrp interfaces' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -174,6 +174,8 @@ class ShowIpEigrpInterfacesParser(
         EIGRP-IPv4 Interfaces for AS(1)
         Gi1  1  0/0  0/0  20  0/0  84  0
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"eigrp", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpEigrpInterfacesResult:

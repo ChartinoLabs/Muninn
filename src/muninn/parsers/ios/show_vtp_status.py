@@ -1,7 +1,7 @@
 """Parser for 'show vtp status' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -182,6 +182,8 @@ _REQUIRED_FIELDS = (
 @register(OS.CISCO_IOS, "show vtp status")
 class ShowVtpStatusParser(BaseParser["ShowVtpStatusResult"]):
     """Parser for 'show vtp status' command."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"switching", "vtp"})
 
     @classmethod
     def parse(cls, output: str) -> ShowVtpStatusResult:

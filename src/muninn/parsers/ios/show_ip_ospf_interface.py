@@ -1,7 +1,7 @@
 """Parser for 'show ip ospf interface' command on IOS/IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -539,6 +539,8 @@ def _parse_block(lines: list[str]) -> OspfInterfaceEntry | None:
 @register(OS.CISCO_IOSXE, "show ip ospf interface")
 class ShowIpOspfInterfaceParser(BaseParser[ShowIpOspfInterfaceResult]):
     """Parser for 'show ip ospf interface' on IOS/IOS-XE."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"ospf", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpOspfInterfaceResult:

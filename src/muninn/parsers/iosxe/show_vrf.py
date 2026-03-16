@@ -1,7 +1,7 @@
 """Parser for 'show vrf' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -33,6 +33,8 @@ class ShowVrfParser(BaseParser[ShowVrfResult]):
         VRF1              65000:1      ipv4,ipv6   Tu1
                                                     Lo300
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"vrf"})
 
     # Pattern for VRF row: name, default RD, optional protocols, optional interface
     # Name                             Default RD            Protocols   Interfaces

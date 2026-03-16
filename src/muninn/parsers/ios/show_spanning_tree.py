@@ -1,7 +1,7 @@
 """Parser for 'show spanning-tree' command on IOS/IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -300,6 +300,8 @@ def _parse_instance(name: str, lines: list[str]) -> InstanceEntry:
 @register(OS.CISCO_IOSXE, "show spanning-tree")
 class ShowSpanningTreeParser(BaseParser[ShowSpanningTreeResult]):
     """Parser for 'show spanning-tree' on IOS/IOS-XE."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"stp", "switching"})
 
     @classmethod
     def parse(cls, output: str) -> ShowSpanningTreeResult:

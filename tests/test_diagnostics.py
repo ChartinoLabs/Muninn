@@ -23,6 +23,8 @@ def test_logs_fallback_reason_and_selected_parser(
 
     @register("nxos", "show version")
     class BuiltInParser(BaseParser):
+        tags = frozenset({"test"})
+
         @classmethod
         def parse(cls, output: str) -> dict[str, Any]:
             return {"source": "built_in"}

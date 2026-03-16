@@ -1,7 +1,7 @@
 """Parser for 'show archive' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -87,6 +87,8 @@ def _try_parse_entry(stripped: str, result: ShowArchiveResult) -> bool:
 @register(OS.CISCO_IOS, "show archive")
 class ShowArchiveParser(BaseParser[ShowArchiveResult]):
     """Parser for 'show archive' command."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowArchiveResult:

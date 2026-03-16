@@ -1,7 +1,7 @@
 """Parser for 'show power inline priority' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -64,6 +64,8 @@ class ShowPowerInlinePriorityParser(BaseParser[ShowPowerInlinePriorityResult]):
 
         Gi1/0/1    auto   off        low
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"poe", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowPowerInlinePriorityResult:

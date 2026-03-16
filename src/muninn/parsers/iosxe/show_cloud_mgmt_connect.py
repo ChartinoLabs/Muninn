@@ -1,7 +1,7 @@
 """Parser for 'show cloud-mgmt connect' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -207,6 +207,8 @@ class ShowCloudMgmtConnectParser(BaseParser[ShowCloudMgmtConnectResult]):
           Serial Number:              FOC2829Y10T
           Status:                     Registered
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"sdwan"})
 
     @classmethod
     def parse(cls, output: str) -> ShowCloudMgmtConnectResult:

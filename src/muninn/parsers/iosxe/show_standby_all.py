@@ -2,7 +2,7 @@
 
 import re
 from collections.abc import Callable
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -302,6 +302,8 @@ class ShowStandbyAllParser(BaseParser[ShowStandbyAllResult]):
           Virtual IP address is 192.168.1.254
           Priority 100 (default 100)
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"fhrp"})
 
     @classmethod
     def parse(cls, output: str) -> ShowStandbyAllResult:

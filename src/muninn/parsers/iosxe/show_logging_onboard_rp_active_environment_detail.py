@@ -1,7 +1,7 @@
 """Parser for 'show logging onboard rp active environment detail' on IOS-XE."""
 
 import re
-from typing import Any, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -154,6 +154,8 @@ class ShowLoggingOnboardRpActiveEnvironmentDetailParser(
         03/30/2023 02:32:41 obfl0:         17.06.04    386204  17.10.1r 0   Ins
                             V01 C9407-FAN        C1   FXS222800XL
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"environment", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowLoggingOnboardRpActiveEnvironmentDetailResult:

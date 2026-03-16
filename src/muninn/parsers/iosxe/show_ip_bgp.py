@@ -1,7 +1,7 @@
 """Parser for 'show ip bgp' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -393,6 +393,8 @@ class ShowIpBgpParser(BaseParser["ShowIpBgpResult"]):
          *>  10.1.0.0/16      0.0.0.0                  0         32768 i
          *>i 10.2.0.0/16      10.0.0.1                 0    100      0 i
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"bgp", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpBgpResult:

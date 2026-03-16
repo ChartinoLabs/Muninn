@@ -1,7 +1,7 @@
 """Parser for 'show power inline upoe-plus' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -109,6 +109,8 @@ class ShowPowerInlineUpoePlusParser(
         Gi1/0/15    auto   SS   on,on         60.0      10.5      6       Ieee PD
         Gi1/0/23    auto   DS   on,on         45.4      26.9      3,4     Ieee PD
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"poe", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowPowerInlineUpoePlusResult:

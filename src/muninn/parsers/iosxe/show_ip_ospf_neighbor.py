@@ -1,7 +1,7 @@
 """Parser for 'show ip ospf neighbor' command on IOS/IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -32,6 +32,8 @@ class ShowIpOspfNeighborParser(BaseParser[ShowIpOspfNeighborResult]):
 
     Parses OSPF neighbor adjacency information.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"ospf", "routing"})
 
     # Pattern for neighbor entries
     # Neighbor ID     Pri   State           Dead Time   Address         Interface

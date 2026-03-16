@@ -1,7 +1,7 @@
 """Parser for 'show ipv6 interface brief' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -40,6 +40,8 @@ class ShowIpv6InterfaceBriefParser(
     Parses the IPv6 interface summary table showing interface name,
     status, protocol, and assigned IPv6 addresses.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"interfaces"})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpv6InterfaceBriefResult:

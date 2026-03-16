@@ -1,7 +1,7 @@
 """Parser for 'show vlans' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -336,6 +336,8 @@ class ShowVlansParser(BaseParser[ShowVlansResult]):
     Parses dot1q VLAN information including trunk interfaces,
     protocol counters, and per-interface traffic statistics.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"switching", "vlan"})
 
     @classmethod
     def parse(cls, output: str) -> ShowVlansResult:

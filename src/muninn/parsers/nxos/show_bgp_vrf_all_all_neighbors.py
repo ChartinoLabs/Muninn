@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -744,6 +744,8 @@ class ShowBgpVrfAllAllNeighborsParser(
     Parses BGP neighbor detail output across all VRFs, nested by
     VRF name and then neighbor IP address.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"bgp", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowBgpVrfAllAllNeighborsResult:

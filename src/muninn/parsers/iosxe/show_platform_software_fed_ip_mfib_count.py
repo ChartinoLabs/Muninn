@@ -1,7 +1,7 @@
 """Parser for 'show platform software fed ip mfib count' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -25,6 +25,8 @@ class ShowPlatformSoftwareFedIpMfibCountParser(
     BaseParser[ShowPlatformSoftwareFedIpMfibCountResult]
 ):
     """Parser for 'show platform software fed ip mfib count' command."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"multicast", "platform"})
 
     _COUNT_PATTERN = re.compile(r"^Number\s+of\s+entries\s*=\s*(?P<count>\d+)$", re.I)
 

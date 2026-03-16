@@ -1,7 +1,7 @@
 """Parser for 'show inventory' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -33,6 +33,8 @@ class ShowInventoryParser(BaseParser[ShowInventoryResult]):
     Parses hardware inventory information including chassis, modules,
     power supplies, fans, and transceivers.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"inventory", "system"})
 
     # Pattern for NAME/DESCR line: NAME: "...", DESCR: "..."
     _NAME_DESCR_PATTERN = re.compile(

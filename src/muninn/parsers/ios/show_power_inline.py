@@ -1,7 +1,7 @@
 """Parser for 'show power inline' command on IOS/IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -191,6 +191,8 @@ def _parse_lines(lines: list[str]) -> ShowPowerInlineResult:
 @register(OS.CISCO_IOSXE, "show power inline")
 class ShowPowerInlineParser(BaseParser[ShowPowerInlineResult]):
     """Parser for 'show power inline' on IOS/IOS-XE."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"poe", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowPowerInlineResult:

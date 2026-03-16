@@ -1,7 +1,7 @@
 """Parser for 'show clock' command on IOS-XE, IOS, and NX-OS."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -32,6 +32,8 @@ class ShowClockParser(BaseParser[ShowClockResult]):
         .04:37:54.849 UTC Thu Aug 7 2025
         18:56:04.554 EST Mon Oct 17 2016
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"system"})
 
     # Pattern matches: [*|.]HH:MM:SS.mmm TZ Day Mon DD YYYY
     _CLOCK_PATTERN = re.compile(

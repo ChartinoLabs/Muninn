@@ -1,7 +1,7 @@
 """Parser for 'show sdwan tunnel statistics table' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -60,6 +60,8 @@ class ShowSdwanTunnelStatisticsTableParser(
         PROTOCOL  SOURCE IP  DEST IP     PORT   PORT   SYSTEM IP  ...
         ipsec     150.0.5.1  150.0.0.1   12346  12346  20.0.0.20  ...
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"sdwan"})
 
     _ROW_PATTERN = re.compile(
         r"^(?P<protocol>\S+)\s+"

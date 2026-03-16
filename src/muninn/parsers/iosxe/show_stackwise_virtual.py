@@ -1,7 +1,7 @@
 """Parser for 'show stackwise-virtual' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -178,6 +178,8 @@ class ShowStackwiseVirtualParser(BaseParser[ShowStackwiseVirtualResult]):
         2       1                       HundredGigE2/0/51
                                         HundredGigE2/0/52
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowStackwiseVirtualResult:

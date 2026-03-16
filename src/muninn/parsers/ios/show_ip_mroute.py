@@ -1,7 +1,7 @@
 """Parser for 'show ip mroute' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -184,6 +184,8 @@ class ShowIpMrouteParser(BaseParser[ShowIpMrouteResult]):
     Parses IP multicast routing table entries with group/source
     hierarchy, incoming/outgoing interfaces, flags, and timers.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"multicast", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpMrouteResult:

@@ -1,7 +1,7 @@
 """Parser for 'show object-group' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -283,6 +283,8 @@ class ShowObjectGroupParser(BaseParser[ShowObjectGroupResult]):
          group-object NNNN
          1.1.1.0 255.255.255.0
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"acl", "security"})
 
     @classmethod
     def parse(cls, output: str) -> ShowObjectGroupResult:

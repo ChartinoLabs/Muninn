@@ -1,7 +1,7 @@
 """Parser for 'show platform software yang-management process' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -45,6 +45,8 @@ class ShowPlatformSoftwareYangManagementProcessParser(
         pubd             : Running
         gnmib            : Not Running
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"platform", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformSoftwareYangManagementProcessResult:

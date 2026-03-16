@@ -5,7 +5,7 @@ format, so a single parser handles both.
 """
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -384,6 +384,8 @@ def _parse_section(lines: list[str]) -> AddressFamilyEntry | None:
 @register(OS.CISCO_NXOS, "show bgp l2vpn evpn summary")
 class ShowIpBgpSummaryParser(BaseParser["ShowIpBgpSummaryResult"]):
     """Parser for 'show ip bgp summary' on NX-OS."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"bgp", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpBgpSummaryResult:

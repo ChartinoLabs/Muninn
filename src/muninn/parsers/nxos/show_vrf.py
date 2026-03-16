@@ -1,7 +1,7 @@
 """Parser for 'show vrf' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -31,6 +31,8 @@ class ShowVrfParser(BaseParser[ShowVrfResult]):
         VRF1                                    3 Up      --
         default                                 1 Up      --
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"vrf"})
 
     _ROW_PATTERN = re.compile(
         r"^(?P<name>\S+)\s+(?P<vrf_id>\d+)\s+(?P<state>\S+)\s+(?P<reason>.+)$"

@@ -1,7 +1,7 @@
 """Parser for 'show port-security interface <interface>' on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -112,6 +112,8 @@ class ShowPortSecurityInterfaceParser(
     Parses port-security details for a single interface including max MAC
     addresses, violation mode, aging settings, and security violation count.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"security"})
 
     @classmethod
     def parse(cls, output: str) -> ShowPortSecurityInterfaceResult:

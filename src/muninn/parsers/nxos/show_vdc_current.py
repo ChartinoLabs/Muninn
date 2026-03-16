@@ -1,7 +1,7 @@
 """Parser for 'show vdc current-vdc' command on NX-OS."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -28,6 +28,8 @@ class ShowVdcCurrentParser(BaseParser[ShowVdcCurrentResult]):
     Example output:
         Current vdc is 1 - PE1
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"system"})
 
     _PATTERN = re.compile(
         r"^Current\s+vdc\s+is\s+(?P<id>\d+)\s*-\s*(?P<name>\S+)$",

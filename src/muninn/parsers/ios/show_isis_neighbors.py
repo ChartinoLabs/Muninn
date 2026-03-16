@@ -1,7 +1,7 @@
 """Parser for 'show isis neighbors' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -99,6 +99,8 @@ class ShowIsisNeighborsParser(BaseParser["ShowIsisNeighborsResult"]):
         vMX1            L2   Gi2           10.1.2.1        UP    24       XRv3.03
         XRv3            L1   Gi2           10.1.2.3        UP    8        XRv3.03
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"isis", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowIsisNeighborsResult:

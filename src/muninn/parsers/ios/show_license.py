@@ -1,7 +1,7 @@
 """Parser for 'show license' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -56,6 +56,8 @@ class ShowLicenseParser(BaseParser[ShowLicenseResult]):
                 License Count: Non-Counted
                 License Priority: Medium
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowLicenseResult:

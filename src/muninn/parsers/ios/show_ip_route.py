@@ -1,7 +1,7 @@
 """Parser for 'show ip route' command on IOS/IOS-XE."""
 
 import re
-from typing import Literal, NotRequired, TypedDict
+from typing import ClassVar, Literal, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -598,6 +598,8 @@ def _parse_routes(lines: list[str]) -> ShowIpRouteResult:
 @register(OS.CISCO_IOSXE, "show ip route")
 class ShowIpRouteParser(BaseParser[ShowIpRouteResult]):
     """Parser for 'show ip route' on IOS/IOS-XE."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpRouteResult:

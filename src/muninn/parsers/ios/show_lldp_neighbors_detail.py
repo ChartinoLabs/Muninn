@@ -1,7 +1,7 @@
 """Parser for 'show lldp neighbors detail' command on IOS."""
 
 import re
-from typing import Literal, NotRequired, TypedDict
+from typing import ClassVar, Literal, NotRequired, TypedDict
 
 from netutils.interface import canonical_interface_name
 
@@ -121,6 +121,8 @@ class ShowLldpNeighborsDetailParser(
     Parses detailed LLDP neighbor information including system name,
     description, capabilities, and management addresses.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"lldp"})
 
     _SEPARATOR = re.compile(r"^-{3,}$")
     _LOCAL_INTF = re.compile(r"^Local Intf:\s+(?P<v>\S+)")

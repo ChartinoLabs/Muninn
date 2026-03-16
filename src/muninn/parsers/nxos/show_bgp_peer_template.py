@@ -1,7 +1,7 @@
 """Parser for 'show bgp peer-template' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -137,6 +137,8 @@ class ShowBgpPeerTemplateParser(BaseParser["ShowBgpPeerTemplateResult"]):
         Inherits session configuration from session-template PEER-SESSION
         Description: DESC
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"bgp", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowBgpPeerTemplateResult:

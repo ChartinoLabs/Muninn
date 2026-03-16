@@ -1,7 +1,7 @@
 """Parser for 'show bgp vrf all ipv4 unicast detail' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -386,6 +386,8 @@ class ShowBgpVrfAllIpv4UnicastDetailParser(
               0.0.0.0 (metric 0) from 0.0.0.0 (10.0.0.1)
                 Origin IGP, MED not set, localpref 100, weight 32768
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"bgp", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowBgpVrfAllIpv4UnicastDetailResult:

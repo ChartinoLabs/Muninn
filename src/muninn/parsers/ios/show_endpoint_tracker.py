@@ -1,7 +1,7 @@
 """Parser for 'show endpoint-tracker' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -55,6 +55,8 @@ class ShowEndpointTrackerParser(
 
     Output is keyed by interface, then tracker (record) name.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"sdwan"})
 
     @classmethod
     def parse(cls, output: str) -> ShowEndpointTrackerResult:

@@ -1,7 +1,7 @@
 """Parser for 'show switch detail' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -172,6 +172,8 @@ class ShowSwitchDetailParser(BaseParser[ShowSwitchDetailResult]):
         *1       Active   689c.e2ff.b9d9     3      V04     Ready
          2       Standby  c800.84ff.7e00     2      V05     Ready
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowSwitchDetailResult:

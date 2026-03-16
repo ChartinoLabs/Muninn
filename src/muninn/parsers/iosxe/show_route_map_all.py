@@ -1,7 +1,7 @@
 """Parser for 'show route-map all' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -155,6 +155,8 @@ class ShowRouteMapAllParser(BaseParser[ShowRouteMapAllResult]):
             local-preference 200
           Policy routing matches: 0 packets, 0 bytes
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowRouteMapAllResult:

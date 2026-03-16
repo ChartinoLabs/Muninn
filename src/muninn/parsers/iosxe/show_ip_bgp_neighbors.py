@@ -1,7 +1,7 @@
 """Parser for 'show ip bgp neighbors' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -574,6 +574,8 @@ class ShowIpBgpNeighborsParser(BaseParser["ShowIpBgpNeighborsResult"]):
           BGP version 4, remote router ID 20.40.1.1
           BGP state = Established, up for 7w3d
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"bgp", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpBgpNeighborsResult:

@@ -1,7 +1,7 @@
 """Parser for 'show ip dhcp snooping binding' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -34,6 +34,8 @@ class ShowIpDhcpSnoopingBindingResult(TypedDict):
 @register(OS.CISCO_IOSXE, "show ip dhcp snooping binding")
 class ShowIpDhcpSnoopingBindingParser(BaseParser[ShowIpDhcpSnoopingBindingResult]):
     """Parser for 'show ip dhcp snooping binding' command."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"dhcp", "switching"})
 
     _ENTRY_PATTERN = re.compile(
         r"^(?P<mac>\S+)\s+(?P<ip>\S+)\s+(?P<lease>\d+)\s+(?P<type>\S+)\s+"

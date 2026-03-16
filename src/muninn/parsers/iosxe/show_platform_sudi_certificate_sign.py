@@ -1,7 +1,7 @@
 """Parser for 'show platform sudi certificate sign' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -133,6 +133,8 @@ class ShowPlatformSudiCertificateSignParser(
         Signature:
         1809AF26E52292B71217418F6111DDD50707B516...
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"platform", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformSudiCertificateSignResult:

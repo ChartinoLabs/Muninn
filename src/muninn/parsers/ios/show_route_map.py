@@ -2,7 +2,7 @@
 
 import re
 from dataclasses import dataclass, field
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -149,6 +149,8 @@ class ShowRouteMapParser(BaseParser[ShowRouteMapResult]):
             ip next-hop 10.10.11.254
           Policy routing matches: 0 packets, 0 bytes
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowRouteMapResult:

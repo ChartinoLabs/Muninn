@@ -1,7 +1,7 @@
 """Parser for 'show platform software dpidb index' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -41,6 +41,8 @@ class ShowPlatformSoftwareDpidbIndexParser(
         Index 1028 -- swidb Gi0/0
         Index 1030 -- swidb Hu1/0/1
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"platform", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformSoftwareDpidbIndexResult:

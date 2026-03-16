@@ -1,7 +1,7 @@
 """Parser for 'show vpc' command on NX-OS."""
 
 import re
-from typing import Any, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict
 
 from netutils.interface import canonical_interface_name
 
@@ -159,6 +159,8 @@ class ShowVpcParser(BaseParser["ShowVpcResult"]):
 
     Parses vPC domain status, peer-link information, and vPC member ports.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"vpc"})
 
     @classmethod
     def parse(cls, output: str) -> ShowVpcResult:

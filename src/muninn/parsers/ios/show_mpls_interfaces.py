@@ -1,7 +1,7 @@
 """Parser for 'show mpls interfaces' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -55,6 +55,8 @@ class ShowMplsInterfacesParser(BaseParser[ShowMplsInterfacesResult]):
         TenGigabitEthernet1/1  Yes (ldp)     No       No  No     Yes
         Vlan101                Yes (ldp)     No       No  No     Yes
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"mpls"})
 
     @classmethod
     def parse(cls, output: str) -> ShowMplsInterfacesResult:

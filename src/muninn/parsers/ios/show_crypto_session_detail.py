@@ -1,7 +1,7 @@
 """Parser for 'show crypto session detail' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -570,6 +570,8 @@ class ShowCryptoSessionDetailParser(
     BaseParser[ShowCryptoSessionDetailResult],
 ):
     """Parser for 'show crypto session detail' on IOS."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"security"})
 
     @classmethod
     def parse(cls, output: str) -> ShowCryptoSessionDetailResult:

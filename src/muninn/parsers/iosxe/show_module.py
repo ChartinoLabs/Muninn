@@ -1,7 +1,7 @@
 """Parser for 'show module' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -185,6 +185,8 @@ class ShowModuleParser(BaseParser[ShowModuleResult]):
         1   48   48-Port 10GE / 25GE      C9600-LC-48YL CAT2431
         3   0    Supervisor 1 Module      C9600-SUP-1   FDO2426
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"inventory", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowModuleResult:

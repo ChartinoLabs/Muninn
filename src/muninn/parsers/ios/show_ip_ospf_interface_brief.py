@@ -1,7 +1,7 @@
 """Parser for 'show ip ospf interface brief' command on IOS."""
 
 import re
-from typing import TypedDict, cast
+from typing import ClassVar, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -65,6 +65,8 @@ class ShowIpOspfInterfaceBriefParser(
     Parses the OSPF interface summary table showing interface name,
     process ID, area, IP address/mask, cost, state, and neighbor counts.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"ospf", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpOspfInterfaceBriefResult:

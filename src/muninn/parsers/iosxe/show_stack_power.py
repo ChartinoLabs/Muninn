@@ -1,7 +1,7 @@
 """Parser for 'show stack-power' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -95,6 +95,8 @@ class ShowStackPowerParser(BaseParser[ShowStackPowerResult]):
         Name         Mode   Topolgy Pwr(W) Pwr(W) Pwr(W) Pwr(W) SW  PS
         Powerstack-1 SP-PS  Stndaln 1100   0      575    525    1   1
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"environment", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowStackPowerResult:

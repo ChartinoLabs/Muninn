@@ -1,7 +1,7 @@
 """Parser for 'show port-channel summary' command on NX-OS."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -53,6 +53,8 @@ class ShowPortChannelSummaryParser(BaseParser[ShowPortChannelSummaryResult]):
 
     Parses port-channel summary including member interfaces and their status.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"interfaces", "lag"})
 
     # Pattern for port-channel line
     # 1     Po1(RU)     Eth      LACP      Eth1/1(P)    Eth1/2(P)

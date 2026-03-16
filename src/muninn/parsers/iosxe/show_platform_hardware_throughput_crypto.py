@@ -1,7 +1,7 @@
 """Parser for 'show platform hardware throughput crypto' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -97,6 +97,8 @@ class ShowPlatformHardwareThroughputCryptoParser(
         Default Crypto throughput level: 2.5G
         Current boot level is network-premier
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"platform", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformHardwareThroughputCryptoResult:

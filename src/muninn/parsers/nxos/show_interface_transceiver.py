@@ -1,7 +1,7 @@
 """Parser for 'show interface transceiver' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -81,6 +81,8 @@ class ShowInterfaceTransceiverParser(
     temperature, voltage, current, Tx power, and Rx power
     per interface.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"interfaces"})
 
     @classmethod
     def parse(cls, output: str) -> ShowInterfaceTransceiverResult:

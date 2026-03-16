@@ -1,7 +1,7 @@
 """Parser for 'show interface description' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -48,6 +48,8 @@ class ShowInterfaceDescriptionParser(BaseParser[ShowInterfaceDescriptionResult])
     - Physical ports with Type, Speed, and Description columns.
     - Logical interfaces with only Description column.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"interfaces"})
 
     @classmethod
     def _normalize_description(cls, value: str | None) -> str | None:

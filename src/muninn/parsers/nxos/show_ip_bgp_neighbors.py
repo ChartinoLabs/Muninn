@@ -1,7 +1,7 @@
 """Parser for 'show ip bgp neighbors' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -651,6 +651,8 @@ def _parse_neighbor_block(lines: list[str]) -> NeighborEntry:
 @register(OS.CISCO_NXOS, "show ip bgp neighbors")
 class ShowIpBgpNeighborsParser(BaseParser["ShowIpBgpNeighborsResult"]):
     """Parser for 'show ip bgp neighbors' on NX-OS."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"bgp", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpBgpNeighborsResult:

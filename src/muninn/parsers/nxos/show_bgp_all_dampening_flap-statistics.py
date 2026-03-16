@@ -1,7 +1,7 @@
 """Parser for 'show bgp all dampening flap-statistics' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -119,6 +119,8 @@ class ShowBgpAllDampeningFlapStatisticsParser(
     BaseParser["ShowBgpAllDampeningFlapStatisticsResult"],
 ):
     """Parser for 'show bgp all dampening flap-statistics' on NX-OS."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"bgp", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowBgpAllDampeningFlapStatisticsResult:

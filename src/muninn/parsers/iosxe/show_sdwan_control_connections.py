@@ -1,7 +1,7 @@
 """Parser for 'show sdwan control connections' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -110,6 +110,8 @@ class ShowSdwanControlConnectionsParser(
         TYPE    PROT SYSTEM IP       ID         ID     PRIVATE IP
         vsmart  dtls 1.1.1.5         4294950463 1      10.0.5.64
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"sdwan"})
 
     @classmethod
     def parse(cls, output: str) -> ShowSdwanControlConnectionsResult:

@@ -1,7 +1,7 @@
 """Parser for 'show power' and 'show power detail' commands on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -145,6 +145,8 @@ class ShowPowerDetailParser(BaseParser[ShowPowerDetailResult]):
         Tray    Status      0     1
         FT1     active      good  good
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"environment", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowPowerDetailResult:

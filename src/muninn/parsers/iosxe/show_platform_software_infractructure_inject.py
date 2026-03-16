@@ -5,7 +5,7 @@ Note: The command contains a typo in the actual IOS-XE CLI — it is
 """
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -275,6 +275,8 @@ class ShowPlatformSoftwareInfractructureInjectParser(
          28324 total BD  inject pak, 0 failed
          ...
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"platform", "system"})
 
     @classmethod
     def parse(

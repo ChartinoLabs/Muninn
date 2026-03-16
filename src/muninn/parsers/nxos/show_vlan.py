@@ -1,7 +1,7 @@
 """Parser for 'show vlan' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -301,6 +301,8 @@ def _find_sections(lines: list[str]) -> dict[str, tuple[int, int]]:
 @register(OS.CISCO_NXOS, "show vlan")
 class ShowVlanParser(BaseParser[ShowVlanResult]):
     """Parser for 'show vlan' on NX-OS."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"switching", "vlan"})
 
     @classmethod
     def parse(cls, output: str) -> ShowVlanResult:

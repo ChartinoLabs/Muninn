@@ -1,7 +1,7 @@
 """Parser for 'show environment status' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -193,6 +193,8 @@ class ShowEnvironmentStatusParser(BaseParser[ShowEnvironmentStatusResult]):
         ------  ----------  -----------
         FT1     active      good  good
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"environment", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowEnvironmentStatusResult:

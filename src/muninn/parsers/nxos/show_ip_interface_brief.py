@@ -1,7 +1,7 @@
 """Parser for 'show ip interface brief' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -38,6 +38,8 @@ class ShowIpInterfaceBriefParser(BaseParser[ShowIpInterfaceBriefResult]):
 
     Parses interface IP addressing and status information organized by VRF.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"interfaces"})
 
     # Pattern for VRF header
     # IP Interface Status for VRF "default"(1)

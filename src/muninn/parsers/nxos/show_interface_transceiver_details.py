@@ -2,7 +2,7 @@
 
 import re
 from dataclasses import dataclass, field
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -331,6 +331,8 @@ class ShowInterfaceTransceiverDetailsParser(
     data including temperature, voltage, current, Tx power, and Rx power
     with alarm and warning thresholds.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"interfaces"})
 
     @classmethod
     def parse(cls, output: str) -> ShowInterfaceTransceiverDetailsResult:

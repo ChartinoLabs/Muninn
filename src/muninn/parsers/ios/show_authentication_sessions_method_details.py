@@ -2,7 +2,7 @@
 
 import re
 from collections.abc import Callable
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -317,6 +317,8 @@ class ShowAuthenticationSessionsMethodDetailsParser(
     BaseParser[ShowAuthenticationSessionsMethodDetailsResult],
 ):
     """Parser for 'show authentication sessions method details' on IOS."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"security"})
 
     @classmethod
     def parse(cls, output: str) -> ShowAuthenticationSessionsMethodDetailsResult:

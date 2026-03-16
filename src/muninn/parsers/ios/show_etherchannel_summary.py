@@ -1,7 +1,7 @@
 """Parser for 'show etherchannel summary' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -165,6 +165,8 @@ class ShowEtherchannelSummaryParser(BaseParser[ShowEtherchannelSummaryResult]):
         1      Po1(SU)         LACP      Te6/4(P)       Te3/5(P)
         3      Po3(SU)         LACP      Te4/2(P)       Te2/2(P)
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"interfaces", "lag"})
 
     @classmethod
     def parse(cls, output: str) -> ShowEtherchannelSummaryResult:

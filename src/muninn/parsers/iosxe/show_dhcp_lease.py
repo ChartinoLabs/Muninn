@@ -2,7 +2,7 @@
 
 import re
 from collections.abc import Callable
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -163,6 +163,8 @@ class ShowDhcpLeaseParser(BaseParser[ShowDhcpLeaseResult]):
            DHCP transaction id: 1663D15A
            Lease: 3600 secs,  Renewal: 1800 secs,  Rebind: 3150 secs
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"dhcp"})
 
     @classmethod
     def parse(cls, output: str) -> ShowDhcpLeaseResult:

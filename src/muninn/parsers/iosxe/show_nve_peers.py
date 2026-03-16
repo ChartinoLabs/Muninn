@@ -1,7 +1,7 @@
 """Parser for 'show nve peers' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -34,6 +34,8 @@ class ShowNvePeersParser(BaseParser[ShowNvePeersResult]):
         nve1 3000101 L3CP 20.0.101.2 5c71...fb60 3000101 UP A/M/4 4d21h
         nve1 200051  L2CP 20.0.101.2 3           200051  UP N/A   4d17h
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"vxlan"})
 
     _ROW_PATTERN = re.compile(
         r"^(?P<interface>\S+)\s+"

@@ -1,7 +1,7 @@
 """Parser for 'show interface capabilities' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -188,6 +188,8 @@ class ShowInterfaceCapabilitiesParser(
     Parses per-interface capability information including model, speed,
     duplex, trunk encapsulation, and feature support flags.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"interfaces"})
 
     @classmethod
     def parse(cls, output: str) -> ShowInterfaceCapabilitiesResult:

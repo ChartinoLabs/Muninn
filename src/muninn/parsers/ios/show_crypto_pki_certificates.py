@@ -1,7 +1,7 @@
 """Parser for 'show crypto pki certificates' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -306,6 +306,8 @@ class ShowCryptoPkiCertificatesParser(
     BaseParser["ShowCryptoPkiCertificatesResult"],
 ):
     """Parser for 'show crypto pki certificates' on IOS."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"security"})
 
     @classmethod
     def parse(cls, output: str) -> ShowCryptoPkiCertificatesResult:

@@ -1,7 +1,7 @@
 """Parser for 'show platform software audit summary' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -125,6 +125,8 @@ class ShowPlatformSoftwareAuditSummaryParser(
         -----------------------------------
         AVC Denial count: 189
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"platform", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformSoftwareAuditSummaryResult:

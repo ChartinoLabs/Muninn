@@ -1,7 +1,7 @@
 """Parser for 'show logging onboard rp active message detail' on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -258,6 +258,8 @@ class ShowLoggingOnboardRpActiveMessageDetailParser(
         -------------------------------------------------------
         05/24/2023 18:42:22 %IOSXE-2-DIAGNOSTICS_PASSED : ...
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"logging", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowLoggingOnboardRpActiveMessageDetailResult:

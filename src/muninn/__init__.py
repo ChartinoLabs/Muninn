@@ -10,7 +10,7 @@ from muninn.exceptions import (
 )
 from muninn.os import OS, OperatingSystem, resolve_os
 from muninn.parser import BaseParser
-from muninn.registry import RuntimeRegistry, register
+from muninn.registry import ParserInfo, RuntimeRegistry, register
 from muninn.runtime import Muninn
 
 __all__ = [
@@ -24,6 +24,7 @@ __all__ = [
     "OperatingSystem",
     "ParseError",
     "ParserAmbiguityError",
+    "ParserInfo",
     "ParserNotFoundError",
     "RuntimeRegistry",
     "register",

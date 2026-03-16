@@ -1,7 +1,7 @@
 """Parser for 'show boot' command on IOS-XE."""
 
 import re
-from typing import Any, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -374,6 +374,8 @@ class ShowBootParser(BaseParser[ShowBootResult]):
         Config file     : flash:/config.text
         Manual Boot     : no
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowBootResult:

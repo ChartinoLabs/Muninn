@@ -1,7 +1,7 @@
 """Parser for 'show spanning-tree root' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -58,6 +58,8 @@ class ShowSpanningTreeRootParser(BaseParser[ShowSpanningTreeRootResult]):
     Parses spanning-tree root bridge information per VLAN, including
     root priority, address, cost, timers, and root port.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"stp", "switching"})
 
     @classmethod
     def parse(cls, output: str) -> ShowSpanningTreeRootResult:

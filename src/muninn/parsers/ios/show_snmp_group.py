@@ -1,7 +1,7 @@
 """Parser for 'show snmp group' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -128,6 +128,8 @@ class ShowSnmpGroupParser(BaseParser[ShowSnmpGroupResult]):
         notifyview: g1notifyview
         row status: active      access-list: snmp-acl-name
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"snmp"})
 
     @classmethod
     def parse(cls, output: str) -> ShowSnmpGroupResult:

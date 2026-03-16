@@ -1,7 +1,7 @@
 """Parser for 'show ipv6 neighbors' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -35,6 +35,8 @@ class ShowIpv6NeighborsParser(BaseParser[ShowIpv6NeighborsResult]):
 
     Parses IPv6 neighbor discovery cache entries.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"arp"})
 
     _HEADER_PATTERN = re.compile(r"^IPv6\s+Address\s+Age\s+Link-layer\s+Addr", re.I)
 

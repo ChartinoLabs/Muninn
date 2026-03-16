@@ -1,7 +1,7 @@
 """Parser for 'show environment' command on IOS/IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -93,6 +93,8 @@ class ShowEnvironmentParser(BaseParser[ShowEnvironmentResult]):
     * With thresholds: tab-delimited threshold column, fixed column positions
       from the header for slot/sensor/state/reading.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"environment", "system"})
 
     @classmethod
     def _find_header(cls, lines: list[str]) -> tuple[int, bool]:

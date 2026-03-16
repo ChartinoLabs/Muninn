@@ -1,7 +1,7 @@
 """Parser for 'show graceful-reload' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -56,6 +56,8 @@ class ShowGracefulReloadParser(BaseParser[ShowGracefulReloadResult]):
         Client OSPFV3                          : (0x10203004) Status: GR stack none: Up
         Client OSPF                            : (0x10203003) Status: GR stack none: Up
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowGracefulReloadResult:

@@ -5,7 +5,7 @@ Also handles 'show ipv6 eigrp interfaces detail'.
 
 import re
 from collections.abc import Callable
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -240,6 +240,8 @@ class ShowIpEigrpInterfacesDetailParser(
           Hello-interval is 5, Hold-time is 15
           Split-horizon is enabled
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"eigrp", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpEigrpInterfacesDetailResult:

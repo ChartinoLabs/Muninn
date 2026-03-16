@@ -1,7 +1,7 @@
 """Parser for 'show lldp timers' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -29,6 +29,8 @@ class ShowLldpTimersParser(BaseParser[ShowLldpTimersResult]):
         Reinit-time in seconds: 2
         Transmit interval in seconds: 30
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"lldp"})
 
     _FIELD_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
         (

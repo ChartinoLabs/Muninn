@@ -1,7 +1,7 @@
 """Parser for 'show ip bgp summary vrf' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -244,6 +244,8 @@ class ShowIpBgpSummaryVrfParser(BaseParser["ShowIpBgpSummaryVrfResult"]):
     Parses VRF-scoped BGP summary information showing neighbor state
     and prefix counts across multiple VRFs and address families.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"bgp", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpBgpSummaryVrfResult:

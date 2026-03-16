@@ -1,7 +1,7 @@
 """Parser for 'show mpls l2transport vc' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -68,6 +68,8 @@ class ShowMplsL2transportVcParser(BaseParser[ShowMplsL2transportVcResult]):
         Gi0/0/0.100    Ethernet VLAN 100          10.1.1.1        100        UP
         Fa2/0          HDLC                       172.16.0.1      200        DOWN
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"mpls"})
 
     @classmethod
     def parse(cls, output: str) -> ShowMplsL2transportVcResult:

@@ -1,7 +1,7 @@
 """Parser for 'show version' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -79,6 +79,8 @@ class ShowVersionParser(BaseParser[ShowVersionResult]):
     Parses system version, hardware, and uptime information.
     Supports both modern NX-OS format and legacy kickstart/system format.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"inventory", "system"})
 
     # Software version patterns
     _BIOS_VERSION = re.compile(r"^\s*BIOS:\s*version\s+(?P<version>\S+)", re.I)

@@ -1,7 +1,7 @@
 """Parser for 'show logging' command on IOS/IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -541,6 +541,8 @@ def _build_result(
 @register(OS.CISCO_IOSXE, "show logging")
 class ShowLoggingParser(BaseParser[ShowLoggingResult]):
     """Parser for 'show logging' on IOS/IOS-XE."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"logging", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowLoggingResult:

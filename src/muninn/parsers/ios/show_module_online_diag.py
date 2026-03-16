@@ -1,7 +1,7 @@
 """Parser for 'show module online diag' command on IOS."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -37,6 +37,8 @@ class ShowModuleOnlineDiagParser(BaseParser[ShowModuleOnlineDiagResult]):
         1  Pass
         2  Pass
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"inventory", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowModuleOnlineDiagResult:

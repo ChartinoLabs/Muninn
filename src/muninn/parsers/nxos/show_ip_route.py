@@ -1,7 +1,7 @@
 """Parser for 'show ip route' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -252,6 +252,8 @@ class ShowIpRouteParser(BaseParser[ShowIpRouteResult]):
     Parses the IPv4 routing table including VRF context, multiple
     next-hops per route (ECMP), and VXLAN overlay attributes.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpRouteResult:

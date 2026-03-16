@@ -1,7 +1,7 @@
 """Parser for 'show privilege' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -21,6 +21,8 @@ class ShowPrivilegeParser(BaseParser[ShowPrivilegeResult]):
     Example output:
         Current privilege level is 15
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"aaa", "system"})
 
     _PATTERN = re.compile(r"^Current\s+privilege\s+level\s+is\s+(?P<level>\d+)$")
 

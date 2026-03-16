@@ -1,7 +1,7 @@
 """Parser for 'show ip ospf database' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -193,6 +193,8 @@ class ShowIpOspfDatabaseParser(BaseParser[ShowIpOspfDatabaseResult]):
         Link ID         ADV Router      Age         Seq#       Checksum Link count
         10.4.1.1        10.4.1.1        742         0x80000039 0x0048E3 3
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"ospf", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpOspfDatabaseResult:

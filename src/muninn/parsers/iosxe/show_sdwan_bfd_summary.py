@@ -1,7 +1,7 @@
 """Parser for 'show sdwan bfd summary' command on IOS-XE."""
 
 import re
-from typing import TypedDict, cast
+from typing import ClassVar, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -55,6 +55,8 @@ class ShowSdwanBfdSummaryParser(BaseParser[ShowSdwanBfdSummaryResult]):
         sessions-flap          4
         poll-interval          600000
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"sdwan"})
 
     @classmethod
     def parse(cls, output: str) -> ShowSdwanBfdSummaryResult:

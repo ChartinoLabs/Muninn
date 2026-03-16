@@ -1,7 +1,7 @@
 """Parser for 'show cdp neighbors detail' command on IOS/IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from netutils.interface import canonical_interface_name
 
@@ -43,6 +43,8 @@ class ShowCdpNeighborsDetailParser(BaseParser[ShowCdpNeighborsDetailResult]):
     Parses detailed CDP neighbor information including software version,
     VTP domain, native VLAN, duplex, and management addresses.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"cdp"})
 
     _DEVICE_ID_PATTERN = re.compile(r"Device ID:\s*(.+)")
     _IP_ADDRESS_PATTERN = re.compile(r"IP(?:v4)? [Aa]ddress:\s*(\S+)")

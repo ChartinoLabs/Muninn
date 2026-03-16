@@ -1,7 +1,7 @@
 """Parser for 'show ip igmp snooping groups count' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -25,6 +25,8 @@ class ShowIpIgmpSnoopingGroupsCountParser(
     BaseParser[ShowIpIgmpSnoopingGroupsCountResult]
 ):
     """Parser for 'show ip igmp snooping groups count' command."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"multicast"})
 
     _COUNT_PATTERN = re.compile(
         r"^Total\s+number\s+of\s+groups:\s*(?P<count>\d+)$", re.I

@@ -1,7 +1,7 @@
 """Parser for 'show vrrp brief' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -103,6 +103,8 @@ class ShowVrrpBriefParser(BaseParser[ShowVrrpBriefResult]):
         Interface          Grp  A-F Pri  Time Own Pre State   Master addr/Group addr
         Vl10                 1 IPv4 150     0  N   Y  MASTER  10.1.0.1(local) 10.1.0.3
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"fhrp"})
 
     @classmethod
     def _get_row_pattern(cls, output: str) -> tuple[re.Pattern[str], bool]:

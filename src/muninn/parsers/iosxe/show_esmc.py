@@ -1,7 +1,7 @@
 """Parser for 'show esmc' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -152,6 +152,8 @@ class ShowEsmcParser(BaseParser[ShowEsmcResult]):
           ESMC Information rate : 1 packet/second
           ESMC Expiry: 5 second
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowEsmcResult:

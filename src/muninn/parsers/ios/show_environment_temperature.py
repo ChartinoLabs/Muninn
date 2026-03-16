@@ -1,7 +1,7 @@
 """Parser for 'show environment temperature' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -120,6 +120,8 @@ class ShowEnvironmentTemperatureParser(
         Yellow Threshold : 46 Degree Celsius
         Red Threshold    : 56 Degree Celsius
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"environment", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowEnvironmentTemperatureResult:

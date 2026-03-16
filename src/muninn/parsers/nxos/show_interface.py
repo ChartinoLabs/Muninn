@@ -1,7 +1,7 @@
 """Parser for 'show interface' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -520,6 +520,8 @@ class ShowInterfaceParser(BaseParser[ShowInterfaceResult]):
     Parses detailed interface information including status, hardware,
     addressing, counters, and configuration details.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"interfaces"})
 
     @classmethod
     def parse(cls, output: str) -> ShowInterfaceResult:

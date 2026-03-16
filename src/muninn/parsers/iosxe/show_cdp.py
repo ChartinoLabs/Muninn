@@ -1,7 +1,7 @@
 """Parser for 'show cdp' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -139,6 +139,8 @@ class ShowCdpParser(BaseParser[ShowCdpResult]):
                 Sending a holdtime value of 180 seconds
                 Sending CDPv2 advertisements is  enabled
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"cdp"})
 
     @classmethod
     def parse(cls, output: str) -> ShowCdpResult:

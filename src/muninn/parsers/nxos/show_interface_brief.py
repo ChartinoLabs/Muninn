@@ -1,7 +1,7 @@
 """Parser for 'show interface brief' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypeAlias, TypedDict
+from typing import ClassVar, NotRequired, TypeAlias, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -76,6 +76,8 @@ class ShowInterfaceBriefParser(BaseParser[ShowInterfaceBriefResult]):
     Parses multi-section output covering Ethernet, Port-channel,
     Management, Loopback, and VLAN interface summaries.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"interfaces"})
 
     # Ethernet section header pattern:
     # Ethernet      VLAN    Type Mode   Status  Reason                   Speed     Port

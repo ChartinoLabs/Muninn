@@ -1,7 +1,7 @@
 """Parser for 'show interface link' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -161,6 +161,8 @@ def _parse_down_since_line(
 @register(OS.CISCO_IOS, "show interface link")
 class ShowInterfaceLinkParser(BaseParser[ShowInterfaceLinkResult]):
     """Parser for 'show interface link' on IOS."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"interfaces"})
 
     @classmethod
     def parse(cls, output: str) -> ShowInterfaceLinkResult:

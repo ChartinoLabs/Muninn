@@ -2,7 +2,7 @@
 
 import re
 from dataclasses import dataclass, field
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -349,6 +349,8 @@ class ShowPolicyMapControlPlaneParser(
     Parses CoPP (Control Plane Policing) policy-map information including
     class-maps, match criteria, police rates, and QoS settings.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"qos"})
 
     @classmethod
     def parse(cls, output: str) -> ShowPolicyMapControlPlaneResult:

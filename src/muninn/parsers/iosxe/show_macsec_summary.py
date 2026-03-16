@@ -2,7 +2,7 @@
 
 import re
 from collections.abc import Callable
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -43,6 +43,8 @@ class ShowMacsecSummaryResult(TypedDict):
 @register(OS.CISCO_IOSXE, "show macsec summary")
 class ShowMacsecSummaryParser(BaseParser[ShowMacsecSummaryResult]):
     """Parser for 'show macsec summary' command."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"macsec", "security"})
 
     _NO_CHANNELS_PATTERN = re.compile(r"^%?No\s+Secure\s+Channels$", re.I)
     _SUMMARY_HEADER = re.compile(r"^Interface\s+Transmit\s+SC\s+Receive\s+SC$", re.I)

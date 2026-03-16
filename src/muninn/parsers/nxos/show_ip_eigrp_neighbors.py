@@ -1,7 +1,7 @@
 """Parser for 'show ip eigrp neighbors' command on NX-OS."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -57,6 +57,8 @@ _NEIGHBOR_RE = re.compile(
 @register(OS.CISCO_NXOS, "show ip eigrp neighbors")
 class ShowIpEigrpNeighborsParser(BaseParser["ShowIpEigrpNeighborsResult"]):
     """Parser for 'show ip eigrp neighbors' on NX-OS."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"eigrp", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpEigrpNeighborsResult:

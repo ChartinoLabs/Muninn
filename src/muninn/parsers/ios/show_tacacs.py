@@ -1,7 +1,7 @@
 """Parser for 'show tacacs' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -145,6 +145,8 @@ class ShowTacacsParser(BaseParser[ShowTacacsResult]):
                 Total Packets Sent:     147753
                 Total Packets Recv:     147693
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"aaa", "security"})
 
     @classmethod
     def parse(cls, output: str) -> ShowTacacsResult:

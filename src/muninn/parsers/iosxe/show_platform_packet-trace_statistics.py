@@ -1,7 +1,7 @@
 """Parser for 'show platform packet-trace statistics' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -386,6 +386,8 @@ class ShowPlatformPacketTraceStatisticsParser(
           Drop     0
           Consume  0
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"platform", "system"})
 
     @classmethod
     def parse(

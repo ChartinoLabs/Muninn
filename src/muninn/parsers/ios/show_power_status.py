@@ -1,7 +1,7 @@
 """Parser for 'show power status' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -113,6 +113,8 @@ class ShowPowerStatusParser(BaseParser[ShowPowerStatusResult]):
         PS1-1                         220V   good
         PS2     PWR-C4KX-750AC-R  AC 750W    good         good     n.a.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"environment", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowPowerStatusResult:

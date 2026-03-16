@@ -6,7 +6,7 @@ Handles two fundamentally different output formats:
 """
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -357,6 +357,8 @@ def _parse_stack(lines: list[str]) -> ShowPlatformResult:
 @register(OS.CISCO_IOSXE, "show platform")
 class ShowPlatformParser(BaseParser[ShowPlatformResult]):
     """Parser for 'show platform' on IOS/IOS-XE."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"platform", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformResult:

@@ -2,7 +2,7 @@
 
 import re
 from dataclasses import dataclass, field
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -321,6 +321,8 @@ class ShowPolicyMapParser(BaseParser[ShowPolicyMapResult]):
         Class class-default
           Match: any
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"qos"})
 
     @classmethod
     def parse(cls, output: str) -> ShowPolicyMapResult:

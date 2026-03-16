@@ -1,7 +1,7 @@
 """Parser for 'show lldp neighbors' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -27,6 +27,8 @@ class ShowLldpNeighborsResult(TypedDict):
 @register(OS.CISCO_NXOS, "show lldp neighbors")
 class ShowLldpNeighborsParser(BaseParser[ShowLldpNeighborsResult]):
     """Parser for 'show lldp neighbors' command on NX-OS."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"lldp"})
 
     _LOCAL_INTF = r"(?:Eth|mgmt|Gi|Te|Fo|Po|Lo|Vlan|Tu|Se|nve)\S*"
     _SUMMARY_PATTERN = re.compile(

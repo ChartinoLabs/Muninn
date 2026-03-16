@@ -1,7 +1,7 @@
 """Parser for 'dir' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -92,6 +92,8 @@ class DirParser(BaseParser[DirResult]):
     Parses filesystem directory listings including file entries
     with sizes and dates, and optional usage summary.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"system"})
 
     @classmethod
     def parse(cls, output: str) -> DirResult:

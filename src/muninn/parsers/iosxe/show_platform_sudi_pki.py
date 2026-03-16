@@ -1,7 +1,7 @@
 """Parser for 'show platform sudi pki' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -78,6 +78,8 @@ class ShowPlatformSudiPkiParser(BaseParser["ShowPlatformSudiPkiResult"]):
         Cisco Manufacturing CA III          Valid
         Cisco Manufacturing CA SHA2         Valid
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"platform", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformSudiPkiResult:

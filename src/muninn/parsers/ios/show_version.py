@@ -1,7 +1,7 @@
 """Parser for 'show version' command on IOS/IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -440,6 +440,8 @@ def _parse_single_line(line: str, result: dict) -> None:
 @register(OS.CISCO_IOSXE, "show version")
 class ShowVersionParser(BaseParser["ShowVersionResult"]):
     """Parser for 'show version' on IOS/IOS-XE."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"inventory", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowVersionResult:

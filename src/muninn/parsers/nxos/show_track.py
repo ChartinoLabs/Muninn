@@ -1,7 +1,7 @@
 """Parser for 'show track' command on NX-OS."""
 
 import re
-from typing import Any, TypedDict, cast
+from typing import Any, ClassVar, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -28,6 +28,8 @@ class ShowTrackResult(TypedDict):
 @register(OS.CISCO_NXOS, "show track")
 class ShowTrackParser(BaseParser[ShowTrackResult]):
     """Parser for 'show track' command."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"tracking"})
 
     _TRACK_ID_PATTERN = re.compile(r"^Track\s+(?P<id>\d+)$", re.I)
     _DETAIL_PATTERN = re.compile(

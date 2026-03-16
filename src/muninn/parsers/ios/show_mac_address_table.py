@@ -1,7 +1,7 @@
 """Parser for 'show mac address-table' command on IOS/IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -369,6 +369,8 @@ def _parse_output(output: str) -> ShowMacAddressTableResult:
 @register(OS.CISCO_IOSXE, "show mac-address-table")
 class ShowMacAddressTableParser(BaseParser[ShowMacAddressTableResult]):
     """Parser for 'show mac address-table' on IOS/IOS-XE."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"mac", "switching"})
 
     @classmethod
     def parse(cls, output: str) -> ShowMacAddressTableResult:

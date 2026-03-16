@@ -1,7 +1,7 @@
 """Parser for 'show vrf interface' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -33,6 +33,8 @@ class ShowVrfInterfaceParser(BaseParser[ShowVrfInterfaceResult]):
         Ethernet1/1               default                              1  --
         mgmt0                     management                           2  --
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"vrf"})
 
     _HEADER_PATTERN = re.compile(r"^Interface\s+VRF-Name")
 

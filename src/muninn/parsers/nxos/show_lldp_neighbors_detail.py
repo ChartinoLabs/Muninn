@@ -1,7 +1,7 @@
 """Parser for 'show lldp neighbors detail' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -61,6 +61,8 @@ class ShowLldpNeighborsDetailParser(BaseParser[ShowLldpNeighborsDetailResult]):
     Parses detailed LLDP neighbor information including chassis ID,
     port descriptions, system capabilities, and management addresses.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"lldp"})
 
     _CHASSIS_ID_PATTERN = re.compile(r"^Chassis\s+id:\s+(?P<value>.+)$", re.I)
     _PORT_ID_PATTERN = re.compile(r"^Port\s+id:\s+(?P<value>.+)$", re.I)

@@ -1,7 +1,7 @@
 """Parser for 'show standby delay' command on IOS-XE."""
 
 import re
-from typing import TypeAlias, TypedDict
+from typing import ClassVar, TypeAlias, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -32,6 +32,8 @@ class ShowStandbyDelayParser(BaseParser[ShowStandbyDelayResult]):
         Interface          Minimum Reload
         GigabitEthernet1   99      888
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"fhrp"})
 
     _ROW_PATTERN = re.compile(
         r"^(?P<interface>\S+)\s+(?P<minimum>\d+)\s+(?P<reload>\d+)\s*$"

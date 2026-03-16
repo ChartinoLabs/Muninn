@@ -1,7 +1,7 @@
 """Parser for 'show processes cpu' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -39,6 +39,8 @@ class ShowProcessesCpuParser(BaseParser[ShowProcessesCpuResult]):
         PID    Runtime(ms)  Invoked   uSecs  5Sec    1Min    5Min    TTY  Process
             1         6170      1011      6   0.00%   0.00%  0.00%   -    init
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"system"})
 
     _SUMMARY_PATTERN = re.compile(
         r"CPU\s+utilization\s+for\s+five\s+seconds:\s+(?P<five_sec>\d+)%"

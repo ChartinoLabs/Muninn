@@ -1,7 +1,7 @@
 """Parser for 'show ipv6 dhcp interface' command on IOS-XE."""
 
 import re
-from typing import Any, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -399,6 +399,8 @@ class ShowIpv6DhcpInterfaceParser(BaseParser[ShowIpv6DhcpInterfaceResult]):
             Reachable via address: FE80::20C:29FF:FE22:1DA5
             DUID: 00030001001EE59BE700
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"dhcp"})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpv6DhcpInterfaceResult:

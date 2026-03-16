@@ -1,7 +1,7 @@
 """Parser for 'show ip ospf neighbor' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -63,6 +63,8 @@ class ShowIpOspfNeighborParser(BaseParser[ShowIpOspfNeighborResult]):
     Parses OSPF neighbor adjacency information from the neighbor table.
     Neighbors are keyed by canonical interface name, then by neighbor router ID.
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"ospf", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpOspfNeighborResult:

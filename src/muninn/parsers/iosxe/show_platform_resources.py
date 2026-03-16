@@ -1,7 +1,7 @@
 """Parser for 'show platform resources' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -199,6 +199,8 @@ class ShowPlatformResourcesParser(BaseParser[ShowPlatformResourcesResult]):
          QFP                                                           H
           DRAM             233176KB(44%) 524288KB  85%      95%       H
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"platform", "system"})
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformResourcesResult:

@@ -1,7 +1,7 @@
 """Parser for 'show ip vrf interfaces' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -32,6 +32,8 @@ class ShowIpVrfInterfacesParser(BaseParser[ShowIpVrfInterfacesResult]):
         Vl1100                 192.168.100.1   BYOD-Guest                       up
         Gi0/0                  unassigned      Mgmt-vrf                         down
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"vrf"})
 
     _ROW_PATTERN = re.compile(
         r"^(?P<interface>\S+)\s+"

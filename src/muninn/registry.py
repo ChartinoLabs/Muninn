@@ -50,8 +50,19 @@ class CommandSpec:
     parser_cls: type[BaseParser[object]]
     source: ParserSource
     is_pattern: bool
+    tags: frozenset[str] = frozenset()
     compiled_pattern: re.Pattern[str] | None = None
     group_names: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class ParserInfo:
+    """Public metadata for a registered parser, used for catalog listing."""
+
+    os: OS
+    command_template: str
+    tags: frozenset[str]
+    source: ParserSource
 
 
 @dataclass(frozen=True)
@@ -116,12 +127,24 @@ class RuntimeRegistry:
     ) -> None:
         """Register a parser class with explicit source metadata."""
         resolved_os = resolve_os(os)
+        tags: frozenset[str] = getattr(parser_cls, "tags", frozenset())
+
+        if source == "built_in" and not tags:
+            os_name = resolved_os.value.name
+            cls_name = parser_cls.__qualname__
+            msg = (
+                f"Built-in parser {cls_name!r} for os={os_name!r}, "
+                f"command={command!r} must define non-empty tags"
+            )
+            raise ValueError(msg)
+
         spec = _build_command_spec(
             os=resolved_os,
             command=command,
             doc_template=doc_template,
             parser_cls=parser_cls,
             source=source,
+            tags=tags,
         )
 
         parser_cls.os = resolved_os
@@ -182,6 +205,18 @@ class RuntimeRegistry:
         for candidates in self._pattern_registry.values():
             specs.extend(candidate.command_spec for candidate in candidates)
         return specs
+
+    def list_parser_catalog(self) -> list[ParserInfo]:
+        """Build a catalog of all registered parsers with metadata."""
+        return [
+            ParserInfo(
+                os=spec.os,
+                command_template=spec.doc_template,
+                tags=spec.tags,
+                source=spec.source,
+            )
+            for spec in self.list_command_specs()
+        ]
 
     def _add_candidate(
         self,
@@ -278,6 +313,7 @@ def _build_command_spec(
     doc_template: str | None,
     parser_cls: type[BaseParser[object]],
     source: ParserSource,
+    tags: frozenset[str] = frozenset(),
 ) -> CommandSpec:
     collapsed_command = _collapse_command_whitespace(command)
     if not collapsed_command:
@@ -298,6 +334,7 @@ def _build_command_spec(
             parser_cls=parser_cls,
             source=source,
             is_pattern=False,
+            tags=tags,
         )
 
     runtime_pattern = _normalize_pattern_for_runtime(collapsed_command)
@@ -316,6 +353,7 @@ def _build_command_spec(
         parser_cls=parser_cls,
         source=source,
         is_pattern=True,
+        tags=tags,
         compiled_pattern=compiled_pattern,
         group_names=group_names,
     )

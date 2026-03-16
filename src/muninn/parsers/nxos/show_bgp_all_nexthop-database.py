@@ -5,7 +5,7 @@ identical output on NX-OS (the two commands are aliases for each other).
 """
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -286,11 +286,12 @@ def _flush_af(
 
 
 @register(OS.CISCO_NXOS, "show bgp all nexthop-database")
-@register(OS.CISCO_NXOS, "show bgp vrf all all nexthop-database")
 class ShowBgpAllNexthopDatabaseParser(
     BaseParser["ShowBgpAllNexthopDatabaseResult"],
 ):
     """Parser for 'show bgp all nexthop-database' on NX-OS."""
+
+    tags: ClassVar[frozenset[str]] = frozenset({"bgp", "routing"})
 
     @classmethod
     def parse(cls, output: str) -> ShowBgpAllNexthopDatabaseResult:

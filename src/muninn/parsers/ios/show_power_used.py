@@ -1,7 +1,7 @@
 """Parser for 'show power used' command on IOS."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -23,6 +23,8 @@ class ShowPowerUsedParser(BaseParser[ShowPowerUsedResult]):
     Example output:
         system power used =      2255.76 Watts (43.38 Amps @ 52V)
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"environment", "system"})
 
     _PATTERN = re.compile(
         r"system\s+power\s+used\s*=\s*"

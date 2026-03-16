@@ -1,7 +1,7 @@
 """Parser for 'show vrf detail' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -45,6 +45,8 @@ class ShowVrfDetailParser(BaseParser[ShowVrfDetailResult]):
             Max Routes: 0  Mid-Threshold: 0
             Table-ID: 0x00000009, AF: IPv4, Fwd-ID: 0x00000009, State: Up
     """
+
+    tags: ClassVar[frozenset[str]] = frozenset({"vrf"})
 
     _VRF_HEADER = re.compile(
         r"^VRF-Name:\s+(?P<name>\S+),\s+"
