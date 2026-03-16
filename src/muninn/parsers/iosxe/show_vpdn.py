@@ -5,6 +5,7 @@ from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 
 
@@ -55,7 +56,7 @@ _TUNNEL_PATTERN = re.compile(
     r"(?P<rem_tun_id>\d+)\s+"
     r"(?P<remote_name>\S+)\s+"
     r"(?P<state>\S+)\s+"
-    r"(?P<remote_ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+"
+    rf"(?P<remote_ip>{IPV4_ADDRESS})\s+"
     r"(?P<session_count>\d+)\s+"
     r"(?P<vpdn_group>\S+)"
 )

@@ -10,6 +10,7 @@ from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import SEPARATOR_DASH_SPACE_RE
 from muninn.registry import register
 
 # --- TypedDict schema ---
@@ -105,7 +106,7 @@ _MAC_PERSIST_RE = re.compile(
 )
 
 # Table separator / header lines to skip
-_SEPARATOR_RE = re.compile(r"^[-\s]+$")
+_SEPARATOR_RE = SEPARATOR_DASH_SPACE_RE
 _SLOT_HEADER_RE = re.compile(r"^\s*Slot\s+", re.IGNORECASE)
 _SWITCH_HEADER_RE = re.compile(r"^\s*Switch\s+Ports\s+", re.IGNORECASE)
 _ROLE_HEADER_RE = re.compile(r"^\s*Switch#?\s+Role\s+", re.IGNORECASE)

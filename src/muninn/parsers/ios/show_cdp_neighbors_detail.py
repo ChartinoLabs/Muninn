@@ -7,6 +7,7 @@ from netutils.interface import canonical_interface_name
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import SEPARATOR_DASH_RE
 from muninn.registry import register
 
 
@@ -63,7 +64,7 @@ class ShowCdpNeighborsDetailParser(BaseParser[ShowCdpNeighborsDetailResult]):
     _TOTAL_ENTRIES_PATTERN = re.compile(
         r"Total (?:cdp )?entries displayed\s*:\s*(\d+)", re.I
     )
-    _SEPARATOR_PATTERN = re.compile(r"^-{3,}$")
+    _SEPARATOR_PATTERN = SEPARATOR_DASH_RE
     _ENTRY_ADDR_HEADER = re.compile(r"^Entry address\(es\):")
     _MGMT_ADDR_HEADER = re.compile(r"^Management address\(es\):")
 

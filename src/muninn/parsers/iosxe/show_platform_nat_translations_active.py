@@ -5,6 +5,7 @@ from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 
 
@@ -41,13 +42,13 @@ class ShowPlatformNatTranslationsActiveResult(TypedDict):
 #   ---  172.16.6.14           10.10.10.4            ---                   ---
 _TRANSLATION = re.compile(
     r"^(?P<protocol>\S+)\s+"
-    r"(?P<inside_global>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
+    rf"(?P<inside_global>{IPV4_ADDRESS})"
     r"(?::(?P<ig_port>\d+))?\s+"
-    r"(?P<inside_local>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
+    rf"(?P<inside_local>{IPV4_ADDRESS})"
     r"(?::(?P<il_port>\d+))?\s+"
-    r"(?P<outside_local>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|---)"
+    rf"(?P<outside_local>{IPV4_ADDRESS}|---)"
     r"(?::(?P<ol_port>\d+))?\s+"
-    r"(?P<outside_global>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|---)"
+    rf"(?P<outside_global>{IPV4_ADDRESS}|---)"
     r"(?::(?P<og_port>\d+))?\s*$"
 )
 

@@ -5,6 +5,7 @@ from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 from muninn.utils import canonical_interface_name
 
@@ -43,11 +44,11 @@ class ShowIpOspfNeighborResult(TypedDict):
 # 10.0.0.6          1 INIT/DROTHER     -        77.77.77.77     Po4
 # 10.0.0.7          1 FULL/            4d19h    88.88.88.88     Eth1/3
 _NEIGHBOR_PATTERN = re.compile(
-    r"^(?P<neighbor_id>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+"
+    rf"^(?P<neighbor_id>{IPV4_ADDRESS})\s+"
     r"(?P<priority>\d+)\s+"
     r"(?P<state_role>.+?)\s{2,}"
     r"(?P<up_time>\S+)\s+"
-    r"(?P<address>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+"
+    rf"(?P<address>{IPV4_ADDRESS})\s+"
     r"(?P<interface>\S+)\s*$"
 )
 

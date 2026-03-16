@@ -5,6 +5,7 @@ from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import MAC_ADDRESS
 from muninn.registry import register
 from muninn.utils import canonical_interface_name
 
@@ -40,7 +41,7 @@ class ShowSpanningTreeRootResult(TypedDict):
 _VLAN_LINE_PATTERN = re.compile(
     r"^VLAN(?P<vlan_id>\d+)"
     r"\s+(?P<priority>\d+)"
-    r"\s+(?P<address>[0-9a-fA-F]{4}\.[0-9a-fA-F]{4}\.[0-9a-fA-F]{4})"
+    rf"\s+(?P<address>{MAC_ADDRESS})"
     r"\s+(?P<cost>\d+)"
     r"\s+(?P<hello>\d+)"
     r"\s+(?P<max_age>\d+)"

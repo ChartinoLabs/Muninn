@@ -5,6 +5,7 @@ from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS, MAC_ADDRESS
 from muninn.registry import register
 
 
@@ -35,9 +36,9 @@ class ShowArpParser(BaseParser[ShowArpResult]):
 
     _ARP_ENTRY_PATTERN = re.compile(
         r"^Internet\s+"
-        r"(?P<address>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+"
+        rf"(?P<address>{IPV4_ADDRESS})\s+"
         r"(?P<age>-|\d+)\s+"
-        r"(?P<hardware_addr>[0-9a-fA-F]{4}\.[0-9a-fA-F]{4}\.[0-9a-fA-F]{4})\s+"
+        rf"(?P<hardware_addr>{MAC_ADDRESS})\s+"
         r"(?P<type>\S+)"
         r"(?:\s+(?P<interface>\S+))?",
         re.IGNORECASE,

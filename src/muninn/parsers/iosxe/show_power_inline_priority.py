@@ -5,6 +5,7 @@ from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import SEPARATOR_DASH_SPACE_RE
 from muninn.registry import register
 from muninn.utils import canonical_interface_name
 
@@ -41,7 +42,7 @@ _ROW_PATTERN = re.compile(
 
 _HEADER_KEYWORDS = frozenset({"interface", "admin", "oper", "state", "priority"})
 
-_SEPARATOR_PATTERN = re.compile(r"^[-\s]+$")
+_SEPARATOR_PATTERN = SEPARATOR_DASH_SPACE_RE
 
 
 def _is_header_or_separator(line: str) -> bool:

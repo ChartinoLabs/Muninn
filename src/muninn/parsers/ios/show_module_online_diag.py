@@ -5,6 +5,7 @@ from typing import TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import SEPARATOR_DASH_SPACE_RE
 from muninn.registry import register
 
 
@@ -24,7 +25,7 @@ _ROW_PATTERN = re.compile(r"^\s*(?P<mod>\d+)\s+(?P<status>\S+)\s*$")
 
 _HEADER_PATTERN = re.compile(r"^\s*Mod\s+Online\s+Diag\s+Status", re.IGNORECASE)
 
-_SEPARATOR = re.compile(r"^[-\s]+$")
+_SEPARATOR = SEPARATOR_DASH_SPACE_RE
 
 
 @register(OS.CISCO_IOS, "show module online diag")
