@@ -1,8 +1,4 @@
-"""Parser for 'show bgp all nexthop-database' command on NX-OS.
-
-Also registered as 'show bgp vrf all all nexthop-database', which produces
-identical output on NX-OS (the two commands are aliases for each other).
-"""
+"""Parser for 'show bgp all nexthop-database' command on NX-OS."""
 
 import re
 from typing import NotRequired, TypedDict
@@ -286,7 +282,6 @@ def _flush_af(
 
 
 @register(OS.CISCO_NXOS, "show bgp all nexthop-database")
-@register(OS.CISCO_NXOS, "show bgp vrf all all nexthop-database")
 class ShowBgpAllNexthopDatabaseParser(
     BaseParser["ShowBgpAllNexthopDatabaseResult"],
 ):
