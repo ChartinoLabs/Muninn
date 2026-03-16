@@ -1,8 +1,4 @@
-"""Parser for 'show bgp all nexthop-database' command on NX-OS.
-
-Also registered as 'show bgp vrf all all nexthop-database', which produces
-identical output on NX-OS (the two commands are aliases for each other).
-"""
+"""Parser for 'show bgp all nexthop-database' command on NX-OS."""
 
 import re
 from typing import ClassVar, NotRequired, TypedDict
