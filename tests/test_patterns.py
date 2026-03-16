@@ -5,8 +5,6 @@ import re
 import pytest
 
 from muninn.patterns import (
-    INTERFACE_LIKE,
-    INTERFACE_LIKE_RE,
     IPV4_ADDRESS,
     IPV4_ADDRESS_RE,
     IPV4_PREFIX,
@@ -212,68 +210,3 @@ class TestSeparatorDashSpace:
         """Pre-compiled RE locates columnar separator in multi-line text."""
         text = "VLAN  Name   Status\n---- ------ ------\n1     default"
         assert SEPARATOR_DASH_SPACE_RE.search(text)
-
-
-class TestInterfaceLike:
-    """Tests for INTERFACE_LIKE pattern (Cisco interface name detection)."""
-
-    @pytest.mark.parametrize(
-        "value",
-        [
-            "Ethernet1/1",
-            "Eth1/1",
-            "GigabitEthernet0/0/0",
-            "Gi0/1",
-            "FastEthernet0/1",
-            "Fa0/1",
-            "TenGigabitEthernet1/0/1",
-            "Te1/0/1",
-            "HundredGigE1/0/1",
-            "Hu1/0/1",
-            "TwentyFiveGigE1/0/1",
-            "Loopback0",
-            "Lo0",
-            "Vlan100",
-            "Port-channel1",
-            "Po1",
-            "Tunnel0",
-            "Tu0",
-            "Serial0/0",
-            "Se0/0",
-            "mgmt0",
-            "Management0",
-            "nve1",
-            "BDI100",
-            "AppGigabitEthernet1/0/1",
-        ],
-    )
-    def test_matches_interface_names(self, value: str) -> None:
-        """Common Cisco interface names (full and abbreviated) match."""
-        assert INTERFACE_LIKE_RE.match(value)
-
-    @pytest.mark.parametrize(
-        "value",
-        [
-            "",
-            "Vlan",
-            "Loopback",
-            "not-an-interface",
-            "12345",
-            "Po",
-        ],
-    )
-    def test_rejects_non_interfaces(self, value: str) -> None:
-        """Strings that are not interface names do not match."""
-        assert not INTERFACE_LIKE_RE.match(value)
-
-    def test_case_insensitive(self) -> None:
-        """Pattern matches regardless of case."""
-        assert INTERFACE_LIKE_RE.match("gigabitethernet0/0")
-        assert INTERFACE_LIKE_RE.match("VLAN100")
-        assert INTERFACE_LIKE_RE.match("MGMT0")
-
-    def test_embeddable_with_anchor(self) -> None:
-        """String constant can be combined with anchors."""
-        pattern = re.compile(r"^" + INTERFACE_LIKE, re.IGNORECASE)
-        assert pattern.match("Ethernet1/1 is up")
-        assert not pattern.match("  Ethernet1/1")

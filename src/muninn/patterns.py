@@ -47,25 +47,3 @@ SEPARATOR_DASH_SPACE = r"^[-\s]+$"
 
 SEPARATOR_DASH_RE = re.compile(SEPARATOR_DASH, re.MULTILINE)
 SEPARATOR_DASH_SPACE_RE = re.compile(SEPARATOR_DASH_SPACE, re.MULTILINE)
-
-# ---------------------------------------------------------------------------
-# Interface name detection
-# ---------------------------------------------------------------------------
-
-# Matches the start of a Cisco interface name (any common abbreviation).
-# Does not anchor to start/end of line so it can be embedded freely.
-# Use with re.IGNORECASE.
-INTERFACE_LIKE = (
-    r"(?:Gi(?:g(?:abit(?:Ethernet)?)?)?|Fa(?:s(?:t(?:Ethernet)?)?)?|"
-    r"Eth(?:ernet)?|"
-    r"Te(?:n(?:Gig(?:abit(?:Ethernet)?)?)?)?|"
-    r"Fo(?:r(?:ty(?:Gig(?:abit(?:Ethernet)?)?)?)?)?|"
-    r"Hu(?:n(?:dred(?:Gig(?:E|abit(?:Ethernet)?)?)?)?)?|"
-    r"Twe(?:ntyFiveGig(?:E|abit(?:Ethernet)?)?)?|"
-    r"AppGigabitEthernet|"
-    r"mgmt|Management|Lo(?:opback)?|Vlan|Po(?:rt-channel)?|"
-    r"Tu(?:nnel)?|Se(?:rial)?|nve|BDI)"
-    r"\d"
-)
-
-INTERFACE_LIKE_RE = re.compile(INTERFACE_LIKE, re.IGNORECASE)
