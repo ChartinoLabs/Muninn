@@ -1,4 +1,4 @@
-"""Parser for 'show bgp all detail' command on IOS-XE."""
+"""Parser for 'show bgp all detail' / 'show ip bgp all detail' on IOS-XE."""
 
 import re
 from typing import NotRequired, TypedDict
@@ -36,6 +36,10 @@ class PathEntry(TypedDict):
     evpn_esi: NotRequired[str]
     gateway_address: NotRequired[str]
     local_vtep: NotRequired[str]
+    external: NotRequired[bool]
+    received_only: NotRequired[bool]
+    via: NotRequired[str]
+    next_hop_metric: NotRequired[int]
     evpn_label: NotRequired[int]
     updated: NotRequired[str]
 
@@ -45,9 +49,13 @@ class RouteEntry(TypedDict):
 
     version: int
     paths_available: int
-    best_path: int
-    table: str
+    best_path: NotRequired[int]
+    table: NotRequired[str]
     paths: list[PathEntry]
+    no_best_path: NotRequired[bool]
+    not_advertised_to_any_peer: NotRequired[bool]
+    advertised_to_update_groups: NotRequired[list[int]]
+    flag: NotRequired[str]
     rib_failure: NotRequired[str]
     multipath: NotRequired[str]
     bestpath: NotRequired[str]
@@ -57,6 +65,7 @@ class RouteDistinguisherEntry(TypedDict):
     """Schema for a Route Distinguisher group."""
 
     default_vrf: NotRequired[str]
+    rd: NotRequired[str]
     routes: dict[str, RouteEntry]
 
 
@@ -98,6 +107,12 @@ _PATHS_RE = re.compile(
     r"(?:,\s*(.+?)\s*)?\)\s*$"
 )
 
+_PATHS_NO_BEST_RE = re.compile(
+    r"^\s*Paths:\s+\((\d+)\s+available,\s+no\s+best\s+path\)\s*$"
+)
+
+_FLAG_RE = re.compile(r"^\s*Flag:\s+(\S+)\s*$")
+
 _BESTPATH_RE = re.compile(r"^\s*BGP Bestpath:\s+(.+?)\s*$")
 
 _MULTIPATH_RE = re.compile(r"^\s*Multipath:\s+(.+?)\s*$")
@@ -114,8 +129,8 @@ _ORIGIN_LINE_RE = re.compile(
 
 _NEXT_HOP_RE = re.compile(
     r"^\s+(?P<nexthop>\S+)"
-    r"(?:\s+\((?:metric\s+\d+\s*)?\))?"  # optional (metric N) or ()
-    r"(?:\s+\((?:inaccessible|via\s+(?:vrf\s+\S+|default))\))?"
+    r"(?:\s+\(metric\s+(?P<nh_metric>\d+)\s*\))?"  # optional (metric N)
+    r"(?:\s+\((?:inaccessible|via\s+(?P<via>vrf\s+\S+|default))\))?"
     r"\s+from\s+(?P<from>\S+)"
     r"\s+\((?P<rid>[^)]+)\)"
 )
@@ -143,12 +158,17 @@ def _is_noise_line(stripped: str) -> bool:
     return stripped.startswith("Load for ") or stripped.startswith("Time source ")
 
 
-def _extract_as_path(line: str) -> str:
-    """Extract the AS path from the first line after Refresh Epoch."""
+def _extract_as_path(line: str) -> tuple[str, bool]:
+    """Extract AS path and received-only flag after Refresh Epoch.
+
+    Returns:
+        Tuple of (as_path, received_only).
+    """
     stripped = line.strip()
+    received_only = "(received-only)" in stripped
     if stripped.startswith("Local"):
-        return ""
-    return stripped.split(",")[0].strip()
+        return "Local", received_only
+    return stripped.split(",")[0].strip(), received_only
 
 
 def _parse_path_attributes(lines: list[str], idx: int) -> tuple[PathEntry | None, int]:
@@ -159,7 +179,7 @@ def _parse_path_attributes(lines: list[str], idx: int) -> tuple[PathEntry | None
     if idx >= len(lines):
         return None, idx
 
-    as_path = _extract_as_path(lines[idx])
+    as_path, received_only = _extract_as_path(lines[idx])
     idx += 1
 
     if idx >= len(lines):
@@ -179,6 +199,14 @@ def _parse_path_attributes(lines: list[str], idx: int) -> tuple[PathEntry | None
         "valid": False,
         "best": False,
     }
+    if received_only:
+        path["received_only"] = True
+    nh_metric = nh_match.group("nh_metric")
+    if nh_metric:
+        path["next_hop_metric"] = int(nh_metric)
+    via = nh_match.group("via")
+    if via:
+        path["via"] = via
     idx += 1
 
     # Parse attribute lines until a boundary
@@ -215,6 +243,7 @@ _ORIGIN_INT_FIELDS: tuple[tuple[str, str], ...] = (
 
 _ORIGIN_BOOL_FLAGS: tuple[tuple[str, str], ...] = (
     ("internal", "internal"),
+    ("external", "external"),
     ("sourced", "sourced"),
 )
 
@@ -298,11 +327,23 @@ def _parse_single_attribute(stripped: str, path: PathEntry, idx: int) -> int:
 
 def _parse_route_header(
     lines: list[str], idx: int
-) -> tuple[str, int, str | None, int, int, str, str | None, str | None, int]:
+) -> tuple[
+    str,
+    int,
+    str | None,
+    int,
+    int,
+    str,
+    str | None,
+    str | None,
+    bool,
+    str | None,
+    int,
+]:
     """Parse the header portion of a route block.
 
     Returns (raw_prefix, version, bestpath, paths_available, best_path,
-             table, rib_failure, multipath, next_idx).
+             table, rib_failure, multipath, no_best_path, flag, next_idx).
     """
     m = _ROUTE_FULL_PREFIX_RE.match(lines[idx])
     if not m:
@@ -320,7 +361,15 @@ def _parse_route_header(
         idx += 1
 
     # Paths line
-    paths_available, best_path, table, rib_failure, idx = _parse_paths_line(lines, idx)
+    (paths_available, best_path, table, rib_failure, no_best_path, idx) = (
+        _parse_paths_line(lines, idx)
+    )
+
+    # Optional: Flag line
+    flag = None
+    if idx < len(lines) and (fm := _FLAG_RE.match(lines[idx])):
+        flag = fm.group(1)
+        idx += 1
 
     # Optional: Multipath line
     multipath = None
@@ -337,22 +386,33 @@ def _parse_route_header(
         table,
         rib_failure,
         multipath,
+        no_best_path,
+        flag,
         idx,
     )
 
 
 def _parse_paths_line(
     lines: list[str], idx: int
-) -> tuple[int, int, str, str | None, int]:
-    """Parse the 'Paths:' line. Returns (available, best, table, rib_failure, idx)."""
+) -> tuple[int, int, str, str | None, bool, int]:
+    """Parse the 'Paths:' line.
+
+    Returns (available, best, table, rib_failure, no_best_path, idx).
+    """
     if idx >= len(lines):
-        return 0, 0, "", None, idx
+        return 0, 0, "", None, False, idx
     pm = _PATHS_RE.match(lines[idx])
-    if not pm:
-        return 0, 0, "", None, idx
-    extra = pm.group(4)
-    rib_failure = extra.strip() if extra and "RIB-failure" in extra else None
-    return int(pm.group(1)), int(pm.group(2)), pm.group(3), rib_failure, idx + 1
+    if pm:
+        extra = pm.group(4)
+        rib_failure = extra.strip() if extra and "RIB-failure" in extra else None
+        avail = int(pm.group(1))
+        best = int(pm.group(2))
+        return avail, best, pm.group(3), rib_failure, False, idx + 1
+    # Check for "no best path" variant
+    nbp = _PATHS_NO_BEST_RE.match(lines[idx])
+    if nbp:
+        return int(nbp.group(1)), 0, "", None, True, idx + 1
+    return 0, 0, "", None, False, idx
 
 
 def _parse_route_block(lines: list[str], idx: int) -> tuple[str, RouteEntry, int]:
@@ -369,11 +429,13 @@ def _parse_route_block(lines: list[str], idx: int) -> tuple[str, RouteEntry, int
         table,
         rib_failure,
         multipath,
+        no_best_path,
+        flag,
         idx,
     ) = _parse_route_header(lines, idx)
 
-    # Skip "Advertised to" / "Not advertised" lines
-    idx = _skip_advertised_lines(lines, idx)
+    # Parse "Advertised to" / "Not advertised" lines
+    advertised_groups, not_advertised_to_any, idx = _parse_advertised_lines(lines, idx)
 
     # Parse individual paths
     paths: list[PathEntry] = []
@@ -385,10 +447,20 @@ def _parse_route_block(lines: list[str], idx: int) -> tuple[str, RouteEntry, int
     route: RouteEntry = {
         "version": version,
         "paths_available": paths_available,
-        "best_path": best_path,
-        "table": table,
         "paths": paths,
     }
+    if no_best_path:
+        route["no_best_path"] = True
+    else:
+        route["best_path"] = best_path
+    if table:
+        route["table"] = table
+    if not_advertised_to_any:
+        route["not_advertised_to_any_peer"] = True
+    if advertised_groups:
+        route["advertised_to_update_groups"] = advertised_groups
+    if flag:
+        route["flag"] = flag
     if rib_failure:
         route["rib_failure"] = rib_failure
     if multipath:
@@ -404,31 +476,40 @@ def _is_update_group_line(text: str) -> bool:
     return all(c.isdigit() or c.isspace() for c in text)
 
 
-def _skip_advertised_lines(lines: list[str], idx: int) -> int:
-    """Skip 'Advertised to' and 'Not advertised' block lines."""
+def _parse_advertised_lines(lines: list[str], idx: int) -> tuple[list[int], bool, int]:
+    """Parse 'Advertised to' and 'Not advertised' block lines.
+
+    Returns (update_group_ids, not_advertised_to_any_peer, next_idx).
+    """
+    update_groups: list[int] = []
+    not_advertised = False
+
     while idx < len(lines):
         stripped = lines[idx].strip()
         if not stripped:
             idx += 1
             continue
-        if not stripped.startswith(("Advertised to", "Not advertised")):
-            break
-        idx += 1
-        idx = _skip_update_group_ids(lines, idx)
-    return idx
-
-
-def _skip_update_group_ids(lines: list[str], idx: int) -> int:
-    """Skip lines that contain only update-group ID numbers."""
-    while idx < len(lines):
-        next_stripped = lines[idx].strip()
-        if not next_stripped:
-            return idx + 1
-        if _is_update_group_line(next_stripped):
+        if stripped.startswith("Not advertised to any peer"):
+            not_advertised = True
             idx += 1
             continue
+        if stripped.startswith(("Advertised to", "Not advertised")):
+            idx += 1
+            # Parse update-group ID lines that follow
+            while idx < len(lines):
+                next_stripped = lines[idx].strip()
+                if not next_stripped:
+                    idx += 1
+                    break
+                if _is_update_group_line(next_stripped):
+                    update_groups.extend(int(x) for x in next_stripped.split())
+                    idx += 1
+                    continue
+                break
+            continue
         break
-    return idx
+
+    return update_groups, not_advertised, idx
 
 
 def _parse_all_paths(lines: list[str], idx: int, paths: list[PathEntry]) -> int:
@@ -579,6 +660,7 @@ def _merge_rd_entry(
 ) -> None:
     """Merge routes into a Route Distinguisher entry."""
     entry = route_distinguishers.setdefault(rd, {"routes": {}})
+    entry["rd"] = rd
     if vrf is not None:
         entry["default_vrf"] = vrf
     entry["routes"].update(routes)
@@ -606,6 +688,8 @@ def _merge_address_family_entry(
             continue
         if "default_vrf" in rd_entry:
             merged_rds[rd]["default_vrf"] = rd_entry["default_vrf"]
+        if "rd" in rd_entry:
+            merged_rds[rd]["rd"] = rd_entry["rd"]
         merged_rds[rd]["routes"].update(rd_entry["routes"])
 
     if merged_rds:
@@ -619,12 +703,15 @@ def _copy_rd_entry(rd_entry: RouteDistinguisherEntry) -> RouteDistinguisherEntry
     copied: RouteDistinguisherEntry = {"routes": dict(rd_entry["routes"])}
     if "default_vrf" in rd_entry:
         copied["default_vrf"] = rd_entry["default_vrf"]
+    if "rd" in rd_entry:
+        copied["rd"] = rd_entry["rd"]
     return copied
 
 
 @register(OS.CISCO_IOSXE, "show bgp all detail")
+@register(OS.CISCO_IOSXE, "show ip bgp all detail")
 class ShowBgpAllDetailParser(BaseParser["ShowBgpAllDetailResult"]):
-    """Parser for 'show bgp all detail' command.
+    """Parser for 'show bgp all detail' on IOS-XE.
 
     Example output:
         For address family: IPv4 Unicast
@@ -639,7 +726,7 @@ class ShowBgpAllDetailParser(BaseParser["ShowBgpAllDetailResult"]):
         """Parse 'show bgp all detail' output.
 
         Args:
-            output: Raw CLI output from 'show bgp all detail' command.
+            output: Raw CLI output from the command.
 
         Returns:
             Parsed data organized by address family.

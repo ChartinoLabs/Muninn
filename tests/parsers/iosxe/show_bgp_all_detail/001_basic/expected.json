@@ -3,10 +3,13 @@
         "IPv4 Unicast": {
             "routes": {
                 "10.1.1.0/24": {
+                    "advertised_to_update_groups": [
+                        3
+                    ],
                     "best_path": 1,
                     "paths": [
                         {
-                            "as_path": "",
+                            "as_path": "Local",
                             "best": true,
                             "from_peer": "0.0.0.0",
                             "localpref": 100,
@@ -22,7 +25,7 @@
                             "weight": 32768
                         },
                         {
-                            "as_path": "",
+                            "as_path": "Local",
                             "best": false,
                             "from_peer": "10.1.1.2",
                             "internal": true,
@@ -43,9 +46,10 @@
                 },
                 "10.16.2.2/32": {
                     "best_path": 1,
+                    "not_advertised_to_any_peer": true,
                     "paths": [
                         {
-                            "as_path": "",
+                            "as_path": "Local",
                             "best": true,
                             "from_peer": "10.1.1.2",
                             "internal": true,
@@ -65,10 +69,13 @@
                     "version": 2
                 },
                 "10.4.1.1/32": {
+                    "advertised_to_update_groups": [
+                        3
+                    ],
                     "best_path": 1,
                     "paths": [
                         {
-                            "as_path": "",
+                            "as_path": "Local",
                             "best": true,
                             "from_peer": "0.0.0.0",
                             "localpref": 100,
@@ -94,10 +101,13 @@
         "IPv6 Unicast": {
             "routes": {
                 "2001:1:1:1::1/128": {
+                    "advertised_to_update_groups": [
+                        1
+                    ],
                     "best_path": 1,
                     "paths": [
                         {
-                            "as_path": "",
+                            "as_path": "Local",
                             "best": true,
                             "from_peer": "0.0.0.0",
                             "localpref": 100,
@@ -119,9 +129,10 @@
                 },
                 "2001:2:2:2::2/128": {
                     "best_path": 1,
+                    "not_advertised_to_any_peer": true,
                     "paths": [
                         {
-                            "as_path": "",
+                            "as_path": "Local",
                             "best": true,
                             "from_peer": "2001:DB8:1:1::2",
                             "internal": true,
@@ -136,7 +147,7 @@
                             "valid": true
                         },
                         {
-                            "as_path": "",
+                            "as_path": "Local",
                             "best": false,
                             "from_peer": "10.1.1.2",
                             "internal": true,
@@ -156,10 +167,13 @@
                     "version": 2
                 },
                 "2001:DB8:1:1::/64": {
+                    "advertised_to_update_groups": [
+                        1
+                    ],
                     "best_path": 1,
                     "paths": [
                         {
-                            "as_path": "",
+                            "as_path": "Local",
                             "best": true,
                             "from_peer": "0.0.0.0",
                             "localpref": 100,
@@ -175,7 +189,7 @@
                             "weight": 32768
                         },
                         {
-                            "as_path": "",
+                            "as_path": "Local",
                             "best": false,
                             "from_peer": "2001:DB8:1:1::2",
                             "internal": true,
@@ -190,7 +204,7 @@
                             "valid": true
                         },
                         {
-                            "as_path": "",
+                            "as_path": "Local",
                             "best": false,
                             "from_peer": "10.1.1.2",
                             "internal": true,
@@ -214,12 +228,15 @@
         "VPNv4 Unicast": {
             "route_distinguishers": {
                 "100:100": {
+                    "default_vrf": "VRF1",
+                    "rd": "100:100",
                     "routes": {
                         "10.229.11.11/32": {
                             "best_path": 1,
+                            "not_advertised_to_any_peer": true,
                             "paths": [
                                 {
-                                    "as_path": "",
+                                    "as_path": "Local",
                                     "best": true,
                                     "from_peer": "0.0.0.0",
                                     "localpref": 100,
@@ -232,6 +249,7 @@
                                     "sourced": true,
                                     "tx_pathid": "0x0",
                                     "valid": true,
+                                    "via": "vrf VRF1",
                                     "weight": 32768
                                 }
                             ],
@@ -239,20 +257,22 @@
                             "table": "VRF1",
                             "version": 2
                         }
-                    },
-                    "default_vrf": "VRF1"
+                    }
                 }
             }
         },
         "VPNv6 Unicast": {
             "route_distinguishers": {
                 "100:100": {
+                    "default_vrf": "VRF1",
+                    "rd": "100:100",
                     "routes": {
                         "[100:100]2001:11:11::11/128": {
                             "best_path": 1,
+                            "not_advertised_to_any_peer": true,
                             "paths": [
                                 {
-                                    "as_path": "",
+                                    "as_path": "Local",
                                     "best": true,
                                     "from_peer": "0.0.0.0",
                                     "localpref": 100,
@@ -265,6 +285,7 @@
                                     "sourced": true,
                                     "tx_pathid": "0x0",
                                     "valid": true,
+                                    "via": "vrf VRF1",
                                     "weight": 32768
                                 }
                             ],
@@ -272,8 +293,7 @@
                             "table": "VRF1",
                             "version": 2
                         }
-                    },
-                    "default_vrf": "VRF1"
+                    }
                 }
             }
         }
