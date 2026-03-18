@@ -1,11 +1,12 @@
 """Parser for 'show caller summary' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ShowCallerSummaryResult(TypedDict):
@@ -102,6 +103,8 @@ class ShowCallerSummaryParser(BaseParser[ShowCallerSummaryResult]):
 
                 0   Total unique users logged in
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     @classmethod
     def parse(cls, output: str) -> ShowCallerSummaryResult:

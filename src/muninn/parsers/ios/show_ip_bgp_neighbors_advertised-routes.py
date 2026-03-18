@@ -1,11 +1,12 @@
 """Parser for 'show ip bgp neighbors advertised-routes' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class RouteEntry(TypedDict):
@@ -236,6 +237,8 @@ class ShowIpBgpNeighborsAdvertisedRoutesParser(
     BaseParser["ShowIpBgpNeighborsAdvertisedRoutesResult"],
 ):
     """Parser for 'show ip bgp neighbors advertised-routes' on IOS."""
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.BGP, ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpBgpNeighborsAdvertisedRoutesResult:

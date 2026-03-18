@@ -1,11 +1,12 @@
 """Parser for 'show interface snmp-ifindex' command on NX-OS."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -40,6 +41,8 @@ class ShowInterfaceSnmpIfindexParser(BaseParser[ShowInterfaceSnmpIfindexResult])
         Vlan1                150994945 (0x09000001)
         Po10                 369098762 (0x16000002)
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.INTERFACES})
 
     # Matches lines like: Eth1/1  436207616 (0x1a000000)
     # The hex value in parentheses is optional on some platforms.

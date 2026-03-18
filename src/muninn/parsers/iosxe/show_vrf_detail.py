@@ -1,11 +1,12 @@
 """Parser for 'show vrf detail' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -484,6 +485,8 @@ class ShowVrfDetailParser(BaseParser[ShowVrfDetailResult]):
                 Gi0/0
         Address family ipv4 unicast (Table ID = 0x1):
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.VRF})
 
     @classmethod
     def parse(cls, output: str) -> ShowVrfDetailResult:

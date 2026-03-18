@@ -1,11 +1,12 @@
 """Parser for 'show snmp community' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class SnmpCommunityEntry(TypedDict):
@@ -80,6 +81,8 @@ class ShowSnmpCommunityParser(BaseParser[ShowSnmpCommunityResult]):
         Community SecurityName: public
         storage-type: nonvolatile        active
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SNMP})
 
     @classmethod
     def parse(cls, output: str) -> ShowSnmpCommunityResult:

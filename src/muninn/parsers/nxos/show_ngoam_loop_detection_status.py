@@ -1,11 +1,12 @@
 """Parser for 'show ngoam loop-detection status' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class LoopDetectionEntry(TypedDict):
@@ -32,6 +33,8 @@ class ShowNgoamLoopDetectionStatusParser(
     BaseParser[ShowNgoamLoopDetectionStatusResult]
 ):
     """Parser for 'show ngoam loop-detection status' command."""
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SWITCHING})
 
     _ERROR_PATTERN = re.compile(r"^ERROR:\s+Loop detection is not enabled$", re.I)
     _ROW_PATTERN = re.compile(

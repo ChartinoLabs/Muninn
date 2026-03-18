@@ -1,7 +1,7 @@
 """Parser for 'show lldp neighbors detail' command on IOS."""
 
 import re
-from typing import Literal, NotRequired, TypedDict
+from typing import ClassVar, Literal, NotRequired, TypedDict
 
 from netutils.interface import canonical_interface_name
 
@@ -9,6 +9,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import SEPARATOR_DASH_RE
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 _NOT_ADVERTISED = "- not advertised"
 
@@ -122,6 +123,8 @@ class ShowLldpNeighborsDetailParser(
     Parses detailed LLDP neighbor information including system name,
     description, capabilities, and management addresses.
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.LLDP})
 
     _SEPARATOR = SEPARATOR_DASH_RE
     _LOCAL_INTF = re.compile(r"^Local Intf:\s+(?P<v>\S+)")

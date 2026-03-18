@@ -1,11 +1,12 @@
 """Parser for 'show control cpu' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class QueueEntry(TypedDict):
@@ -51,6 +52,8 @@ class ShowControlCpuParser(BaseParser[ShowControlCpuResult]):
         sw forwarding              433         425         0           0
         broadcast                  0           0           0           0
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     @classmethod
     def parse(cls, output: str) -> ShowControlCpuResult:

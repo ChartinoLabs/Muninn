@@ -1,12 +1,13 @@
 """Parser for 'show platform nat translations active' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class NatTranslationEntry(TypedDict):
@@ -146,6 +147,14 @@ class ShowPlatformNatTranslationsActiveParser(
         ---  172.16.6.14        10.10.10.4         ---                ---
         Total number of translations: 3
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.NAT,
+            ParserTag.PLATFORM,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformNatTranslationsActiveResult:

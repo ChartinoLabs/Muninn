@@ -1,11 +1,12 @@
 """Parser for 'show lldp neighbors' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -31,6 +32,8 @@ class ShowLldpNeighborsParser(BaseParser[ShowLldpNeighborsResult]):
 
     Parses LLDP neighbor information showing connected devices.
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.LLDP})
 
     # Pattern for neighbor entries - handles variable spacing
     # Device ID           Local Intf     Hold-time  Capability      Port ID

@@ -1,11 +1,12 @@
 """Parser for 'show ip eigrp timers' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -122,6 +123,13 @@ class ShowIpEigrpTimersParser(BaseParser[ShowIpEigrpTimersResult]):
         |           1.724  (parent)
           |           1.724  Hello (Te0/0/6.20)
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.EIGRP,
+            ParserTag.ROUTING,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowIpEigrpTimersResult:

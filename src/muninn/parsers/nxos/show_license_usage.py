@@ -1,11 +1,12 @@
 """Parser for 'show license usage' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class LicenseEntry(TypedDict):
@@ -91,6 +92,8 @@ class ShowLicenseUsageParser(BaseParser["ShowLicenseUsageResult"]):
         FC_PORT_ACTIVATION_PKG        No    0   Unused             -
         ------------------------------------------------------------------------
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     @classmethod
     def parse(cls, output: str) -> ShowLicenseUsageResult:

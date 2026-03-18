@@ -1,11 +1,12 @@
 """Parser for 'show vrrp' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -319,6 +320,8 @@ class ShowVrrpParser(BaseParser[ShowVrrpResult]):
           Virtual MAC address is 0000.5eff.010a
           Advertisement interval is 1.000 sec
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.FHRP})
 
     @classmethod
     def parse(cls, output: str) -> ShowVrrpResult:

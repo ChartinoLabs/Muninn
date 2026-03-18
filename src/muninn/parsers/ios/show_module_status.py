@@ -1,11 +1,12 @@
 """Parser for 'show module status' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ModuleStatusEntry(TypedDict):
@@ -172,6 +173,13 @@ class ShowModuleStatusParser(BaseParser[ShowModuleStatusResult]):
           1  aaaa.aaaa.0000 to aaaa.aaaa.ffff   2.1   12.2(18r)S1  15.2(1)SY5   Ok
           4                17.6.1r[FC2] 17.09.03 hw-faulty
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.INVENTORY,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowModuleStatusResult:

@@ -1,11 +1,12 @@
 """Parser for 'show boot mode' command on NX-OS."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ShowBootModeResult(TypedDict):
@@ -21,6 +22,8 @@ class ShowBootModeParser(BaseParser[ShowBootModeResult]):
     Example output:
         Current mode is native
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     _PATTERN = re.compile(r"^Current\s+mode\s+is\s+(?P<mode>\w+)$", re.IGNORECASE)
 

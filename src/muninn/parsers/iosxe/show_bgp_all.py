@@ -1,12 +1,13 @@
 """Parser for 'show bgp all' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class PathEntry(TypedDict):
@@ -489,6 +490,8 @@ class ShowBgpAllParser(BaseParser["ShowBgpAllResult"]):
         Route Distinguisher: 65535:1 (default for vrf evpn1)
          *>   10.1.1.0/24     0.0.0.0                  0         32768 ?
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.BGP, ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowBgpAllResult:

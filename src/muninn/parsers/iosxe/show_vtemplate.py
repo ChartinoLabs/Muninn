@@ -1,11 +1,12 @@
 """Parser for 'show vtemplate' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class VtemplateEntry(TypedDict):
@@ -53,6 +54,8 @@ class ShowVtemplateParser(BaseParser[ShowVtemplateResult]):
         1                 PPTP        0
         2                 L2TP        3       Yes
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.VPN})
 
     @classmethod
     def parse(cls, output: str) -> ShowVtemplateResult:

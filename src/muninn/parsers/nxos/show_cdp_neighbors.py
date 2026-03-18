@@ -1,11 +1,12 @@
 """Parser for 'show cdp neighbors' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -31,6 +32,8 @@ class ShowCdpNeighborsParser(BaseParser[ShowCdpNeighborsResult]):
 
     Parses CDP neighbor information showing connected devices.
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.CDP})
 
     # Pattern for entries where everything is on one line
     # swor96(SSI13110AAQ) Eth1/17 165 S I s N5K-C5010P-BF Eth1/19

@@ -1,11 +1,12 @@
 """Parser for IOS authentication session summary commands."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 _HEADER_RE = re.compile(
@@ -129,6 +130,8 @@ class ShowAuthenticationSessionsParser(
     BaseParser[ShowAuthenticationSessionsResult],
 ):
     """Parser for 'show authentication sessions' and 'show access-session'."""
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SECURITY})
 
     @classmethod
     def parse(cls, output: str) -> ShowAuthenticationSessionsResult:

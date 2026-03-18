@@ -1,11 +1,12 @@
 """Parser for 'show endpoint-tracker' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 # Data line: interface, record name, status, RTT, probe ID, next hop
@@ -55,6 +56,8 @@ class ShowEndpointTrackerParser(
 
     Output is keyed by interface, then tracker (record) name.
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SDWAN})
 
     @classmethod
     def parse(cls, output: str) -> ShowEndpointTrackerResult:

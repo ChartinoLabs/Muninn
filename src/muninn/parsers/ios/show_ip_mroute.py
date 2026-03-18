@@ -1,11 +1,12 @@
 """Parser for 'show ip mroute' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 # Multicast route entry header:
@@ -184,6 +185,13 @@ class ShowIpMrouteParser(BaseParser[ShowIpMrouteResult]):
     Parses IP multicast routing table entries with group/source
     hierarchy, incoming/outgoing interfaces, flags, and timers.
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.MULTICAST,
+            ParserTag.ROUTING,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowIpMrouteResult:

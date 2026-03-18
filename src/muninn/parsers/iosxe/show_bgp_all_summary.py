@@ -5,6 +5,8 @@ with multiple address-family sections.  We reuse the existing parsing
 logic and register it under the additional command name.
 """
 
+from typing import ClassVar
+
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.parsers.ios.show_ip_bgp_summary import (
@@ -15,6 +17,7 @@ from muninn.parsers.ios.show_ip_bgp_summary import (
     _strip_prompt_lines,
 )
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 __all__ = ["ShowBgpAllSummaryParser"]
 
@@ -36,6 +39,8 @@ class ShowBgpAllSummaryParser(BaseParser["ShowIpBgpSummaryResult"]):
     The output format is identical to 'show ip bgp summary'; parsing logic
     is reused from that parser.
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.BGP, ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpBgpSummaryResult:

@@ -6,12 +6,13 @@ Handles two fundamentally different output formats:
 """
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import SEPARATOR_DASH_SPACE_RE
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 # --- TypedDict schema ---
 
@@ -358,6 +359,13 @@ def _parse_stack(lines: list[str]) -> ShowPlatformResult:
 @register(OS.CISCO_IOSXE, "show platform")
 class ShowPlatformParser(BaseParser[ShowPlatformResult]):
     """Parser for 'show platform' on IOS/IOS-XE."""
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.PLATFORM,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformResult:

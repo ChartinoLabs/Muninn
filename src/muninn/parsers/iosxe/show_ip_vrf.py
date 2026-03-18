@@ -1,11 +1,12 @@
 """Parser for 'show ip vrf' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -28,6 +29,8 @@ class ShowIpVrfParser(BaseParser[ShowIpVrfResult]):
 
     Parses VRF information including default RD and associated interfaces.
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.VRF})
 
     # Pattern for VRF entries with name and RD
     # Name                         Default RD            Interfaces

@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 # ---------------------------------------------------------------------------
 # TypedDict schemas
@@ -571,6 +572,8 @@ class ShowBgpProcessVrfAllParser(BaseParser["ShowBgpProcessVrfAllResult"]):
     Parses BGP process information, attribute statistics, and per-VRF
     details including address family configuration.
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.BGP, ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowBgpProcessVrfAllResult:

@@ -1,11 +1,12 @@
 """Parser for 'show ipv6 eigrp neighbors' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -38,6 +39,13 @@ class ShowIpv6EigrpNeighborsParser(BaseParser[ShowIpv6EigrpNeighborsResult]):
                                              (sec)        (ms)     Cnt Num
         0   FE80::A8BB:CCFF:FE00:200 Gi0/0   12 00:00:21  10  100 0  3
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.EIGRP,
+            ParserTag.ROUTING,
+        }
+    )
 
     _ROW_PATTERN = re.compile(
         r"^(?P<handle>\d+)\s+"

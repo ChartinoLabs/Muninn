@@ -1,11 +1,12 @@
 """Parser for 'show bgp all nexthop-database' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -286,6 +287,8 @@ class ShowBgpAllNexthopDatabaseParser(
     BaseParser["ShowBgpAllNexthopDatabaseResult"],
 ):
     """Parser for 'show bgp all nexthop-database' on NX-OS."""
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.BGP, ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowBgpAllNexthopDatabaseResult:

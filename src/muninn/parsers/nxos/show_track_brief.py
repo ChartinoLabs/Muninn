@@ -1,11 +1,12 @@
 """Parser for 'show track brief' command on NX-OS."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class TrackBriefEntry(TypedDict):
@@ -27,6 +28,8 @@ class ShowTrackBriefResult(TypedDict):
 @register(OS.CISCO_NXOS, "show track brief")
 class ShowTrackBriefParser(BaseParser[ShowTrackBriefResult]):
     """Parser for 'show track brief' command."""
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.TRACKING})
 
     _ROW_PATTERN = re.compile(
         r"^(?P<track>\d+)\s+"

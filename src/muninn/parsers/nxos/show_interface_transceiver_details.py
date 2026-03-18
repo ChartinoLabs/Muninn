@@ -2,11 +2,12 @@
 
 import re
 from dataclasses import dataclass, field
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -331,6 +332,8 @@ class ShowInterfaceTransceiverDetailsParser(
     data including temperature, voltage, current, Tx power, and Rx power
     with alarm and warning thresholds.
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.INTERFACES})
 
     @classmethod
     def parse(cls, output: str) -> ShowInterfaceTransceiverDetailsResult:

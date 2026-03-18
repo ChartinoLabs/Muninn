@@ -1,11 +1,12 @@
 """Parser for 'show redundancy' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ProcessorEntry(TypedDict):
@@ -260,6 +261,13 @@ class ShowRedundancyParser(BaseParser[ShowRedundancyResult]):
         Hardware Mode = Duplex
         Communications = Up
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.REDUNDANCY,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowRedundancyResult:

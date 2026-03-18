@@ -1,12 +1,13 @@
 """Parser for 'show sdwan omp peers' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class RouteStats(TypedDict):
@@ -46,6 +47,8 @@ class ShowSdwanOmpPeersParser(BaseParser[ShowSdwanOmpPeersResult]):
                                 ID     ID     ID   STATE UPTIME     R/I/S
         10.4.1.4      vsmart  1      1       55   up    0:01:24:29 4/0/4
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SDWAN})
 
     # Standard format (no tenant column):
     # 10.4.1.4    vsmart 1 1 4294945506up 6:13:57:28 4/0/4

@@ -1,11 +1,12 @@
 """Parser for 'show ipv6 route' command on IOS/IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 # Header: "IPv6 Routing Table - {vrf} - {count} entries"
@@ -135,6 +136,8 @@ def _parse_route_line(line: str) -> RouteEntry | None:
 @register(OS.CISCO_IOSXE, "show ipv6 route")
 class ShowIpv6RouteParser(BaseParser[ShowIpv6RouteResult]):
     """Parser for 'show ipv6 route' on IOS/IOS-XE."""
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpv6RouteResult:

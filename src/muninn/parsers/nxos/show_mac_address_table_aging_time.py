@@ -1,11 +1,12 @@
 """Parser for 'show mac address-table aging-time' command on NX-OS."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ShowMacAddressTableAgingTimeResult(TypedDict):
@@ -19,6 +20,13 @@ class ShowMacAddressTableAgingTimeParser(
     BaseParser[ShowMacAddressTableAgingTimeResult]
 ):
     """Parser for 'show mac address-table aging-time' command."""
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.MAC,
+            ParserTag.SWITCHING,
+        }
+    )
 
     _VALUE_PATTERN = re.compile(r"^(?P<value>\d+)$")
 

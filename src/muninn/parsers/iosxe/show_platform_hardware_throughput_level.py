@@ -1,11 +1,12 @@
 """Parser for 'show platform hardware throughput level' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ShowPlatformHardwareThroughputLevelResult(TypedDict):
@@ -36,6 +37,13 @@ class ShowPlatformHardwareThroughputLevelParser(
 
         The current throughput level is unthrottled
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.PLATFORM,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformHardwareThroughputLevelResult:

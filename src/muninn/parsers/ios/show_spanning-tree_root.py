@@ -1,11 +1,12 @@
 """Parser for 'show spanning-tree root' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 # --- Column header pattern ---
@@ -58,6 +59,13 @@ class ShowSpanningTreeRootParser(BaseParser[ShowSpanningTreeRootResult]):
         VLAN0002         11185 5c6e.f0a7.a0b0         0    2   20  15
         VLAN0003         11195 5c6e.f0a7.a0b0         0    2   20  15  Po34
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.STP,
+            ParserTag.SWITCHING,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowSpanningTreeRootResult:

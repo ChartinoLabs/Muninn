@@ -1,11 +1,12 @@
 """Parser for 'show interfaces transceiver' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -121,6 +122,8 @@ class ShowInterfaceTransceiverParser(
     voltage, bias current, transmit power, and receive power per
     interface.
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.INTERFACES})
 
     @classmethod
     def parse(cls, output: str) -> ShowInterfaceTransceiverResult:

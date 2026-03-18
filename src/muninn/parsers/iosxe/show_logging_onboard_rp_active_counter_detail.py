@@ -2,12 +2,13 @@
 
 import re
 from collections.abc import Mapping
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import SEPARATOR_DASH_RE
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class CounterSummaryEntry(TypedDict):
@@ -164,6 +165,13 @@ class ShowLoggingOnboardRpActiveCounterDetailParser(
          03/02/2023 03:08:48 obfl0:       4      1     20
          V02   C9400-SUP-1XL   A0         JAE22350LQR
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.LOGGING,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowLoggingOnboardRpActiveCounterDetailResult:

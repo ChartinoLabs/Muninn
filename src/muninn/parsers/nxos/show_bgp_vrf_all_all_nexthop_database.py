@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import re
-from typing import Any, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 # ---------------------------------------------------------------------------
 # TypedDict schemas
@@ -286,6 +287,8 @@ class ShowBgpVrfAllAllNexthopDatabaseParser(
     Parses the BGP next-hop database showing per-VRF, per-address-family
     next-hop entries with their resolution status, metrics, and flags.
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.BGP, ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowBgpVrfAllAllNexthopDatabaseResult:

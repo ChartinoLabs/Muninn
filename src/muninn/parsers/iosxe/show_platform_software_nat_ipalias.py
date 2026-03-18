@@ -1,12 +1,13 @@
 """Parser for 'show platform software nat ipalias' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class IpAliasEntry(TypedDict):
@@ -39,6 +40,13 @@ class ShowPlatformSoftwareNatIpaliasParser(
         IP Address          Table ID
         80.0.0.11           0
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.NAT,
+            ParserTag.PLATFORM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformSoftwareNatIpaliasResult:

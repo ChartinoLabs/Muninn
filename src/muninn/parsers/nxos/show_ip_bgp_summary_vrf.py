@@ -1,12 +1,13 @@
 """Parser for 'show ip bgp summary vrf' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class NeighborEntry(TypedDict):
@@ -245,6 +246,8 @@ class ShowIpBgpSummaryVrfParser(BaseParser["ShowIpBgpSummaryVrfResult"]):
     Parses VRF-scoped BGP summary information showing neighbor state
     and prefix counts across multiple VRFs and address families.
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.BGP, ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpBgpSummaryVrfResult:

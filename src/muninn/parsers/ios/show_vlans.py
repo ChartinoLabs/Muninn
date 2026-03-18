@@ -1,11 +1,12 @@
 """Parser for 'show vlans' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 # Matches both "VLAN ID: <id>" and "Virtual LAN ID:  <id>" header lines
@@ -336,6 +337,13 @@ class ShowVlansParser(BaseParser[ShowVlansResult]):
     Parses dot1q VLAN information including trunk interfaces,
     protocol counters, and per-interface traffic statistics.
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.SWITCHING,
+            ParserTag.VLAN,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowVlansResult:

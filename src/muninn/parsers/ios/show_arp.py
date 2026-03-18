@@ -1,12 +1,13 @@
 """Parser for 'show arp' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import IPV4_ADDRESS, MAC_ADDRESS
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ArpEntry(TypedDict):
@@ -33,6 +34,8 @@ class ShowArpParser(BaseParser[ShowArpResult]):
         Internet  10.1.18.122             -   58bf.eaff.e5b6  ARPA   GigabitEthernet0/0
         Internet  10.1.18.1              45   0012.7fff.04d7  ARPA   GigabitEthernet0/0
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.ARP})
 
     _ARP_ENTRY_PATTERN = re.compile(
         r"^Internet\s+"

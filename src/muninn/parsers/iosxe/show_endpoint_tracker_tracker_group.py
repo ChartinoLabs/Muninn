@@ -1,11 +1,12 @@
 """Parser for 'show endpoint-tracker tracker-group' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class TrackerGroupEntry(TypedDict):
@@ -34,6 +35,8 @@ class ShowEndpointTrackerTrackerGroupParser(
         group-udp-tcp      tcp-10002, udp-10002   UP(UP OR UP)
         group2             track1, track2         UP(UP OR UP)
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SDWAN})
 
     _ROW_PATTERN = re.compile(
         r"^(?P<name>\S+)\s+"

@@ -1,12 +1,13 @@
 """Parser for 'show ip arp' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import IPV4_ADDRESS, MAC_ADDRESS
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ArpEntry(TypedDict):
@@ -31,6 +32,8 @@ class ShowIpArpParser(BaseParser[ShowIpArpResult]):
 
     Parses ARP table entries showing IP to MAC address mappings.
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.ARP})
 
     # Pattern for ARP table entries
     # Protocol  Address          Age (min)  Hardware Addr   Type   Interface

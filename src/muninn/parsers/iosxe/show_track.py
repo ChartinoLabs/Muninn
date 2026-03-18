@@ -1,11 +1,12 @@
 """Parser for 'show track' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -248,6 +249,8 @@ class ShowTrackParser(BaseParser[ShowTrackResult]):
           Line protocol is Up
             1 change, last change 00:00:27
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.TRACKING})
 
     @classmethod
     def parse(cls, output: str) -> ShowTrackResult:

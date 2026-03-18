@@ -5,11 +5,12 @@ details with running state, CPLD/firmware versions, and timing information.
 """
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 # --- TypedDict schema ---
 
@@ -223,6 +224,13 @@ class ShowPlatformDiagParser(BaseParser[ShowPlatformDiagResult]):
           Physical insert detect time : 00:03:03 (3d10h ago)
           Logical insert detect time  : 00:03:03 (3d10h ago)
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.PLATFORM,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformDiagResult:

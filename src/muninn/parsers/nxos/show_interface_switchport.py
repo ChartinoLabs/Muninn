@@ -1,11 +1,12 @@
 """Parser for 'show interface switchport' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 # ---------------------------------------------------------------------------
@@ -239,6 +240,8 @@ class ShowInterfaceSwitchportParser(BaseParser["ShowInterfaceSwitchportResult"])
     Parses switchport configuration for each interface including mode,
     VLANs, trunking, and private VLAN settings.
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.INTERFACES})
 
     @classmethod
     def parse(cls, output: str) -> ShowInterfaceSwitchportResult:

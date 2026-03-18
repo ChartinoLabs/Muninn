@@ -1,11 +1,12 @@
 """Parser for 'show vlan access-map' command on NX-OS."""
 
 import re
-from typing import TypedDict, cast
+from typing import ClassVar, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class AccessMapMatch(TypedDict):
@@ -49,6 +50,13 @@ def _parse_access_map_line(line: str, state: dict[str, str | None]) -> None:
 @register(OS.CISCO_NXOS, "show vlan access-map")
 class ShowVlanAccessMapParser(BaseParser[ShowVlanAccessMapResult]):
     """Parser for 'show vlan access-map' command."""
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.SWITCHING,
+            ParserTag.VLAN,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowVlanAccessMapResult:

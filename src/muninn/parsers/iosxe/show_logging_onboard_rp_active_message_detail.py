@@ -1,12 +1,13 @@
 """Parser for 'show logging onboard rp active message detail' on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import SEPARATOR_DASH_RE
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class SummaryMessageEntry(TypedDict):
@@ -259,6 +260,13 @@ class ShowLoggingOnboardRpActiveMessageDetailParser(
         -------------------------------------------------------
         05/24/2023 18:42:22 %IOSXE-2-DIAGNOSTICS_PASSED : ...
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.LOGGING,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowLoggingOnboardRpActiveMessageDetailResult:

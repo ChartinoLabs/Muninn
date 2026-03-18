@@ -1,11 +1,12 @@
 """Parser for 'show ip bgp summary' command on IOS/IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class MemoryNetworkEntries(TypedDict):
@@ -379,6 +380,8 @@ def _split_address_families(lines: list[str]) -> list[tuple[str, list[str]]]:
 @register(OS.CISCO_IOSXE, "show ip bgp summary")
 class ShowIpBgpSummaryParser(BaseParser["ShowIpBgpSummaryResult"]):
     """Parser for 'show ip bgp summary' on IOS/IOS-XE."""
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.BGP, ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpBgpSummaryResult:

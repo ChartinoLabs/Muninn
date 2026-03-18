@@ -1,11 +1,12 @@
 """Parser for 'show platform software dpidb index' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -41,6 +42,13 @@ class ShowPlatformSoftwareDpidbIndexParser(
         Index 1028 -- swidb Gi0/0
         Index 1030 -- swidb Hu1/0/1
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.PLATFORM,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformSoftwareDpidbIndexResult:

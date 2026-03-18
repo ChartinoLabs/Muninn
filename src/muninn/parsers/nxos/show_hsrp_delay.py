@@ -1,11 +1,12 @@
 """Parser for 'show hsrp delay' command on NX-OS."""
 
 import re
-from typing import TypeAlias, TypedDict
+from typing import ClassVar, TypeAlias, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class DelayInfo(TypedDict):
@@ -32,6 +33,8 @@ class ShowHsrpDelayParser(BaseParser[ShowHsrpDelayResult]):
         Interface          Minimum Reload
         GigabitEthernet1   99      888
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.FHRP})
 
     _ROW_PATTERN = re.compile(
         r"^(?P<interface>\S+)\s+(?P<minimum>\d+)\s+(?P<reload>\d+)$"

@@ -1,11 +1,12 @@
 """Parser for 'show ip ospf database network' command on IOS."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class NetworkLsaEntry(TypedDict):
@@ -201,6 +202,13 @@ class ShowIpOspfDatabaseNetworkParser(
     BaseParser["ShowIpOspfDatabaseNetworkResult"],
 ):
     """Parser for 'show ip ospf database network' on IOS."""
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.OSPF,
+            ParserTag.ROUTING,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowIpOspfDatabaseNetworkResult:

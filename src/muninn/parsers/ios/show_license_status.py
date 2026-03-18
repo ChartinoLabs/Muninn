@@ -2,11 +2,12 @@
 
 import re
 from collections.abc import Callable
-from typing import Any, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 # --- Section header constants ---
 _SECTION_LICENSE_TYPE = "license type supported"
@@ -248,6 +249,8 @@ class ShowLicenseStatusParser(BaseParser["ShowLicenseStatusResult"]):
     Parses license type support, license operations, call-home operations,
     device credential status, and SWIFT URL configuration.
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     @classmethod
     def parse(cls, output: str) -> ShowLicenseStatusResult:

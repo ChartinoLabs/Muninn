@@ -1,11 +1,12 @@
 """Parser for 'show platform sudi certificate sign' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 # PEM certificate block boundaries
 _PEM_BEGIN = "-----BEGIN CERTIFICATE-----"
@@ -133,6 +134,13 @@ class ShowPlatformSudiCertificateSignParser(
         Signature:
         1809AF26E52292B71217418F6111DDD50707B516...
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.PLATFORM,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformSudiCertificateSignResult:

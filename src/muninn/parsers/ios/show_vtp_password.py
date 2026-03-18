@@ -1,11 +1,12 @@
 """Parser for 'show vtp password' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class VtpStatus(TypedDict):
@@ -24,6 +25,13 @@ class ShowVtpPasswordResult(TypedDict):
 @register(OS.CISCO_IOS, "show vtp password")
 class ShowVtpPasswordParser(BaseParser[ShowVtpPasswordResult]):
     """Parser for 'show vtp password' command."""
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.SWITCHING,
+            ParserTag.VTP,
+        }
+    )
 
     _NOT_CONFIGURED_PATTERN = re.compile(
         r"^The\s+VTP\s+password\s+is\s+not\s+configured\.$", re.I

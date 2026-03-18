@@ -1,11 +1,12 @@
 """Parser for 'show mac address-table dynamic' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -31,6 +32,13 @@ class ShowMacAddressTableDynamicResult(TypedDict):
 @register(OS.CISCO_IOSXE, "show mac address-table dynamic")
 class ShowMacAddressTableDynamicParser(BaseParser[ShowMacAddressTableDynamicResult]):
     """Parser for 'show mac address-table dynamic' command."""
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.MAC,
+            ParserTag.SWITCHING,
+        }
+    )
 
     _ROW_PATTERN = re.compile(
         r"^(?P<vlan>\d+)\s+(?P<mac>\S+)\s+(?P<type>\S+)\s+(?P<port>\S+)$"

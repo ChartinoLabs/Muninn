@@ -1,11 +1,12 @@
 """Parser for 'show ip route summary' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class RoutingTableInfo(TypedDict):
@@ -255,6 +256,8 @@ class ShowIpRouteSummaryParser(BaseParser["ShowIpRouteSummaryResult"]):
         eigrp 65329     3           3013        0           481920      868608
         Total           28          3057        0           486528      1122244
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpRouteSummaryResult:

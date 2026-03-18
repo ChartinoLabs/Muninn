@@ -5,11 +5,12 @@ Note: The command contains a typo in the actual IOS-XE CLI — it is
 """
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class L3Statistics(TypedDict):
@@ -275,6 +276,13 @@ class ShowPlatformSoftwareInfractructureInjectParser(
          28324 total BD  inject pak, 0 failed
          ...
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.PLATFORM,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(

@@ -1,11 +1,12 @@
 """Parser for 'show platform packet-trace summary' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -44,6 +45,13 @@ class ShowPlatformPacketTraceSummaryParser(
     Parses the per-packet summary table produced by IOS-XE packet-trace,
     keyed by packet number.
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.PLATFORM,
+            ParserTag.SYSTEM,
+        }
+    )
 
     # Matches lines like:
     #   0     Gi0/0/1          Gi0/0/0          FWD

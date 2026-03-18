@@ -1,11 +1,12 @@
 """Parser for 'show processes cpu' command on IOS/IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 # --- Summary line ---
 # "CPU utilization for five seconds: 1%/0%; one minute: 2%; five minutes: 3%"
@@ -115,6 +116,8 @@ def _parse_processes(lines: list[str]) -> dict[str, ProcessEntry]:
 @register(OS.CISCO_IOSXE, "show processes cpu")
 class ShowProcessesCpuParser(BaseParser["ShowProcessesCpuResult"]):
     """Parser for 'show processes cpu' on IOS/IOS-XE."""
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     @classmethod
     def parse(cls, output: str) -> ShowProcessesCpuResult:

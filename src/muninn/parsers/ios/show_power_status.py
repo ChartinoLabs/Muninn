@@ -1,11 +1,12 @@
 """Parser for 'show power status' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class PowerSupplyEntry(TypedDict):
@@ -113,6 +114,13 @@ class ShowPowerStatusParser(BaseParser[ShowPowerStatusResult]):
         PS1-1                         220V   good
         PS2     PWR-C4KX-750AC-R  AC 750W    good         good     n.a.
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.ENVIRONMENT,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowPowerStatusResult:

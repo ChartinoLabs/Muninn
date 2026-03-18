@@ -1,7 +1,7 @@
 """Parser for 'show access-list' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -11,6 +11,7 @@ from muninn.parsers.ios._acl_common import (
     parse_standard_ace_body,
 )
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class AccessListEntry(TypedDict):
@@ -111,6 +112,13 @@ class ShowAccessListParser(BaseParser[ShowAccessListResult]):
         Standard IP access list 1
             10 permit 10.1.2.3 log
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.ACL,
+            ParserTag.SECURITY,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowAccessListResult:

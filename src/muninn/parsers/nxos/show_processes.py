@@ -1,11 +1,12 @@
 """Parser for 'show processes' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ProcessEntry(TypedDict):
@@ -46,6 +47,8 @@ class ShowProcessesParser(BaseParser[ShowProcessesResult]):
             1      S  b8dffed3            1     -     O  init
             -     NR         -            0     -     X  ldap
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     @classmethod
     def parse(cls, output: str) -> ShowProcessesResult:

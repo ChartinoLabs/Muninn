@@ -1,11 +1,12 @@
 """Parser for 'show aliases' command on IOS."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class AliasEntry(TypedDict):
@@ -49,6 +50,8 @@ class ShowAliasesParser(BaseParser["ShowAliasesResult"]):
           lo                    logout
           p                     ping
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     @classmethod
     def parse(cls, output: str) -> ShowAliasesResult:

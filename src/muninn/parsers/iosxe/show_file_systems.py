@@ -1,11 +1,12 @@
 """Parser for 'show file systems' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class FileSystemEntry(TypedDict):
@@ -46,6 +47,8 @@ class ShowFileSystemsParser(BaseParser[ShowFileSystemsResult]):
         *  11353194496    9936510976      disk     rw   flash:
               2097152       2057602     nvram     rw   nvram:
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     _ROW_PATTERN = _ROW_PATTERN
 

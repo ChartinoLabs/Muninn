@@ -1,11 +1,12 @@
 """Parser for 'show environment' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class FanEntry(TypedDict):
@@ -454,6 +455,13 @@ class ShowEnvironmentParser(BaseParser[ShowEnvironmentResult]):
     Parses temperature sensors, fans, power supplies, modules,
     clocks, and power usage summary information.
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.ENVIRONMENT,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowEnvironmentResult:

@@ -1,11 +1,12 @@
 """Parser for 'show snmp user' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class SnmpUserEntry(TypedDict):
@@ -52,6 +53,8 @@ class ShowSnmpUserParser(BaseParser[ShowSnmpUserResult]):
         Privacy Protocol: AES128
         Group-name: managerpriv
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SNMP})
 
     _FIELD_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
         (_ENGINE_ID_PATTERN, "engine_id"),

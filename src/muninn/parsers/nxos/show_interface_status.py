@@ -1,11 +1,12 @@
 """Parser for 'show interface status' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -32,6 +33,8 @@ class ShowInterfaceStatusParser(BaseParser[ShowInterfaceStatusResult]):
 
     Parses interface status including description, VLAN, duplex, speed, and type.
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.INTERFACES})
 
     # Pattern for interface status entries
     # Port          Name               Status    Vlan      Duplex  Speed   Type

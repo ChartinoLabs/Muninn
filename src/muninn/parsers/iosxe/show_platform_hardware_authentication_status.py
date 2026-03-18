@@ -1,11 +1,12 @@
 """Parser for 'show platform hardware authentication status' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ComponentAuthEntry(TypedDict):
@@ -95,6 +96,13 @@ class ShowPlatformHardwareAuthenticationStatusParser(
         Line Card:1 Authentication:  pass
                SUP0 Authentication:  pass
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.PLATFORM,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformHardwareAuthenticationStatusResult:

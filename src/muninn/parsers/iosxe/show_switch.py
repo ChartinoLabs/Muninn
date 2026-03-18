@@ -1,11 +1,12 @@
 """Parser for 'show switch' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class SwitchEntry(TypedDict):
@@ -116,6 +117,8 @@ class ShowSwitchParser(BaseParser[ShowSwitchResult]):
         *1       Active   0c75.bd6e.db00     15     V02     Ready
          2       Member   0000.0000.0000     0              Provisioned
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     @classmethod
     def parse(cls, output: str) -> ShowSwitchResult:

@@ -1,11 +1,12 @@
 """Parser for 'show hsrp summary' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class GroupStats(TypedDict):
@@ -146,6 +147,8 @@ class ShowHsrpSummaryParser(BaseParser[ShowHsrpSummaryResult]):
         Total Groups: 3
              Version::    V1-IPV4: 0       V2-IPV4: 3      V2-IPV6: 0
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.FHRP})
 
     @classmethod
     def parse(cls, output: str) -> ShowHsrpSummaryResult:

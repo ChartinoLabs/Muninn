@@ -1,11 +1,12 @@
 """Parser for 'show bgp sessions' command on NX-OS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 # --- State abbreviation mapping ---
 
@@ -198,6 +199,8 @@ class ShowBgpSessionsParser(BaseParser["ShowBgpSessionsResult"]):
         VRF default, local ASN 333
         peers 3, established peers 2, local router-id 10.106.0.6
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.BGP, ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowBgpSessionsResult:

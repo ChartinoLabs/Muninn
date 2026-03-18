@@ -1,11 +1,12 @@
 """Parser for 'show meraki' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class SwitchEntry(TypedDict):
@@ -58,6 +59,8 @@ class ShowMerakiParser(BaseParser[ShowMerakiResult]):
         ---------------------------------------------------------------
         1  C9300-48P        FJC2345T05A  Q5TE-5HWS-J3G8  Registered C9K-C
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SDWAN})
 
     @classmethod
     def parse(cls, output: str) -> ShowMerakiResult:

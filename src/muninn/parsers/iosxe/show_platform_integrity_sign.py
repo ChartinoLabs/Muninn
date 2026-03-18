@@ -1,11 +1,12 @@
 """Parser for 'show platform integrity sign' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class BootSlotEntry(TypedDict):
@@ -227,6 +228,13 @@ class ShowPlatformIntegritySignParser(
         Signature:
         AD7B89E69E9F09C1...
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.PLATFORM,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformIntegritySignResult:

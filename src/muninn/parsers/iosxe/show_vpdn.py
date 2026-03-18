@@ -1,12 +1,13 @@
 """Parser for 'show vpdn' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class VpdnTunnelEntry(TypedDict):
@@ -133,6 +134,8 @@ class ShowVpdnParser(BaseParser[ShowVpdnResult]):
                                           Vcid, Circuit
          3542       56774      7658       lns@cisco.com, -     est    00:10:09 645
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.VPN})
 
     @classmethod
     def parse(cls, output: str) -> ShowVpdnResult:

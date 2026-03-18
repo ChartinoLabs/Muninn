@@ -3,6 +3,8 @@
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, ClassVar, Generic, TypeVar
 
+from muninn.tags import ParserTag
+
 if TYPE_CHECKING:
     from muninn.os import OS
 
@@ -19,10 +21,12 @@ class BaseParser(ABC, Generic[T_co]):
     Attributes:
         os: Operating system this parser is registered for.
         command: The command this parser handles.
+        tags: Descriptive tags for categorizing the parser (e.g., "routing", "ospf").
     """
 
     os: ClassVar["OS"]
     command: ClassVar[str]
+    tags: ClassVar[frozenset[ParserTag]] = frozenset()
 
     @classmethod
     @abstractmethod

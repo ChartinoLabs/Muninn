@@ -1,11 +1,12 @@
 """Parser for 'dir' commands on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class FileEntry(TypedDict):
@@ -67,6 +68,8 @@ class DirParser(BaseParser[DirResult]):
 
         1940303872 bytes total (1036210176 bytes free)
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     @classmethod
     def parse(cls, output: str) -> DirResult:

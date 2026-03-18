@@ -1,11 +1,12 @@
 """Parser for 'show redundancy config-sync failures mcl' command on IOS-XE."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 _EMPTY_LIST = re.compile(r"^The\s+list\s+is\s+Empty$", re.IGNORECASE)
 _HEADER = re.compile(r"^Mismatched\s+Command\s+List$", re.IGNORECASE)
@@ -88,6 +89,13 @@ class ShowRedundancyConfigSyncFailuresMclParser(
         - ip address 192.0.2.0 255.255.255.0
         ! </submode> "interface"
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.REDUNDANCY,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowRedundancyConfigSyncFailuresMclResult:

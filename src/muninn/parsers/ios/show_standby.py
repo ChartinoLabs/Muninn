@@ -3,11 +3,12 @@
 import re
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -412,6 +413,8 @@ class ShowStandbyParser(BaseParser[ShowStandbyResult]):
             1 state change, last state change 10w3d
           Virtual IP address is 10.0.52.161
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.FHRP})
 
     @classmethod
     def parse(cls, output: str) -> ShowStandbyResult:

@@ -1,11 +1,12 @@
 """Parser for 'show archive' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 # Marker indicating the most recent archive entry
 _MOST_RECENT_MARKER = "<- Most Recent"
@@ -87,6 +88,8 @@ def _try_parse_entry(stripped: str, result: ShowArchiveResult) -> bool:
 @register(OS.CISCO_IOS, "show archive")
 class ShowArchiveParser(BaseParser[ShowArchiveResult]):
     """Parser for 'show archive' command."""
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     @classmethod
     def parse(cls, output: str) -> ShowArchiveResult:

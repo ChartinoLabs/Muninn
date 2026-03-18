@@ -1,11 +1,12 @@
 """Parser for 'show processes memory' command on IOS/IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class PoolSummary(TypedDict):
@@ -117,6 +118,8 @@ def _parse_process_lines(
 @register(OS.CISCO_IOSXE, "show processes memory sorted")
 class ShowProcessesMemoryParser(BaseParser["ShowProcessesMemoryResult"]):
     """Parser for 'show processes memory' on IOS/IOS-XE."""
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     @classmethod
     def parse(cls, output: str) -> ShowProcessesMemoryResult:

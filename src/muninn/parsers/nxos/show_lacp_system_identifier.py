@@ -1,11 +1,12 @@
 """Parser for 'show lacp system-identifier' command on NX-OS."""
 
 import re
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ShowLacpSystemIdentifierResult(TypedDict):
@@ -22,6 +23,13 @@ class ShowLacpSystemIdentifierParser(BaseParser[ShowLacpSystemIdentifierResult])
     Example output:
         32768,5e-2-0-1-0-7
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.INTERFACES,
+            ParserTag.LAG,
+        }
+    )
 
     _PATTERN = re.compile(
         r"^\s*(?P<system_priority>\d+),\s*(?P<system_id_mac>[\w.\-]+)\s*$"

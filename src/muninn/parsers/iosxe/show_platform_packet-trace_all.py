@@ -1,11 +1,12 @@
 """Parser for 'show platform packet-trace all' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -205,6 +206,13 @@ class ShowPlatformPacketTraceAllParser(
             Start   : 19591545483878568 ns (07/27/2021 09:34:27.497712 UTC)
             Stop    : 19591545483897048 ns (07/27/2021 09:34:27.497731 UTC)
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.PLATFORM,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformPacketTraceAllResult:

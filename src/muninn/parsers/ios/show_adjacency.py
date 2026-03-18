@@ -1,11 +1,12 @@
 """Parser for 'show adjacency' command on IOS."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -45,6 +46,8 @@ class ShowAdjacencyParser(BaseParser[ShowAdjacencyResult]):
     Parses adjacency table entries showing protocol, interface, and
     next-hop address relationships.
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowAdjacencyResult:
