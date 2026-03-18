@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import SEPARATOR_DASH_RE
 from muninn.registry import register
 from muninn.utils import canonical_interface_name
 
@@ -55,7 +56,7 @@ class ShowBfdNeighborsDetailsResult(TypedDict):
 
 # --- Block splitting ---
 _NEIGHBOR_HEADER_RE = re.compile(r"^NeighAddr\b", re.IGNORECASE)
-_SEPARATOR_RE = re.compile(r"^-{3,}$")
+_SEPARATOR_RE = SEPARATOR_DASH_RE
 
 # --- Neighbor summary line (first data line in a block) ---
 # Header: NeighAddr  LD/RD  RH/RS  State  Int

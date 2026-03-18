@@ -5,6 +5,7 @@ from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 from muninn.utils import canonical_interface_name
 
@@ -41,7 +42,7 @@ class ShowIpEigrpNeighborsParser(BaseParser[ShowIpEigrpNeighborsResult]):
 
     _ROW_PATTERN = re.compile(
         r"^(?P<handle>\d+)\s+"
-        r"(?P<address>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+"
+        rf"(?P<address>{IPV4_ADDRESS})\s+"
         r"(?P<interface>\S+)\s+"
         r"(?P<hold>\d+)\s+"
         r"(?P<uptime>\S+)\s+"

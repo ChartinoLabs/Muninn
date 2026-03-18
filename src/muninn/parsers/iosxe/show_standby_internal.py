@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import MAC_ADDRESS
 from muninn.registry import register
 from muninn.utils import canonical_interface_name
 
@@ -67,9 +68,7 @@ _VIP_ROW = re.compile(
     r"^(?P<hash>\d+)\s+(?P<ip>\S+)\s+(?P<intf>\S+)\s+Grp\s+(?P<group>\d+)$"
 )
 _MAC_SECTION_HEADER = re.compile(r"^HSRP\s+MAC\s+Address\s+Table$", re.IGNORECASE)
-_MAC_HASH_ROW = re.compile(
-    r"^(?P<hash>\d+)\s+(?P<intf>\S+)\s+(?P<mac>[0-9a-fA-F]{4}\.[0-9a-fA-F]{4}\.[0-9a-fA-F]{4})$"
-)
+_MAC_HASH_ROW = re.compile(rf"^(?P<hash>\d+)\s+(?P<intf>\S+)\s+(?P<mac>{MAC_ADDRESS})$")
 _MAC_GRP_ROW = re.compile(r"^\S+\s+Grp\s+(?P<group>\d+)$")
 
 

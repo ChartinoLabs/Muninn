@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 
 
@@ -52,7 +53,7 @@ class ShowSdwanOmpPeersParser(BaseParser[ShowSdwanOmpPeersResult]):
     # 10.4.1.4    vsmart 1 1 4294945506up 6:13:57:28 4/0/4
     # 10.115.55.5 vedge  1 1 55 up        0:01:24:29 1/0/1
     _PEER_PATTERN = re.compile(
-        r"^(?P<peer>\d+\.\d+\.\d+\.\d+)\s+"
+        rf"^(?P<peer>{IPV4_ADDRESS})\s+"
         r"(?P<type>\S+)\s+"
         r"(?P<domain_id>\d+)\s+"
         r"(?P<overlay_id>\d+)\s+"
@@ -66,7 +67,7 @@ class ShowSdwanOmpPeersParser(BaseParser[ShowSdwanOmpPeersResult]):
     # 0  10.8.1.82  vsmart  1  1  1001  None  up  90:21:24:08  61/37/24
     _TENANT_PEER_PATTERN = re.compile(
         r"^(?P<tenant_id>\d+)\s+"
-        r"(?P<peer>\d+\.\d+\.\d+\.\d+)\s+"
+        rf"(?P<peer>{IPV4_ADDRESS})\s+"
         r"(?P<type>\S+)\s+"
         r"(?P<domain_id>\d+)\s+"
         r"(?P<overlay_id>\d+)\s+"

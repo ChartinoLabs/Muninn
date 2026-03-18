@@ -124,7 +124,7 @@ class ShowCdpNeighborsDetailParser(
 
     _DEVICE_ID_PATTERN = re.compile(r"^Device ID:\s*(.+)$")
     _SYSTEM_NAME_PATTERN = re.compile(r"^System Name:\s*(.+)$")
-    _IPV4_ADDRESS_PATTERN = re.compile(
+    _IPV4_ADDRESSESS_PATTERN = re.compile(
         r"^\s+IPv4 Address:\s*(\S+)$",
     )
     _PLATFORM_CAPS_PATTERN = re.compile(
@@ -281,7 +281,7 @@ class ShowCdpNeighborsDetailParser(
         """
         if not state.addr_section:
             return False
-        ipv4_match = cls._IPV4_ADDRESS_PATTERN.match(line)
+        ipv4_match = cls._IPV4_ADDRESSESS_PATTERN.match(line)
         if not ipv4_match:
             return False
 

@@ -5,6 +5,7 @@ from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 from muninn.utils import canonical_interface_name
 
@@ -41,7 +42,7 @@ class ShowIpInterfaceBriefParser(BaseParser[ShowIpInterfaceBriefResult]):
     # ucse1/0/0              10.19.14.1      YES other  administratively down down
     _INTERFACE_PATTERN = re.compile(
         r"^(?P<interface>\S+)\s+"
-        r"(?P<ip_address>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|unassigned)\s+"
+        rf"(?P<ip_address>{IPV4_ADDRESS}|unassigned)\s+"
         r"(?P<ok>YES|NO)\s+"
         r"(?P<method>\S+)\s+"
         r"(?P<status>up|down|administratively down|deleted)\s+"

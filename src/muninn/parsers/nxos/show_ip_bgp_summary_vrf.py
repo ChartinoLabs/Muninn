@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 
 
@@ -69,7 +70,7 @@ _TYPE_HEADER_RE = re.compile(r"^\s*Neighbor\s+T\s+AS\s+PfxRcd")
 
 # Single-line neighbor entry: all fields on one line
 _NEIGHBOR_SINGLE_RE = re.compile(
-    r"^(?P<neighbor>\d+\.\d+\.\d+\.\d+)\s+"
+    rf"^(?P<neighbor>{IPV4_ADDRESS})\s+"
     r"(?P<version>\d+)\s+"
     r"(?P<as>\d+)\s+"
     r"(?P<msg_rcvd>\d+)\s+"
@@ -83,7 +84,7 @@ _NEIGHBOR_SINGLE_RE = re.compile(
 
 # Wrapped neighbor: first line has neighbor, version, AS only
 _NEIGHBOR_WRAP_FIRST_RE = re.compile(
-    r"^(?P<neighbor>\d+\.\d+\.\d+\.\d+)\s+"
+    rf"^(?P<neighbor>{IPV4_ADDRESS})\s+"
     r"(?P<version>\d+)\s+"
     r"(?P<as>\d+)\s*$"
 )

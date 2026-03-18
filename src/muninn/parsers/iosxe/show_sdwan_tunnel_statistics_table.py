@@ -5,6 +5,7 @@ from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 
 
@@ -65,11 +66,11 @@ class ShowSdwanTunnelStatisticsTableParser(
 
     _ROW_PATTERN = re.compile(
         r"^(?P<protocol>\S+)\s+"
-        r"(?P<source_ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+"
-        r"(?P<dest_ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+"
+        rf"(?P<source_ip>{IPV4_ADDRESS})\s+"
+        rf"(?P<dest_ip>{IPV4_ADDRESS})\s+"
         r"(?P<source_port>\d+)\s+"
         r"(?P<dest_port>\d+)\s+"
-        r"(?P<system_ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+"
+        rf"(?P<system_ip>{IPV4_ADDRESS})\s+"
         r"(?P<local_color>\S+)\s+"
         r"(?P<remote_color>\S+)\s+"
         r"(?P<tunnel_mtu>\d+)\s+"

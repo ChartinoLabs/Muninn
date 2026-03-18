@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import SEPARATOR_DASH_SPACE_RE
 from muninn.registry import register
 from muninn.utils import canonical_interface_name
 
@@ -41,7 +42,7 @@ _BASIC_HEADER = re.compile(r"^VLAN\s+Name\s+Status\s+Ports\s*$")
 _TYPE_HEADER = re.compile(r"^VLAN\s+Type\s+Vlan-mode\s*$")
 _REMOTE_SPAN_HEADER = re.compile(r"^Remote SPAN VLANs\s*$")
 _PV_HEADER = re.compile(r"^Primary\s+Secondary\s+Type\s+Ports\s*$")
-_SEPARATOR = re.compile(r"^[-\s]+$")
+_SEPARATOR = SEPARATOR_DASH_SPACE_RE
 
 # Column positions for the basic VLAN table (consistent across NX-OS samples)
 _NAME_COL = 5

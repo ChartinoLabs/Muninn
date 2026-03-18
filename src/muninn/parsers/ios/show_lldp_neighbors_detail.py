@@ -7,6 +7,7 @@ from netutils.interface import canonical_interface_name
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import SEPARATOR_DASH_RE
 from muninn.registry import register
 
 _NOT_ADVERTISED = "- not advertised"
@@ -124,7 +125,7 @@ class ShowLldpNeighborsDetailParser(
 
     tags: ClassVar[frozenset[str]] = frozenset({"lldp"})
 
-    _SEPARATOR = re.compile(r"^-{3,}$")
+    _SEPARATOR = SEPARATOR_DASH_RE
     _LOCAL_INTF = re.compile(r"^Local Intf:\s+(?P<v>\S+)")
     _CHASSIS_ID = re.compile(r"^Chassis id:\s+(?P<v>.+)$")
     _PORT_ID = re.compile(r"^Port id:\s+(?P<v>.+)$")

@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import MAC_ADDRESS
 from muninn.registry import register
 from muninn.utils import canonical_interface_name
 
@@ -58,7 +59,7 @@ class ShowMacAddressTableParser(BaseParser[ShowMacAddressTableResult]):
     tags: ClassVar[frozenset[str]] = frozenset({"mac", "switching"})
 
     # Match MAC table entry lines. The format is:
-    # [flag] VLAN  MAC_ADDRESS  TYPE  AGE  SECURE  NTFY  PORTS [extra]
+    # [flag] VLAN  MAC_ADDRESSESS  TYPE  AGE  SECURE  NTFY  PORTS [extra]
     #
     # Examples:
     # *   10     aaaa.bbff.8888   static   -         F      F    Eth1/2
@@ -68,7 +69,7 @@ class ShowMacAddressTableParser(BaseParser[ShowMacAddressTableResult]):
     _ENTRY_PATTERN = re.compile(
         r"^(?P<flag>[*+G])?\s*"
         r"(?P<vlan>\d+|-)\s+"
-        r"(?P<mac>[0-9a-fA-F]{4}\.[0-9a-fA-F]{4}\.[0-9a-fA-F]{4})\s+"
+        rf"(?P<mac>{MAC_ADDRESS})\s+"
         r"(?P<type>static|dynamic)\s+"
         r"(?P<age>\d+|-|NA|~~~)\s+"
         r"(?P<secure>[FT])\s+"

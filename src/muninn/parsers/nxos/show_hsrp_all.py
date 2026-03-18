@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 
 
@@ -146,9 +147,7 @@ class ShowHsrpAllParser(BaseParser[ShowHsrpAllResult]):
     _REDUNDANCY_NAME_PATTERN = re.compile(r"IP redundancy name is (?P<name>\S+)")
 
     # Secondary VIP listed under "Secondary VIP(s):" section
-    _SECONDARY_VIP_LIST_PATTERN = re.compile(
-        r"^\s+(?P<vip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s*$"
-    )
+    _SECONDARY_VIP_LIST_PATTERN = re.compile(rf"^\s+(?P<vip>{IPV4_ADDRESS})\s*$")
 
     @classmethod
     def _new_entry(cls, match: re.Match[str]) -> HsrpGroupEntry:

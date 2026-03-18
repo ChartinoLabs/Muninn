@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 from muninn.utils import canonical_interface_name
 
@@ -41,8 +42,8 @@ _HOLDDOWN_RE = re.compile(r"^(\d+)\((\d+)\)$")
 # Tabular data line — starts with optional * then an IP address
 _DATA_LINE_RE = re.compile(
     r"^\*?"
-    r"(?P<our_addr>\d+\.\d+\.\d+\.\d+)\s+"
-    r"(?P<neigh_addr>\d+\.\d+\.\d+\.\d+)\s+"
+    rf"(?P<our_addr>{IPV4_ADDRESS})\s+"
+    rf"(?P<neigh_addr>{IPV4_ADDRESS})\s+"
     r"(?P<ld>\d+)/(?P<rd>\d+)\s+"
     r"(?P<rh_rs>\S+)\s+"
     r"(?P<holddown>\d+\(\d+\))\s+"

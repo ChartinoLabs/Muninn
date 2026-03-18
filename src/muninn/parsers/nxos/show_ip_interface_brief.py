@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 from muninn.utils import canonical_interface_name
 
@@ -52,7 +53,7 @@ class ShowIpInterfaceBriefParser(BaseParser[ShowIpInterfaceBriefResult]):
     # tunnel-te11          unnumbered      protocol-up/link-up/admin-up
     _INTERFACE_PATTERN = re.compile(
         r"^(?P<interface>\S+)\s+"
-        r"(?P<ip_address>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|unnumbered|forward-enabled)\s+"
+        rf"(?P<ip_address>{IPV4_ADDRESS}|unnumbered|forward-enabled)\s+"
         r"protocol-(?P<protocol>up|down)/link-(?P<link>up|down)/admin-(?P<admin>up|down)"
     )
 

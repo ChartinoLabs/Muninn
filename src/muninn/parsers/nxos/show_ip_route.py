@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 from muninn.utils import canonical_interface_name
 
@@ -61,7 +62,7 @@ _VRF_HEADER_PATTERN = re.compile(r'^IP Route Table for VRF "(?P<vrf>.+)"')
 
 # Route prefix line: 10.10.0.21/32, ubest/mbest: 1/0[, flags...]
 _ROUTE_PREFIX_PATTERN = re.compile(
-    r"^(?P<prefix>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
+    rf"^(?P<prefix>{IPV4_ADDRESS})"
     r"/(?P<mask>\d{1,2}),\s+"
     r"ubest/mbest:\s+(?P<ubest>\d+)/(?P<mbest>\d+)"
     r"(?P<flags>(?:,\s*\S+)*)"

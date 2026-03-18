@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import SEPARATOR_DASH_SPACE_RE
 from muninn.registry import register
 
 
@@ -51,7 +52,7 @@ _DIAG_HEADER = re.compile(
     re.IGNORECASE,
 )
 _POWER_HEADER = re.compile(r"^Mod\s+Power-Status\s+Reason", re.IGNORECASE)
-_SEPARATOR = re.compile(r"^[-\s]+$")
+_SEPARATOR = SEPARATOR_DASH_SPACE_RE
 _DASH_GROUP = re.compile(r"-+")
 
 # Data row patterns for non-column-position sections

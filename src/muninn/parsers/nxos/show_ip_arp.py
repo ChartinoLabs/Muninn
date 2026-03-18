@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS, MAC_ADDRESS
 from muninn.registry import register
 from muninn.utils import canonical_interface_name
 
@@ -38,9 +39,9 @@ class ShowIpArpParser(BaseParser[ShowIpArpResult]):
     # 10.215.51.250      -      0000.0c9f.f9d3  Vlan2515
     # 10.5.6.10       00:00:16  INCOMPLETE      Vlan1425
     _ARP_ENTRY_PATTERN = re.compile(
-        r"^(?P<address>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+"
+        rf"^(?P<address>{IPV4_ADDRESS})\s+"
         r"(?P<age>-|\d{2}:\d{2}:\d{2})\s+"
-        r"(?P<mac_address>[0-9a-fA-F]{4}\.[0-9a-fA-F]{4}\.[0-9a-fA-F]{4}|INCOMPLETE)\s+"
+        rf"(?P<mac_address>{MAC_ADDRESS}|INCOMPLETE)\s+"
         r"(?P<interface>\S+)"
     )
 

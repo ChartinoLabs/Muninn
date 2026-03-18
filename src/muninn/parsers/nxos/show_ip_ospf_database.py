@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 
 # --- LSA type name mapping from section headers ---
@@ -61,8 +62,8 @@ _COLUMN_HEADER_RE = re.compile(r"^\s*Link ID\s+ADV Router\s+Age\s+Seq#\s+Checksu
 
 # --- LSA entry: with link count ---
 _LSA_WITH_COUNT_RE = re.compile(
-    r"^(\d+\.\d+\.\d+\.\d+)\s+"
-    r"(\d+\.\d+\.\d+\.\d+)\s+"
+    rf"^({IPV4_ADDRESS})\s+"
+    rf"({IPV4_ADDRESS})\s+"
     r"(\d+)\s+"
     r"(0x[0-9a-fA-F]+)\s+"
     r"(0x[0-9a-fA-F]+)\s+"
@@ -71,8 +72,8 @@ _LSA_WITH_COUNT_RE = re.compile(
 
 # --- LSA entry: without link count (network, summary, external without tag) ---
 _LSA_NO_COUNT_RE = re.compile(
-    r"^(\d+\.\d+\.\d+\.\d+)\s+"
-    r"(\d+\.\d+\.\d+\.\d+)\s+"
+    rf"^({IPV4_ADDRESS})\s+"
+    rf"({IPV4_ADDRESS})\s+"
     r"(\d+)\s+"
     r"(0x[0-9a-fA-F]+)\s+"
     r"(0x[0-9a-fA-F]+)\s*$"

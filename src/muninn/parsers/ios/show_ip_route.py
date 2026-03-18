@@ -5,6 +5,7 @@ from typing import ClassVar, Literal, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 from muninn.utils import canonical_interface_name
 
@@ -118,9 +119,7 @@ _GATEWAY_NOT_SET_RE = re.compile(r"^Gateway of last resort is not set\s*$")
 _VRF_RE = re.compile(r"^Routing Table:\s*(\S+)\s*$")
 
 # Subnet summary lines (ignored)
-_SUBNET_SUMMARY_RE = re.compile(
-    r"^\s+\d+\.\d+\.\d+\.\d+/\d+ is (?:variably )?subnetted"
-)
+_SUBNET_SUMMARY_RE = re.compile(rf"^\s+{IPV4_ADDRESS}/\d+ is (?:variably )?subnetted")
 
 # Route entry line - captures flags, protocol code, type code, and the rest
 # Examples:
@@ -136,7 +135,7 @@ _ROUTE_RE = re.compile(
     r"^([A-Za-z][\w]?)\s*"  # protocol code (1-2 chars)
     r"([*+%p&]*)?\s*"  # optional flags after protocol
     r"(?:(IA|E[12]|N[12]|EX|L[12]|ia|su)\s+)?"  # optional type code
-    r"(\d+\.\d+\.\d+\.\d+(?:/\d+)?)\s*"  # network/prefix
+    rf"({IPV4_ADDRESS}(?:/\d+)?)\s*"  # network/prefix
     r"(.*)$"  # rest of the line (may be empty for multi-line routes)
 )
 
@@ -144,7 +143,7 @@ _ROUTE_RE = re.compile(
 # Groups: 1=AD, 2=metric, 3=next_hop_ip, 4=vrf_leak, 5=age, 6=interface
 _CONTINUATION_RE = re.compile(
     r"^\s+\[(\d+)/(\d+)\]\s+via\s+"
-    r"(\d+\.\d+\.\d+\.\d+)"  # next-hop IP
+    rf"({IPV4_ADDRESS})"  # next-hop IP
     r"(?:\s+\((\S+)\))?"  # optional VRF leak
     r"(?:,\s*(\S+))?"  # optional age or interface
     r"(?:,\s*(\S+))?"  # optional interface
@@ -155,7 +154,7 @@ _CONTINUATION_RE = re.compile(
 # Groups: 1=AD, 2=metric, 3=next_hop_ip, 4=vrf_leak, 5=age, 6=interface
 _NEXTHOP_VIA_RE = re.compile(
     r"\[(\d+)/(\d+)\]\s+via\s+"
-    r"(\d+\.\d+\.\d+\.\d+)"  # next-hop IP
+    rf"({IPV4_ADDRESS})"  # next-hop IP
     r"(?:\s+\((\S+)\))?"  # optional VRF leak
     r"(?:,\s*(\S+))?"  # optional age or interface
     r"(?:,\s*(\S+))?"  # optional interface
@@ -435,7 +434,7 @@ def _extract_vrf(line: str) -> str | None:
 
 def _get_subnet_mask(line: str) -> str | None:
     """Extract the classful prefix from a subnet summary line."""
-    m = re.match(r"\s+(\d+\.\d+\.\d+\.\d+/\d+)\s+is\s+", line)
+    m = re.match(rf"\s+({IPV4_ADDRESS}/\d+)\s+is\s+", line)
     if m:
         return m.group(1)
     return None

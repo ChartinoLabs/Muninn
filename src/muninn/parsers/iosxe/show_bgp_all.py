@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 
 
@@ -83,13 +84,13 @@ _ROUTE_RE = re.compile(
     r"\s*"
     r"(?P<network>\S+)?"
     r"\s+"
-    r"(?P<nexthop>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|[:0-9A-Fa-f]+:[:0-9A-Fa-f]+)"
+    rf"(?P<nexthop>{IPV4_ADDRESS}|[:0-9A-Fa-f]+:[:0-9A-Fa-f]+)"
     r"(?=\s)"
 )
 
 _CONTINUATION_RE = re.compile(
     r"^\s+"
-    r"(?P<nexthop>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|[:0-9A-Fa-f]+:[:0-9A-Fa-f]+)"
+    rf"(?P<nexthop>{IPV4_ADDRESS}|[:0-9A-Fa-f]+:[:0-9A-Fa-f]+)"
     r"(?=\s)"
 )
 
