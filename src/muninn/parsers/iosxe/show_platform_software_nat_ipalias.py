@@ -5,6 +5,7 @@ from typing import TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 
 
@@ -21,9 +22,7 @@ class ShowPlatformSoftwareNatIpaliasResult(TypedDict):
 
 
 # Matches data lines: "80.0.0.11           0"
-_ENTRY = re.compile(
-    r"^(?P<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+(?P<table_id>\d+)\s*$"
-)
+_ENTRY = re.compile(rf"^(?P<ip>{IPV4_ADDRESS})\s+(?P<table_id>\d+)\s*$")
 
 # Header line to skip
 _HEADER = re.compile(r"^IP\s+Address\s+Table\s+ID", re.IGNORECASE)

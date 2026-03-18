@@ -6,6 +6,7 @@ from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import SEPARATOR_DASH_RE
 from muninn.registry import register
 
 
@@ -43,7 +44,7 @@ class ShowLoggingOnboardRpActiveCounterDetailResult(TypedDict):
 # Section headers
 _SUMMARY_HEADER = re.compile(r"^COUNTER\s+SUMMARY\s+INFORMATION$")
 _CONTINUOUS_HEADER = re.compile(r"^COUNTER\s+LOGGING\s+CONTINUOUS\s+INFORMATION$")
-_SEPARATOR = re.compile(r"^-{3,}$")
+_SEPARATOR = SEPARATOR_DASH_RE
 
 # Summary row with VID present:
 # 1,V02,C9400-SUP-1XL       ,A0  ,JAE22350LQR,20

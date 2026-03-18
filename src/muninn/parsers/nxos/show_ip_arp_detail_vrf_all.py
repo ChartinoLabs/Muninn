@@ -5,6 +5,7 @@ from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS, MAC_ADDRESS
 from muninn.registry import register
 from muninn.utils import canonical_interface_name
 
@@ -27,9 +28,9 @@ class ShowIpArpDetailVrfAllResult(TypedDict):
 
 
 _ARP_DETAIL_PATTERN = re.compile(
-    r"^(?P<address>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+"
+    rf"^(?P<address>{IPV4_ADDRESS})\s+"
     r"(?P<age>-|\d{2}:\d{2}:\d{2})\s+"
-    r"(?P<mac>[0-9a-fA-F]{4}\.[0-9a-fA-F]{4}\.[0-9a-fA-F]{4}|INCOMPLETE)\s+"
+    rf"(?P<mac>{MAC_ADDRESS}|INCOMPLETE)\s+"
     r"(?P<interface>\S+)\s+"
     r"(?P<physical_interface>\S+)"
     r"(?:\s+(?P<flags>[\*\+\#]+|CP|PS|RO))?"

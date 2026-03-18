@@ -5,6 +5,7 @@ from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 
 
@@ -48,7 +49,7 @@ _TYPE_PATTERN = re.compile(
 _PEER_ROW_PATTERN = re.compile(
     r"^\s*(?P<ent>\d+)\s+"
     r"(?P<nbma>\S+)\s+"
-    r"(?P<tunnel>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+"
+    rf"(?P<tunnel>{IPV4_ADDRESS})\s+"
     r"(?P<state>\S+)\s+"
     r"(?P<uptime>\S+)\s+"
     r"(?P<attrb>\S+)\s*$"
@@ -56,7 +57,7 @@ _PEER_ROW_PATTERN = re.compile(
 
 # Continuation row (no entry count, starts with tunnel IP after stripping)
 _CONTINUATION_PATTERN = re.compile(
-    r"^(?P<tunnel>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+"
+    rf"^(?P<tunnel>{IPV4_ADDRESS})\s+"
     r"(?P<state>\S+)\s+"
     r"(?P<uptime>\S+)\s+"
     r"(?P<attrb>\S+)\s*$"

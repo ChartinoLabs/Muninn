@@ -5,6 +5,7 @@ from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 
 
@@ -39,7 +40,7 @@ class ShowNvePeersParser(BaseParser[ShowNvePeersResult]):
         r"^(?P<interface>\S+)\s+"
         r"(?P<vni>\d+)\s+"
         r"(?P<type>\S+)\s+"
-        r"(?P<peer_ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s+"
+        rf"(?P<peer_ip>{IPV4_ADDRESS})\s+"
         r"(?P<rmac_num_rt>\S+)\s+"
         r"(?P<evni>\d+)\s+"
         r"(?P<state>\S+)\s+"

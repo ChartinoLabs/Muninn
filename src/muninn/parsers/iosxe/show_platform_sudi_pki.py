@@ -5,6 +5,7 @@ from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import SEPARATOR_DASH_RE
 from muninn.registry import register
 
 
@@ -28,7 +29,7 @@ class ShowPlatformSudiPkiResult(TypedDict):
 _CERT_STATUS = re.compile(r"^'(?P<name>[^']+)'\s+certificate\s*:\s*(?P<status>\S+)\s*$")
 
 # Table header separator line
-_SEPARATOR = re.compile(r"^-{3,}$")
+_SEPARATOR = SEPARATOR_DASH_RE
 
 # Table header line prefix
 _TABLE_HEADER_PREFIX = "SUDI Issuer-CN"

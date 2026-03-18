@@ -5,6 +5,7 @@ from typing import Any, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import SEPARATOR_DASH_RE
 from muninn.registry import register
 
 
@@ -53,7 +54,7 @@ _SUMMARY_HEADER = re.compile(r"^ENVIRONMENT\s+SUMMARY\s+INFORMATION$")
 _CONTINUOUS_HEADER = re.compile(r"^ENVIRONMENT\s+CONTINUOUS\s+INFORMATION$")
 
 # Separator lines: ----...
-_SEPARATOR = re.compile(r"^-{3,}$")
+_SEPARATOR = SEPARATOR_DASH_RE
 
 # Column header lines to skip
 _COLUMN_HEADER = re.compile(r"^(?:MM/DD/YYYY|VID)\s+", re.IGNORECASE)

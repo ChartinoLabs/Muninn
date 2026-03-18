@@ -5,6 +5,7 @@ from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import SEPARATOR_DASH_SPACE_RE
 from muninn.registry import register
 from muninn.utils import canonical_interface_name
 
@@ -43,7 +44,7 @@ _ROW_PATTERN = re.compile(
 _HEADER_PATTERN = re.compile(r"^Local\s+intf", re.IGNORECASE)
 
 # Separator line (dashes).
-_SEPARATOR_PATTERN = re.compile(r"^[-\s]+$")
+_SEPARATOR_PATTERN = SEPARATOR_DASH_SPACE_RE
 
 # Detail line patterns for extended output (show mpls l2transport vc detail).
 _LABEL_PATTERN = re.compile(

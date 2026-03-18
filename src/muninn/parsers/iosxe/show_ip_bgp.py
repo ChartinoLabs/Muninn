@@ -5,6 +5,7 @@ from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 
 
@@ -63,14 +64,14 @@ _ROUTE_RE = re.compile(
     r"\s*"  # optional spacing after prefix
     r"(?P<network>\d\S+)?"  # optional network (starts with digit)
     r"\s+"  # whitespace separator
-    r"(?P<nexthop>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"  # next hop IPv4
+    rf"(?P<nexthop>{IPV4_ADDRESS})"  # next hop IPv4
     r"(?=\s)"  # must be followed by whitespace (not CIDR slash)
 )
 
 # Continuation line: only next-hop and data fields, deeply indented.
 _CONTINUATION_RE = re.compile(
     r"^\s+"  # leading whitespace
-    r"(?P<nexthop>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"  # next hop IPv4
+    rf"(?P<nexthop>{IPV4_ADDRESS})"  # next hop IPv4
     r"(?=\s)"  # must be followed by whitespace
 )
 
