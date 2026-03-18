@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ShowPortSecurityInterfaceResult(TypedDict):
@@ -113,7 +114,7 @@ class ShowPortSecurityInterfaceParser(
     addresses, violation mode, aging settings, and security violation count.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"security"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SECURITY})
 
     @classmethod
     def parse(cls, output: str) -> ShowPortSecurityInterfaceResult:

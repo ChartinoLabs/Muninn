@@ -6,6 +6,7 @@ from typing import ClassVar, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ShowClockResult(TypedDict):
@@ -33,7 +34,7 @@ class ShowClockParser(BaseParser[ShowClockResult]):
         18:56:04.554 EST Mon Oct 17 2016
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     # Pattern matches: [*|.]HH:MM:SS.mmm TZ Day Mon DD YYYY
     _CLOCK_PATTERN = re.compile(

@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 # PEM certificate block boundaries
 _PEM_BEGIN = "-----BEGIN CERTIFICATE-----"
@@ -134,7 +135,12 @@ class ShowPlatformSudiCertificateSignParser(
         1809AF26E52292B71217418F6111DDD50707B516...
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"platform", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.PLATFORM,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformSudiCertificateSignResult:

@@ -6,6 +6,7 @@ from typing import ClassVar, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -36,7 +37,7 @@ class ShowPowerInlineConsumptionParser(
         Gi1/4          NO                 0.0
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"poe", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.POE, ParserTag.SYSTEM})
 
     _ROW_PATTERN = re.compile(
         r"^(?P<interface>\S+)\s+(?P<configured>YES|NO)\s+(?P<watts>\d+(?:\.\d+)?)$",

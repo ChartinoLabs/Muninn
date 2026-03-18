@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -100,7 +101,12 @@ class ShowIsisNeighborsParser(BaseParser["ShowIsisNeighborsResult"]):
         XRv3            L1   Gi2           10.1.2.3        UP    8        XRv3.03
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"isis", "routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.ISIS,
+            ParserTag.ROUTING,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowIsisNeighborsResult:

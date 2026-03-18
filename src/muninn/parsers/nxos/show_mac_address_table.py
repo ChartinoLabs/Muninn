@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import MAC_ADDRESS
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 # Entry flag character to descriptive string mapping
@@ -56,7 +57,12 @@ class ShowMacAddressTableParser(BaseParser[ShowMacAddressTableResult]):
     VLAN, MAC address, type, age, security flags, and port information.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"mac", "switching"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.MAC,
+            ParserTag.SWITCHING,
+        }
+    )
 
     # Match MAC table entry lines. The format is:
     # [flag] VLAN  MAC_ADDRESSESS  TYPE  AGE  SECURE  NTFY  PORTS [extra]

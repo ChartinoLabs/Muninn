@@ -8,6 +8,7 @@ from netutils.interface import canonical_interface_name
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class PeerLinkEntry(TypedDict):
@@ -160,7 +161,7 @@ class ShowVpcParser(BaseParser["ShowVpcResult"]):
     Parses vPC domain status, peer-link information, and vPC member ports.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"vpc"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.VPC})
 
     @classmethod
     def parse(cls, output: str) -> ShowVpcResult:

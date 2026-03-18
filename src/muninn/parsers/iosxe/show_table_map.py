@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class MappingEntry(TypedDict):
@@ -86,7 +87,7 @@ class ShowTableMapParser(BaseParser[ShowTableMapResult]):
         default copy
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"qos"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.QOS})
 
     @classmethod
     def parse(cls, output: str) -> ShowTableMapResult:

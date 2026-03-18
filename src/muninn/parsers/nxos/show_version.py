@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class UptimeInfo(TypedDict):
@@ -80,7 +81,12 @@ class ShowVersionParser(BaseParser[ShowVersionResult]):
     Supports both modern NX-OS format and legacy kickstart/system format.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"inventory", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.INVENTORY,
+            ParserTag.SYSTEM,
+        }
+    )
 
     # Software version patterns
     _BIOS_VERSION = re.compile(r"^\s*BIOS:\s*version\s+(?P<version>\S+)", re.I)

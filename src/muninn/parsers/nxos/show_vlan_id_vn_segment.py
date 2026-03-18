@@ -6,6 +6,7 @@ from typing import ClassVar, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class VlanSegmentEntry(TypedDict):
@@ -25,7 +26,12 @@ class ShowVlanIdVnSegmentResult(TypedDict):
 class ShowVlanIdVnSegmentParser(BaseParser[ShowVlanIdVnSegmentResult]):
     """Parser for 'show vlan id 1-4093 vn-segment' command."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"switching", "vlan"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.SWITCHING,
+            ParserTag.VLAN,
+        }
+    )
 
     _ROW_PATTERN = re.compile(r"^(?P<vlan>\d+)\s+(?P<segment>\d+)$")
 

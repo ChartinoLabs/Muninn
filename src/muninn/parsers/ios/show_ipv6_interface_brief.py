@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict, cast
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 # Interface header line: "InterfaceName    [status/protocol]"
@@ -41,7 +42,7 @@ class ShowIpv6InterfaceBriefParser(
     status, protocol, and assigned IPv6 addresses.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"interfaces"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.INTERFACES})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpv6InterfaceBriefResult:

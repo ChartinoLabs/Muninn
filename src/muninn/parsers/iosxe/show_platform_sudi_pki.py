@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import SEPARATOR_DASH_RE
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class SudiIssuerEntry(TypedDict):
@@ -80,7 +81,12 @@ class ShowPlatformSudiPkiParser(BaseParser["ShowPlatformSudiPkiResult"]):
         Cisco Manufacturing CA SHA2         Valid
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"platform", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.PLATFORM,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformSudiPkiResult:

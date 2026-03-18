@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class PowerSummaryEntry(TypedDict):
@@ -85,7 +86,12 @@ class ShowPowerAvailableParser(BaseParser[ShowPowerAvailableResult]):
         Inline Power (-50V)       683        3189
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"environment", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.ENVIRONMENT,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowPowerAvailableResult:

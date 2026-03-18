@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class NeighborEntry(TypedDict):
@@ -163,7 +164,7 @@ class ShowBgpSummaryParser(BaseParser["ShowBgpSummaryResult"]):
         10.5.17.1      4  150  220  217    60   0   0 03:08:19   15
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"bgp", "routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.BGP, ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowBgpSummaryResult:

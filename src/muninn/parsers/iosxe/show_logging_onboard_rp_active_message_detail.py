@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import SEPARATOR_DASH_RE
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class SummaryMessageEntry(TypedDict):
@@ -260,7 +261,12 @@ class ShowLoggingOnboardRpActiveMessageDetailParser(
         05/24/2023 18:42:22 %IOSXE-2-DIAGNOSTICS_PASSED : ...
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"logging", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.LOGGING,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowLoggingOnboardRpActiveMessageDetailResult:

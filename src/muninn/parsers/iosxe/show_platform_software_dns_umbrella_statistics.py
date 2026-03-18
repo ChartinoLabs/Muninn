@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class UmbrellaStatistics(TypedDict):
@@ -71,7 +72,12 @@ class ShowPlatformSoftwareDnsUmbrellaStatisticsParser(
          Dropped pkts                : 0
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"platform", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.PLATFORM,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformSoftwareDnsUmbrellaStatisticsResult:

@@ -11,6 +11,7 @@ from muninn.exceptions import ParseError, ParserAmbiguityError, ParserNotFoundEr
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.runtime import Muninn
+from muninn.tags import ParserTag
 
 
 @pytest.fixture
@@ -27,7 +28,7 @@ def test_local_first_falls_back_to_built_in_on_exception(
 
     @register("nxos", "show version")
     class BuiltInParser(BaseParser):
-        tags = frozenset({"test"})
+        tags = frozenset({ParserTag.SYSTEM})
 
         @classmethod
         def parse(cls, output: str) -> dict[str, Any]:
@@ -52,7 +53,7 @@ def test_centralized_first_uses_built_in_before_local(runtime: Muninn) -> None:
 
     @register("nxos", "show version")
     class BuiltInParser(BaseParser):
-        tags = frozenset({"test"})
+        tags = frozenset({ParserTag.SYSTEM})
 
         @classmethod
         def parse(cls, output: str) -> dict[str, Any]:
@@ -77,7 +78,7 @@ def test_local_only_ignores_built_in_parsers(runtime: Muninn) -> None:
 
     @register("nxos", "show version")
     class BuiltInParser(BaseParser):
-        tags = frozenset({"test"})
+        tags = frozenset({ParserTag.SYSTEM})
 
         @classmethod
         def parse(cls, output: str) -> dict[str, Any]:
@@ -94,7 +95,7 @@ def test_fallback_on_none_result(runtime: Muninn) -> None:
 
     @register("nxos", "show version")
     class BuiltInParser(BaseParser):
-        tags = frozenset({"test"})
+        tags = frozenset({ParserTag.SYSTEM})
 
         @classmethod
         def parse(cls, output: str) -> dict[str, Any]:
@@ -118,7 +119,7 @@ def test_fallback_on_empty_dict_result(runtime: Muninn) -> None:
 
     @register("nxos", "show version")
     class BuiltInParser(BaseParser):
-        tags = frozenset({"test"})
+        tags = frozenset({ParserTag.SYSTEM})
 
         @classmethod
         def parse(cls, output: str) -> dict[str, Any]:
@@ -142,7 +143,7 @@ def test_parse_error_when_all_candidates_fail(runtime: Muninn) -> None:
 
     @register("nxos", "show version")
     class BuiltInParser(BaseParser):
-        tags = frozenset({"test"})
+        tags = frozenset({ParserTag.SYSTEM})
 
         @classmethod
         def parse(cls, output: str) -> dict[str, Any]:
@@ -171,7 +172,7 @@ def test_execution_mode_is_loaded_from_environment(
 
     @register("nxos", "show version")
     class BuiltInParser(BaseParser):
-        tags = frozenset({"test"})
+        tags = frozenset({ParserTag.SYSTEM})
 
         @classmethod
         def parse(cls, output: str) -> dict[str, Any]:
@@ -195,7 +196,7 @@ def test_instance_parse_accepts_keyword_arguments(runtime: Muninn) -> None:
 
     @register("nxos", "show version")
     class BuiltInParser(BaseParser):
-        tags = frozenset({"test"})
+        tags = frozenset({ParserTag.SYSTEM})
 
         @classmethod
         def parse(cls, output: str) -> dict[str, Any]:
@@ -235,7 +236,7 @@ def test_parse_prefers_literal_over_pattern(runtime: Muninn) -> None:
 
     @register("ios", "show ip ospf neighbors")
     class LiteralParser(BaseParser):
-        tags = frozenset({"test"})
+        tags = frozenset({ParserTag.SYSTEM})
 
         @classmethod
         def parse(cls, output: str) -> dict[str, Any]:
@@ -243,7 +244,7 @@ def test_parse_prefers_literal_over_pattern(runtime: Muninn) -> None:
 
     @register("ios", r"show ip ospf (?P<token>\S+)")
     class PatternParser(BaseParser):
-        tags = frozenset({"test"})
+        tags = frozenset({ParserTag.SYSTEM})
 
         @classmethod
         def parse(cls, output: str) -> dict[str, Any]:

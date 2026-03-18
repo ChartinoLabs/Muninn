@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import SEPARATOR_DASH_RE
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class HardwareInfo(TypedDict):
@@ -156,7 +157,12 @@ class ShowLoggingOnboardRpActiveEnvironmentDetailParser(
                             V01 C9407-FAN        C1   FXS222800XL
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"environment", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.ENVIRONMENT,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowLoggingOnboardRpActiveEnvironmentDetailResult:

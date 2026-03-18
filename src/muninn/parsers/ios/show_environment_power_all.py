@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class PowerSupplyEntry(TypedDict):
@@ -57,7 +58,12 @@ class ShowEnvironmentPowerAllParser(BaseParser[ShowEnvironmentPowerAllResult]):
         1A  PWR-C1-1100WAC      ABC123456AB  OK              Good     Good     1100
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"environment", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.ENVIRONMENT,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowEnvironmentPowerAllResult:

@@ -6,6 +6,7 @@ from typing import ClassVar, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class QueueEntry(TypedDict):
@@ -52,7 +53,7 @@ class ShowControlCpuParser(BaseParser[ShowControlCpuResult]):
         broadcast                  0           0           0           0
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     @classmethod
     def parse(cls, output: str) -> ShowControlCpuResult:

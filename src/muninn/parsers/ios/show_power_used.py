@@ -6,6 +6,7 @@ from typing import ClassVar, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ShowPowerUsedResult(TypedDict):
@@ -24,7 +25,12 @@ class ShowPowerUsedParser(BaseParser[ShowPowerUsedResult]):
         system power used =      2255.76 Watts (43.38 Amps @ 52V)
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"environment", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.ENVIRONMENT,
+            ParserTag.SYSTEM,
+        }
+    )
 
     _PATTERN = re.compile(
         r"system\s+power\s+used\s*=\s*"

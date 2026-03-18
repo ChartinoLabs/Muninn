@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class IpAliasEntry(TypedDict):
@@ -40,7 +41,12 @@ class ShowPlatformSoftwareNatIpaliasParser(
         80.0.0.11           0
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"nat", "platform"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.NAT,
+            ParserTag.PLATFORM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformSoftwareNatIpaliasResult:

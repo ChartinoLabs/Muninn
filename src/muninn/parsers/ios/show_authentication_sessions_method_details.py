@@ -8,6 +8,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import SEPARATOR_DASH_RE
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -319,7 +320,7 @@ class ShowAuthenticationSessionsMethodDetailsParser(
 ):
     """Parser for 'show authentication sessions method details' on IOS."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"security"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SECURITY})
 
     @classmethod
     def parse(cls, output: str) -> ShowAuthenticationSessionsMethodDetailsResult:

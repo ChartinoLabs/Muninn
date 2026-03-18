@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ProcessorEntry(TypedDict):
@@ -261,7 +262,12 @@ class ShowRedundancyParser(BaseParser[ShowRedundancyResult]):
         Communications = Up
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"redundancy", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.REDUNDANCY,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowRedundancyResult:

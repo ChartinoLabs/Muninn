@@ -6,6 +6,7 @@ from typing import ClassVar, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ComponentAuthEntry(TypedDict):
@@ -96,7 +97,12 @@ class ShowPlatformHardwareAuthenticationStatusParser(
                SUP0 Authentication:  pass
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"platform", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.PLATFORM,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformHardwareAuthenticationStatusResult:

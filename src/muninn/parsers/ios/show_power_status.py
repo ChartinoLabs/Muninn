@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class PowerSupplyEntry(TypedDict):
@@ -114,7 +115,12 @@ class ShowPowerStatusParser(BaseParser[ShowPowerStatusResult]):
         PS2     PWR-C4KX-750AC-R  AC 750W    good         good     n.a.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"environment", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.ENVIRONMENT,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowPowerStatusResult:

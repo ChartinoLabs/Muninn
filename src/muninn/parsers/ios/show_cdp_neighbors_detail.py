@@ -9,6 +9,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import SEPARATOR_DASH_RE
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class CdpNeighborDetailEntry(TypedDict):
@@ -45,7 +46,7 @@ class ShowCdpNeighborsDetailParser(BaseParser[ShowCdpNeighborsDetailResult]):
     VTP domain, native VLAN, duplex, and management addresses.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"cdp"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.CDP})
 
     _DEVICE_ID_PATTERN = re.compile(r"Device ID:\s*(.+)")
     _IP_ADDRESS_PATTERN = re.compile(r"IP(?:v4)? [Aa]ddress:\s*(\S+)")

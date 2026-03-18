@@ -7,6 +7,7 @@ from typing import ClassVar, Literal, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 OptionalStringField = Literal[
@@ -120,7 +121,7 @@ class ShowCdpNeighborsDetailParser(
     with full platform, version, and address details.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"cdp"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.CDP})
 
     _DEVICE_ID_PATTERN = re.compile(r"^Device ID:\s*(.+)$")
     _SYSTEM_NAME_PATTERN = re.compile(r"^System Name:\s*(.+)$")

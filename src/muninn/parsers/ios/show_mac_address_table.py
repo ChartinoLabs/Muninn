@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 # Separator patterns that indicate header/divider lines to skip
@@ -370,7 +371,12 @@ def _parse_output(output: str) -> ShowMacAddressTableResult:
 class ShowMacAddressTableParser(BaseParser[ShowMacAddressTableResult]):
     """Parser for 'show mac address-table' on IOS/IOS-XE."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"mac", "switching"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.MAC,
+            ParserTag.SWITCHING,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowMacAddressTableResult:

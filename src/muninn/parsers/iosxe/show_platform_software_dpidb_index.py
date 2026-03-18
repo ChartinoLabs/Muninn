@@ -6,6 +6,7 @@ from typing import ClassVar, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -42,7 +43,12 @@ class ShowPlatformSoftwareDpidbIndexParser(
         Index 1030 -- swidb Hu1/0/1
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"platform", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.PLATFORM,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformSoftwareDpidbIndexResult:

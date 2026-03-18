@@ -6,6 +6,7 @@ from typing import ClassVar, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class VlanFilterEntry(TypedDict):
@@ -29,7 +30,12 @@ class ShowVlanFilterParser(BaseParser[ShowVlanFilterResult]):
         Configured on VLANs:    3,402
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"switching", "vlan"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.SWITCHING,
+            ParserTag.VLAN,
+        }
+    )
 
     _MAP_PATTERN = re.compile(r"^vlan\s+map\s+(?P<tag>\S+):$", re.I)
     _VLANS_PATTERN = re.compile(

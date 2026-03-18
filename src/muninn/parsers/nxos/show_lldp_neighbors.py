@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -28,7 +29,7 @@ class ShowLldpNeighborsResult(TypedDict):
 class ShowLldpNeighborsParser(BaseParser[ShowLldpNeighborsResult]):
     """Parser for 'show lldp neighbors' command on NX-OS."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"lldp"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.LLDP})
 
     _LOCAL_INTF = r"(?:Eth|mgmt|Gi|Te|Fo|Po|Lo|Vlan|Tu|Se|nve)\S*"
     _SUMMARY_PATTERN = re.compile(

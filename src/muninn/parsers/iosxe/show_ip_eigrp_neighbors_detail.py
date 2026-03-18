@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -111,7 +112,12 @@ class ShowIpEigrpNeighborsDetailParser(
            Topology-ids from peer - 0
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"eigrp", "routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.EIGRP,
+            ParserTag.ROUTING,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowIpEigrpNeighborsDetailResult:

@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class PathEntry(TypedDict):
@@ -490,7 +491,7 @@ class ShowBgpAllParser(BaseParser["ShowBgpAllResult"]):
          *>   10.1.1.0/24     0.0.0.0                  0         32768 ?
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"bgp", "routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.BGP, ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowBgpAllResult:

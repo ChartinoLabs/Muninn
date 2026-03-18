@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class PathEntry(TypedDict):
@@ -387,7 +388,7 @@ class ShowBgpVrfAllIpv4UnicastDetailParser(
                 Origin IGP, MED not set, localpref 100, weight 32768
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"bgp", "routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.BGP, ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowBgpVrfAllIpv4UnicastDetailResult:

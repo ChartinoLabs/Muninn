@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class DeviceEntry(TypedDict):
@@ -208,7 +209,7 @@ class ShowCloudMgmtConnectParser(BaseParser[ShowCloudMgmtConnectResult]):
           Status:                     Registered
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"sdwan"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SDWAN})
 
     @classmethod
     def parse(cls, output: str) -> ShowCloudMgmtConnectResult:

@@ -6,6 +6,7 @@ from typing import ClassVar, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ShowIpDhcpSnoopingStatisticsResult(TypedDict):
@@ -22,7 +23,12 @@ class ShowIpDhcpSnoopingStatisticsParser(
 ):
     """Parser for 'show ip dhcp snooping statistics' command."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"dhcp", "switching"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.DHCP,
+            ParserTag.SWITCHING,
+        }
+    )
 
     _STAT_PATTERN = re.compile(r"^(?P<key>[\w\s]+?)\s*=\s*(?P<value>\d+)$")
 

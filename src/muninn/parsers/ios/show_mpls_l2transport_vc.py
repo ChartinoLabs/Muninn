@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import SEPARATOR_DASH_SPACE_RE
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -70,7 +71,7 @@ class ShowMplsL2transportVcParser(BaseParser[ShowMplsL2transportVcResult]):
         Fa2/0          HDLC                       172.16.0.1      200        DOWN
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"mpls"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.MPLS})
 
     @classmethod
     def parse(cls, output: str) -> ShowMplsL2transportVcResult:

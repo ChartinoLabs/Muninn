@@ -6,6 +6,7 @@ from typing import Any, ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -400,7 +401,7 @@ class ShowIpv6DhcpInterfaceParser(BaseParser[ShowIpv6DhcpInterfaceResult]):
             DUID: 00030001001EE59BE700
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"dhcp"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.DHCP})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpv6DhcpInterfaceResult:

@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class RateEntry(TypedDict):
@@ -132,7 +133,7 @@ class ShowPolicyMapMultipointParser(BaseParser[ShowPolicyMapMultipointResult]):
               Match: any
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"qos"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.QOS})
 
     @classmethod
     def parse(cls, output: str) -> ShowPolicyMapMultipointResult:

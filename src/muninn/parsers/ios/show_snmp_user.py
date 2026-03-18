@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class SnmpUserEntry(TypedDict):
@@ -53,7 +54,7 @@ class ShowSnmpUserParser(BaseParser[ShowSnmpUserResult]):
         Group-name: managerpriv
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"snmp"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SNMP})
 
     _FIELD_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
         (_ENGINE_ID_PATTERN, "engine_id"),

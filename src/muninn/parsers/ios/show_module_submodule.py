@@ -6,6 +6,7 @@ from typing import ClassVar, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class SubmoduleDetails(TypedDict):
@@ -34,7 +35,12 @@ class ShowModuleSubmoduleParser(BaseParser[ShowModuleSubmoduleResult]):
           1 Cat6k MSFC 2 daughterboard  WS-F6K-MSFC2    SAD062803TX      2.5    Ok
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"inventory", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.INVENTORY,
+            ParserTag.SYSTEM,
+        }
+    )
 
     _HEADER_PATTERN = re.compile(
         r"^Mod\s+Sub-Module\s+Model\s+Serial\s+Hw\s+Status",

@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 # Header line that marks the start of tabular data
@@ -134,7 +135,7 @@ class ShowStandbyBriefParser(BaseParser[ShowStandbyBriefResult]):
     priority, preempt state, HSRP state, and active/standby/virtual IPs.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"fhrp"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.FHRP})
 
     @classmethod
     def parse(cls, output: str) -> ShowStandbyBriefResult:

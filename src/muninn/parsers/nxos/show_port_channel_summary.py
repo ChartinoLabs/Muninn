@@ -6,6 +6,7 @@ from typing import ClassVar, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -54,7 +55,12 @@ class ShowPortChannelSummaryParser(BaseParser[ShowPortChannelSummaryResult]):
     Parses port-channel summary including member interfaces and their status.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"interfaces", "lag"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.INTERFACES,
+            ParserTag.LAG,
+        }
+    )
 
     # Pattern for port-channel line
     # 1     Po1(RU)     Eth      LACP      Eth1/1(P)    Eth1/2(P)

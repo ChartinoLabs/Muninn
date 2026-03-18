@@ -6,6 +6,7 @@ from typing import ClassVar, TypedDict, cast
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ShowIpArpSummaryResult(TypedDict):
@@ -49,7 +50,7 @@ def _match_arp_line(line: str, result: dict[str, int]) -> None:
 class ShowIpArpSummaryParser(BaseParser[ShowIpArpSummaryResult]):
     """Parser for 'show ip arp summary' command."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"arp"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.ARP})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpArpSummaryResult:

@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class NeighborEntry(TypedDict):
@@ -246,7 +247,7 @@ class ShowIpBgpSummaryVrfParser(BaseParser["ShowIpBgpSummaryVrfResult"]):
     and prefix counts across multiple VRFs and address families.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"bgp", "routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.BGP, ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpBgpSummaryVrfResult:

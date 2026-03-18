@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class TunnelStatisticsEntry(TypedDict):
@@ -62,7 +63,7 @@ class ShowSdwanTunnelStatisticsTableParser(
         ipsec     150.0.5.1  150.0.0.1   12346  12346  20.0.0.20  ...
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"sdwan"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SDWAN})
 
     _ROW_PATTERN = re.compile(
         r"^(?P<protocol>\S+)\s+"

@@ -6,6 +6,7 @@ from typing import ClassVar, TypeAlias, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class DelayInfo(TypedDict):
@@ -33,7 +34,7 @@ class ShowStandbyDelayParser(BaseParser[ShowStandbyDelayResult]):
         GigabitEthernet1   99      888
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"fhrp"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.FHRP})
 
     _ROW_PATTERN = re.compile(
         r"^(?P<interface>\S+)\s+(?P<minimum>\d+)\s+(?P<reload>\d+)\s*$"

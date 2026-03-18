@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 # --- LSA type name mapping from section headers ---
 _LSA_TYPE_MAP: dict[str, str] = {
@@ -233,7 +234,12 @@ def _parse_database(
 class ShowIpOspfDatabaseParser(BaseParser[ShowIpOspfDatabaseResult]):
     """Parser for 'show ip ospf database' on NX-OS."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"ospf", "routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.OSPF,
+            ParserTag.ROUTING,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowIpOspfDatabaseResult:

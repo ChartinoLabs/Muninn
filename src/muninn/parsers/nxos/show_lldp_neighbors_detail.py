@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 _NOT_ADVERTISED = "not advertised"
@@ -62,7 +63,7 @@ class ShowLldpNeighborsDetailParser(BaseParser[ShowLldpNeighborsDetailResult]):
     port descriptions, system capabilities, and management addresses.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"lldp"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.LLDP})
 
     _CHASSIS_ID_PATTERN = re.compile(r"^Chassis\s+id:\s+(?P<value>.+)$", re.I)
     _PORT_ID_PATTERN = re.compile(r"^Port\s+id:\s+(?P<value>.+)$", re.I)

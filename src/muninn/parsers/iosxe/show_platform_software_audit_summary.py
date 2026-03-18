@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 # "AUDIT LOG ON chassis 1 route-processor 0"
 _CHASSIS_HEADER = re.compile(
@@ -126,7 +127,12 @@ class ShowPlatformSoftwareAuditSummaryParser(
         AVC Denial count: 189
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"platform", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.PLATFORM,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformSoftwareAuditSummaryResult:

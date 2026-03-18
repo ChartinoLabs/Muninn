@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class VrfEntry(TypedDict):
@@ -32,7 +33,7 @@ class ShowVrfParser(BaseParser[ShowVrfResult]):
         default                                 1 Up      --
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"vrf"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.VRF})
 
     _ROW_PATTERN = re.compile(
         r"^(?P<name>\S+)\s+(?P<vrf_id>\d+)\s+(?P<state>\S+)\s+(?P<reason>.+)$"

@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -33,7 +34,7 @@ class ShowIpVrfInterfacesParser(BaseParser[ShowIpVrfInterfacesResult]):
         Gi0/0                  unassigned      Mgmt-vrf                         down
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"vrf"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.VRF})
 
     _ROW_PATTERN = re.compile(
         r"^(?P<interface>\S+)\s+"

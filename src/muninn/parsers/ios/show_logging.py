@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class SyslogEntry(TypedDict):
@@ -542,7 +543,12 @@ def _build_result(
 class ShowLoggingParser(BaseParser[ShowLoggingResult]):
     """Parser for 'show logging' on IOS/IOS-XE."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"logging", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.LOGGING,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowLoggingResult:

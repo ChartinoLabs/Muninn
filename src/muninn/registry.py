@@ -12,6 +12,7 @@ from muninn.os import OS, OperatingSystem, resolve_os
 
 if TYPE_CHECKING:
     from muninn.parser import BaseParser
+    from muninn.tags import ParserTag
 
 ParserSource = Literal["built_in", "local"]
 
@@ -50,7 +51,7 @@ class CommandSpec:
     parser_cls: type[BaseParser[object]]
     source: ParserSource
     is_pattern: bool
-    tags: frozenset[str] = frozenset()
+    tags: frozenset[ParserTag] = frozenset()
     compiled_pattern: re.Pattern[str] | None = None
     group_names: tuple[str, ...] = ()
 
@@ -61,7 +62,7 @@ class ParserInfo:
 
     os: OS
     command_template: str
-    tags: frozenset[str]
+    tags: frozenset[ParserTag]
     source: ParserSource
 
 
@@ -127,7 +128,7 @@ class RuntimeRegistry:
     ) -> None:
         """Register a parser class with explicit source metadata."""
         resolved_os = resolve_os(os)
-        tags: frozenset[str] = getattr(parser_cls, "tags", frozenset())
+        tags: frozenset[ParserTag] = getattr(parser_cls, "tags", frozenset())
 
         if source == "built_in" and not tags:
             os_name = resolved_os.value.name
@@ -313,7 +314,7 @@ def _build_command_spec(
     doc_template: str | None,
     parser_cls: type[BaseParser[object]],
     source: ParserSource,
-    tags: frozenset[str] = frozenset(),
+    tags: frozenset[ParserTag] = frozenset(),
 ) -> CommandSpec:
     collapsed_command = _collapse_command_whitespace(command)
     if not collapsed_command:

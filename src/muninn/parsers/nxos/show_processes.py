@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict, cast
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ProcessEntry(TypedDict):
@@ -47,7 +48,7 @@ class ShowProcessesParser(BaseParser[ShowProcessesResult]):
             -     NR         -            0     -     X  ldap
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     @classmethod
     def parse(cls, output: str) -> ShowProcessesResult:

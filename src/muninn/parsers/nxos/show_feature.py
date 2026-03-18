@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class FeatureInstanceEntry(TypedDict):
@@ -39,7 +40,7 @@ class ShowFeatureParser(BaseParser[ShowFeatureResult]):
         ospf                   1          enabled (not-running)
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     _ROW_PATTERN = re.compile(
         r"^(?P<feature>\S+)\s+(?P<instance>\d+)\s+"

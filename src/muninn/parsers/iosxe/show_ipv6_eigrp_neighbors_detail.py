@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -138,7 +139,12 @@ class ShowIpv6EigrpNeighborsDetailParser(
            Topology-ids from peer - 0
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"eigrp", "routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.EIGRP,
+            ParserTag.ROUTING,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowIpv6EigrpNeighborsDetailResult:

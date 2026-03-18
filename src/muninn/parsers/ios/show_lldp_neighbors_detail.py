@@ -9,6 +9,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import SEPARATOR_DASH_RE
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 _NOT_ADVERTISED = "- not advertised"
 
@@ -123,7 +124,7 @@ class ShowLldpNeighborsDetailParser(
     description, capabilities, and management addresses.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"lldp"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.LLDP})
 
     _SEPARATOR = SEPARATOR_DASH_RE
     _LOCAL_INTF = re.compile(r"^Local Intf:\s+(?P<v>\S+)")

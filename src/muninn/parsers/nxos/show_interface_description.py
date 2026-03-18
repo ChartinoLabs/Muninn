@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -49,7 +50,7 @@ class ShowInterfaceDescriptionParser(BaseParser[ShowInterfaceDescriptionResult])
     - Logical interfaces with only Description column.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"interfaces"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.INTERFACES})
 
     @classmethod
     def _normalize_description(cls, value: str | None) -> str | None:

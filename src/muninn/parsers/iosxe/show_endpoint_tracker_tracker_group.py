@@ -6,6 +6,7 @@ from typing import ClassVar, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class TrackerGroupEntry(TypedDict):
@@ -35,7 +36,7 @@ class ShowEndpointTrackerTrackerGroupParser(
         group2             track1, track2         UP(UP OR UP)
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"sdwan"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SDWAN})
 
     _ROW_PATTERN = re.compile(
         r"^(?P<name>\S+)\s+"

@@ -11,6 +11,7 @@ from muninn.parsers.ios._acl_common import (
     parse_standard_ace_body,
 )
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class AccessListEntry(TypedDict):
@@ -112,7 +113,12 @@ class ShowAccessListParser(BaseParser[ShowAccessListResult]):
             10 permit 10.1.2.3 log
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"acl", "security"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.ACL,
+            ParserTag.SECURITY,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowAccessListResult:

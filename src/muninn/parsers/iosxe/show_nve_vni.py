@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class NveVniEntry(TypedDict):
@@ -47,7 +48,7 @@ class ShowNveVniParser(BaseParser[ShowNveVniResult]):
         nve1       20011      N/A             Up         L2CP  11    CLI N/A
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"vxlan"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.VXLAN})
 
     # Match data rows: interface, VNI, multicast-group, VNI state, mode,
     # VLAN/BD, cfg, vrf.

@@ -6,6 +6,7 @@ from typing import ClassVar, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -47,7 +48,12 @@ _TOTAL_RE = re.compile(r"^\s+Total number of interface:\s*\d+")
 class ShowIpOspfInterfaceBriefParser(BaseParser[ShowIpOspfInterfaceBriefResult]):
     """Parser for 'show ip ospf interface brief' on NX-OS."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"ospf", "routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.OSPF,
+            ParserTag.ROUTING,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowIpOspfInterfaceBriefResult:

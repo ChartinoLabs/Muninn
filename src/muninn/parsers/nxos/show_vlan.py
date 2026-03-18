@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import SEPARATOR_DASH_SPACE_RE
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -303,7 +304,12 @@ def _find_sections(lines: list[str]) -> dict[str, tuple[int, int]]:
 class ShowVlanParser(BaseParser[ShowVlanResult]):
     """Parser for 'show vlan' on NX-OS."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"switching", "vlan"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.SWITCHING,
+            ParserTag.VLAN,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowVlanResult:

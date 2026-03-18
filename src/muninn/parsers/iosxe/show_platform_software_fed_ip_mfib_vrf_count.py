@@ -6,6 +6,7 @@ from typing import ClassVar, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class MfibVrfCount(TypedDict):
@@ -26,7 +27,12 @@ class ShowPlatformSoftwareFedIpMfibVrfCountParser(
 ):
     """Parser for 'show platform software fed ip mfib vrf count' command."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"multicast", "platform"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.MULTICAST,
+            ParserTag.PLATFORM,
+        }
+    )
 
     _COUNT_PATTERN = re.compile(r"^Number\s+of\s+entries\s*=\s*(?P<count>\d+)$", re.I)
 

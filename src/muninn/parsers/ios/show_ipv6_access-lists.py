@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.parsers.ios._acl_common import AclParsedFields, parse_extended_ace_body
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class Ipv6AccessListEntry(TypedDict):
@@ -108,7 +109,12 @@ class ShowIpv6AccessListsParser(BaseParser[ShowIpv6AccessListsResult]):
             permit tcp host 2001:DB8:1::32 eq bgp ... sequence 1
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"acl", "security"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.ACL,
+            ParserTag.SECURITY,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowIpv6AccessListsResult:

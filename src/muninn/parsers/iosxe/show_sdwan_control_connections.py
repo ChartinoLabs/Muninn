@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ControlConnectionEntry(TypedDict):
@@ -111,7 +112,7 @@ class ShowSdwanControlConnectionsParser(
         vsmart  dtls 1.1.1.5         4294950463 1      10.0.5.64
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"sdwan"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SDWAN})
 
     @classmethod
     def parse(cls, output: str) -> ShowSdwanControlConnectionsResult:

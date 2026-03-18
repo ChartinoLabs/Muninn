@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 # --- State abbreviation mapping ---
 
@@ -199,7 +200,7 @@ class ShowBgpSessionsParser(BaseParser["ShowBgpSessionsResult"]):
         peers 3, established peers 2, local router-id 10.106.0.6
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"bgp", "routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.BGP, ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowBgpSessionsResult:

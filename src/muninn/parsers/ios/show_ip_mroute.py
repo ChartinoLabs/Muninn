@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 # Multicast route entry header:
@@ -185,7 +186,12 @@ class ShowIpMrouteParser(BaseParser[ShowIpMrouteResult]):
     hierarchy, incoming/outgoing interfaces, flags, and timers.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"multicast", "routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.MULTICAST,
+            ParserTag.ROUTING,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowIpMrouteResult:

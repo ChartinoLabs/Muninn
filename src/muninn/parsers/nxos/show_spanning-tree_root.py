@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import MAC_ADDRESS
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -60,7 +61,12 @@ class ShowSpanningTreeRootParser(BaseParser[ShowSpanningTreeRootResult]):
     root priority, address, cost, timers, and root port.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"stp", "switching"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.STP,
+            ParserTag.SWITCHING,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowSpanningTreeRootResult:

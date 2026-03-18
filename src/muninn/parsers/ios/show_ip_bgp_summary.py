@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class MemoryNetworkEntries(TypedDict):
@@ -380,7 +381,7 @@ def _split_address_families(lines: list[str]) -> list[tuple[str, list[str]]]:
 class ShowIpBgpSummaryParser(BaseParser["ShowIpBgpSummaryResult"]):
     """Parser for 'show ip bgp summary' on IOS/IOS-XE."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"bgp", "routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.BGP, ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpBgpSummaryResult:

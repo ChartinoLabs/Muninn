@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class LsaEntry(TypedDict):
@@ -194,7 +195,12 @@ class ShowIpOspfDatabaseParser(BaseParser[ShowIpOspfDatabaseResult]):
         10.4.1.1        10.4.1.1        742         0x80000039 0x0048E3 3
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"ospf", "routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.OSPF,
+            ParserTag.ROUTING,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowIpOspfDatabaseResult:

@@ -6,6 +6,7 @@ from typing import ClassVar, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ShowPrivilegeResult(TypedDict):
@@ -22,7 +23,7 @@ class ShowPrivilegeParser(BaseParser[ShowPrivilegeResult]):
         Current privilege level is 15
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"aaa", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.AAA, ParserTag.SYSTEM})
 
     _PATTERN = re.compile(r"^Current\s+privilege\s+level\s+is\s+(?P<level>\d+)$")
 

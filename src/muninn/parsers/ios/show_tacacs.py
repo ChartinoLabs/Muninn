@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class TacacsServerEntry(TypedDict):
@@ -146,7 +147,12 @@ class ShowTacacsParser(BaseParser[ShowTacacsResult]):
                 Total Packets Recv:     147693
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"aaa", "security"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.AAA,
+            ParserTag.SECURITY,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowTacacsResult:

@@ -8,6 +8,7 @@ from typing import Any, ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 # ---------------------------------------------------------------------------
 # TypedDict schemas
@@ -287,7 +288,7 @@ class ShowBgpVrfAllAllNexthopDatabaseParser(
     next-hop entries with their resolution status, metrics, and flags.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"bgp", "routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.BGP, ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowBgpVrfAllAllNexthopDatabaseResult:

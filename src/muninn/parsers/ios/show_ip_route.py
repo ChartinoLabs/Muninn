@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 RouteFlagKey = Literal[
@@ -598,7 +599,7 @@ def _parse_routes(lines: list[str]) -> ShowIpRouteResult:
 class ShowIpRouteParser(BaseParser[ShowIpRouteResult]):
     """Parser for 'show ip route' on IOS/IOS-XE."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpRouteResult:

@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 # Null-equivalent values for type, class, and device fields
@@ -110,7 +111,7 @@ class ShowPowerInlineUpoePlusParser(
         Gi1/0/23    auto   DS   on,on         45.4      26.9      3,4     Ieee PD
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"poe", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.POE, ParserTag.SYSTEM})
 
     @classmethod
     def parse(cls, output: str) -> ShowPowerInlineUpoePlusResult:

@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypeAlias, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -77,7 +78,7 @@ class ShowInterfaceBriefParser(BaseParser[ShowInterfaceBriefResult]):
     Management, Loopback, and VLAN interface summaries.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"interfaces"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.INTERFACES})
 
     # Ethernet section header pattern:
     # Ethernet      VLAN    Type Mode   Status  Reason                   Speed     Port

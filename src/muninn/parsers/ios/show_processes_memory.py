@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict, cast
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class PoolSummary(TypedDict):
@@ -118,7 +119,7 @@ def _parse_process_lines(
 class ShowProcessesMemoryParser(BaseParser["ShowProcessesMemoryResult"]):
     """Parser for 'show processes memory' on IOS/IOS-XE."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     @classmethod
     def parse(cls, output: str) -> ShowProcessesMemoryResult:

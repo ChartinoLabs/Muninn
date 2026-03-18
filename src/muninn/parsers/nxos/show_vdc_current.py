@@ -6,6 +6,7 @@ from typing import ClassVar, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class VdcCurrentInfo(TypedDict):
@@ -29,7 +30,7 @@ class ShowVdcCurrentParser(BaseParser[ShowVdcCurrentResult]):
         Current vdc is 1 - PE1
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     _PATTERN = re.compile(
         r"^Current\s+vdc\s+is\s+(?P<id>\d+)\s*-\s*(?P<name>\S+)$",

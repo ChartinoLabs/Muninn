@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 # --- Role and status normalization maps ---
@@ -301,7 +302,12 @@ def _parse_instance(name: str, lines: list[str]) -> InstanceEntry:
 class ShowSpanningTreeParser(BaseParser[ShowSpanningTreeResult]):
     """Parser for 'show spanning-tree' on IOS/IOS-XE."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"stp", "switching"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.STP,
+            ParserTag.SWITCHING,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowSpanningTreeResult:

@@ -6,6 +6,7 @@ from typing import Any, ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -263,7 +264,7 @@ class ShowAvbDomainParser(BaseParser[ShowAvbDomainResult]):
            Class-  B        core             2    2
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     @classmethod
     def parse(cls, output: str) -> ShowAvbDomainResult:

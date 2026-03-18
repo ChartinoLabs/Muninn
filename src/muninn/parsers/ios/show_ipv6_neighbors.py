@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -36,7 +37,7 @@ class ShowIpv6NeighborsParser(BaseParser[ShowIpv6NeighborsResult]):
     Parses IPv6 neighbor discovery cache entries.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"arp"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.ARP})
 
     _HEADER_PATTERN = re.compile(r"^IPv6\s+Address\s+Age\s+Link-layer\s+Addr", re.I)
 

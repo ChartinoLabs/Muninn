@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class RouteMapClauseEntry(TypedDict):
@@ -156,7 +157,7 @@ class ShowRouteMapAllParser(BaseParser[ShowRouteMapAllResult]):
           Policy routing matches: 0 packets, 0 bytes
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowRouteMapAllResult:

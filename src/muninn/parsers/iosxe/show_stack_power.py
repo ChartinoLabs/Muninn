@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class SwitchPowerEntry(TypedDict):
@@ -96,7 +97,12 @@ class ShowStackPowerParser(BaseParser[ShowStackPowerResult]):
         Powerstack-1 SP-PS  Stndaln 1100   0      575    525    1   1
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"environment", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.ENVIRONMENT,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowStackPowerResult:

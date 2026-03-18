@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 # --- Regex patterns ---
 
@@ -248,7 +249,7 @@ class TracerouteParser(BaseParser[TracerouteResult]):
           3 10.0.0.1 16 msec *  16 msec
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"connectivity"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.CONNECTIVITY})
 
     @classmethod
     def parse(cls, output: str) -> TracerouteResult:

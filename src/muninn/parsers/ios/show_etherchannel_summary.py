@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict, cast
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -166,7 +167,12 @@ class ShowEtherchannelSummaryParser(BaseParser[ShowEtherchannelSummaryResult]):
         3      Po3(SU)         LACP      Te4/2(P)       Te2/2(P)
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"interfaces", "lag"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.INTERFACES,
+            ParserTag.LAG,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowEtherchannelSummaryResult:

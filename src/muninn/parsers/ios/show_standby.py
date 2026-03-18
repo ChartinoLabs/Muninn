@@ -8,6 +8,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -413,7 +414,7 @@ class ShowStandbyParser(BaseParser[ShowStandbyResult]):
           Virtual IP address is 10.0.52.161
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"fhrp"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.FHRP})
 
     @classmethod
     def parse(cls, output: str) -> ShowStandbyResult:

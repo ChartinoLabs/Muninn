@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class PreemptionDelay(TypedDict):
@@ -73,7 +74,7 @@ class ShowHsrpAllParser(BaseParser[ShowHsrpAllResult]):
     active/standby routers, authentication, and timers.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"fhrp"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.FHRP})
 
     # Vlan100 - Group 100 (HSRP-V2) (IPv4)
     _HEADER_PATTERN = re.compile(

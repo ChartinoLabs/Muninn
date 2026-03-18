@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class FileSystemEntry(TypedDict):
@@ -47,7 +48,7 @@ class ShowFileSystemsParser(BaseParser[ShowFileSystemsResult]):
               2097152       2057602     nvram     rw   nvram:
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     _ROW_PATTERN = _ROW_PATTERN
 

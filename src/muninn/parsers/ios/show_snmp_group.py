@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class SnmpGroupEntry(TypedDict):
@@ -129,7 +130,7 @@ class ShowSnmpGroupParser(BaseParser[ShowSnmpGroupResult]):
         row status: active      access-list: snmp-acl-name
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"snmp"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SNMP})
 
     @classmethod
     def parse(cls, output: str) -> ShowSnmpGroupResult:

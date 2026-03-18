@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class NvePeerVniEntry(TypedDict):
@@ -36,7 +37,7 @@ class ShowNvePeersParser(BaseParser[ShowNvePeersResult]):
         nve1 200051  L2CP 20.0.101.2 3           200051  UP N/A   4d17h
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"vxlan"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.VXLAN})
 
     _ROW_PATTERN = re.compile(
         r"^(?P<interface>\S+)\s+"

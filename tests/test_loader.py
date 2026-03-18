@@ -9,6 +9,7 @@ from muninn.config import ExecutionMode
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.runtime import Muninn
+from muninn.tags import ParserTag
 
 
 def test_load_local_parsers_from_path(tmp_path: Path) -> None:
@@ -18,7 +19,7 @@ def test_load_local_parsers_from_path(tmp_path: Path) -> None:
 
     @register("nxos", "show version")
     class BuiltInParser(BaseParser):
-        tags = frozenset({"test"})
+        tags = frozenset({ParserTag.SYSTEM})
 
         @classmethod
         def parse(cls, output: str) -> dict[str, str]:

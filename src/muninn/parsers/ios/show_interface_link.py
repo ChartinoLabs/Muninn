@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 # Column header labels used to detect output variant
@@ -162,7 +163,7 @@ def _parse_down_since_line(
 class ShowInterfaceLinkParser(BaseParser[ShowInterfaceLinkResult]):
     """Parser for 'show interface link' on IOS."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"interfaces"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.INTERFACES})
 
     @classmethod
     def parse(cls, output: str) -> ShowInterfaceLinkResult:

@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 # --- VRF/AF section header ---
 _VRF_AF_RE = re.compile(
@@ -120,7 +121,7 @@ class ShowBgpAllDampeningFlapStatisticsParser(
 ):
     """Parser for 'show bgp all dampening flap-statistics' on NX-OS."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"bgp", "routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.BGP, ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowBgpAllDampeningFlapStatisticsResult:

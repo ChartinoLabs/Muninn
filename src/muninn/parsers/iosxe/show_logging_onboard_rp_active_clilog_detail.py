@@ -8,6 +8,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 # ---------------------------------------------------------------------------
 # TypedDict schemas
@@ -80,7 +81,12 @@ class ShowLoggingOnboardRpActiveClilogDetailParser(
     (timestamped command history) sections from onboard logging output.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"logging", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.LOGGING,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowLoggingOnboardRpActiveClilogDetailResult:

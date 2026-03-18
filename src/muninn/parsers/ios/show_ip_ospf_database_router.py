@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class LinkEntry(TypedDict):
@@ -256,7 +257,12 @@ class ShowIpOspfDatabaseRouterParser(
 ):
     """Parser for 'show ip ospf database router' on IOS."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"ospf", "routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.OSPF,
+            ParserTag.ROUTING,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowIpOspfDatabaseRouterResult:

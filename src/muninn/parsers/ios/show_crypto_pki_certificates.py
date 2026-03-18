@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 # Type alias for validity parse result
 _ValidityResult = tuple["ValidityDate | None", int]
@@ -307,7 +308,7 @@ class ShowCryptoPkiCertificatesParser(
 ):
     """Parser for 'show crypto pki certificates' on IOS."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"security"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SECURITY})
 
     @classmethod
     def parse(cls, output: str) -> ShowCryptoPkiCertificatesResult:

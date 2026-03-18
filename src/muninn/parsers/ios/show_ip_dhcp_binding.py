@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class DhcpBindingEntry(TypedDict):
@@ -42,7 +43,7 @@ class ShowIpDhcpBindingParser(BaseParser[ShowIpDhcpBindingResult]):
         10.100.88.197    01dd.dddd.dddd.dd     Infinite          Manual
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"dhcp"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.DHCP})
 
     # Matches a DHCP binding row:
     # IP address, client-ID/MAC, lease expiration, type, and optional state/interface

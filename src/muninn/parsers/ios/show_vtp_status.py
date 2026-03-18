@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ShowVtpStatusResult(TypedDict):
@@ -183,7 +184,12 @@ _REQUIRED_FIELDS = (
 class ShowVtpStatusParser(BaseParser["ShowVtpStatusResult"]):
     """Parser for 'show vtp status' command."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"switching", "vtp"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.SWITCHING,
+            ParserTag.VTP,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowVtpStatusResult:

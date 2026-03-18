@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict, cast
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ShowLldpTimersResult(TypedDict):
@@ -30,7 +31,7 @@ class ShowLldpTimersParser(BaseParser[ShowLldpTimersResult]):
         Transmit interval in seconds: 30
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"lldp"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.LLDP})
 
     _FIELD_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
         (

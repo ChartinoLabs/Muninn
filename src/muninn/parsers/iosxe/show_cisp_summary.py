@@ -6,6 +6,7 @@ from typing import ClassVar, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class CispStatus(TypedDict):
@@ -25,7 +26,7 @@ class ShowCispSummaryResult(TypedDict):
 class ShowCispSummaryParser(BaseParser[ShowCispSummaryResult]):
     """Parser for 'show cisp summary' command."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"security"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SECURITY})
 
     _NOT_ENABLED_PATTERN = re.compile(r"^CISP\s+not\s+enabled$", re.I)
 

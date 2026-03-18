@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class SnmpCommunityEntry(TypedDict):
@@ -81,7 +82,7 @@ class ShowSnmpCommunityParser(BaseParser[ShowSnmpCommunityResult]):
         storage-type: nonvolatile        active
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"snmp"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SNMP})
 
     @classmethod
     def parse(cls, output: str) -> ShowSnmpCommunityResult:

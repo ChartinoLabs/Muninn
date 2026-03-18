@@ -10,6 +10,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class BracketEntries(TypedDict):
@@ -385,7 +386,7 @@ def _parse_section(lines: list[str]) -> AddressFamilyEntry | None:
 class ShowIpBgpSummaryParser(BaseParser["ShowIpBgpSummaryResult"]):
     """Parser for 'show ip bgp summary' on NX-OS."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"bgp", "routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.BGP, ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpBgpSummaryResult:

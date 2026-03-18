@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import SEPARATOR_DASH_SPACE_RE
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ModuleEntry(TypedDict):
@@ -334,7 +335,12 @@ class ShowModuleParser(BaseParser[ShowModuleResult]):
         3    48     1/10 Gbps Ethernet Module           N7K-F248XP-25E     ok
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"inventory", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.INVENTORY,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowModuleResult:

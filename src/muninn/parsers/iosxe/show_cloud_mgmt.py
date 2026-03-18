@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class SwitchEntry(TypedDict):
@@ -80,7 +81,7 @@ class ShowCloudMgmtParser(BaseParser[ShowCloudMgmtResult]):
         1   C9350-48U       FOC2829Y10T    Q5CF-TM95    d47f:35ff:d880  Yes
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"sdwan"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SDWAN})
 
     @classmethod
     def parse(cls, output: str) -> ShowCloudMgmtResult:

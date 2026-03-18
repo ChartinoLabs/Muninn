@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -35,7 +36,12 @@ class ShowIpDhcpSnoopingBindingResult(TypedDict):
 class ShowIpDhcpSnoopingBindingParser(BaseParser[ShowIpDhcpSnoopingBindingResult]):
     """Parser for 'show ip dhcp snooping binding' command."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"dhcp", "switching"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.DHCP,
+            ParserTag.SWITCHING,
+        }
+    )
 
     _ENTRY_PATTERN = re.compile(
         r"^(?P<mac>\S+)\s+(?P<ip>\S+)\s+(?P<lease>\d+)\s+(?P<type>\S+)\s+"

@@ -6,6 +6,7 @@ from typing import ClassVar, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ShowPlatformUsbStatusResult(TypedDict):
@@ -18,7 +19,12 @@ class ShowPlatformUsbStatusResult(TypedDict):
 class ShowPlatformUsbStatusParser(BaseParser[ShowPlatformUsbStatusResult]):
     """Parser for 'show platform usb status' command."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"platform", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.PLATFORM,
+            ParserTag.SYSTEM,
+        }
+    )
 
     _STATUS_PATTERN = re.compile(r"^USB\s+(?P<status>\S+)$", re.I)
 

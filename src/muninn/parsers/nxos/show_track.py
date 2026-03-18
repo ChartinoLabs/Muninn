@@ -6,6 +6,7 @@ from typing import Any, ClassVar, TypedDict, cast
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class TrackEntry(TypedDict):
@@ -29,7 +30,7 @@ class ShowTrackResult(TypedDict):
 class ShowTrackParser(BaseParser[ShowTrackResult]):
     """Parser for 'show track' command."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"tracking"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.TRACKING})
 
     _TRACK_ID_PATTERN = re.compile(r"^Track\s+(?P<id>\d+)$", re.I)
     _DETAIL_PATTERN = re.compile(

@@ -6,6 +6,7 @@ from typing import ClassVar, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class IgmpGroupsCount(TypedDict):
@@ -26,7 +27,7 @@ class ShowIpIgmpSnoopingGroupsCountParser(
 ):
     """Parser for 'show ip igmp snooping groups count' command."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"multicast"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.MULTICAST})
 
     _COUNT_PATTERN = re.compile(
         r"^Total\s+number\s+of\s+groups:\s*(?P<count>\d+)$", re.I

@@ -12,6 +12,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import SEPARATOR_DASH_SPACE_RE
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 # --- TypedDict schema ---
 
@@ -359,7 +360,12 @@ def _parse_stack(lines: list[str]) -> ShowPlatformResult:
 class ShowPlatformParser(BaseParser[ShowPlatformResult]):
     """Parser for 'show platform' on IOS/IOS-XE."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"platform", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.PLATFORM,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformResult:

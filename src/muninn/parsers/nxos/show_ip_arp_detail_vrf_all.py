@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import IPV4_ADDRESS, MAC_ADDRESS
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -78,7 +79,7 @@ class ShowIpArpDetailVrfAllParser(BaseParser[ShowIpArpDetailVrfAllResult]):
         192.168.240.59 00:02:40  0cc4.7aee.9c2e  Vlan240  Po1000  +
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"arp"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.ARP})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpArpDetailVrfAllResult:

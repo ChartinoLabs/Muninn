@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -56,7 +57,7 @@ class ShowMplsInterfacesParser(BaseParser[ShowMplsInterfacesResult]):
         Vlan101                Yes (ldp)     No       No  No     Yes
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"mpls"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.MPLS})
 
     @classmethod
     def parse(cls, output: str) -> ShowMplsInterfacesResult:

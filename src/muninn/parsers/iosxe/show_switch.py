@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class SwitchEntry(TypedDict):
@@ -117,7 +118,7 @@ class ShowSwitchParser(BaseParser[ShowSwitchResult]):
          2       Member   0000.0000.0000     0              Provisioned
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     @classmethod
     def parse(cls, output: str) -> ShowSwitchResult:

@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -113,7 +114,7 @@ class ShowIPv6InterfaceBriefParser(BaseParser[ShowIPv6InterfaceBriefResult]):
                          fe80::e6c7:22ff:fe10:afc1[T]
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"interfaces"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.INTERFACES})
 
     @classmethod
     def parse(cls, output: str) -> ShowIPv6InterfaceBriefResult:

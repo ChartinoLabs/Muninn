@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -104,7 +105,7 @@ class ShowVrrpBriefParser(BaseParser[ShowVrrpBriefResult]):
         Vl10                 1 IPv4 150     0  N   Y  MASTER  10.1.0.1(local) 10.1.0.3
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"fhrp"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.FHRP})
 
     @classmethod
     def _get_row_pattern(cls, output: str) -> tuple[re.Pattern[str], bool]:

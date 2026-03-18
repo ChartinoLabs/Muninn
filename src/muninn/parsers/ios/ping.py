@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class PingPacketData(TypedDict):
@@ -66,7 +67,7 @@ class PingParser(BaseParser["PingResult"]):
         Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/10 ms
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"connectivity"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.CONNECTIVITY})
 
     @classmethod
     def parse(cls, output: str) -> PingResult:

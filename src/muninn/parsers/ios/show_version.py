@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 # --- Constants ---
 BYTES_PER_KB = 1024
@@ -441,7 +442,12 @@ def _parse_single_line(line: str, result: dict) -> None:
 class ShowVersionParser(BaseParser["ShowVersionResult"]):
     """Parser for 'show version' on IOS/IOS-XE."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"inventory", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.INVENTORY,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowVersionResult:

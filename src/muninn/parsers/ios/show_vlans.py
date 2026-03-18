@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 # Matches both "VLAN ID: <id>" and "Virtual LAN ID:  <id>" header lines
@@ -337,7 +338,12 @@ class ShowVlansParser(BaseParser[ShowVlansResult]):
     protocol counters, and per-interface traffic statistics.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"switching", "vlan"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.SWITCHING,
+            ParserTag.VLAN,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowVlansResult:

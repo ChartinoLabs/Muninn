@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class ModuleEntry(TypedDict):
@@ -186,7 +187,12 @@ class ShowModuleParser(BaseParser[ShowModuleResult]):
         3   0    Supervisor 1 Module      C9600-SUP-1   FDO2426
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"inventory", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.INVENTORY,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowModuleResult:

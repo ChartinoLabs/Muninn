@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class NetworkEntry(TypedDict):
@@ -284,7 +285,12 @@ class ShowObjectGroupParser(BaseParser[ShowObjectGroupResult]):
          1.1.1.0 255.255.255.0
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"acl", "security"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.ACL,
+            ParserTag.SECURITY,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowObjectGroupResult:

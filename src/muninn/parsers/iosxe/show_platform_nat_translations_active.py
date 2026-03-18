@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class NatTranslationEntry(TypedDict):
@@ -147,7 +148,13 @@ class ShowPlatformNatTranslationsActiveParser(
         Total number of translations: 3
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"nat", "platform", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.NAT,
+            ParserTag.PLATFORM,
+            ParserTag.SYSTEM,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformNatTranslationsActiveResult:

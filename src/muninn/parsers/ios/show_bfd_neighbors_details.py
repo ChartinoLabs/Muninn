@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import SEPARATOR_DASH_RE
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -259,7 +260,7 @@ class ShowBfdNeighborsDetailsParser(
     registered protocols, and session statistics.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"bfd", "routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.BFD, ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowBfdNeighborsDetailsResult:

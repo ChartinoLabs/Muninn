@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import SEPARATOR_DASH_SPACE_RE
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -66,7 +67,7 @@ class ShowPowerInlinePriorityParser(BaseParser[ShowPowerInlinePriorityResult]):
         Gi1/0/1    auto   off        low
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"poe", "system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.POE, ParserTag.SYSTEM})
 
     @classmethod
     def parse(cls, output: str) -> ShowPowerInlinePriorityResult:

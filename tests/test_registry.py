@@ -15,8 +15,9 @@ from muninn.registry import (
     _normalize_command,
     register,
 )
+from muninn.tags import ParserTag
 
-_TEST_TAGS: frozenset[str] = frozenset({"test"})
+_TEST_TAGS: frozenset[ParserTag] = frozenset({ParserTag.SYSTEM})
 
 
 class TestNormalizeCommand:
@@ -668,13 +669,15 @@ class TestParserTags:
         """Subclass can set custom tags as a frozenset."""
 
         class MyParser(BaseParser):
-            tags: ClassVar[frozenset[str]] = frozenset({"routing", "ospf"})
+            tags: ClassVar[frozenset[ParserTag]] = frozenset(
+                {ParserTag.ROUTING, ParserTag.OSPF}
+            )
 
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
                 return {}
 
-        assert MyParser.tags == frozenset({"routing", "ospf"})
+        assert MyParser.tags == frozenset({ParserTag.ROUTING, ParserTag.OSPF})
 
     def test_built_in_registration_without_tags_raises_value_error(
         self,
@@ -720,7 +723,9 @@ class TestParserTags:
 
         @register("nxos", "show ip ospf neighbor")
         class OspfParser(BaseParser):
-            tags: ClassVar[frozenset[str]] = frozenset({"routing", "ospf"})
+            tags: ClassVar[frozenset[ParserTag]] = frozenset(
+                {ParserTag.ROUTING, ParserTag.OSPF}
+            )
 
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
@@ -732,7 +737,7 @@ class TestParserTags:
 
         specs = runtime_registry.list_command_specs()
         assert len(specs) == 1
-        assert specs[0].tags == frozenset({"routing", "ospf"})
+        assert specs[0].tags == frozenset({ParserTag.ROUTING, ParserTag.OSPF})
 
     def test_list_parser_catalog_returns_parser_info_objects(
         self,
@@ -742,7 +747,9 @@ class TestParserTags:
 
         @register("nxos", "show version")
         class VersionParser(BaseParser):
-            tags: ClassVar[frozenset[str]] = frozenset({"system", "inventory"})
+            tags: ClassVar[frozenset[ParserTag]] = frozenset(
+                {ParserTag.SYSTEM, ParserTag.INVENTORY}
+            )
 
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
@@ -750,7 +757,7 @@ class TestParserTags:
 
         @register("nxos", "show ip route")
         class RouteParser(BaseParser):
-            tags: ClassVar[frozenset[str]] = frozenset({"routing"})
+            tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.ROUTING})
 
             @classmethod
             def parse(cls, output: str) -> dict[str, Any]:
@@ -770,12 +777,12 @@ class TestParserTags:
 
         version_info = catalog_by_cmd["show version"]
         assert version_info.os is OS.CISCO_NXOS
-        assert version_info.tags == frozenset({"system", "inventory"})
+        assert version_info.tags == frozenset({ParserTag.SYSTEM, ParserTag.INVENTORY})
         assert version_info.source == "built_in"
 
         route_info = catalog_by_cmd["show ip route"]
         assert route_info.os is OS.CISCO_NXOS
-        assert route_info.tags == frozenset({"routing"})
+        assert route_info.tags == frozenset({ParserTag.ROUTING})
         assert route_info.source == "built_in"
 
     def test_list_parser_catalog_includes_local_parsers(
@@ -811,7 +818,7 @@ class TestParserTags:
         info = ParserInfo(
             os=OS.CISCO_NXOS,
             command_template="show version",
-            tags=frozenset({"system"}),
+            tags=frozenset({ParserTag.SYSTEM}),
             source="built_in",
         )
         with pytest.raises(AttributeError):

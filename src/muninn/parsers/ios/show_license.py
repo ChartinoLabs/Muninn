@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 # Pattern to match the start of each license entry
 _INDEX_FEATURE = re.compile(r"^Index\s+(\d+)\s+Feature:\s+(\S+)")
@@ -57,7 +58,7 @@ class ShowLicenseParser(BaseParser[ShowLicenseResult]):
                 License Priority: Medium
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"system"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     @classmethod
     def parse(cls, output: str) -> ShowLicenseResult:

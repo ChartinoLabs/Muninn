@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 
 
 class PathEntry(TypedDict):
@@ -123,7 +124,12 @@ class ShowIpEigrpTopologyParser(BaseParser["ShowIpEigrpTopologyResult"]):
                 via 10.254.11.9, TenGigabitEthernet1/1
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"eigrp", "routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.EIGRP,
+            ParserTag.ROUTING,
+        }
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowIpEigrpTopologyResult:

@@ -6,6 +6,7 @@ from typing import ClassVar, NotRequired, TypedDict
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -652,7 +653,7 @@ def _parse_neighbor_block(lines: list[str]) -> NeighborEntry:
 class ShowIpBgpNeighborsParser(BaseParser["ShowIpBgpNeighborsResult"]):
     """Parser for 'show ip bgp neighbors' on NX-OS."""
 
-    tags: ClassVar[frozenset[str]] = frozenset({"bgp", "routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.BGP, ParserTag.ROUTING})
 
     @classmethod
     def parse(cls, output: str) -> ShowIpBgpNeighborsResult:

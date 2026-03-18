@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -34,7 +35,12 @@ class ShowIpOspfNeighborParser(BaseParser[ShowIpOspfNeighborResult]):
     Parses OSPF neighbor adjacency information.
     """
 
-    tags: ClassVar[frozenset[str]] = frozenset({"ospf", "routing"})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {
+            ParserTag.OSPF,
+            ParserTag.ROUTING,
+        }
+    )
 
     # Pattern for neighbor entries
     # Neighbor ID     Pri   State           Dead Time   Address         Interface
