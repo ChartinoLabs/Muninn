@@ -1,0 +1,28 @@
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, m - OMP
+       n - NAT, Ni - NAT inside, No - NAT outside, Nd - NAT DIA
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       H - NHRP, G - NHRP registered, g - NHRP registration summary
+       o - ODR, P - periodic downloaded static route, l - LISP
+       a - application route
+       + - replicated route, % - next hop override, p - overrides from PfR
+       & - replicated local route overrides by connected
+
+Gateway of last resort is not set
+
+      10.0.0.0/8 is variably subnetted, 6 subnets, 2 masks
+O        10.12.0.0/30 [110/2] via 10.24.0.1, 1w4d, GigabitEthernet3
+O        10.13.0.0/30 [110/2] via 10.34.0.1, 1w4d, GigabitEthernet2
+C        10.24.0.0/30 is directly connected, GigabitEthernet3
+L        10.24.0.2/32 is directly connected, GigabitEthernet3
+C        10.34.0.0/30 is directly connected, GigabitEthernet2
+L        10.34.0.2/32 is directly connected, GigabitEthernet2
+      192.0.2.0/32 is subnetted, 4 subnets
+O        192.0.2.1 [110/3] via 10.34.0.1, 1w4d, GigabitEthernet2
+                   [110/3] via 10.24.0.1, 1w4d, GigabitEthernet3
+O        192.0.2.2 [110/2] via 10.24.0.1, 1w4d, GigabitEthernet3
+O        192.0.2.3 [110/2] via 10.34.0.1, 1w4d, GigabitEthernet2
+C        192.0.2.4 is directly connected, Loopback0

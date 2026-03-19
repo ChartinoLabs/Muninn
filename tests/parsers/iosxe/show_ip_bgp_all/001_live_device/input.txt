@@ -1,0 +1,42 @@
+For address family: IPv4 Unicast
+
+
+For address family: VPNv4 Unicast
+
+BGP table version is 18, local router ID is 192.0.2.4
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
+              x best-external, a additional-path, c RIB-compressed,
+              t secondary path, L long-lived-stale,
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+Route Distinguisher: 65000:100 (default for vrf RED)
+ r i  10.12.10.0/30    198.51.100.1             0    100      0 ?
+ r>i                   198.51.100.2             0    100      0 ?
+ r>i  10.13.10.0/30    198.51.100.3             0    100      0 ?
+ r i                   198.51.100.1             0    100      0 ?
+ * i  10.24.10.0/30    198.51.100.2             0    100      0 ?
+ *>                    0.0.0.0                  0         32768 ?
+ * i  10.34.10.0/30    198.51.100.3             0    100      0 ?
+ *>                    0.0.0.0                  0         32768 ?
+ r>i  198.51.100.1/32  198.51.100.1             0    100      0 ?
+ r>i  198.51.100.2/32  198.51.100.2             0    100      0 ?
+ r>i  198.51.100.3/32  198.51.100.3             0    100      0 ?
+ *>   198.51.100.4/32  0.0.0.0                  0         32768 ?
+Route Distinguisher: 65000:200 (default for vrf BLUE)
+ r i  10.12.20.0/30    203.0.113.1              0    100      0 ?
+ r>i                   203.0.113.2              0    100      0 ?
+ r i  10.13.20.0/30    203.0.113.1              0    100      0 ?
+ r>i                   203.0.113.3              0    100      0 ?
+ * i  10.24.20.0/30    203.0.113.2              0    100      0 ?
+ *>                    0.0.0.0                  0         32768 ?
+ * i  10.34.20.0/30    203.0.113.3              0    100      0 ?
+ *>                    0.0.0.0                  0         32768 ?
+ r>i  203.0.113.1/32   203.0.113.1              0    100      0 ?
+ r>i  203.0.113.2/32   203.0.113.2              0    100      0 ?
+ r>i  203.0.113.3/32   203.0.113.3              0    100      0 ?
+ *>   203.0.113.4/32   0.0.0.0                  0         32768 ?
+
+For address family: IPv4 Multicast

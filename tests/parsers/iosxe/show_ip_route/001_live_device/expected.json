@@ -1,0 +1,142 @@
+{
+    "vrf": "default",
+    "routes": {
+        "10.12.0.0/30": {
+            "network": "10.12.0.0",
+            "mask": "30",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+                {
+                    "admin_distance": 110,
+                    "metric": 2,
+                    "next_hop": "10.24.0.1",
+                    "age": "1w4d",
+                    "outgoing_interface": "GigabitEthernet3"
+                }
+            ]
+        },
+        "10.13.0.0/30": {
+            "network": "10.13.0.0",
+            "mask": "30",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+                {
+                    "admin_distance": 110,
+                    "metric": 2,
+                    "next_hop": "10.34.0.1",
+                    "age": "1w4d",
+                    "outgoing_interface": "GigabitEthernet2"
+                }
+            ]
+        },
+        "10.24.0.0/30": {
+            "network": "10.24.0.0",
+            "mask": "30",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+                {
+                    "outgoing_interface": "GigabitEthernet3"
+                }
+            ]
+        },
+        "10.24.0.2/32": {
+            "network": "10.24.0.2",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+                {
+                    "outgoing_interface": "GigabitEthernet3"
+                }
+            ]
+        },
+        "10.34.0.0/30": {
+            "network": "10.34.0.0",
+            "mask": "30",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+                {
+                    "outgoing_interface": "GigabitEthernet2"
+                }
+            ]
+        },
+        "10.34.0.2/32": {
+            "network": "10.34.0.2",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+                {
+                    "outgoing_interface": "GigabitEthernet2"
+                }
+            ]
+        },
+        "192.0.2.1/32": {
+            "network": "192.0.2.1",
+            "mask": "32",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+                {
+                    "admin_distance": 110,
+                    "metric": 3,
+                    "next_hop": "10.34.0.1",
+                    "age": "1w4d",
+                    "outgoing_interface": "GigabitEthernet2"
+                },
+                {
+                    "admin_distance": 110,
+                    "metric": 3,
+                    "next_hop": "10.24.0.1",
+                    "age": "1w4d",
+                    "outgoing_interface": "GigabitEthernet3"
+                }
+            ]
+        },
+        "192.0.2.2/32": {
+            "network": "192.0.2.2",
+            "mask": "32",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+                {
+                    "admin_distance": 110,
+                    "metric": 2,
+                    "next_hop": "10.24.0.1",
+                    "age": "1w4d",
+                    "outgoing_interface": "GigabitEthernet3"
+                }
+            ]
+        },
+        "192.0.2.3/32": {
+            "network": "192.0.2.3",
+            "mask": "32",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+                {
+                    "admin_distance": 110,
+                    "metric": 2,
+                    "next_hop": "10.34.0.1",
+                    "age": "1w4d",
+                    "outgoing_interface": "GigabitEthernet2"
+                }
+            ]
+        },
+        "192.0.2.4/32": {
+            "network": "192.0.2.4",
+            "mask": "32",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+                {
+                    "outgoing_interface": "Loopback0"
+                }
+            ]
+        }
+    }
+}
