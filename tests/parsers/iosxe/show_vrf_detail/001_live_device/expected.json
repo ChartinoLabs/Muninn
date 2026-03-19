@@ -1,0 +1,55 @@
+{
+    "vrfs": {
+        "BLUE": {
+            "vrf_id": 2,
+            "default_rd": "65000:200",
+            "cli_format": "new",
+            "flags": "0x180C",
+            "interfaces": [
+                "Loopback20",
+                "GigabitEthernet2.20",
+                "GigabitEthernet3.20"
+            ],
+            "address_families": {
+                "ipv4 unicast": {
+                    "table_id": "0x2",
+                    "flags": "0x0",
+                    "label_allocation_mode": "per-prefix"
+                }
+            }
+        },
+        "RED": {
+            "vrf_id": 3,
+            "default_rd": "65000:100",
+            "cli_format": "new",
+            "flags": "0x180C",
+            "interfaces": [
+                "Loopback10",
+                "GigabitEthernet2.10",
+                "GigabitEthernet3.10"
+            ],
+            "address_families": {
+                "ipv4 unicast": {
+                    "table_id": "0x3",
+                    "flags": "0x0",
+                    "label_allocation_mode": "per-prefix"
+                }
+            }
+        },
+        "management": {
+            "vrf_id": 1,
+            "cli_format": "new",
+            "flags": "0x1808",
+            "interfaces": [
+                "GigabitEthernet1"
+            ],
+            "address_families": {
+                "ipv4 unicast": {
+                    "table_id": "0x1",
+                    "flags": "0x0",
+                    "label_allocation_mode": "per-prefix"
+                }
+            }
+        }
+    }
+}

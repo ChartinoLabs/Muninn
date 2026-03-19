@@ -37,7 +37,7 @@ class ShowIpVrfParser(BaseParser[ShowIpVrfResult]):
     # VRF1                         65000:1               Tu1
     # Mgmt-intf                    <not set>             Gi1
     _VRF_PATTERN = re.compile(
-        r"^(?P<name>\S+)\s+"
+        r"^\s*(?P<name>\S+)\s+"
         r"(?P<default_rd>\S+(?:\s+\S+)?)\s+"
         r"(?P<interface>\S+)$"
     )
