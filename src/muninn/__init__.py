@@ -1,5 +1,6 @@
 """Muninn: A standalone CLI output parser library for network devices."""
 
+from muninn._version import __version__, __version_tuple__
 from muninn.config import Configuration, ExecutionMode
 from muninn.exceptions import (
     EmptyOutputError,
@@ -15,6 +16,8 @@ from muninn.runtime import Muninn
 from muninn.tags import ParserTag
 
 __all__ = [
+    "__version__",
+    "__version_tuple__",
     "BaseParser",
     "Configuration",
     "EmptyOutputError",

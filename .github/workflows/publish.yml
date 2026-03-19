@@ -1,0 +1,71 @@
+---
+name: Publish to PyPI
+on: # yamllint disable-line rule:truthy
+  push:
+    tags:
+      - "v*"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup-python-uv
+        with:
+          python-version: "3.13"
+      - name: Build package
+        run: uv build
+      - name: Verify package version matches tag
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          PKG_VERSION=$(uv run python -c "from muninn._version import __version__; print(__version__)")
+          TAG_VERSION="${TAG_NAME#v}"
+          if [ "$PKG_VERSION" != "$TAG_VERSION" ]; then
+            echo "::error::Tag version ($TAG_VERSION) does not match package version ($PKG_VERSION)"
+            exit 1
+          fi
+      - name: Upload distribution artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+      - name: Extract changelog for this version
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          VERSION="${TAG_NAME#v}"
+          # Extract the section for this version from CHANGELOG.md
+          awk "/^## ${VERSION} /{found=1; next} /^## /{if(found) exit} found" CHANGELOG.md > release_notes.md
+          if [ ! -s release_notes.md ]; then
+            echo "No changelog entry found for version ${VERSION}" > release_notes.md
+          fi
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: gh release create "$TAG_NAME" --title "$TAG_NAME" --notes-file release_notes.md
+  publish:
+    needs: [build, release]
+    runs-on: ubuntu-latest
+    environment: pypi
+    steps:
+      - name: Download distribution artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
