@@ -183,6 +183,7 @@ def _parse_lines(output: str) -> dict[str, ProcessEntry]:
 
 
 @register(OS.CISCO_IOS, "show ip ospf database")
+@register(OS.CISCO_IOSXE, "show ip ospf database")
 class ShowIpOspfDatabaseParser(BaseParser[ShowIpOspfDatabaseResult]):
     """Parser for 'show ip ospf database' command.
 
