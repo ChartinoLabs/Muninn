@@ -117,6 +117,33 @@ class ShowInterfaceStatusParser(BaseParser[ShowInterfaceStatusResult]):
         return value
 
     @classmethod
+    def _build_entry(cls, parsed: dict[str, str | None]) -> InterfaceStatusEntry:
+        """Build an InterfaceStatusEntry from parsed field values."""
+        entry: InterfaceStatusEntry = {
+            "status": str(parsed["status"]),
+            "duplex": str(parsed["duplex"]),
+            "speed": str(parsed["speed"]),
+        }
+
+        name = cls._normalize_value(parsed.get("name"))
+        vlan = cls._normalize_value(parsed.get("vlan"))
+        intf_type = cls._normalize_value(parsed.get("type"))
+
+        if name:
+            entry["name"] = name
+        if vlan:
+            entry["vlan"] = vlan
+        if intf_type:
+            entry["type"] = intf_type
+
+        return entry
+
+    @classmethod
+    def _is_header_or_empty(cls, line: str) -> bool:
+        """Return True if line is a header, separator, or empty."""
+        return not line or line.startswith("Port") or line.startswith("---")
+
+    @classmethod
     def parse(cls, output: str) -> ShowInterfaceStatusResult:
         """Parse 'show interface status' output on IOS-XE / IOS.
 
@@ -133,11 +160,7 @@ class ShowInterfaceStatusParser(BaseParser[ShowInterfaceStatusResult]):
 
         for line in output.splitlines():
             stripped = line.strip()
-            if (
-                not stripped
-                or stripped.startswith("Port")
-                or stripped.startswith("---")
-            ):
+            if cls._is_header_or_empty(stripped):
                 continue
 
             match = cls._INTERFACE_PATTERN.match(stripped)
@@ -149,28 +172,7 @@ class ShowInterfaceStatusParser(BaseParser[ShowInterfaceStatusResult]):
                 continue
 
             port = canonical_interface_name(match.group("port"), os=OS.CISCO_IOSXE)
-            # status, duplex, speed are always str from regex matches
-            status = str(parsed["status"])
-            duplex = str(parsed["duplex"])
-            speed = str(parsed["speed"])
-            name = cls._normalize_value(parsed.get("name"))
-            vlan = cls._normalize_value(parsed.get("vlan"))
-            intf_type = cls._normalize_value(parsed.get("type"))
-
-            entry: InterfaceStatusEntry = {
-                "status": status,
-                "duplex": duplex,
-                "speed": speed,
-            }
-
-            if name:
-                entry["name"] = name
-            if vlan:
-                entry["vlan"] = vlan
-            if intf_type:
-                entry["type"] = intf_type
-
-            interfaces[port] = entry
+            interfaces[port] = cls._build_entry(parsed)
 
         if not interfaces:
             msg = "No interfaces found in output"
