@@ -1,11 +1,12 @@
 """Parser for 'show interface status' command on IOS-XE."""
 
 import re
-from typing import NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
@@ -40,6 +41,8 @@ class ShowInterfaceStatusParser(BaseParser[ShowInterfaceStatusResult]):
         Gi1/0/2   AccessPoint   connected    8      a-full a-1000
         Po1       ethchl        connected    trunk  a-full a-1000
     """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.INTERFACES})
 
     # IOS-XE status values.  The base status word may be followed by a colon
     # and optional additional text (e.g. "notconnect: TD", "connected: TDR").
@@ -146,9 +149,10 @@ class ShowInterfaceStatusParser(BaseParser[ShowInterfaceStatusResult]):
                 continue
 
             port = canonical_interface_name(match.group("port"), os=OS.CISCO_IOSXE)
-            status = parsed["status"]
-            duplex = parsed["duplex"]
-            speed = parsed["speed"]
+            # status, duplex, speed are always str from regex matches
+            status = str(parsed["status"])
+            duplex = str(parsed["duplex"])
+            speed = str(parsed["speed"])
             name = cls._normalize_value(parsed.get("name"))
             vlan = cls._normalize_value(parsed.get("vlan"))
             intf_type = cls._normalize_value(parsed.get("type"))
