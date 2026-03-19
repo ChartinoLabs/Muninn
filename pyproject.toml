@@ -1,6 +1,6 @@
 [project]
-name = "muninn"
-version = "0.1.0"
+name = "muninn-parsers"
+dynamic = ["version"]
 description = "A standalone CLI output parser library for network devices"
 readme = "README.md"
 authors = [
@@ -14,8 +14,14 @@ dependencies = [
 ]
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/muninn/_version.py"
 
 [dependency-groups]
 dev = [
