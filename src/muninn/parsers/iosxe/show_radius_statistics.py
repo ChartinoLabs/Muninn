@@ -23,8 +23,8 @@ class ShowRadiusStatisticsResult(TypedDict):
     triple_counters: dict[str, RadiusTripleCounter]
     single_counters: dict[str, str]
     source_port_range: NotRequired[str]
-    source_port_span: NotRequired[tuple[str, str]]
-    last_source_port_identifier: NotRequired[tuple[str, str]]
+    source_port_span: NotRequired[list[str]]
+    last_source_port_identifier: NotRequired[list[str]]
     elapsed_since_clear: NotRequired[str]
 
 
@@ -134,11 +134,11 @@ class _RadiusAcc:
             if key in self.meta:
                 out[key] = self.meta[key]
         if "source_port_span" in self.meta:
-            out["source_port_span"] = list(self.meta["source_port_span"])
+            span = cast(tuple[str, str], self.meta["source_port_span"])
+            out["source_port_span"] = [span[0], span[1]]
         if "last_source_port_identifier" in self.meta:
-            out["last_source_port_identifier"] = list(
-                self.meta["last_source_port_identifier"]
-            )
+            ports = cast(tuple[str, str], self.meta["last_source_port_identifier"])
+            out["last_source_port_identifier"] = [ports[0], ports[1]]
         return cast(ShowRadiusStatisticsResult, out)
 
 
