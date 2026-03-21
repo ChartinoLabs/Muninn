@@ -152,7 +152,6 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         "iosxe/show_processes_memory/001_live_device/expected.json",
         "iosxe/show_processes_memory/003_sorted_two_pools_with_total_line/expected.json",
         "iosxe/show_processes_memory_sorted/001_live_device/expected.json",
-        "iosxe/show_stackwise-virtual_neighbors/001_basic/expected.json",
         "iosxe/show_standby_brief/001_multiple_active_groups/expected.json",
         "iosxe/show_standby_brief/002_ipv6_and_continuation_lines/expected.json",
         "iosxe/show_standby_brief/003_single_init_no_preempt/expected.json",
