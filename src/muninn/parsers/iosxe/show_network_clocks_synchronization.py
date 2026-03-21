@@ -1,7 +1,7 @@
 """Parser for 'show network-clocks synchronization' command on IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import ClassVar, Final, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -35,6 +35,15 @@ _ROW_RE = re.compile(
     r"(?P<prio>\d+)\s+(?P<ql>\S+)\s+(?P<tx>\S+)\s+(?P<rx>\S+)\s*$"
 )
 
+# ESMC Tx/Rx use "-" or NA-like tokens for “no value”; SigType "NA" is a separate enum.
+_ESMC_ABSENT_CASEFOLD: Final[frozenset[str]] = frozenset({"na", "n/a"})
+
+
+def _esmc_column_has_value(token: str) -> bool:
+    if token == "-":
+        return False
+    return token.casefold() not in _ESMC_ABSENT_CASEFOLD
+
 
 def _parse_ncs_kv_line(line: str) -> tuple[str, str] | None:
     if ":" not in line:
@@ -62,9 +71,9 @@ def _parse_interface_row(line: str) -> NetworkClockInterfaceRow | None:
         "prio": int(m.group("prio")),
         "ql_in": m.group("ql"),
     }
-    if tx != "-":
+    if _esmc_column_has_value(tx):
         row["esmc_tx"] = tx
-    if rx != "-":
+    if _esmc_column_has_value(rx):
         row["esmc_rx"] = rx
     return row
 

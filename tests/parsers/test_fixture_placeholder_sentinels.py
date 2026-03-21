@@ -5,7 +5,9 @@ omitting the key (or using ``null`` if the schema uses optional fields) instead 
 carrying strings like ``-`` or ``---`` through to structured output.
 
 Some tokens are ambiguous: Cisco often prints ``NA`` / ``N/A`` as *meaningful*
-labels (e.g. network-clocks ``SigType``, RADIUS statistics). Legacy fixtures that
+labels (e.g. network-clocks ``SigType`` as the literal ``NA`` enum, or RADIUS
+statistics). ESMC Tx/Rx columns treat ``NA`` / ``N/A`` / ``n/a`` like ``-`` and
+omit those keys. Legacy fixtures that
 still mirror those literals are listed below; **new** test cases are not exempt
 unless their path is added explicitly (so new work does not silently reintroduce
 placeholders).
