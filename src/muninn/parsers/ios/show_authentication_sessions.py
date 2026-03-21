@@ -25,6 +25,14 @@ _DATA_RE = re.compile(
 )
 _SESSION_COUNT_RE = re.compile(r"^\s*Session\s+count\s*=\s*(\d+)", re.IGNORECASE)
 
+# IOS prints N/A in the Method column when no method applies (e.g. Unauth);
+# omit the key.
+_METHOD_NA_PLACEHOLDERS: frozenset[str] = frozenset({"NA", "N/A", "n/a"})
+
+
+def _is_method_na_placeholder(value: str) -> bool:
+    return value in _METHOD_NA_PLACEHOLDERS
+
 
 class SessionTableEntry(TypedDict):
     """Normalized row parsed from an IOS session summary table."""
@@ -110,7 +118,7 @@ def _parse_session_table(
 class AuthSessionEntry(TypedDict):
     """Schema for a single authentication session entry."""
 
-    method: str
+    method: NotRequired[str]
     domain: str
     status: str
     session_id: str
@@ -160,11 +168,12 @@ class ShowAuthenticationSessionsParser(
             mac_address = entry["mac_address"]
 
             auth_entry: AuthSessionEntry = {
-                "method": entry["method"],
                 "domain": entry["domain"],
                 "status": entry["status"],
                 "session_id": entry["session_id"],
             }
+            if not _is_method_na_placeholder(entry["method"]):
+                auth_entry["method"] = entry["method"]
             if "fg" in entry:
                 auth_entry["fg"] = entry["fg"]
 
