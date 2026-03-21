@@ -11,9 +11,8 @@ from muninn.utils import canonical_interface_name
 
 
 class SVLLinkPortStatus(TypedDict):
-    """Per-port link and protocol status on an SVL."""
+    """Link and protocol status for one port on an SVL."""
 
-    port: str
     link_status: str
     protocol_status: str
 
@@ -22,7 +21,7 @@ class SVLLinkSwitchEntry(TypedDict):
     """SVL link rows for one switch."""
 
     svl: str
-    ports: list[SVLLinkPortStatus]
+    ports: dict[str, SVLLinkPortStatus]
 
 
 class ShowStackwiseVirtualLinkResult(TypedDict):
@@ -85,14 +84,12 @@ def _parse_link_table(lines: list[str]) -> dict[str, SVLLinkSwitchEntry]:
             if sw not in switches:
                 switches[sw] = SVLLinkSwitchEntry(
                     svl=m.group("svl"),
-                    ports=[],
+                    ports={},
                 )
-            switches[sw]["ports"].append(
-                SVLLinkPortStatus(
-                    port=_canon(m.group("port")),
-                    link_status=m.group("link_st"),
-                    protocol_status=m.group("proto_st"),
-                ),
+            port_name = _canon(m.group("port"))
+            switches[sw]["ports"][port_name] = SVLLinkPortStatus(
+                link_status=m.group("link_st"),
+                protocol_status=m.group("proto_st"),
             )
             continue
 
@@ -100,12 +97,10 @@ def _parse_link_table(lines: list[str]) -> dict[str, SVLLinkSwitchEntry]:
             continue
 
         if m := _CONT.match(line):
-            switches[current_switch]["ports"].append(
-                SVLLinkPortStatus(
-                    port=_canon(m.group("port")),
-                    link_status=m.group("link_st"),
-                    protocol_status=m.group("proto_st"),
-                ),
+            port_name = _canon(m.group("port"))
+            switches[current_switch]["ports"][port_name] = SVLLinkPortStatus(
+                link_status=m.group("link_st"),
+                protocol_status=m.group("proto_st"),
             )
 
     return switches
