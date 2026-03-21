@@ -51,6 +51,8 @@ def _esmc_store_kv(
 ) -> None:
     if not subsection or not current_name:
         return
+    if v == "-":
+        return
     if subsection == "admin":
         admin[k] = v
     else:
