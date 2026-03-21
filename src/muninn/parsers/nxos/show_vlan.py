@@ -16,7 +16,7 @@ class PrivateVlanInfo(TypedDict):
 
     type: str
     primary_vlan: NotRequired[str]
-    secondary_vlans: NotRequired[list[str]]
+    secondary_vlans: NotRequired[dict[str, bool]]
 
 
 class VlanEntry(TypedDict):
@@ -25,7 +25,7 @@ class VlanEntry(TypedDict):
     vlan_id: int
     name: str
     status: str
-    ports: list[str]
+    ports: dict[str, bool]
     type: str
     vlan_mode: str
     private_vlan: NotRequired[PrivateVlanInfo]
@@ -69,16 +69,16 @@ _SECTION_PATTERNS: list[tuple[re.Pattern[str], str]] = [
 ]
 
 
-def _normalize_ports(port_str: str) -> list[str]:
-    """Split comma-separated ports and normalize to canonical names."""
+def _normalize_ports(port_str: str) -> dict[str, bool]:
+    """Split comma-separated ports into a canonical interface name keyed map."""
     port_str = port_str.strip()
     if not port_str:
-        return []
-    return [
-        canonical_interface_name(p.strip(), os=OS.CISCO_NXOS)
+        return {}
+    return {
+        canonical_interface_name(p.strip(), os=OS.CISCO_NXOS): True
         for p in port_str.split(",")
         if p.strip()
-    ]
+    }
 
 
 def _expand_vlan_ranges(text: str) -> list[int]:
@@ -164,7 +164,7 @@ def _parse_basic_table(lines: list[str]) -> dict[str, VlanEntry]:
         elif current_vlan_id is not None:
             ports_str = _col_field(line, _PORTS_COL)
             if ports_str:
-                vlans[current_vlan_id]["ports"].extend(_normalize_ports(ports_str))
+                vlans[current_vlan_id]["ports"].update(_normalize_ports(ports_str))
 
     return vlans
 
@@ -235,12 +235,15 @@ def _apply_primary_pv(vlans: dict[str, VlanEntry], pri_str: str, sec_str: str) -
     if pri_entry is None:
         return
     if "private_vlan" not in pri_entry:
-        pri_entry["private_vlan"] = {"type": "primary", "secondary_vlans": []}
+        pri_entry["private_vlan"] = {
+            "type": "primary",
+            "secondary_vlans": {},
+        }
     pri_pv = pri_entry["private_vlan"]
     if "secondary_vlans" not in pri_pv:
-        pri_pv["secondary_vlans"] = []
-    sec_list: list[str] = pri_pv["secondary_vlans"]
-    sec_list.append(sec_str)
+        pri_pv["secondary_vlans"] = {}
+    sec_map: dict[str, bool] = pri_pv["secondary_vlans"]
+    sec_map[sec_str] = True
 
 
 def _parse_private_vlans(lines: list[str], vlans: dict[str, VlanEntry]) -> None:

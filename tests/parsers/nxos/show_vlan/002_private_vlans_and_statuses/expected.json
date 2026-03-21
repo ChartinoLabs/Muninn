@@ -4,10 +4,10 @@
             "vlan_id": 10,
             "name": "STD-VLAN10",
             "status": "sus/lshut",
-            "ports": [
-                "Ethernet1/1",
-                "Ethernet1/2"
-            ],
+            "ports": {
+                "Ethernet1/1": true,
+                "Ethernet1/2": true
+            },
             "type": "enet",
             "vlan_mode": "CE"
         },
@@ -15,28 +15,28 @@
             "vlan_id": 20,
             "name": "PV-VLAN20-PRIMARY",
             "status": "act/lshut",
-            "ports": [
-                "Ethernet1/11",
-                "Ethernet1/12"
-            ],
+            "ports": {
+                "Ethernet1/11": true,
+                "Ethernet1/12": true
+            },
             "type": "enet",
             "vlan_mode": "CE",
             "private_vlan": {
                 "type": "primary",
-                "secondary_vlans": [
-                    "25",
-                    "30"
-                ]
+                "secondary_vlans": {
+                    "25": true,
+                    "30": true
+                }
             }
         },
         "25": {
             "vlan_id": 25,
             "name": "PV-VLAN25-SEC-ISO",
             "status": "sus/ishut",
-            "ports": [
-                "Ethernet1/21",
-                "Ethernet1/22"
-            ],
+            "ports": {
+                "Ethernet1/21": true,
+                "Ethernet1/22": true
+            },
             "type": "enet",
             "vlan_mode": "CE",
             "private_vlan": {
@@ -48,10 +48,10 @@
             "vlan_id": 30,
             "name": "PV-VLAN30-SEC-ISO",
             "status": "act/ishut",
-            "ports": [
-                "Ethernet1/31",
-                "Ethernet1/32"
-            ],
+            "ports": {
+                "Ethernet1/31": true,
+                "Ethernet1/32": true
+            },
             "type": "enet",
             "vlan_mode": "CE",
             "private_vlan": {
