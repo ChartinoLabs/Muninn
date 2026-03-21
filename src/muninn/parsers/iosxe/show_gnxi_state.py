@@ -19,7 +19,7 @@ class GnxiStateRow(TypedDict):
 class ShowGnxiStateResult(TypedDict):
     """Schema for 'show gnxi state' parsed output."""
 
-    rows: list[GnxiStateRow]
+    rows: dict[str, GnxiStateRow]
 
 
 _ROW_RE = re.compile(r"^(?P<st>\S+)\s+(?P<s>\S+)\s*$")
@@ -46,11 +46,11 @@ class ShowGnxiStateParser(BaseParser[ShowGnxiStateResult]):
     @classmethod
     def parse(cls, output: str) -> ShowGnxiStateResult:
         """Parse 'show gnxi state' output."""
-        rows: list[GnxiStateRow] = []
+        rows: dict[str, GnxiStateRow] = {}
         for line in output.splitlines():
             row = _parse_gnxi_row(line)
             if row:
-                rows.append(row)
+                rows[row["state"]] = row
         if not rows:
             msg = "No gNXI state rows parsed"
             raise ValueError(msg)
