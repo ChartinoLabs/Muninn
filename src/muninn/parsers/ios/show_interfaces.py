@@ -68,9 +68,8 @@ class CountersEntry(TypedDict):
 
 
 class PortChannelMemberEntry(TypedDict):
-    """Schema for a port-channel member."""
+    """Per-member duplex and speed (see ``PortChannelInfo.members`` keys)."""
 
-    interface: str
     duplex: str
     speed: str
 
@@ -79,7 +78,7 @@ class PortChannelInfo(TypedDict):
     """Schema for port-channel information."""
 
     active_members: int
-    members: list[PortChannelMemberEntry]
+    members: dict[str, PortChannelMemberEntry]
     pf_jumbo_members: NotRequired[int]
 
 
@@ -617,7 +616,8 @@ def _parse_tunnel(lines: list[str]) -> TunnelInfo:
 
 def _parse_port_channel(lines: list[str]) -> PortChannelInfo:
     """Parse port-channel specific lines."""
-    pc: PortChannelInfo = {"active_members": 0, "members": []}
+    members: dict[str, PortChannelMemberEntry] = {}
+    pc: PortChannelInfo = {"active_members": 0, "members": members}
     for line in lines:
         m = _PC_ACTIVE_RE.match(line)
         if m:
@@ -626,13 +626,11 @@ def _parse_port_channel(lines: list[str]) -> PortChannelInfo:
 
         m = _PC_MEMBER_RE.match(line)
         if m:
-            pc["members"].append(
-                {
-                    "interface": canonical_interface_name(m.group(1), os=OS.CISCO_IOS),
-                    "duplex": m.group(2).strip(),
-                    "speed": m.group(3),
-                }
-            )
+            if_name = canonical_interface_name(m.group(1), os=OS.CISCO_IOS)
+            members[if_name] = {
+                "duplex": m.group(2).strip(),
+                "speed": m.group(3),
+            }
             continue
 
         m = _PC_JUMBO_RE.match(line)
@@ -645,14 +643,9 @@ def _parse_port_channel(lines: list[str]) -> PortChannelInfo:
             # "Members in this channel: Gi1/0/2" — short form without duplex/speed
             member_str = m.group(1).strip()
             for name in member_str.split():
-                pc["members"].append(
-                    {
-                        "interface": canonical_interface_name(name, os=OS.CISCO_IOS),
-                        "duplex": "",
-                        "speed": "",
-                    }
-                )
-            pc["active_members"] = len(pc["members"])
+                canon = canonical_interface_name(name, os=OS.CISCO_IOS)
+                members[canon] = {"duplex": "", "speed": ""}
+            pc["active_members"] = len(members)
             continue
 
     return pc
