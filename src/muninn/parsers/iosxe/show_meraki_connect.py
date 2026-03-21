@@ -14,7 +14,7 @@ class ShowMerakiConnectResult(TypedDict):
 
     service_line: str
     sections: dict[str, dict[str, str]]
-    device_registration_devices: NotRequired[list[dict[str, str]]]
+    device_registration_devices: NotRequired[dict[str, dict[str, str]]]
     device_registration_prefix: NotRequired[dict[str, str]]
 
 
@@ -48,7 +48,7 @@ class _MerakiAcc:
         self.service_line = ""
         self.current: str | None = None
         self.sections: dict[str, dict[str, str]] = {}
-        self.devices: list[dict[str, str]] = []
+        self.devices: dict[str, dict[str, str]] = {}
         self.prefix: dict[str, str] = {}
         self.current_dev: dict[str, str] | None = None
 
@@ -79,7 +79,7 @@ class _MerakiAcc:
             return
         if k == "Device Number":
             dev = {k: v}
-            self.devices.append(dev)
+            self.devices[v] = dev
             self.current_dev = dev
         elif self.current_dev is not None:
             self.current_dev[k] = v
