@@ -1,12 +1,15 @@
 """Parser for 'show endpoint-tracker records' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
+
+# CLI prints these in numeric/type columns when a tracker-group row has no value.
+_NA_LIKE_PLACEHOLDERS: frozenset[str] = frozenset({"NA", "N/A", "n/a"})
 
 
 class EndpointTrackerRecordRow(TypedDict):
@@ -14,11 +17,11 @@ class EndpointTrackerRecordRow(TypedDict):
 
     record_name: str
     endpoint: str
-    endpoint_type: str
-    threshold_ms: str
-    multiplier: str
-    interval_s: str
     tracker_type: str
+    endpoint_type: NotRequired[str]
+    threshold_ms: NotRequired[str]
+    multiplier: NotRequired[str]
+    interval_s: NotRequired[str]
 
 
 class ShowEndpointTrackerRecordsResult(TypedDict):
@@ -32,6 +35,23 @@ def _split_record_line(line: str) -> list[str] | None:
     if len(parts) < 7:
         return None
     return parts
+
+
+def _row_from_record_parts(parts: list[str]) -> EndpointTrackerRecordRow:
+    row: EndpointTrackerRecordRow = {
+        "record_name": parts[0],
+        "endpoint": parts[1],
+        "tracker_type": parts[6],
+    }
+    if parts[2] not in _NA_LIKE_PLACEHOLDERS:
+        row["endpoint_type"] = parts[2]
+    if parts[3] not in _NA_LIKE_PLACEHOLDERS:
+        row["threshold_ms"] = parts[3]
+    if parts[4] not in _NA_LIKE_PLACEHOLDERS:
+        row["multiplier"] = parts[4]
+    if parts[5] not in _NA_LIKE_PLACEHOLDERS:
+        row["interval_s"] = parts[5]
+    return row
 
 
 @register(OS.CISCO_IOSXE, "show endpoint-tracker records")
@@ -53,15 +73,7 @@ class ShowEndpointTrackerRecordsParser(BaseParser[ShowEndpointTrackerRecordsResu
             parts = _split_record_line(line)
             if not parts:
                 continue
-            row = EndpointTrackerRecordRow(
-                record_name=parts[0],
-                endpoint=parts[1],
-                endpoint_type=parts[2],
-                threshold_ms=parts[3],
-                multiplier=parts[4],
-                interval_s=parts[5],
-                tracker_type=parts[6],
-            )
+            row = _row_from_record_parts(parts)
             rows[row["record_name"]] = row
         if not rows:
             msg = "No endpoint-tracker records parsed"

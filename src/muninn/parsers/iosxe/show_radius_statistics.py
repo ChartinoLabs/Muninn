@@ -10,11 +10,15 @@ from muninn.tags import ParserTag
 
 
 class RadiusTripleCounter(TypedDict):
-    """Three-column auth/acct/both counter."""
+    """Three-column auth/acct/both counter.
 
-    auth: str
-    acct: str
+    IOS-XE prints ``NA`` in the auth and/or acct columns when that counter does
+    not apply; those keys are omitted instead of carrying the literal token.
+    """
+
     both: str
+    auth: NotRequired[str]
+    acct: NotRequired[str]
 
 
 class ShowRadiusStatisticsResult(TypedDict):
@@ -38,6 +42,21 @@ _ELAPSED_RE = re.compile(
     r"^Elapsed time since counters last cleared\s*:\s*(.+)$",
     re.I,
 )
+
+
+def _omit_na_auth_acct_column(value: str) -> bool:
+    """Return True if the CLI uses NA / N/A for a non-applicable auth or acct cell."""
+    return value.strip().upper() in {"NA", "N/A"}
+
+
+def _triple_row(auth: str, acct: str, both: str) -> RadiusTripleCounter:
+    """Build a triple counter row, dropping auth/acct when the device printed NA."""
+    row: RadiusTripleCounter = {"both": both}
+    if not _omit_na_auth_acct_column(auth):
+        row["auth"] = auth
+    if not _omit_na_auth_acct_column(acct):
+        row["acct"] = acct
+    return row
 
 
 class _RadiusAcc:
@@ -77,11 +96,7 @@ class _RadiusAcc:
         name = m3.group(1).strip()
         if name.lower().startswith("access "):
             return True
-        self.triple[name] = RadiusTripleCounter(
-            auth=m3.group(2),
-            acct=m3.group(3),
-            both=m3.group(4),
-        )
+        self.triple[name] = _triple_row(m3.group(2), m3.group(3), m3.group(4))
         return True
 
     def _feed_single(self, s: str) -> bool:
