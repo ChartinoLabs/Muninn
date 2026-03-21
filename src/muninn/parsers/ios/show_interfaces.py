@@ -68,9 +68,8 @@ class CountersEntry(TypedDict):
 
 
 class PortChannelMemberEntry(TypedDict):
-    """Schema for a port-channel member."""
+    """Per-member duplex and speed (see ``PortChannelInfo.members`` keys)."""
 
-    interface: str
     duplex: str
     speed: str
 
@@ -617,7 +616,8 @@ def _parse_tunnel(lines: list[str]) -> TunnelInfo:
 
 def _parse_port_channel(lines: list[str]) -> PortChannelInfo:
     """Parse port-channel specific lines."""
-    pc: PortChannelInfo = {"active_members": 0, "members": {}}
+    members: dict[str, PortChannelMemberEntry] = {}
+    pc: PortChannelInfo = {"active_members": 0, "members": members}
     for line in lines:
         m = _PC_ACTIVE_RE.match(line)
         if m:
@@ -626,9 +626,8 @@ def _parse_port_channel(lines: list[str]) -> PortChannelInfo:
 
         m = _PC_MEMBER_RE.match(line)
         if m:
-            ifname = canonical_interface_name(m.group(1), os=OS.CISCO_IOS)
-            pc["members"][ifname] = {
-                "interface": ifname,
+            if_name = canonical_interface_name(m.group(1), os=OS.CISCO_IOS)
+            members[if_name] = {
                 "duplex": m.group(2).strip(),
                 "speed": m.group(3),
             }
@@ -644,13 +643,9 @@ def _parse_port_channel(lines: list[str]) -> PortChannelInfo:
             # "Members in this channel: Gi1/0/2" — short form without duplex/speed
             member_str = m.group(1).strip()
             for name in member_str.split():
-                ifname = canonical_interface_name(name, os=OS.CISCO_IOS)
-                pc["members"][ifname] = {
-                    "interface": ifname,
-                    "duplex": "",
-                    "speed": "",
-                }
-            pc["active_members"] = len(pc["members"])
+                canon = canonical_interface_name(name, os=OS.CISCO_IOS)
+                members[canon] = {"duplex": "", "speed": ""}
+            pc["active_members"] = len(members)
             continue
 
     return pc
