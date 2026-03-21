@@ -25,7 +25,7 @@ class ShowSubscriberLiteSessionResult(TypedDict):
     """Schema for 'show subscriber lite-session' parsed output."""
 
     total_lite_sessions_up: int
-    sessions: list[SubscriberLiteSessionEntry]
+    sessions: dict[str, SubscriberLiteSessionEntry]
 
 
 _TOTAL_RE = re.compile(r"^Total lite sessions up:\s*(\d+)\s*$", re.I)
@@ -59,7 +59,7 @@ class ShowSubscriberLiteSessionParser(BaseParser[ShowSubscriberLiteSessionResult
     def parse(cls, output: str) -> ShowSubscriberLiteSessionResult:
         """Parse 'show subscriber lite-session' output."""
         total = 0
-        sessions: list[SubscriberLiteSessionEntry] = []
+        sessions: dict[str, SubscriberLiteSessionEntry] = {}
         for line in output.splitlines():
             line = line.strip()
             if not line:
@@ -72,7 +72,7 @@ class ShowSubscriberLiteSessionParser(BaseParser[ShowSubscriberLiteSessionResult
                 continue
             row = _parse_lite_row(line)
             if row:
-                sessions.append(row)
+                sessions[row["src_ip"]] = row
         if total == 0 and not sessions:
             msg = "No lite session data parsed"
             raise ValueError(msg)
