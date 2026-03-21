@@ -10,10 +10,9 @@ from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
-class NeighborPortPair(TypedDict):
-    """Local and optional remote SVL neighbor port."""
+class NeighborPortRemote(TypedDict):
+    """Remote SVL neighbor port for a local interface."""
 
-    local_port: str
     remote_port: str
 
 
@@ -21,7 +20,7 @@ class NeighborSwitchEntry(TypedDict):
     """SVL neighbor information for one switch."""
 
     svl: str
-    port_pairs: list[NeighborPortPair]
+    ports: dict[str, NeighborPortRemote]
 
 
 class ShowStackwiseVirtualNeighborsResult(TypedDict):
@@ -73,13 +72,11 @@ def _parse_neighbors_table(lines: list[str]) -> dict[str, NeighborSwitchEntry]:
             if sw not in switches:
                 switches[sw] = NeighborSwitchEntry(
                     svl=m.group("svl"),
-                    port_pairs=[],
+                    ports={},
                 )
-            switches[sw]["port_pairs"].append(
-                NeighborPortPair(
-                    local_port=_canon(m.group("local")),
-                    remote_port=_canon(m.group("remote")),
-                ),
+            local = _canon(m.group("local"))
+            switches[sw]["ports"][local] = NeighborPortRemote(
+                remote_port=_canon(m.group("remote")),
             )
             continue
 
@@ -87,18 +84,14 @@ def _parse_neighbors_table(lines: list[str]) -> dict[str, NeighborSwitchEntry]:
             continue
 
         if m := _CONT_TWO.match(line):
-            switches[current_switch]["port_pairs"].append(
-                NeighborPortPair(
-                    local_port=_canon(m.group("local")),
-                    remote_port=_canon(m.group("remote")),
-                ),
+            local = _canon(m.group("local"))
+            switches[current_switch]["ports"][local] = NeighborPortRemote(
+                remote_port=_canon(m.group("remote")),
             )
         elif m := _CONT_ONE.match(line):
-            switches[current_switch]["port_pairs"].append(
-                NeighborPortPair(
-                    local_port=_canon(m.group("local")),
-                    remote_port="",
-                ),
+            local = _canon(m.group("local"))
+            switches[current_switch]["ports"][local] = NeighborPortRemote(
+                remote_port="",
             )
 
     return switches
