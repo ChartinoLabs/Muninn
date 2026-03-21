@@ -15,7 +15,7 @@ class ArpDetailEntry(TypedDict):
     """Schema for a single detailed ARP entry."""
 
     interface: str
-    physical_interface: str
+    physical_interface: NotRequired[str]
     age: NotRequired[str]
     mac_address: NotRequired[str]
     flags: NotRequired[str]
@@ -45,10 +45,12 @@ def _build_entry(match: re.Match[str]) -> ArpDetailEntry:
         "interface": canonical_interface_name(
             match.group("interface"), os=OS.CISCO_NXOS
         ),
-        "physical_interface": canonical_interface_name(
-            match.group("physical_interface"), os=OS.CISCO_NXOS
-        ),
     }
+    raw_physical = match.group("physical_interface")
+    if raw_physical != "-":
+        entry["physical_interface"] = canonical_interface_name(
+            raw_physical, os=OS.CISCO_NXOS
+        )
 
     age_str = match.group("age")
     if age_str != "-":
