@@ -1,7 +1,7 @@
 """Parser for 'show pppatm session' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -13,17 +13,18 @@ from muninn.utils import canonical_interface_name
 class PppAtmSessionRow(TypedDict):
     """One PPPoATM session row.
 
-    ``atm_intf``, ``vt``, and ``va`` are canonical interface names.
+    ``atm_intf``, ``vt``, and ``va`` (when present) are canonical interface names.
+    Columns that contained only NA-like placeholders (no semantic value) are omitted.
     """
 
-    uniq_id: str
     atm_intf: str
-    vpi_vci: str
-    encap: str
-    vt: str
-    va: str
-    va_st: str
-    state: str
+    uniq_id: NotRequired[str]
+    vpi_vci: NotRequired[str]
+    encap: NotRequired[str]
+    vt: NotRequired[str]
+    va: NotRequired[str]
+    va_st: NotRequired[str]
+    state: NotRequired[str]
 
 
 class ShowPppAtmSessionResult(TypedDict):
@@ -47,10 +48,31 @@ _ROW_RE = re.compile(
 # Columns: Uniq ID, ATM-Intf, VPI/VCI, Encap, VT, VA, VA-st, State
 
 
+def _is_na_like_placeholder(value: str) -> bool:
+    """True when *value* is the usual Cisco “no value” sentinel, case-insensitive."""
+    return value.strip().casefold() in {"n/a", "na"}
+
+
+def _optional_cli_str(raw: str) -> str | None:
+    """Return stripped CLI text, or *None* when it is an NA-like placeholder."""
+    s = raw.strip()
+    if _is_na_like_placeholder(s):
+        return None
+    return s
+
+
+def _optional_canonical_interface(raw: str) -> str | None:
+    """Canonical interface name, or *None* when *raw* is an NA-like placeholder."""
+    s = _optional_cli_str(raw)
+    if s is None:
+        return None
+    return canonical_interface_name(s, os=OS.CISCO_IOSXE)
+
+
 def _session_dict_key(row: PppAtmSessionRow) -> str:
     """Stable key when the device omits a numeric uniq id."""
-    uid = row["uniq_id"]
-    if uid != "N/A":
+    uid = row.get("uniq_id")
+    if uid:
         return uid
     return row["atm_intf"]
 
@@ -59,16 +81,32 @@ def _parse_pppatm_row(line: str) -> PppAtmSessionRow | None:
     m = _ROW_RE.match(line.strip())
     if not m:
         return None
-    return PppAtmSessionRow(
-        uniq_id=m.group("uid"),
-        atm_intf=canonical_interface_name(m.group("atm"), os=OS.CISCO_IOSXE),
-        vpi_vci=m.group("vpi"),
-        encap=m.group("enc"),
-        vt=canonical_interface_name(m.group("vt"), os=OS.CISCO_IOSXE),
-        va=canonical_interface_name(m.group("va"), os=OS.CISCO_IOSXE),
-        va_st=m.group("vast"),
-        state=m.group("st"),
-    )
+    atm = _optional_canonical_interface(m.group("atm"))
+    if atm is None:
+        return None
+    out: dict[str, str] = {"atm_intf": atm}
+    uid = _optional_cli_str(m.group("uid"))
+    if uid is not None:
+        out["uniq_id"] = uid
+    vpi = _optional_cli_str(m.group("vpi"))
+    if vpi is not None:
+        out["vpi_vci"] = vpi
+    enc = _optional_cli_str(m.group("enc"))
+    if enc is not None:
+        out["encap"] = enc
+    vt = _optional_canonical_interface(m.group("vt"))
+    if vt is not None:
+        out["vt"] = vt
+    va = _optional_canonical_interface(m.group("va"))
+    if va is not None:
+        out["va"] = va
+    vast = _optional_cli_str(m.group("vast"))
+    if vast is not None:
+        out["va_st"] = vast
+    st = _optional_cli_str(m.group("st"))
+    if st is not None:
+        out["state"] = st
+    return cast(PppAtmSessionRow, out)
 
 
 class _PppAtmAcc:

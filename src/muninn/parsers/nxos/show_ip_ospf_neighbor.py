@@ -16,8 +16,8 @@ class OspfNeighborEntry(TypedDict):
 
     priority: int
     state: str
-    up_time: str
     address: str
+    up_time: NotRequired[str]
     role: NotRequired[str]
 
 
@@ -158,9 +158,12 @@ class ShowIpOspfNeighborParser(BaseParser[ShowIpOspfNeighborResult]):
         entry: OspfNeighborEntry = {
             "priority": int(match.group("priority")),
             "state": state,
-            "up_time": match.group("up_time"),
             "address": match.group("address"),
         }
+
+        up_time = match.group("up_time")
+        if up_time not in {"-", "---"}:
+            entry["up_time"] = up_time
 
         if role and role != "-":
             entry["role"] = role
