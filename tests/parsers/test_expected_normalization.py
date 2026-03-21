@@ -37,6 +37,8 @@ def _looks_like_interface(value: str) -> bool:
     - Tunnel1, Tu1
     - Virtual-Access2.1, Vi2.1
     - Virtual-Template1, Vt1
+    - ATM0/2/0.20, AT0/2/0.20
+    - Dialer1, Di1
     """
     import re
 
@@ -47,7 +49,8 @@ def _looks_like_interface(value: str) -> bool:
         r"Hu(?:ndredGigE)?|mgmt|Management|Lo(?:opback)?|"
         r"Vlan|Po(?:rt-channel)?|Tu(?:nnel)?|Se(?:rial)?|"
         r"nve|BDI|Twe(?:ntyFiveGigE)?|"
-        r"Virtual-Access|Virtual-Template|Vi|Vt)\d",
+        r"Virtual-Access|Virtual-Template|Vi|Vt|"
+        r"ATM|AT|Dialer|Di)\d",
         re.IGNORECASE,
     )
     return bool(interface_pattern.match(value))
