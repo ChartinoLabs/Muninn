@@ -28,11 +28,7 @@ _PLACEHOLDER_HYPHENS: Final[frozenset[str]] = frozenset({"-", "---"})
 _PLACEHOLDER_NA_LIKE: Final[frozenset[str]] = frozenset({"NA", "N/A", "n/a"})
 
 # Legacy fixtures still using hyphen / em-dash placeholders as string *values*.
-_HYPHEN_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset(
-    {
-        "nxos/show_ip_ospf_neighbor/002_multi_vrf_with_roles/expected.json",
-    }
-)
+_HYPHEN_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset({})
 
 # Legacy fixtures where NA / N/A / n/a appear as CLI text (not always “null”).
 _NA_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset(
