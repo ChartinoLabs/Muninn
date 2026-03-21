@@ -49,7 +49,7 @@ class StandbyGroupEntry(TypedDict):
     priority: int
     configured_priority: int
     group_name: NotRequired[str]
-    tracks: NotRequired[list[TrackEntry]]
+    tracks: NotRequired[dict[str, dict[str, TrackEntry]]]
 
 
 class StandbyInterfaceEntry(TypedDict):
@@ -143,19 +143,6 @@ def _split_blocks(output: str) -> list[tuple[re.Match[str], list[str]]]:
     return blocks
 
 
-def _parse_tracks(lines: list[str], start_idx: int) -> list[TrackEntry]:
-    """Parse track lines from a block starting at the given index."""
-    tracks: list[TrackEntry] = []
-    for line in lines[start_idx:]:
-        stripped = line.strip()
-        if not stripped:
-            continue
-        track = _match_track_line(stripped)
-        if track:
-            tracks.append(track)
-    return tracks
-
-
 def _match_track_line(stripped: str) -> TrackEntry | None:
     """Match a single track line and return a TrackEntry or None."""
     match = _TRACK_OBJECT_RE.match(stripped)
@@ -219,7 +206,7 @@ class _FieldContext:
     """Mutable context for collecting list-type fields during parsing."""
 
     secondary_ips: list[str] = field(default_factory=list)
-    tracks: list[TrackEntry] = field(default_factory=list)
+    tracks: dict[str, dict[str, TrackEntry]] = field(default_factory=dict)
 
 
 def _extract_fields(lines: list[str], entry: dict[str, object]) -> None:
@@ -398,7 +385,7 @@ def _try_remaining_fields(
 
     track = _match_track_line(stripped)
     if track:
-        ctx.tracks.append(track)
+        ctx.tracks.setdefault(track["type"], {})[track["name"]] = track
 
     return False
 
