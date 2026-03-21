@@ -1,70 +1,72 @@
 {
-    "groups": {
-        "VLAN1/1": {
-            "interface": "VLAN1",
-            "group": 1,
-            "priority": 120,
-            "preempt": true,
-            "state": "Active",
-            "active": "local",
-            "standby": "10.1.1.3",
-            "virtual_ip": "10.1.1.1"
+    "interfaces": {
+        "VLAN1": {
+            "groups": {
+                "1": {
+                    "priority": 120,
+                    "preempt": true,
+                    "state": "Active",
+                    "active": "local",
+                    "standby": "10.1.1.3",
+                    "virtual_ip": "10.1.1.1"
+                },
+                "6": {
+                    "priority": 120,
+                    "preempt": true,
+                    "state": "Active",
+                    "active": "local",
+                    "standby": "FE80::B",
+                    "virtual_ip": "FE80::DEF"
+                }
+            }
         },
-        "VLAN1/6": {
-            "interface": "VLAN1",
-            "group": 6,
-            "priority": 120,
-            "preempt": true,
-            "state": "Active",
-            "active": "local",
-            "standby": "FE80::B",
-            "virtual_ip": "FE80::DEF"
+        "VLAN51": {
+            "groups": {
+                "1": {
+                    "priority": 120,
+                    "preempt": true,
+                    "state": "Init",
+                    "virtual_ip": "10.1.51.1"
+                },
+                "6": {
+                    "priority": 120,
+                    "preempt": true,
+                    "state": "Init",
+                    "virtual_ip": "FE80::DEF"
+                }
+            }
         },
-        "VLAN51/1": {
-            "interface": "VLAN51",
-            "group": 1,
-            "priority": 120,
-            "preempt": true,
-            "state": "Init",
-            "virtual_ip": "10.1.51.1"
+        "VLAN500": {
+            "groups": {
+                "1": {
+                    "priority": 120,
+                    "preempt": true,
+                    "state": "Active",
+                    "active": "local",
+                    "standby": "10.1.5.3",
+                    "virtual_ip": "10.1.5.1"
+                },
+                "6": {
+                    "priority": 120,
+                    "preempt": true,
+                    "state": "Active",
+                    "active": "local",
+                    "standby": "FE80::B",
+                    "virtual_ip": "FE80::DEF"
+                }
+            }
         },
-        "VLAN51/6": {
-            "interface": "VLAN51",
-            "group": 6,
-            "priority": 120,
-            "preempt": true,
-            "state": "Init",
-            "virtual_ip": "FE80::DEF"
-        },
-        "VLAN500/1": {
-            "interface": "VLAN500",
-            "group": 1,
-            "priority": 120,
-            "preempt": true,
-            "state": "Active",
-            "active": "local",
-            "standby": "10.1.5.3",
-            "virtual_ip": "10.1.5.1"
-        },
-        "VLAN500/6": {
-            "interface": "VLAN500",
-            "group": 6,
-            "priority": 120,
-            "preempt": true,
-            "state": "Active",
-            "active": "local",
-            "standby": "FE80::B",
-            "virtual_ip": "FE80::DEF"
-        },
-        "VLAN4010/1": {
-            "interface": "VLAN4010",
-            "group": 1,
-            "priority": 120,
-            "preempt": true,
-            "state": "Active",
-            "active": "local",
-            "standby": "10.1.254.3",
-            "virtual_ip": "10.1.254.1"
+        "VLAN4010": {
+            "groups": {
+                "1": {
+                    "priority": 120,
+                    "preempt": true,
+                    "state": "Active",
+                    "active": "local",
+                    "standby": "10.1.254.3",
+                    "virtual_ip": "10.1.254.1"
+                }
+            }
         }
     }
 }

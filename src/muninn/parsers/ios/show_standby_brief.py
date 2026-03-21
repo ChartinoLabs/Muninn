@@ -32,16 +32,9 @@ _CONTINUATION_RE = re.compile(r"^\s{10,}(?P<virtual_ip>\S+)\s*$")
 _UNKNOWN_VALUE = "unknown"
 
 
-def _hsrp_group_key(interface: str, group: int) -> str:
-    """Return a stable key for an HSRP group (``{interface}/{group}``, NX-OS style)."""
-    return f"{interface}/{group}"
-
-
 class HsrpGroupEntry(TypedDict):
     """Schema for a single HSRP group entry."""
 
-    interface: str
-    group: int
     priority: int
     preempt: bool
     state: str
@@ -50,10 +43,16 @@ class HsrpGroupEntry(TypedDict):
     virtual_ip: NotRequired[str]
 
 
+class HsrpInterfaceBriefEntry(TypedDict):
+    """HSRP groups keyed by group number under one interface."""
+
+    groups: dict[str, HsrpGroupEntry]
+
+
 class ShowStandbyBriefResult(TypedDict):
     """Schema for 'show standby brief' parsed output."""
 
-    groups: dict[str, HsrpGroupEntry]
+    interfaces: dict[str, HsrpInterfaceBriefEntry]
 
 
 def _is_known(value: str | None) -> bool:
@@ -85,17 +84,20 @@ def _preprocess_lines(lines: list[str]) -> list[str]:
     return merged
 
 
-def _parse_data_lines(lines: list[str]) -> dict[str, HsrpGroupEntry]:
-    """Parse data lines after the header into HSRP entries keyed by interface/group."""
-    groups: dict[str, HsrpGroupEntry] = {}
-    last_key: str | None = None
+def _parse_data_lines(lines: list[str]) -> dict[str, HsrpInterfaceBriefEntry]:
+    """Parse data lines after the header into nested interface → group entries."""
+    interfaces: dict[str, HsrpInterfaceBriefEntry] = {}
+    last_iface_group: tuple[str, str] | None = None
     last_interface: str | None = None
 
     for line in lines:
         # Check for continuation line (virtual IP on its own line)
         cont_match = _CONTINUATION_RE.match(line)
-        if cont_match and last_key is not None:
-            groups[last_key]["virtual_ip"] = cont_match.group("virtual_ip")
+        if cont_match and last_iface_group is not None:
+            iface, grp = last_iface_group
+            interfaces[iface]["groups"][grp]["virtual_ip"] = cont_match.group(
+                "virtual_ip",
+            )
             continue
 
         data_match = _DATA_RE.match(line)
@@ -108,12 +110,10 @@ def _parse_data_lines(lines: list[str]) -> dict[str, HsrpGroupEntry]:
         interface = last_interface or ""
 
         group_num = int(data_match.group("group"))
-        key = _hsrp_group_key(interface, group_num)
-        last_key = key
+        group_str = str(group_num)
+        last_iface_group = (interface, group_str)
 
         entry: HsrpGroupEntry = {
-            "interface": interface,
-            "group": group_num,
             "priority": int(data_match.group("priority")),
             "preempt": data_match.group("preempt") == "P",
             "state": data_match.group("state"),
@@ -131,9 +131,13 @@ def _parse_data_lines(lines: list[str]) -> dict[str, HsrpGroupEntry]:
         if _is_known(virtual_ip):
             entry["virtual_ip"] = virtual_ip
 
-        groups[key] = entry
+        iface_entry = interfaces.setdefault(
+            interface,
+            HsrpInterfaceBriefEntry(groups={}),
+        )
+        iface_entry["groups"][group_str] = entry
 
-    return groups
+    return interfaces
 
 
 @register(OS.CISCO_IOS, "show standby brief")
@@ -167,6 +171,6 @@ class ShowStandbyBriefParser(BaseParser[ShowStandbyBriefResult]):
                 break
 
         data_lines = _preprocess_lines(lines[data_start:])
-        groups = _parse_data_lines(data_lines)
+        interfaces = _parse_data_lines(data_lines)
 
-        return {"groups": groups}
+        return {"interfaces": interfaces}
