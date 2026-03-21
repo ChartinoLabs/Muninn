@@ -1,7 +1,7 @@
 """Parser for 'show mac address-table' command on IOS/IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, Final, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -83,6 +83,9 @@ _CONTINUATION_RE = re.compile(r"^\s{10,}(.+?)\s*$")
 _UNICAST_HEADER_RE = re.compile(r"^Unicast Entries", re.IGNORECASE)
 _MULTICAST_HEADER_RE = re.compile(r"^Multicast Entries", re.IGNORECASE)
 
+# VLAN column placeholders (no numeric VLAN / not applicable) — omit key in output
+_VLAN_PLACEHOLDER_VALUES: Final[frozenset[str]] = frozenset({"-", "---"})
+
 # Special port values that should not be normalized as interfaces
 _SPECIAL_PORTS = frozenset(
     {
@@ -97,7 +100,7 @@ _SPECIAL_PORTS = frozenset(
 class MacEntry(TypedDict):
     """Schema for a single MAC address table entry."""
 
-    vlan: str
+    vlan: NotRequired[str]
     mac_address: str
     type: str
     ports: list[str]
@@ -122,6 +125,13 @@ class ShowMacAddressTableResult(TypedDict):
     entries: list[MacEntry]
     multicast_entries: NotRequired[list[MulticastEntry]]
     total_mac_addresses: NotRequired[int]
+
+
+def _vlan_value_or_omit(raw: str) -> str | None:
+    """Return VLAN id text, or None when the CLI printed a dash placeholder."""
+    if raw in _VLAN_PLACEHOLDER_VALUES:
+        return None
+    return raw
 
 
 def _normalize_port(port: str) -> str:
@@ -178,11 +188,13 @@ def _parse_standard_entries(lines: list[str]) -> list[MacEntry]:
             continue
 
         entry: MacEntry = {
-            "vlan": m.group(2),
             "mac_address": m.group(3),
             "type": m.group(4).lower(),
             "ports": _parse_port_list(m.group(5) or ""),
         }
+        vlan_val = _vlan_value_or_omit(m.group(2))
+        if vlan_val is not None:
+            entry["vlan"] = vlan_val
         if m.group(1) == "*":
             entry["primary"] = True
 
@@ -195,12 +207,14 @@ def _parse_extended_entry(m: re.Match[str]) -> MacEntry:
     """Build a MacEntry from an extended-format regex match."""
     age_raw = m.group(6)
     entry: MacEntry = {
-        "vlan": m.group(2),
         "mac_address": m.group(3),
         "type": m.group(4).lower(),
         "learn": m.group(5).lower() == "yes",
         "ports": _parse_port_list(m.group(7) or ""),
     }
+    vlan_val = _vlan_value_or_omit(m.group(2))
+    if vlan_val is not None:
+        entry["vlan"] = vlan_val
     if age_raw != "-":
         entry["age"] = int(age_raw)
     if m.group(1) == "*":
