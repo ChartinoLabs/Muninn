@@ -10,17 +10,16 @@ from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
-class DadPortEntry(TypedDict):
-    """Dual-active detection port status."""
+class DadPortStatus(TypedDict):
+    """Dual-active detection status for one interface."""
 
-    port: str
     status: str
 
 
 class ShowStackwiseVirtualDualActiveDetectionResult(TypedDict):
     """Schema for 'show stackwise-virtual dual-active-detection' parsed output."""
 
-    switches: dict[str, list[DadPortEntry]]
+    switches: dict[str, dict[str, DadPortStatus]]
 
 
 _FULL = re.compile(
@@ -44,35 +43,29 @@ def _dad_skip_line(stripped: str) -> bool:
 
 def _dad_append_full(
     m: re.Match[str],
-    switches: dict[str, list[DadPortEntry]],
+    switches: dict[str, dict[str, DadPortStatus]],
 ) -> str:
     sw = m.group("switch")
     if sw not in switches:
-        switches[sw] = []
-    switches[sw].append(
-        DadPortEntry(
-            port=canonical_interface_name(m.group("port"), os=OS.CISCO_IOSXE),
-            status=m.group("status").lower(),
-        ),
-    )
+        switches[sw] = {}
+    port_name = canonical_interface_name(m.group("port"), os=OS.CISCO_IOSXE)
+    switches[sw][port_name] = DadPortStatus(status=m.group("status").lower())
     return sw
 
 
 def _dad_append_cont(
     m: re.Match[str],
-    switches: dict[str, list[DadPortEntry]],
+    switches: dict[str, dict[str, DadPortStatus]],
     current_switch: str,
 ) -> None:
-    switches[current_switch].append(
-        DadPortEntry(
-            port=canonical_interface_name(m.group("port"), os=OS.CISCO_IOSXE),
-            status=m.group("status").lower(),
-        ),
+    port_name = canonical_interface_name(m.group("port"), os=OS.CISCO_IOSXE)
+    switches[current_switch][port_name] = DadPortStatus(
+        status=m.group("status").lower(),
     )
 
 
 def _parse_dad_output(output: str) -> ShowStackwiseVirtualDualActiveDetectionResult:
-    switches: dict[str, list[DadPortEntry]] = {}
+    switches: dict[str, dict[str, DadPortStatus]] = {}
     current_switch: str | None = None
 
     for raw in output.splitlines():
