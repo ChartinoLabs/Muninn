@@ -7,10 +7,14 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
+from muninn.utils import canonical_interface_name
 
 
 class PppAllRow(TypedDict):
-    """One PPP session row."""
+    """One PPP session row.
+
+    ``interface`` is the canonical interface name.
+    """
 
     interface: str
     open_nego: str
@@ -49,13 +53,14 @@ class ShowPppAllParser(BaseParser[ShowPppAllResult]):
             if not parts or len(parts) < 4:
                 continue
             iface, open_nego, stage, peer = parts[0], parts[1], parts[2], parts[3]
+            interface = canonical_interface_name(iface, os=OS.CISCO_IOSXE)
             row = PppAllRow(
-                interface=iface,
+                interface=interface,
                 open_nego=open_nego,
                 stage=stage,
                 peer_address=peer,
             )
-            sessions[row["interface"]] = row
+            sessions[interface] = row
         if not sessions:
             msg = "No PPP sessions parsed"
             raise ValueError(msg)
