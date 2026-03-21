@@ -1,151 +1,99 @@
 {
     "object_groups": {
         "NNNN": {
-            "group_type": "Network",
-            "entries": []
+            "group_type": "Network"
         },
         "SSSS": {
-            "group_type": "Service",
-            "entries": []
+            "group_type": "Service"
         },
         "TEST-SVC-OGR": {
             "group_type": "Service",
             "description": "! Test Service Group !",
-            "entries": [
-                {
-                    "type": "Service",
-                    "protocol": "icmp",
-                    "icmp_type": "echo-reply"
+            "nested_groups": {
+                "SSSS": {}
+            },
+            "protocols": {
+                "icmp": {
+                    "all": {},
+                    "types": {
+                        "echo-reply": {}
+                    }
                 },
-                {
-                    "type": "Service",
-                    "protocol": "tcp",
-                    "port_match": "eq",
-                    "port": "smtp"
+                "ip": {
+                    "all": {}
                 },
-                {
-                    "type": "Service",
-                    "protocol": "udp",
-                    "port_match": "eq",
-                    "port": "tacacs"
+                "ipinip": {
+                    "all": {}
                 },
-                {
-                    "type": "Service",
-                    "protocol": "udp",
-                    "port_match": "range",
-                    "port_range_start": "tacacs",
-                    "port_range_end": "50"
+                "99": {
+                    "all": {}
                 },
-                {
-                    "type": "Service",
-                    "protocol": "tcp",
-                    "port_match": "range",
-                    "port_range_start": "79",
-                    "port_range_end": "www"
+                "tcp": {
+                    "all": {},
+                    "eq": {
+                        "81": {},
+                        "smtp": {},
+                        "www": {}
+                    },
+                    "range": {
+                        "79": {
+                            "end": "www"
+                        }
+                    }
                 },
-                {
-                    "type": "Service",
-                    "protocol": "tcp",
-                    "port_match": "eq",
-                    "port": "www"
+                "tcp-udp": {
+                    "range": {
+                        "0": {
+                            "end": "65535"
+                        },
+                        "12200": {
+                            "end": "12700"
+                        }
+                    }
                 },
-                {
-                    "type": "Service",
-                    "protocol": "tcp",
-                    "port_match": "eq",
-                    "port": "81"
-                },
-                {
-                    "type": "Service",
-                    "protocol": "udp",
-                    "port_match": "lt",
-                    "port": "999"
-                },
-                {
-                    "type": "Service",
-                    "protocol": "udp",
-                    "port_match": "gt",
-                    "port": "97"
-                },
-                {
-                    "type": "Service",
-                    "protocol": "tcp-udp",
-                    "port_match": "range",
-                    "port_range_start": "12200",
-                    "port_range_end": "12700"
-                },
-                {
-                    "type": "Service",
-                    "protocol": "icmp"
-                },
-                {
-                    "type": "Service",
-                    "protocol": "tcp"
-                },
-                {
-                    "type": "Service",
-                    "protocol": "udp"
-                },
-                {
-                    "type": "Service",
-                    "protocol": "tcp-udp",
-                    "port_match": "range",
-                    "port_range_start": "0",
-                    "port_range_end": "65535"
-                },
-                {
-                    "type": "Service",
-                    "group_object": "SSSS"
-                },
-                {
-                    "type": "Service",
-                    "protocol": "ip"
-                },
-                {
-                    "type": "Service",
-                    "protocol": "ipinip"
-                },
-                {
-                    "type": "Service",
-                    "protocol": "99"
+                "udp": {
+                    "all": {},
+                    "eq": {
+                        "tacacs": {}
+                    },
+                    "gt": {
+                        "97": {}
+                    },
+                    "lt": {
+                        "999": {}
+                    },
+                    "range": {
+                        "tacacs": {
+                            "end": "50"
+                        }
+                    }
                 }
-            ]
+            }
         },
         "TEST_NET_OGR": {
             "group_type": "Network",
+            "any": true,
             "description": "###TEST NETWORK OGR###",
-            "entries": [
-                {
-                    "type": "Network",
-                    "any": true
-                },
-                {
-                    "type": "Network",
-                    "host": "1.1.1.1"
-                },
-                {
-                    "type": "Network",
-                    "range_start": "2.2.2.2",
-                    "range_end": "3.3.3.3"
-                },
-                {
-                    "type": "Network",
-                    "group_object": "NNNN"
-                },
-                {
-                    "type": "Network",
-                    "network": "1.1.1.0",
-                    "mask": "255.255.255.0"
+            "hosts": {
+                "1.1.1.1": {}
+            },
+            "ipv4_networks": {
+                "1.1.1.0/24": {}
+            },
+            "nested_groups": {
+                "NNNN": {}
+            },
+            "ranges": {
+                "2.2.2.2": {
+                    "end": "3.3.3.3"
                 }
-            ]
+            }
         },
         "XXXX": {
-            "group_type": "Network",
-            "entries": []
+            "group_type": "Network"
         },
         "YYYY": {
-            "group_type": "Network",
-            "entries": []
+            "group_type": "Network"
         }
     }
 }
