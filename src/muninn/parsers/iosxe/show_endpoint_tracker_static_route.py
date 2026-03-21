@@ -21,7 +21,7 @@ class EndpointTrackerStaticRouteRow(TypedDict):
 class ShowEndpointTrackerStaticRouteResult(TypedDict):
     """Schema for 'show endpoint-tracker static-route' parsed output."""
 
-    rows: list[EndpointTrackerStaticRouteRow]
+    rows: dict[str, EndpointTrackerStaticRouteRow]
 
 
 _ROW_RE = re.compile(
@@ -53,7 +53,7 @@ class ShowEndpointTrackerStaticRouteParser(
     @classmethod
     def parse(cls, output: str) -> ShowEndpointTrackerStaticRouteResult:
         """Parse 'show endpoint-tracker static-route' output."""
-        rows: list[EndpointTrackerStaticRouteRow] = []
+        rows: dict[str, EndpointTrackerStaticRouteRow] = {}
         for line in output.splitlines():
             s = line.strip()
             if not s or s.lower().startswith("tracker name"):
@@ -62,7 +62,7 @@ class ShowEndpointTrackerStaticRouteParser(
                 continue
             row = _parse_static_route_row(line)
             if row:
-                rows.append(row)
+                rows[row["tracker_name"]] = row
         if not rows:
             msg = "No endpoint-tracker static-route rows parsed"
             raise ValueError(msg)
