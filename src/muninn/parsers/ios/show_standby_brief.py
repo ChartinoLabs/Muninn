@@ -159,7 +159,7 @@ class ShowStandbyBriefParser(BaseParser[ShowStandbyBriefResult]):
             output: Raw CLI output from command.
 
         Returns:
-            Parsed HSRP group entries.
+            HSRP data nested as ``interfaces[ifname]["groups"][group_id]``.
         """
         lines = output.splitlines()
 
