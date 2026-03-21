@@ -166,10 +166,6 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         # --- NX-OS ---
         "nxos/show_bgp_all_dampening_flap-statistics/001_basic/expected.json",
         "nxos/show_bgp_vrf_all_all/001_basic/expected.json",
-        "nxos/show_cdp_neighbors_detail/001_basic/expected.json",
-        "nxos/show_cdp_neighbors_detail/002_multiple_platforms/expected.json",
-        "nxos/show_cdp_neighbors_detail/003_mikrotik/expected.json",
-        "nxos/show_cdp_neighbors_detail/004_no_separator/expected.json",
         "nxos/show_ip_bgp/001_basic_routes/expected.json",
         "nxos/show_ip_bgp/002_multi_vrf/expected.json",
         "nxos/show_ip_bgp/003_route_distinguisher/expected.json",

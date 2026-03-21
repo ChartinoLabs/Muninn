@@ -48,7 +48,7 @@ class CdpNeighborDetailEntry(TypedDict):
 class ShowCdpNeighborsDetailResult(TypedDict):
     """Schema for 'show cdp neighbors detail' parsed output."""
 
-    neighbors: dict[str, list[CdpNeighborDetailEntry]]
+    neighbors: dict[str, dict[str, CdpNeighborDetailEntry]]
 
 
 # Required fields that must be present to build a valid entry
@@ -86,7 +86,7 @@ _OPTIONAL_LIST_FIELDS: tuple[OptionalListField, ...] = (
 class _ParseState:
     """Mutable state for the detail parser's line-by-line loop."""
 
-    neighbors: dict[str, list[CdpNeighborDetailEntry]] = field(
+    neighbors: dict[str, dict[str, CdpNeighborDetailEntry]] = field(
         default_factory=dict,
     )
     fields: dict[str, object] = field(default_factory=dict)
@@ -243,9 +243,11 @@ class ShowCdpNeighborsDetailParser(
         if entry is None:
             return
         intf = state.local_intf
-        if intf not in state.neighbors:
-            state.neighbors[intf] = []
-        state.neighbors[intf].append(entry)
+        by_device = state.neighbors.setdefault(intf, {})
+        key = entry["device_id"]
+        if key in by_device:
+            key = f"{entry['device_id']}|{entry['port_id']}"
+        by_device[key] = entry
 
     @classmethod
     def _handle_record_boundary(
