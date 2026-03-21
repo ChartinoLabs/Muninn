@@ -66,13 +66,42 @@ class LldpNeighborDetailEntry(TypedDict):
 class ShowLldpNeighborsDetailResult(TypedDict):
     """Schema for 'show lldp neighbors detail' parsed output."""
 
-    neighbors: dict[str, list[LldpNeighborDetailEntry]]
+    neighbors: dict[str, LldpNeighborDetailEntry]
     total_entries: NotRequired[int]
 
 
 def _is_not_advertised(line: str) -> bool:
     """Check if a line indicates a field is not advertised."""
     return _NOT_ADVERTISED in line
+
+
+def _neighbor_block_key(
+    neighbors: dict[str, LldpNeighborDetailEntry],
+    local_intf: str | None,
+    port_id_raw: str,
+    chassis_id: str,
+) -> str:
+    """Return a unique dict key for this neighbor block.
+
+    Preference order: canonical local interface (when present), else canonical
+    port id. If that base key is already used, append ``::<chassis_id>`` (then a
+    numeric suffix in pathological cases) so multiple neighbors on the same
+    local port or duplicate port-id labels remain addressable.
+    """
+    if local_intf is not None:
+        base = canonical_interface_name(local_intf)
+    else:
+        base = _canonicalize_if_interface(port_id_raw)
+
+    if base not in neighbors:
+        return base
+    disambiguated = f"{base}::{chassis_id}"
+    if disambiguated not in neighbors:
+        return disambiguated
+    n = 2
+    while f"{disambiguated}#{n}" in neighbors:
+        n += 1
+    return f"{disambiguated}#{n}"
 
 
 def _build_entry(
@@ -122,6 +151,12 @@ class ShowLldpNeighborsDetailParser(
 
     Parses detailed LLDP neighbor information including system name,
     description, capabilities, and management addresses.
+
+    Output ``neighbors`` is a mapping from a natural identifier to each entry:
+    canonical local interface when ``Local Intf`` is present; otherwise the
+    remote port id (canonicalized when it looks like an interface name). If the
+    base key would collide, ``::<chassis_id>`` is appended (then ``#N`` if
+    needed).
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.LLDP})
@@ -244,66 +279,69 @@ class ShowLldpNeighborsDetailParser(
         )
 
     @classmethod
+    def _parse_block_line(
+        cls,
+        lines: list[str],
+        idx: int,
+        fields: dict[str, str | int | list[str] | None],
+    ) -> int:
+        """Advance one line in a neighbor block. Returns the next line index."""
+        stripped = lines[idx].strip()
+
+        if cls._is_skippable(stripped):
+            return idx + 1
+
+        if cls._parse_simple_fields(stripped, fields):
+            return idx + 1
+
+        m = cls._TIME_REM.match(stripped)
+        if m:
+            fields["time_remaining"] = int(m.group("v"))
+            return idx + 1
+
+        if cls._SYS_DESC_HDR.match(stripped):
+            desc, next_idx = cls._collect_sys_description(lines, idx + 1)
+            fields["system_description"] = desc
+            return next_idx
+
+        if cls._MGMT_HDR.match(stripped):
+            addrs, next_idx = cls._collect_mgmt_addresses(lines, idx + 1)
+            if addrs:
+                fields["management_addresses"] = addrs
+            return next_idx
+
+        return idx + 1
+
+    @classmethod
     def _parse_block(
         cls,
         lines: list[str],
-    ) -> tuple[str | None, LldpNeighborDetailEntry | None]:
+    ) -> tuple[str | None, str | None, LldpNeighborDetailEntry | None]:
         """Parse a single neighbor block.
 
         Args:
             lines: Lines belonging to one neighbor block.
 
         Returns:
-            Tuple of (local_interface, entry) or (None, None).
+            Tuple of (local_interface, port_id_raw, entry) or (None, None, None).
         """
         fields: dict[str, str | int | list[str] | None] = {}
         idx = 0
 
         while idx < len(lines):
-            stripped = lines[idx].strip()
+            idx = cls._parse_block_line(lines, idx, fields)
 
-            if cls._is_skippable(stripped):
-                idx += 1
-                continue
-
-            # Simple single-line fields
-            if cls._parse_simple_fields(stripped, fields):
-                idx += 1
-                continue
-
-            # Time remaining
-            m = cls._TIME_REM.match(stripped)
-            if m:
-                fields["time_remaining"] = int(m.group("v"))
-                idx += 1
-                continue
-
-            # Multi-line system description
-            if cls._SYS_DESC_HDR.match(stripped):
-                desc, idx = cls._collect_sys_description(
-                    lines,
-                    idx + 1,
-                )
-                fields["system_description"] = desc
-                continue
-
-            # Management addresses block
-            if cls._MGMT_HDR.match(stripped):
-                addrs, idx = cls._collect_mgmt_addresses(
-                    lines,
-                    idx + 1,
-                )
-                if addrs:
-                    fields["management_addresses"] = addrs
-                continue
-
-            idx += 1
-
+        port_id_raw = fields.get("port_id")
         local_intf = fields.pop("local_intf", None)
         entry = _build_entry(fields)
         if entry is None:
-            return None, None
-        return str(local_intf) if local_intf else None, entry
+            return None, None, None
+        pid = str(port_id_raw) if port_id_raw is not None else None
+        return (
+            str(local_intf) if local_intf else None,
+            pid,
+            entry,
+        )
 
     @classmethod
     def _split_blocks(
@@ -352,24 +390,25 @@ class ShowLldpNeighborsDetailParser(
             output: Raw CLI output from command.
 
         Returns:
-            Parsed LLDP neighbor details keyed by local interface.
+            Parsed LLDP neighbor details keyed by local interface or port id.
 
         Raises:
             ValueError: If no neighbors found in output.
         """
         blocks, total_entries = cls._split_blocks(output)
-        neighbors: dict[str, list[LldpNeighborDetailEntry]] = {}
+        neighbors: dict[str, LldpNeighborDetailEntry] = {}
 
         for block in blocks:
-            local_intf, entry = cls._parse_block(block)
-            if entry is None:
+            local_intf, port_id_raw, entry = cls._parse_block(block)
+            if entry is None or not port_id_raw:
                 continue
-            key = (
-                canonical_interface_name(local_intf)
-                if local_intf is not None
-                else "unknown"
+            key = _neighbor_block_key(
+                neighbors,
+                local_intf,
+                port_id_raw,
+                entry["chassis_id"],
             )
-            neighbors.setdefault(key, []).append(entry)
+            neighbors[key] = entry
 
         if not neighbors:
             msg = "No LLDP neighbor details found in output"
