@@ -25,13 +25,8 @@ _DATA_RE = re.compile(
 )
 _SESSION_COUNT_RE = re.compile(r"^\s*Session\s+count\s*=\s*(\d+)", re.IGNORECASE)
 
-# IOS prints N/A in the Method column when no method applies (e.g. Unauth);
-# omit the key.
-_METHOD_NA_PLACEHOLDERS: frozenset[str] = frozenset({"NA", "N/A", "n/a"})
-
-
-def _is_method_na_placeholder(value: str) -> bool:
-    return value in _METHOD_NA_PLACEHOLDERS
+# Device prints these in the Method column when no method applies; omit the key.
+_NA_LIKE_METHOD_PLACEHOLDERS: frozenset[str] = frozenset({"NA", "N/A", "n/a"})
 
 
 class SessionTableEntry(TypedDict):
@@ -172,7 +167,7 @@ class ShowAuthenticationSessionsParser(
                 "status": entry["status"],
                 "session_id": entry["session_id"],
             }
-            if not _is_method_na_placeholder(entry["method"]):
+            if entry["method"] not in _NA_LIKE_METHOD_PLACEHOLDERS:
                 auth_entry["method"] = entry["method"]
             if "fg" in entry:
                 auth_entry["fg"] = entry["fg"]
