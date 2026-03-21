@@ -47,7 +47,7 @@ class TrackEntry(TypedDict):
     threshold_up: NotRequired[int]
     latest_op_return_code: NotRequired[str]
     latest_rtt_ms: NotRequired[int]
-    tracked_by: NotRequired[list[TrackedByEntry]]
+    tracked_by: NotRequired[dict[str, dict[str, dict[str, TrackedByEntry]]]]
 
 
 class ShowTrackResult(TypedDict):
@@ -205,14 +205,19 @@ def _parse_tracked_by_line(line: str, entry: TrackEntry) -> bool:
     if not match:
         return False
 
-    tracked_entry: TrackedByEntry = {"name": match.group("name")}
-    if match.group("interface"):
-        tracked_entry["interface"] = canonical_interface_name(match.group("interface"))
-    if match.group("group_id"):
-        tracked_entry["group_id"] = int(match.group("group_id"))
+    name = match.group("name")
+    interface = canonical_interface_name(match.group("interface"))
+    group_id = int(match.group("group_id"))
+    tracked_entry: TrackedByEntry = {
+        "name": name,
+        "interface": interface,
+        "group_id": group_id,
+    }
 
-    tracked_by = entry.setdefault("tracked_by", [])
-    tracked_by.append(tracked_entry)
+    tracked_by = entry.setdefault("tracked_by", {})
+    by_group = tracked_by.setdefault(name, {})
+    by_intf = by_group.setdefault(str(group_id), {})
+    by_intf[interface] = tracked_entry
     return True
 
 
