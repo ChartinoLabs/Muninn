@@ -16,8 +16,8 @@ class NatTranslationEntry(TypedDict):
     protocol: str
     inside_global: str
     inside_local: str
-    outside_local: str
-    outside_global: str
+    outside_local: NotRequired[str]
+    outside_global: NotRequired[str]
     inside_global_port: NotRequired[int]
     inside_local_port: NotRequired[int]
     outside_local_port: NotRequired[int]
@@ -66,11 +66,9 @@ def _normalize_protocol(protocol: str) -> str:
     return protocol.lower()
 
 
-def _normalize_address(value: str) -> str:
-    """Normalize sentinel address values for parsed output."""
-    if value == "---":
-        return "N/A"
-    return value
+def _outside_global_hierarchy_key(raw: str) -> str:
+    """Dict key for the outside-global tier when nesting translations."""
+    return raw if raw != "---" else "N/A"
 
 
 def _port_key(port: str | None) -> str:
@@ -84,9 +82,13 @@ def _build_entry(match: re.Match[str]) -> NatTranslationEntry:
         protocol=_normalize_protocol(match.group("protocol")),
         inside_global=match.group("inside_global"),
         inside_local=match.group("inside_local"),
-        outside_local=_normalize_address(match.group("outside_local")),
-        outside_global=_normalize_address(match.group("outside_global")),
     )
+    outside_local = match.group("outside_local")
+    if outside_local != "---":
+        entry["outside_local"] = outside_local
+    outside_global = match.group("outside_global")
+    if outside_global != "---":
+        entry["outside_global"] = outside_global
 
     ig_port = match.group("ig_port")
     if ig_port is not None:
@@ -115,7 +117,7 @@ def _store_translation(
     protocol = _normalize_protocol(match.group("protocol"))
     inside_global = match.group("inside_global")
     inside_global_port = _port_key(match.group("ig_port"))
-    outside_global = _normalize_address(match.group("outside_global"))
+    outside_global = _outside_global_hierarchy_key(match.group("outside_global"))
     outside_global_port = _port_key(match.group("og_port"))
 
     if protocol not in translations:

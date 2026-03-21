@@ -44,11 +44,9 @@ _NA_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset(
     {
         "ios/show_access-session/002_with_flags_and_unauth/expected.json",
         "ios/show_authentication_sessions/002_with_session_count/expected.json",
-        "ios/show_ip_nat_translations/001_basic/expected.json",
         "iosxe/show_endpoint_tracker_records/001_basic/expected.json",
         "iosxe/show_network_clocks_synchronization/001_basic/expected.json",
         "iosxe/show_platform/003_asr903_chassis/expected.json",
-        "iosxe/show_platform_nat_translations_active/001_basic/expected.json",
         "iosxe/show_power_inline_priority/002_with_oper_priority/expected.json",
         "iosxe/show_pppatm_session/001_basic/expected.json",
         "iosxe/show_radius_statistics/001_basic/expected.json",
