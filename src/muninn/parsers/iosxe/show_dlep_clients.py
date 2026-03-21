@@ -21,13 +21,13 @@ class DlepClientBlock(TypedDict):
 
     interface: str
     server_ip: str
-    clients: list[DlepClientEntry]
+    clients: dict[str, DlepClientEntry]
 
 
 class ShowDlepClientsResult(TypedDict):
     """Schema for 'show dlep clients' parsed output."""
 
-    blocks: list[DlepClientBlock]
+    blocks: dict[str, DlepClientBlock]
 
 
 _IF_RE = re.compile(r"^DLEP Clients for Interface\s+(.+)$", re.I | re.M)
@@ -51,7 +51,7 @@ class _DlepClientChunk:
     def __init__(self, iface: str) -> None:
         self.iface = iface
         self.server = ""
-        self.clients: list[DlepClientEntry] = []
+        self.clients: dict[str, DlepClientEntry] = {}
         self.current: DlepClientEntry | None = None
 
     def feed(self, line: str) -> None:
@@ -76,11 +76,12 @@ class _DlepClientChunk:
         cm = _CLIENT_RE.match(st)
         if not cm:
             return False
-        self.current = DlepClientEntry(
+        entry = DlepClientEntry(
             client_ip=f"{cm.group('ip')}:{cm.group('port')}",
             fields={},
         )
-        self.clients.append(self.current)
+        self.clients[entry["client_ip"]] = entry
+        self.current = entry
         return True
 
     def _feed_fields(self, s: str) -> None:
@@ -121,7 +122,7 @@ class ShowDlepClientsParser(BaseParser[ShowDlepClientsResult]):
     def parse(cls, output: str) -> ShowDlepClientsResult:
         """Parse 'show dlep clients' output."""
         matches = list(_IF_RE.finditer(output))
-        blocks: list[DlepClientBlock] = []
+        blocks: dict[str, DlepClientBlock] = {}
         for i, m in enumerate(matches):
             iface = m.group(1).strip()
             start = m.start()
@@ -129,7 +130,7 @@ class ShowDlepClientsParser(BaseParser[ShowDlepClientsResult]):
             chunk = output[start:end]
             b = _parse_dlep_client_block(chunk, iface)
             if b:
-                blocks.append(b)
+                blocks[b["interface"]] = b
         if not blocks:
             msg = "No DLEP client blocks parsed"
             raise ValueError(msg)
