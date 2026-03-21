@@ -30,7 +30,7 @@ class ShowVpcResult(TypedDict):
     vpc_role: str
     number_of_vpcs: int
     peer_gateway: str
-    dual_active_excluded_vlans: str
+    dual_active_excluded_vlans: NotRequired[str]
     graceful_consistency_check: str
     auto_recovery_status: str
     delay_restore_status: str
@@ -127,7 +127,13 @@ def _try_kv_match(stripped: str, result: dict[str, Any]) -> bool:
     for pattern, key, converter in _KV_PATTERNS:
         m = pattern.match(stripped)
         if m:
-            result[key] = converter(m.group(1))
+            raw = m.group(1)
+            if key == "dual_active_excluded_vlans":
+                val = raw.strip()
+                if val not in ("", "-"):
+                    result[key] = val
+                return True
+            result[key] = converter(raw)
             return True
     return False
 
@@ -182,7 +188,6 @@ class ShowVpcParser(BaseParser["ShowVpcResult"]):
             "vpc_role": "",
             "number_of_vpcs": 0,
             "peer_gateway": "",
-            "dual_active_excluded_vlans": "",
             "graceful_consistency_check": "",
             "auto_recovery_status": "",
             "delay_restore_status": "",
