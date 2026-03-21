@@ -47,7 +47,7 @@ class ShowVlanResult(TypedDict):
 
     vlans: dict[str, VlanEntry]
     remote_span_vlans: NotRequired[list[int]]
-    private_vlans: NotRequired[list[PrivateVlanEntry]]
+    private_vlans: NotRequired[dict[str, PrivateVlanEntry]]
 
 
 # Section header patterns
@@ -307,9 +307,9 @@ def _parse_private_vlan_line(
 
 def _parse_private_vlans(
     lines: list[str],
-) -> list[PrivateVlanEntry]:
-    """Parse Private VLAN associations table."""
-    entries: list[PrivateVlanEntry] = []
+) -> dict[str, PrivateVlanEntry]:
+    """Parse Private VLAN associations table (keyed by secondary VLAN ID)."""
+    entries: dict[str, PrivateVlanEntry] = {}
 
     header_idx = -1
     for i, line in enumerate(lines):
@@ -333,7 +333,7 @@ def _parse_private_vlans(
 
         entry = _parse_private_vlan_line(line, pri_col, sec_col, type_col, ports_col)
         if entry is not None:
-            entries.append(entry)
+            entries[str(entry["secondary"])] = entry
 
     return entries
 
