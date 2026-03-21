@@ -31,7 +31,6 @@ _PLACEHOLDER_NA_LIKE: Final[frozenset[str]] = frozenset({"NA", "N/A", "n/a"})
 _HYPHEN_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset(
     {
         "nxos/show_ip_ospf_neighbor/002_multi_vrf_with_roles/expected.json",
-        "nxos/show_vpc/001_basic/expected.json",
     }
 )
 
