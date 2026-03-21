@@ -2,7 +2,7 @@
 
 import ipaddress
 import re
-from typing import ClassVar, TypedDict
+from typing import ClassVar, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -130,12 +130,13 @@ def _merge_icmp_service_line(group: ObjectGroup, line: str) -> bool:
     icmp = group.setdefault("protocols", {}).setdefault("icmp", {})
     if not isinstance(icmp, dict):
         return True
-    icmp_typed: dict[str, object] = icmp
+    icmp_typed = cast(dict[str, object], icmp)
     icmp_type = m.group("icmp_type")
     if icmp_type:
-        types = icmp_typed.setdefault("types", {})
-        if isinstance(types, dict):
-            types[str(icmp_type)] = {}
+        types_raw = icmp_typed.setdefault("types", {})
+        if isinstance(types_raw, dict):
+            types_dict = cast(dict[str, object], types_raw)
+            types_dict[str(icmp_type)] = {}
     else:
         icmp_typed["all"] = {}
     return True
@@ -156,18 +157,20 @@ def _merge_protocol_port_line(group: ObjectGroup, line: str) -> None:
     proto_node = protos.setdefault(protocol, {})
     if not isinstance(proto_node, dict):
         return
-    pnode: dict[str, object] = proto_node
+    pnode = cast(dict[str, object], proto_node)
 
     if match_type == "range" and port1 and port2:
-        rmap = pnode.setdefault("range", {})
-        if not isinstance(rmap, dict):
+        rmap_raw = pnode.setdefault("range", {})
+        if not isinstance(rmap_raw, dict):
             return
+        rmap = cast(dict[str, object], rmap_raw)
         rmap[str(port1)] = RangeEnd(end=str(port2))
         return
     if match_type and port1:
-        mmap = pnode.setdefault(match_type, {})
-        if not isinstance(mmap, dict):
+        mmap_raw = pnode.setdefault(match_type, {})
+        if not isinstance(mmap_raw, dict):
             return
+        mmap = cast(dict[str, object], mmap_raw)
         mmap[str(port1)] = {}
         return
 
