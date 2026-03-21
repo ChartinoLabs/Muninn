@@ -66,7 +66,7 @@ class LldpNeighborDetailEntry(TypedDict):
 class ShowLldpNeighborsDetailResult(TypedDict):
     """Schema for 'show lldp neighbors detail' parsed output."""
 
-    neighbors: dict[str, LldpNeighborDetailEntry]
+    neighbors: dict[str, dict[str, dict[str, LldpNeighborDetailEntry]]]
     total_entries: NotRequired[int]
 
 
@@ -75,33 +75,11 @@ def _is_not_advertised(line: str) -> bool:
     return _NOT_ADVERTISED in line
 
 
-def _neighbor_block_key(
-    neighbors: dict[str, LldpNeighborDetailEntry],
-    local_intf: str | None,
-    port_id_raw: str,
-    chassis_id: str,
-) -> str:
-    """Return a unique dict key for this neighbor block.
-
-    Preference order: canonical local interface (when present), else canonical
-    port id. If that base key is already used, append ``::<chassis_id>`` (then a
-    numeric suffix in pathological cases) so multiple neighbors on the same
-    local port or duplicate port-id labels remain addressable.
-    """
+def _outer_neighbor_key(local_intf: str | None, port_id_raw: str) -> str:
+    """Top-level key: canonical local interface, or port id when local is absent."""
     if local_intf is not None:
-        base = canonical_interface_name(local_intf)
-    else:
-        base = _canonicalize_if_interface(port_id_raw)
-
-    if base not in neighbors:
-        return base
-    disambiguated = f"{base}::{chassis_id}"
-    if disambiguated not in neighbors:
-        return disambiguated
-    n = 2
-    while f"{disambiguated}#{n}" in neighbors:
-        n += 1
-    return f"{disambiguated}#{n}"
+        return canonical_interface_name(local_intf)
+    return _canonicalize_if_interface(port_id_raw)
 
 
 def _build_entry(
@@ -390,25 +368,23 @@ class ShowLldpNeighborsDetailParser(
             output: Raw CLI output from command.
 
         Returns:
-            Parsed LLDP neighbor details keyed by local interface or port id.
+            Parsed LLDP neighbor details nested as
+            ``local interface (or port) → chassis id → port id → entry``.
 
         Raises:
             ValueError: If no neighbors found in output.
         """
         blocks, total_entries = cls._split_blocks(output)
-        neighbors: dict[str, LldpNeighborDetailEntry] = {}
+        neighbors: dict[str, dict[str, dict[str, LldpNeighborDetailEntry]]] = {}
 
         for block in blocks:
             local_intf, port_id_raw, entry = cls._parse_block(block)
             if entry is None or not port_id_raw:
                 continue
-            key = _neighbor_block_key(
-                neighbors,
-                local_intf,
-                port_id_raw,
-                entry["chassis_id"],
-            )
-            neighbors[key] = entry
+            outer = _outer_neighbor_key(local_intf, port_id_raw)
+            chassis = entry["chassis_id"]
+            port = entry["port_id"]
+            neighbors.setdefault(outer, {}).setdefault(chassis, {})[port] = entry
 
         if not neighbors:
             msg = "No LLDP neighbor details found in output"
