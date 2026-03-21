@@ -31,20 +31,34 @@ _IF_RE = re.compile(
     re.I,
 )
 _LAST_RE = re.compile(r"^LAST UPDATE\s+(.+)$", re.I)
+# Two columns separated by wide padding; labels may contain single spaces
+# (e.g. "Total bytes", "65 to 127 byte frames").
+_STAT_ROW_FULL_RE = re.compile(
+    r"^\s*(\d+)\s+(.+?)\s{2,}(\d+)\s+(.+)$",
+)
+# Continuation lines with only the transmit column (e.g. collision sub-counts).
+_STAT_ROW_TX_ONLY_RE = re.compile(r"^\s*(\d+)\s+(.+)$")
 
 
 def _parse_stat_row(line: str) -> ControllerEthernetStatRow | None:
-    parts = re.split(r"\s{2,}", line.strip())
-    if len(parts) < 4:
-        return None
-    if not parts[0].isdigit() or not parts[2].isdigit():
-        return None
-    return ControllerEthernetStatRow(
-        transmit_value=parts[0],
-        transmit_label=parts[1],
-        receive_value=parts[2],
-        receive_label=parts[3],
-    )
+    s = line.rstrip()
+    m = _STAT_ROW_FULL_RE.match(s)
+    if m:
+        return ControllerEthernetStatRow(
+            transmit_value=m.group(1),
+            transmit_label=m.group(2).strip(),
+            receive_value=m.group(3),
+            receive_label=m.group(4).strip(),
+        )
+    m = _STAT_ROW_TX_ONLY_RE.match(s)
+    if m:
+        return ControllerEthernetStatRow(
+            transmit_value=m.group(1),
+            transmit_label=m.group(2).strip(),
+            receive_value="",
+            receive_label="",
+        )
+    return None
 
 
 def _parse_controller_ethernet(output: str) -> ShowControllerEthernetControllerResult:

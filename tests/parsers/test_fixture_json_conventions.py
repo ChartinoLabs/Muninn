@@ -122,6 +122,8 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         "iosxe/show_bgp_all_detail/001_basic/expected.json",
         "iosxe/show_bgp_all_detail/001_live_device/expected.json",
         "iosxe/show_bgp_all_detail/002_vpn_with_communities/expected.json",
+        # Row order is meaningful; labels repeat across rows.
+        "iosxe/show_controller_ethernet_controller/001_basic/expected.json",
         "iosxe/show_ip_bgp/001_basic/expected.json",
         "iosxe/show_ip_bgp/002_multipath_and_continuations/expected.json",
         "iosxe/show_ip_bgp/003_wrapped_networks/expected.json",
