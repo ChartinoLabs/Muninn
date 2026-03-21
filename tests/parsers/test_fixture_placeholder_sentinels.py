@@ -35,7 +35,6 @@ _HYPHEN_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset(
         "iosxe/show_vpdn/001_basic/expected.json",
         "nxos/show_ip_arp_detail_vrf_all/002_incomplete_and_static/expected.json",
         "nxos/show_ip_ospf_neighbor/002_multi_vrf_with_roles/expected.json",
-        "nxos/show_vpc/001_basic/expected.json",
     }
 )
 
