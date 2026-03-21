@@ -7,10 +7,14 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
+from muninn.utils import canonical_interface_name
 
 
 class SubscriberSessionEntry(TypedDict):
-    """One row from 'show subscriber session'."""
+    """One row from 'show subscriber session'.
+
+    ``interface`` is the canonical interface name.
+    """
 
     uniq_id: str
     interface: str
@@ -45,7 +49,7 @@ def _parse_session_row(line: str) -> SubscriberSessionEntry | None:
         return None
     return SubscriberSessionEntry(
         uniq_id=m.group("id"),
-        interface=m.group("if"),
+        interface=canonical_interface_name(m.group("if"), os=OS.CISCO_IOSXE),
         state=m.group("st"),
         service=m.group("svc"),
         uptime=m.group("up"),
