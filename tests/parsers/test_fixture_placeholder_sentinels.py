@@ -33,7 +33,6 @@ _HYPHEN_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset({})
 # Legacy fixtures where NA / N/A / n/a appear as CLI text (not always “null”).
 _NA_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset(
     {
-        "iosxe/show_endpoint_tracker_records/001_basic/expected.json",
         "iosxe/show_network_clocks_synchronization/001_basic/expected.json",
         "iosxe/show_platform/003_asr903_chassis/expected.json",
         "iosxe/show_power_inline_priority/002_with_oper_priority/expected.json",
