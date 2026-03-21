@@ -9,16 +9,25 @@ from muninn.registry import register
 from muninn.tags import ParserTag
 
 
-class ControllerEthernetStatRow(TypedDict):
-    """One transmit/receive statistics row.
+class ControllerEthernetColumn(TypedDict):
+    """One numeric counter and its description in a transmit or receive column."""
 
-    ``receive_*`` keys are omitted when the CLI line has no receive column.
+    value: str
+    label: str
+
+
+class ControllerEthernetStatRow(TypedDict):
+    """One line of statistics.
+
+    ``transmit`` and ``receive`` are independent counters shown on the same line;
+    their labels often match (e.g. both ``Total bytes``) but may differ
+    (e.g. ``System FCS error frames`` vs ``IpgViolation frames``).
+
+    ``receive`` is omitted when the line has no receive column.
     """
 
-    transmit_value: str
-    transmit_label: str
-    receive_value: NotRequired[str]
-    receive_label: NotRequired[str]
+    transmit: ControllerEthernetColumn
+    receive: NotRequired[ControllerEthernetColumn]
 
 
 class ShowControllerEthernetControllerResult(TypedDict):
@@ -48,16 +57,22 @@ def _parse_stat_row(line: str) -> ControllerEthernetStatRow | None:
     m = _STAT_ROW_FULL_RE.match(s)
     if m:
         return ControllerEthernetStatRow(
-            transmit_value=m.group(1),
-            transmit_label=m.group(2).strip(),
-            receive_value=m.group(3),
-            receive_label=m.group(4).strip(),
+            transmit=ControllerEthernetColumn(
+                value=m.group(1),
+                label=m.group(2).strip(),
+            ),
+            receive=ControllerEthernetColumn(
+                value=m.group(3),
+                label=m.group(4).strip(),
+            ),
         )
     m = _STAT_ROW_TX_ONLY_RE.match(s)
     if m:
         return ControllerEthernetStatRow(
-            transmit_value=m.group(1),
-            transmit_label=m.group(2).strip(),
+            transmit=ControllerEthernetColumn(
+                value=m.group(1),
+                label=m.group(2).strip(),
+            ),
         )
     return None
 
