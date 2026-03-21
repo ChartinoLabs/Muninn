@@ -1,1 +1,1 @@
-IOS-XE `show track` parser now returns `tracked_by` as a mapping keyed by `protocol|group_id|interface` instead of a list.
+IOS-XE `show track` now nests `tracked_by` as protocol name → group id → interface → entry (replacing the prior list-of-dicts shape). Composite pipe-delimited keys are not used.
