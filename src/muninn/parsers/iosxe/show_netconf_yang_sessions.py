@@ -10,9 +10,8 @@ from muninn.tags import ParserTag
 
 
 class NetconfYangSessionEntry(TypedDict):
-    """One NETCONF-YANG management session."""
+    """One NETCONF-YANG management session (outer key is ``session_id``)."""
 
-    session_id: str
     transport: str
     username: str
     source_host: str
@@ -23,7 +22,7 @@ class ShowNetconfYangSessionsResult(TypedDict):
     """Schema for 'show netconf-yang sessions' parsed output."""
 
     session_count: int
-    sessions: list[NetconfYangSessionEntry]
+    sessions: dict[str, NetconfYangSessionEntry]
 
 
 _SESSION_COUNT_PATTERN = re.compile(
@@ -54,10 +53,10 @@ class ShowNetconfYangSessionsParser(BaseParser[ShowNetconfYangSessionsResult]):
             output: Raw CLI output from 'show netconf-yang sessions'.
 
         Returns:
-            Session count and session rows from the table.
+            Session count and sessions keyed by session id.
         """
         session_count = 0
-        sessions: list[NetconfYangSessionEntry] = []
+        sessions: dict[str, NetconfYangSessionEntry] = {}
 
         for raw in output.splitlines():
             line = raw.strip()
@@ -74,15 +73,13 @@ class ShowNetconfYangSessionsParser(BaseParser[ShowNetconfYangSessionsResult]):
 
             row_match = _SESSION_ROW_PATTERN.match(line)
             if row_match:
-                sessions.append(
-                    NetconfYangSessionEntry(
-                        session_id=row_match.group("id"),
-                        transport=row_match.group("transport"),
-                        username=row_match.group("username"),
-                        source_host=row_match.group("source"),
-                        global_lock=row_match.group("lock"),
-                    )
-                )
+                sid = row_match.group("id")
+                sessions[sid] = {
+                    "transport": row_match.group("transport"),
+                    "username": row_match.group("username"),
+                    "source_host": row_match.group("source"),
+                    "global_lock": row_match.group("lock"),
+                }
 
         return ShowNetconfYangSessionsResult(
             session_count=session_count,
