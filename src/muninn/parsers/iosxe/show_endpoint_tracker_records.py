@@ -24,7 +24,7 @@ class EndpointTrackerRecordRow(TypedDict):
 class ShowEndpointTrackerRecordsResult(TypedDict):
     """Schema for 'show endpoint-tracker records' parsed output."""
 
-    rows: list[EndpointTrackerRecordRow]
+    rows: dict[str, EndpointTrackerRecordRow]
 
 
 def _split_record_line(line: str) -> list[str] | None:
@@ -43,7 +43,7 @@ class ShowEndpointTrackerRecordsParser(BaseParser[ShowEndpointTrackerRecordsResu
     @classmethod
     def parse(cls, output: str) -> ShowEndpointTrackerRecordsResult:
         """Parse 'show endpoint-tracker records' output."""
-        rows: list[EndpointTrackerRecordRow] = []
+        rows: dict[str, EndpointTrackerRecordRow] = {}
         for line in output.splitlines():
             s = line.strip()
             if not s or s.lower().startswith("record name"):
@@ -62,7 +62,7 @@ class ShowEndpointTrackerRecordsParser(BaseParser[ShowEndpointTrackerRecordsResu
                 interval_s=parts[5],
                 tracker_type=parts[6],
             )
-            rows.append(row)
+            rows[row["record_name"]] = row
         if not rows:
             msg = "No endpoint-tracker records parsed"
             raise ValueError(msg)
