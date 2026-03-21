@@ -154,8 +154,6 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         "iosxe/show_standby_brief/002_ipv6_and_continuation_lines/expected.json",
         "iosxe/show_standby_brief/003_single_init_no_preempt/expected.json",
         "iosxe/show_standby_brief/004_bridge_domain_standby_state/expected.json",
-        "iosxe/show_track/001_interface_tracking/expected.json",
-        "iosxe/show_track/002_multiple_track_types/expected.json",
         "iosxe/show_version/001_c3850_stack/expected.json",
         "iosxe/show_version/003_c9300_switch/expected.json",
         "iosxe/show_vlan/002_all_statuses_remote_span_private_vlans/expected.json",
