@@ -44,10 +44,6 @@ _TABLE_HEADER = re.compile(
 )
 
 
-def _canon(name: str) -> str:
-    return canonical_interface_name(name, os=OS.CISCO_IOSXE)
-
-
 def _skip_neighbors_preamble(stripped: str) -> bool:
     if stripped.startswith("---") or _TABLE_HEADER.match(stripped):
         return True
@@ -74,9 +70,12 @@ def _parse_neighbors_table(lines: list[str]) -> dict[str, NeighborSwitchEntry]:
                     svl=m.group("svl"),
                     ports={},
                 )
-            local = _canon(m.group("local"))
+            local = canonical_interface_name(m.group("local"), os=OS.CISCO_IOSXE)
             switches[sw]["ports"][local] = NeighborPortRemote(
-                remote_port=_canon(m.group("remote")),
+                remote_port=canonical_interface_name(
+                    m.group("remote"),
+                    os=OS.CISCO_IOSXE,
+                ),
             )
             continue
 
@@ -84,12 +83,15 @@ def _parse_neighbors_table(lines: list[str]) -> dict[str, NeighborSwitchEntry]:
             continue
 
         if m := _CONT_TWO.match(line):
-            local = _canon(m.group("local"))
+            local = canonical_interface_name(m.group("local"), os=OS.CISCO_IOSXE)
             switches[current_switch]["ports"][local] = NeighborPortRemote(
-                remote_port=_canon(m.group("remote")),
+                remote_port=canonical_interface_name(
+                    m.group("remote"),
+                    os=OS.CISCO_IOSXE,
+                ),
             )
         elif m := _CONT_ONE.match(line):
-            local = _canon(m.group("local"))
+            local = canonical_interface_name(m.group("local"), os=OS.CISCO_IOSXE)
             switches[current_switch]["ports"][local] = NeighborPortRemote(
                 remote_port="",
             )

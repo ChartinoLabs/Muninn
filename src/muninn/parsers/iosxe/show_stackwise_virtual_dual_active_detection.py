@@ -36,10 +36,6 @@ _HEADER = re.compile(
 )
 
 
-def _canon(name: str) -> str:
-    return canonical_interface_name(name, os=OS.CISCO_IOSXE)
-
-
 def _dad_skip_line(stripped: str) -> bool:
     if not stripped or stripped.startswith("---"):
         return True
@@ -55,7 +51,7 @@ def _dad_append_full(
         switches[sw] = []
     switches[sw].append(
         DadPortEntry(
-            port=_canon(m.group("port")),
+            port=canonical_interface_name(m.group("port"), os=OS.CISCO_IOSXE),
             status=m.group("status").lower(),
         ),
     )
@@ -69,7 +65,7 @@ def _dad_append_cont(
 ) -> None:
     switches[current_switch].append(
         DadPortEntry(
-            port=_canon(m.group("port")),
+            port=canonical_interface_name(m.group("port"), os=OS.CISCO_IOSXE),
             status=m.group("status").lower(),
         ),
     )
