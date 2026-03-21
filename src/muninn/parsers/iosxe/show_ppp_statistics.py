@@ -47,9 +47,9 @@ class PppDisconnectRow(TypedDict):
 class ShowPppStatisticsResult(TypedDict):
     """Schema for 'show ppp statistics' parsed output."""
 
-    statistics: list[PppStatisticRow]
-    mib_counters: list[PppMibCounterRow]
-    disconnect_reasons: list[PppDisconnectRow]
+    statistics: dict[str, PppStatisticRow]
+    mib_counters: dict[str, PppMibCounterRow]
+    disconnect_reasons: dict[str, PppDisconnectRow]
 
 
 _TWO_VALUE_ROW = re.compile(
@@ -63,36 +63,31 @@ def _append_row_for_section(
     desc: str,
     a: int,
     b: int,
-    statistics: list[PppStatisticRow],
-    mib_counters: list[PppMibCounterRow],
-    disconnect_reasons: list[PppDisconnectRow],
+    statistics: dict[str, PppStatisticRow],
+    mib_counters: dict[str, PppMibCounterRow],
+    disconnect_reasons: dict[str, PppDisconnectRow],
 ) -> None:
+    key = str(type_id)
     if section is _PppSection.STATISTICS:
-        statistics.append(
-            PppStatisticRow(
-                type_id=type_id,
-                description=desc,
-                total=a,
-                since_cleared=b,
-            )
+        statistics[key] = PppStatisticRow(
+            type_id=type_id,
+            description=desc,
+            total=a,
+            since_cleared=b,
         )
     elif section is _PppSection.MIB_COUNTERS:
-        mib_counters.append(
-            PppMibCounterRow(
-                type_id=type_id,
-                description=desc,
-                peak=a,
-                current=b,
-            )
+        mib_counters[key] = PppMibCounterRow(
+            type_id=type_id,
+            description=desc,
+            peak=a,
+            current=b,
         )
     elif section is _PppSection.DISCONNECT:
-        disconnect_reasons.append(
-            PppDisconnectRow(
-                type_id=type_id,
-                description=desc,
-                total=a,
-                since_cleared=b,
-            )
+        disconnect_reasons[key] = PppDisconnectRow(
+            type_id=type_id,
+            description=desc,
+            total=a,
+            since_cleared=b,
         )
 
 
@@ -107,9 +102,9 @@ def _update_section(stripped: str, section: _PppSection) -> _PppSection:
 
 
 def _parse_ppp_statistics_output(output: str) -> ShowPppStatisticsResult:
-    statistics: list[PppStatisticRow] = []
-    mib_counters: list[PppMibCounterRow] = []
-    disconnect_reasons: list[PppDisconnectRow] = []
+    statistics: dict[str, PppStatisticRow] = {}
+    mib_counters: dict[str, PppMibCounterRow] = {}
+    disconnect_reasons: dict[str, PppDisconnectRow] = {}
 
     section = _PppSection.NONE
 
