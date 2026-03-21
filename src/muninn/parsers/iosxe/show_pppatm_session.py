@@ -7,10 +7,14 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
+from muninn.utils import canonical_interface_name
 
 
 class PppAtmSessionRow(TypedDict):
-    """One PPPoATM session row."""
+    """One PPPoATM session row.
+
+    ``atm_intf``, ``vt``, and ``va`` are canonical interface names.
+    """
 
     uniq_id: str
     atm_intf: str
@@ -57,11 +61,11 @@ def _parse_pppatm_row(line: str) -> PppAtmSessionRow | None:
         return None
     return PppAtmSessionRow(
         uniq_id=m.group("uid"),
-        atm_intf=m.group("atm"),
+        atm_intf=canonical_interface_name(m.group("atm"), os=OS.CISCO_IOSXE),
         vpi_vci=m.group("vpi"),
         encap=m.group("enc"),
-        vt=m.group("vt"),
-        va=m.group("va"),
+        vt=canonical_interface_name(m.group("vt"), os=OS.CISCO_IOSXE),
+        va=canonical_interface_name(m.group("va"), os=OS.CISCO_IOSXE),
         va_st=m.group("vast"),
         state=m.group("st"),
     )
