@@ -20,7 +20,7 @@ class EsmcInterfaceDetail(TypedDict):
 class ShowEsmcDetailResult(TypedDict):
     """Schema for 'show esmc detail' parsed output."""
 
-    interfaces: list[EsmcInterfaceDetail]
+    interfaces: dict[str, EsmcInterfaceDetail]
 
 
 _IF_RE = re.compile(r"^Interface:\s+(.+)$")
@@ -31,15 +31,13 @@ def _flush_block(
     name: str | None,
     admin: dict[str, str],
     oper: dict[str, str],
-    out: list[EsmcInterfaceDetail],
+    out: dict[str, EsmcInterfaceDetail],
 ) -> None:
     if name:
-        out.append(
-            EsmcInterfaceDetail(
-                name=name,
-                administrative_configurations=admin.copy(),
-                operational_status=oper.copy(),
-            )
+        out[name] = EsmcInterfaceDetail(
+            name=name,
+            administrative_configurations=admin.copy(),
+            operational_status=oper.copy(),
         )
 
 
@@ -60,7 +58,7 @@ def _esmc_store_kv(
 
 
 def _parse_esmc_detail(output: str) -> ShowEsmcDetailResult:
-    interfaces: list[EsmcInterfaceDetail] = []
+    interfaces: dict[str, EsmcInterfaceDetail] = {}
     current_name: str | None = None
     admin: dict[str, str] = {}
     oper: dict[str, str] = {}
