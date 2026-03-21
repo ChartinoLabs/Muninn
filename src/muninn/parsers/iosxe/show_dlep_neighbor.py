@@ -14,13 +14,13 @@ class DlepNeighborBlock(TypedDict):
 
     interface: str
     local_ip: str
-    neighbors: list[dict[str, str]]
+    neighbors: dict[str, dict[str, str]]
 
 
 class ShowDlepNeighborResult(TypedDict):
     """Schema for 'show dlep neighbor' parsed output."""
 
-    blocks: list[DlepNeighborBlock]
+    blocks: dict[str, DlepNeighborBlock]
 
 
 _IF_RE = re.compile(
@@ -50,7 +50,7 @@ class _DlepNeighborChunk:
     def __init__(self, iface: str) -> None:
         self.iface = iface
         self.local = ""
-        self.neighbors: list[dict[str, str]] = []
+        self.neighbors: dict[str, dict[str, str]] = {}
         self.current: dict[str, str] | None = None
 
     def feed(self, line: str) -> None:
@@ -77,8 +77,9 @@ class _DlepNeighborChunk:
         sm = _SID_RE.match(st)
         if not sm:
             return False
-        self.current = {"sid": sm.group("sid"), "remote_mac": sm.group("mac")}
-        self.neighbors.append(self.current)
+        sid = sm.group("sid")
+        self.current = {"sid": sid, "remote_mac": sm.group("mac")}
+        self.neighbors[sid] = self.current
         return True
 
     def _feed_addr(self, st: str) -> bool:
@@ -122,7 +123,7 @@ class ShowDlepNeighborParser(BaseParser[ShowDlepNeighborResult]):
     def parse(cls, output: str) -> ShowDlepNeighborResult:
         """Parse 'show dlep neighbor' output."""
         matches = list(_IF_RE.finditer(output))
-        blocks: list[DlepNeighborBlock] = []
+        blocks: dict[str, DlepNeighborBlock] = {}
         for i, m in enumerate(matches):
             iface = m.group(1).strip()
             start = m.start()
@@ -130,7 +131,7 @@ class ShowDlepNeighborParser(BaseParser[ShowDlepNeighborResult]):
             chunk = output[start:end]
             b = _parse_dlep_neighbor_block(chunk, iface)
             if b:
-                blocks.append(b)
+                blocks[b["interface"]] = b
         if not blocks:
             msg = "No DLEP neighbor blocks parsed"
             raise ValueError(msg)
