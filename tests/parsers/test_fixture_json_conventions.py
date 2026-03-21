@@ -2,8 +2,11 @@
 
 Muninn prefers keyed dicts over lists of dicts when a natural identifier exists;
 see ``docs/01-design-principles.md`` section 4. This module enforces that for new and
-changed fixtures. Full-file exemptions live in ``_LIST_OF_DICTS_EXEMPT_EXPECTED_FILES``
-below (see comments there).
+changed fixtures.
+
+Full-file exemptions are paths (relative to ``tests/parsers/``) in
+``_LIST_OF_DICTS_EXEMPT_EXPECTED_FILES``. Use the OS section headers and optional
+trailing ``# ...`` comments on individual lines to record why a fixture is exempt.
 """
 
 from __future__ import annotations
