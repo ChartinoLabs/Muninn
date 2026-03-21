@@ -21,7 +21,7 @@ class DlepCounterSection(TypedDict):
 class ShowDlepCountersResult(TypedDict):
     """Schema for 'show dlep counters' parsed output."""
 
-    sections: list[DlepCounterSection]
+    sections: dict[str, DlepCounterSection]
 
 
 _IF_RE = re.compile(r"^DLEP Counters for\s+(.+)$", re.I | re.M)
@@ -129,13 +129,13 @@ class ShowDlepCountersParser(BaseParser[ShowDlepCountersResult]):
     def parse(cls, output: str) -> ShowDlepCountersResult:
         """Parse 'show dlep counters' output."""
         matches = list(_IF_RE.finditer(output))
-        sections: list[DlepCounterSection] = []
+        sections: dict[str, DlepCounterSection] = {}
         for i, m in enumerate(matches):
             name = m.group(1).strip()
             start = m.start()
             end = matches[i + 1].start() if i + 1 < len(matches) else len(output)
             chunk = output[start:end]
-            sections.append(_parse_dlep_counter_block(chunk, name))
+            sections[name] = _parse_dlep_counter_block(chunk, name)
         if not sections:
             msg = "No DLEP counter sections parsed"
             raise ValueError(msg)
