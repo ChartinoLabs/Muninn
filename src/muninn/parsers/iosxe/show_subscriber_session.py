@@ -25,7 +25,7 @@ class ShowSubscriberSessionResult(TypedDict):
     """Schema for 'show subscriber session' parsed output."""
 
     total_sessions: int
-    sessions: list[SubscriberSessionEntry]
+    sessions: dict[str, SubscriberSessionEntry]
 
 
 _ROW_RE = re.compile(
@@ -64,7 +64,7 @@ class ShowSubscriberSessionParser(BaseParser[ShowSubscriberSessionResult]):
     def parse(cls, output: str) -> ShowSubscriberSessionResult:
         """Parse 'show subscriber session' output."""
         total: int | None = None
-        sessions: list[SubscriberSessionEntry] = []
+        sessions: dict[str, SubscriberSessionEntry] = {}
         for line in output.splitlines():
             line = line.rstrip()
             if not line.strip():
@@ -76,7 +76,7 @@ class ShowSubscriberSessionParser(BaseParser[ShowSubscriberSessionResult]):
                 continue
             row = _parse_session_row(line)
             if row:
-                sessions.append(row)
+                sessions[row["uniq_id"]] = row
         if total is None:
             msg = "Total sessions line not found"
             raise ValueError(msg)
