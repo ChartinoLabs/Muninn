@@ -2,41 +2,25 @@
     "object_groups": {
         "TEST-v6-obj": {
             "group_type": "V6-Network",
-            "entries": [
-                {
-                    "type": "V6-Network",
-                    "host": "2001:db8::1:1111"
-                },
-                {
-                    "type": "V6-Network",
-                    "host": "2001:db8::2:2222"
-                },
-                {
-                    "type": "V6-Network",
-                    "network": "2001:db8:111:1::",
-                    "mask": "48"
-                },
-                {
-                    "type": "V6-Network",
-                    "network": "2001:db8:222:2::",
-                    "mask": "48"
-                }
-            ]
+            "hosts": {
+                "2001:db8::1:1111": {},
+                "2001:db8::2:2222": {}
+            },
+            "ipv6_prefixes": {
+                "2001:db8:111::/48": {},
+                "2001:db8:222::/48": {}
+            }
         },
         "TEST-v6-icmp": {
             "group_type": "V6-Service",
-            "entries": [
-                {
-                    "type": "V6-Service",
-                    "protocol": "icmp",
-                    "icmp_type": "echo-request"
-                },
-                {
-                    "type": "V6-Service",
-                    "protocol": "icmp",
-                    "icmp_type": "echo-reply"
+            "protocols": {
+                "icmp": {
+                    "types": {
+                        "echo-reply": {},
+                        "echo-request": {}
+                    }
                 }
-            ]
+            }
         }
     }
 }

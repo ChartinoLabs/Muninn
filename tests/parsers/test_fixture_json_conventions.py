@@ -97,8 +97,6 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         "ios/show_logging/006_console_alerts_esm_dropped/expected.json",
         "ios/show_logging/007_sequence_numbered_logs_with_timezone/expected.json",
         "ios/show_logging/008_console_enabled_buffer_informational/expected.json",
-        "ios/show_object-group/001_basic/expected.json",
-        "ios/show_object-group/002_ipv6/expected.json",
         "ios/show_processes_memory/001_basic/expected.json",
         "ios/show_processes_memory_sorted/001_basic/expected.json",
         "ios/show_processes_memory_sorted/002_single_pool/expected.json",
