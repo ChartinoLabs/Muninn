@@ -1,1 +1,1 @@
-IOS `show lldp neighbors detail` now returns `neighbors` as a mapping of interface or port-id key to a single neighbor entry (not a list per key). Duplicate port labels without `Local Intf` are disambiguated with `::<chassis_id>`.
+IOS `show lldp neighbors detail` now nests `neighbors` as outer key (canonical local interface, or port id when absent) → chassis id → port id → entry, replacing the prior list-of-dicts shape.
