@@ -1,7 +1,7 @@
 """Parser for 'show controller ethernet-controller' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -10,12 +10,15 @@ from muninn.tags import ParserTag
 
 
 class ControllerEthernetStatRow(TypedDict):
-    """One transmit/receive statistics row."""
+    """One transmit/receive statistics row.
+
+    ``receive_*`` keys are omitted when the CLI line has no receive column.
+    """
 
     transmit_value: str
     transmit_label: str
-    receive_value: str
-    receive_label: str
+    receive_value: NotRequired[str]
+    receive_label: NotRequired[str]
 
 
 class ShowControllerEthernetControllerResult(TypedDict):
@@ -55,8 +58,6 @@ def _parse_stat_row(line: str) -> ControllerEthernetStatRow | None:
         return ControllerEthernetStatRow(
             transmit_value=m.group(1),
             transmit_label=m.group(2).strip(),
-            receive_value="",
-            receive_label="",
         )
     return None
 
