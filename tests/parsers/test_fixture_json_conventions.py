@@ -61,7 +61,6 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         "ios/show_cdp_neighbors_detail/002_single_neighbor/expected.json",
         "ios/show_crypto_session_detail/001_basic/expected.json",
         "ios/show_dot1x_all/002_with_clients/expected.json",
-        "ios/show_interfaces/003_port_channel_members/expected.json",
         "ios/show_ip_eigrp_topology/001_basic/expected.json",
         "ios/show_ip_eigrp_topology/002_multiple_as/expected.json",
         "ios/show_ip_ospf_database/001_basic/expected.json",
