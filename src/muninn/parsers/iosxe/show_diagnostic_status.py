@@ -21,13 +21,13 @@ class DiagnosticCardEntry(TypedDict):
 
     card: str
     description: str
-    tests: list[DiagnosticTestEntry]
+    tests: dict[str, DiagnosticTestEntry]
 
 
 class ShowDiagnosticStatusResult(TypedDict):
     """Schema for 'show diagnostic status' parsed output."""
 
-    cards: list[DiagnosticCardEntry]
+    cards: dict[str, DiagnosticCardEntry]
 
 
 _HEADER_SKIP = re.compile(r"^(Card|======|------)", re.I)
@@ -37,8 +37,8 @@ _ROW_RE = re.compile(
 _CONT_RE = re.compile(r"^\s+(?P<test>\S+)\s+(?P<run><[^>]+>)\s*$")
 
 
-def _parse_diagnostic_status(output: str) -> list[DiagnosticCardEntry]:
-    cards: list[DiagnosticCardEntry] = []
+def _parse_diagnostic_status(output: str) -> dict[str, DiagnosticCardEntry]:
+    cards: dict[str, DiagnosticCardEntry] = {}
     current: DiagnosticCardEntry | None = None
     for line in output.splitlines():
         s = line.rstrip()
@@ -48,25 +48,26 @@ def _parse_diagnostic_status(output: str) -> list[DiagnosticCardEntry]:
             continue
         m = _ROW_RE.match(s)
         if m:
+            tname = m.group("test")
+            card_id = m.group("card")
             current = DiagnosticCardEntry(
-                card=m.group("card"),
+                card=card_id,
                 description=m.group("desc").strip(),
-                tests=[
-                    DiagnosticTestEntry(
-                        name=m.group("test"),
+                tests={
+                    tname: DiagnosticTestEntry(
+                        name=tname,
                         run_by=m.group("run"),
                     )
-                ],
+                },
             )
-            cards.append(current)
+            cards[card_id] = current
             continue
         cm = _CONT_RE.match(s)
         if cm and current is not None:
-            current["tests"].append(
-                DiagnosticTestEntry(
-                    name=cm.group("test"),
-                    run_by=cm.group("run"),
-                )
+            tname = cm.group("test")
+            current["tests"][tname] = DiagnosticTestEntry(
+                name=tname,
+                run_by=cm.group("run"),
             )
     return cards
 
