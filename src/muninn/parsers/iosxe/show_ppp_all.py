@@ -21,7 +21,7 @@ class PppAllRow(TypedDict):
 class ShowPppAllResult(TypedDict):
     """Schema for 'show ppp all' parsed output."""
 
-    sessions: list[PppAllRow]
+    sessions: dict[str, PppAllRow]
 
 
 def _split_ppp_columns(line: str) -> list[str] | None:
@@ -40,7 +40,7 @@ class ShowPppAllParser(BaseParser[ShowPppAllResult]):
     @classmethod
     def parse(cls, output: str) -> ShowPppAllResult:
         """Parse 'show ppp all' output."""
-        sessions: list[PppAllRow] = []
+        sessions: dict[str, PppAllRow] = {}
         for line in output.splitlines():
             s = line.strip()
             if not s or s.startswith("Interface") or set(s) <= {"-"}:
@@ -49,14 +49,13 @@ class ShowPppAllParser(BaseParser[ShowPppAllResult]):
             if not parts or len(parts) < 4:
                 continue
             iface, open_nego, stage, peer = parts[0], parts[1], parts[2], parts[3]
-            sessions.append(
-                PppAllRow(
-                    interface=iface,
-                    open_nego=open_nego,
-                    stage=stage,
-                    peer_address=peer,
-                )
+            row = PppAllRow(
+                interface=iface,
+                open_nego=open_nego,
+                stage=stage,
+                peer_address=peer,
             )
+            sessions[row["interface"]] = row
         if not sessions:
             msg = "No PPP sessions parsed"
             raise ValueError(msg)
