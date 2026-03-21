@@ -5,10 +5,14 @@ discourages composite string keys (see ``docs/01-design-principles.md`` section 
 **Nested keys vs. composite string keys**). This module enforces structural rules for
 new and changed fixtures.
 
-Full-file exemptions are paths (relative to ``tests/parsers/``) in
-``_LIST_OF_DICTS_EXEMPT_EXPECTED_FILES``. The same set applies to both list-of-dicts
-and pipe-in-key checks. Use the OS section headers and optional trailing ``# ...``
-comments on individual lines to record why a fixture is exempt.
+Full-file exemptions are paths (relative to ``tests/parsers/``):
+
+- ``_LIST_OF_DICTS_EXEMPT_EXPECTED_FILES`` — list-of-dicts convention only.
+- ``_PIPE_IN_DICT_KEY_EXEMPT_EXPECTED_FILES`` — pipe-in-key convention only (independent
+  of the list above).
+
+Use the OS section headers and optional trailing ``# ...`` comments on individual lines
+to record why a fixture is exempt.
 """
 
 import json
@@ -204,6 +208,10 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
     }
 )
 
+# Legacy fixtures that still use ``|`` in JSON object keys (rare). Prefer nesting over
+# adding here.
+_PIPE_IN_DICT_KEY_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset()
+
 
 def _discover_expected_json_files() -> list[Path]:
     """All ``expected.json`` paths under this directory (excluding ``_*`` OS dirs)."""
@@ -261,13 +269,13 @@ def test_expected_json_avoids_pipe_in_dict_keys(
 ) -> None:
     r"""Fail when a fixture uses ``|`` in a JSON object key (composite-key smell).
 
-    Exempt entire ``expected.json`` files via ``_LIST_OF_DICTS_EXEMPT_EXPECTED_FILES``
-    (same as list-of-dicts). String *values* may still contain ``|`` from the CLI.
+    Exempt ``expected.json`` files via ``_PIPE_IN_DICT_KEY_EXEMPT_EXPECTED_FILES`` (see
+    module docstring). String *values* may still contain ``|`` from the CLI.
     """
     rel = expected_path.relative_to(PARSERS_TEST_DIR).as_posix()
     data = json.loads(expected_path.read_text(encoding="utf-8"))
     violations = _find_dict_key_paths_with_pipe(data)
-    if rel in _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES:
+    if rel in _PIPE_IN_DICT_KEY_EXEMPT_EXPECTED_FILES:
         return
     if not violations:
         return
@@ -280,8 +288,9 @@ def test_expected_json_avoids_pipe_in_dict_keys(
     msg = (
         f"{rel} uses '|' in JSON object key(s) at JSON Pointer path(s). Prefer nested "
         f"dicts per docs/01-design-principles.md section 4 (Nested keys vs. composite "
-        f"string keys), or add the file path to "
-        f"_LIST_OF_DICTS_EXEMPT_EXPECTED_FILES in test_fixture_json_conventions.py.\n"
+        f"string keys), or add the path to "
+        f"_PIPE_IN_DICT_KEY_EXEMPT_EXPECTED_FILES in\n"
+        f"test_fixture_json_conventions.py.\n"
         f"{lines}{more}"
     )
     pytest.fail(msg)

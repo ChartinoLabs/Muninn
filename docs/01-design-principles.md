@@ -148,7 +148,7 @@ The pipe character (`|`) is a common delimiter in composite keys. **Fixture CI**
 - **List-of-dicts:** fails when a non-empty list contains only objects if a keyed dict would be natural (per the patterns above).
 - **Pipe in keys:** fails when any object key contains U+007C (`|`).
 
-Both checks share one opt-out list, `_LIST_OF_DICTS_EXEMPT_EXPECTED_FILES`, for legacy fixtures until they are refactored.
+Each check has its own opt-out set in `test_fixture_json_conventions.py` (`_LIST_OF_DICTS_EXEMPT_EXPECTED_FILES` vs. `_PIPE_IN_DICT_KEY_EXEMPT_EXPECTED_FILES`) so a legacy list-of-dicts fixture does not automatically skip the pipe-in-key rule, and vice versa.
 
 ### 5. Test Metadata for Platform/Version Tracking
 
