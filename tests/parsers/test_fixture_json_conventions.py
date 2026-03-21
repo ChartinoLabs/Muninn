@@ -1,12 +1,14 @@
 """Conventions for ``expected.json`` parser fixtures.
 
-Muninn prefers keyed dicts over lists of dicts when a natural identifier exists;
-see ``docs/01-design-principles.md`` section 4. This module enforces that for new and
-changed fixtures.
+Muninn prefers keyed dicts over lists of dicts when a natural identifier exists, and
+discourages composite string keys (see ``docs/01-design-principles.md`` section 4,
+**Nested keys vs. composite string keys**). This module enforces structural rules for
+new and changed fixtures.
 
 Full-file exemptions are paths (relative to ``tests/parsers/``) in
-``_LIST_OF_DICTS_EXEMPT_EXPECTED_FILES``. Use the OS section headers and optional
-trailing ``# ...`` comments on individual lines to record why a fixture is exempt.
+``_LIST_OF_DICTS_EXEMPT_EXPECTED_FILES``. The same set applies to both list-of-dicts
+and pipe-in-key checks. Use the OS section headers and optional trailing ``# ...``
+comments on individual lines to record why a fixture is exempt.
 """
 
 import json
@@ -48,12 +50,30 @@ def _find_list_of_dict_paths(obj: object, path: JsonPath = ()) -> list[JsonPath]
     return found
 
 
+def _find_dict_key_paths_with_pipe(obj: object, path: JsonPath = ()) -> list[JsonPath]:
+    """Paths to dict keys containing ``|`` (composite-key smell)."""
+    found: list[JsonPath] = []
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if not isinstance(k, str):
+                msg = f"Expected string dict keys in JSON, got {type(k).__name__}"
+                raise TypeError(msg)
+            child_path = path + (k,)
+            if "|" in k:
+                found.append(child_path)
+            found.extend(_find_dict_key_paths_with_pipe(v, child_path))
+    elif isinstance(obj, list):
+        for i, item in enumerate(obj):
+            found.extend(_find_dict_key_paths_with_pipe(item, path + (i,)))
+    return found
+
+
 PARSERS_TEST_DIR = Path(__file__).parent
 
 
-# Seeded legacy fixtures: list-of-dicts predates the keyed-dict preference in
-# docs/01-design-principles.md section 4. Add new paths only when refactoring the
-# parser output is out of scope; prefer fixing the schema instead.
+# Seeded legacy fixtures: structural conventions in docs/01-design-principles.md §4.
+# Add new paths only when refactoring the parser output is out of scope; prefer fixing
+# the schema instead.
 _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
     {
         # --- IOS ---
@@ -225,6 +245,42 @@ def test_expected_json_avoids_list_of_dicts(
     msg = (
         f"{rel} contains list-of-dicts at JSON Pointer path(s). Prefer keyed "
         f"dicts per docs/01-design-principles.md section 4, or add the file path to "
+        f"_LIST_OF_DICTS_EXEMPT_EXPECTED_FILES in test_fixture_json_conventions.py.\n"
+        f"{lines}{more}"
+    )
+    pytest.fail(msg)
+
+
+@pytest.mark.parametrize(
+    "expected_path",
+    _discover_expected_json_files(),
+    ids=lambda p: p.relative_to(PARSERS_TEST_DIR).as_posix(),
+)
+def test_expected_json_avoids_pipe_in_dict_keys(
+    expected_path: Path,
+) -> None:
+    r"""Fail when a fixture uses ``|`` in a JSON object key (composite-key smell).
+
+    Exempt entire ``expected.json`` files via ``_LIST_OF_DICTS_EXEMPT_EXPECTED_FILES``
+    (same as list-of-dicts). String *values* may still contain ``|`` from the CLI.
+    """
+    rel = expected_path.relative_to(PARSERS_TEST_DIR).as_posix()
+    data = json.loads(expected_path.read_text(encoding="utf-8"))
+    violations = _find_dict_key_paths_with_pipe(data)
+    if rel in _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES:
+        return
+    if not violations:
+        return
+    lines = "\n".join(
+        f"  - {_path_to_json_pointer(p) or '(document root)'}" for p in violations[:50]
+    )
+    more = ""
+    if len(violations) > 50:
+        more = f"\n  ... and {len(violations) - 50} more"
+    msg = (
+        f"{rel} uses '|' in JSON object key(s) at JSON Pointer path(s). Prefer nested "
+        f"dicts per docs/01-design-principles.md section 4 (Nested keys vs. composite "
+        f"string keys), or add the file path to "
         f"_LIST_OF_DICTS_EXEMPT_EXPECTED_FILES in test_fixture_json_conventions.py.\n"
         f"{lines}{more}"
     )
