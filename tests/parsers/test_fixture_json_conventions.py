@@ -97,7 +97,6 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         "ios/show_processes_memory/001_basic/expected.json",
         "ios/show_processes_memory_sorted/001_basic/expected.json",
         "ios/show_processes_memory_sorted/002_single_pool/expected.json",
-        "ios/show_standby/002_multiple_groups_with_tracks/expected.json",
         "ios/show_standby_brief/001_mixed_states_and_interfaces/expected.json",
         "ios/show_version/001_c3750x_switch/expected.json",
         "ios/show_vlan/002_remote_span_and_private_vlans/expected.json",
