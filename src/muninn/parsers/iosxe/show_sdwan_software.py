@@ -23,7 +23,7 @@ class SdwanSoftwareRow(TypedDict):
 class ShowSdwanSoftwareResult(TypedDict):
     """Schema for 'show sdwan software' parsed output."""
 
-    images: list[SdwanSoftwareRow]
+    images: dict[str, SdwanSoftwareRow]
     total_space_mb: NotRequired[int]
     used_space_mb: NotRequired[int]
     available_space_mb: NotRequired[int]
@@ -65,7 +65,7 @@ class _SdwanSoftwareAcc:
     __slots__ = ("images", "in_table", "extra")
 
     def __init__(self) -> None:
-        self.images: list[SdwanSoftwareRow] = []
+        self.images: dict[str, SdwanSoftwareRow] = {}
         self.in_table = False
         self.extra: dict[str, int] = {}
 
@@ -88,7 +88,7 @@ class _SdwanSoftwareAcc:
             return
         row = _parse_sdwan_software_row(raw)
         if row:
-            self.images.append(row)
+            self.images[row["version"]] = row
 
     def result(self) -> ShowSdwanSoftwareResult:
         if not self.images:
