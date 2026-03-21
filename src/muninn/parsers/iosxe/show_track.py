@@ -47,7 +47,7 @@ class TrackEntry(TypedDict):
     threshold_up: NotRequired[int]
     latest_op_return_code: NotRequired[str]
     latest_rtt_ms: NotRequired[int]
-    tracked_by: NotRequired[list[TrackedByEntry]]
+    tracked_by: NotRequired[dict[str, TrackedByEntry]]
 
 
 class ShowTrackResult(TypedDict):
@@ -100,6 +100,13 @@ _TRACKED_BY_ENTRY = re.compile(
 _RETURN_CODE_LINE = re.compile(r"^Latest\s+operation\s+return\s+code:\s+(?P<code>\w+)$")
 
 _RTT_LINE = re.compile(r"^Latest\s+RTT\s+\(?millisecs\)?\s+(?P<rtt>\d+)$")
+
+_TRACKED_BY_KEY_FIELDS_SEP = "|"
+
+
+def _tracked_by_key(name: str, group_id: int, interface: str) -> str:
+    """Build a stable dict key for a tracked-by row (protocol, group, interface)."""
+    return _TRACKED_BY_KEY_FIELDS_SEP.join((name, str(group_id), interface))
 
 
 def _parse_type_line(line: str, entry: TrackEntry) -> bool:
@@ -205,14 +212,18 @@ def _parse_tracked_by_line(line: str, entry: TrackEntry) -> bool:
     if not match:
         return False
 
-    tracked_entry: TrackedByEntry = {"name": match.group("name")}
-    if match.group("interface"):
-        tracked_entry["interface"] = canonical_interface_name(match.group("interface"))
-    if match.group("group_id"):
-        tracked_entry["group_id"] = int(match.group("group_id"))
+    name = match.group("name")
+    interface = canonical_interface_name(match.group("interface"))
+    group_id = int(match.group("group_id"))
+    tracked_entry: TrackedByEntry = {
+        "name": name,
+        "interface": interface,
+        "group_id": group_id,
+    }
 
-    tracked_by = entry.setdefault("tracked_by", [])
-    tracked_by.append(tracked_entry)
+    key = _tracked_by_key(name, group_id, interface)
+    tracked_by = entry.setdefault("tracked_by", {})
+    tracked_by[key] = tracked_entry
     return True
 
 
