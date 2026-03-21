@@ -35,6 +35,8 @@ def _looks_like_interface(value: str) -> bool:
     - Vlan100
     - Port-channel1, Po1
     - Tunnel1, Tu1
+    - Virtual-Access2.1, Vi2.1
+    - Virtual-Template1, Vt1
     """
     import re
 
@@ -44,7 +46,8 @@ def _looks_like_interface(value: str) -> bool:
         r"Te(?:nGigabitEthernet)?|Fo(?:rtyGigabitEthernet)?|"
         r"Hu(?:ndredGigE)?|mgmt|Management|Lo(?:opback)?|"
         r"Vlan|Po(?:rt-channel)?|Tu(?:nnel)?|Se(?:rial)?|"
-        r"nve|BDI|Twe(?:ntyFiveGigE)?)\d",
+        r"nve|BDI|Twe(?:ntyFiveGigE)?|"
+        r"Virtual-Access|Virtual-Template|Vi|Vt)\d",
         re.IGNORECASE,
     )
     return bool(interface_pattern.match(value))
