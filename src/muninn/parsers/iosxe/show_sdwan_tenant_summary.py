@@ -22,7 +22,7 @@ class ShowSdwanTenantSummaryResult(TypedDict):
 
     max_tenants: int
     num_active_tenants: int
-    tenants: list[SdwanTenantRow]
+    tenants: dict[str, SdwanTenantRow]
 
 
 _MAX_RE = re.compile(r"^tenants-summary\s+max-tenants\s+(\d+)\s*$", re.I)
@@ -51,7 +51,7 @@ class _SdwanTenantAcc:
     def __init__(self) -> None:
         self.max_t = 0
         self.active = 0
-        self.tenants: list[SdwanTenantRow] = []
+        self.tenants: dict[str, SdwanTenantRow] = {}
 
     def feed(self, line: str) -> None:
         s = line.rstrip()
@@ -69,7 +69,7 @@ class _SdwanTenantAcc:
             return
         row = _parse_tenant_line(s)
         if row:
-            self.tenants.append(row)
+            self.tenants[row["org_name"]] = row
 
     def result(self) -> ShowSdwanTenantSummaryResult:
         if not self.tenants and self.max_t == 0 and self.active == 0:
