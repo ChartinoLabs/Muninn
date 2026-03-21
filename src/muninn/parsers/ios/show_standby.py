@@ -49,7 +49,7 @@ class StandbyGroupEntry(TypedDict):
     priority: int
     configured_priority: int
     group_name: NotRequired[str]
-    tracks: NotRequired[dict[str, TrackEntry]]
+    tracks: NotRequired[dict[str, dict[str, TrackEntry]]]
 
 
 class StandbyInterfaceEntry(TypedDict):
@@ -119,11 +119,6 @@ _TRACK_INTERFACE_RE = re.compile(
     r"\s+state\s+(?P<state>\S+)"
     r"(?:\s+decrement\s+(?P<decrement>\d+))?"
 )
-
-
-def _track_key(entry: TrackEntry) -> str:
-    """Stable dict key for a track (type + name are unique within a group)."""
-    return f"{entry['type']}:{entry['name']}"
 
 
 def _split_blocks(output: str) -> list[tuple[re.Match[str], list[str]]]:
@@ -211,7 +206,7 @@ class _FieldContext:
     """Mutable context for collecting list-type fields during parsing."""
 
     secondary_ips: list[str] = field(default_factory=list)
-    tracks: dict[str, TrackEntry] = field(default_factory=dict)
+    tracks: dict[str, dict[str, TrackEntry]] = field(default_factory=dict)
 
 
 def _extract_fields(lines: list[str], entry: dict[str, object]) -> None:
@@ -390,7 +385,7 @@ def _try_remaining_fields(
 
     track = _match_track_line(stripped)
     if track:
-        ctx.tracks[_track_key(track)] = track
+        ctx.tracks.setdefault(track["type"], {})[track["name"]] = track
 
     return False
 
