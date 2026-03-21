@@ -1,7 +1,7 @@
 """Parser for 'show mac address-table' command on IOS/IOS-XE."""
 
 import re
-from typing import ClassVar, Final, NotRequired, TypedDict
+from typing import ClassVar, Final, Literal, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -119,12 +119,23 @@ class MulticastEntry(TypedDict):
     ports: list[str]
 
 
-class ShowMacAddressTableResult(TypedDict):
+class MacTableRow(TypedDict, total=False):
+    """One MAC row under ``mac_table[vlan_key][mac_key]``."""
+
+    kind: Literal["unicast", "multicast"]
+    type: str
+    ports: list[str]
+    primary: NotRequired[bool]
+    age: NotRequired[int]
+    learn: NotRequired[bool]
+    protocols: NotRequired[list[str]]
+
+
+class ShowMacAddressTableResult(TypedDict, total=False):
     """Schema for 'show mac address-table' parsed output."""
 
-    entries: list[MacEntry]
-    multicast_entries: NotRequired[list[MulticastEntry]]
-    total_mac_addresses: NotRequired[int]
+    mac_table: dict[str, dict[str, MacTableRow]]
+    total_mac_addresses: int
 
 
 def _vlan_value_or_omit(raw: str) -> str | None:
@@ -132,6 +143,61 @@ def _vlan_value_or_omit(raw: str) -> str | None:
     if raw in _VLAN_PLACEHOLDER_VALUES:
         return None
     return raw
+
+
+def _vlan_segment_key(raw: str | None) -> str:
+    """Outer dict key for VLAN (broadcast domain) in ``mac_table``."""
+    if raw is None:
+        return "none"
+    if raw in _VLAN_PLACEHOLDER_VALUES:
+        return "none"
+    if raw.lower() == "all":
+        return "all"
+    return str(raw)
+
+
+def _row_from_unicast_entry(entry: MacEntry) -> MacTableRow:
+    """Build a leaf row (``vlan`` / ``mac`` only appear as parent keys)."""
+    row: MacTableRow = {
+        "kind": "unicast",
+        "type": entry["type"],
+        "ports": entry["ports"],
+    }
+    if "primary" in entry:
+        row["primary"] = entry["primary"]
+    if "age" in entry:
+        row["age"] = entry["age"]
+    if "learn" in entry:
+        row["learn"] = entry["learn"]
+    if "protocols" in entry:
+        row["protocols"] = entry["protocols"]
+    return row
+
+
+def _row_from_multicast_entry(entry: MulticastEntry) -> MacTableRow:
+    """Build a multicast leaf row."""
+    return {
+        "kind": "multicast",
+        "type": entry["type"],
+        "ports": entry["ports"],
+    }
+
+
+def _merge_mac_table(
+    unicast: list[MacEntry],
+    multicast: list[MulticastEntry],
+) -> dict[str, dict[str, MacTableRow]]:
+    """Nest rows into ``vlan -> mac -> row``; multicast rows overwrite on collision."""
+    mac_table: dict[str, dict[str, MacTableRow]] = {}
+    for entry in unicast:
+        vk = _vlan_segment_key(entry.get("vlan"))
+        mk = entry["mac_address"].lower()
+        mac_table.setdefault(vk, {})[mk] = _row_from_unicast_entry(entry)
+    for entry in multicast:
+        vk = _vlan_segment_key(entry.get("vlan"))
+        mk = entry["mac_address"].lower()
+        mac_table.setdefault(vk, {})[mk] = _row_from_multicast_entry(entry)
+    return mac_table
 
 
 def _normalize_port(port: str) -> str:
@@ -363,14 +429,15 @@ def _parse_output(output: str) -> ShowMacAddressTableResult:
 
     _apply_continuations(filtered_unicast, entries)
 
-    result: ShowMacAddressTableResult = {"entries": entries}
-
+    mcast_entries: list[MulticastEntry] = []
     if multicast_lines:
         filtered_mcast = _filter_entry_lines(multicast_lines)
         mcast_entries = _parse_multicast_section(filtered_mcast)
         _apply_continuations(filtered_mcast, mcast_entries)
-        if mcast_entries:
-            result["multicast_entries"] = mcast_entries
+
+    result: ShowMacAddressTableResult = {
+        "mac_table": _merge_mac_table(entries, mcast_entries),
+    }
 
     if total is not None:
         result["total_mac_addresses"] = total

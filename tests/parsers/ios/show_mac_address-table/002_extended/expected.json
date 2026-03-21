@@ -1,96 +1,105 @@
 {
-    "entries": [
-        {
-            "vlan": "100",
-            "mac_address": "11aa.22ff.ee88",
-            "type": "static",
-            "learn": false,
-            "ports": [
-                "Router"
-            ],
-            "primary": true
+    "mac_table": {
+        "100": {
+            "11aa.22ff.ee88": {
+                "kind": "unicast",
+                "type": "static",
+                "ports": [
+                    "Router"
+                ],
+                "primary": true,
+                "learn": false
+            }
         },
-        {
-            "vlan": "101",
-            "mac_address": "44dd.eeff.55bb",
-            "type": "dynamic",
-            "learn": true,
-            "ports": [
-                "GigabitEthernet1/40"
-            ],
-            "age": 10,
-            "primary": true
+        "101": {
+            "44dd.eeff.55bb": {
+                "kind": "unicast",
+                "type": "dynamic",
+                "ports": [
+                    "GigabitEthernet1/40"
+                ],
+                "primary": true,
+                "age": 10,
+                "learn": true
+            }
         },
-        {
-            "vlan": "102",
-            "mac_address": "aa11.bbff.ee55",
-            "type": "static",
-            "learn": true,
-            "ports": [
-                "GigabitEthernet1/2",
-                "GigabitEthernet1/4",
-                "GigabitEthernet1/5",
-                "GigabitEthernet1/6",
-                "GigabitEthernet1/9",
-                "GigabitEthernet1/10",
-                "GigabitEthernet1/11",
-                "GigabitEthernet1/12",
-                "Router",
-                "Switch"
-            ],
-            "primary": true
+        "102": {
+            "aa11.bbff.ee55": {
+                "kind": "unicast",
+                "type": "static",
+                "ports": [
+                    "GigabitEthernet1/2",
+                    "GigabitEthernet1/4",
+                    "GigabitEthernet1/5",
+                    "GigabitEthernet1/6",
+                    "GigabitEthernet1/9",
+                    "GigabitEthernet1/10",
+                    "GigabitEthernet1/11",
+                    "GigabitEthernet1/12",
+                    "Router",
+                    "Switch"
+                ],
+                "primary": true,
+                "learn": true
+            }
         },
-        {
-            "vlan": "200",
-            "mac_address": "dd44.55ff.55ee",
-            "type": "static",
-            "learn": true,
-            "ports": [
-                "TenGigabitEthernet1/1",
-                "TenGigabitEthernet1/2",
-                "TenGigabitEthernet1/4",
-                "TenGigabitEthernet1/8"
-            ],
-            "primary": true
+        "200": {
+            "dd44.55ff.55ee": {
+                "kind": "unicast",
+                "type": "static",
+                "ports": [
+                    "TenGigabitEthernet1/1",
+                    "TenGigabitEthernet1/2",
+                    "TenGigabitEthernet1/4",
+                    "TenGigabitEthernet1/8"
+                ],
+                "primary": true,
+                "learn": true
+            }
         },
-        {
-            "vlan": "300",
-            "mac_address": "11aa.22ff.ee88",
-            "type": "static",
-            "learn": false,
-            "ports": [
-                "Router"
-            ]
+        "300": {
+            "11aa.22ff.ee88": {
+                "kind": "unicast",
+                "type": "static",
+                "ports": [
+                    "Router"
+                ],
+                "learn": false
+            }
         },
-        {
-            "vlan": "301",
-            "mac_address": "11aa.22ff.ee88",
-            "type": "static",
-            "learn": false,
-            "ports": [
-                "Drop"
-            ]
+        "301": {
+            "11aa.22ff.ee88": {
+                "kind": "unicast",
+                "type": "static",
+                "ports": [
+                    "Drop"
+                ],
+                "learn": false
+            }
         },
-        {
-            "mac_address": "0000.0000.0000",
-            "type": "static",
-            "learn": false,
-            "ports": [
-                "Router"
-            ],
-            "primary": true
+        "none": {
+            "0000.0000.0000": {
+                "kind": "unicast",
+                "type": "static",
+                "ports": [
+                    "Router"
+                ],
+                "primary": true,
+                "learn": false
+            }
         },
-        {
-            "vlan": "400",
-            "mac_address": "0000.0000.0000",
-            "type": "static",
-            "learn": false,
-            "ports": [
-                "Port-channel10",
-                "Router"
-            ],
-            "primary": true
+        "400": {
+            "0000.0000.0000": {
+                "kind": "unicast",
+                "type": "static",
+                "ports": [
+                    "Port-channel10",
+                    "Router"
+                ],
+                "primary": true,
+                "learn": false
+            }
         }
-    ],
+    },
     "total_mac_addresses": 8
 }
