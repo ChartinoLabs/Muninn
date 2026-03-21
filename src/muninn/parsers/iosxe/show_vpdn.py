@@ -29,7 +29,7 @@ class VpdnSessionEntry(TypedDict):
     remote_id: int
     tunnel_id: int
     username: str
-    interface: str
+    interface: NotRequired[str]
     state: str
     last_change: str
     unique_id: int
@@ -104,16 +104,18 @@ def _build_session_entry(match: re.Match[str]) -> tuple[str, VpdnSessionEntry]:
         Tuple of (local_id_str, session_entry).
     """
     local_id = match.group("local_id")
+    intf = match.group("intf")
     entry = VpdnSessionEntry(
         local_id=int(local_id),
         remote_id=int(match.group("remote_id")),
         tunnel_id=int(match.group("tunnel_id")),
         username=match.group("username"),
-        interface=match.group("intf"),
         state=match.group("state"),
         last_change=match.group("last_chg"),
         unique_id=int(match.group("uniq_id")),
     )
+    if intf != "-":
+        entry["interface"] = intf
     return local_id, entry
 
 
@@ -133,6 +135,9 @@ class ShowVpdnParser(BaseParser[ShowVpdnResult]):
          LocID      RemID      TunID      Username, Intf/      State  Last Chg Uniq ID
                                           Vcid, Circuit
          3542       56774      7658       lns@cisco.com, -     est    00:10:09 645
+
+    A hyphen in the interface column means no interface; the ``interface`` key is
+    omitted (rather than set to ``"-"``).
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.VPN})
