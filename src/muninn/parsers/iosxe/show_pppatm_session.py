@@ -28,7 +28,7 @@ class ShowPppAtmSessionResult(TypedDict):
     summary_lines: list[str]
     sessions_in_state: str | None
     sessions_total: int | None
-    sessions: list[PppAtmSessionRow]
+    sessions: dict[str, PppAtmSessionRow]
 
 
 _STATE_RE = re.compile(
@@ -41,6 +41,14 @@ _ROW_RE = re.compile(
     r"(?P<vt>\S+)\s+(?P<va>\S+)\s+(?P<vast>\S+)\s+(?P<st>\S+)\s*$"
 )
 # Columns: Uniq ID, ATM-Intf, VPI/VCI, Encap, VT, VA, VA-st, State
+
+
+def _session_dict_key(row: PppAtmSessionRow) -> str:
+    """Stable key when the device omits a numeric uniq id."""
+    uid = row["uniq_id"]
+    if uid != "N/A":
+        return uid
+    return row["atm_intf"]
 
 
 def _parse_pppatm_row(line: str) -> PppAtmSessionRow | None:
@@ -68,7 +76,7 @@ class _PppAtmAcc:
         self.summary_lines: list[str] = []
         self.sessions_in_state: str | None = None
         self.sessions_total: int | None = None
-        self.sessions: list[PppAtmSessionRow] = []
+        self.sessions: dict[str, PppAtmSessionRow] = {}
 
     def feed(self, line: str) -> None:
         s = line.strip()
@@ -89,7 +97,7 @@ class _PppAtmAcc:
             return
         row = _parse_pppatm_row(s)
         if row:
-            self.sessions.append(row)
+            self.sessions[_session_dict_key(row)] = row
 
     def result(self) -> ShowPppAtmSessionResult:
         if self.sessions_total is None and not self.sessions:
