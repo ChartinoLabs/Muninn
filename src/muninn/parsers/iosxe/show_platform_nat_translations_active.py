@@ -16,8 +16,8 @@ class NatTranslationEntry(TypedDict):
     protocol: str
     inside_global: str
     inside_local: str
-    outside_local: str
-    outside_global: str
+    outside_local: NotRequired[str]
+    outside_global: NotRequired[str]
     inside_global_port: NotRequired[int]
     inside_local_port: NotRequired[int]
     outside_local_port: NotRequired[int]
@@ -80,13 +80,17 @@ def _port_key(port: str | None) -> str:
 
 def _build_entry(match: re.Match[str]) -> NatTranslationEntry:
     """Build a NatTranslationEntry from a regex match."""
-    entry = NatTranslationEntry(
-        protocol=_normalize_protocol(match.group("protocol")),
-        inside_global=match.group("inside_global"),
-        inside_local=match.group("inside_local"),
-        outside_local=_normalize_address(match.group("outside_local")),
-        outside_global=_normalize_address(match.group("outside_global")),
-    )
+    entry: NatTranslationEntry = {
+        "protocol": _normalize_protocol(match.group("protocol")),
+        "inside_global": match.group("inside_global"),
+        "inside_local": match.group("inside_local"),
+    }
+    ol_addr = match.group("outside_local")
+    if ol_addr != "---":
+        entry["outside_local"] = ol_addr
+    og_addr = match.group("outside_global")
+    if og_addr != "---":
+        entry["outside_global"] = og_addr
 
     ig_port = match.group("ig_port")
     if ig_port is not None:
