@@ -20,8 +20,8 @@ class PppoeCounterRow(TypedDict):
 class ShowPppoeStatisticsResult(TypedDict):
     """Schema for 'show pppoe statistics' parsed output."""
 
-    pppoe_events: list[PppoeCounterRow]
-    pppoe_statistics: list[PppoeCounterRow]
+    pppoe_events: dict[str, PppoeCounterRow]
+    pppoe_statistics: dict[str, PppoeCounterRow]
 
 
 def _split_counter_row(line: str) -> tuple[str, int, int] | None:
@@ -48,8 +48,8 @@ class _PppoeAcc:
 
     def __init__(self) -> None:
         self.mode: str | None = None
-        self.events: list[PppoeCounterRow] = []
-        self.stats: list[PppoeCounterRow] = []
+        self.events: dict[str, PppoeCounterRow] = {}
+        self.stats: dict[str, PppoeCounterRow] = {}
 
     def feed(self, line: str) -> None:
         s = line.strip()
@@ -86,9 +86,9 @@ class _PppoeAcc:
             since_cleared=sp[2],
         )
         if self.mode == "events":
-            self.events.append(row)
+            self.events[row["name"]] = row
         else:
-            self.stats.append(row)
+            self.stats[row["name"]] = row
 
     def result(self) -> ShowPppoeStatisticsResult:
         if not self.events and not self.stats:
