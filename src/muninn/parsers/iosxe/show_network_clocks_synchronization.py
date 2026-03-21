@@ -1,7 +1,7 @@
 """Parser for 'show network-clocks synchronization' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -19,8 +19,8 @@ class NetworkClockInterfaceRow(TypedDict):
     mode_ql: str
     prio: int
     ql_in: str
-    esmc_tx: str
-    esmc_rx: str
+    esmc_tx: NotRequired[str]
+    esmc_rx: NotRequired[str]
 
 
 class ShowNetworkClocksSynchronizationResult(TypedDict):
@@ -52,16 +52,21 @@ def _parse_interface_row(line: str) -> NetworkClockInterfaceRow | None:
     if not m:
         return None
     raw_if = m.group("if")
-    return NetworkClockInterfaceRow(
-        interface=canonical_interface_name(raw_if, os=OS.CISCO_IOSXE),
-        selected=bool(m.group("mark")),
-        sig_type=m.group("sig"),
-        mode_ql=m.group("mode"),
-        prio=int(m.group("prio")),
-        ql_in=m.group("ql"),
-        esmc_tx=m.group("tx"),
-        esmc_rx=m.group("rx"),
-    )
+    tx = m.group("tx")
+    rx = m.group("rx")
+    row: NetworkClockInterfaceRow = {
+        "interface": canonical_interface_name(raw_if, os=OS.CISCO_IOSXE),
+        "selected": bool(m.group("mark")),
+        "sig_type": m.group("sig"),
+        "mode_ql": m.group("mode"),
+        "prio": int(m.group("prio")),
+        "ql_in": m.group("ql"),
+    }
+    if tx != "-":
+        row["esmc_tx"] = tx
+    if rx != "-":
+        row["esmc_rx"] = rx
+    return row
 
 
 class _NcsAccum:
@@ -84,7 +89,7 @@ class _NcsAccum:
         if self._consume_table(s):
             return
         pair = _parse_ncs_kv_line(s)
-        if pair:
+        if pair and pair[1] != "-":
             self.settings[pair[0]] = pair[1]
 
     def _consume_table(self, s: str) -> bool:
