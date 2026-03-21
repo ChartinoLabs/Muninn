@@ -27,7 +27,7 @@ class ShowNetworkClocksSynchronizationResult(TypedDict):
     """Schema for 'show network-clocks synchronization' parsed output."""
 
     settings: dict[str, str]
-    interfaces: list[NetworkClockInterfaceRow]
+    interfaces: dict[str, NetworkClockInterfaceRow]
 
 
 _ROW_RE = re.compile(
@@ -71,7 +71,7 @@ class _NcsAccum:
 
     def __init__(self) -> None:
         self.settings: dict[str, str] = {}
-        self.interfaces: list[NetworkClockInterfaceRow] = []
+        self.interfaces: dict[str, NetworkClockInterfaceRow] = {}
         self.in_table = False
 
     def feed(self, line: str) -> None:
@@ -96,7 +96,7 @@ class _NcsAccum:
             return True
         row = _parse_interface_row(s)
         if row:
-            self.interfaces.append(row)
+            self.interfaces[row["interface"]] = row
         return True
 
 
