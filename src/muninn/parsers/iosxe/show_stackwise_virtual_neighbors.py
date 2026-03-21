@@ -10,9 +10,10 @@ from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
-class NeighborPortRemote(TypedDict):
-    """Remote SVL neighbor port for a local interface."""
+class NeighborPortPair(TypedDict):
+    """Local and optional remote SVL neighbor port."""
 
+    local_port: str
     remote_port: str
 
 
@@ -20,7 +21,7 @@ class NeighborSwitchEntry(TypedDict):
     """SVL neighbor information for one switch."""
 
     svl: str
-    ports: dict[str, NeighborPortRemote]
+    port_pairs: list[NeighborPortPair]
 
 
 class ShowStackwiseVirtualNeighborsResult(TypedDict):
@@ -42,6 +43,10 @@ _TABLE_HEADER = re.compile(
     r"^Switch\s+SVL\s+Local\s+Port",
     re.IGNORECASE,
 )
+
+
+def _canon(name: str) -> str:
+    return canonical_interface_name(name, os=OS.CISCO_IOSXE)
 
 
 def _skip_neighbors_preamble(stripped: str) -> bool:
@@ -68,13 +73,12 @@ def _parse_neighbors_table(lines: list[str]) -> dict[str, NeighborSwitchEntry]:
             if sw not in switches:
                 switches[sw] = NeighborSwitchEntry(
                     svl=m.group("svl"),
-                    ports={},
+                    port_pairs=[],
                 )
-            local = canonical_interface_name(m.group("local"), os=OS.CISCO_IOSXE)
-            switches[sw]["ports"][local] = NeighborPortRemote(
-                remote_port=canonical_interface_name(
-                    m.group("remote"),
-                    os=OS.CISCO_IOSXE,
+            switches[sw]["port_pairs"].append(
+                NeighborPortPair(
+                    local_port=_canon(m.group("local")),
+                    remote_port=_canon(m.group("remote")),
                 ),
             )
             continue
@@ -83,17 +87,18 @@ def _parse_neighbors_table(lines: list[str]) -> dict[str, NeighborSwitchEntry]:
             continue
 
         if m := _CONT_TWO.match(line):
-            local = canonical_interface_name(m.group("local"), os=OS.CISCO_IOSXE)
-            switches[current_switch]["ports"][local] = NeighborPortRemote(
-                remote_port=canonical_interface_name(
-                    m.group("remote"),
-                    os=OS.CISCO_IOSXE,
+            switches[current_switch]["port_pairs"].append(
+                NeighborPortPair(
+                    local_port=_canon(m.group("local")),
+                    remote_port=_canon(m.group("remote")),
                 ),
             )
         elif m := _CONT_ONE.match(line):
-            local = canonical_interface_name(m.group("local"), os=OS.CISCO_IOSXE)
-            switches[current_switch]["ports"][local] = NeighborPortRemote(
-                remote_port="",
+            switches[current_switch]["port_pairs"].append(
+                NeighborPortPair(
+                    local_port=_canon(m.group("local")),
+                    remote_port="",
+                ),
             )
 
     return switches
