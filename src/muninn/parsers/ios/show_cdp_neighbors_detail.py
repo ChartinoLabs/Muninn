@@ -33,7 +33,7 @@ class CdpNeighborDetailEntry(TypedDict):
 class ShowCdpNeighborsDetailResult(TypedDict):
     """Schema for 'show cdp neighbors detail' parsed output."""
 
-    neighbors: list[CdpNeighborDetailEntry]
+    neighbors: dict[str, CdpNeighborDetailEntry]
     total_entries: NotRequired[int]
 
 
@@ -261,18 +261,18 @@ class ShowCdpNeighborsDetailParser(BaseParser[ShowCdpNeighborsDetailResult]):
             output: Raw CLI output from command.
 
         Returns:
-            Parsed CDP neighbor details as a list of entries.
+            Parsed CDP neighbor details keyed by canonical local interface name.
 
         Raises:
             ValueError: If no neighbors found.
         """
         blocks = cls._split_into_blocks(output)
-        neighbors: list[CdpNeighborDetailEntry] = []
+        neighbors: dict[str, CdpNeighborDetailEntry] = {}
 
         for block in blocks:
             entry = cls._parse_block(block)
             if entry is not None:
-                neighbors.append(entry)
+                neighbors[entry["local_interface"]] = entry
 
         if not neighbors:
             msg = "No CDP neighbor details found in output"
