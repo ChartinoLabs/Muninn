@@ -12,10 +12,10 @@ from muninn.tags import ParserTag
 class DlepHeaderInfo(TypedDict):
     """Per-interface header fields printed before counter groups."""
 
-    last_clear_time: str
     dlep_version: str
     dlep_local_ip: str
     dlepv5_tcp_port: int
+    last_clear_time: NotRequired[str]
 
 
 class DlepCounterSection(TypedDict):
@@ -77,6 +77,8 @@ def _parse_dlep_header_kv(line: str) -> tuple[str, str | int] | None:
     key = raw_key.strip().casefold()
     val = raw_val.strip()
     if key == "last clear time":
+        if not val:
+            return None
         return ("last_clear_time", val)
     if key == "dlep version":
         return ("dlep_version", val)
@@ -92,7 +94,6 @@ def _parse_dlep_header_kv(line: str) -> tuple[str, str | int] | None:
 
 def _empty_header() -> DlepHeaderInfo:
     return {
-        "last_clear_time": "",
         "dlep_version": "",
         "dlep_local_ip": "",
         "dlepv5_tcp_port": 0,
