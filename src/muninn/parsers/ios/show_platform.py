@@ -21,14 +21,14 @@ class SubslotEntry(TypedDict):
     """Schema for a subslot within a chassis slot."""
 
     type: str
-    state: str
+    state: NotRequired[str]
     insert_time: str
 
 
 class SlotEntry(TypedDict):
     """Schema for a chassis slot entry."""
 
-    state: str
+    state: NotRequired[str]
     type: NotRequired[str]
     insert_time: NotRequired[str]
     cpld_version: NotRequired[str]
@@ -116,6 +116,19 @@ _CURRENT_HEADER_RE = re.compile(r"^\s*Current\s*$")
 _NA_VALUE = "N/A"
 
 
+def _omit_na_state_for_empty_module(slot_type: str, state: str) -> bool:
+    """Whether to drop ``state`` when the CLI prints N/A for an absent module.
+
+    Cisco uses type *Unknown* (or a blank type) with state *N/A* for empty
+    power/module bays; we omit ``state`` so fixtures avoid placeholder literals
+    (issue #633). Real modules keep ``state`` even if unusual.
+    """
+    if state != _NA_VALUE:
+        return False
+    normalized = slot_type.strip().lower()
+    return not normalized or normalized == "unknown"
+
+
 def _parse_chassis_type(lines: list[str]) -> str | None:
     """Extract chassis type from output lines."""
     for line in lines:
@@ -156,9 +169,10 @@ def _add_subslot(
     _, sub_type, sub_state, sub_insert = _parse_slot_row(line, cols)
     subslot_entry: SubslotEntry = {
         "type": sub_type,
-        "state": sub_state,
         "insert_time": sub_insert,
     }
+    if not _omit_na_state_for_empty_module(sub_type, sub_state):
+        subslot_entry["state"] = sub_state
     if parent_num in slots:
         current_parent = parent_num
     if current_parent and current_parent in slots:
@@ -186,7 +200,9 @@ def _parse_slot_table(lines: list[str], cols: _SlotColumns) -> dict[str, SlotEnt
         if not slot_name or not state:
             continue
 
-        entry: SlotEntry = {"state": state}
+        entry: SlotEntry = {}
+        if not _omit_na_state_for_empty_module(slot_type, state):
+            entry["state"] = state
         if slot_type:
             entry["type"] = slot_type
         if insert_time:
