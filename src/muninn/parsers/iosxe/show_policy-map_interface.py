@@ -59,13 +59,11 @@ class ShapeEntry(TypedDict):
     target_rate: NotRequired[int]
 
 
-class QosSetEntry(TypedDict):
-    """Schema for QoS set action."""
+class QosSetLeaf(TypedDict, total=False):
+    """QoS set details under ``qos_set[type][value]``."""
 
-    type: str
-    value: str
-    packets_marked: NotRequired[int]
-    table: NotRequired[str]
+    table: str
+    packets_marked: int
 
 
 class PriorityEntry(TypedDict):
@@ -89,7 +87,7 @@ class ClassMapEntry(TypedDict):
     police: NotRequired[PoliceEntry]
     queueing: NotRequired[QueueingEntry]
     shape: NotRequired[ShapeEntry]
-    qos_set: NotRequired[list[QosSetEntry]]
+    qos_set: NotRequired[dict[str, dict[str, QosSetLeaf]]]
     priority: NotRequired[PriorityEntry]
     child_policy: NotRequired[str]
     child_classes: NotRequired[dict[str, "ClassMapEntry"]]
@@ -462,13 +460,26 @@ def _parse_shape(class_entry: ClassMapEntry, lines: list[str], idx: int) -> int:
     return idx
 
 
+def _qos_set_merge_leaf(
+    qos_set: dict[str, dict[str, QosSetLeaf]],
+    type_key: str,
+    value_key: str,
+    updates: QosSetLeaf,
+) -> None:
+    """Merge *updates* into ``qos_set[type_key][value_key]`` (last write wins)."""
+    inner = qos_set.setdefault(type_key, {})
+    if value_key not in inner:
+        inner[value_key] = {}
+    inner[value_key].update(updates)
+
+
 def _parse_qos_set_block(class_entry: ClassMapEntry, lines: list[str], idx: int) -> int:
     """Parse QoS Set block lines.
 
     Returns updated index.
     """
     total = len(lines)
-    qos_set_list: list[QosSetEntry] = list(class_entry.get("qos_set", []))
+    qos_set: dict[str, dict[str, QosSetLeaf]] = {}
 
     while idx < total:
         stripped = lines[idx].strip()
@@ -478,21 +489,20 @@ def _parse_qos_set_block(class_entry: ClassMapEntry, lines: list[str], idx: int)
 
         table_m = _QOS_SET_TABLE_RE.match(stripped)
         if table_m:
-            entry = QosSetEntry(
-                type=table_m.group(1),
-                value=table_m.group(2),
-                table=table_m.group(3),
+            _qos_set_merge_leaf(
+                qos_set,
+                table_m.group(1),
+                table_m.group(2),
+                {"table": table_m.group(3)},
             )
-            qos_set_list.append(entry)
             idx += 1
             continue
 
         qos_m = _QOS_SET_RE.match(stripped)
         if qos_m:
-            entry = QosSetEntry(
-                type=qos_m.group(1).strip(),
-                value=qos_m.group(2),
-            )
+            type_key = qos_m.group(1).strip()
+            value_key = qos_m.group(2)
+            leaf: QosSetLeaf = {}
             idx += 1
             # Check for Packets marked on next line
             while idx < total:
@@ -502,16 +512,16 @@ def _parse_qos_set_block(class_entry: ClassMapEntry, lines: list[str], idx: int)
                     continue
                 marked_m = _PACKETS_MARKED_RE.match(next_s)
                 if marked_m:
-                    entry["packets_marked"] = int(marked_m.group(1))
+                    leaf["packets_marked"] = int(marked_m.group(1))
                     idx += 1
                 break
-            qos_set_list.append(entry)
+            _qos_set_merge_leaf(qos_set, type_key, value_key, leaf)
             continue
 
         break
 
-    if qos_set_list:
-        class_entry["qos_set"] = qos_set_list
+    if qos_set:
+        class_entry["qos_set"] = qos_set
 
     return idx
 
