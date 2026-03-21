@@ -12,7 +12,7 @@ from muninn.tags import ParserTag
 class ShowCryptoIpsecSaDetailResult(TypedDict):
     """Schema for 'show crypto ipsec sa detail' parsed output."""
 
-    interfaces: list[dict[str, str]]
+    interfaces: dict[str, dict[str, str]]
 
 
 _IF_RE = re.compile(r"^interface:\s+(.+)$", re.I | re.M)
@@ -32,9 +32,9 @@ def _flatten_sa_block(text: str) -> dict[str, str]:
     return out
 
 
-def _parse_crypto_ipsec_sa_detail(output: str) -> list[dict[str, str]]:
+def _parse_crypto_ipsec_sa_detail(output: str) -> dict[str, dict[str, str]]:
     matches = list(_IF_RE.finditer(output))
-    interfaces: list[dict[str, str]] = []
+    interfaces: dict[str, dict[str, str]] = {}
     for i, m in enumerate(matches):
         iface = m.group(1).strip()
         start = m.end()
@@ -42,7 +42,7 @@ def _parse_crypto_ipsec_sa_detail(output: str) -> list[dict[str, str]]:
         chunk = output[start:end]
         block = _flatten_sa_block(chunk)
         block["interface"] = iface
-        interfaces.append(block)
+        interfaces[iface] = block
     return interfaces
 
 
