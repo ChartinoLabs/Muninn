@@ -15,7 +15,7 @@ class NetworkClockInterfaceRow(TypedDict):
 
     interface: str
     selected: bool
-    sig_type: str
+    sig_type: NotRequired[str]
     mode_ql: str
     prio: int
     ql_in: str
@@ -35,11 +35,12 @@ _ROW_RE = re.compile(
     r"(?P<prio>\d+)\s+(?P<ql>\S+)\s+(?P<tx>\S+)\s+(?P<rx>\S+)\s*$"
 )
 
-# ESMC Tx/Rx use "-" or NA-like tokens for “no value”; SigType "NA" is a separate enum.
+# ESMC Tx/Rx and SigType use "-" or NA-like tokens for “no value” (see CLI legend:
+# ``NA - Not Applicable`` for SigType).
 _ESMC_ABSENT_CASEFOLD: Final[frozenset[str]] = frozenset({"na", "n/a"})
 
 
-def _esmc_column_has_value(token: str) -> bool:
+def _nominated_table_token_has_value(token: str) -> bool:
     if token == "-":  # nosec B105
         return False
     return token.casefold() not in _ESMC_ABSENT_CASEFOLD
@@ -63,17 +64,19 @@ def _parse_interface_row(line: str) -> NetworkClockInterfaceRow | None:
     raw_if = m.group("if")
     tx = m.group("tx")
     rx = m.group("rx")
+    sig = m.group("sig")
     row: NetworkClockInterfaceRow = {
         "interface": canonical_interface_name(raw_if, os=OS.CISCO_IOSXE),
         "selected": bool(m.group("mark")),
-        "sig_type": m.group("sig"),
         "mode_ql": m.group("mode"),
         "prio": int(m.group("prio")),
         "ql_in": m.group("ql"),
     }
-    if _esmc_column_has_value(tx):
+    if _nominated_table_token_has_value(sig):
+        row["sig_type"] = sig
+    if _nominated_table_token_has_value(tx):
         row["esmc_tx"] = tx
-    if _esmc_column_has_value(rx):
+    if _nominated_table_token_has_value(rx):
         row["esmc_rx"] = rx
     return row
 

@@ -4,13 +4,10 @@ When the device prints obvious “no value” sentinels, Muninn generally prefer
 omitting the key (or using ``null`` if the schema uses optional fields) instead of
 carrying strings like ``-`` or ``---`` through to structured output.
 
-Some tokens are ambiguous: Cisco often prints ``NA`` / ``N/A`` as *meaningful*
-labels (e.g. network-clocks ``SigType`` as the literal ``NA`` enum, or RADIUS
-statistics). ESMC Tx/Rx columns treat ``NA`` / ``N/A`` / ``n/a`` like ``-`` and
-omit those keys. Legacy fixtures that
-still mirror those literals are listed below; **new** test cases are not exempt
-unless their path is added explicitly (so new work does not silently reintroduce
-placeholders).
+Some Cisco outputs use ``NA`` / ``N/A`` as *meaningful* labels in specific
+contexts. Legacy fixtures that still mirror those literals as string leaves are
+listed below; **new** test cases are not exempt unless their path is added
+explicitly (so new work does not silently reintroduce placeholders).
 
 Full-file exemptions are paths relative to ``tests/parsers/`` (same style as
 ``test_fixture_json_conventions.py``).
@@ -33,11 +30,7 @@ _PLACEHOLDER_NA_LIKE: Final[frozenset[str]] = frozenset({"NA", "N/A", "n/a"})
 _HYPHEN_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset({})
 
 # Legacy fixtures where NA / N/A / n/a appear as CLI text (not always “null”).
-_NA_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset(
-    {
-        "iosxe/show_network_clocks_synchronization/001_basic/expected.json",
-    }
-)
+_NA_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset({})
 
 PARSERS_TEST_DIR = Path(__file__).parent
 
