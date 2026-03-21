@@ -1,7 +1,7 @@
 """Parser for 'show object-group' command on IOS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -40,7 +40,7 @@ class ObjectGroup(TypedDict):
 
     group_type: str
     description: NotRequired[str]
-    entries: list[NetworkEntry | ServiceEntry]
+    entries: dict[str, NetworkEntry | ServiceEntry]
 
 
 class ShowObjectGroupResult(TypedDict):
@@ -182,6 +182,68 @@ def _parse_service_entry(line: str, group_type: str) -> ServiceEntry | None:
     return entry
 
 
+def _network_entry_key(entry: NetworkEntry) -> str:
+    """Stable key for a network or V6-network object-group entry."""
+    if entry.get("any"):
+        return "any"
+    if "host" in entry:
+        return f"host:{entry['host']}"
+    if "range_start" in entry:
+        return f"range:{entry['range_start']}-{entry['range_end']}"
+    if "group_object" in entry:
+        return f"group-object:{entry['group_object']}"
+    if "network" in entry:
+        return f"network:{entry['network']}/{entry['mask']}"
+    msg = f"Unsupported network object-group entry: {entry!r}"
+    raise ValueError(msg)
+
+
+def _service_entry_key(entry: ServiceEntry) -> str:
+    """Stable key for a service or V6-service object-group entry."""
+    if "group_object" in entry:
+        return f"group-object:{entry['group_object']}"
+
+    proto = entry.get("protocol", "")
+    if proto == "icmp":
+        if "icmp_type" in entry:
+            return f"icmp:{entry['icmp_type']}"
+        return "icmp"
+
+    port_match = entry.get("port_match")
+    if port_match == "range":
+        return f"{proto}:range:{entry['port_range_start']}:{entry['port_range_end']}"
+    if port_match in ("eq", "lt", "gt"):
+        return f"{proto}:{port_match}:{entry['port']}"
+    if port_match is None:
+        return proto
+
+    msg = f"Unsupported service object-group entry: {entry!r}"
+    raise ValueError(msg)
+
+
+def _object_group_entry_base_key(entry: NetworkEntry | ServiceEntry) -> str:
+    """Return a stable key for an object-group entry (may collide on duplicates)."""
+    gtype = entry["type"]
+    if "Network" in gtype:
+        return _network_entry_key(cast(NetworkEntry, entry))
+    return _service_entry_key(cast(ServiceEntry, entry))
+
+
+def _insert_entry(
+    entries: dict[str, NetworkEntry | ServiceEntry],
+    entry: NetworkEntry | ServiceEntry,
+) -> None:
+    """Insert *entry* under a unique key derived from its semantic identity."""
+    base = _object_group_entry_base_key(entry)
+    if base not in entries:
+        entries[base] = entry
+        return
+    n = 2
+    while f"{base}#{n}" in entries:
+        n += 1
+    entries[f"{base}#{n}"] = entry
+
+
 def _parse_entry(line: str, group_type: str) -> NetworkEntry | ServiceEntry | None:
     """Parse an object-group entry line based on group type.
 
@@ -214,7 +276,7 @@ def _process_header(
     group_type = header_match.group("type")
     # Avoid overwriting entries if the group was already created.
     if name not in object_groups:
-        object_groups[name] = {"group_type": group_type, "entries": []}
+        object_groups[name] = {"group_type": group_type, "entries": {}}
     return name, group_type
 
 
@@ -232,7 +294,7 @@ def _process_body_line(
 
     entry = _parse_entry(line, current_type)
     if entry:
-        object_groups[current_name]["entries"].append(entry)
+        _insert_entry(object_groups[current_name]["entries"], entry)
 
 
 def _parse_object_groups(output: str) -> dict[str, ObjectGroup]:
@@ -300,7 +362,8 @@ class ShowObjectGroupParser(BaseParser[ShowObjectGroupResult]):
             output: Raw CLI output from 'show object-group' command.
 
         Returns:
-            Parsed data with object groups keyed by name.
+            Parsed data with object groups keyed by name. Each group's ``entries``
+            maps a stable entry identity string to that entry's fields.
 
         Raises:
             ValueError: If no object groups found in output.

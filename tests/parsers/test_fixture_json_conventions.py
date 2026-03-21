@@ -92,8 +92,6 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         "ios/show_mac_address-table/008_extended_multi_supervisor/expected.json",
         "ios/show_mac_address-table/009_unicast_multicast_static_switch/expected.json",
         "ios/show_mac_address-table/010_standard_simple_vlan_svi/expected.json",
-        "ios/show_object-group/001_basic/expected.json",
-        "ios/show_object-group/002_ipv6/expected.json",
         "ios/show_processes_memory/001_basic/expected.json",
         "ios/show_processes_memory_sorted/001_basic/expected.json",
         "ios/show_processes_memory_sorted/002_single_pool/expected.json",
