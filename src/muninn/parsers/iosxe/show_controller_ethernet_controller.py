@@ -1,7 +1,7 @@
 """Parser for 'show controller ethernet-controller' command on IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -9,32 +9,28 @@ from muninn.registry import register
 from muninn.tags import ParserTag
 
 
-class ControllerEthernetColumn(TypedDict):
-    """One numeric counter and its description in a transmit or receive column."""
+class ControllerEthernetCounterEntry(TypedDict):
+    """Numeric counter under a label key."""
 
     value: str
-    label: str
 
 
-class ControllerEthernetStatRow(TypedDict):
-    """One line of statistics.
+class ControllerEthernetStatistics(TypedDict):
+    """Per-column counters keyed by CLI label.
 
-    ``transmit`` and ``receive`` are independent counters shown on the same line;
-    their labels often match (e.g. both ``Total bytes``) but may differ
-    (e.g. ``System FCS error frames`` vs ``IpgViolation frames``).
-
-    ``receive`` is omitted when the line has no receive column.
+    Labels are unique keys; if the device repeats a label in the same column,
+    later keys are suffixed `` (2)``, `` (3)``, …
     """
 
-    transmit: ControllerEthernetColumn
-    receive: NotRequired[ControllerEthernetColumn]
+    transmit: dict[str, ControllerEthernetCounterEntry]
+    receive: dict[str, ControllerEthernetCounterEntry]
 
 
 class ShowControllerEthernetControllerResult(TypedDict):
     """Schema for 'show controller ethernet-controller' parsed output."""
 
     interface: str
-    statistics: list[ControllerEthernetStatRow]
+    statistics: ControllerEthernetStatistics
     last_update: str
 
 
@@ -52,35 +48,21 @@ _STAT_ROW_FULL_RE = re.compile(
 _STAT_ROW_TX_ONLY_RE = re.compile(r"^\s*(\d+)\s+(.+)$")
 
 
-def _parse_stat_row(line: str) -> ControllerEthernetStatRow | None:
-    s = line.rstrip()
-    m = _STAT_ROW_FULL_RE.match(s)
-    if m:
-        return ControllerEthernetStatRow(
-            transmit=ControllerEthernetColumn(
-                value=m.group(1),
-                label=m.group(2).strip(),
-            ),
-            receive=ControllerEthernetColumn(
-                value=m.group(3),
-                label=m.group(4).strip(),
-            ),
-        )
-    m = _STAT_ROW_TX_ONLY_RE.match(s)
-    if m:
-        return ControllerEthernetStatRow(
-            transmit=ControllerEthernetColumn(
-                value=m.group(1),
-                label=m.group(2).strip(),
-            ),
-        )
-    return None
+def _unique_label_key(d: dict[str, ControllerEthernetCounterEntry], label: str) -> str:
+    """Return a key not already present in ``d`` (suffix duplicate labels)."""
+    if label not in d:
+        return label
+    n = 2
+    while f"{label} ({n})" in d:
+        n += 1
+    return f"{label} ({n})"
 
 
 def _parse_controller_ethernet(output: str) -> ShowControllerEthernetControllerResult:
     lines = output.splitlines()
     interface = ""
-    stats: list[ControllerEthernetStatRow] = []
+    transmit: dict[str, ControllerEthernetCounterEntry] = {}
+    receive: dict[str, ControllerEthernetCounterEntry] = {}
     last_update = ""
     for line in lines:
         s = line.rstrip()
@@ -94,15 +76,27 @@ def _parse_controller_ethernet(output: str) -> ShowControllerEthernetControllerR
         if lm:
             last_update = lm.group(1).strip()
             continue
-        row = _parse_stat_row(s)
-        if row:
-            stats.append(row)
+        m = _STAT_ROW_FULL_RE.match(s)
+        if m:
+            tx_label = m.group(2).strip()
+            rx_label = m.group(4).strip()
+            tx_key = _unique_label_key(transmit, tx_label)
+            rx_key = _unique_label_key(receive, rx_label)
+            transmit[tx_key] = ControllerEthernetCounterEntry(value=m.group(1))
+            receive[rx_key] = ControllerEthernetCounterEntry(value=m.group(3))
+            continue
+        m = _STAT_ROW_TX_ONLY_RE.match(s)
+        if m:
+            tx_label = m.group(2).strip()
+            tx_key = _unique_label_key(transmit, tx_label)
+            transmit[tx_key] = ControllerEthernetCounterEntry(value=m.group(1))
+            continue
     if not interface:
         msg = "Ethernet controller interface not found"
         raise ValueError(msg)
     return ShowControllerEthernetControllerResult(
         interface=interface,
-        statistics=stats,
+        statistics=ControllerEthernetStatistics(transmit=transmit, receive=receive),
         last_update=last_update,
     )
 
