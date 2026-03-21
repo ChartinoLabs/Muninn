@@ -34,7 +34,6 @@ _HYPHEN_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset({})
 _NA_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset(
     {
         "iosxe/show_network_clocks_synchronization/001_basic/expected.json",
-        "iosxe/show_power_inline_priority/002_with_oper_priority/expected.json",
     }
 )
 
