@@ -15,7 +15,7 @@ class SnmpUserEntry(TypedDict):
     engine_id: str
     storage_type: str
     authentication_protocol: str
-    privacy_protocol: str
+    privacy_protocol: NotRequired[str]
     group_name: str
     access_list: NotRequired[str]
 
@@ -39,6 +39,9 @@ _PRIVACY_PROTOCOL_PATTERN = re.compile(
     r"^Privacy\s+Protocol:\s+(?P<privacy_protocol>\S+)"
 )
 _GROUP_NAME_PATTERN = re.compile(r"^Group-name:\s+(?P<group_name>\S+)")
+
+# IOS uses "-" / "---" for absent values; omit matching keys from structured output.
+_PLACEHOLDER_HYPHENS = frozenset({"-", "---"})
 
 
 @register(OS.CISCO_IOS, "show snmp user")
@@ -132,9 +135,13 @@ def _build_entry(raw: dict[str, str]) -> SnmpUserEntry:
         "engine_id": raw.get("engine_id", ""),
         "storage_type": raw.get("storage_type", ""),
         "authentication_protocol": raw.get("authentication_protocol", ""),
-        "privacy_protocol": raw.get("privacy_protocol", ""),
         "group_name": raw.get("group_name", ""),
     }
+    privacy = raw.get("privacy_protocol", "")
+    if privacy not in _PLACEHOLDER_HYPHENS:
+        entry["privacy_protocol"] = privacy
     if "access_list" in raw:
-        entry["access_list"] = raw["access_list"]
+        acl = raw["access_list"]
+        if acl not in _PLACEHOLDER_HYPHENS:
+            entry["access_list"] = acl
     return entry
