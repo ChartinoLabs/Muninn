@@ -40,7 +40,7 @@ _ESMC_ABSENT_CASEFOLD: Final[frozenset[str]] = frozenset({"na", "n/a"})
 
 
 def _esmc_column_has_value(token: str) -> bool:
-    if token == "-":
+    if token == "-":  # nosec B105
         return False
     return token.casefold() not in _ESMC_ABSENT_CASEFOLD
 
