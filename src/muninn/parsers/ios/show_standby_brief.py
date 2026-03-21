@@ -32,6 +32,11 @@ _CONTINUATION_RE = re.compile(r"^\s{10,}(?P<virtual_ip>\S+)\s*$")
 _UNKNOWN_VALUE = "unknown"
 
 
+def _hsrp_group_key(interface: str, group: int) -> str:
+    """Return a stable key for an HSRP group (``{interface}/{group}``, NX-OS style)."""
+    return f"{interface}/{group}"
+
+
 class HsrpGroupEntry(TypedDict):
     """Schema for a single HSRP group entry."""
 
@@ -48,7 +53,7 @@ class HsrpGroupEntry(TypedDict):
 class ShowStandbyBriefResult(TypedDict):
     """Schema for 'show standby brief' parsed output."""
 
-    groups: list[HsrpGroupEntry]
+    groups: dict[str, HsrpGroupEntry]
 
 
 def _is_known(value: str | None) -> bool:
@@ -80,16 +85,17 @@ def _preprocess_lines(lines: list[str]) -> list[str]:
     return merged
 
 
-def _parse_data_lines(lines: list[str]) -> list[HsrpGroupEntry]:
-    """Parse the data lines after the header into HSRP group entries."""
-    groups: list[HsrpGroupEntry] = []
+def _parse_data_lines(lines: list[str]) -> dict[str, HsrpGroupEntry]:
+    """Parse data lines after the header into HSRP entries keyed by interface/group."""
+    groups: dict[str, HsrpGroupEntry] = {}
+    last_key: str | None = None
     last_interface: str | None = None
 
     for line in lines:
         # Check for continuation line (virtual IP on its own line)
         cont_match = _CONTINUATION_RE.match(line)
-        if cont_match and groups:
-            groups[-1]["virtual_ip"] = cont_match.group("virtual_ip")
+        if cont_match and last_key is not None:
+            groups[last_key]["virtual_ip"] = cont_match.group("virtual_ip")
             continue
 
         data_match = _DATA_RE.match(line)
@@ -101,9 +107,13 @@ def _parse_data_lines(lines: list[str]) -> list[HsrpGroupEntry]:
             last_interface = canonical_interface_name(raw_interface, os=OS.CISCO_IOS)
         interface = last_interface or ""
 
+        group_num = int(data_match.group("group"))
+        key = _hsrp_group_key(interface, group_num)
+        last_key = key
+
         entry: HsrpGroupEntry = {
             "interface": interface,
-            "group": int(data_match.group("group")),
+            "group": group_num,
             "priority": int(data_match.group("priority")),
             "preempt": data_match.group("preempt") == "P",
             "state": data_match.group("state"),
@@ -121,7 +131,7 @@ def _parse_data_lines(lines: list[str]) -> list[HsrpGroupEntry]:
         if _is_known(virtual_ip):
             entry["virtual_ip"] = virtual_ip
 
-        groups.append(entry)
+        groups[key] = entry
 
     return groups
 
