@@ -9,8 +9,6 @@ Full-file exemptions are paths (relative to ``tests/parsers/``) in
 trailing ``# ...`` comments on individual lines to record why a fixture is exempt.
 """
 
-from __future__ import annotations
-
 import json
 from pathlib import Path
 
