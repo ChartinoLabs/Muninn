@@ -118,6 +118,38 @@ Instead of this:
 
 The nested structure depth will sometimes be significant - this is unavoidable when CLI output itself contains deeply hierarchical data. We're constrained by vendor CLI implementations.
 
+#### Nested keys vs. composite string keys
+
+**Anti-pattern:** Building dict keys by concatenating identifiers into one string—often with delimiters such as `|`, `/`, or `:`—so the key encodes multiple dimensions at once (for example `GigabitEthernet0/1|5` for interface plus HSRP group, or `object:1` merged with unrelated fields). This makes the schema harder to consume, obscures structure, invites parsing bugs, and is not a substitute for proper nesting.
+
+**Preferred:** When the device semantics are hierarchical (one interface has many HSRP groups, one object has many children, etc.), **nest dictionaries** so each key level represents a single conceptual dimension. For example, prefer:
+
+```json
+{
+  "GigabitEthernet0/1": {
+    "groups": {
+      "5": { "state": "Active", "priority": 110 },
+      "10": { "state": "Standby", "priority": 100 }
+    }
+  }
+}
+```
+
+over a flat map whose keys are opaque composite strings.
+
+**Legitimate flat keys:** A single real-world identifier that is already one string in the CLI (VRF name, neighbor router-id, canonical interface name as the sole index) remains appropriate as one dict key. The rule targets **encoding multiple independent attributes into one key** where nesting would mirror the data model.
+
+The pipe character (`|`) is a common delimiter in composite keys. **Fixture CI** (below) rejects `|` in JSON object **keys** in parser `expected.json` files. String **values** taken from device output may still contain `|`.
+
+#### Parser fixture checks (CI)
+
+`tests/parsers/test_fixture_json_conventions.py` validates every `expected.json` under `tests/parsers/`:
+
+- **List-of-dicts:** fails when a non-empty list contains only objects if a keyed dict would be natural (per the patterns above).
+- **Pipe in keys:** fails when any object key contains U+007C (`|`).
+
+Each check has its own opt-out set in `test_fixture_json_conventions.py` (`_LIST_OF_DICTS_EXEMPT_EXPECTED_FILES` vs. `_PIPE_IN_DICT_KEY_EXEMPT_EXPECTED_FILES`) so a legacy list-of-dicts fixture does not automatically skip the pipe-in-key rule, and vice versa.
+
 ### 5. Test Metadata for Platform/Version Tracking
 
 **Problem in Genie**: Test data exists (golden input/output files), but there's no metadata indicating which hardware platforms or software versions the test data came from. Users have no visibility into parser coverage or reliability for their specific environment.

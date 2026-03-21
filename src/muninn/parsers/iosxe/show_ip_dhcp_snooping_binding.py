@@ -33,6 +33,7 @@ class ShowIpDhcpSnoopingBindingResult(TypedDict):
 
 
 @register(OS.CISCO_IOSXE, "show ip dhcp snooping binding")
+@register(OS.CISCO_IOS, "show ip dhcp snooping binding")
 class ShowIpDhcpSnoopingBindingParser(BaseParser[ShowIpDhcpSnoopingBindingResult]):
     """Parser for 'show ip dhcp snooping binding' command."""
 

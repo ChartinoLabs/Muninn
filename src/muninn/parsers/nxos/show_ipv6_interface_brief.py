@@ -11,16 +11,22 @@ from muninn.utils import canonical_interface_name
 
 
 class IPv6AddressEntry(TypedDict):
-    """Schema for a single IPv6 address."""
+    """Schema for link-local address (address plus optional flags)."""
 
     address: str
+    flags: NotRequired[list[str]]
+
+
+class IPv6GlobalAddressInfo(TypedDict):
+    """Optional flags for a global IPv6 address (address is the dict key)."""
+
     flags: NotRequired[list[str]]
 
 
 class IPv6InterfaceBriefEntry(TypedDict):
     """Schema for a single IPv6 interface brief entry."""
 
-    ipv6_addresses: list[IPv6AddressEntry]
+    ipv6_addresses: dict[str, IPv6GlobalAddressInfo]
     protocol_status: str
     link_status: str
     admin_status: str
@@ -80,11 +86,14 @@ def _parse_address(address: str) -> IPv6AddressEntry:
 def _record_address(entry: IPv6InterfaceBriefEntry, address: str) -> None:
     """Store a global or link-local address on an interface entry."""
     parsed_address = _parse_address(address)
-    if parsed_address["address"].lower().startswith("fe80:"):
+    addr = parsed_address["address"]
+    if addr.lower().startswith("fe80:"):
         entry["link_local"] = parsed_address
         return
-    if parsed_address not in entry["ipv6_addresses"]:
-        entry["ipv6_addresses"].append(parsed_address)
+    info: IPv6GlobalAddressInfo = {}
+    if "flags" in parsed_address:
+        info["flags"] = parsed_address["flags"]
+    entry["ipv6_addresses"][addr] = info
 
 
 def _validate_result(vrfs: dict[str, VrfEntry]) -> None:
@@ -154,7 +163,7 @@ class ShowIPv6InterfaceBriefParser(BaseParser[ShowIPv6InterfaceBriefResult]):
                     intf_match.group("interface"), os=OS.CISCO_NXOS
                 )
                 entry: IPv6InterfaceBriefEntry = {
-                    "ipv6_addresses": [],
+                    "ipv6_addresses": {},
                     "protocol_status": intf_match.group("protocol"),
                     "link_status": intf_match.group("link"),
                     "admin_status": intf_match.group("admin"),
