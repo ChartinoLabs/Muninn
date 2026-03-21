@@ -1,7 +1,7 @@
 """Parser for 'show power inline priority' command on IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, Final, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -16,7 +16,7 @@ class PowerInlinePriorityEntry(TypedDict):
 
     admin_state: str
     oper_state: str
-    admin_priority: str
+    admin_priority: NotRequired[str]
     oper_priority: NotRequired[str]
 
 
@@ -45,6 +45,13 @@ _HEADER_KEYWORDS = frozenset({"interface", "admin", "oper", "state", "priority"}
 
 _SEPARATOR_PATTERN = SEPARATOR_DASH_SPACE_RE
 
+# CLI uses NA / N/A / n/a when admin priority is not configured (not an enum value).
+_ADMIN_PRIORITY_UNSET_NORMALIZED: Final[frozenset[str]] = frozenset({"na", "n/a"})
+
+
+def _admin_priority_is_unset(raw: str) -> bool:
+    return raw.strip().casefold() in _ADMIN_PRIORITY_UNSET_NORMALIZED
+
 
 def _is_header_or_separator(line: str) -> bool:
     """Return True if the line is a table header or separator."""
@@ -52,6 +59,22 @@ def _is_header_or_separator(line: str) -> bool:
     if all(word in _HEADER_KEYWORDS for word in lower.split()):
         return True
     return bool(_SEPARATOR_PATTERN.match(line))
+
+
+def _entry_from_row_match(m: re.Match[str]) -> tuple[str, PowerInlinePriorityEntry]:
+    """Build an interface entry from a row regex match."""
+    name = canonical_interface_name(m.group("interface"))
+    entry: PowerInlinePriorityEntry = {
+        "admin_state": m.group("admin_state"),
+        "oper_state": m.group("oper_state"),
+    }
+    admin_priority = m.group("admin_priority")
+    if not _admin_priority_is_unset(admin_priority):
+        entry["admin_priority"] = admin_priority
+    oper_priority = m.group("oper_priority")
+    if oper_priority is not None:
+        entry["oper_priority"] = oper_priority
+    return name, entry
 
 
 @register(OS.CISCO_IOSXE, "show power inline priority")
@@ -98,15 +121,7 @@ class ShowPowerInlinePriorityParser(BaseParser[ShowPowerInlinePriorityResult]):
                 continue
 
             if m := _ROW_PATTERN.match(line):
-                name = canonical_interface_name(m.group("interface"))
-                entry: PowerInlinePriorityEntry = {
-                    "admin_state": m.group("admin_state"),
-                    "oper_state": m.group("oper_state"),
-                    "admin_priority": m.group("admin_priority"),
-                }
-                oper_priority = m.group("oper_priority")
-                if oper_priority is not None:
-                    entry["oper_priority"] = oper_priority
+                name, entry = _entry_from_row_match(m)
                 interfaces[name] = entry
 
         if not interfaces:
