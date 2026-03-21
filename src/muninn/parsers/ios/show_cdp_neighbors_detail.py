@@ -19,7 +19,6 @@ class CdpNeighborDetailEntry(TypedDict):
     entry_addresses: list[str]
     platform: str
     capabilities: str
-    local_interface: str
     port_id: str
     hold_time: int
     version: str
@@ -33,7 +32,7 @@ class CdpNeighborDetailEntry(TypedDict):
 class ShowCdpNeighborsDetailResult(TypedDict):
     """Schema for 'show cdp neighbors detail' parsed output."""
 
-    neighbors: dict[str, CdpNeighborDetailEntry]
+    neighbors: dict[str, dict[str, dict[str, CdpNeighborDetailEntry]]]
     total_entries: NotRequired[int]
 
 
@@ -226,8 +225,8 @@ class ShowCdpNeighborsDetailParser(BaseParser[ShowCdpNeighborsDetailResult]):
             entry["management_addresses"] = mgmt_addresses
 
     @classmethod
-    def _parse_block(cls, block: str) -> CdpNeighborDetailEntry | None:
-        """Parse a single neighbor block into a structured entry."""
+    def _parse_block(cls, block: str) -> tuple[str, CdpNeighborDetailEntry] | None:
+        """Parse a single neighbor block into (local interface key, entry)."""
         device_match = cls._DEVICE_ID_PATTERN.search(block)
         if not device_match:
             return None
@@ -239,19 +238,21 @@ class ShowCdpNeighborsDetailParser(BaseParser[ShowCdpNeighborsDetailResult]):
         platform, capabilities = cls._extract_platform_capabilities(block)
         hold_match = cls._HOLDTIME_PATTERN.search(block)
 
+        local_interface = canonical_interface_name(intf_match.group(1))
+        port_id = canonical_interface_name(intf_match.group(2))
+
         entry: CdpNeighborDetailEntry = {
             "device_id": device_match.group(1).strip(),
             "entry_addresses": cls._extract_addresses(block, cls._ENTRY_ADDR_HEADER),
             "platform": platform,
             "capabilities": capabilities,
-            "local_interface": canonical_interface_name(intf_match.group(1)),
-            "port_id": canonical_interface_name(intf_match.group(2)),
+            "port_id": port_id,
             "hold_time": int(hold_match.group(1)) if hold_match else 0,
             "version": cls._extract_version(block),
         }
 
         cls._add_optional_fields(entry, block)
-        return entry
+        return local_interface, entry
 
     @classmethod
     def parse(cls, output: str) -> ShowCdpNeighborsDetailResult:
@@ -261,18 +262,27 @@ class ShowCdpNeighborsDetailParser(BaseParser[ShowCdpNeighborsDetailResult]):
             output: Raw CLI output from command.
 
         Returns:
-            Parsed CDP neighbor details keyed by canonical local interface name.
+            Parsed CDP neighbor details nested as
+            ``local interface → device_id → port_id (outgoing) → entry``.
+            Multiple neighbors on the same local interface are distinct under
+            ``device_id`` and ``port_id``.
 
         Raises:
             ValueError: If no neighbors found.
         """
         blocks = cls._split_into_blocks(output)
-        neighbors: dict[str, CdpNeighborDetailEntry] = {}
+        neighbors: dict[str, dict[str, dict[str, CdpNeighborDetailEntry]]] = {}
 
         for block in blocks:
-            entry = cls._parse_block(block)
-            if entry is not None:
-                neighbors[entry["local_interface"]] = entry
+            parsed = cls._parse_block(block)
+            if parsed is None:
+                continue
+            local_if, entry = parsed
+            device_id = entry["device_id"]
+            port_key = entry["port_id"]
+            by_local = neighbors.setdefault(local_if, {})
+            by_device = by_local.setdefault(device_id, {})
+            by_device[port_key] = entry
 
         if not neighbors:
             msg = "No CDP neighbor details found in output"
