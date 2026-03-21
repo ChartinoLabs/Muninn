@@ -31,13 +31,13 @@ class DnsLookupJob(TypedDict):
     dns_type: NotRequired[str]
     dns_rtt_ms: NotRequired[str]
     payload_size: NotRequired[str]
-    ips: list[DnsLookupIpEntry]
+    ips: dict[str, DnsLookupIpEntry]
 
 
 class ShowDnsLookupCacheResult(TypedDict):
     """Schema for 'show dns-lookup cache' parsed output."""
 
-    jobs: list[DnsLookupJob]
+    jobs: dict[str, DnsLookupJob]
     total_jobs: NotRequired[int]
 
 
@@ -88,7 +88,7 @@ class _DnsAcc:
         self.dns_type: str | None = None
         self.dns_rtt: str | None = None
         self.payload: str | None = None
-        self.ips: list[DnsLookupIpEntry] = []
+        self.ips: dict[str, DnsLookupIpEntry] = {}
         self.in_response = False
 
 
@@ -164,7 +164,8 @@ def _dns_line_response_body(s: str, acc: _DnsAcc) -> bool:
         return True
     im = _IP_LINE_RE.match(s)
     if im:
-        acc.ips.append(DnsLookupIpEntry(ip=im.group(1), ttl=int(im.group(2))))
+        ip = im.group(1)
+        acc.ips[ip] = DnsLookupIpEntry(ip=ip, ttl=int(im.group(2)))
         return True
     return False
 
@@ -224,14 +225,14 @@ def _parse_dns_lookup_cache(output: str) -> ShowDnsLookupCacheResult:
     total_m = _TOTAL_RE.search(output)
     total_jobs = int(total_m.group(1)) if total_m else None
     starts = list(_JOB_START.finditer(output))
-    jobs: list[DnsLookupJob] = []
+    jobs: dict[str, DnsLookupJob] = {}
     for i, m in enumerate(starts):
         start = m.start()
         end = starts[i + 1].start() if i + 1 < len(starts) else len(output)
         chunk = output[start:end]
         job = _dns_parse_job_block(chunk)
         if job:
-            jobs.append(job)
+            jobs[str(job["job_id"])] = job
     if not jobs:
         msg = "No DNS lookup jobs parsed"
         raise ValueError(msg)
