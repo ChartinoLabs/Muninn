@@ -1,7 +1,7 @@
 """Parser for 'show mac address-table' command on NX-OS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, Literal, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -26,11 +26,7 @@ _INTERFACE_PORT_PATTERN = re.compile(r"^(?:Eth|Po|Lo|Vlan|mgmt|nve|Tu|Fa|Gi|Te)\
 
 
 class MacTableEntry(TypedDict):
-    """Schema for a single MAC address table entry.
-
-    Optional fields (vlan, age, entry_flag) are omitted when not applicable
-    rather than set to null, following the project convention.
-    """
+    """Intermediate row from the CLI line (includes keys used only for nesting)."""
 
     mac_address: str
     type: str
@@ -43,10 +39,57 @@ class MacTableEntry(TypedDict):
     entry_flag: NotRequired[str]
 
 
+class MacTableRow(TypedDict, total=False):
+    """Leaf under ``mac_table[vlan_key][mac_key]``."""
+
+    kind: Literal["unicast"]
+    type: str
+    secure: bool
+    ntfy: bool
+    port: str
+    is_routed: bool
+    age: NotRequired[int]
+    entry_flag: NotRequired[str]
+
+
 class ShowMacAddressTableResult(TypedDict):
     """Schema for 'show mac address-table' parsed output."""
 
-    mac_table: list[MacTableEntry]
+    mac_table: dict[str, dict[str, MacTableRow]]
+
+
+def _vlan_segment_key(entry: MacTableEntry) -> str:
+    """Outer key: numeric VLAN id, or ``none`` when VLAN is absent (``-`` column)."""
+    if "vlan" not in entry:
+        return "none"
+    return str(entry["vlan"])
+
+
+def _row_from_entry(entry: MacTableEntry) -> MacTableRow:
+    """Strip ``vlan`` / ``mac_address``; they appear only as parent keys."""
+    row: MacTableRow = {
+        "kind": "unicast",
+        "type": entry["type"],
+        "secure": entry["secure"],
+        "ntfy": entry["ntfy"],
+        "port": entry["port"],
+        "is_routed": entry["is_routed"],
+    }
+    if "age" in entry:
+        row["age"] = entry["age"]
+    if "entry_flag" in entry:
+        row["entry_flag"] = entry["entry_flag"]
+    return row
+
+
+def _nest_mac_table(entries: list[MacTableEntry]) -> dict[str, dict[str, MacTableRow]]:
+    """Build ``vlan -> mac -> row`` (last row wins on duplicate keys)."""
+    mac_table: dict[str, dict[str, MacTableRow]] = {}
+    for entry in entries:
+        vk = _vlan_segment_key(entry)
+        mk = entry["mac_address"]
+        mac_table.setdefault(vk, {})[mk] = _row_from_entry(entry)
+    return mac_table
 
 
 @register(OS.CISCO_NXOS, "show mac address-table")
@@ -135,12 +178,12 @@ class ShowMacAddressTableParser(BaseParser[ShowMacAddressTableResult]):
             output: Raw CLI output from command.
 
         Returns:
-            Parsed MAC address table with list of entries.
+            Parsed MAC address table with nested ``mac_table``.
 
         Raises:
-            ValueError: If no MAC table entries found.
+            ValueError: If no MAC table entries found in output.
         """
-        mac_table: list[MacTableEntry] = []
+        entries: list[MacTableEntry] = []
 
         for line in output.splitlines():
             line = line.strip()
@@ -149,10 +192,10 @@ class ShowMacAddressTableParser(BaseParser[ShowMacAddressTableResult]):
 
             match = cls._ENTRY_PATTERN.match(line)
             if match:
-                mac_table.append(cls._parse_entry(match))
+                entries.append(cls._parse_entry(match))
 
-        if not mac_table:
+        if not entries:
             msg = "No MAC address table entries found in output"
             raise ValueError(msg)
 
-        return ShowMacAddressTableResult(mac_table=mac_table)
+        return ShowMacAddressTableResult(mac_table=_nest_mac_table(entries))

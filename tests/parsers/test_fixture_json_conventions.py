@@ -168,11 +168,6 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         "nxos/show_ipv6_route/001_multi_vrf_mixed_protocols/expected.json",
         "nxos/show_ipv6_route/002_vxlan_overlay/expected.json",
         "nxos/show_ipv6_route/003_eigrp_subinterfaces/expected.json",
-        "nxos/show_mac_address-table/001_mixed_static_entries/expected.json",
-        "nxos/show_mac_address-table/002_dynamic_vpc_entries/expected.json",
-        "nxos/show_mac_address-table/003_na_age_mixed_flags/expected.json",
-        "nxos/show_mac_address-table/004_vlan_bd_with_drop_and_subinterface/expected.json",
-        "nxos/show_mac_address-table/005_ntc_gateway_static_drop/expected.json",
     }
 )
 
