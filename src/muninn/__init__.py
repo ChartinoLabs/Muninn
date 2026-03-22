@@ -13,6 +13,7 @@ from muninn.os import OS, OperatingSystem, resolve_os
 from muninn.parser import BaseParser
 from muninn.registry import ParserInfo, RuntimeRegistry, register
 from muninn.runtime import Muninn
+from muninn.schema_doc import SchemaDoc
 from muninn.tags import ParserTag
 
 __all__ = [
@@ -32,6 +33,7 @@ __all__ = [
     "ParserNotFoundError",
     "ParserTag",
     "RuntimeRegistry",
+    "SchemaDoc",
     "register",
     "resolve_os",
 ]
