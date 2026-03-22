@@ -28,11 +28,10 @@ class DirectionCounters(TypedDict):
     arp: ProtocolCounters
 
 
-class PuntCause(TypedDict):
-    """A single punt or drop cause entry."""
+class CauseLeaf(TypedDict):
+    """Punt/drop cause row (outer dict key is the numeric ``code`` as a string)."""
 
     count: int
-    code: int
     cause: str
 
 
@@ -55,9 +54,9 @@ class PacketsProcessed(TypedDict):
 
     forward: int
     punt: int
-    punt_causes: NotRequired[list[PuntCause]]
+    punt_causes: NotRequired[dict[str, CauseLeaf]]
     drop: int
-    drop_causes: NotRequired[list[PuntCause]]
+    drop_causes: NotRequired[dict[str, CauseLeaf]]
     consume: int
 
 
@@ -152,13 +151,13 @@ def _parse_direction_block(
 def _collect_causes(
     lines: list[str],
     start: int,
-) -> tuple[list[PuntCause], int]:
+) -> tuple[dict[str, CauseLeaf], int]:
     """Collect cause lines starting at the given index.
 
     Returns:
-        Tuple of (causes list, index after last cause line).
+        Tuple of (causes keyed by code string, index after last cause line).
     """
-    causes: list[PuntCause] = []
+    causes: dict[str, CauseLeaf] = {}
     idx = start
     while idx < len(lines):
         stripped = lines[idx].strip()
@@ -167,13 +166,11 @@ def _collect_causes(
             continue
         cause_match = _CAUSE_RE.match(lines[idx])
         if cause_match:
-            causes.append(
-                PuntCause(
-                    count=int(cause_match.group("count")),
-                    code=int(cause_match.group("code")),
-                    cause=cause_match.group("cause"),
-                )
-            )
+            code = str(int(cause_match.group("code")))
+            causes[code] = {
+                "count": int(cause_match.group("count")),
+                "cause": cause_match.group("cause"),
+            }
             idx += 1
             continue
         break
@@ -216,8 +213,8 @@ def _build_summary(
 
 def _build_processed(
     counters: dict[str, int | None],
-    punt_causes: list[PuntCause],
-    drop_causes: list[PuntCause],
+    punt_causes: dict[str, CauseLeaf],
+    drop_causes: dict[str, CauseLeaf],
 ) -> PacketsProcessed:
     """Build the PacketsProcessed from parsed counters and causes."""
     processed = PacketsProcessed(
@@ -235,8 +232,8 @@ def _build_processed(
 
 def _build_result(
     counters: dict[str, int | None],
-    punt_causes: list[PuntCause],
-    drop_causes: list[PuntCause],
+    punt_causes: dict[str, CauseLeaf],
+    drop_causes: dict[str, CauseLeaf],
     pkt_dir_in: DirectionCounters | None,
     pkt_dir_out: DirectionCounters | None,
 ) -> ShowPlatformPacketTraceStatisticsResult:
@@ -282,7 +279,7 @@ def _handle_counter_line(
     name: str,
     value: int,
     counters: dict[str, int | None],
-    cause_map: dict[str, list[PuntCause]],
+    cause_map: dict[str, dict[str, CauseLeaf]],
 ) -> int:
     """Store a counter value and collect trailing causes if applicable."""
     counters[name] = value
@@ -311,7 +308,7 @@ def _parse_lines(
 ) -> ShowPlatformPacketTraceStatisticsResult:
     """Parse output lines into structured result."""
     counters: dict[str, int | None] = {name: None for name, _ in _COUNTER_PATTERNS}
-    cause_map: dict[str, list[PuntCause]] = {}
+    cause_map: dict[str, dict[str, CauseLeaf]] = {}
     dir_map: dict[str, DirectionCounters] = {}
 
     idx = 0
@@ -346,8 +343,8 @@ def _parse_lines(
 
     return _build_result(
         counters,
-        cause_map.get("punt", []),
-        cause_map.get("drop", []),
+        cause_map.get("punt", {}),
+        cause_map.get("drop", {}),
         dir_map.get("PKT_DIR_IN"),
         dir_map.get("PKT_DIR_OUT"),
     )

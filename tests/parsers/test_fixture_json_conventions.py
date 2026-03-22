@@ -137,7 +137,6 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         "iosxe/show_logging/002_console_enabled_persistent_enabled/expected.json",
         "iosxe/show_logging/005_many_log_messages_wireless/expected.json",
         "iosxe/show_logging/006_ipv6_trap_hosts_monitor_informational/expected.json",
-        "iosxe/show_platform_packet-trace_statistics/001_basic/expected.json",
         "iosxe/show_policy-map_interface/001_basic/expected.json",
         "iosxe/show_processes_memory/001_basic/expected.json",
         "iosxe/show_processes_memory/001_live_device/expected.json",
