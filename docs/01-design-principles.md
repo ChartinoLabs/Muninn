@@ -90,6 +90,37 @@ class ShowClockParser(BaseParser):
         ...
 ```
 
+#### Optional: `SchemaDoc` and `Annotated` for targeted schemas
+
+Most parsers should keep ordinary field types (`str`, `int`, `float`, `bool`, nested `TypedDict`, and so on). That remains the default.
+
+For **specific, high-traffic parsers**—or wherever the output shape is easy to misunderstand in generated documentation—Muninn provides `SchemaDoc` in `muninn.schema_doc`. Attach it with `typing.Annotated` to describe **what a value represents**, including dynamic dict keys and fields that would otherwise look like undifferentiated strings or numbers:
+
+```python
+from typing import Annotated, TypedDict
+
+from muninn.schema_doc import SchemaDoc
+
+VlanKey = Annotated[
+    str,
+    SchemaDoc(
+        "VLAN id string used as the mapping key (digits from the CLI label; "
+        "leading zeros preserved where applicable)."
+    ),
+]
+
+class ExampleResult(TypedDict):
+    vlans: dict[VlanKey, dict[str, object]]
+    metric: Annotated[int, SchemaDoc("IGP metric as shown in the routing table.")]
+```
+
+**Guidelines:**
+
+- **Not mandatory** and not a goal for blanket coverage. Use judgment so parser modules stay mostly parsing logic, not annotation boilerplate.
+- **Any base type** works: `Annotated[str, SchemaDoc(...)]`, `Annotated[int, SchemaDoc(...)]`, `Annotated[float, SchemaDoc(...)]`, and so on—not only strings.
+- **Runtime unchanged**: `Annotated` metadata is for static analysis and future documentation tooling; `parse()` still returns plain JSON-serializable `dict` values (ordinary strings and numbers at runtime).
+- **Wide parsers**: Prefer documenting the outer structure and a few important keys or nested maps; annotating every leaf field rarely pays off.
+
 Users who want type hints can import the TypedDict or parser class directly.
 
 ### 4. Dictionaries of Dictionaries Output Pattern
@@ -197,4 +228,4 @@ The following are acknowledged but not primary concerns:
 
 - [Testing Strategy](02-testing-strategy.md) - Test file structure and metadata format
 - [Parser Registration](03-parser-registration.md) - Literal and regex command registration rules
-- Output schema conventions (TODO)
+- Parser output schemas: `TypedDict` by default; optional `SchemaDoc` with `typing.Annotated` for selected parsers (see **§3** above)
