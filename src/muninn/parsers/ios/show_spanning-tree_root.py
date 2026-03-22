@@ -1,13 +1,30 @@
 """Parser for 'show spanning-tree root' command on IOS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import Annotated, ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
+from muninn.schema_doc import SchemaDoc
 from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
+
+MacAddressString = Annotated[
+    str,
+    SchemaDoc(
+        "Root bridge MAC in dotted hex (three groups of four hex digits) "
+        "as in CLI output."
+    ),
+]
+
+VlanIdKey = Annotated[
+    str,
+    SchemaDoc(
+        "VLAN id as a decimal string without leading zeros, derived from the "
+        "CLI VLAN label (e.g. VLAN0001 → '1')."
+    ),
+]
 
 # --- Column header pattern ---
 _HEADER_RE = re.compile(r"^Vlan\s+Root\s+ID\s+Cost\s+Time\s+Age\s+Dly\s+Root\s+Port")
@@ -29,7 +46,7 @@ class RootBridgeEntry(TypedDict):
     """Schema for the root bridge identification."""
 
     priority: int
-    address: str
+    address: MacAddressString
 
 
 class VlanRootEntry(TypedDict):
@@ -40,10 +57,18 @@ class VlanRootEntry(TypedDict):
     hello_time: int
     max_age: int
     forward_delay: int
-    root_port: NotRequired[str]
+    root_port: NotRequired[
+        Annotated[
+            str,
+            SchemaDoc(
+                "Local port toward the root bridge when present; "
+                "canonical IOS interface name (e.g. 'Port-channel34')."
+            ),
+        ]
+    ]
 
 
-ShowSpanningTreeRootResult = dict[str, VlanRootEntry]
+ShowSpanningTreeRootResult = dict[VlanIdKey, VlanRootEntry]
 
 
 @register(OS.CISCO_IOS, "show spanning-tree root")
