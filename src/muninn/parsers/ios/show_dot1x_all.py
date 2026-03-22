@@ -11,11 +11,10 @@ from muninn.utils import canonical_interface_name
 
 
 class Dot1xClientEntry(TypedDict):
-    """Schema for a single dot1x client (supplicant) entry."""
+    """Schema for a single dot1x client (supplicant), keyed by ``session_id``."""
 
     eap_method: str
     mac_address: str
-    session_id: str
     auth_sm_state: NotRequired[str]
     auth_bend_sm_state: NotRequired[str]
 
@@ -44,7 +43,7 @@ class Dot1xInterfaceEntry(TypedDict):
     max_start: NotRequired[int]
     credentials_profile: NotRequired[str]
     eap_profile: NotRequired[str]
-    clients: NotRequired[list[Dot1xClientEntry]]
+    clients: NotRequired[dict[str, Dot1xClientEntry]]
 
 
 class ShowDot1xAllResult(TypedDict):
@@ -192,15 +191,27 @@ _CLIENT_FIELD_PATTERNS: list[tuple[re.Pattern[str], str]] = [
 ]
 
 
-def _flush_client(clients: list[Dot1xClientEntry], current: dict | None) -> None:
-    """Append the current client to the list if it has a MAC address."""
-    if current is not None and "mac_address" in current:
-        clients.append(current)  # type: ignore[arg-type]
+def _flush_client(clients: dict[str, Dot1xClientEntry], current: dict | None) -> None:
+    """Store the current client under ``session_id`` when complete."""
+    if current is None or "mac_address" not in current:
+        return
+    sid = current.get("session_id")
+    if not sid:
+        return
+    row: Dot1xClientEntry = {
+        "eap_method": current["eap_method"],
+        "mac_address": current["mac_address"],
+    }
+    if "auth_sm_state" in current:
+        row["auth_sm_state"] = current["auth_sm_state"]
+    if "auth_bend_sm_state" in current:
+        row["auth_bend_sm_state"] = current["auth_bend_sm_state"]
+    clients[sid] = row
 
 
-def _parse_clients(lines: list[str]) -> list[Dot1xClientEntry]:
+def _parse_clients(lines: list[str]) -> dict[str, Dot1xClientEntry]:
     """Parse dot1x client entries from interface block lines."""
-    clients: list[Dot1xClientEntry] = []
+    clients: dict[str, Dot1xClientEntry] = {}
     current: dict | None = None
 
     for line in lines:
@@ -294,9 +305,9 @@ def _parse_interface_block(raw_name: str, block: str) -> Dot1xInterfaceEntry:
     if client_start is not None and not _CLIENT_LIST_EMPTY_RE.match(
         block_lines[client_start].strip()
     ):
-        clients = _parse_clients(block_lines[client_start:])
-        if clients:
-            entry["clients"] = clients
+        client_map = _parse_clients(block_lines[client_start:])
+        if client_map:
+            entry["clients"] = client_map
 
     return entry  # type: ignore[return-value]
 

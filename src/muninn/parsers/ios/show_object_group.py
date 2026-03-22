@@ -1,7 +1,8 @@
 """Parser for 'show object-group' command on IOS."""
 
+import ipaddress
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -9,38 +10,26 @@ from muninn.registry import register
 from muninn.tags import ParserTag
 
 
-class NetworkEntry(TypedDict):
-    """Schema for a single network object-group entry."""
+class RangeEnd(TypedDict):
+    """End of a host range line."""
 
-    type: str
-    host: NotRequired[str]
-    network: NotRequired[str]
-    mask: NotRequired[str]
-    range_start: NotRequired[str]
-    range_end: NotRequired[str]
-    any: NotRequired[bool]
-    group_object: NotRequired[str]
+    end: str
 
 
-class ServiceEntry(TypedDict):
-    """Schema for a single service object-group entry."""
-
-    type: str
-    protocol: NotRequired[str]
-    port_match: NotRequired[str]
-    port: NotRequired[str]
-    port_range_start: NotRequired[str]
-    port_range_end: NotRequired[str]
-    icmp_type: NotRequired[str]
-    group_object: NotRequired[str]
-
-
-class ObjectGroup(TypedDict):
-    """Schema for a single object-group."""
+class ObjectGroup(TypedDict, total=False):
+    """Schema for a single object-group (network or service)."""
 
     group_type: str
-    description: NotRequired[str]
-    entries: list[NetworkEntry | ServiceEntry]
+    description: str
+    # --- Network / V6-Network ---
+    any: bool
+    hosts: dict[str, dict]
+    ranges: dict[str, RangeEnd]
+    nested_groups: dict[str, dict]
+    ipv4_networks: dict[str, dict]
+    ipv6_prefixes: dict[str, dict]
+    # --- Service / V6-Service ---
+    protocols: dict[str, object]
 
 
 class ShowObjectGroupResult(TypedDict):
@@ -76,8 +65,6 @@ _IPV6_PREFIX_PATTERN = re.compile(r"^\s+(?P<network>\S+)/(?P<prefix_len>\d+)$")
 _ICMP_PATTERN = re.compile(r"^\s+icmp(?:\s+(?P<icmp_type>\S+))?\s*$")
 
 # Service entries: protocol with optional port specification
-# Matches: "tcp eq smtp", "udp range 49 50", "tcp-udp range 12200 12700",
-#           "tcp", "udp", "ip", "ipinip", "99"
 _SERVICE_PROTOCOL_PORT_PATTERN = re.compile(
     r"^\s+(?P<protocol>\S+)"
     r"(?:\s+(?P<match>eq|lt|gt|range)\s+(?P<port1>\S+)(?:\s+(?P<port2>\S+))?)?"
@@ -85,165 +72,126 @@ _SERVICE_PROTOCOL_PORT_PATTERN = re.compile(
 )
 
 
-def _parse_network_entry(line: str, group_type: str) -> NetworkEntry | None:
-    """Parse a network object-group entry line.
+def _ipv4_line_to_cidr(network: str, mask: str) -> str:
+    """Normalize IPv4 network + mask to a CIDR string."""
+    net = ipaddress.IPv4Network(f"{network}/{mask}", strict=False)
+    return str(net)
 
-    Args:
-        line: Raw line from CLI output.
-        group_type: The group type (Network, V6-Network).
 
-    Returns:
-        Parsed entry, or None if line does not match a network entry.
-    """
+def _ipv6_line_to_prefix(network: str, prefix_len: str) -> str:
+    """Normalize IPv6 address + prefix length to a CIDR string."""
+    net = ipaddress.IPv6Network(f"{network}/{prefix_len}", strict=False)
+    return str(net)
+
+
+def _merge_network_into_group(group: ObjectGroup, line: str) -> None:
+    """Parse a network object-group line and merge into *group*."""
     m = _ANY_PATTERN.match(line)
     if m:
-        return {"type": group_type, "any": True}
+        group["any"] = True
+        return
 
     m = _HOST_PATTERN.match(line)
     if m:
-        return {"type": group_type, "host": m.group("host")}
+        hosts = group.setdefault("hosts", {})
+        hosts[m.group("host")] = {}
+        return
 
     m = _RANGE_PATTERN.match(line)
     if m:
-        return {
-            "type": group_type,
-            "range_start": m.group("start"),
-            "range_end": m.group("end"),
-        }
+        ranges = group.setdefault("ranges", {})
+        ranges[m.group("start")] = RangeEnd(end=m.group("end"))
+        return
 
     m = _GROUP_OBJECT_PATTERN.match(line)
     if m:
-        return {"type": group_type, "group_object": m.group("name")}
+        nested = group.setdefault("nested_groups", {})
+        nested[m.group("name")] = {}
+        return
 
     m = _NETWORK_MASK_PATTERN.match(line)
     if m:
-        return {
-            "type": group_type,
-            "network": m.group("network"),
-            "mask": m.group("mask"),
-        }
+        cidr = _ipv4_line_to_cidr(m.group("network"), m.group("mask"))
+        group.setdefault("ipv4_networks", {})[cidr] = {}
+        return
 
     m = _IPV6_PREFIX_PATTERN.match(line)
     if m:
-        return {
-            "type": group_type,
-            "network": m.group("network"),
-            "mask": m.group("prefix_len"),
-        }
-
-    return None
+        pfx = _ipv6_line_to_prefix(m.group("network"), m.group("prefix_len"))
+        group.setdefault("ipv6_prefixes", {})[pfx] = {}
+        return
 
 
-def _parse_service_entry(line: str, group_type: str) -> ServiceEntry | None:
-    """Parse a service object-group entry line.
-
-    Args:
-        line: Raw line from CLI output.
-        group_type: The group type (Service, V6-Service).
-
-    Returns:
-        Parsed entry, or None if line does not match a service entry.
-    """
-    m = _GROUP_OBJECT_PATTERN.match(line)
-    if m:
-        return {"type": group_type, "group_object": m.group("name")}
-
-    # Check ICMP first since "icmp <type>" doesn't follow the eq/lt/gt/range pattern
+def _merge_icmp_service_line(group: ObjectGroup, line: str) -> bool:
+    """Merge an ``icmp`` line; return True if *line* matched."""
     m = _ICMP_PATTERN.match(line)
-    if m:
-        icmp_type = m.group("icmp_type")
-        if icmp_type:
-            return {
-                "type": group_type,
-                "protocol": "icmp",
-                "icmp_type": icmp_type,
-            }
-        return {"type": group_type, "protocol": "icmp"}
+    if not m:
+        return False
+    icmp = group.setdefault("protocols", {}).setdefault("icmp", {})
+    if not isinstance(icmp, dict):
+        return True
+    icmp_typed = cast(dict[str, object], icmp)
+    icmp_type = m.group("icmp_type")
+    if icmp_type:
+        types_raw = icmp_typed.setdefault("types", {})
+        if isinstance(types_raw, dict):
+            types_dict = cast(dict[str, object], types_raw)
+            types_dict[str(icmp_type)] = {}
+    else:
+        icmp_typed["all"] = {}
+    return True
 
+
+def _merge_protocol_port_line(group: ObjectGroup, line: str) -> None:
+    """Merge a protocol line with optional eq/lt/gt/range (non-ICMP)."""
     m = _SERVICE_PROTOCOL_PORT_PATTERN.match(line)
     if not m:
-        return None
+        return
 
     protocol = m.group("protocol")
     match_type = m.group("match")
     port1 = m.group("port1")
     port2 = m.group("port2")
 
-    entry: ServiceEntry = {"type": group_type, "protocol": protocol}
+    protos = group.setdefault("protocols", {})
+    proto_node = protos.setdefault(protocol, {})
+    if not isinstance(proto_node, dict):
+        return
+    pnode = cast(dict[str, object], proto_node)
 
     if match_type == "range" and port1 and port2:
-        entry["port_match"] = "range"
-        entry["port_range_start"] = port1
-        entry["port_range_end"] = port2
-    elif match_type and port1:
-        entry["port_match"] = match_type
-        entry["port"] = port1
-
-    return entry
-
-
-def _parse_entry(line: str, group_type: str) -> NetworkEntry | ServiceEntry | None:
-    """Parse an object-group entry line based on group type.
-
-    Args:
-        line: Raw line from CLI output.
-        group_type: The group type (Network, Service, V6-Network, V6-Service).
-
-    Returns:
-        Parsed entry, or None if line does not match.
-    """
-    if "Network" in group_type:
-        return _parse_network_entry(line, group_type)
-    return _parse_service_entry(line, group_type)
-
-
-def _process_header(
-    line: str,
-    object_groups: dict[str, ObjectGroup],
-) -> tuple[str, str] | None:
-    """Process a group header line.
-
-    Returns:
-        Tuple of (name, type) if the line is a header, or None.
-    """
-    header_match = _HEADER_PATTERN.match(line)
-    if not header_match:
-        return None
-
-    name = header_match.group("name")
-    group_type = header_match.group("type")
-    # Avoid overwriting entries if the group was already created.
-    if name not in object_groups:
-        object_groups[name] = {"group_type": group_type, "entries": []}
-    return name, group_type
-
-
-def _process_body_line(
-    line: str,
-    current_name: str,
-    current_type: str,
-    object_groups: dict[str, ObjectGroup],
-) -> None:
-    """Process a body line (description or entry) within a group."""
-    desc_match = _DESCRIPTION_PATTERN.match(line)
-    if desc_match:
-        object_groups[current_name]["description"] = desc_match.group("desc").strip()
+        rmap_raw = pnode.setdefault("range", {})
+        if not isinstance(rmap_raw, dict):
+            return
+        rmap = cast(dict[str, object], rmap_raw)
+        rmap[str(port1)] = RangeEnd(end=str(port2))
+        return
+    if match_type and port1:
+        mmap_raw = pnode.setdefault(match_type, {})
+        if not isinstance(mmap_raw, dict):
+            return
+        mmap = cast(dict[str, object], mmap_raw)
+        mmap[str(port1)] = {}
         return
 
-    entry = _parse_entry(line, current_type)
-    if entry:
-        object_groups[current_name]["entries"].append(entry)
+    pnode["all"] = {}
+
+
+def _merge_service_into_group(group: ObjectGroup, line: str) -> None:
+    """Parse a service object-group line and merge into *group*."""
+    m = _GROUP_OBJECT_PATTERN.match(line)
+    if m:
+        group.setdefault("nested_groups", {})[m.group("name")] = {}
+        return
+
+    if _merge_icmp_service_line(group, line):
+        return
+
+    _merge_protocol_port_line(group, line)
 
 
 def _parse_object_groups(output: str) -> dict[str, ObjectGroup]:
-    """Parse all object groups from raw output.
-
-    Args:
-        output: Raw CLI output from 'show object-group' command.
-
-    Returns:
-        Dict of object groups keyed by name.
-    """
+    """Parse all object groups from raw output."""
     object_groups: dict[str, ObjectGroup] = {}
     current_name: str | None = None
     current_type: str | None = None
@@ -252,13 +200,28 @@ def _parse_object_groups(output: str) -> dict[str, ObjectGroup]:
         if not line.strip():
             continue
 
-        header = _process_header(line, object_groups)
-        if header:
-            current_name, current_type = header
+        header_match = _HEADER_PATTERN.match(line)
+        if header_match:
+            name = header_match.group("name")
+            group_type = header_match.group("type")
+            if name not in object_groups:
+                object_groups[name] = ObjectGroup(group_type=group_type)
+            current_name, current_type = name, group_type
             continue
 
-        if current_name is not None and current_type is not None:
-            _process_body_line(line, current_name, current_type, object_groups)
+        if current_name is None or current_type is None:
+            continue
+
+        desc_match = _DESCRIPTION_PATTERN.match(line)
+        if desc_match:
+            desc = desc_match.group("desc").strip()
+            object_groups[current_name]["description"] = desc
+            continue
+
+        if "Network" in current_type:
+            _merge_network_into_group(object_groups[current_name], line)
+        else:
+            _merge_service_into_group(object_groups[current_name], line)
 
     return object_groups
 
