@@ -5,7 +5,6 @@ from typing import Annotated, ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
-from muninn.patterns import MAC_ADDRESS
 from muninn.registry import register
 from muninn.schema_doc import SchemaDoc
 from muninn.tags import ParserTag
@@ -14,32 +13,46 @@ from muninn.utils import canonical_interface_name
 MacAddressString = Annotated[
     str,
     SchemaDoc(
-        "Spanning-tree bridge MAC in lowercase dotted-hex form "
-        "(e.g. '5c6e.f0a7.a0b0') as emitted by this parser."
+        "Root bridge MAC in dotted hex (three groups of four hex digits) "
+        "as in CLI output."
     ),
 ]
 
-VlanStpMapKey = Annotated[
+VlanIdKey = Annotated[
     str,
     SchemaDoc(
-        "VLAN ID string used as the mapping key: decimal digits taken from the "
-        "CLI VLAN label (e.g. VLAN0001 → '0001'). Leading zeros are preserved."
+        "VLAN id as a decimal string without leading zeros, derived from the "
+        "CLI VLAN label (e.g. VLAN0001 → '1')."
     ),
 ]
 
+# --- Column header pattern ---
+_HEADER_RE = re.compile(r"^Vlan\s+Root\s+ID\s+Cost\s+Time\s+Age\s+Dly\s+Root\s+Port")
 
-class RootId(TypedDict):
-    """Schema for the root bridge identifier."""
+# Data line: VLAN, priority, address, cost, hello, max age, fwd dly, port
+_DATA_RE = re.compile(
+    r"^(?P<vlan>\S+)\s+"
+    r"(?P<priority>\d+)\s+"
+    r"(?P<address>[0-9a-f]{4}\.[0-9a-f]{4}\.[0-9a-f]{4})\s+"
+    r"(?P<cost>\d+)\s+"
+    r"(?P<hello>\d+)\s+"
+    r"(?P<max_age>\d+)\s+"
+    r"(?P<fwd_delay>\d+)"
+    r"(?:\s+(?P<root_port>\S+))?\s*$"
+)
+
+
+class RootBridgeEntry(TypedDict):
+    """Schema for the root bridge identification."""
 
     priority: int
     address: MacAddressString
 
 
-class SpanningTreeRootEntry(TypedDict):
-    """Schema for a single VLAN spanning-tree root entry."""
+class VlanRootEntry(TypedDict):
+    """Schema for a single VLAN's spanning-tree root information."""
 
-    vlan_id: int
-    root_id: RootId
+    root_id: RootBridgeEntry
     root_cost: int
     hello_time: int
     max_age: int
@@ -48,32 +61,14 @@ class SpanningTreeRootEntry(TypedDict):
         Annotated[
             str,
             SchemaDoc(
-                "Local port toward the root bridge when this switch is not root; "
+                "Local port toward the root bridge when present; "
                 "canonical IOS interface name (e.g. 'Port-channel34')."
             ),
         ]
     ]
-    is_root: NotRequired[bool]
 
 
-class ShowSpanningTreeRootResult(TypedDict):
-    """Schema for 'show spanning-tree root' parsed output on IOS."""
-
-    vlans: dict[VlanStpMapKey, SpanningTreeRootEntry]
-
-
-# Data line: VLAN name, priority, MAC, cost, hello, max age, fwd dly, optional root port
-_DATA_RE = re.compile(
-    r"^(?P<vlan>VLAN\d+)\s+"
-    r"(?P<priority>\d+)\s+"
-    rf"(?P<address>{MAC_ADDRESS})\s+"
-    r"(?P<cost>\d+)\s+"
-    r"(?P<hello>\d+)\s+"
-    r"(?P<max_age>\d+)\s+"
-    r"(?P<fwd_delay>\d+)"
-    r"(?:\s+(?P<root_port>\S+))?\s*$",
-    re.IGNORECASE,
-)
+ShowSpanningTreeRootResult = dict[VlanIdKey, VlanRootEntry]
 
 
 @register(OS.CISCO_IOS, "show spanning-tree root")
@@ -105,51 +100,44 @@ class ShowSpanningTreeRootParser(BaseParser[ShowSpanningTreeRootResult]):
             output: Raw CLI output from 'show spanning-tree root' command.
 
         Returns:
-            Parsed spanning-tree root entries keyed by VLAN ID string (digits
-            from the ``VLAN####`` name, preserving leading zeros).
+            Dict keyed by VLAN ID with root bridge information.
 
         Raises:
-            ValueError: If no spanning-tree root entries found in output.
+            ValueError: If a data line cannot be parsed.
         """
-        vlans: dict[str, SpanningTreeRootEntry] = {}
+        result: ShowSpanningTreeRootResult = {}
 
         for line in output.splitlines():
-            match = _DATA_RE.match(line.strip())
+            match = _DATA_RE.match(line)
             if not match:
                 continue
 
             vlan_name = match.group("vlan")
-            vlan_digits = re.match(r"VLAN(?P<vid>\d+)", vlan_name, re.IGNORECASE)
-            if not vlan_digits:
+            # Extract numeric VLAN ID from names like "VLAN0001"
+            vlan_match = re.match(r"VLAN(\d+)", vlan_name, re.IGNORECASE)
+            if not vlan_match:
                 msg = f"Cannot extract VLAN ID from: {vlan_name}"
                 raise ValueError(msg)
 
-            vlan_id_str = vlan_digits.group("vid")
+            vlan_id = str(int(vlan_match.group(1)))
 
-            entry: SpanningTreeRootEntry = {
-                "vlan_id": int(vlan_id_str),
-                "root_id": RootId(
-                    priority=int(match.group("priority")),
-                    address=match.group("address").lower(),
-                ),
+            entry: VlanRootEntry = {
+                "root_id": {
+                    "priority": int(match.group("priority")),
+                    "address": match.group("address"),
+                },
                 "root_cost": int(match.group("cost")),
                 "hello_time": int(match.group("hello")),
                 "max_age": int(match.group("max_age")),
                 "forward_delay": int(match.group("fwd_delay")),
             }
 
-            root_port_raw = match.group("root_port")
-            if root_port_raw:
+            root_port = match.group("root_port")
+            if root_port:
                 entry["root_port"] = canonical_interface_name(
-                    root_port_raw, os=OS.CISCO_IOS
+                    root_port, os=OS.CISCO_IOS
                 )
-            else:
-                entry["is_root"] = True
 
-            vlans[vlan_id_str] = entry
+            result[vlan_id] = entry
 
-        if not vlans:
-            msg = "No spanning-tree root entries found in output"
-            raise ValueError(msg)
-
-        return ShowSpanningTreeRootResult(vlans=vlans)
+        return result
