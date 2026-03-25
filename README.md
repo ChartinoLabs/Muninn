@@ -12,9 +12,13 @@ Muninn is a library that transforms unstructured network device CLI output into 
 
 ## Installation
 
+Muninn can be quickly and easily installed with `uv` as shown below:
+
 ```bash
 uv add muninn-parsers
 ```
+
+Or, if you prefer good old-fashioned `pip`, you can do so as shown below:
 
 ```bash
 pip install muninn-parsers
