@@ -111,3 +111,14 @@ result = mn.parse("iosxe", "show clock", raw_output)
 ```
 
 See [Configuration](configuration.md) for all the ways to set parser paths.
+
+## Contributing Local Parsers Upstream
+
+If your local parser works well, consider contributing it back to Muninn. The gap between a working local parser and an upstream contribution is small -- the parsing logic itself doesn't need to change. You just need to add:
+
+1. **Tags** -- Built-in parsers require a non-empty `tags` set (local parsers don't). Add the appropriate `ParserTag` values to categorize your parser.
+2. **Test fixtures** -- Create a test case directory with `metadata.yaml`, `input.txt`, and `expected.json` so the parser is covered by CI.
+
+That's it. The `@register()` decorator, `BaseParser` subclass, and `TypedDict` schema you already wrote are exactly what the upstream project expects.
+
+See [Writing Parsers](../developer-guide/writing-parsers.md) and [Testing Parsers](../developer-guide/testing-parsers.md) for the full conventions.
