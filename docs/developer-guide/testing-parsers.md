@@ -92,6 +92,8 @@ dir crashinfo:
 
 ## Running Tests
 
+Parser tests are discovered and parametrized automatically. You can run all of them, or filter by OS or command name:
+
 ```bash
 # All parser tests
 uv run pytest tests/parsers/
