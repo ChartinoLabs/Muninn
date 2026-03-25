@@ -42,12 +42,11 @@ my-parsers/
 ```python
 """Parser for 'show custom command' on NX-OS."""
 
-from typing import ClassVar, TypedDict
+from typing import TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
-from muninn.tags import ParserTag
 
 
 class ShowCustomCommandResult(TypedDict):
@@ -60,8 +59,6 @@ class ShowCustomCommandResult(TypedDict):
 @register(OS.CISCO_NXOS, "show custom command")
 class ShowCustomCommandParser(BaseParser[ShowCustomCommandResult]):
     """Parser for 'show custom command'."""
-
-    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     @classmethod
     def parse(cls, output: str) -> ShowCustomCommandResult:
