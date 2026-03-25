@@ -11,15 +11,17 @@ The core workflow is simple: create a `Muninn` instance and call `parse()` with 
 3. **Output** - the raw text output from the device
 
 ```python
+from typing import Any
+
 import muninn
 
-mn = muninn.Muninn()
+mn: muninn.Muninn = muninn.Muninn()
 
-raw_output = """
+raw_output: str = """
 *04:45:00.857 UTC Thu Aug 7 2025
 """
 
-result = mn.parse("iosxe", "show clock", raw_output)
+result: dict[str, Any] = mn.parse("iosxe", "show clock", raw_output)
 print(result)
 # {'time': '04:45:00.857', 'timezone': 'UTC', 'day_of_week': 'Thu',
 #  'month': 'Aug', 'day': '7', 'year': '2025'}
@@ -49,9 +51,11 @@ mn.parse(OS.CISCO_NXOS, "show clock", output)
 For one-off parsing without managing an instance:
 
 ```python
+from typing import Any
+
 import muninn
 
-result = muninn.Muninn.parse("iosxe", "show clock", raw_output)
+result: dict[str, Any] = muninn.Muninn.parse("iosxe", "show clock", raw_output)
 ```
 
 ## Handling Errors
@@ -59,12 +63,14 @@ result = muninn.Muninn.parse("iosxe", "show clock", raw_output)
 Muninn raises specific exceptions for different failure modes:
 
 ```python
-from muninn import Muninn, ParserNotFoundError, ParseError, EmptyOutputError
+from typing import Any
 
-mn = Muninn()
+from muninn import EmptyOutputError, Muninn, ParseError, ParserNotFoundError
+
+mn: Muninn = Muninn()
 
 try:
-    result = mn.parse("iosxe", "show clock", raw_output)
+    result: dict[str, Any] = mn.parse("iosxe", "show clock", raw_output)
 except EmptyOutputError:
     print("Device returned empty output")
 except ParserNotFoundError:
@@ -78,17 +84,22 @@ except ParseError:
 To see what parsers are registered:
 
 ```python
-mn = muninn.Muninn()
+from muninn import Muninn
+from muninn.os import OS
 
-for os, command in mn.registry.list_parsers():
-    print(f"{os.value.name}: {command}")
+mn: Muninn = Muninn()
+
+for os_entry, command in mn.registry.list_parsers():
+    print(f"{os_entry.value.name}: {command}")
 ```
 
 For richer metadata including tags:
 
 ```python
+from muninn.registry import ParserInfo
+
 for info in mn.registry.list_parser_catalog():
-    tags = ", ".join(sorted(info.tags))
+    tags: str = ", ".join(sorted(info.tags))
     print(f"{info.os.value.name}: {info.command_template} [{tags}]")
 ```
 
