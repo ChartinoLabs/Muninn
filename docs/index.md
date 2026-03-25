@@ -14,7 +14,11 @@ Muninn transforms unstructured CLI output from network devices into structured P
 - **Type-aware** - Import individual parsers to get `TypedDict` return types that describe the parsed data structure, enabling IDE autocompletion and better AI-assisted coding.
 - **Extensible** - Load your own local parsers alongside built-in ones.
 
-## Quick Example
+## Quick Examples
+
+### Using the Runtime
+
+The simplest way to use Muninn is through the `Muninn` runtime. Pass an OS identifier, the CLI command, and the raw output - Muninn automatically discovers and runs the right parser:
 
 ```python
 import muninn
@@ -53,7 +57,7 @@ Returns:
 
 ### Using a Parser Directly
 
-Import a specific parser to get full type information on the parsed result:
+You can also import a specific parser and call it directly. This gives you access to the parser's `TypedDict` return type, which enables IDE autocompletion and helps AI coding assistants reason about the structure of the parsed data:
 
 ```python
 from muninn.parsers.nxos.show_ip_ospf_neighbor import (
