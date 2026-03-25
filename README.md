@@ -82,11 +82,12 @@ Fallback occurs when a parser raises an exception, returns `None`, or returns `{
 
 ## Documentation
 
-- [Design Philosophy](docs/design.md) - Core philosophy, design decisions, and comparison with alternatives
+Full documentation is available at **[chartinolabs.github.io/Muninn](https://chartinolabs.github.io/Muninn/)**.
+
 - [Changelog](CHANGELOG.md) - Release history built from changelog fragments
 - [Changelog Fragments Guide](changes/README.md) - How to add release-note fragments
 - [Releasing](RELEASING.md) - How to compile release notes and cut a release
 
 ## Status
 
-Early development. See the design principles document for project direction.
+Early development. See the [Design Philosophy](https://chartinolabs.github.io/Muninn/design/) page for project direction.
