@@ -95,9 +95,9 @@ mn.load_local_parsers(paths=["/path/to/my-parsers"])
 
 For more information on how to configure the execution mode, see the [`parser_execution_mode`](configuration.md#parser_execution_mode) section of the Configuration page.
 
-## Typical Setup Pattern
+## Loading Local Parsers at Startup
 
-Most applications load local parsers once at startup:
+Most applications load local parsers once at startup, then use the same `Muninn` instance throughout:
 
 ```python
 import muninn
@@ -109,7 +109,7 @@ mn.load_local_parsers()
 result = mn.parse("iosxe", "show clock", raw_output)
 ```
 
-See [Configuration](configuration.md) for all the ways to set parser paths.
+For details on how to configure parser search paths via environment variables, `pyproject.toml`, or the API, see the [`parser_paths`](configuration.md#parser_paths) section of the Configuration page.
 
 ## Contributing Local Parsers Upstream
 
