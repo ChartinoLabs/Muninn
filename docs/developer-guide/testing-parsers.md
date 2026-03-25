@@ -77,11 +77,17 @@ When the real command contains characters that don't work in directory names, ad
 
 ```
 tests/parsers/iosxe/dir_crashinfo/
-├── command.txt          # contains: dir crashinfo:
+├── command.txt
 └── 001_basic/
     ├── metadata.yaml
     ├── input.txt
     └── expected.json
+```
+
+The `command.txt` file contains the exact command string, nothing else:
+
+```
+dir crashinfo:
 ```
 
 ## Running Tests
