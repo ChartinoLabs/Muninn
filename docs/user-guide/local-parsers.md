@@ -93,6 +93,8 @@ mn.configuration.set_execution_mode(muninn.ExecutionMode.LOCAL_ONLY)
 mn.load_local_parsers(paths=["/path/to/my-parsers"])
 ```
 
+For more information on how to configure the execution mode, see the [`parser_execution_mode`](configuration.md#parser_execution_mode) section of the Configuration page.
+
 ## Typical Setup Pattern
 
 Most applications load local parsers once at startup:
