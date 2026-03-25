@@ -86,6 +86,6 @@ Browse all available parsers in the [Parser Library](library.md).
 
 ## Next Steps
 
-- [Installation](getting-started/installation.md) - Install Muninn via pip or uv
+- [Installation](getting-started/installation.md) - Install Muninn via `pip` or `uv`
 - [Quick Start](getting-started/quickstart.md) - Walk through the basics of parsing CLI output
 - [Configuration](user-guide/configuration.md) - Customize execution mode, parser paths, and fallback behavior
