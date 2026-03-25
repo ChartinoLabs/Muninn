@@ -4,7 +4,7 @@ A standalone CLI output parser library for network devices.
 
 ---
 
-Muninn transforms unstructured CLI output from network devices into structured Python dictionaries. Named after Odin's raven of memory in Norse mythology, Muninn "remembers" how to parse CLI output into structured data.
+Muninn transforms unstructured CLI output from network devices into structured Python dictionaries.
 
 ## Why Muninn?
 
