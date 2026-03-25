@@ -127,7 +127,7 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  var dataUrl = "catalog-data.json";
+  var dataUrl = "../catalog-data.json";
 
   fetch(dataUrl)
     .then(function (r) { return r.json(); })
