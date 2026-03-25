@@ -48,7 +48,7 @@ This matches concrete commands like `show ip ospf 1` and `show ip ospf 100`.
 
 ### Full-Command Matching
 
-Muninn always matches against the entire normalized command. You don't need anchors -- these behave identically:
+Muninn always matches against the entire normalized command. You don't need anchors -these behave identically:
 
 ```python
 @register(OS.CISCO_IOS, r"show ip ospf (?P<process_id>\d+)")
@@ -67,7 +67,7 @@ An exact command always wins over a broader pattern.
 If more than one regex pattern matches within the same source tier, Muninn raises `ParserAmbiguityError` instead of guessing:
 
 ```python
-# These both match "show ip ospf 5" -- Muninn raises an error
+# These both match "show ip ospf 5" - Muninn raises an error
 @register(OS.CISCO_IOS, r"show ip ospf (?P<token>\S+)")
 class GenericParser(BaseParser): ...
 

@@ -106,6 +106,6 @@ uv run pytest tests/parsers/ -v
 
 When contributing test data:
 
-1. **Sanitize production data** -- Remove hostnames, IP addresses, and other sensitive information
-2. **Include metadata** -- All required fields must be populated (use "Unknown" when provenance is unavailable)
-3. **Verify accuracy** -- Ensure `expected.json` matches what the parser should produce
+1. **Sanitize production data** -Remove hostnames, IP addresses, and other sensitive information
+2. **Include metadata** -All required fields must be populated (use "Unknown" when provenance is unavailable)
+3. **Verify accuracy** -Ensure `expected.json` matches what the parser should produce

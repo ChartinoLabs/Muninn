@@ -83,8 +83,8 @@ Controls which parser Muninn prefers when both a built-in parser and a local par
 
 Controls what happens when a parser returns no useful data (`None` or `{}`).
 
-- **`true`** (default) -- Muninn tries the next eligible parser. This is usually what you want for resilience.
-- **`false`** -- Only raised exceptions trigger fallback. An empty return is treated as the final result.
+- **`true`** (default) -Muninn tries the next eligible parser. This is usually what you want for resilience.
+- **`false`** -Only raised exceptions trigger fallback. An empty return is treated as the final result.
 
 === "Environment Variable"
 

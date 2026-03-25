@@ -116,7 +116,7 @@ Use nested dictionaries for hierarchical data rather than composite string keys:
     }
 }
 
-# Avoid -- composite key encodes multiple dimensions
+# Avoid - composite key encodes multiple dimensions
 {
     "GigabitEthernet0/1|5": {"state": "Active", "priority": 110}
 }
@@ -149,9 +149,9 @@ src/muninn/parsers/
     └── __init__.py
 ```
 
-Parsers are auto-discovered at import time. Adding a new file is all that's needed -- no `__init__.py` registration required.
+Parsers are auto-discovered at import time. Adding a new file is all that's needed -no `__init__.py` registration required.
 
 ## Next Steps
 
-- [Parser Registration](parser-registration.md) -- Literal vs regex command registration
-- [Testing Parsers](testing-parsers.md) -- How to write test fixtures
+- [Parser Registration](parser-registration.md) -Literal vs regex command registration
+- [Testing Parsers](testing-parsers.md) -How to write test fixtures

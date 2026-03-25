@@ -70,7 +70,7 @@ class ShowCustomCommandParser(BaseParser[ShowCustomCommandResult]):
 ```
 
 !!! note
-    Local parsers do not need to define `tags` -- the tags requirement only applies to built-in parsers.
+    Local parsers do not need to define `tags` -the tags requirement only applies to built-in parsers.
 
 ## Execution Modes
 
@@ -114,10 +114,10 @@ See [Configuration](configuration.md) for all the ways to set parser paths.
 
 ## Contributing Local Parsers Upstream
 
-If your local parser works well, consider contributing it back to Muninn. The gap between a working local parser and an upstream contribution is small -- the parsing logic itself doesn't need to change. You just need to add:
+If your local parser works well, consider contributing it back to Muninn. The gap between a working local parser and an upstream contribution is small -the parsing logic itself doesn't need to change. You just need to add:
 
-1. **Tags** -- Built-in parsers require a non-empty `tags` set (local parsers don't). Add the appropriate `ParserTag` values to categorize your parser.
-2. **Test fixtures** -- Create a test case directory with `metadata.yaml`, `input.txt`, and `expected.json` so the parser is covered by CI.
+1. **Tags** -Built-in parsers require a non-empty `tags` set (local parsers don't). Add the appropriate `ParserTag` values to categorize your parser.
+2. **Test fixtures** -Create a test case directory with `metadata.yaml`, `input.txt`, and `expected.json` so the parser is covered by CI.
 
 That's it. The `@register()` decorator, `BaseParser` subclass, and `TypedDict` schema you already wrote are exactly what the upstream project expects.
 
