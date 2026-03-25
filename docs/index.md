@@ -8,11 +8,11 @@ Muninn transforms unstructured CLI output from network devices into structured P
 
 ## Why Muninn?
 
-- **Standalone** -No framework dependencies. Install and use it in any Python project.
-- **Simple API** -`Muninn().parse(os, command, output)` and you're done.
-- **Well-tested** -Every parser has test cases with platform and software version metadata.
-- **Type-aware** -Import individual parsers to get `TypedDict` return types that describe the parsed data structure, enabling IDE autocompletion and better AI-assisted coding.
-- **Extensible** -Load your own local parsers alongside built-in ones.
+- **Standalone** - No framework dependencies. Install and use it in any Python project.
+- **Simple API** - `Muninn().parse(os, command, output)` and you're done.
+- **Well-tested** - Every parser has test cases with platform and software version metadata.
+- **Type-aware** - Import individual parsers to get `TypedDict` return types that describe the parsed data structure, enabling IDE autocompletion and better AI-assisted coding.
+- **Extensible** - Load your own local parsers alongside built-in ones.
 
 ## Quick Example
 

@@ -36,5 +36,5 @@ print(muninn.__version__)
 
 Muninn has minimal dependencies:
 
-- [netutils](https://netutils.readthedocs.io/) -Network utility functions
-- [pydantic-settings](https://docs.pydantic.dev/latest/concepts/pydantic_settings/) -Configuration management
+- [netutils](https://netutils.readthedocs.io/) - Network utility functions
+- [pydantic-settings](https://docs.pydantic.dev/latest/concepts/pydantic_settings/) - Configuration management

@@ -6,9 +6,9 @@ This guide walks through the basics of using Muninn to parse network device CLI 
 
 The core workflow is simple: create a `Muninn` instance and call `parse()` with three arguments:
 
-1. **OS identifier** -which network operating system produced the output
-2. **Command** -the CLI command that was run
-3. **Output** -the raw text output from the device
+1. **OS identifier** - which network operating system produced the output
+2. **Command** - the CLI command that was run
+3. **Output** - the raw text output from the device
 
 ```python
 import muninn
@@ -94,6 +94,6 @@ for info in mn.registry.list_parser_catalog():
 
 ## Next Steps
 
-- [Configuration](../user-guide/configuration.md) -Customize execution mode and parser paths
-- [Local Parsers](../user-guide/local-parsers.md) -Load your own parser modules
-- [Parser Library](../library.md) -Browse all available parsers
+- [Configuration](../user-guide/configuration.md) - Customize execution mode and parser paths
+- [Local Parsers](../user-guide/local-parsers.md) - Load your own parser modules
+- [Parser Library](../library.md) - Browse all available parsers

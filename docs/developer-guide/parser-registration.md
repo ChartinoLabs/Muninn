@@ -48,7 +48,7 @@ This matches concrete commands like `show ip ospf 1` and `show ip ospf 100`.
 
 ### Full-Command Matching
 
-Muninn always matches against the entire normalized command. You don't need anchors -these behave identically:
+Muninn always matches against the entire normalized command. You don't need anchors - these behave identically:
 
 ```python
 @register(OS.CISCO_IOS, r"show ip ospf (?P<process_id>\d+)")
