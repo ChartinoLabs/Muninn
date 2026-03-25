@@ -134,17 +134,19 @@ class ShowClockParser(BaseParser[ShowClockResult]):
     ...
 ```
 
+When a parser covers multiple operating systems, place the file under the OS directory you consider the primary target. For example, a `show clock` parser that covers IOS-XE, IOS, and NX-OS lives in `iosxe/show_clock.py` - there's no need to duplicate the file across OS directories. If a different OS later needs divergent parsing logic, that's when you'd create a separate parser file under the other OS directory.
+
 ## File Placement
 
 ```
 src/muninn/parsers/
 ├── iosxe/
 │   ├── __init__.py
-│   ├── show_clock.py
+│   ├── show_clock.py      # registers for IOS-XE, IOS, and NX-OS
 │   └── show_privilege.py
 ├── nxos/
 │   ├── __init__.py
-│   └── show_clock.py     # if NX-OS needs a separate parser
+│   └── show_clock.py      # only needed if NX-OS requires different parsing logic
 └── ios/
     └── __init__.py
 ```
