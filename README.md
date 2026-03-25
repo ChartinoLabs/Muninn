@@ -2,16 +2,19 @@
 
 Muninn is a library that transforms unstructured network device CLI output into structured, type-hinted Python data structures.
 
-## Design Goals
+## Why Muninn?
 
-- **Standalone**: No framework dependencies. Just `pip install muninn` and use it.
-- **Simple API**: `Muninn().parse(os, command, output)` → `dict`
-- **Well-tested**: Comprehensive test coverage with platform/version metadata
-- **Type-aware**: Native Python type hints for clarity
+- **Standalone** - No framework dependencies. Install and use it in any Python project.
+- **Simple API** - `Muninn().parse(os, command, output)` and you're done.
+- **Well-tested** - Every parser has test cases with platform and software version metadata.
+- **Type-aware** - Import individual parsers to get `TypedDict` return types that describe the parsed data structure, enabling IDE autocompletion and better AI-assisted coding.
+- **Extensible** - Load your own local parsers alongside built-in ones.
 
 ## Quick Example
 
 ```python
+from typing import Any
+
 import muninn
 
 mn = muninn.Muninn()
@@ -22,8 +25,7 @@ Neighbor ID     Pri   State           Dead Time   Address         Interface
 10.1.1.2          1   FULL/BDR        00:00:33    192.168.1.2     Ethernet1/2
 """
 
-result = mn.parse("nxos", "show ip ospf neighbor", raw_output)
-# Returns structured dict keyed by neighbor ID
+result: dict[str, Any] = mn.parse("nxos", "show ip ospf neighbor", raw_output)
 ```
 
 ## Documentation
