@@ -10,6 +10,16 @@ Muninn is a library that transforms unstructured network device CLI output into 
 - **Type-aware** - Import individual parsers to get `TypedDict` return types that describe the parsed data structure, enabling IDE autocompletion and better AI-assisted coding.
 - **Extensible** - Load your own local parsers alongside built-in ones.
 
+## Installation
+
+```bash
+uv add muninn-parsers
+```
+
+```bash
+pip install muninn-parsers
+```
+
 ## Quick Examples
 
 ### Auto-Discovering Parsers
