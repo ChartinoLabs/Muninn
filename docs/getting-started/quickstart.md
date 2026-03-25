@@ -89,6 +89,8 @@ from muninn.os import OS
 
 mn: Muninn = Muninn()
 
+os_entry: OS
+command: str
 for os_entry, command in mn.registry.list_parsers():
     print(f"{os_entry.value.name}: {command}")
 ```
@@ -98,6 +100,7 @@ For richer metadata including tags:
 ```python
 from muninn.registry import ParserInfo
 
+info: ParserInfo
 for info in mn.registry.list_parser_catalog():
     tags: str = ", ".join(sorted(info.tags))
     print(f"{info.os.value.name}: {info.command_template} [{tags}]")
