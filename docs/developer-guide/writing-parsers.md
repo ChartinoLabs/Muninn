@@ -78,13 +78,13 @@ class ShowClockResult(TypedDict):
 
 ### Tags
 
-Built-in parsers **must** define a non-empty `tags` set. Tags categorize parsers for browsing and filtering in the parser library.
+Built-in parsers **must** define a non-empty `tags` set using one or more values from the `ParserTag` enum. Tags categorize parsers for browsing and filtering in the parser library.
 
 ```python
 tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.OSPF, ParserTag.ROUTING})
 ```
 
-Available tags include: `AAA`, `ACL`, `ARP`, `BFD`, `BGP`, `CDP`, `Connectivity`, `DHCP`, `EIGRP`, `Environment`, `FHRP`, `Interfaces`, `Inventory`, `IS-IS`, `LAG`, `LLDP`, `Logging`, `MAC`, `MACsec`, `MPLS`, `Multicast`, `NAT`, `OSPF`, `Platform`, `PoE`, `QoS`, `Redundancy`, `Routing`, `SD-WAN`, `Security`, `SNMP`, `STP`, `Switching`, `System`, `Tracking`, `VLAN`, `vPC`, `VPN`, `VRF`, `VTP`, `VXLAN`.
+The full set of available tags is defined in `muninn.tags.ParserTag`. If you feel a tag is missing for your parser's feature area, you're welcome to add a new `ParserTag` value as part of your contribution.
 
 ### Dict-of-Dicts Output Pattern
 
