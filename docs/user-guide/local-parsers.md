@@ -10,7 +10,7 @@ Muninn supports loading parser modules from local project paths without modifyin
 
 ### From Configured Paths
 
-If parser paths are set via environment variable or `pyproject.toml`:
+If parser paths are set via environment variable or `pyproject.toml` (see [`parser_paths`](configuration.md#parser_paths)):
 
 ```python
 import muninn
