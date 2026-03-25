@@ -1,10 +1,6 @@
 # Muninn
 
-A standalone CLI output parser library for network devices.
-
----
-
-Muninn transforms unstructured CLI output from network devices into structured Python dictionaries.
+Muninn is a standalone library that transforms unstructured CLI output from network devices into structured Python dictionaries.
 
 ## Why Muninn?
 
