@@ -97,7 +97,10 @@ for os_entry, command in mn.registry.list_parsers():
 For richer metadata including tags:
 
 ```python
+from muninn import Muninn
 from muninn.registry import ParserInfo
+
+mn: Muninn = Muninn()
 
 info: ParserInfo
 for info in mn.registry.list_parser_catalog():
