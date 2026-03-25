@@ -1,5 +1,10 @@
 # Testing Parsers
 
+!!! warning "Test fixtures must use real device output"
+    Raw CLI output in `input.txt` files **must** come from a live network device, ideally untampered. This ensures that parsers are validated against real-world output, including quirks in formatting, whitespace, and edge cases that only appear on actual hardware.
+
+    **AI-generated CLI output is not acceptable.** Language models frequently produce output that looks plausible but differs from real device output in subtle ways. Contributions with signs of AI-generated test fixtures will not be accepted.
+
 Every parser must have test fixtures that prove it works with real device output. Tests are organized by OS and command, with metadata tracking platform and version coverage.
 
 ## Test Structure
