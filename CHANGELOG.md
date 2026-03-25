@@ -4,6 +4,102 @@ All notable changes to Muninn are documented in this file.
 
 <!-- towncrier release notes start -->
 
+## 0.2.0 - 2026-03-25
+
+### Added Parsers
+
+- Added parser support for `show controller ethernet-controller` on Cisco IOS-XE. ([#282](https://github.com/ChartinoLabs/Muninn/pull/282))
+- Added parser support for `show crypto ipsec sa detail` on Cisco IOS. ([#283](https://github.com/ChartinoLabs/Muninn/pull/283))
+- Added parser support for `show diagnostic status` on Cisco IOS-XE. ([#284](https://github.com/ChartinoLabs/Muninn/pull/284))
+- Added parser support for `show dlep clients` on Cisco IOS-XE. ([#285](https://github.com/ChartinoLabs/Muninn/pull/285))
+- Added parser support for `show dlep counters` on Cisco IOS-XE. ([#286](https://github.com/ChartinoLabs/Muninn/pull/286))
+- Added parser support for `show dlep neighbor` on Cisco IOS-XE. ([#287](https://github.com/ChartinoLabs/Muninn/pull/287))
+- Added parser support for `show dns-lookup cache` on Cisco IOS-XE. ([#288](https://github.com/ChartinoLabs/Muninn/pull/288))
+- Added parser support for `show endpoint-tracker records` on Cisco IOS-XE. ([#289](https://github.com/ChartinoLabs/Muninn/pull/289))
+- Added parser support for `show endpoint-tracker static-route` on Cisco IOS-XE. ([#290](https://github.com/ChartinoLabs/Muninn/pull/290))
+- Added parser support for `show esmc detail` on Cisco IOS-XE. ([#291](https://github.com/ChartinoLabs/Muninn/pull/291))
+- Added parser support for `show gnxi state` on Cisco IOS-XE. ([#292](https://github.com/ChartinoLabs/Muninn/pull/292))
+- Registered `show ip dhcp snooping binding` for Cisco IOS (shared parser with IOS-XE). ([#293](https://github.com/ChartinoLabs/Muninn/pull/293))
+- Added parser support for `show meraki connect` on Cisco IOS-XE. ([#294](https://github.com/ChartinoLabs/Muninn/pull/294))
+- Added parser support for `show meraki migration` on Cisco IOS-XE. ([#295](https://github.com/ChartinoLabs/Muninn/pull/295))
+- Added IOS-XE parser for `show netconf session`. ([#296](https://github.com/ChartinoLabs/Muninn/pull/296))
+- Added IOS-XE parser for `show netconf-yang datastores`. ([#297](https://github.com/ChartinoLabs/Muninn/pull/297))
+- Added IOS-XE parser for `show netconf-yang sessions`. ([#298](https://github.com/ChartinoLabs/Muninn/pull/298))
+- Added parser support for `show network-clocks synchronization` on Cisco IOS-XE. ([#299](https://github.com/ChartinoLabs/Muninn/pull/299))
+- Added parser support for `show ppp all` on Cisco IOS-XE. ([#300](https://github.com/ChartinoLabs/Muninn/pull/300))
+- Added IOS-XE parser for `show ppp statistics`. ([#301](https://github.com/ChartinoLabs/Muninn/pull/301))
+- Added parser support for `show pppatm session` on Cisco IOS-XE. ([#302](https://github.com/ChartinoLabs/Muninn/pull/302))
+- Added parser support for `show pppoe statistics` on Cisco IOS-XE. ([#303](https://github.com/ChartinoLabs/Muninn/pull/303))
+- Added parser support for `show radius statistics` on Cisco IOS-XE. ([#304](https://github.com/ChartinoLabs/Muninn/pull/304))
+- Added parser support for `show sdwan security-info` on Cisco IOS-XE. ([#309](https://github.com/ChartinoLabs/Muninn/pull/309))
+- Added parser support for `show sdwan software` on Cisco IOS-XE. ([#310](https://github.com/ChartinoLabs/Muninn/pull/310))
+- Added parser support for `show sdwan tenant-summary` on Cisco IOS-XE. ([#311](https://github.com/ChartinoLabs/Muninn/pull/311))
+- Added parser support for `show sdwan version` on Cisco IOS-XE. ([#312](https://github.com/ChartinoLabs/Muninn/pull/312))
+- Added IOS-XE parser for `show stack-power budgeting`. ([#313](https://github.com/ChartinoLabs/Muninn/pull/313))
+- Added IOS-XE parser for `show stack-power detail`. ([#314](https://github.com/ChartinoLabs/Muninn/pull/314))
+- Added IOS-XE parser for `show stackwise-virtual bandwidth`. ([#315](https://github.com/ChartinoLabs/Muninn/pull/315))
+- Added IOS-XE parser for `show stackwise-virtual dual-active-detection`. ([#316](https://github.com/ChartinoLabs/Muninn/pull/316))
+- Added IOS-XE parser for `show stackwise-virtual link`. ([#317](https://github.com/ChartinoLabs/Muninn/pull/317))
+- Added IOS-XE parser for `show stackwise-virtual neighbors`. ([#318](https://github.com/ChartinoLabs/Muninn/pull/318))
+- Added parser support for `show subscriber lite-session` on Cisco IOS-XE. ([#319](https://github.com/ChartinoLabs/Muninn/pull/319))
+- Added parser support for `show subscriber session` on Cisco IOS-XE. ([#320](https://github.com/ChartinoLabs/Muninn/pull/320))
+- Added parser support for `show subscriber statistics` on Cisco IOS-XE. ([#321](https://github.com/ChartinoLabs/Muninn/pull/321))
+
+### Updated Parsers
+
+- IOS-XE ``show ppp all`` now emits canonical interface names for each session row and dict key. ([#573](https://github.com/ChartinoLabs/Muninn/pull/573))
+- IOS-XE ``show pppatm session`` now emits canonical interface names for the ATM, VT, and VA columns. ([#574](https://github.com/ChartinoLabs/Muninn/pull/574))
+- Omit hyphen placeholder values for privacy protocol (and access-list) in IOS `show snmp user` output. ([#623](https://github.com/ChartinoLabs/Muninn/pull/623))
+- Omit `interface` on IOS-XE `show vpdn` sessions when the CLI prints `-` (no interface). ([#624](https://github.com/ChartinoLabs/Muninn/pull/624))
+- NX-OS ``show ip arp detail vrf all`` omits ``physical_interface`` when the CLI prints ``-`` (no resolved L2 interface). ([#625](https://github.com/ChartinoLabs/Muninn/pull/625))
+- Omit `up_time` on NX-OS `show ip ospf neighbor` when the CLI prints a hyphen placeholder. ([#626](https://github.com/ChartinoLabs/Muninn/pull/626))
+- IOS/IOS-XE ``show platform``: omit ``state`` when the device reports ``N/A`` for an empty module bay (unknown or blank slot type). ([#633](https://github.com/ChartinoLabs/Muninn/pull/633))
+- IOS-XE `show power inline priority`: omit `admin_priority` when the CLI prints `NA` / `N/A` / `n/a` (unset), instead of passing those strings through. ([#635](https://github.com/ChartinoLabs/Muninn/pull/635))
+- IOS-XE ``show pppatm session`` omits ``uniq_id`` and other columns when the CLI used NA-like placeholders with no semantic value. ([#636](https://github.com/ChartinoLabs/Muninn/pull/636))
+- IOS-XE `show radius statistics`: omit `auth` / `acct` keys when the device prints `NA` for non-applicable counters (see #637). ([#637](https://github.com/ChartinoLabs/Muninn/pull/637))
+- Omit VLAN field in IOS/IOS-XE `show mac address-table` output when the CLI uses dash placeholders instead of a VLAN id.
+
+### Fixed Parsers
+
+- NX-OS ``show vpc`` omits ``dual_active_excluded_vlans`` when the device prints ``-`` (no VLANs excluded). ([#627](https://github.com/ChartinoLabs/Muninn/pull/627))
+- IOS ``show authentication sessions`` and ``show access-session`` omit the ``method`` field when the CLI prints ``NA`` / ``N/A`` / ``n/a`` as an empty placeholder (instead of echoing those strings). ([#629](https://github.com/ChartinoLabs/Muninn/pull/629))
+- IOS / IOS-XE NAT translation parsers omit ``outside_local`` / ``outside_global`` when the CLI prints ``---`` instead of emitting ``N/A`` string values; hierarchical keys still use ``N/A`` for missing outside-global addressing. ([#630](https://github.com/ChartinoLabs/Muninn/pull/630))
+- IOS-XE ``show endpoint-tracker records`` omits ``endpoint_type``, ``threshold_ms``, ``multiplier``, and ``interval_s`` when the CLI prints ``NA`` / ``N/A`` / ``n/a`` as empty placeholders (e.g. tracker-group rows). ([#631](https://github.com/ChartinoLabs/Muninn/pull/631))
+- IOS-XE ``show network-clocks synchronization`` omits ``sig_type`` as well as ``esmc_tx`` / ``esmc_rx`` when the CLI prints ``NA`` / ``N/A`` / ``n/a`` as empty placeholders (in addition to ``-``). ([#655](https://github.com/ChartinoLabs/Muninn/pull/655))
+
+### Breaking Changes
+
+- IOS `show lldp neighbors detail` now nests `neighbors` as outer key (canonical local interface, or port id when absent) → chassis id → port id → entry, replacing the prior list-of-dicts shape. ([#587](https://github.com/ChartinoLabs/Muninn/pull/587))
+- IOS/IOS-XE ``show interfaces`` parser: ``port_channel.members`` is now a dict keyed by canonical interface name; each value holds ``duplex`` and ``speed`` only (the redundant ``interface`` field is removed). ([#588](https://github.com/ChartinoLabs/Muninn/pull/588))
+- IOS `show object-group` replaces flat `entries` lists with nested structures: network groups use `hosts`, `ranges`, `ipv4_networks` (CIDR keys), `ipv6_prefixes`, and `nested_groups`; service groups use a `protocols` tree plus `nested_groups` for `group-object` references. ([#589](https://github.com/ChartinoLabs/Muninn/pull/589))
+- IOS `show standby` now returns each group's `tracks` as nested mappings (`track_type` → `track_name` → track details) instead of a list of track objects. ([#590](https://github.com/ChartinoLabs/Muninn/pull/590))
+- `show standby brief` on IOS/IOS-XE now returns `interfaces` as a mapping of canonical interface name to `{ "groups": { group_number: HsrpGroupEntry, ... } }`, replacing the prior list of entries. ([#591](https://github.com/ChartinoLabs/Muninn/pull/591))
+- `show vlan` on IOS/IOS-XE now returns `private_vlans` as a mapping of secondary VLAN ID (string) to association details instead of a list. ([#592](https://github.com/ChartinoLabs/Muninn/pull/592))
+- `show interfaces` on IOS/IOS-XE now returns each port-channel's `members` as a mapping of interface name to duplex/speed details instead of a list. ([#593](https://github.com/ChartinoLabs/Muninn/pull/593))
+- IOS and IOS-XE `show mac address-table` now return `mac_table` as `vlan_key -> mac_address -> row`, with each row carrying `kind` (`unicast` or `multicast`) and no top-level `entries` / `multicast_entries` lists. ([#600](https://github.com/ChartinoLabs/Muninn/pull/600))
+- NX-OS `show mac address-table` now returns `mac_table` as `vlan_key -> mac_address -> row` (with `kind: unicast` on each row) instead of a flat list of entries. ([#601](https://github.com/ChartinoLabs/Muninn/pull/601))
+- IOS `show dot1x all` now maps `clients` by `session_id` (dict) instead of a list; `session_id` is not duplicated inside each client row. ([#602](https://github.com/ChartinoLabs/Muninn/pull/602))
+- IOS-XE `show netconf-yang sessions` now returns `sessions` as a dict keyed by session id; `session_id` is not repeated inside each session value. ([#603](https://github.com/ChartinoLabs/Muninn/pull/603))
+- IOS-XE `show policy-map interface` now nests `qos_set` as `type -> value -> { table?, packets_marked? }` instead of a list of QoS-set objects. ([#604](https://github.com/ChartinoLabs/Muninn/pull/604))
+- IOS-XE `show platform packet-trace statistics` now maps `punt_causes` and `drop_causes` by cause code (string keys); `code` is not repeated inside each cause value. ([#605](https://github.com/ChartinoLabs/Muninn/pull/605))
+- IOS-XE `show stackwise-virtual neighbors` parser now returns per-switch `ports` as a mapping of local interface name to `{ "remote_port": ... }` instead of a `port_pairs` list.
+- IOS-XE `show track` now nests `tracked_by` as protocol name → group id → interface → entry (replacing the prior list-of-dicts shape).
+- IOS/IOS-XE `show cdp neighbors detail` now nests `neighbors` as local interface → CDP device_id → outgoing port_id → entry (replacing both the prior list shape and a flat per-local-interface map). Each neighbor entry no longer repeats `local_interface`; use the top-level key path instead.
+- NX-OS `show cdp neighbors detail` now returns per-local-interface neighbors as a mapping keyed by `device_id` (with a `device_id|port_id` suffix when the same device appears twice on one interface) instead of a list.
+- NX-OS `show ipv6 interface brief` (including `vrf` variants) now returns per-interface global IPv6 addresses as a mapping of address string to optional metadata (e.g. `flags`) instead of a list of objects.
+- `show stackwise-virtual link` parser now returns per-switch `ports` as a mapping of interface name to status instead of a list.
+
+### Internal
+
+- Fixture interface-name checks now include Virtual-Access and Virtual-Template (``Vi``/``Vt`` abbreviations and full names). ([#582](https://github.com/ChartinoLabs/Muninn/pull/582))
+- Document nested dict preference for composite keys; CI rejects `|` in parser `expected.json` object keys. ([#620](https://github.com/ChartinoLabs/Muninn/pull/620))
+- Add CI tests that discourage placeholder strings (`-`, `---`, `NA`/`N/A`) in parser `expected.json` fixtures, with legacy exemptions. ([#621](https://github.com/ChartinoLabs/Muninn/pull/621))
+- Add MkDocs Material documentation site with interactive parser library, design philosophy, and CI/CD integration. ([#668](https://github.com/ChartinoLabs/Muninn/pull/668))
+- Link README to the documentation site. ([#669](https://github.com/ChartinoLabs/Muninn/pull/669))
+- Added a convention test for ``expected.json`` fixtures (keyed dicts vs list-of-dicts) with full-file exemptions listed in the test module.
+- Remove stale list-of-dicts exemption for `show standby brief` (fixture already nested dicts).
+
+
 ## 0.1.0 - 2026-03-19
 
 ### Added Parsers
