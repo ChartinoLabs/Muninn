@@ -3,7 +3,7 @@
 Muninn supports loading parser modules from local project paths without modifying the installed package. This is useful when you need to:
 
 - Parse commands not yet covered by built-in parsers
-- Override built-in parser behavior for your environment
+- Work around a bug in a built-in parser or override its behavior for your environment
 - Develop and test parsers before contributing them upstream
 
 ## Loading Local Parsers
