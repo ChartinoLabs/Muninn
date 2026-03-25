@@ -84,8 +84,7 @@ except ParseError:
 To see what parsers are registered:
 
 ```python
-from muninn import Muninn
-from muninn.os import OS
+from muninn import Muninn, OS
 
 mn: Muninn = Muninn()
 
