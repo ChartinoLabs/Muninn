@@ -143,6 +143,18 @@ document.addEventListener("DOMContentLoaded", function () {
   var sortCol = "command";
   var sortDir = "asc";
 
+  // Human-readable OS display names
+  var osDisplayNames = {
+    "cisco_ios": "Cisco IOS",
+    "cisco_iosxe": "Cisco IOS-XE",
+    "cisco_iosxr": "Cisco IOS-XR",
+    "cisco_nxos": "Cisco NX-OS"
+  };
+
+  function osLabel(os) {
+    return osDisplayNames[os] || os;
+  }
+
   // Load versions manifest
   fetch("versions.json")
     .then(function (r) { return r.json(); })
@@ -222,7 +234,7 @@ document.addEventListener("DOMContentLoaded", function () {
     osSet.forEach(function (os) {
       var opt = document.createElement("option");
       opt.value = os;
-      opt.textContent = os;
+      opt.textContent = osLabel(os);
       osFilter.appendChild(opt);
     });
 
@@ -259,7 +271,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var tr = document.createElement("tr");
 
     var tdOs = document.createElement("td");
-    tdOs.textContent = p.os;
+    tdOs.textContent = osLabel(p.os);
     tr.appendChild(tdOs);
 
     var tdCmd = document.createElement("td");
@@ -294,6 +306,7 @@ document.addEventListener("DOMContentLoaded", function () {
     filtered.sort(function (a, b) {
       var va = a[sortCol] || "";
       var vb = b[sortCol] || "";
+      if (sortCol === "os") { va = osLabel(va); vb = osLabel(vb); }
       if (Array.isArray(va)) va = va.join(", ");
       if (Array.isArray(vb)) vb = vb.join(", ");
       var cmp = va.localeCompare(vb);
