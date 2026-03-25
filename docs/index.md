@@ -16,9 +16,9 @@ Muninn transforms unstructured CLI output from network devices into structured P
 
 ## Quick Examples
 
-### Using the Runtime
+### Auto-Discovering Parsers
 
-The simplest way to use Muninn is through the `Muninn` runtime. Pass an OS identifier, the CLI command, and the raw output - Muninn automatically discovers and runs the right parser:
+Create a `Muninn` instance and call `parse()` with an OS identifier, the CLI command, and the raw output. Muninn automatically finds and runs the right parser:
 
 ```python
 import muninn
