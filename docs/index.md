@@ -21,6 +21,8 @@ Muninn transforms unstructured CLI output from network devices into structured P
 Create a `Muninn` instance and call `parse()` with an OS identifier, the CLI command, and the raw output. Muninn automatically finds and runs the right parser:
 
 ```python
+from typing import Any
+
 import muninn
 
 mn = muninn.Muninn()
@@ -31,7 +33,7 @@ Neighbor ID     Pri   State           Dead Time   Address         Interface
 10.1.1.2          1   FULL/BDR        00:00:33    192.168.1.2     Ethernet1/2
 """
 
-result = mn.parse("nxos", "show ip ospf neighbor", raw_output)
+result: dict[str, Any] = mn.parse("nxos", "show ip ospf neighbor", raw_output)
 ```
 
 Returns:
