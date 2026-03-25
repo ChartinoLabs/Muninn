@@ -1,0 +1,30 @@
+---
+name: Deploy documentation
+on: # yamllint disable-line rule:truthy
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+permissions:
+  contents: write
+concurrency:
+  group: docs-deploy
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup-python-uv
+        with:
+          python-version: "3.13"
+      - name: Install docs dependencies
+        run: uv sync --group docs
+      - name: Generate parser library data
+        run: uv run python scripts/generate_catalog.py
+      - name: Deploy to GitHub Pages
+        run: uv run mkdocs gh-deploy --force
