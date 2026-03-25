@@ -39,7 +39,7 @@ def main() -> None:
 
     unique.sort(key=lambda e: (e["os"], e["command"]))
 
-    output_path = Path(__file__).resolve().parent.parent / "site" / "catalog-data.json"
+    output_path = Path(__file__).resolve().parent.parent / "docs" / "catalog-data.json"
     output_path.write_text(json.dumps(unique, indent=2) + "\n")
 
     logger = logging.getLogger(__name__)
