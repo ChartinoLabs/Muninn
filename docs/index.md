@@ -60,4 +60,4 @@ Returns:
 | Cisco IOS | `ios`, `cisco_ios` |
 | Cisco IOS-XR | `iosxr`, `cisco_iosxr`, `ios-xr` |
 
-Browse all available parsers in the [Parser Catalog](catalog.md).
+Browse all available parsers in the [Parser Library](library.md).

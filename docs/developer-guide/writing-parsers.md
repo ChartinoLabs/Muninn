@@ -78,7 +78,7 @@ class ShowClockResult(TypedDict):
 
 ### Tags
 
-Built-in parsers **must** define a non-empty `tags` set. Tags categorize parsers for catalog browsing and filtering.
+Built-in parsers **must** define a non-empty `tags` set. Tags categorize parsers for browsing and filtering in the parser library.
 
 ```python
 tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.OSPF, ParserTag.ROUTING})

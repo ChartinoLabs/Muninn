@@ -96,4 +96,4 @@ for info in mn.registry.list_parser_catalog():
 
 - [Configuration](../user-guide/configuration.md) -- Customize execution mode and parser paths
 - [Local Parsers](../user-guide/local-parsers.md) -- Load your own parser modules
-- [Parser Catalog](../catalog.md) -- Browse all available parsers
+- [Parser Library](../library.md) -- Browse all available parsers

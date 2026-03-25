@@ -1,4 +1,4 @@
-# Parser Catalog
+# Parser Library
 
 Browse all parsers available in Muninn. Use the search box and filters to find parsers by command, OS, or feature tag.
 
