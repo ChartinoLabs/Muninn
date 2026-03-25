@@ -126,3 +126,19 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Run unit tests with pytest
         run: uv run pytest --cov=src --cov-report=term-missing
+  docs-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup-python-uv
+        with:
+          python-version: "3.13"
+      - name: Install docs dependencies
+        run: uv sync --group docs
+      - name: Generate parser library data
+        run: uv run python scripts/generate_catalog.py
+      - name: Build docs (strict)
+        run: uv run mkdocs build --strict
