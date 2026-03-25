@@ -56,14 +56,19 @@ Returns:
 Import a specific parser to get full type information on the parsed result:
 
 ```python
-from muninn.parsers.iosxe.show_clock import ShowClockParser, ShowClockResult
+from muninn.parsers.nxos.show_ip_ospf_neighbor import (
+    ShowIpOspfNeighborParser,
+    ShowIpOspfNeighborResult,
+)
 
 raw_output = """
-*04:45:00.857 UTC Thu Aug 7 2025
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+10.1.1.1          1   FULL/DR         00:00:38    192.168.1.1     Ethernet1/1
+10.1.1.2          1   FULL/BDR        00:00:33    192.168.1.2     Ethernet1/2
 """
 
-result: ShowClockResult = ShowClockParser.parse(raw_output)
-print(result["timezone"])  # "UTC" - IDE autocompletion and type checking work here
+result: ShowIpOspfNeighborResult = ShowIpOspfNeighborParser.parse(raw_output)
+# IDE autocompletion and type checking work here
 ```
 
 ## Supported Platforms
