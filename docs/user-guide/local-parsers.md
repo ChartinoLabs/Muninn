@@ -71,7 +71,7 @@ class ShowCustomCommandParser(BaseParser[ShowCustomCommandResult]):
 
 ## Execution Modes
 
-When both a built-in and local parser exist for the same OS/command, the execution mode determines priority:
+When both a built-in and local parser exist for the same OS/command, the [execution mode](configuration.md#parser_execution_mode) determines priority:
 
 | Mode | Behavior |
 |------|----------|
