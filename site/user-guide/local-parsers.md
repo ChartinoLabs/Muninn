@@ -1,0 +1,113 @@
+# Local Parsers
+
+Muninn supports loading parser modules from local project paths without modifying the installed package. This is useful when you need to:
+
+- Parse commands not yet covered by built-in parsers
+- Override built-in parser behavior for your environment
+- Develop and test parsers before contributing them upstream
+
+## Loading Local Parsers
+
+### From Configured Paths
+
+If parser paths are set via environment variable or `pyproject.toml`:
+
+```python
+import muninn
+
+mn = muninn.Muninn()
+mn.load_local_parsers()  # loads from configured parser_paths
+
+result = mn.parse("nxos", "show ip ospf neighbor", raw_output)
+```
+
+### From Explicit Paths
+
+Pass paths directly to `load_local_parsers()`:
+
+```python
+mn = muninn.Muninn()
+mn.load_local_parsers(paths=["/path/to/my-parsers"])
+```
+
+## Writing a Local Parser
+
+Local parsers follow the same structure as built-in parsers. Create a Python file in your local parser directory:
+
+```
+my-parsers/
+└── show_custom_command.py
+```
+
+```python
+"""Parser for 'show custom command' on NX-OS."""
+
+from typing import ClassVar, TypedDict
+
+from muninn.os import OS
+from muninn.parser import BaseParser
+from muninn.registry import register
+from muninn.tags import ParserTag
+
+
+class ShowCustomCommandResult(TypedDict):
+    """Schema for parsed output."""
+
+    status: str
+    count: int
+
+
+@register(OS.CISCO_NXOS, "show custom command")
+class ShowCustomCommandParser(BaseParser[ShowCustomCommandResult]):
+    """Parser for 'show custom command'."""
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
+
+    @classmethod
+    def parse(cls, output: str) -> ShowCustomCommandResult:
+        # Your parsing logic here
+        ...
+```
+
+!!! note
+    Local parsers do not need to define `tags` -- the tags requirement only applies to built-in parsers.
+
+## Execution Modes
+
+When both a built-in and local parser exist for the same OS/command, the execution mode determines priority:
+
+| Mode | Behavior |
+|------|----------|
+| `local_first_fallback` (default) | Local parser runs first; built-in is tried on failure |
+| `centralized_first_fallback` | Built-in parser runs first; local is tried on failure |
+| `local_only` | Only local parsers are considered |
+
+Fallback is triggered when a parser:
+
+- Raises an exception
+- Returns `None`
+- Returns `{}` (when `fallback_on_invalid_result` is enabled)
+
+```python
+import muninn
+
+mn = muninn.Muninn()
+mn.configuration.set_execution_mode(muninn.ExecutionMode.LOCAL_ONLY)
+mn.load_local_parsers(paths=["/path/to/my-parsers"])
+```
+
+## Typical Setup Pattern
+
+Most applications load local parsers once at startup:
+
+```python
+import muninn
+
+mn = muninn.Muninn()
+mn.load_local_parsers()
+
+# Use mn.parse() throughout your application
+result = mn.parse("iosxe", "show clock", raw_output)
+```
+
+See [Configuration](configuration.md) for all the ways to set parser paths.
