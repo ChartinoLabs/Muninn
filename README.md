@@ -30,56 +30,6 @@ result = mn.parse("nxos", "show ip ospf neighbor", raw_output)
 # Returns structured dict keyed by neighbor ID
 ```
 
-## Configuration
-
-Muninn supports three configuration sources in descending precedence:
-
-1. API overrides
-2. Environment variables
-3. `[tool.muninn]` in `pyproject.toml`
-
-## Local Parser Overlays
-
-Muninn supports loading parser modules from local project paths without modifying the
-installed package.
-
-```python
-import muninn
-
-mn = muninn.Muninn()
-mn.load_local_parsers(paths=["/path/to/local-parsers"])
-result = mn.parse("nxos", "show ip ospf neighbor", raw_output)
-```
-
-You can also use the class-level convenience call:
-
-```python
-result = muninn.Muninn.parse("nxos", "show ip ospf neighbor", raw_output)
-```
-
-When both built-in and local parsers exist for the same OS and command, execution
-behavior is controlled by `ExecutionMode`:
-
-- `ExecutionMode.LOCAL_FIRST_FALLBACK` (default)
-- `ExecutionMode.CENTRALIZED_FIRST_FALLBACK`
-- `ExecutionMode.LOCAL_ONLY`
-
-```python
-import muninn
-
-mn = muninn.Muninn()
-mn.configuration.set_execution_mode(muninn.ExecutionMode.LOCAL_ONLY)
-```
-
-Fallback occurs when a parser raises an exception, returns `None`, or returns `{}`.
-
-### Environment Variables
-
-- `MUNINN_PARSER_PATHS`: parser search paths separated by `:` (or platform path separator)
-- `MUNINN_PARSER_EXECUTION_MODE`: one of `centralized_first_fallback`,
-  `local_first_fallback`, `local_only`
-- `MUNINN_FALLBACK_ON_INVALID_RESULT`: boolean toggle for fallback on `None` / `{}`
-
 ## Documentation
 
 Full documentation is available at **[chartinolabs.github.io/Muninn](https://chartinolabs.github.io/Muninn/)**.
