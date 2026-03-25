@@ -51,6 +51,21 @@ Returns:
 }
 ```
 
+### Using a Parser Directly
+
+Import a specific parser to get full type information on the parsed result:
+
+```python
+from muninn.parsers.iosxe.show_clock import ShowClockParser, ShowClockResult
+
+raw_output = """
+*04:45:00.857 UTC Thu Aug 7 2025
+"""
+
+result: ShowClockResult = ShowClockParser.parse(raw_output)
+print(result["timezone"])  # "UTC" - IDE autocompletion and type checking work here
+```
+
 ## Supported Platforms
 
 | Platform | OS Aliases |
