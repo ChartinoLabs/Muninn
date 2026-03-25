@@ -70,7 +70,7 @@ class ShowCustomCommandParser(BaseParser[ShowCustomCommandResult]):
 ```
 
 !!! note
-    Local parsers do not need to define `tags` - the tags requirement only applies to built-in parsers.
+    Local parsers do not need to define `tags` - the tags requirement only applies to built-in parsers. If you plan to [contribute your parser upstream](#contributing-local-parsers-upstream), you will need to add tags. See [Tags](../developer-guide/writing-parsers.md#tags) for the full list of available values.
 
 ## Execution Modes
 
