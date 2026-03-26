@@ -129,7 +129,12 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
 </style>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+// Use an IIFE instead of DOMContentLoaded — MkDocs Material's instant
+// navigation (XHR page swaps) never re-fires DOMContentLoaded, so the
+// catalog wouldn't initialise on first visit via an in-site link.
+// The inline script sits below the HTML it references, so the elements
+// already exist when this executes.
+;(function () {
   var versionSelect = document.getElementById("catalog-version");
   var search = document.getElementById("catalog-search");
   var osFilter = document.getElementById("catalog-os-filter");
@@ -352,5 +357,5 @@ document.addEventListener("DOMContentLoaded", function () {
       render();
     });
   });
-});
+})();
 </script>
