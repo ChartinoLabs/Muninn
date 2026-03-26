@@ -164,6 +164,12 @@ def _parse_counters_and_timers(line: str, entry: BfdSessionEntry) -> None:
         entry["round_trip_timer_ms"] = int(m.group(1))
 
 
+def _ensure_timers(entry: BfdSessionEntry) -> BfdTimers:
+    if "timers" not in entry:
+        entry["timers"] = BfdTimers(tx_interval_ms=0, rx_interval_ms=0, multiplier=0)
+    return entry["timers"]
+
+
 def _parse_bfd_intervals(line: str, entry: BfdSessionEntry) -> None:
     """Parse MinTxInt, MinRxInt, Multiplier, and standalone Echo Tx Int."""
     tx_match = _MIN_TX_RE.search(line)
@@ -171,14 +177,11 @@ def _parse_bfd_intervals(line: str, entry: BfdSessionEntry) -> None:
     mult_match = _MULTIPLIER_RE.search(line)
 
     if tx_match:
-        timers = entry.setdefault("timers", {})  # type: ignore[typeddict-item]
-        timers["tx_interval_ms"] = int(tx_match.group(1))
+        _ensure_timers(entry)["tx_interval_ms"] = int(tx_match.group(1))
     if rx_match:
-        timers = entry.setdefault("timers", {})  # type: ignore[typeddict-item]
-        timers["rx_interval_ms"] = int(rx_match.group(1))
+        _ensure_timers(entry)["rx_interval_ms"] = int(rx_match.group(1))
     if mult_match:
-        timers = entry.setdefault("timers", {})  # type: ignore[typeddict-item]
-        timers["multiplier"] = int(mult_match.group(1))
+        _ensure_timers(entry)["multiplier"] = int(mult_match.group(1))
 
     # Echo Tx Int on its own line (not part of "Session state is ... with N ms")
     if not _SESSION_STATE_RE.search(line):
