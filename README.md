@@ -1,5 +1,12 @@
 # Muninn
 
+[![CI](https://github.com/ChartinoLabs/Muninn/actions/workflows/main_branch_push_pull.yml/badge.svg)](https://github.com/ChartinoLabs/Muninn/actions/workflows/main_branch_push_pull.yml)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+[![PyPI version](https://img.shields.io/pypi/v/muninn-parsers)](https://pypi.org/project/muninn-parsers/)
+[![PyPI downloads](https://img.shields.io/pypi/dm/muninn-parsers)](https://pypi.org/project/muninn-parsers/)
+[![Python versions](https://img.shields.io/pypi/pyversions/muninn-parsers)](https://pypi.org/project/muninn-parsers/)
+[![License](https://img.shields.io/pypi/l/muninn-parsers)](https://github.com/ChartinoLabs/Muninn/blob/main/LICENSE)
+
 Muninn is a library that transforms unstructured network device CLI output into structured, type-hinted Python data structures.
 
 ## Why Muninn?
