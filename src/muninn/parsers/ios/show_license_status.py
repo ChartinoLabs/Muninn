@@ -2,7 +2,7 @@
 
 import re
 from collections.abc import Callable
-from typing import Any, ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -282,4 +282,4 @@ class ShowLicenseStatusParser(BaseParser["ShowLicenseStatusResult"]):
             msg = "No license status information found in output"
             raise ValueError(msg)
 
-        return result  # type: ignore[return-value]
+        return cast(ShowLicenseStatusResult, result)

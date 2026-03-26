@@ -1,7 +1,7 @@
 """Parser for 'show processes cpu' command on IOS/IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -128,4 +128,4 @@ class ShowProcessesCpuParser(BaseParser["ShowProcessesCpuResult"]):
         _parse_summary(lines, result)
         result["processes"] = _parse_processes(lines)
 
-        return result  # type: ignore[return-value]
+        return cast(ShowProcessesCpuResult, result)

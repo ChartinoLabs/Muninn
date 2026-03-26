@@ -1,7 +1,7 @@
 """Parser for 'show ip ospf database network' command on IOS."""
 
 import re
-from typing import ClassVar, TypedDict
+from typing import ClassVar, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -115,7 +115,7 @@ def _parse_lsa_block(
         return None
 
     entry["attached_routers"] = attached_routers
-    return entry  # type: ignore[return-value]
+    return cast(NetworkLsaEntry, entry)
 
 
 def _store_lsa(

@@ -1,7 +1,7 @@
 """Parser for 'show crypto pki certificates' command on IOS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -290,7 +290,7 @@ def _parse_certificate_block(
     if subject_name:
         entry["subject_name"] = subject_name
 
-    return cert_type, entry  # type: ignore[return-value]
+    return cert_type, cast(CertificateEntry, entry)
 
 
 def _extract_trustpoint(entry: CertificateEntry) -> str:

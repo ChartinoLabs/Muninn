@@ -188,7 +188,7 @@ def _process_data_row(
 
     source, entry = result_row
     if source == "Total":
-        return source, entry  # type: ignore[return-value]
+        return source, cast(TotalEntry, entry)
 
     route_sources[source] = cast(RouteSourceEntry, entry)
     return source, None

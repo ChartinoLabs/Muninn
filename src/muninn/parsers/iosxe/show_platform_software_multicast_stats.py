@@ -1,7 +1,7 @@
 """Parser for 'show platform software multicast stats' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict
+from typing import ClassVar, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -215,4 +215,4 @@ class ShowPlatformSoftwareMulticastStatsParser(
             msg = "No multicast statistics found in output"
             raise ValueError(msg)
 
-        return result  # type: ignore[return-value]
+        return cast(ShowPlatformSoftwareMulticastStatsResult, result)

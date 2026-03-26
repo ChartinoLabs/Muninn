@@ -1,7 +1,7 @@
 """Parser for 'show ip ospf database router' command on IOS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -212,7 +212,7 @@ def _parse_single_lsa(lines: list[str]) -> RouterLsaEntry:
     entry: dict = {}
     _parse_lsa_header(lines, entry)
     entry["links"] = _parse_lsa_links(lines)
-    return entry  # type: ignore[return-value]
+    return cast(RouterLsaEntry, entry)
 
 
 def _parse_header(

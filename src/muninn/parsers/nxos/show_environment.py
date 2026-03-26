@@ -1,7 +1,7 @@
 """Parser for 'show environment' command on NX-OS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -495,4 +495,4 @@ class ShowEnvironmentParser(BaseParser[ShowEnvironmentResult]):
             else:
                 idx += 1
 
-        return result  # type: ignore[return-value]
+        return cast(ShowEnvironmentResult, result)

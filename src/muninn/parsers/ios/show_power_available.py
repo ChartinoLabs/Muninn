@@ -1,7 +1,7 @@
 """Parser for 'show power available' command on IOS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -136,7 +136,7 @@ class ShowPowerAvailableParser(BaseParser[ShowPowerAvailableResult]):
         if measurements:
             result["measurements"] = measurements
 
-        return result  # type: ignore[return-value]
+        return cast(ShowPowerAvailableResult, result)
 
     @classmethod
     def _parse_summary_line(cls, line: str, result: dict) -> None:

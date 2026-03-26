@@ -3,7 +3,7 @@
 import re
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -187,7 +187,7 @@ def _parse_block(
 
     _extract_fields(lines, entry)
 
-    return interface, group, entry  # type: ignore[return-value]
+    return interface, group, cast(StandbyGroupEntry, entry)
 
 
 def _store_group(

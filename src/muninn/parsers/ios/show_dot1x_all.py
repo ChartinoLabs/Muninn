@@ -1,7 +1,7 @@
 """Parser for 'show dot1x all' command on IOS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -309,7 +309,7 @@ def _parse_interface_block(raw_name: str, block: str) -> Dot1xInterfaceEntry:
         if client_map:
             entry["clients"] = client_map
 
-    return entry  # type: ignore[return-value]
+    return cast(Dot1xInterfaceEntry, entry)
 
 
 @register(OS.CISCO_IOS, "show dot1x all")

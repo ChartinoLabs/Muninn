@@ -1,7 +1,7 @@
 """Parser for 'show spanning-tree' command on IOS/IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -165,7 +165,7 @@ def _parse_root_id(lines: list[str]) -> tuple[RootIdEntry, bool]:
         if _IS_ROOT_RE.match(line):
             is_root = True
 
-    return root, is_root  # type: ignore[return-value]
+    return cast(RootIdEntry, root), is_root
 
 
 def _parse_bridge_id(lines: list[str], is_root: bool) -> BridgeIdEntry:
@@ -196,7 +196,7 @@ def _parse_bridge_id(lines: list[str], is_root: bool) -> BridgeIdEntry:
         if m:
             bridge["aging_time"] = int(m.group(1))
 
-    return bridge  # type: ignore[return-value]
+    return cast(BridgeIdEntry, bridge)
 
 
 def _parse_interfaces(lines: list[str]) -> dict[str, InterfaceEntry]:

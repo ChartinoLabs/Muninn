@@ -1,7 +1,7 @@
 """Parser for 'show port-security interface <interface>' on IOS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -134,4 +134,4 @@ class ShowPortSecurityInterfaceParser(
             msg = "No port-security data found in output"
             raise ValueError(msg)
 
-        return result  # type: ignore[return-value]
+        return cast(ShowPortSecurityInterfaceResult, result)

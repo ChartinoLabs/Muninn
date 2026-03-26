@@ -1,7 +1,7 @@
 """Parser for 'show ip mroute' command on IOS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -175,7 +175,7 @@ def _parse_source_entry(
     _parse_incoming(body_lines, entry)
     _parse_outgoing(body_lines, entry)
 
-    return entry  # type: ignore[return-value]
+    return cast(SourceEntry, entry)
 
 
 @register(OS.CISCO_IOS, "show ip mroute")
