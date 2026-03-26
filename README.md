@@ -1,21 +1,38 @@
 # Muninn
 
-A standalone CLI output parser library for network devices.
+Muninn is a library that transforms unstructured network device CLI output into structured, type-hinted Python data structures.
 
-## Overview
+## Why Muninn?
 
-Muninn transforms unstructured CLI output from network devices into structured Python dictionaries. Named after Odin's raven of memory in Norse mythology, Muninn "remembers" how to parse CLI output into structured data.
+- **Standalone** - No framework dependencies. Install and use it in any Python project.
+- **Simple API** - `Muninn().parse(os, command, output)` and you're done.
+- **Well-tested** - Every parser has test cases with platform and software version metadata.
+- **Type-aware** - Import individual parsers to get `TypedDict` return types that describe the parsed data structure, enabling IDE autocompletion and better AI-assisted coding.
+- **Extensible** - Load your own local parsers alongside built-in ones.
 
-## Design Goals
+## Installation
 
-- **Standalone**: No framework dependencies. Just `pip install muninn` and use it.
-- **Simple API**: `Muninn().parse(os, command, output)` → `dict`
-- **Well-tested**: Comprehensive test coverage with platform/version metadata
-- **Type-aware**: Native Python type hints for clarity
+Muninn can be quickly and easily installed with `uv` as shown below:
 
-## Quick Example
+```bash
+uv add muninn-parsers
+```
+
+Or, if you prefer good old-fashioned `pip`, you can do so as shown below:
+
+```bash
+pip install muninn-parsers
+```
+
+## Quick Examples
+
+### Auto-Discovering Parsers
+
+Create a `Muninn` instance and call `parse()` with an OS identifier, the CLI command, and the raw output. Muninn automatically finds and runs the right parser:
 
 ```python
+from typing import Any
+
 import muninn
 
 mn = muninn.Muninn()
@@ -26,67 +43,58 @@ Neighbor ID     Pri   State           Dead Time   Address         Interface
 10.1.1.2          1   FULL/BDR        00:00:33    192.168.1.2     Ethernet1/2
 """
 
-result = mn.parse("nxos", "show ip ospf neighbor", raw_output)
-# Returns structured dict keyed by neighbor ID
+result: dict[str, Any] = mn.parse("nxos", "show ip ospf neighbor", raw_output)
 ```
 
-## Configuration
+Returns:
 
-Muninn supports three configuration sources in descending precedence:
+```json
+{
+  "10.1.1.1": {
+    "priority": 1,
+    "state": "FULL/DR",
+    "dead_time": "00:00:38",
+    "address": "192.168.1.1",
+    "interface": "Ethernet1/1"
+  },
+  "10.1.1.2": {
+    "priority": 1,
+    "state": "FULL/BDR",
+    "dead_time": "00:00:33",
+    "address": "192.168.1.2",
+    "interface": "Ethernet1/2"
+  }
+}
+```
 
-1. API overrides
-2. Environment variables
-3. `[tool.muninn]` in `pyproject.toml`
+### Using a Parser Directly
 
-## Local Parser Overlays
-
-Muninn supports loading parser modules from local project paths without modifying the
-installed package.
+You can also import a specific parser and call it directly. This gives you access to the parser's `TypedDict` return type, which enables IDE autocompletion and helps AI coding assistants reason about the structure of the parsed data:
 
 ```python
-import muninn
+from muninn.parsers.nxos.show_ip_ospf_neighbor import (
+    ShowIpOspfNeighborParser,
+    ShowIpOspfNeighborResult,
+)
 
-mn = muninn.Muninn()
-mn.load_local_parsers(paths=["/path/to/local-parsers"])
-result = mn.parse("nxos", "show ip ospf neighbor", raw_output)
+raw_output = """
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+10.1.1.1          1   FULL/DR         00:00:38    192.168.1.1     Ethernet1/1
+10.1.1.2          1   FULL/BDR        00:00:33    192.168.1.2     Ethernet1/2
+"""
+
+result: ShowIpOspfNeighborResult = ShowIpOspfNeighborParser.parse(raw_output)
+# IDE autocompletion and type checking work here
 ```
-
-You can also use the class-level convenience call:
-
-```python
-result = muninn.Muninn.parse("nxos", "show ip ospf neighbor", raw_output)
-```
-
-When both built-in and local parsers exist for the same OS and command, execution
-behavior is controlled by `ExecutionMode`:
-
-- `ExecutionMode.LOCAL_FIRST_FALLBACK` (default)
-- `ExecutionMode.CENTRALIZED_FIRST_FALLBACK`
-- `ExecutionMode.LOCAL_ONLY`
-
-```python
-import muninn
-
-mn = muninn.Muninn()
-mn.configuration.set_execution_mode(muninn.ExecutionMode.LOCAL_ONLY)
-```
-
-Fallback occurs when a parser raises an exception, returns `None`, or returns `{}`.
-
-### Environment Variables
-
-- `MUNINN_PARSER_PATHS`: parser search paths separated by `:` (or platform path separator)
-- `MUNINN_PARSER_EXECUTION_MODE`: one of `centralized_first_fallback`,
-  `local_first_fallback`, `local_only`
-- `MUNINN_FALLBACK_ON_INVALID_RESULT`: boolean toggle for fallback on `None` / `{}`
 
 ## Documentation
 
-- [Design Philosophy](docs/design.md) - Core philosophy, design decisions, and comparison with alternatives
+Full documentation is available at **[chartinolabs.github.io/Muninn](https://chartinolabs.github.io/Muninn/)**.
+
 - [Changelog](CHANGELOG.md) - Release history built from changelog fragments
 - [Changelog Fragments Guide](changes/README.md) - How to add release-note fragments
 - [Releasing](RELEASING.md) - How to compile release notes and cut a release
 
 ## Status
 
-Early development. See the design principles document for project direction.
+Early development. See the [Design Philosophy](https://chartinolabs.github.io/Muninn/design/) page for project direction.
