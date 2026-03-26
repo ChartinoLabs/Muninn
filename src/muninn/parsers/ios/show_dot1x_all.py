@@ -346,7 +346,7 @@ class ShowDot1xAllParser(BaseParser[ShowDot1xAllResult]):
         # Add global settings
         settings = _parse_global_settings(global_lines)
         for key, value in settings.items():
-            result[key] = value  # type: ignore[literal-required]
+            result[key] = value
 
         # Parse each interface block
         for raw_name, block_text in blocks:

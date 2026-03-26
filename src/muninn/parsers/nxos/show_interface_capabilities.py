@@ -161,7 +161,7 @@ def _build_entry(
 
     for field_key in _OPTIONAL_FIELDS:
         if field_key in mapped:
-            entry[field_key] = mapped[field_key]  # type: ignore[literal-required]
+            entry[field_key] = mapped[field_key]
 
     return entry
 

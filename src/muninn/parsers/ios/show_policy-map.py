@@ -127,7 +127,7 @@ class _ClassState:
     """Mutable state for tracking the current class being parsed."""
 
     name: str | None = None
-    entry: ClassEntry = field(default_factory=lambda: ClassEntry({}))  # type: ignore[misc]
+    entry: ClassEntry = field(default_factory=lambda: ClassEntry({}))
     match_clauses: list[str] = field(default_factory=list)
     in_police: bool = False
     police: PoliceEntry | None = None
@@ -157,7 +157,7 @@ class _ParseState:
 
         self.policy_maps[self.current_policy]["classes"][self.current_class.name] = (
             ClassEntry(**entry)
-        )  # type: ignore[arg-type]
+        )
 
     def start_class(self, name: str) -> None:
         """Begin a new class, flushing any current one."""
@@ -190,7 +190,7 @@ def _parse_police_line(line: str, state: _ParseState) -> bool:
     action_match = _POLICE_ACTION.match(line)
     if action_match:
         action_type = action_match.group("action_type").replace("-", "_")
-        state.current_class.police[action_type] = action_match.group("action")  # type: ignore[literal-required]
+        state.current_class.police[action_type] = action_match.group("action")
         return True
 
     stats_match = _POLICE_STATS.match(line)
