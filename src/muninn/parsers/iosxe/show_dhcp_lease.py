@@ -2,7 +2,7 @@
 
 import re
 from collections.abc import Callable
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -150,7 +150,7 @@ def _parse_lease_block(lines: list[str]) -> tuple[str, DhcpLeaseEntry]:
         msg = "No interface found in DHCP lease block"
         raise ValueError(msg)
 
-    return interface, DhcpLeaseEntry(**entry)  # type: ignore[arg-type]
+    return interface, cast(DhcpLeaseEntry, entry)
 
 
 @register(OS.CISCO_IOSXE, "show dhcp lease")

@@ -1,7 +1,7 @@
 """Parser for 'show platform hardware throughput crypto' command on IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -130,4 +130,4 @@ class ShowPlatformHardwareThroughputCryptoParser(
             msg = "No crypto throughput data found in output"
             raise ValueError(msg)
 
-        return ShowPlatformHardwareThroughputCryptoResult(**result)  # type: ignore[typeddict-item]
+        return cast(ShowPlatformHardwareThroughputCryptoResult, result)

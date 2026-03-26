@@ -1,7 +1,7 @@
 """Parser for 'show platform software dns-umbrella statistics' command on IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -109,5 +109,5 @@ class ShowPlatformSoftwareDnsUmbrellaStatisticsParser(
             raise ValueError(msg)
 
         return ShowPlatformSoftwareDnsUmbrellaStatisticsResult(
-            umbrella_statistics=UmbrellaStatistics(**stats),  # type: ignore[typeddict-item]
+            umbrella_statistics=cast(UmbrellaStatistics, stats),
         )

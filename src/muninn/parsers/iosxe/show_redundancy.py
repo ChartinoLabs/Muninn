@@ -1,7 +1,7 @@
 """Parser for 'show redundancy' command on IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -248,7 +248,7 @@ def _parse_processor_section(
         idx += 1
     if not entry:
         return idx, None
-    return idx, ProcessorEntry(**entry)  # type: ignore[typeddict-item]
+    return idx, cast(ProcessorEntry, entry)
 
 
 @register(OS.CISCO_IOSXE, "show redundancy")
@@ -309,7 +309,7 @@ class ShowRedundancyParser(BaseParser[ShowRedundancyResult]):
 
         _validate_required_fields(result)
 
-        return ShowRedundancyResult(**result)  # type: ignore[typeddict-item]
+        return cast(ShowRedundancyResult, result)
 
 
 def _validate_required_fields(result: dict[str, object]) -> None:

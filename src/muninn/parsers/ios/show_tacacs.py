@@ -1,7 +1,7 @@
 """Parser for 'show tacacs' command on IOS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -106,7 +106,7 @@ def _extract_fields(lines: list[str]) -> dict[str, str | int]:
 
 def _build_entry(fields: dict[str, str | int]) -> TacacsServerEntry:
     """Build a TacacsServerEntry from extracted fields."""
-    entry = TacacsServerEntry(**{k: int(fields[k]) for k in _REQUIRED_INT_KEYS})  # type: ignore[typeddict-item]
+    entry = cast(TacacsServerEntry, {k: int(fields[k]) for k in _REQUIRED_INT_KEYS})
     for key in _OPTIONAL_STR_KEYS:
         if key in fields:
             entry[key] = str(fields[key])

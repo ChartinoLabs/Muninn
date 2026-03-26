@@ -1,7 +1,7 @@
 """Parser for 'show cloud-mgmt connect' command on IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -247,7 +247,7 @@ class ShowCloudMgmtConnectParser(BaseParser[ShowCloudMgmtConnectResult]):
             msg = "No cloud management connect information found in output"
             raise ValueError(msg)
 
-        return ShowCloudMgmtConnectResult(**state.result)  # type: ignore[typeddict-item]
+        return cast(ShowCloudMgmtConnectResult, state.result)
 
 
 class _ParseState:

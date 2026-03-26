@@ -5,7 +5,7 @@ Note: The command contains a typo in the actual IOS-XE CLI — it is
 """
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -202,7 +202,7 @@ def _parse_l3_section(lines: list[str]) -> L3Statistics:
             if mapped:
                 stats[mapped] = int(match.group("val"))
 
-    return L3Statistics(**stats)  # type: ignore[typeddict-item]
+    return cast(L3Statistics, stats)
 
 
 def _parse_per_feature(lines: list[str]) -> dict[str, int]:
@@ -231,7 +231,7 @@ def _parse_l2_section(lines: list[str]) -> L2Statistics:
             stats[f"total_{prefix}_inject"] = int(match.group("total"))
             stats[f"failed_{prefix}_inject"] = int(match.group("failed"))
 
-    return L2Statistics(**stats)  # type: ignore[typeddict-item]
+    return cast(L2Statistics, stats)
 
 
 def _split_sections(
