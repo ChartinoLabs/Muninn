@@ -1,0 +1,56 @@
+{
+  "os": "cisco_nxos",
+  "command": "show lldp timers",
+  "schema": {
+    "name": "ShowLldpTimersResult",
+    "fields": {
+      "hold_timer": {
+        "type": "int",
+        "required": true
+      },
+      "reinit_timer": {
+        "type": "int",
+        "required": true
+      },
+      "hello_timer": {
+        "type": "int",
+        "required": true
+      },
+      "transmit_delay": {
+        "type": "int",
+        "required": false
+      },
+      "hold_multiplier": {
+        "type": "int",
+        "required": false
+      },
+      "notification_interval": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Show lldp timers output with required timers only",
+      "input": "LLDP Timers:\n\nHoldtime in seconds: 120\nReinit-time in seconds: 2\nTransmit interval in seconds: 30\n",
+      "expected": {
+        "hold_timer": 120,
+        "reinit_timer": 2,
+        "hello_timer": 30
+      }
+    },
+    {
+      "name": "Show lldp timers output with optional timer fields",
+      "input": "show lldp timers\n\nLLDP Timers:\n\n    Holdtime in seconds: 120\n    Reinit-time in seconds: 2\n    Transmit interval in seconds: 30\n    Transmit delay in seconds: 2\n    Hold multiplier in seconds: 4\n    Notification interval in seconds: 5\n",
+      "expected": {
+        "hello_timer": 30,
+        "hold_multiplier": 4,
+        "hold_timer": 120,
+        "notification_interval": 5,
+        "reinit_timer": 2,
+        "transmit_delay": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,159 @@
+{
+  "os": "cisco_nxos",
+  "command": "show ip eigrp neighbors",
+  "schema": {
+    "name": "ShowIpEigrpNeighborsResult",
+    "fields": {
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "EigrpProcessEntry",
+            "fields": {
+              "neighbors": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "EigrpNeighborEntry",
+                    "fields": {
+                      "peer_handle": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "interface": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "hold_time": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "uptime": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "srtt": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "rto": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "queue_count": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "sequence_number": {
+                        "type": "int",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic EIGRP neighbors with multiple peers across various interfaces",
+      "input": "IP-EIGRP neighbors for process 65535 VRF default\nH Address Interface Hold Uptime SRTT RTO Q Seq\n(sec) (ms) Cnt Num\n7 10.20.150.2 Po2001 12 03:44:02 20 200 0 10331\n6 10.20.200.2 Po2000 14 03:44:02 13 200 0 158157\n5 10.40.1.1 Eth1/26 13 03:44:14 16 200 0 158164\n4 10.50.2.1 Eth2/5 12 03:44:14 16 200 0 158166\n3 10.50.1.1 Eth2/6 13 03:44:15 16 200 0 158165\n2 10.50.3.1 Eth2/7 11 03:44:15 13 200 0 158167\n1 10.20.5.2 Eth3/11 14 03:44:16 18 200 0 158158\n0 10.20.6.2 Eth3/12 11 03:44:17 14 200 0 158163\n",
+      "expected": {
+        "processes": {
+          "65535": {
+            "neighbors": {
+              "10.20.150.2": {
+                "hold_time": 12,
+                "interface": "Port-channel2001",
+                "peer_handle": 7,
+                "queue_count": 0,
+                "rto": 200,
+                "sequence_number": 10331,
+                "srtt": 20,
+                "uptime": "03:44:02"
+              },
+              "10.20.200.2": {
+                "hold_time": 14,
+                "interface": "Port-channel2000",
+                "peer_handle": 6,
+                "queue_count": 0,
+                "rto": 200,
+                "sequence_number": 158157,
+                "srtt": 13,
+                "uptime": "03:44:02"
+              },
+              "10.20.5.2": {
+                "hold_time": 14,
+                "interface": "Ethernet3/11",
+                "peer_handle": 1,
+                "queue_count": 0,
+                "rto": 200,
+                "sequence_number": 158158,
+                "srtt": 18,
+                "uptime": "03:44:16"
+              },
+              "10.20.6.2": {
+                "hold_time": 11,
+                "interface": "Ethernet3/12",
+                "peer_handle": 0,
+                "queue_count": 0,
+                "rto": 200,
+                "sequence_number": 158163,
+                "srtt": 14,
+                "uptime": "03:44:17"
+              },
+              "10.40.1.1": {
+                "hold_time": 13,
+                "interface": "Ethernet1/26",
+                "peer_handle": 5,
+                "queue_count": 0,
+                "rto": 200,
+                "sequence_number": 158164,
+                "srtt": 16,
+                "uptime": "03:44:14"
+              },
+              "10.50.1.1": {
+                "hold_time": 13,
+                "interface": "Ethernet2/6",
+                "peer_handle": 3,
+                "queue_count": 0,
+                "rto": 200,
+                "sequence_number": 158165,
+                "srtt": 16,
+                "uptime": "03:44:15"
+              },
+              "10.50.2.1": {
+                "hold_time": 12,
+                "interface": "Ethernet2/5",
+                "peer_handle": 4,
+                "queue_count": 0,
+                "rto": 200,
+                "sequence_number": 158166,
+                "srtt": 16,
+                "uptime": "03:44:14"
+              },
+              "10.50.3.1": {
+                "hold_time": 11,
+                "interface": "Ethernet2/7",
+                "peer_handle": 2,
+                "queue_count": 0,
+                "rto": 200,
+                "sequence_number": 158167,
+                "srtt": 13,
+                "uptime": "03:44:15"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

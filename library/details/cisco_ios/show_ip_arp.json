@@ -1,0 +1,130 @@
+{
+  "os": "cisco_ios",
+  "command": "show ip arp",
+  "schema": {
+    "name": "ShowIpArpResult",
+    "fields": {
+      "arp_entries": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ArpEntry",
+            "fields": {
+              "hardware_addr": {
+                "type": "str",
+                "required": true
+              },
+              "type": {
+                "type": "str",
+                "required": true
+              },
+              "age": {
+                "type": "int",
+                "required": false
+              },
+              "interface": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic ARP table with two entries, one with age and one local",
+      "input": "R5#show ip arp\nProtocol  Address          Age (min)  Hardware Addr   Type   Interface\nInternet  10.1.8.1               79   0012.7fff.04d7  ARPA   FastEthernet0\nInternet  10.1.8.146              -   843d.c6ff.f1ef  ARPA   FastEthernet0\n",
+      "expected": {
+        "arp_entries": {
+          "10.1.8.1": {
+            "age": 79,
+            "hardware_addr": "0012.7fff.04d7",
+            "type": "ARPA",
+            "interface": "FastEthernet0"
+          },
+          "10.1.8.146": {
+            "hardware_addr": "843d.c6ff.f1ef",
+            "type": "ARPA",
+            "interface": "FastEthernet0"
+          }
+        }
+      }
+    },
+    {
+      "name": "ARP table with entries on multiple interfaces including Port-channel and Vlan",
+      "input": "R5#show ip arp\nProtocol  Address          Age (min)  Hardware Addr   Type   Interface\nInternet  10.1.8.1               79   0012.7fff.04d7  ARPA   FastEthernet0\nInternet  10.9.1.1                -   843d.c6ff.f1fe  ARPA   Port-channel10\nInternet  10.69.1.2               -   843d.c6ff.f1f9  ARPA   Vlan99\nInternet  10.1.8.146              -   843d.c6ff.f1ef  ARPA   FastEthernet0\n",
+      "expected": {
+        "arp_entries": {
+          "10.1.8.1": {
+            "age": 79,
+            "hardware_addr": "0012.7fff.04d7",
+            "type": "ARPA",
+            "interface": "FastEthernet0"
+          },
+          "10.9.1.1": {
+            "hardware_addr": "843d.c6ff.f1fe",
+            "type": "ARPA",
+            "interface": "Port-channel10"
+          },
+          "10.69.1.2": {
+            "hardware_addr": "843d.c6ff.f1f9",
+            "type": "ARPA",
+            "interface": "Vlan99"
+          },
+          "10.1.8.146": {
+            "hardware_addr": "843d.c6ff.f1ef",
+            "type": "ARPA",
+            "interface": "FastEthernet0"
+          }
+        }
+      }
+    },
+    {
+      "name": "ARP table with SRP-A entry that has no interface field",
+      "input": "Protocol  Address              Age(min)       Hardware Addr     Type      Interface\nInternet  172.16.233.229       -              0000.0c59.f892    ARPA      Ethernet0/0\nInternet  172.16.233.218       -              0000.0c07.ac00    ARPA      Ethernet0/0\nInternet  172.16.233.19        -              0000.0c63.1300    ARPA      Ethernet0/0\nInternet  172.16.233.209       -              0000.0c36.6965    ARPA      Ethernet0/0\nInternet  172.16.168.11        -              0000.0c63.1300    ARPA      Ethernet0/0\nInternet  172.16.168.254       9              0000.0c36.6965    ARPA      Ethernet0/0\nInternet  10.0.0.0             -              aabb.cc03.8200    SRP-A\n",
+      "expected": {
+        "arp_entries": {
+          "172.16.233.229": {
+            "hardware_addr": "0000.0c59.f892",
+            "type": "ARPA",
+            "interface": "Ethernet0/0"
+          },
+          "172.16.233.218": {
+            "hardware_addr": "0000.0c07.ac00",
+            "type": "ARPA",
+            "interface": "Ethernet0/0"
+          },
+          "172.16.233.19": {
+            "hardware_addr": "0000.0c63.1300",
+            "type": "ARPA",
+            "interface": "Ethernet0/0"
+          },
+          "172.16.233.209": {
+            "hardware_addr": "0000.0c36.6965",
+            "type": "ARPA",
+            "interface": "Ethernet0/0"
+          },
+          "172.16.168.11": {
+            "hardware_addr": "0000.0c63.1300",
+            "type": "ARPA",
+            "interface": "Ethernet0/0"
+          },
+          "172.16.168.254": {
+            "age": 9,
+            "hardware_addr": "0000.0c36.6965",
+            "type": "ARPA",
+            "interface": "Ethernet0/0"
+          },
+          "10.0.0.0": {
+            "hardware_addr": "aabb.cc03.8200",
+            "type": "SRP-A"
+          }
+        }
+      }
+    }
+  ]
+}

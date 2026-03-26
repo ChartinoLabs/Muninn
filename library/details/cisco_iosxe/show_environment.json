@@ -1,0 +1,1395 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show environment",
+  "schema": {
+    "name": "ShowEnvironmentResult",
+    "fields": {
+      "critical_alarms": {
+        "type": "int",
+        "required": true
+      },
+      "major_alarms": {
+        "type": "int",
+        "required": true
+      },
+      "minor_alarms": {
+        "type": "int",
+        "required": true
+      },
+      "sensors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "SensorEntry",
+              "fields": {
+                "state": {
+                  "type": "str",
+                  "required": true
+                },
+                "reading": {
+                  "type": "int",
+                  "required": true
+                },
+                "unit": {
+                  "type": "str",
+                  "required": true
+                },
+                "thresholds": {
+                  "type": {
+                    "name": "ThresholdEntry",
+                    "fields": {
+                      "minor": {
+                        "type": "int | None",
+                        "required": true
+                      },
+                      "major": {
+                        "type": "int | None",
+                        "required": true
+                      },
+                      "critical": {
+                        "type": "int | None",
+                        "required": true
+                      },
+                      "shutdown": {
+                        "type": "int | None",
+                        "required": true
+                      }
+                    }
+                  },
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic sensor table without thresholds, verifying IOS-XE registration",
+      "input": "Number of Critical alarms:  0\nNumber of Major alarms:     0\nNumber of Minor alarms:     0\n\nSlot    Sensor       Current State       Reading\n----    ------       -------------       -------\n R0    V1: VMA          Normal           1201 mV\n R0    V1: VMB          Normal           2495 mV\n R0    Temp: Outlet     Normal           30 Celsius\n R0    Temp: CPU AIR    Normal           32 Celsius\n P0    Vin              Normal           101 V AC\n P0    Temp1            Normal           26 Celsius\n P6    Temp: FC PWM1    Fan Speed 60%    26 Celsius\n",
+      "expected": {
+        "critical_alarms": 0,
+        "major_alarms": 0,
+        "minor_alarms": 0,
+        "sensors": {
+          "R0": {
+            "V1: VMA": {
+              "state": "Normal",
+              "reading": 1201,
+              "unit": "mV"
+            },
+            "V1: VMB": {
+              "state": "Normal",
+              "reading": 2495,
+              "unit": "mV"
+            },
+            "Temp: Outlet": {
+              "state": "Normal",
+              "reading": 30,
+              "unit": "Celsius"
+            },
+            "Temp: CPU AIR": {
+              "state": "Normal",
+              "reading": 32,
+              "unit": "Celsius"
+            }
+          },
+          "P0": {
+            "Vin": {
+              "state": "Normal",
+              "reading": 101,
+              "unit": "V AC"
+            },
+            "Temp1": {
+              "state": "Normal",
+              "reading": 26,
+              "unit": "Celsius"
+            }
+          },
+          "P6": {
+            "Temp: FC PWM1": {
+              "state": "Fan Speed 60%",
+              "reading": 26,
+              "unit": "Celsius"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Sensor table with threshold columns including temperature and voltage sensors",
+      "input": "Number of Critical alarms:  0\nNumber of Major alarms:     0\nNumber of Minor alarms:     0\n\n Slot        Sensor          Current State   Reading        Threshold(Minor,Major,Critical,Shutdown)\n ----------  --------------  --------------- ------------   ---------------------------------------\n R0          PSOC-MB_0: VOUT Normal          12058 mV     \tna\n R0          PSOC-MB_1: VOUT Normal          3292  mV     \tna\n R0          PSOC-MB_2: VOUT Normal          11990 mV     \tna\n R0          PSOC-MB_3: VOUT Normal          11990 mV     \tna\n R0          PSOC-MB_4: VOUT Normal          5000  mV     \tna\n R0          PSOC-MB_5: VOUT Normal          3299  mV     \tna\n R0          PSOC-MB_7: VOUT Normal          2499  mV     \tna\n R0          PSOC-MB_8: VOUT Normal          1800  mV     \tna\n R0          PSOC-MB_9: VOUT Normal          1200  mV     \tna\n R0          PSOC-MB_10: VOU Normal          1200  mV     \tna\n R0          3570MB1 _0: VOU Normal          1001  mV     \tna\n R0          3570MB2 _0: VOU Normal          999   mV     \tna\n R0          3570MB3 _0: VOU Normal          1652  mV     \tna\n R0          35215MB1_0: VOU Normal          840   mV     \tna\n R0          35215MB2_0: VOU Normal          806   mV     \tna\n R0          Temp: Outlet_A  Normal          30    Celsius\t(55 ,60 ,65 ,75 )(Celsius)\n R0          Temp: Outlet_B  Normal          26    Celsius\t(60 ,65 ,70 ,80 )(Celsius)\n R0          Temp: Inlet_A   Normal          30    Celsius\t(45 ,55 ,65 ,70 )(Celsius)\n R0          Temp: Inlet_B   Normal          26    Celsius\t(55 ,65 ,75 ,80 )(Celsius)\n R0          Temp: UADP_0_0  Normal          38    Celsius\t(105,110,120,124)(Celsius)\n R0          Temp: UADP_0_1  Normal          37    Celsius\t(105,110,120,124)(Celsius)\n R0          Temp: UADP_0_2  Normal          37    Celsius\t(105,110,120,124)(Celsius)\n R0          Temp: UADP_0_3  Normal          34    Celsius\t(105,110,120,124)(Celsius)\n R0          Temp: UADP_0_4  Normal          37    Celsius\t(105,110,120,124)(Celsius)\n R0          Temp: UADP_0_5  Normal          34    Celsius\t(105,110,120,124)(Celsius)\n R0          Temp: UADP_0_6  Normal          35    Celsius\t(105,110,120,124)(Celsius)\n R0          Temp: UADP_0_7  Normal          34    Celsius\t(105,110,120,124)(Celsius)\n R0          Temp: UADP_0_8  Normal          36    Celsius\t(105,110,120,124)(Celsius)\n R0          PSOC-DB_1: VOUT Normal          5001  mV     \tna\n R0          PSOC-DB_2: VOUT Normal          3299  mV     \tna\n R0          PSOC-DB_4: VOUT Normal          2499  mV     \tna\n R0          PSOC-DB_5: VOUT Normal          1699  mV     \tna\n R0          PSOC-DB_7: VOUT Normal          1500  mV     \tna\n R0          PSOC-DB_8: VOUT Normal          1299  mV     \tna\n R0          PSOC-DB_11: VOU Normal          601   mV     \tna\n R0          3570DB1 _0: VOU Normal          1790  mV     \tna\n R0          3570DB2 _0: VOU Normal          1201  mV     \tna\n R0          3570DB3 _0: VOU Normal          1051  mV     \tna\n R0          Temp: Coretemp  Normal          36    Celsius\t(107,117,123,125)(Celsius)\n R0          Temp: OutletDB  Normal          28    Celsius\t(65 ,70 ,75 ,85 )(Celsius)\n",
+      "expected": {
+        "critical_alarms": 0,
+        "major_alarms": 0,
+        "minor_alarms": 0,
+        "sensors": {
+          "R0": {
+            "PSOC-MB_0: VOUT": {
+              "state": "Normal",
+              "reading": 12058,
+              "unit": "mV"
+            },
+            "PSOC-MB_1: VOUT": {
+              "state": "Normal",
+              "reading": 3292,
+              "unit": "mV"
+            },
+            "PSOC-MB_2: VOUT": {
+              "state": "Normal",
+              "reading": 11990,
+              "unit": "mV"
+            },
+            "PSOC-MB_3: VOUT": {
+              "state": "Normal",
+              "reading": 11990,
+              "unit": "mV"
+            },
+            "PSOC-MB_4: VOUT": {
+              "state": "Normal",
+              "reading": 5000,
+              "unit": "mV"
+            },
+            "PSOC-MB_5: VOUT": {
+              "state": "Normal",
+              "reading": 3299,
+              "unit": "mV"
+            },
+            "PSOC-MB_7: VOUT": {
+              "state": "Normal",
+              "reading": 2499,
+              "unit": "mV"
+            },
+            "PSOC-MB_8: VOUT": {
+              "state": "Normal",
+              "reading": 1800,
+              "unit": "mV"
+            },
+            "PSOC-MB_9: VOUT": {
+              "state": "Normal",
+              "reading": 1200,
+              "unit": "mV"
+            },
+            "PSOC-MB_10: VOU": {
+              "state": "Normal",
+              "reading": 1200,
+              "unit": "mV"
+            },
+            "3570MB1 _0: VOU": {
+              "state": "Normal",
+              "reading": 1001,
+              "unit": "mV"
+            },
+            "3570MB2 _0: VOU": {
+              "state": "Normal",
+              "reading": 999,
+              "unit": "mV"
+            },
+            "3570MB3 _0: VOU": {
+              "state": "Normal",
+              "reading": 1652,
+              "unit": "mV"
+            },
+            "35215MB1_0: VOU": {
+              "state": "Normal",
+              "reading": 840,
+              "unit": "mV"
+            },
+            "35215MB2_0: VOU": {
+              "state": "Normal",
+              "reading": 806,
+              "unit": "mV"
+            },
+            "Temp: Outlet_A": {
+              "state": "Normal",
+              "reading": 30,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 55,
+                "major": 60,
+                "critical": 65,
+                "shutdown": 75
+              }
+            },
+            "Temp: Outlet_B": {
+              "state": "Normal",
+              "reading": 26,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 60,
+                "major": 65,
+                "critical": 70,
+                "shutdown": 80
+              }
+            },
+            "Temp: Inlet_A": {
+              "state": "Normal",
+              "reading": 30,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 45,
+                "major": 55,
+                "critical": 65,
+                "shutdown": 70
+              }
+            },
+            "Temp: Inlet_B": {
+              "state": "Normal",
+              "reading": 26,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 55,
+                "major": 65,
+                "critical": 75,
+                "shutdown": 80
+              }
+            },
+            "Temp: UADP_0_0": {
+              "state": "Normal",
+              "reading": 38,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 105,
+                "major": 110,
+                "critical": 120,
+                "shutdown": 124
+              }
+            },
+            "Temp: UADP_0_1": {
+              "state": "Normal",
+              "reading": 37,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 105,
+                "major": 110,
+                "critical": 120,
+                "shutdown": 124
+              }
+            },
+            "Temp: UADP_0_2": {
+              "state": "Normal",
+              "reading": 37,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 105,
+                "major": 110,
+                "critical": 120,
+                "shutdown": 124
+              }
+            },
+            "Temp: UADP_0_3": {
+              "state": "Normal",
+              "reading": 34,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 105,
+                "major": 110,
+                "critical": 120,
+                "shutdown": 124
+              }
+            },
+            "Temp: UADP_0_4": {
+              "state": "Normal",
+              "reading": 37,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 105,
+                "major": 110,
+                "critical": 120,
+                "shutdown": 124
+              }
+            },
+            "Temp: UADP_0_5": {
+              "state": "Normal",
+              "reading": 34,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 105,
+                "major": 110,
+                "critical": 120,
+                "shutdown": 124
+              }
+            },
+            "Temp: UADP_0_6": {
+              "state": "Normal",
+              "reading": 35,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 105,
+                "major": 110,
+                "critical": 120,
+                "shutdown": 124
+              }
+            },
+            "Temp: UADP_0_7": {
+              "state": "Normal",
+              "reading": 34,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 105,
+                "major": 110,
+                "critical": 120,
+                "shutdown": 124
+              }
+            },
+            "Temp: UADP_0_8": {
+              "state": "Normal",
+              "reading": 36,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 105,
+                "major": 110,
+                "critical": 120,
+                "shutdown": 124
+              }
+            },
+            "PSOC-DB_1: VOUT": {
+              "state": "Normal",
+              "reading": 5001,
+              "unit": "mV"
+            },
+            "PSOC-DB_2: VOUT": {
+              "state": "Normal",
+              "reading": 3299,
+              "unit": "mV"
+            },
+            "PSOC-DB_4: VOUT": {
+              "state": "Normal",
+              "reading": 2499,
+              "unit": "mV"
+            },
+            "PSOC-DB_5: VOUT": {
+              "state": "Normal",
+              "reading": 1699,
+              "unit": "mV"
+            },
+            "PSOC-DB_7: VOUT": {
+              "state": "Normal",
+              "reading": 1500,
+              "unit": "mV"
+            },
+            "PSOC-DB_8: VOUT": {
+              "state": "Normal",
+              "reading": 1299,
+              "unit": "mV"
+            },
+            "PSOC-DB_11: VOU": {
+              "state": "Normal",
+              "reading": 601,
+              "unit": "mV"
+            },
+            "3570DB1 _0: VOU": {
+              "state": "Normal",
+              "reading": 1790,
+              "unit": "mV"
+            },
+            "3570DB2 _0: VOU": {
+              "state": "Normal",
+              "reading": 1201,
+              "unit": "mV"
+            },
+            "3570DB3 _0: VOU": {
+              "state": "Normal",
+              "reading": 1051,
+              "unit": "mV"
+            },
+            "Temp: Coretemp": {
+              "state": "Normal",
+              "reading": 36,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 107,
+                "major": 117,
+                "critical": 123,
+                "shutdown": 125
+              }
+            },
+            "Temp: OutletDB": {
+              "state": "Normal",
+              "reading": 28,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 65,
+                "major": 70,
+                "critical": 75,
+                "shutdown": 85
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Large multi-slot chassis with many sensors across F0, F1, R0, R1, line cards, and power supplies",
+      "input": "Number of Critical alarms:  0\nNumber of Major alarms:     0\nNumber of Minor alarms:     0\n\nSlot    Sensor       Current State       Reading\n----    ------       -------------       -------\n F0    V1: VMA          Normal           1796 mV\n F0    V1: VMB          Normal           1196 mV\n F0    V1: VMC          Normal           996 mV\n F0    V1: VMD          Normal           1044 mV\n F0    V1: VME          Normal           1020 mV\n F0    V1: VMF          Normal           1098 mV\n F0    V1: 12v          Normal           11821 mV\n F0    V1: VDD          Normal           3295 mV\n F0    V1: GP1          Normal           908 mV\n F0    V1: GP2          Normal           771 mV\n F0    V2: VMA          Normal           3291 mV\n F0    V2: VMB          Normal           2495 mV\n F0    V2: VMC          Normal           1499 mV\n F0    V2: VMD          Normal           1196 mV\n F0    V2: VME          Normal           1103 mV\n F0    V2: VMF          Normal           1000 mV\n F0    V2: 12v          Normal           11748 mV\n F0    V2: VDD          Normal           3295 mV\n F0    V2: GP1          Normal           771 mV\n F0    V2: GP2          Normal           1096 mV\n F0    Temp: Inlet      Normal           30 Celsius\n F0    Temp: Pop Die    Normal           43 Celsius\n F0    Temp: Left Ext   Normal           42 Celsius\n F0    Temp: HKP Die    Normal           47 Celsius\n F0    Temp: CPP Rear   Normal           40 Celsius\n F0    Temp: Olv Die    Normal           38 Celsius\n F0    Temp: Rght Ext   Normal           37 Celsius\n F0    Temp: MCH Die    Normal           53 Celsius\n F0    V3: VMA          Normal           3291 mV\n F0    V3: VMB          Normal           2495 mV\n F0    V3: VMC          Normal           1499 mV\n F0    V3: VMD          Normal           1000 mV\n F0    V3: 12v          Normal           11850 mV\n F0    V3: VDD          Normal           3300 mV\n P0    Vin              Normal           101 V AC\n P0    Iin              Normal           1 A\n P0    Vout             Normal           12 V AC\n P0    Iout             Normal           15 A\n P0    Temp1            Normal           26 Celsius\n P0    Temp2            Normal           31 Celsius\n P0    Temp3            Normal           26 Celsius\n P1    Vin              Normal           101 V AC\n P1    Iin              Normal           2 A\n P1    Vout             Normal           12 V AC\n P1    Iout             Normal           16 A\n P1    Temp1            Normal           26 Celsius\n P1    Temp2            Normal           33 Celsius\n P1    Temp3            Normal           26 Celsius\n P6    Temp1            Normal           38 Celsius\n P6    Temp: FC PWM1    Fan Speed 60%    26 Celsius\n P7    Temp1            Normal           37 Celsius\n P7    Temp: FC PWM1    Fan Speed 60%    26 Celsius\n R0    V1: VMA          Normal           1201 mV\n R0    V1: VMB          Normal           2495 mV\n R0    V1: VMC          Normal           3291 mV\n R0    V1: VMD          Normal           2495 mV\n R0    V1: VME          Normal           1796 mV\n R0    V1: VMF          Normal           1528 mV\n R0    V1: 12v          Normal           11835 mV\n R0    V1: VDD          Normal           3295 mV\n R0    V1: GP1          Normal           910 mV\n R0    V1: GP2          Normal           1198 mV\n R0    V2: VMA          Normal           1049 mV\n R0    V2: VMB          Normal           1098 mV\n R0    V2: VMD          Normal           996 mV\n R0    V2: VME          Normal           1098 mV\n R0    V2: VMF          Normal           996 mV\n R0    V2: 12v          Normal           11850 mV\n R0    V2: VDD          Normal           3300 mV\n R0    V2: GP1          Normal           2497 mV\n R0    V2: GP2          Normal           1196 mV\n R0    Temp: Outlet     Normal           30 Celsius\n R0    Temp: CPU AIR    Normal           32 Celsius\n R0    Temp: Inlet      Normal           26 Celsius\n R0    Temp: SCBY AIR   Normal           45 Celsius\n R0    Temp: MCH DIE    Normal           54 Celsius\n R0    Temp: MCH AIR    Normal           40 Celsius\n R0    Temp: C2D C0     Normal           35 Celsius\n R0    Temp: C2D C1     Normal           37 Celsius\n R1    V1: VMA          Normal           1201 mV\n R1    V1: VMB          Normal           2495 mV\n R1    V1: VMC          Normal           3291 mV\n R1    V1: VMD          Normal           2495 mV\n R1    V1: VME          Normal           1796 mV\n R1    V1: VMF          Normal           1528 mV\n R1    V1: 12v          Normal           11835 mV\n R1    V1: VDD          Normal           3305 mV\n R1    V1: GP1          Normal           910 mV\n R1    V1: GP2          Normal           1198 mV\n R1    V2: VMA          Normal           1044 mV\n R1    V2: VMB          Normal           1098 mV\n R1    V2: VMD          Normal           991 mV\n R1    V2: VME          Normal           1098 mV\n R1    V2: VMF          Normal           1000 mV\n R1    V2: 12v          Normal           11821 mV\n R1    V2: VDD          Normal           3305 mV\n R1    V2: GP1          Normal           2497 mV\n R1    V2: GP2          Normal           1196 mV\n R1    Temp: Outlet     Normal           30 Celsius\n R1    Temp: CPU AIR    Normal           32 Celsius\n R1    Temp: Inlet      Normal           25 Celsius\n R1    Temp: SCBY AIR   Normal           40 Celsius\n R1    Temp: MCH DIE    Normal           53 Celsius\n R1    Temp: MCH AIR    Normal           39 Celsius\n R1    Temp: C2D C0     Normal           36 Celsius\n R1    Temp: C2D C1     Normal           33 Celsius\n 0     V1: VMA          Normal           1098 mV\n 0     V1: VMB          Normal           1196 mV\n 0     V1: VMC          Normal           1494 mV\n 0     V1: VMD          Normal           1796 mV\n 0     V1: VME          Normal           2490 mV\n 0     V1: VMF          Normal           3286 mV\n 0     V1: 12v          Normal           11894 mV\n 0     V1: VDD          Normal           3295 mV\n 0     V1: GP1          Normal           749 mV\n 0     V1: GP2          Normal           898 mV\n 0     V2: VMB          Normal           996 mV\n 0     V2: VME          Normal           747 mV\n 0     V2: VMF          Normal           747 mV\n 0     V2: 12v          Normal           11865 mV\n 0     V2: VDD          Normal           3295 mV\n 0     V2: GP2          Normal           747 mV\n 0     Temp: Left       Normal           30 Celsius\n 0     Temp: Center     Normal           37 Celsius\n 0     Temp: Asic1      Normal           50 Celsius\n 0     Temp: Right      Normal           35 Celsius\n F1    V1: VMA          Normal           1796 mV\n F1    V1: VMB          Normal           1196 mV\n F1    V1: VMC          Normal           996 mV\n F1    V1: VMD          Normal           1049 mV\n F1    V1: VME          Normal           1035 mV\n F1    V1: VMF          Normal           1098 mV\n F1    V1: 12v          Normal           11821 mV\n F1    V1: VDD          Normal           3295 mV\n F1    V1: GP1          Normal           903 mV\n F1    V1: GP2          Normal           769 mV\n F1    V2: VMA          Normal           3291 mV\n F1    V2: VMB          Normal           2495 mV\n F1    V2: VMC          Normal           1499 mV\n F1    V2: VMD          Normal           1196 mV\n F1    V2: VME          Normal           1098 mV\n F1    V2: VMF          Normal           996 mV\n F1    V2: 12v          Normal           11762 mV\n F1    V2: VDD          Normal           3295 mV\n F1    V2: GP1          Normal           771 mV\n F1    V2: GP2          Normal           1088 mV\n F1    Temp: Inlet      Normal           31 Celsius\n F1    Temp: Pop Die    Normal           48 Celsius\n F1    Temp: Left Ext   Normal           43 Celsius\n F1    Temp: HKP Die    Normal           52 Celsius\n F1    Temp: CPP Rear   Normal           46 Celsius\n F1    Temp: Olv Die    Normal           41 Celsius\n F1    Temp: Rght Ext   Normal           37 Celsius\n F1    Temp: MCH Die    Normal           54 Celsius\n F1    V3: VMA          Normal           3286 mV\n F1    V3: VMB          Normal           2495 mV\n F1    V3: VMC          Normal           1494 mV\n F1    V3: VMD          Normal           996 mV\n F1    V3: 12v          Normal           11806 mV\n F1    V3: VDD          Normal           3295 mV\n 1     V1: VMA          Normal           1098 mV\n 1     V1: VMB          Normal           1196 mV\n 1     V1: VMC          Normal           1494 mV\n 1     V1: VMD          Normal           1791 mV\n 1     V1: VME          Normal           2490 mV\n 1     V1: VMF          Normal           3286 mV\n 1     V1: 12v          Normal           11879 mV\n 1     V1: VDD          Normal           3291 mV\n 1     V1: GP1          Normal           747 mV\n 1     V1: GP2          Normal           891 mV\n 1     V2: VMB          Normal           996 mV\n 1     V2: VME          Normal           747 mV\n 1     V2: VMF          Normal           747 mV\n 1     V2: 12v          Normal           11865 mV\n 1     V2: VDD          Normal           3295 mV\n 1     V2: GP2          Normal           749 mV\n 1     Temp: Left       Normal           26 Celsius\n 1     Temp: Center     Normal           29 Celsius\n 1     Temp: Asic1      Normal           38 Celsius\n 1     Temp: Right      Normal           29 Celsius\n P2    Vin              Normal           101 V AC\n P2    Iin              Normal           1 A\n P2    Vout             Normal           12 V AC\n P2    Iout             Normal           13 A\n P2    Temp1            Normal           26 Celsius\n P2    Temp2            Normal           31 Celsius\n P2    Temp3            Normal           26 Celsius\n P3    Vin              Normal           100 V AC\n P3    Iin              Normal           1 A\n P3    Vout             Normal           12 V AC\n P3    Iout             Normal           13 A\n P3    Temp1            Normal           26 Celsius\n P3    Temp2            Normal           31 Celsius\n P3    Temp3            Normal           26 Celsius\n",
+      "expected": {
+        "critical_alarms": 0,
+        "major_alarms": 0,
+        "minor_alarms": 0,
+        "sensors": {
+          "F0": {
+            "V1: VMA": {
+              "state": "Normal",
+              "reading": 1796,
+              "unit": "mV"
+            },
+            "V1: VMB": {
+              "state": "Normal",
+              "reading": 1196,
+              "unit": "mV"
+            },
+            "V1: VMC": {
+              "state": "Normal",
+              "reading": 996,
+              "unit": "mV"
+            },
+            "V1: VMD": {
+              "state": "Normal",
+              "reading": 1044,
+              "unit": "mV"
+            },
+            "V1: VME": {
+              "state": "Normal",
+              "reading": 1020,
+              "unit": "mV"
+            },
+            "V1: VMF": {
+              "state": "Normal",
+              "reading": 1098,
+              "unit": "mV"
+            },
+            "V1: 12v": {
+              "state": "Normal",
+              "reading": 11821,
+              "unit": "mV"
+            },
+            "V1: VDD": {
+              "state": "Normal",
+              "reading": 3295,
+              "unit": "mV"
+            },
+            "V1: GP1": {
+              "state": "Normal",
+              "reading": 908,
+              "unit": "mV"
+            },
+            "V1: GP2": {
+              "state": "Normal",
+              "reading": 771,
+              "unit": "mV"
+            },
+            "V2: VMA": {
+              "state": "Normal",
+              "reading": 3291,
+              "unit": "mV"
+            },
+            "V2: VMB": {
+              "state": "Normal",
+              "reading": 2495,
+              "unit": "mV"
+            },
+            "V2: VMC": {
+              "state": "Normal",
+              "reading": 1499,
+              "unit": "mV"
+            },
+            "V2: VMD": {
+              "state": "Normal",
+              "reading": 1196,
+              "unit": "mV"
+            },
+            "V2: VME": {
+              "state": "Normal",
+              "reading": 1103,
+              "unit": "mV"
+            },
+            "V2: VMF": {
+              "state": "Normal",
+              "reading": 1000,
+              "unit": "mV"
+            },
+            "V2: 12v": {
+              "state": "Normal",
+              "reading": 11748,
+              "unit": "mV"
+            },
+            "V2: VDD": {
+              "state": "Normal",
+              "reading": 3295,
+              "unit": "mV"
+            },
+            "V2: GP1": {
+              "state": "Normal",
+              "reading": 771,
+              "unit": "mV"
+            },
+            "V2: GP2": {
+              "state": "Normal",
+              "reading": 1096,
+              "unit": "mV"
+            },
+            "Temp: Inlet": {
+              "state": "Normal",
+              "reading": 30,
+              "unit": "Celsius"
+            },
+            "Temp: Pop Die": {
+              "state": "Normal",
+              "reading": 43,
+              "unit": "Celsius"
+            },
+            "Temp: HKP Die": {
+              "state": "Normal",
+              "reading": 47,
+              "unit": "Celsius"
+            },
+            "Temp: Olv Die": {
+              "state": "Normal",
+              "reading": 38,
+              "unit": "Celsius"
+            },
+            "Temp: MCH Die": {
+              "state": "Normal",
+              "reading": 53,
+              "unit": "Celsius"
+            },
+            "V3: VMA": {
+              "state": "Normal",
+              "reading": 3291,
+              "unit": "mV"
+            },
+            "V3: VMB": {
+              "state": "Normal",
+              "reading": 2495,
+              "unit": "mV"
+            },
+            "V3: VMC": {
+              "state": "Normal",
+              "reading": 1499,
+              "unit": "mV"
+            },
+            "V3: VMD": {
+              "state": "Normal",
+              "reading": 1000,
+              "unit": "mV"
+            },
+            "V3: 12v": {
+              "state": "Normal",
+              "reading": 11850,
+              "unit": "mV"
+            },
+            "V3: VDD": {
+              "state": "Normal",
+              "reading": 3300,
+              "unit": "mV"
+            }
+          },
+          "P0": {
+            "Vin": {
+              "state": "Normal",
+              "reading": 101,
+              "unit": "V AC"
+            },
+            "Iin": {
+              "state": "Normal",
+              "reading": 1,
+              "unit": "A"
+            },
+            "Vout": {
+              "state": "Normal",
+              "reading": 12,
+              "unit": "V AC"
+            },
+            "Iout": {
+              "state": "Normal",
+              "reading": 15,
+              "unit": "A"
+            },
+            "Temp1": {
+              "state": "Normal",
+              "reading": 26,
+              "unit": "Celsius"
+            },
+            "Temp2": {
+              "state": "Normal",
+              "reading": 31,
+              "unit": "Celsius"
+            },
+            "Temp3": {
+              "state": "Normal",
+              "reading": 26,
+              "unit": "Celsius"
+            }
+          },
+          "P1": {
+            "Vin": {
+              "state": "Normal",
+              "reading": 101,
+              "unit": "V AC"
+            },
+            "Iin": {
+              "state": "Normal",
+              "reading": 2,
+              "unit": "A"
+            },
+            "Vout": {
+              "state": "Normal",
+              "reading": 12,
+              "unit": "V AC"
+            },
+            "Iout": {
+              "state": "Normal",
+              "reading": 16,
+              "unit": "A"
+            },
+            "Temp1": {
+              "state": "Normal",
+              "reading": 26,
+              "unit": "Celsius"
+            },
+            "Temp2": {
+              "state": "Normal",
+              "reading": 33,
+              "unit": "Celsius"
+            },
+            "Temp3": {
+              "state": "Normal",
+              "reading": 26,
+              "unit": "Celsius"
+            }
+          },
+          "P6": {
+            "Temp1": {
+              "state": "Normal",
+              "reading": 38,
+              "unit": "Celsius"
+            },
+            "Temp: FC PWM1": {
+              "state": "Fan Speed 60%",
+              "reading": 26,
+              "unit": "Celsius"
+            }
+          },
+          "P7": {
+            "Temp1": {
+              "state": "Normal",
+              "reading": 37,
+              "unit": "Celsius"
+            },
+            "Temp: FC PWM1": {
+              "state": "Fan Speed 60%",
+              "reading": 26,
+              "unit": "Celsius"
+            }
+          },
+          "R0": {
+            "V1: VMA": {
+              "state": "Normal",
+              "reading": 1201,
+              "unit": "mV"
+            },
+            "V1: VMB": {
+              "state": "Normal",
+              "reading": 2495,
+              "unit": "mV"
+            },
+            "V1: VMC": {
+              "state": "Normal",
+              "reading": 3291,
+              "unit": "mV"
+            },
+            "V1: VMD": {
+              "state": "Normal",
+              "reading": 2495,
+              "unit": "mV"
+            },
+            "V1: VME": {
+              "state": "Normal",
+              "reading": 1796,
+              "unit": "mV"
+            },
+            "V1: VMF": {
+              "state": "Normal",
+              "reading": 1528,
+              "unit": "mV"
+            },
+            "V1: 12v": {
+              "state": "Normal",
+              "reading": 11835,
+              "unit": "mV"
+            },
+            "V1: VDD": {
+              "state": "Normal",
+              "reading": 3295,
+              "unit": "mV"
+            },
+            "V1: GP1": {
+              "state": "Normal",
+              "reading": 910,
+              "unit": "mV"
+            },
+            "V1: GP2": {
+              "state": "Normal",
+              "reading": 1198,
+              "unit": "mV"
+            },
+            "V2: VMA": {
+              "state": "Normal",
+              "reading": 1049,
+              "unit": "mV"
+            },
+            "V2: VMB": {
+              "state": "Normal",
+              "reading": 1098,
+              "unit": "mV"
+            },
+            "V2: VMD": {
+              "state": "Normal",
+              "reading": 996,
+              "unit": "mV"
+            },
+            "V2: VME": {
+              "state": "Normal",
+              "reading": 1098,
+              "unit": "mV"
+            },
+            "V2: VMF": {
+              "state": "Normal",
+              "reading": 996,
+              "unit": "mV"
+            },
+            "V2: 12v": {
+              "state": "Normal",
+              "reading": 11850,
+              "unit": "mV"
+            },
+            "V2: VDD": {
+              "state": "Normal",
+              "reading": 3300,
+              "unit": "mV"
+            },
+            "V2: GP1": {
+              "state": "Normal",
+              "reading": 2497,
+              "unit": "mV"
+            },
+            "V2: GP2": {
+              "state": "Normal",
+              "reading": 1196,
+              "unit": "mV"
+            },
+            "Temp: Outlet": {
+              "state": "Normal",
+              "reading": 30,
+              "unit": "Celsius"
+            },
+            "Temp: CPU AIR": {
+              "state": "Normal",
+              "reading": 32,
+              "unit": "Celsius"
+            },
+            "Temp: Inlet": {
+              "state": "Normal",
+              "reading": 26,
+              "unit": "Celsius"
+            },
+            "Temp: MCH DIE": {
+              "state": "Normal",
+              "reading": 54,
+              "unit": "Celsius"
+            },
+            "Temp: MCH AIR": {
+              "state": "Normal",
+              "reading": 40,
+              "unit": "Celsius"
+            },
+            "Temp: C2D C0": {
+              "state": "Normal",
+              "reading": 35,
+              "unit": "Celsius"
+            },
+            "Temp: C2D C1": {
+              "state": "Normal",
+              "reading": 37,
+              "unit": "Celsius"
+            }
+          },
+          "R1": {
+            "V1: VMA": {
+              "state": "Normal",
+              "reading": 1201,
+              "unit": "mV"
+            },
+            "V1: VMB": {
+              "state": "Normal",
+              "reading": 2495,
+              "unit": "mV"
+            },
+            "V1: VMC": {
+              "state": "Normal",
+              "reading": 3291,
+              "unit": "mV"
+            },
+            "V1: VMD": {
+              "state": "Normal",
+              "reading": 2495,
+              "unit": "mV"
+            },
+            "V1: VME": {
+              "state": "Normal",
+              "reading": 1796,
+              "unit": "mV"
+            },
+            "V1: VMF": {
+              "state": "Normal",
+              "reading": 1528,
+              "unit": "mV"
+            },
+            "V1: 12v": {
+              "state": "Normal",
+              "reading": 11835,
+              "unit": "mV"
+            },
+            "V1: VDD": {
+              "state": "Normal",
+              "reading": 3305,
+              "unit": "mV"
+            },
+            "V1: GP1": {
+              "state": "Normal",
+              "reading": 910,
+              "unit": "mV"
+            },
+            "V1: GP2": {
+              "state": "Normal",
+              "reading": 1198,
+              "unit": "mV"
+            },
+            "V2: VMA": {
+              "state": "Normal",
+              "reading": 1044,
+              "unit": "mV"
+            },
+            "V2: VMB": {
+              "state": "Normal",
+              "reading": 1098,
+              "unit": "mV"
+            },
+            "V2: VMD": {
+              "state": "Normal",
+              "reading": 991,
+              "unit": "mV"
+            },
+            "V2: VME": {
+              "state": "Normal",
+              "reading": 1098,
+              "unit": "mV"
+            },
+            "V2: VMF": {
+              "state": "Normal",
+              "reading": 1000,
+              "unit": "mV"
+            },
+            "V2: 12v": {
+              "state": "Normal",
+              "reading": 11821,
+              "unit": "mV"
+            },
+            "V2: VDD": {
+              "state": "Normal",
+              "reading": 3305,
+              "unit": "mV"
+            },
+            "V2: GP1": {
+              "state": "Normal",
+              "reading": 2497,
+              "unit": "mV"
+            },
+            "V2: GP2": {
+              "state": "Normal",
+              "reading": 1196,
+              "unit": "mV"
+            },
+            "Temp: Outlet": {
+              "state": "Normal",
+              "reading": 30,
+              "unit": "Celsius"
+            },
+            "Temp: CPU AIR": {
+              "state": "Normal",
+              "reading": 32,
+              "unit": "Celsius"
+            },
+            "Temp: Inlet": {
+              "state": "Normal",
+              "reading": 25,
+              "unit": "Celsius"
+            },
+            "Temp: MCH DIE": {
+              "state": "Normal",
+              "reading": 53,
+              "unit": "Celsius"
+            },
+            "Temp: MCH AIR": {
+              "state": "Normal",
+              "reading": 39,
+              "unit": "Celsius"
+            },
+            "Temp: C2D C0": {
+              "state": "Normal",
+              "reading": 36,
+              "unit": "Celsius"
+            },
+            "Temp: C2D C1": {
+              "state": "Normal",
+              "reading": 33,
+              "unit": "Celsius"
+            }
+          },
+          "0": {
+            "V1: VMA": {
+              "state": "Normal",
+              "reading": 1098,
+              "unit": "mV"
+            },
+            "V1: VMB": {
+              "state": "Normal",
+              "reading": 1196,
+              "unit": "mV"
+            },
+            "V1: VMC": {
+              "state": "Normal",
+              "reading": 1494,
+              "unit": "mV"
+            },
+            "V1: VMD": {
+              "state": "Normal",
+              "reading": 1796,
+              "unit": "mV"
+            },
+            "V1: VME": {
+              "state": "Normal",
+              "reading": 2490,
+              "unit": "mV"
+            },
+            "V1: VMF": {
+              "state": "Normal",
+              "reading": 3286,
+              "unit": "mV"
+            },
+            "V1: 12v": {
+              "state": "Normal",
+              "reading": 11894,
+              "unit": "mV"
+            },
+            "V1: VDD": {
+              "state": "Normal",
+              "reading": 3295,
+              "unit": "mV"
+            },
+            "V1: GP1": {
+              "state": "Normal",
+              "reading": 749,
+              "unit": "mV"
+            },
+            "V1: GP2": {
+              "state": "Normal",
+              "reading": 898,
+              "unit": "mV"
+            },
+            "V2: VMB": {
+              "state": "Normal",
+              "reading": 996,
+              "unit": "mV"
+            },
+            "V2: VME": {
+              "state": "Normal",
+              "reading": 747,
+              "unit": "mV"
+            },
+            "V2: VMF": {
+              "state": "Normal",
+              "reading": 747,
+              "unit": "mV"
+            },
+            "V2: 12v": {
+              "state": "Normal",
+              "reading": 11865,
+              "unit": "mV"
+            },
+            "V2: VDD": {
+              "state": "Normal",
+              "reading": 3295,
+              "unit": "mV"
+            },
+            "V2: GP2": {
+              "state": "Normal",
+              "reading": 747,
+              "unit": "mV"
+            },
+            "Temp: Left": {
+              "state": "Normal",
+              "reading": 30,
+              "unit": "Celsius"
+            },
+            "Temp: Center": {
+              "state": "Normal",
+              "reading": 37,
+              "unit": "Celsius"
+            },
+            "Temp: Asic1": {
+              "state": "Normal",
+              "reading": 50,
+              "unit": "Celsius"
+            },
+            "Temp: Right": {
+              "state": "Normal",
+              "reading": 35,
+              "unit": "Celsius"
+            }
+          },
+          "F1": {
+            "V1: VMA": {
+              "state": "Normal",
+              "reading": 1796,
+              "unit": "mV"
+            },
+            "V1: VMB": {
+              "state": "Normal",
+              "reading": 1196,
+              "unit": "mV"
+            },
+            "V1: VMC": {
+              "state": "Normal",
+              "reading": 996,
+              "unit": "mV"
+            },
+            "V1: VMD": {
+              "state": "Normal",
+              "reading": 1049,
+              "unit": "mV"
+            },
+            "V1: VME": {
+              "state": "Normal",
+              "reading": 1035,
+              "unit": "mV"
+            },
+            "V1: VMF": {
+              "state": "Normal",
+              "reading": 1098,
+              "unit": "mV"
+            },
+            "V1: 12v": {
+              "state": "Normal",
+              "reading": 11821,
+              "unit": "mV"
+            },
+            "V1: VDD": {
+              "state": "Normal",
+              "reading": 3295,
+              "unit": "mV"
+            },
+            "V1: GP1": {
+              "state": "Normal",
+              "reading": 903,
+              "unit": "mV"
+            },
+            "V1: GP2": {
+              "state": "Normal",
+              "reading": 769,
+              "unit": "mV"
+            },
+            "V2: VMA": {
+              "state": "Normal",
+              "reading": 3291,
+              "unit": "mV"
+            },
+            "V2: VMB": {
+              "state": "Normal",
+              "reading": 2495,
+              "unit": "mV"
+            },
+            "V2: VMC": {
+              "state": "Normal",
+              "reading": 1499,
+              "unit": "mV"
+            },
+            "V2: VMD": {
+              "state": "Normal",
+              "reading": 1196,
+              "unit": "mV"
+            },
+            "V2: VME": {
+              "state": "Normal",
+              "reading": 1098,
+              "unit": "mV"
+            },
+            "V2: VMF": {
+              "state": "Normal",
+              "reading": 996,
+              "unit": "mV"
+            },
+            "V2: 12v": {
+              "state": "Normal",
+              "reading": 11762,
+              "unit": "mV"
+            },
+            "V2: VDD": {
+              "state": "Normal",
+              "reading": 3295,
+              "unit": "mV"
+            },
+            "V2: GP1": {
+              "state": "Normal",
+              "reading": 771,
+              "unit": "mV"
+            },
+            "V2: GP2": {
+              "state": "Normal",
+              "reading": 1088,
+              "unit": "mV"
+            },
+            "Temp: Inlet": {
+              "state": "Normal",
+              "reading": 31,
+              "unit": "Celsius"
+            },
+            "Temp: Pop Die": {
+              "state": "Normal",
+              "reading": 48,
+              "unit": "Celsius"
+            },
+            "Temp: HKP Die": {
+              "state": "Normal",
+              "reading": 52,
+              "unit": "Celsius"
+            },
+            "Temp: Olv Die": {
+              "state": "Normal",
+              "reading": 41,
+              "unit": "Celsius"
+            },
+            "Temp: MCH Die": {
+              "state": "Normal",
+              "reading": 54,
+              "unit": "Celsius"
+            },
+            "V3: VMA": {
+              "state": "Normal",
+              "reading": 3286,
+              "unit": "mV"
+            },
+            "V3: VMB": {
+              "state": "Normal",
+              "reading": 2495,
+              "unit": "mV"
+            },
+            "V3: VMC": {
+              "state": "Normal",
+              "reading": 1494,
+              "unit": "mV"
+            },
+            "V3: VMD": {
+              "state": "Normal",
+              "reading": 996,
+              "unit": "mV"
+            },
+            "V3: 12v": {
+              "state": "Normal",
+              "reading": 11806,
+              "unit": "mV"
+            },
+            "V3: VDD": {
+              "state": "Normal",
+              "reading": 3295,
+              "unit": "mV"
+            }
+          },
+          "1": {
+            "V1: VMA": {
+              "state": "Normal",
+              "reading": 1098,
+              "unit": "mV"
+            },
+            "V1: VMB": {
+              "state": "Normal",
+              "reading": 1196,
+              "unit": "mV"
+            },
+            "V1: VMC": {
+              "state": "Normal",
+              "reading": 1494,
+              "unit": "mV"
+            },
+            "V1: VMD": {
+              "state": "Normal",
+              "reading": 1791,
+              "unit": "mV"
+            },
+            "V1: VME": {
+              "state": "Normal",
+              "reading": 2490,
+              "unit": "mV"
+            },
+            "V1: VMF": {
+              "state": "Normal",
+              "reading": 3286,
+              "unit": "mV"
+            },
+            "V1: 12v": {
+              "state": "Normal",
+              "reading": 11879,
+              "unit": "mV"
+            },
+            "V1: VDD": {
+              "state": "Normal",
+              "reading": 3291,
+              "unit": "mV"
+            },
+            "V1: GP1": {
+              "state": "Normal",
+              "reading": 747,
+              "unit": "mV"
+            },
+            "V1: GP2": {
+              "state": "Normal",
+              "reading": 891,
+              "unit": "mV"
+            },
+            "V2: VMB": {
+              "state": "Normal",
+              "reading": 996,
+              "unit": "mV"
+            },
+            "V2: VME": {
+              "state": "Normal",
+              "reading": 747,
+              "unit": "mV"
+            },
+            "V2: VMF": {
+              "state": "Normal",
+              "reading": 747,
+              "unit": "mV"
+            },
+            "V2: 12v": {
+              "state": "Normal",
+              "reading": 11865,
+              "unit": "mV"
+            },
+            "V2: VDD": {
+              "state": "Normal",
+              "reading": 3295,
+              "unit": "mV"
+            },
+            "V2: GP2": {
+              "state": "Normal",
+              "reading": 749,
+              "unit": "mV"
+            },
+            "Temp: Left": {
+              "state": "Normal",
+              "reading": 26,
+              "unit": "Celsius"
+            },
+            "Temp: Center": {
+              "state": "Normal",
+              "reading": 29,
+              "unit": "Celsius"
+            },
+            "Temp: Asic1": {
+              "state": "Normal",
+              "reading": 38,
+              "unit": "Celsius"
+            },
+            "Temp: Right": {
+              "state": "Normal",
+              "reading": 29,
+              "unit": "Celsius"
+            }
+          },
+          "P2": {
+            "Vin": {
+              "state": "Normal",
+              "reading": 101,
+              "unit": "V AC"
+            },
+            "Iin": {
+              "state": "Normal",
+              "reading": 1,
+              "unit": "A"
+            },
+            "Vout": {
+              "state": "Normal",
+              "reading": 12,
+              "unit": "V AC"
+            },
+            "Iout": {
+              "state": "Normal",
+              "reading": 13,
+              "unit": "A"
+            },
+            "Temp1": {
+              "state": "Normal",
+              "reading": 26,
+              "unit": "Celsius"
+            },
+            "Temp2": {
+              "state": "Normal",
+              "reading": 31,
+              "unit": "Celsius"
+            },
+            "Temp3": {
+              "state": "Normal",
+              "reading": 26,
+              "unit": "Celsius"
+            }
+          },
+          "P3": {
+            "Vin": {
+              "state": "Normal",
+              "reading": 100,
+              "unit": "V AC"
+            },
+            "Iin": {
+              "state": "Normal",
+              "reading": 1,
+              "unit": "A"
+            },
+            "Vout": {
+              "state": "Normal",
+              "reading": 12,
+              "unit": "V AC"
+            },
+            "Iout": {
+              "state": "Normal",
+              "reading": 13,
+              "unit": "A"
+            },
+            "Temp1": {
+              "state": "Normal",
+              "reading": 26,
+              "unit": "Celsius"
+            },
+            "Temp2": {
+              "state": "Normal",
+              "reading": 31,
+              "unit": "Celsius"
+            },
+            "Temp3": {
+              "state": "Normal",
+              "reading": 26,
+              "unit": "Celsius"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

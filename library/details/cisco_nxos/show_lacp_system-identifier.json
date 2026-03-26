@@ -1,0 +1,27 @@
+{
+  "os": "cisco_nxos",
+  "command": "show lacp system-identifier",
+  "schema": {
+    "name": "ShowLacpSystemIdentifierResult",
+    "fields": {
+      "system_id_mac": {
+        "type": "str",
+        "required": true
+      },
+      "system_priority": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Show lacp system-identifier output with priority and MAC",
+      "input": "32768,5e-2-0-1-0-7\n",
+      "expected": {
+        "system_id_mac": "5e-2-0-1-0-7",
+        "system_priority": 32768
+      }
+    }
+  ]
+}

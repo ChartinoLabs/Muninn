@@ -1,0 +1,188 @@
+{
+  "os": "cisco_ios",
+  "command": "show etherchannel summary",
+  "schema": {
+    "name": "ShowEtherchannelSummaryResult",
+    "fields": {
+      "num_channel_groups": {
+        "type": "int",
+        "required": true
+      },
+      "num_aggregators": {
+        "type": "int",
+        "required": true
+      },
+      "port_channels": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PortChannelEntry",
+            "fields": {
+              "port_channel": {
+                "type": "str",
+                "required": true
+              },
+              "port_channel_status": {
+                "type": "str",
+                "required": true
+              },
+              "layer": {
+                "type": "str",
+                "required": true
+              },
+              "protocol": {
+                "type": "str",
+                "required": false
+              },
+              "members": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "MemberPort",
+                    "fields": {
+                      "status": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "interface": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple port-channels with LACP, including multi-line member ports",
+      "input": "Flags:  D - down        P - bundled in port-channel\n        I - stand-alone s - suspended\n        H - Hot-standby (LACP only)\n        R - Layer3      S - Layer2\n        U - in use      N - not in use, no aggregation\n        f - failed to allocate aggregator\n\n        M - not in use, no aggregation due to minimum links not met\n        m - not in use, port not aggregated due to minimum links not met\n        u - unsuitable for bundling\n        d - default port\n\n        w - waiting to be aggregated\nNumber of channel-groups in use: 6\nNumber of aggregators:           6\n\nGroup  Port-channel  Protocol    Ports\n------+-------------+-----------+-----------------------------------------------\n1      Po1(SU)         LACP      Te6/4(P)       Te3/5(P)       Te9/4(P)\n                                 Te5/5(P)\n3      Po3(SU)         LACP      Te4/2(P)       Te2/2(P)\n7      Po7(SU)         LACP      Te3/3(P)       Te1/3(P)\n13     Po13(SU)        LACP      Te2/8(P)\n14     Po14(SU)        LACP      Te1/8(P)\n51     Po51(SU)        LACP      Te2/10(P)      Te4/10(P)\n",
+      "expected": {
+        "num_aggregators": 6,
+        "num_channel_groups": 6,
+        "port_channels": {
+          "1": {
+            "layer": "Layer2",
+            "members": {
+              "TenGigabitEthernet3/5": {
+                "interface": "TenGigabitEthernet3/5",
+                "status": "P"
+              },
+              "TenGigabitEthernet5/5": {
+                "interface": "TenGigabitEthernet5/5",
+                "status": "P"
+              },
+              "TenGigabitEthernet6/4": {
+                "interface": "TenGigabitEthernet6/4",
+                "status": "P"
+              },
+              "TenGigabitEthernet9/4": {
+                "interface": "TenGigabitEthernet9/4",
+                "status": "P"
+              }
+            },
+            "port_channel": "Port-channel1",
+            "port_channel_status": "in-use",
+            "protocol": "LACP"
+          },
+          "13": {
+            "layer": "Layer2",
+            "members": {
+              "TenGigabitEthernet2/8": {
+                "interface": "TenGigabitEthernet2/8",
+                "status": "P"
+              }
+            },
+            "port_channel": "Port-channel13",
+            "port_channel_status": "in-use",
+            "protocol": "LACP"
+          },
+          "14": {
+            "layer": "Layer2",
+            "members": {
+              "TenGigabitEthernet1/8": {
+                "interface": "TenGigabitEthernet1/8",
+                "status": "P"
+              }
+            },
+            "port_channel": "Port-channel14",
+            "port_channel_status": "in-use",
+            "protocol": "LACP"
+          },
+          "3": {
+            "layer": "Layer2",
+            "members": {
+              "TenGigabitEthernet2/2": {
+                "interface": "TenGigabitEthernet2/2",
+                "status": "P"
+              },
+              "TenGigabitEthernet4/2": {
+                "interface": "TenGigabitEthernet4/2",
+                "status": "P"
+              }
+            },
+            "port_channel": "Port-channel3",
+            "port_channel_status": "in-use",
+            "protocol": "LACP"
+          },
+          "51": {
+            "layer": "Layer2",
+            "members": {
+              "TenGigabitEthernet2/10": {
+                "interface": "TenGigabitEthernet2/10",
+                "status": "P"
+              },
+              "TenGigabitEthernet4/10": {
+                "interface": "TenGigabitEthernet4/10",
+                "status": "P"
+              }
+            },
+            "port_channel": "Port-channel51",
+            "port_channel_status": "in-use",
+            "protocol": "LACP"
+          },
+          "7": {
+            "layer": "Layer2",
+            "members": {
+              "TenGigabitEthernet1/3": {
+                "interface": "TenGigabitEthernet1/3",
+                "status": "P"
+              },
+              "TenGigabitEthernet3/3": {
+                "interface": "TenGigabitEthernet3/3",
+                "status": "P"
+              }
+            },
+            "port_channel": "Port-channel7",
+            "port_channel_status": "in-use",
+            "protocol": "LACP"
+          }
+        }
+      }
+    },
+    {
+      "name": "Single port-channel with no member ports and no protocol",
+      "input": "csr1000v-1#show etherchannel summary\nFlags:  D - down        P/bndl - bundled in port-channel\n        I - stand-alone s/susp - suspended\n        H - Hot-standby (LACP only)\n        R - Layer3      S - Layer2\n        U - in use      f - failed to allocate aggregator\n\n        M - not in use, minimum links not met\n        u - unsuitable for bundling\n        w - waiting to be aggregated\n        d - default port\n\n\nNumber of channel-groups in use: 1\nNumber of aggregators:           1\n\nGroup  Port-channel  Protocol    Ports\n------+-------------+-----------+-----------------------------------------------\n2\tPo2(RU)\t\t-\n",
+      "expected": {
+        "num_aggregators": 1,
+        "num_channel_groups": 1,
+        "port_channels": {
+          "2": {
+            "layer": "Layer3",
+            "port_channel": "Port-channel2",
+            "port_channel_status": "in-use"
+          }
+        }
+      }
+    }
+  ]
+}

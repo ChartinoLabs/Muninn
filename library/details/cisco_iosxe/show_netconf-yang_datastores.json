@@ -1,0 +1,28 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show netconf-yang datastores",
+  "schema": {
+    "name": "ShowNetconfYangDatastoresResult",
+    "fields": {
+      "datastores": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "NETCONF-YANG datastore names (issue",
+      "input": "cedge#show netconf-yang datastores\nDatastore Name             : running\nDatastore Name             : candidate\n\ncedge#\n",
+      "expected": {
+        "datastores": [
+          "running",
+          "candidate"
+        ]
+      }
+    }
+  ]
+}

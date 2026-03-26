@@ -1,0 +1,583 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip bgp neighbors",
+  "schema": {
+    "name": "ShowIpBgpNeighborsResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "NeighborEntry",
+            "fields": {
+              "remote_as": {
+                "type": "int",
+                "required": true
+              },
+              "local_as": {
+                "type": "int",
+                "required": false
+              },
+              "link_type": {
+                "type": "str",
+                "required": true
+              },
+              "vrf": {
+                "type": "str",
+                "required": false
+              },
+              "description": {
+                "type": "str",
+                "required": false
+              },
+              "peer_group": {
+                "type": "str",
+                "required": false
+              },
+              "bgp_version": {
+                "type": "int",
+                "required": true
+              },
+              "router_id": {
+                "type": "str",
+                "required": true
+              },
+              "bgp_state": {
+                "type": "str",
+                "required": true
+              },
+              "state_duration": {
+                "type": "str",
+                "required": false
+              },
+              "hold_time": {
+                "type": "int",
+                "required": true
+              },
+              "keepalive_interval": {
+                "type": "int",
+                "required": true
+              },
+              "last_read": {
+                "type": "str",
+                "required": true
+              },
+              "last_write": {
+                "type": "str",
+                "required": true
+              },
+              "message_stats": {
+                "type": {
+                  "name": "MessageStats",
+                  "fields": {
+                    "opens_sent": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "opens_rcvd": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "notifications_sent": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "notifications_rcvd": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "updates_sent": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "updates_rcvd": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "keepalives_sent": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "keepalives_rcvd": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "route_refresh_sent": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "route_refresh_rcvd": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "total_sent": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "total_rcvd": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": true
+              },
+              "connections_established": {
+                "type": "int",
+                "required": true
+              },
+              "connections_dropped": {
+                "type": "int",
+                "required": true
+              },
+              "last_reset": {
+                "type": "str",
+                "required": false
+              },
+              "address_families": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "AddressFamilyInfo",
+                    "fields": {
+                      "table_version": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "neighbor_version": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "peer_group": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "inbound_soft_reconfig": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "community_attr_sent": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "prefix_activity": {
+                        "type": {
+                          "name": "PrefixActivity",
+                          "fields": {
+                            "prefixes_current_sent": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "prefixes_current_rcvd": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "prefixes_total_sent": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "prefixes_total_rcvd": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "implicit_withdraw_sent": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "implicit_withdraw_rcvd": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "explicit_withdraw_sent": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "explicit_withdraw_rcvd": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "used_as_bestpath": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "used_as_multipath": {
+                              "type": "int",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              },
+              "local_host": {
+                "type": "str",
+                "required": false
+              },
+              "local_port": {
+                "type": "int",
+                "required": false
+              },
+              "foreign_host": {
+                "type": "str",
+                "required": false
+              },
+              "foreign_port": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Single BGP neighbor in Established state with IPv4 Unicast AF",
+      "input": "BGP neighbor is 20.30.255.14,  remote AS 1255, internal link\n Member of peer-group RR_SERVERS for session parameters\n  BGP version 4, remote router ID 20.40.1.1\n  BGP state = Established, up for 7w3d\n  Last read 00:00:24, last write 00:00:22, hold time is 180, keepalive interval is 60 seconds\n  Neighbor sessions:\n    1 active, is not multisession capable (disabled)\n  Neighbor capabilities:\n    Route refresh: advertised and received(new)\n    Four-octets ASN Capability: advertised and received\n    Address family IPv4 Unicast: advertised and received\n    Multisession Capability:\n  Message statistics:\n    InQ depth is 0\n    OutQ depth is 0\n\n                         Sent       Rcvd\n    Opens:                  1          1\n    Notifications:          0          0\n    Updates:                1         94\n    Keepalives:         83823      84638\n    Route Refresh:          0          0\n    Total:              83825      84733\n  Default minimum time between advertisement runs is 0 seconds\n\n For address family: IPv4 Unicast\n  Session: 20.30.255.14\n  BGP table version 270, neighbor version 270/0\n  Output queue size : 0\n  Index 1, Advertise bit 0\n  1 update-group member\n  RR_SERVERS peer-group member\n  Inbound soft reconfiguration allowed\n  Slow-peer detection is disabled\n  Slow-peer split-update-group dynamic is disabled\n                                 Sent       Rcvd\n  Prefix activity:               ----       ----\n    Prefixes Current:               0        113 (Consumes 6328 bytes)\n    Prefixes Total:                 0        217\n    Implicit Withdraw:              0         52\n    Explicit Withdraw:              0         52\n    Used as bestpath:             n/a        113\n    Used as multipath:            n/a          0\n\n                                   Outbound    Inbound\n  Local Policy Denied Prefixes:    --------    -------\n    Bestpath from this peer:            217        n/a\n    Invalid Path:                        52        n/a\n    Total:                              269          0\n  Number of NLRIs in the update sent: max 0, min 0\n  Last detected as dynamic slow peer: never\n  Dynamic slow peer recovered: never\n\n  Address tracking is enabled, the RIB does have a route to 20.30.255.14\n  Connections established 1; dropped 0\n  Last reset never\n  Transport(tcp) path-mtu-discovery is enabled\n  Graceful-Restart is disabled\nConnection state is ESTAB, I/O status: 1, unread input bytes: 0\nConnection is ECN Disabled, Mininum incoming TTL 0, Outgoing TTL 255\nLocal host: 20.30.255.13, Local port: 39443\nForeign host: 20.30.255.14, Foreign port: 179\nConnection tableid (VRF): 0\nMaximum output segment queue size: 50\n\nEnqueued packets for retransmit: 0, input: 0  mis-ordered: 0 (0 bytes)\n\nEvent Timers (current time is 0x1106B0BD8):\nTimer          Starts    Wakeups            Next\nRetrans         83827          1             0x0\nTimeWait            0          0             0x0\nAckHold         84719      83274             0x0\nSendWnd             0          0             0x0\nKeepAlive           0          0             0x0\nGiveUp              0          0             0x0\nPmtuAger            1          1             0x0\nDeadWait            0          0             0x0\nLinger              0          0             0x0\nProcessQ            0          0             0x0\n\n iss: 3730243128  snduna: 3731835842  sndnxt: 3731835842\n irs: 2485586108  rcvnxt: 2487200336\n\nsndwnd:  33561  scale:      0  maxrcvwnd:  16384\nrcvwnd:  16099  scale:      0  delrcvwnd:    285\n\nSRTT: 1000 ms, RTTO: 1003 ms, RTV: 3 ms, KRTT: 0 ms\nminRTT: 0 ms, maxRTT: 1000 ms, ACK hold: 200 ms\nStatus Flags: active open\nOption Flags: nagle, path mtu capable, SACK option permitted\nIP Precedence value : 6\n\nDatagrams (max data segment is 1460 bytes):\nRcvd: 168543 (out of order: 0), with data: 84718, total data bytes:41614227\nSent: 168204 (retransmit: 1, fastretransmit: 0, partialack: 0, Second Congestion: 0), with data: 83825, total data bytes: 1592713\n Packets received in fast path: 0, fast processed: 0, slow path: 0\n fast lock acquisition failures: 0, slow path: 0\n",
+      "expected": {
+        "neighbors": {
+          "20.30.255.14": {
+            "address_families": {
+              "IPv4 Unicast": {
+                "inbound_soft_reconfig": true,
+                "neighbor_version": 270,
+                "peer_group": "RR_SERVERS",
+                "prefix_activity": {
+                  "explicit_withdraw_rcvd": 52,
+                  "explicit_withdraw_sent": 0,
+                  "implicit_withdraw_rcvd": 52,
+                  "implicit_withdraw_sent": 0,
+                  "prefixes_current_rcvd": 113,
+                  "prefixes_current_sent": 0,
+                  "prefixes_total_rcvd": 217,
+                  "prefixes_total_sent": 0,
+                  "used_as_bestpath": 113,
+                  "used_as_multipath": 0
+                },
+                "table_version": 270
+              }
+            },
+            "bgp_state": "Established",
+            "bgp_version": 4,
+            "connections_dropped": 0,
+            "connections_established": 1,
+            "foreign_host": "20.30.255.14",
+            "foreign_port": 179,
+            "hold_time": 180,
+            "keepalive_interval": 60,
+            "last_read": "00:00:24",
+            "last_write": "00:00:22",
+            "link_type": "internal",
+            "local_host": "20.30.255.13",
+            "local_port": 39443,
+            "message_stats": {
+              "keepalives_rcvd": 84638,
+              "keepalives_sent": 83823,
+              "notifications_rcvd": 0,
+              "notifications_sent": 0,
+              "opens_rcvd": 1,
+              "opens_sent": 1,
+              "route_refresh_rcvd": 0,
+              "route_refresh_sent": 0,
+              "total_rcvd": 84733,
+              "total_sent": 83825,
+              "updates_rcvd": 94,
+              "updates_sent": 1
+            },
+            "peer_group": "RR_SERVERS",
+            "remote_as": 1255,
+            "router_id": "20.40.1.1",
+            "state_duration": "7w3d"
+          }
+        }
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": "BGP neighbor is 192.0.2.1,  remote AS 65000, internal link\n Fall over configured for session\n BFD is configured. BFD peer is Down. Using BFD to detect fast fallover (multi-hop).\n  BGP version 4, remote router ID 192.0.2.1\n  BGP state = Established, up for 1w4d\n  Last read 00:00:22, last write 00:00:50, hold time is 180, keepalive interval is 60 seconds\n  Last update received: 1w4d\n  Neighbor sessions:\n    1 active, is not multisession capable (disabled)\n  Neighbor capabilities:\n    Route refresh: advertised and received(new)\n    Four-octets ASN Capability: advertised and received\n    Address family IPv4 Unicast: advertised and received\n    Enhanced Refresh Capability: advertised and received\n    Multisession Capability:\n    Stateful switchover support enabled: NO for session 1\n  Message statistics:\n    InQ depth is 0\n    OutQ depth is 0\n\n                         Sent       Rcvd\n    Opens:                  1          1\n    Notifications:          0          0\n    Updates:                1          1\n    Keepalives:         17697      17689\n    Route Refresh:          0          0\n    Total:              17699      17691\n  Do log neighbor state changes (via global configuration)\n  Default minimum time between advertisement runs is 0 seconds\n\n For address family: IPv4 Unicast\n  Session: 192.0.2.1\n  BGP table version 1, neighbor version 1/0\n  Output queue size : 0\n  Index 2, Advertise bit 0\n  2 update-group member\n  Community attribute sent to this neighbor\n  Extended-community attribute sent to this neighbor\n  Slow-peer detection is disabled\n  Slow-peer split-update-group dynamic is disabled\n                                 Sent       Rcvd\n  Prefix activity:               ----       ----\n    Prefixes Current:               0          0\n    Prefixes Total:                 0          0\n    Implicit Withdraw:              0          0\n    Explicit Withdraw:              0          0\n    Used as bestpath:             n/a          0\n    Used as multipath:            n/a          0\n    Used as secondary:            n/a          0\n\n                                   Outbound    Inbound\n  Local Policy Denied Prefixes:    --------    -------\n    Total:                                0          0\n  Number of NLRIs in the update sent: max 0, min 0\n  Last detected as dynamic slow peer: never\n  Dynamic slow peer recovered: never\n  Refresh Epoch: 1\n  Last Sent Refresh Start-of-rib: never\n  Last Sent Refresh End-of-rib: never\n  Last Received Refresh Start-of-rib: never\n  Last Received Refresh End-of-rib: never\n\t\t\t\t       Sent\t  Rcvd\n\tRefresh activity:\t       ----\t  ----\n\t  Refresh Start-of-RIB          0          0\n\t  Refresh End-of-RIB            0          0\n\n  Address tracking is enabled, the RIB does have a route to 192.0.2.1\n  Route to peer address reachability Up: 2; Down: 0\n    Last notification 1w4d\n  Connections established 1; dropped 0\n  Last reset never\n  Interface associated: (none) (peering address NOT in same link)\n  Transport(tcp) path-mtu-discovery is enabled\n  Graceful-Restart is disabled\n  SSO is disabled\nConnection state is ESTAB, I/O status: 1, unread input bytes: 0\nConnection is ECN Disabled, Mininum incoming TTL 0, Outgoing TTL 255\nLocal host: 192.0.2.4, Local port: 179\nForeign host: 192.0.2.1, Foreign port: 22634\nConnection tableid (VRF): 0\nMaximum output segment queue size: 50\n\nEnqueued packets for retransmit: 0, input: 0  mis-ordered: 0 (0 bytes)\n\nEvent Timers (current time is 0x39B14C10):\nTimer          Starts    Wakeups            Next\nRetrans         17699          0             0x0\nTimeWait            0          0             0x0\nAckHold         17691      17560             0x0\nSendWnd             0          0             0x0\nKeepAlive           0          0             0x0\nGiveUp              0          0             0x0\nPmtuAger            0          0             0x0\nDeadWait            0          0             0x0\nLinger              0          0             0x0\nProcessQ            0          0             0x0\n\niss: 4076138802  snduna: 4076475126  sndnxt: 4076475126\nirs:  406863118  rcvnxt:  407199290\n\nsndwnd:  15092  scale:      0  maxrcvwnd:  16384\nrcvwnd:  15244  scale:      0  delrcvwnd:   1140\n\nSRTT: 1000 ms, RTTO: 1003 ms, RTV: 3 ms, KRTT: 0 ms\nminRTT: 3 ms, maxRTT: 1000 ms, ACK hold: 120 ms\nuptime: 964415124 ms, Sent idletime: 22764 ms, Receive idletime: 22884 ms\nStatus Flags: passive open, gen tcbs\nOption Flags: nagle, path mtu capable, SACK option permitted\n  win-scale\nIP Precedence value : 6\nWindow update Optimisation : Enabled\nACK Optimisation : Dynamic ACK Tuning Enabled\n\nDatagrams (max data segment is 1460 bytes):\nPeer MSS:       1460\nRcvd: 35352 (out of order: 0), with data: 17691, total data bytes: 336171\nSent: 35337 (retransmit: 0, fastretransmit: 0, partialack: 0, Second Congestion: 0), with data: 17699, total data bytes: 336323\n\n Packets received in fast path: 0, fast processed: 0, slow path: 0\n fast lock acquisition failures: 0, slow path: 0\nTCP Semaphore      0x7C19EDA07280  FREE\n\nBGP neighbor is 192.0.2.2,  remote AS 65000, internal link\n Fall over configured for session\n BFD is configured. BFD peer is Down. Using BFD to detect fast fallover (multi-hop).\n  BGP version 4, remote router ID 192.0.2.2\n  BGP state = Established, up for 1w4d\n  Last read 00:00:06, last write 00:00:32, hold time is 180, keepalive interval is 60 seconds\n  Last update received: 1w4d\n  Neighbor sessions:\n    1 active, is not multisession capable (disabled)\n  Neighbor capabilities:\n    Route refresh: advertised and received(new)\n    Four-octets ASN Capability: advertised and received\n    Address family IPv4 Unicast: advertised and received\n    Enhanced Refresh Capability: advertised and received\n    Multisession Capability:\n    Stateful switchover support enabled: NO for session 1\n  Message statistics:\n    InQ depth is 0\n    OutQ depth is 0\n\n                         Sent       Rcvd\n    Opens:                  1          1\n    Notifications:          0          0\n    Updates:                1          1\n    Keepalives:         17686      17676\n    Route Refresh:          0          0\n    Total:              17688      17678\n  Do log neighbor state changes (via global configuration)\n  Default minimum time between advertisement runs is 0 seconds\n\n For address family: IPv4 Unicast\n  Session: 192.0.2.2\n  BGP table version 1, neighbor version 1/0\n  Output queue size : 0\n  Index 2, Advertise bit 0\n  2 update-group member\n  Community attribute sent to this neighbor\n  Extended-community attribute sent to this neighbor\n  Slow-peer detection is disabled\n  Slow-peer split-update-group dynamic is disabled\n                                 Sent       Rcvd\n  Prefix activity:               ----       ----\n    Prefixes Current:               0          0\n    Prefixes Total:                 0          0\n    Implicit Withdraw:              0          0\n    Explicit Withdraw:              0          0\n    Used as bestpath:             n/a          0\n    Used as multipath:            n/a          0\n    Used as secondary:            n/a          0\n\n                                   Outbound    Inbound\n  Local Policy Denied Prefixes:    --------    -------\n    Total:                                0          0\n  Number of NLRIs in the update sent: max 0, min 0\n  Last detected as dynamic slow peer: never\n  Dynamic slow peer recovered: never\n  Refresh Epoch: 1\n  Last Sent Refresh Start-of-rib: never\n  Last Sent Refresh End-of-rib: never\n  Last Received Refresh Start-of-rib: never\n  Last Received Refresh End-of-rib: never\n\t\t\t\t       Sent\t  Rcvd\n\tRefresh activity:\t       ----\t  ----\n\t  Refresh Start-of-RIB          0          0\n\t  Refresh End-of-RIB            0          0\n\n  Address tracking is enabled, the RIB does have a route to 192.0.2.2\n  Route to peer address reachability Up: 1; Down: 0\n    Last notification 1w4d\n  Connections established 1; dropped 0\n  Last reset never\n  Interface associated: (none) (peering address NOT in same link)\n  Transport(tcp) path-mtu-discovery is enabled\n  Graceful-Restart is disabled\n  SSO is disabled\nConnection state is ESTAB, I/O status: 1, unread input bytes: 0\nConnection is ECN Disabled, Mininum incoming TTL 0, Outgoing TTL 255\nLocal host: 192.0.2.4, Local port: 179\nForeign host: 192.0.2.2, Foreign port: 52744\nConnection tableid (VRF): 0\nMaximum output segment queue size: 50\n\nEnqueued packets for retransmit: 0, input: 0  mis-ordered: 0 (0 bytes)\n\nEvent Timers (current time is 0x39B14C23):\nTimer          Starts    Wakeups            Next\nRetrans         17688          0             0x0\nTimeWait            0          0             0x0\nAckHold         17678      17571             0x0\nSendWnd             0          0             0x0\nKeepAlive           0          0             0x0\nGiveUp              0          0             0x0\nPmtuAger            0          0             0x0\nDeadWait            0          0             0x0\nLinger              0          0             0x0\nProcessQ            0          0             0x0\n\niss: 1116390085  snduna: 1116726200  sndnxt: 1116726200\nirs: 4036204522  rcvnxt: 4036540447\n\nsndwnd:  15301  scale:      0  maxrcvwnd:  16384\nrcvwnd:  15491  scale:      0  delrcvwnd:    893\n\nSRTT: 1000 ms, RTTO: 1003 ms, RTV: 3 ms, KRTT: 0 ms\nminRTT: 3 ms, maxRTT: 1000 ms, ACK hold: 120 ms\nuptime: 964415459 ms, Sent idletime: 6884 ms, Receive idletime: 7005 ms\nStatus Flags: passive open, gen tcbs\nOption Flags: nagle, path mtu capable, SACK option permitted\n  win-scale\nIP Precedence value : 6\nWindow update Optimisation : Enabled\nACK Optimisation : Dynamic ACK Tuning Enabled\n\nDatagrams (max data segment is 1460 bytes):\nPeer MSS:       1460\nRcvd: 35346 (out of order: 0), with data: 17678, total data bytes: 335924\nSent: 35337 (retransmit: 0, fastretransmit: 0, partialack: 0, Second Congestion: 0), with data: 17688, total data bytes: 336114\n\n Packets received in fast path: 0, fast processed: 0, slow path: 0\n fast lock acquisition failures: 0, slow path: 0\nTCP Semaphore      0x7C19EDA07350  FREE\n\nBGP neighbor is 192.0.2.3,  remote AS 65000, internal link\n Fall over configured for session\n BFD is configured. BFD peer is Down. Using BFD to detect fast fallover (multi-hop).\n  BGP version 4, remote router ID 192.0.2.3\n  BGP state = Established, up for 1w4d\n  Last read 00:00:49, last write 00:00:01, hold time is 180, keepalive interval is 60 seconds\n  Last update received: 1w4d\n  Neighbor sessions:\n    1 active, is not multisession capable (disabled)\n  Neighbor capabilities:\n    Route refresh: advertised and received(new)\n    Four-octets ASN Capability: advertised and received\n    Address family IPv4 Unicast: advertised and received\n    Enhanced Refresh Capability: advertised and received\n    Multisession Capability:\n    Stateful switchover support enabled: NO for session 1\n  Message statistics:\n    InQ depth is 0\n    OutQ depth is 0\n\n                         Sent       Rcvd\n    Opens:                  1          1\n    Notifications:          0          0\n    Updates:                1          1\n    Keepalives:         17687      17671\n    Route Refresh:          0          0\n    Total:              17689      17673\n  Do log neighbor state changes (via global configuration)\n  Default minimum time between advertisement runs is 0 seconds\n\n For address family: IPv4 Unicast\n  Session: 192.0.2.3\n  BGP table version 1, neighbor version 1/0\n  Output queue size : 0\n  Index 2, Advertise bit 0\n  2 update-group member\n  Community attribute sent to this neighbor\n  Extended-community attribute sent to this neighbor\n  Slow-peer detection is disabled\n  Slow-peer split-update-group dynamic is disabled\n                                 Sent       Rcvd\n  Prefix activity:               ----       ----\n    Prefixes Current:               0          0\n    Prefixes Total:                 0          0\n    Implicit Withdraw:              0          0\n    Explicit Withdraw:              0          0\n    Used as bestpath:             n/a          0\n    Used as multipath:            n/a          0\n    Used as secondary:            n/a          0\n\n                                   Outbound    Inbound\n  Local Policy Denied Prefixes:    --------    -------\n    Total:                                0          0\n  Number of NLRIs in the update sent: max 0, min 0\n  Last detected as dynamic slow peer: never\n  Dynamic slow peer recovered: never\n  Refresh Epoch: 1\n  Last Sent Refresh Start-of-rib: never\n  Last Sent Refresh End-of-rib: never\n  Last Received Refresh Start-of-rib: never\n  Last Received Refresh End-of-rib: never\n\t\t\t\t       Sent\t  Rcvd\n\tRefresh activity:\t       ----\t  ----\n\t  Refresh Start-of-RIB          0          0\n\t  Refresh End-of-RIB            0          0\n\n  Address tracking is enabled, the RIB does have a route to 192.0.2.3\n  Route to peer address reachability Up: 2; Down: 0\n    Last notification 1w4d\n  Connections established 1; dropped 0\n  Last reset never\n  Interface associated: (none) (peering address NOT in same link)\n  Transport(tcp) path-mtu-discovery is enabled\n  Graceful-Restart is disabled\n  SSO is disabled\nConnection state is ESTAB, I/O status: 1, unread input bytes: 0\nConnection is ECN Disabled, Mininum incoming TTL 0, Outgoing TTL 255\nLocal host: 192.0.2.4, Local port: 28429\nForeign host: 192.0.2.3, Foreign port: 179\nConnection tableid (VRF): 0\nMaximum output segment queue size: 50\n\nEnqueued packets for retransmit: 0, input: 0  mis-ordered: 0 (0 bytes)\n\nEvent Timers (current time is 0x39B14C25):\nTimer          Starts    Wakeups            Next\nRetrans         17688          0             0x0\nTimeWait            0          0             0x0\nAckHold         17673      17545             0x0\nSendWnd             0          0             0x0\nKeepAlive           0          0             0x0\nGiveUp              0          0             0x0\nPmtuAger       960176     960175      0x39B14D3F\nDeadWait            0          0             0x0\nLinger              0          0             0x0\nProcessQ            0          0             0x0\n\niss: 1906323867  snduna: 1906660001  sndnxt: 1906660001\nirs:  387369888  rcvnxt:  387705718\n\nsndwnd:  15282  scale:      0  maxrcvwnd:  16384\nrcvwnd:  15586  scale:      0  delrcvwnd:    798\n\nSRTT: 1000 ms, RTTO: 1003 ms, RTV: 3 ms, KRTT: 0 ms\nminRTT: 2 ms, maxRTT: 1000 ms, ACK hold: 120 ms\nuptime: 964421404 ms, Sent idletime: 1252 ms, Receive idletime: 1126 ms\nStatus Flags: active open\nOption Flags: nagle, path mtu capable, SACK option permitted\n  win-scale\nIP Precedence value : 6\nWindow update Optimisation : Enabled\nACK Optimisation : Dynamic ACK Tuning Enabled\n\nDatagrams (max data segment is 1460 bytes):\nPeer MSS:       1460\nRcvd: 35330 (out of order: 0), with data: 17673, total data bytes: 335829\nSent: 35313 (retransmit: 0, fastretransmit: 0, partialack: 0, Second Congestion: 0), with data: 17689, total data bytes: 336133\n\n Packets received in fast path: 0, fast processed: 0, slow path: 0\n fast lock acquisition failures: 0, slow path: 0\nTCP Semaphore      0x7C19EDA074F0  FREE\n",
+      "expected": {
+        "neighbors": {
+          "192.0.2.1": {
+            "remote_as": 65000,
+            "link_type": "internal",
+            "bgp_version": 4,
+            "router_id": "192.0.2.1",
+            "bgp_state": "Established",
+            "hold_time": 180,
+            "keepalive_interval": 60,
+            "last_read": "00:00:22",
+            "last_write": "00:00:50",
+            "message_stats": {
+              "opens_sent": 1,
+              "opens_rcvd": 1,
+              "notifications_sent": 0,
+              "notifications_rcvd": 0,
+              "updates_sent": 1,
+              "updates_rcvd": 1,
+              "keepalives_sent": 17697,
+              "keepalives_rcvd": 17689,
+              "route_refresh_sent": 0,
+              "route_refresh_rcvd": 0,
+              "total_sent": 17699,
+              "total_rcvd": 17691
+            },
+            "connections_established": 1,
+            "connections_dropped": 0,
+            "address_families": {
+              "IPv4 Unicast": {
+                "table_version": 1,
+                "neighbor_version": 1,
+                "community_attr_sent": true,
+                "prefix_activity": {
+                  "prefixes_current_sent": 0,
+                  "prefixes_current_rcvd": 0,
+                  "prefixes_total_sent": 0,
+                  "prefixes_total_rcvd": 0,
+                  "implicit_withdraw_sent": 0,
+                  "implicit_withdraw_rcvd": 0,
+                  "explicit_withdraw_sent": 0,
+                  "explicit_withdraw_rcvd": 0,
+                  "used_as_bestpath": 0,
+                  "used_as_multipath": 0
+                }
+              }
+            },
+            "state_duration": "1w4d",
+            "local_host": "192.0.2.4",
+            "local_port": 179,
+            "foreign_host": "192.0.2.1",
+            "foreign_port": 22634
+          },
+          "192.0.2.2": {
+            "remote_as": 65000,
+            "link_type": "internal",
+            "bgp_version": 4,
+            "router_id": "192.0.2.2",
+            "bgp_state": "Established",
+            "hold_time": 180,
+            "keepalive_interval": 60,
+            "last_read": "00:00:06",
+            "last_write": "00:00:32",
+            "message_stats": {
+              "opens_sent": 1,
+              "opens_rcvd": 1,
+              "notifications_sent": 0,
+              "notifications_rcvd": 0,
+              "updates_sent": 1,
+              "updates_rcvd": 1,
+              "keepalives_sent": 17686,
+              "keepalives_rcvd": 17676,
+              "route_refresh_sent": 0,
+              "route_refresh_rcvd": 0,
+              "total_sent": 17688,
+              "total_rcvd": 17678
+            },
+            "connections_established": 1,
+            "connections_dropped": 0,
+            "address_families": {
+              "IPv4 Unicast": {
+                "table_version": 1,
+                "neighbor_version": 1,
+                "community_attr_sent": true,
+                "prefix_activity": {
+                  "prefixes_current_sent": 0,
+                  "prefixes_current_rcvd": 0,
+                  "prefixes_total_sent": 0,
+                  "prefixes_total_rcvd": 0,
+                  "implicit_withdraw_sent": 0,
+                  "implicit_withdraw_rcvd": 0,
+                  "explicit_withdraw_sent": 0,
+                  "explicit_withdraw_rcvd": 0,
+                  "used_as_bestpath": 0,
+                  "used_as_multipath": 0
+                }
+              }
+            },
+            "state_duration": "1w4d",
+            "local_host": "192.0.2.4",
+            "local_port": 179,
+            "foreign_host": "192.0.2.2",
+            "foreign_port": 52744
+          },
+          "192.0.2.3": {
+            "remote_as": 65000,
+            "link_type": "internal",
+            "bgp_version": 4,
+            "router_id": "192.0.2.3",
+            "bgp_state": "Established",
+            "hold_time": 180,
+            "keepalive_interval": 60,
+            "last_read": "00:00:49",
+            "last_write": "00:00:01",
+            "message_stats": {
+              "opens_sent": 1,
+              "opens_rcvd": 1,
+              "notifications_sent": 0,
+              "notifications_rcvd": 0,
+              "updates_sent": 1,
+              "updates_rcvd": 1,
+              "keepalives_sent": 17687,
+              "keepalives_rcvd": 17671,
+              "route_refresh_sent": 0,
+              "route_refresh_rcvd": 0,
+              "total_sent": 17689,
+              "total_rcvd": 17673
+            },
+            "connections_established": 1,
+            "connections_dropped": 0,
+            "address_families": {
+              "IPv4 Unicast": {
+                "table_version": 1,
+                "neighbor_version": 1,
+                "community_attr_sent": true,
+                "prefix_activity": {
+                  "prefixes_current_sent": 0,
+                  "prefixes_current_rcvd": 0,
+                  "prefixes_total_sent": 0,
+                  "prefixes_total_rcvd": 0,
+                  "implicit_withdraw_sent": 0,
+                  "implicit_withdraw_rcvd": 0,
+                  "explicit_withdraw_sent": 0,
+                  "explicit_withdraw_rcvd": 0,
+                  "used_as_bestpath": 0,
+                  "used_as_multipath": 0
+                }
+              }
+            },
+            "state_duration": "1w4d",
+            "local_host": "192.0.2.4",
+            "local_port": 28429,
+            "foreign_host": "192.0.2.3",
+            "foreign_port": 179
+          }
+        }
+      }
+    },
+    {
+      "name": "Multiple BGP neighbors with VRF, description, and external link types",
+      "input": "BGP neighbor is 175.135.172.146,  vrf DEV, remote AS 65180, internal link\n Description: nsxe-core-rtr1\n Member of peer-group HMCO-core for session parameters\n  BGP version 4, remote router ID 9.229.30.214\n  BGP state = Established, up for 38w4d\n  Last read 00:00:01, last write 00:00:01, hold time is 15, keepalive interval is 5 seconds\n  Configured hold time is 15, keepalive interval is 5 seconds\n  Minimum holdtime from neighbor is 0 seconds\n  Neighbor sessions:\n    1 active, is not multisession capable (disabled)\n  Neighbor capabilities:\n    Route refresh: advertised and received(new)\n    Four-octets ASN Capability: advertised and received\n    Address family IPv4 Unicast: advertised and received\n    Enhanced Refresh Capability: advertised and received\n    Multisession Capability:\n    Stateful switchover support enabled: NO for session 1\n  Message statistics:\n    InQ depth is 0\n    OutQ depth is 0\n\n                         Sent       Rcvd\n    Opens:                  1          1\n    Notifications:          0          0\n    Updates:            22459      18491\n    Keepalives:       4552728    4553516\n    Route Refresh:          0          0\n    Total:            4575188    4572008\n  Default minimum time between advertisement runs is 0 seconds\n\n For address family: IPv4 Unicast\n  Session: 58.146.178.38\n  BGP table version 55515, neighbor version 55515/0\n  Output queue size : 0\n  Index 8, Advertise bit 7\n  8 update-group member\n  HMCO-core peer-group member\n  NEXT_HOP is always this router for eBGP paths\n  Community attribute sent to this neighbor\n  Slow-peer detection is disabled\n  Slow-peer split-update-group dynamic is disabled\n  Interface associated: (none)\n                                 Sent       Rcvd\n  Prefix activity:               ----       ----\n    Prefixes Current:             563        169 (Consumes 13520 bytes)\n    Prefixes Total:             27674      20492\n    Implicit Withdraw:          11693       5943\n    Explicit Withdraw:          15418      14380\n    Used as bestpath:             n/a         10\n    Used as multipath:            n/a          0\n\n                                   Outbound    Inbound\n  Local Policy Denied Prefixes:    --------    -------\n    Bestpath from this peer:          12589        n/a\n    Total:                            12589          0\n  Number of NLRIs in the update sent: max 514, min 0\n  Last detected as dynamic slow peer: never\n  Dynamic slow peer recovered: never\n  Minimum time between advertisement runs is 1 seconds\n  Refresh Epoch: 1\n  Last Sent Refresh Start-of-rib: never\n  Last Sent Refresh End-of-rib: never\n  Last Received Refresh Start-of-rib: never\n  Last Received Refresh End-of-rib: never\n\t\t\t\t       Sent\t  Rcvd\n\tRefresh activity:\t       ----\t  ----\n\t  Refresh Start-of-RIB          0          0\n\t  Refresh End-of-RIB            0          0\n\n  Address tracking is enabled, the RIB does have a route to 104.22.155.173\n  Connections established 1; dropped 0\n  Last reset never\n  Transport(tcp) path-mtu-discovery is enabled\n  Graceful-Restart is disabled\nConnection state is ESTAB, I/O status: 1, unread input bytes: 0\nConnection is ECN Disabled, Mininum incoming TTL 0, Outgoing TTL 255\nLocal host: 47.101.28.250, Local port: 1039\nForeign host: 90.58.27.224, Foreign port: 179\nConnection tableid (VRF): 0\nMaximum output segment queue size: 50\n\nEnqueued packets for retransmit: 0, input: 0  mis-ordered: 0 (0 bytes)\n\nEvent Timers (current time is 0x56F2E076A):\nTimer          Starts    Wakeups            Next\nRetrans       4569450          5             0x0\nTimeWait            0          0             0x0\nAckHold       4566922    4209405             0x0\nSendWnd             0          0             0x0\nKeepAlive           0          0             0x0\nGiveUp              0          0             0x0\nPmtuAger        38900      38899     0x56F30239C\nDeadWait            0          0             0x0\nLinger              0          0             0x0\nProcessQ            0          0             0x0\n\niss:   63323904  snduna:  151468819  sndnxt:  151468819\nirs: 1216800858  rcvnxt: 1304621530\n\nsndwnd:  15890  scale:      0  maxrcvwnd:  16384\nrcvwnd:  16156  scale:      0  delrcvwnd:    228\n\nSRTT: 1000 ms, RTTO: 1003 ms, RTV: 3 ms, KRTT: 0 ms\nminRTT: 0 ms, maxRTT: 1690 ms, ACK hold: 200 ms\nuptime: -1 ms, Sent idletime: 830 ms, Receive idletime: 1030 ms\nStatus Flags: active open\nOption Flags: nagle, path mtu capable, md5\nIP Precedence value : 6\n\nDatagrams (max data segment is 1460 bytes):\nRcvd: 8852438 (out of order: 0), with data: 4567355, total data bytes: 87820671\nSent: 8840238 (retransmit: 5, fastretransmit: 0, partialack: 0, Second Congestion: 0), with data: 4570488, total data bytes: 88144914\n\n Packets received in fast path: 0, fast processed: 0, slow path: 0\n fast lock acquisition failures: 0, slow path: 0\nTCP Semaphore      0x38C42C38  FREE\n\nBGP neighbor is 42.116.171.166,  remote AS 65182, external link\n Description: nsxe-lan-rtr1\n Member of peer-group LAN for session parameters\n  BGP version 4, remote router ID 62.166.23.23\n  BGP state = Established, up for 38w4d\n  Last read 00:00:00, last write 00:00:01, hold time is 15, keepalive interval is 5 seconds\n  Configured hold time is 15, keepalive interval is 5 seconds\n  Minimum holdtime from neighbor is 0 seconds\n  Neighbor sessions:\n    1 active, is not multisession capable (disabled)\n  Neighbor capabilities:\n    Route refresh: advertised and received(new)\n    Four-octets ASN Capability: advertised and received\n    Address family IPv4 Unicast: advertised and received\n    Enhanced Refresh Capability: advertised and received\n    Multisession Capability:\n    Stateful switchover support enabled: NO for session 1\n  Message statistics:\n    InQ depth is 0\n    OutQ depth is 0\n\n                         Sent       Rcvd\n    Opens:                  1          1\n    Notifications:          0          0\n    Updates:            25328      26783\n    Keepalives:       4554193    4552827\n    Route Refresh:          0          1\n    Total:            4579524    4579614\n  Default minimum time between advertisement runs is 30 seconds\n\n For address family: IPv4 Unicast\n  Session: 205.156.57.241\n  BGP table version 55515, neighbor version 55515/0\n  Output queue size : 0\n  Index 2, Advertise bit 1\n  2 update-group member\n  LAN peer-group member\n  Inbound soft reconfiguration allowed\n  Community attribute sent to this neighbor\n  Slow-peer detection is disabled\n  Slow-peer split-update-group dynamic is disabled\n  Interface associated: Port-channel3\n                                 Sent       Rcvd\n  Prefix activity:               ----       ----\n    Prefixes Current:             566          9 (Consumes 720 bytes)\n    Prefixes Total:             38073         12\n    Implicit Withdraw:          25567          0\n    Explicit Withdraw:          11940          3\n    Used as bestpath:             n/a          7\n    Used as multipath:            n/a          0\n\n                                   Outbound    Inbound\n  Local Policy Denied Prefixes:    --------    -------\n    AS_PATH loop:                       n/a      48694\n    Bestpath from this peer:             17        n/a\n    Total:                               17      48694\n  Number of NLRIs in the update sent: max 514, min 0\n  Last detected as dynamic slow peer: never\n  Dynamic slow peer recovered: never\n  Minimum time between advertisement runs is 5 seconds\n  Refresh Epoch: 2\n  Last Sent Refresh Start-of-rib: 20w2d\n  Last Sent Refresh End-of-rib: 20w2d\n  Refresh-Out took 0 seconds\n  Last Received Refresh Start-of-rib: 38w4d\n  Last Received Refresh End-of-rib: 38w4d\n  Refresh-In took 0 seconds\n\t\t\t\t       Sent\t  Rcvd\n\tRefresh activity:\t       ----\t  ----\n\t  Refresh Start-of-RIB          1          1\n\t  Refresh End-of-RIB            1          1\n\n  Address tracking is enabled, the RIB does have a route to 234.182.178.210\n  Connections established 1; dropped 0\n  Last reset never\n  Transport(tcp) path-mtu-discovery is enabled\n  Graceful-Restart is disabled\nConnection state is ESTAB, I/O status: 1, unread input bytes: 0\nConnection is ECN Disabled, Mininum incoming TTL 0, Outgoing TTL 1\nLocal host: 39.236.86.64, Local port: 179\nForeign host: 85.15.185.206, Foreign port: 28912\nConnection tableid (VRF): 0\nMaximum output segment queue size: 50\n\nEnqueued packets for retransmit: 0, input: 0  mis-ordered: 0 (0 bytes)\n\nEvent Timers (current time is 0x56F2E0788):\nTimer          Starts    Wakeups            Next\nRetrans       4565119          8             0x0\nTimeWait            0          0             0x0\nAckHold       4567627    4091483             0x0\nSendWnd             0          0             0x0\nKeepAlive           0          0             0x0\nGiveUp              0          0             0x0\nPmtuAger            0          0             0x0\nDeadWait            0          0             0x0\nLinger              0          0             0x0\nProcessQ            0          0             0x0\n\niss: 1165022199  snduna: 1253344612  sndnxt: 1253344612\nirs: 3669450514  rcvnxt: 3758042091\n\nsndwnd:  16194  scale:      0  maxrcvwnd:  16384\nrcvwnd:  15567  scale:      0  delrcvwnd:    817\n\nSRTT: 1000 ms, RTTO: 1003 ms, RTV: 3 ms, KRTT: 0 ms\nminRTT: 0 ms, maxRTT: 1690 ms, ACK hold: 200 ms\nuptime: -1 ms, Sent idletime: 590 ms, Receive idletime: 790 ms\nStatus Flags: passive open, gen tcbs\nOption Flags: nagle, path mtu capable, md5, Retrans timeout\nIP Precedence value : 6\n\nDatagrams (max data segment is 1460 bytes):\nRcvd: 8750829 (out of order: 0), with data: 4574238, total data bytes: 88591576\nSent: 8732984 (retransmit: 8, fastretransmit: 0, partialack: 0, Second Congestion: 0), with data: 4574502, total data bytes: 88322412\n\n Packets received in fast path: 0, fast processed: 0, slow path: 0\n fast lock acquisition failures: 0, slow path: 0\nTCP Semaphore      0x3DC1BAEC  FREE\n",
+      "expected": {
+        "neighbors": {
+          "175.135.172.146": {
+            "address_families": {
+              "IPv4 Unicast": {
+                "community_attr_sent": true,
+                "neighbor_version": 55515,
+                "peer_group": "HMCO-core",
+                "prefix_activity": {
+                  "explicit_withdraw_rcvd": 14380,
+                  "explicit_withdraw_sent": 15418,
+                  "implicit_withdraw_rcvd": 5943,
+                  "implicit_withdraw_sent": 11693,
+                  "prefixes_current_rcvd": 169,
+                  "prefixes_current_sent": 563,
+                  "prefixes_total_rcvd": 20492,
+                  "prefixes_total_sent": 27674,
+                  "used_as_bestpath": 10,
+                  "used_as_multipath": 0
+                },
+                "table_version": 55515
+              }
+            },
+            "bgp_state": "Established",
+            "bgp_version": 4,
+            "connections_dropped": 0,
+            "connections_established": 1,
+            "description": "nsxe-core-rtr1",
+            "foreign_host": "90.58.27.224",
+            "foreign_port": 179,
+            "hold_time": 15,
+            "keepalive_interval": 5,
+            "last_read": "00:00:01",
+            "last_write": "00:00:01",
+            "link_type": "internal",
+            "local_host": "47.101.28.250",
+            "local_port": 1039,
+            "message_stats": {
+              "keepalives_rcvd": 4553516,
+              "keepalives_sent": 4552728,
+              "notifications_rcvd": 0,
+              "notifications_sent": 0,
+              "opens_rcvd": 1,
+              "opens_sent": 1,
+              "route_refresh_rcvd": 0,
+              "route_refresh_sent": 0,
+              "total_rcvd": 4572008,
+              "total_sent": 4575188,
+              "updates_rcvd": 18491,
+              "updates_sent": 22459
+            },
+            "peer_group": "HMCO-core",
+            "remote_as": 65180,
+            "router_id": "9.229.30.214",
+            "state_duration": "38w4d",
+            "vrf": "DEV"
+          },
+          "42.116.171.166": {
+            "address_families": {
+              "IPv4 Unicast": {
+                "community_attr_sent": true,
+                "inbound_soft_reconfig": true,
+                "neighbor_version": 55515,
+                "peer_group": "LAN",
+                "prefix_activity": {
+                  "explicit_withdraw_rcvd": 3,
+                  "explicit_withdraw_sent": 11940,
+                  "implicit_withdraw_rcvd": 0,
+                  "implicit_withdraw_sent": 25567,
+                  "prefixes_current_rcvd": 9,
+                  "prefixes_current_sent": 566,
+                  "prefixes_total_rcvd": 12,
+                  "prefixes_total_sent": 38073,
+                  "used_as_bestpath": 7,
+                  "used_as_multipath": 0
+                },
+                "table_version": 55515
+              }
+            },
+            "bgp_state": "Established",
+            "bgp_version": 4,
+            "connections_dropped": 0,
+            "connections_established": 1,
+            "description": "nsxe-lan-rtr1",
+            "foreign_host": "85.15.185.206",
+            "foreign_port": 28912,
+            "hold_time": 15,
+            "keepalive_interval": 5,
+            "last_read": "00:00:00",
+            "last_write": "00:00:01",
+            "link_type": "external",
+            "local_host": "39.236.86.64",
+            "local_port": 179,
+            "message_stats": {
+              "keepalives_rcvd": 4552827,
+              "keepalives_sent": 4554193,
+              "notifications_rcvd": 0,
+              "notifications_sent": 0,
+              "opens_rcvd": 1,
+              "opens_sent": 1,
+              "route_refresh_rcvd": 1,
+              "route_refresh_sent": 0,
+              "total_rcvd": 4579614,
+              "total_sent": 4579524,
+              "updates_rcvd": 26783,
+              "updates_sent": 25328
+            },
+            "peer_group": "LAN",
+            "remote_as": 65182,
+            "router_id": "62.166.23.23",
+            "state_duration": "38w4d"
+          }
+        }
+      }
+    }
+  ]
+}

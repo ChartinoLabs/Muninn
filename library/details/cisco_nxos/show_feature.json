@@ -1,0 +1,166 @@
+{
+  "os": "cisco_nxos",
+  "command": "show feature",
+  "schema": {
+    "name": "ShowFeatureResult",
+    "fields": {
+      "features": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "FeatureEntry",
+            "fields": {
+              "instances": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "FeatureInstanceEntry",
+                    "fields": {
+                      "state": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "running": {
+                        "type": "bool",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with enabled, disabled, and enabled(not-running) features",
+      "input": "Feature Name          Instance  State\n--------------------  --------  --------\nbash-shell             1          disabled\nbgp                    1          enabled\neigrp                  1          enabled\neigrp                  2          enabled(not-running)\neigrp                  3          enabled(not-running)\neigrp                  4          enabled(not-running)\n",
+      "expected": {
+        "features": {
+          "bash-shell": {
+            "instances": {
+              "1": {
+                "state": "disabled"
+              }
+            }
+          },
+          "bgp": {
+            "instances": {
+              "1": {
+                "state": "enabled"
+              }
+            }
+          },
+          "eigrp": {
+            "instances": {
+              "1": {
+                "state": "enabled"
+              },
+              "2": {
+                "running": false,
+                "state": "enabled"
+              },
+              "3": {
+                "running": false,
+                "state": "enabled"
+              },
+              "4": {
+                "running": false,
+                "state": "enabled"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Large output with many features and instances including space-separated qualifiers",
+      "input": "Feature Name          Instance  State\n--------------------  --------  --------\nbash-shell             1          enabled\nbfd                    1          disabled\nbgp                    1          disabled\ndhcp                   1          disabled\nhsrp_engine            1          enabled\ninterface-vlan         1          enabled\nlacp                   1          enabled\nlldp                   1          enabled\nospf                   1          enabled (not-running)\nospf                   2          enabled\nospf                   3          enabled\nospf                   4          enabled (not-running)\n",
+      "expected": {
+        "features": {
+          "bash-shell": {
+            "instances": {
+              "1": {
+                "state": "enabled"
+              }
+            }
+          },
+          "bfd": {
+            "instances": {
+              "1": {
+                "state": "disabled"
+              }
+            }
+          },
+          "bgp": {
+            "instances": {
+              "1": {
+                "state": "disabled"
+              }
+            }
+          },
+          "dhcp": {
+            "instances": {
+              "1": {
+                "state": "disabled"
+              }
+            }
+          },
+          "hsrp_engine": {
+            "instances": {
+              "1": {
+                "state": "enabled"
+              }
+            }
+          },
+          "interface-vlan": {
+            "instances": {
+              "1": {
+                "state": "enabled"
+              }
+            }
+          },
+          "lacp": {
+            "instances": {
+              "1": {
+                "state": "enabled"
+              }
+            }
+          },
+          "lldp": {
+            "instances": {
+              "1": {
+                "state": "enabled"
+              }
+            }
+          },
+          "ospf": {
+            "instances": {
+              "1": {
+                "running": false,
+                "state": "enabled"
+              },
+              "2": {
+                "state": "enabled"
+              },
+              "3": {
+                "state": "enabled"
+              },
+              "4": {
+                "running": false,
+                "state": "enabled"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

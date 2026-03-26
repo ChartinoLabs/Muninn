@@ -1,0 +1,159 @@
+{
+  "os": "cisco_ios",
+  "command": "show ipv6 route",
+  "schema": {
+    "name": "ShowIpv6RouteResult",
+    "fields": {
+      "vrf": {
+        "type": "str",
+        "required": true
+      },
+      "entry_count": {
+        "type": "int",
+        "required": true
+      },
+      "routes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RouteEntry",
+            "fields": {
+              "protocol": {
+                "type": "str",
+                "required": true
+              },
+              "network": {
+                "type": "str",
+                "required": true
+              },
+              "admin_distance": {
+                "type": "int",
+                "required": true
+              },
+              "metric": {
+                "type": "int",
+                "required": true
+              },
+              "tag": {
+                "type": "int",
+                "required": false
+              },
+              "next_hops": {
+                "type": {
+                  "type": "list",
+                  "items": {
+                    "name": "NextHopEntry",
+                    "fields": {
+                      "type": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "next_hop": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "interface": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "next_hop_vrf": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "interface_vrf": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Mixed protocols with BGP ECMP, static routes with next-hop only and interface-only variants",
+      "input": "IPv6 Routing Table - default - 6 entries\nCodes: C - Connected, L - Local, S - Static, U - Per-user Static route\n       B - BGP, HA - Home Agent, MR - Mobile Router, R - RIP\n       H - NHRP, D - EIGRP, EX - EIGRP external, ND - ND Default\n       NDp - ND Prefix, DCE - Destination, NDr - Redirect, O - OSPF Intra\n       OI - OSPF Inter, OE1 - OSPF ext 1, OE2 - OSPF ext 2, ON1 - OSPF NSSA ext 1\n       ON2 - OSPF NSSA ext 2, l - LISP\nC   2A05:C100:2A::/64 [0/0]\n     via Vlan1, directly connected\nB   2001:DB8:4::2/48 [20/0]\n     via FE80::A8BB:CCFF:FE02:8B00, Serial6/0\n     via A8BB::FE80:CCFF:FE02:8B00, Serial4/0\nL   FF00::/8 [0/0]\n     via Null0, receive\nS   5555:4444::4/128 [1/0]\n     via 2A05:C100:2A::56\n     via 2A05:C100:2A::5765\n     via 2A05:C100:2A::3:344, Vlan1\n     via Vlan1, directly connected\n",
+      "expected": {
+        "vrf": "default",
+        "entry_count": 6,
+        "routes": {
+          "2A05:C100:2A::/64": {
+            "protocol": "C",
+            "network": "2A05:C100:2A::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "directly connected",
+                "interface": "Vlan1"
+              }
+            ]
+          },
+          "2001:DB8:4::2/48": {
+            "protocol": "B",
+            "network": "2001:DB8:4::2/48",
+            "admin_distance": 20,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "via",
+                "next_hop": "FE80::A8BB:CCFF:FE02:8B00",
+                "interface": "Serial6/0"
+              },
+              {
+                "type": "via",
+                "next_hop": "A8BB::FE80:CCFF:FE02:8B00",
+                "interface": "Serial4/0"
+              }
+            ]
+          },
+          "FF00::/8": {
+            "protocol": "L",
+            "network": "FF00::/8",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "Null0"
+              }
+            ]
+          },
+          "5555:4444::4/128": {
+            "protocol": "S",
+            "network": "5555:4444::4/128",
+            "admin_distance": 1,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "via",
+                "next_hop": "2A05:C100:2A::56"
+              },
+              {
+                "type": "via",
+                "next_hop": "2A05:C100:2A::5765"
+              },
+              {
+                "type": "via",
+                "next_hop": "2A05:C100:2A::3:344",
+                "interface": "Vlan1"
+              },
+              {
+                "type": "directly connected",
+                "interface": "Vlan1"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

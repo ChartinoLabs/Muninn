@@ -1,0 +1,396 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show cdp neighbors",
+  "schema": {
+    "name": "ShowCdpNeighborsResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "CdpNeighborEntry",
+              "fields": {
+                "hold_time": {
+                  "type": "int",
+                  "required": true
+                },
+                "port_id": {
+                  "type": "str",
+                  "required": true
+                },
+                "capabilities": {
+                  "type": "str",
+                  "required": false
+                },
+                "platform": {
+                  "type": "str",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_entries": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "All entries wrapped with Multilink and Serial interfaces",
+      "input": "Capability Codes: R - Router, T - Trans Bridge, B - Source Route Bridge\n                  S - Switch, H - Host, I - IGMP, r - Repeater, P - Phone,\n                  D - Remote, C - CVTA, M - Two-port Mac Relay\n\nDevice ID        Local Intrfce     Holdtme    Capability  Platform  Port ID\nR1.cisco.com\n                 Gig 0/2/0         169              R I   ASR1002   Gig 0/0/0\nR2.cisco.com\n                 Gig 0/2/2         167             R B S  CISCO2951 Gig 0/0\nR3.cisco.com\n                 Multilink3        165              R I   ASR1002   Multilink1\nR4.cisco.com\n                 Ser 0/1/0:0       160             R S I  ISR4451-X Ser 0/1/0:0\n\nTotal cdp entries displayed : 4\n",
+      "expected": {
+        "neighbors": {
+          "GigabitEthernet0/2/0": {
+            "R1.cisco.com": {
+              "hold_time": 169,
+              "port_id": "GigabitEthernet0/0/0",
+              "capabilities": "R I",
+              "platform": "ASR1002"
+            }
+          },
+          "GigabitEthernet0/2/2": {
+            "R2.cisco.com": {
+              "hold_time": 167,
+              "port_id": "GigabitEthernet0/0",
+              "capabilities": "R B S",
+              "platform": "CISCO2951"
+            }
+          },
+          "Multilink3": {
+            "R3.cisco.com": {
+              "hold_time": 165,
+              "port_id": "Multilink1",
+              "capabilities": "R I",
+              "platform": "ASR1002"
+            }
+          },
+          "Serial0/1/0:0": {
+            "R4.cisco.com": {
+              "hold_time": 160,
+              "port_id": "Serial0/1/0:0",
+              "capabilities": "R S I",
+              "platform": "ISR4451-X"
+            }
+          }
+        },
+        "total_entries": 4
+      }
+    },
+    {
+      "name": "Multiple neighbors on same Ethernet interface, one with no capabilities",
+      "input": "Capability Codes: R - Router, T - Trans Bridge, B - Source Route Bridge\n                S - Switch, H - Host, I - IGMP, r - Repeater\n\nDevice ID        Local Interfce     Holdtme    Capability  Platform  ''\nPort ID\n\ndevice2      Eth 0          152      R           AS5200    Eth 0\ndevice3      Eth 0          144      R           3640      Eth0/0\ndevice4      Eth 0          141                  RP1      Eth 0/0\n\nTotal cdp entries displayed : 3\n",
+      "expected": {
+        "neighbors": {
+          "Ethernet0": {
+            "device2": {
+              "hold_time": 152,
+              "port_id": "Ethernet0",
+              "capabilities": "R",
+              "platform": "AS5200"
+            },
+            "device3": {
+              "hold_time": 144,
+              "port_id": "Ethernet0/0",
+              "capabilities": "R",
+              "platform": "3640"
+            },
+            "device4": {
+              "hold_time": 141,
+              "port_id": "Ethernet0/0",
+              "platform": "RP1"
+            }
+          }
+        },
+        "total_entries": 3
+      }
+    },
+    {
+      "name": "Single IP phone neighbor with H P M capabilities and Port 1 port ID",
+      "input": "Capability Codes: R - Router, T - Trans Bridge, B - Source Route Bridge\n                  S - Switch, H - Host, I - IGMP, r - Repeater, P - Phone,\n                  D - Remote, C - CVTA, M - Two-port Mac Relay\n\nDevice ID        Local Intrfce     Holdtme    Capability  Platform  Port ID\nSEPD824BDBBB7F9  Gig 4/0/3         155             H P M  IP Phone  Port 1\n\nTotal cdp entries displayed : 1\n",
+      "expected": {
+        "neighbors": {
+          "GigabitEthernet4/0/3": {
+            "SEPD824BDBBB7F9": {
+              "hold_time": 155,
+              "port_id": "Port1",
+              "capabilities": "H P M",
+              "platform": "IP Phone"
+            }
+          }
+        },
+        "total_entries": 1
+      }
+    },
+    {
+      "name": "Wrapped long device names with TwentyFiveGigE and Nexus platforms",
+      "input": "Capability Codes: R - Router, T - Trans Bridge, B - Source Route Bridge\n              S - Switch, H - Host, I - IGMP, r - Repeater, P - Phone,\n              D - Remote, C - CVTA, M - Two-port Mac Relay\n\nDevice ID        Local Intrfce     Holdtme    Capability  Platform  Port ID\nDevice_With_A_Particularly_Long_Name\n                 Gig 1             134             R S C  N9K-9000v Eth 0/0\nanother_device_with_a_long_name\n                 Twe 1/0/3         141              S I   WS-C3850- Ten 1/1/4\n\nTotal cdp entries displayed : 2\n",
+      "expected": {
+        "neighbors": {
+          "GigabitEthernet1": {
+            "Device_With_A_Particularly_Long_Name": {
+              "hold_time": 134,
+              "port_id": "Ethernet0/0",
+              "capabilities": "R S C",
+              "platform": "N9K-9000v"
+            }
+          },
+          "TwentyFiveGigE1/0/3": {
+            "another_device_with_a_long_name": {
+              "hold_time": 141,
+              "port_id": "TenGigabitEthernet1/1/4",
+              "capabilities": "S I",
+              "platform": "WS-C3850-"
+            }
+          }
+        },
+        "total_entries": 2
+      }
+    },
+    {
+      "name": "Single-line entries mixing routers, WAP, and IP phones with no total line",
+      "input": "Capability Codes: R - Router, T - Trans Bridge, B- Source Route Bridge\n\t       S - Switch, H - Host, I - IGMP, r - Repeater, P - Phone\n\nDevice ID         Local Intrfce Holdtme    Capability   Platform   Port ID\nR1-PBX            Gig 1/0/10    144          R S I      2811       Fas 0/0\nTS-1              Gig 1/0/39    122          R          2611       Eth 0/1\nCisco-WAP-N       Gig 1/0/1     120          T I        AIR-AP125  Gig 0\nSEP04FE7F689D33   Gig 1/0/2     125          H P        IP Phone   Port 1\nSEP000DBC50FCD1   Gig 1/0/4     147          H P        IP Phone   Port 1\nSEP00124362C4D2   Gig 1/0/42    147          H P        IP Phone   Port 1\n",
+      "expected": {
+        "neighbors": {
+          "GigabitEthernet1/0/10": {
+            "R1-PBX": {
+              "hold_time": 144,
+              "port_id": "FastEthernet0/0",
+              "capabilities": "R S I",
+              "platform": "2811"
+            }
+          },
+          "GigabitEthernet1/0/39": {
+            "TS-1": {
+              "hold_time": 122,
+              "port_id": "Ethernet0/1",
+              "capabilities": "R",
+              "platform": "2611"
+            }
+          },
+          "GigabitEthernet1/0/1": {
+            "Cisco-WAP-N": {
+              "hold_time": 120,
+              "port_id": "GigabitEthernet0",
+              "capabilities": "T I",
+              "platform": "AIR-AP125"
+            }
+          },
+          "GigabitEthernet1/0/2": {
+            "SEP04FE7F689D33": {
+              "hold_time": 125,
+              "port_id": "Port1",
+              "capabilities": "H P",
+              "platform": "IP Phone"
+            }
+          },
+          "GigabitEthernet1/0/4": {
+            "SEP000DBC50FCD1": {
+              "hold_time": 147,
+              "port_id": "Port1",
+              "capabilities": "H P",
+              "platform": "IP Phone"
+            }
+          },
+          "GigabitEthernet1/0/42": {
+            "SEP00124362C4D2": {
+              "hold_time": 147,
+              "port_id": "Port1",
+              "capabilities": "H P",
+              "platform": "IP Phone"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Large enterprise campus with 13 neighbors including VMware ESXi, WLC, ISR, and Catalyst platforms",
+      "input": "Capability Codes: R - Router, T - Trans Bridge, B - Source Route Bridge\n                  S - Switch, H - Host, I - IGMP, r - Repeater, P - Phone,\n                  D - Remote, C - CVTA, M - Two-port Mac Relay\n\nDevice ID        Local Intrfce     Holdtme    Capability  Platform  Port ID\nFusion-Rtr-PG00-P01.cisco.local\n                 Ten 1/1/2         132              R I   CSR1000V  Gig 2\nFusion-Rtr-PG00-P01.cisco.local\n                 Ten 1/1/2         123              R I   CSR1000V  Gig 1\nC9500-PG00-P01.cisco.local\n                 Ten 1/0/21        148             R S I  C9500-40X Ten 1/0/21\nENT-DNAC-EG00-ESX04\n                 Ten 1/1/1         139               S    VMware ES vmnic2\nENT-DNAC-EG00-ESX03\n                 Ten 1/1/2         154               S    VMware ES vmnic2\nC3560-CX-B-PG00-P01.cisco.local\n                 Ten 1/0/11        161              S I   WS-C3560C Gig 0/3\nC3560-CX-A-PG00-P01.cisco.local\n                 Ten 1/0/5         167             R S I  WS-C3560C Gig 0/1\nC3560-CX-A-PG00-P01.cisco.local\n                 Ten 1/0/7         133             R S I  WS-C3560C Gig 0/7\nC9800-WLC-PG00-P01\n                 Ten 1/1/2         165              R I   C9800-CL  Gig 2\nISR4431-A-PG00-P01.cisco.local\n                 Ten 1/0/13        162             R S I  ISR4431/K Gig 0/0/0\nC9300-B-PG00-P01.cisco.local\n                 Ten 1/0/24        124             R S I  C9300-24U Ten 1/0/24\nISR4431-B-PG00-P01.cisco.local\n                 Ten 1/0/17        164             R S I  ISR4431/K Gig 0/0/1\nISR4431-B-PG00-P01.cisco.local\n                 Ten 1/0/19        133             R S I  ISR4431/K Gig 0/0/0\n\nTotal cdp entries displayed : 13\n",
+      "expected": {
+        "neighbors": {
+          "TenGigabitEthernet1/1/2": {
+            "Fusion-Rtr-PG00-P01.cisco.local": {
+              "hold_time": 123,
+              "port_id": "GigabitEthernet1",
+              "capabilities": "R I",
+              "platform": "CSR1000V"
+            },
+            "ENT-DNAC-EG00-ESX03": {
+              "hold_time": 154,
+              "port_id": "vmnic2",
+              "capabilities": "S",
+              "platform": "VMware ES"
+            },
+            "C9800-WLC-PG00-P01": {
+              "hold_time": 165,
+              "port_id": "GigabitEthernet2",
+              "capabilities": "R I",
+              "platform": "C9800-CL"
+            }
+          },
+          "TenGigabitEthernet1/0/21": {
+            "C9500-PG00-P01.cisco.local": {
+              "hold_time": 148,
+              "port_id": "TenGigabitEthernet1/0/21",
+              "capabilities": "R S I",
+              "platform": "C9500-40X"
+            }
+          },
+          "TenGigabitEthernet1/1/1": {
+            "ENT-DNAC-EG00-ESX04": {
+              "hold_time": 139,
+              "port_id": "vmnic2",
+              "capabilities": "S",
+              "platform": "VMware ES"
+            }
+          },
+          "TenGigabitEthernet1/0/11": {
+            "C3560-CX-B-PG00-P01.cisco.local": {
+              "hold_time": 161,
+              "port_id": "GigabitEthernet0/3",
+              "capabilities": "S I",
+              "platform": "WS-C3560C"
+            }
+          },
+          "TenGigabitEthernet1/0/5": {
+            "C3560-CX-A-PG00-P01.cisco.local": {
+              "hold_time": 167,
+              "port_id": "GigabitEthernet0/1",
+              "capabilities": "R S I",
+              "platform": "WS-C3560C"
+            }
+          },
+          "TenGigabitEthernet1/0/7": {
+            "C3560-CX-A-PG00-P01.cisco.local": {
+              "hold_time": 133,
+              "port_id": "GigabitEthernet0/7",
+              "capabilities": "R S I",
+              "platform": "WS-C3560C"
+            }
+          },
+          "TenGigabitEthernet1/0/13": {
+            "ISR4431-A-PG00-P01.cisco.local": {
+              "hold_time": 162,
+              "port_id": "GigabitEthernet0/0/0",
+              "capabilities": "R S I",
+              "platform": "ISR4431/K"
+            }
+          },
+          "TenGigabitEthernet1/0/24": {
+            "C9300-B-PG00-P01.cisco.local": {
+              "hold_time": 124,
+              "port_id": "TenGigabitEthernet1/0/24",
+              "capabilities": "R S I",
+              "platform": "C9300-24U"
+            }
+          },
+          "TenGigabitEthernet1/0/17": {
+            "ISR4431-B-PG00-P01.cisco.local": {
+              "hold_time": 164,
+              "port_id": "GigabitEthernet0/0/1",
+              "capabilities": "R S I",
+              "platform": "ISR4431/K"
+            }
+          },
+          "TenGigabitEthernet1/0/19": {
+            "ISR4431-B-PG00-P01.cisco.local": {
+              "hold_time": 133,
+              "port_id": "GigabitEthernet0/0/0",
+              "capabilities": "R S I",
+              "platform": "ISR4431/K"
+            }
+          }
+        },
+        "total_entries": 13
+      }
+    },
+    {
+      "name": "Mixed WAAS virtual interfaces, ASR, Catalyst 9000 series, and four-capability entries",
+      "input": "Capability Codes: R - Router, T - Trans Bridge, B - Source Route Bridge\n                  S - Switch, H - Host, I - IGMP, r - Repeater, P - Phone,\n                  D - Remote, C - CVTA, M - Two-port Mac Relay\n\nDevice ID        Local Intrfce     Holdtme    Capability  Platform  Port ID\nasr1002-2.some.example.com\n                 Ten 1/1/3         173              R I   ASR1002-H Ten 0/1/0\nvWAAS3b          Ten 1/0/6         140               H    OE-VWAAS  Virtual 2/0\nvWAAS3b          Ten 1/0/6         140               H    OE-VWAAS  Virtual 1/0\nvWAAS4b          Ten 1/0/7         162               H    OE-VWAAS  Virtual 2/0\nvWAAS4b          Ten 1/0/7         162               H    OE-VWAAS  Virtual 1/0\nNEXTGENLABSWT01.some.example.com\n                 Gig 0/0           130              S I   WS-C3560X Gig 0/23\nrouter01.some.example.com\n                 Ten 1/0/4         172            R B S I CISCO2911 Gig 0/0\n9300mgig-1.some.example.com\n                 Ten 1/1/6         155             R S I  C9300-24U Ten 1/1/7\n9300mgig-1.some.example.com\n                 Ten 1/1/7         140             R S I  C9300-24U Ten 1/1/6\n9500-1.some.example.com\n                 Ten 1/1/8         170             R S I  C9500-40X Ten 2/0/36\n9300mgig-2.some.example.com\n                 Ten 1/1/1         148             R S I  C9300-24U Ten 1/1/2\n\nTotal cdp entries displayed : 11\n",
+      "expected": {
+        "neighbors": {
+          "TenGigabitEthernet1/1/3": {
+            "asr1002-2.some.example.com": {
+              "hold_time": 173,
+              "port_id": "TenGigabitEthernet0/1/0",
+              "capabilities": "R I",
+              "platform": "ASR1002-H"
+            }
+          },
+          "TenGigabitEthernet1/0/6": {
+            "vWAAS3b": {
+              "hold_time": 140,
+              "port_id": "Virtual1/0",
+              "capabilities": "H",
+              "platform": "OE-VWAAS"
+            }
+          },
+          "TenGigabitEthernet1/0/7": {
+            "vWAAS4b": {
+              "hold_time": 162,
+              "port_id": "Virtual1/0",
+              "capabilities": "H",
+              "platform": "OE-VWAAS"
+            }
+          },
+          "GigabitEthernet0/0": {
+            "NEXTGENLABSWT01.some.example.com": {
+              "hold_time": 130,
+              "port_id": "GigabitEthernet0/23",
+              "capabilities": "S I",
+              "platform": "WS-C3560X"
+            }
+          },
+          "TenGigabitEthernet1/0/4": {
+            "router01.some.example.com": {
+              "hold_time": 172,
+              "port_id": "GigabitEthernet0/0",
+              "capabilities": "R B S I",
+              "platform": "CISCO2911"
+            }
+          },
+          "TenGigabitEthernet1/1/6": {
+            "9300mgig-1.some.example.com": {
+              "hold_time": 155,
+              "port_id": "TenGigabitEthernet1/1/7",
+              "capabilities": "R S I",
+              "platform": "C9300-24U"
+            }
+          },
+          "TenGigabitEthernet1/1/7": {
+            "9300mgig-1.some.example.com": {
+              "hold_time": 140,
+              "port_id": "TenGigabitEthernet1/1/6",
+              "capabilities": "R S I",
+              "platform": "C9300-24U"
+            }
+          },
+          "TenGigabitEthernet1/1/8": {
+            "9500-1.some.example.com": {
+              "hold_time": 170,
+              "port_id": "TenGigabitEthernet2/0/36",
+              "capabilities": "R S I",
+              "platform": "C9500-40X"
+            }
+          },
+          "TenGigabitEthernet1/1/1": {
+            "9300mgig-2.some.example.com": {
+              "hold_time": 148,
+              "port_id": "TenGigabitEthernet1/1/2",
+              "capabilities": "R S I",
+              "platform": "C9300-24U"
+            }
+          }
+        },
+        "total_entries": 11
+      }
+    }
+  ]
+}

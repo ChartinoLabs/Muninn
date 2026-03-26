@@ -1,0 +1,90 @@
+{
+  "os": "cisco_nxos",
+  "command": "show interface transceiver",
+  "schema": {
+    "name": "ShowInterfaceTransceiverResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "TransceiverEntry",
+            "fields": {
+              "sfp": {
+                "type": "str",
+                "required": true
+              },
+              "temperature_c": {
+                "type": "float",
+                "required": false
+              },
+              "voltage_v": {
+                "type": "float",
+                "required": false
+              },
+              "current_ma": {
+                "type": "float",
+                "required": false
+              },
+              "tx_power_dbm": {
+                "type": "float",
+                "required": false
+              },
+              "rx_power_dbm": {
+                "type": "float",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic transceiver table with multiple interfaces and optical readings",
+      "input": "Port          Sfp                 Temp     Voltage   Current   Tx Power  Rx Power\n                                  (C)      (V)       (mA)      (dBm)     (dBm)\n----------    ------------------  -------  --------  --------  --------  --------\nEth1/1        QSFP-40G-SR-BD      35.00    3.28      6.84      -2.48     -2.20\nEth1/2        SFP-10G-SR          28.12    3.30      8.22      -1.99     -1.45\nEth1/3        QSFP-100G-LR4-S    32.55    3.25      35.84     -0.75     -3.12\nEth1/4        SFP-H10GB-CU3M     N/A      N/A       N/A       N/A       N/A\nEth2/1        QSFP-40G-SR4       41.23    3.31      7.12      -1.85     -40.00\n",
+      "expected": {
+        "interfaces": {
+          "Ethernet1/1": {
+            "sfp": "QSFP-40G-SR-BD",
+            "temperature_c": 35.0,
+            "voltage_v": 3.28,
+            "current_ma": 6.84,
+            "tx_power_dbm": -2.48,
+            "rx_power_dbm": -2.2
+          },
+          "Ethernet1/2": {
+            "sfp": "SFP-10G-SR",
+            "temperature_c": 28.12,
+            "voltage_v": 3.3,
+            "current_ma": 8.22,
+            "tx_power_dbm": -1.99,
+            "rx_power_dbm": -1.45
+          },
+          "Ethernet1/3": {
+            "sfp": "QSFP-100G-LR4-S",
+            "temperature_c": 32.55,
+            "voltage_v": 3.25,
+            "current_ma": 35.84,
+            "tx_power_dbm": -0.75,
+            "rx_power_dbm": -3.12
+          },
+          "Ethernet1/4": {
+            "sfp": "SFP-H10GB-CU3M"
+          },
+          "Ethernet2/1": {
+            "sfp": "QSFP-40G-SR4",
+            "temperature_c": 41.23,
+            "voltage_v": 3.31,
+            "current_ma": 7.12,
+            "tx_power_dbm": -1.85,
+            "rx_power_dbm": -40.0
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show cisp summary",
+  "schema": {
+    "name": "ShowCispSummaryResult",
+    "fields": {
+      "cisp": {
+        "type": {
+          "name": "CispStatus",
+          "fields": {
+            "enabled": {
+              "type": "bool",
+              "required": true
+            },
+            "running": {
+              "type": "bool",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Live device output",
+      "input": "CISP not enabled\n",
+      "expected": {
+        "cisp": {
+          "enabled": false,
+          "running": false
+        }
+      }
+    },
+    {
+      "name": "Show cisp summary output when CISP is not enabled",
+      "input": "CISP not enabled\n",
+      "expected": {
+        "cisp": {
+          "enabled": false,
+          "running": false
+        }
+      }
+    }
+  ]
+}

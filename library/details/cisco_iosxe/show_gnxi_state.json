@@ -1,0 +1,43 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show gnxi state",
+  "schema": {
+    "name": "ShowGnxiStateResult",
+    "fields": {
+      "rows": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "GnxiStateRow",
+            "fields": {
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "State            Status\n--------------------------------\nEnabled          Up\n",
+      "expected": {
+        "rows": {
+          "Enabled": {
+            "state": "Enabled",
+            "status": "Up"
+          }
+        }
+      }
+    }
+  ]
+}

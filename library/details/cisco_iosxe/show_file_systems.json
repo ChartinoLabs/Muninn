@@ -1,0 +1,243 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show file systems",
+  "schema": {
+    "name": "ShowFileSystemsResult",
+    "fields": {
+      "file_systems": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "FileSystemEntry",
+            "fields": {
+              "type": {
+                "type": "str",
+                "required": true
+              },
+              "flags": {
+                "type": "str",
+                "required": true
+              },
+              "is_default": {
+                "type": "bool",
+                "required": true
+              },
+              "size": {
+                "type": "int",
+                "required": false
+              },
+              "free": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Standard output with multiple file system types including disk, opaque, network, and nvram",
+      "input": "File Systems:\n\n       Size(b)       Free(b)      Type  Flags  Prefixes\n             -             -    opaque     rw   system:\n             -             -    opaque     rw   tmpsys:\n    1651314688    1561067520      disk     rw   crashinfo:\n*  11353194496    9936510976      disk     rw   flash:\n    3846701056    3758395392      disk     ro   webui:\n             -             -    opaque     rw   null:\n             -             -    opaque     ro   tar:\n             -             -   network     rw   tftp:\n       2097152       2057602     nvram     rw   nvram:\n             -             -   network     rw   rcp:\n             -             -   network     rw   http:\n             -             -   network     rw   ftp:\n             -             -   network     rw   scp:\n             -             -   network     rw   sftp:\n             -             -   network     rw   https:\n             -             -    opaque     ro   cns:\n",
+      "expected": {
+        "file_systems": {
+          "cns:": {
+            "flags": "ro",
+            "is_default": false,
+            "type": "opaque"
+          },
+          "crashinfo:": {
+            "flags": "rw",
+            "free": 1561067520,
+            "is_default": false,
+            "size": 1651314688,
+            "type": "disk"
+          },
+          "flash:": {
+            "flags": "rw",
+            "free": 9936510976,
+            "is_default": true,
+            "size": 11353194496,
+            "type": "disk"
+          },
+          "ftp:": {
+            "flags": "rw",
+            "is_default": false,
+            "type": "network"
+          },
+          "http:": {
+            "flags": "rw",
+            "is_default": false,
+            "type": "network"
+          },
+          "https:": {
+            "flags": "rw",
+            "is_default": false,
+            "type": "network"
+          },
+          "null:": {
+            "flags": "rw",
+            "is_default": false,
+            "type": "opaque"
+          },
+          "nvram:": {
+            "flags": "rw",
+            "free": 2057602,
+            "is_default": false,
+            "size": 2097152,
+            "type": "nvram"
+          },
+          "rcp:": {
+            "flags": "rw",
+            "is_default": false,
+            "type": "network"
+          },
+          "scp:": {
+            "flags": "rw",
+            "is_default": false,
+            "type": "network"
+          },
+          "sftp:": {
+            "flags": "rw",
+            "is_default": false,
+            "type": "network"
+          },
+          "system:": {
+            "flags": "rw",
+            "is_default": false,
+            "type": "opaque"
+          },
+          "tar:": {
+            "flags": "ro",
+            "is_default": false,
+            "type": "opaque"
+          },
+          "tftp:": {
+            "flags": "rw",
+            "is_default": false,
+            "type": "network"
+          },
+          "tmpsys:": {
+            "flags": "rw",
+            "is_default": false,
+            "type": "opaque"
+          },
+          "webui:": {
+            "flags": "ro",
+            "free": 3758395392,
+            "is_default": false,
+            "size": 3846701056,
+            "type": "disk"
+          }
+        }
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": "File Systems:\n\n       Size(b)       Free(b)      Type  Flags  Prefixes\n             -             -    opaque     rw   system:\n             -             -    opaque     rw   tmpsys:\n*   5173313536    3967959040      disk     rw   bootflash: flash: crashinfo:\n    2000297984    1866203136      disk     ro   webui:\n             -             -   network     rw   tftp:\n             -             -    opaque     rw   null:\n             -             -    opaque     ro   tar:\n      33554432      33534546     nvram     rw   nvram:\n             -             -    opaque     wo   syslog:\n             -             -   network     rw   rcp:\n             -             -   network     rw   http:\n             -             -   network     rw   ftp:\n             -             -   network     rw   scp:\n             -             -   network     rw   sftp:\n             -             -   network     rw   https:\n             -             -    opaque     ro   cns:\n",
+      "expected": {
+        "file_systems": {
+          "system:": {
+            "type": "opaque",
+            "flags": "rw",
+            "is_default": false
+          },
+          "tmpsys:": {
+            "type": "opaque",
+            "flags": "rw",
+            "is_default": false
+          },
+          "webui:": {
+            "type": "disk",
+            "flags": "ro",
+            "is_default": false,
+            "size": 2000297984,
+            "free": 1866203136
+          },
+          "tftp:": {
+            "type": "network",
+            "flags": "rw",
+            "is_default": false
+          },
+          "null:": {
+            "type": "opaque",
+            "flags": "rw",
+            "is_default": false
+          },
+          "tar:": {
+            "type": "opaque",
+            "flags": "ro",
+            "is_default": false
+          },
+          "nvram:": {
+            "type": "nvram",
+            "flags": "rw",
+            "is_default": false,
+            "size": 33554432,
+            "free": 33534546
+          },
+          "rcp:": {
+            "type": "network",
+            "flags": "rw",
+            "is_default": false
+          },
+          "http:": {
+            "type": "network",
+            "flags": "rw",
+            "is_default": false
+          },
+          "ftp:": {
+            "type": "network",
+            "flags": "rw",
+            "is_default": false
+          },
+          "scp:": {
+            "type": "network",
+            "flags": "rw",
+            "is_default": false
+          },
+          "sftp:": {
+            "type": "network",
+            "flags": "rw",
+            "is_default": false
+          },
+          "https:": {
+            "type": "network",
+            "flags": "rw",
+            "is_default": false
+          },
+          "cns:": {
+            "type": "opaque",
+            "flags": "ro",
+            "is_default": false
+          }
+        }
+      }
+    },
+    {
+      "name": "Minimal output with only flash and nvram file systems",
+      "input": "File Systems:\n\n       Size(b)       Free(b)      Type  Flags  Prefixes\n*   3903578112    2695892992      disk     rw   flash:\n       2097152       2081594     nvram     rw   nvram:\n",
+      "expected": {
+        "file_systems": {
+          "flash:": {
+            "flags": "rw",
+            "free": 2695892992,
+            "is_default": true,
+            "size": 3903578112,
+            "type": "disk"
+          },
+          "nvram:": {
+            "flags": "rw",
+            "free": 2081594,
+            "is_default": false,
+            "size": 2097152,
+            "type": "nvram"
+          }
+        }
+      }
+    }
+  ]
+}

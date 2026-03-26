@@ -1,0 +1,54 @@
+{
+  "os": "cisco_iosxe",
+  "command": "dir <filesystem>",
+  "schema": {
+    "name": "DirResult",
+    "fields": {
+      "directory": {
+        "type": "str",
+        "required": true
+      },
+      "files": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "FileEntry",
+            "fields": {
+              "permissions": {
+                "type": "str",
+                "required": true
+              },
+              "size": {
+                "type": "int",
+                "required": true
+              },
+              "date": {
+                "type": "str",
+                "required": true
+              },
+              "name": {
+                "type": "str",
+                "required": true
+              },
+              "inode": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_bytes": {
+        "type": "int",
+        "required": true
+      },
+      "free_bytes": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}

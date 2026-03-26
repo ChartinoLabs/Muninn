@@ -1,0 +1,953 @@
+{
+  "os": "cisco_ios",
+  "command": "show ip ospf interface",
+  "schema": {
+    "name": "ShowIpOspfInterfaceResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "OspfInterfaceEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "line_protocol": {
+                "type": "str",
+                "required": true
+              },
+              "interface_id": {
+                "type": "int",
+                "required": true
+              },
+              "area": {
+                "type": "str",
+                "required": true
+              },
+              "attached_via": {
+                "type": "str",
+                "required": true
+              },
+              "process_id": {
+                "type": "int",
+                "required": true
+              },
+              "router_id": {
+                "type": "str",
+                "required": true
+              },
+              "network_type": {
+                "type": "str",
+                "required": true
+              },
+              "cost": {
+                "type": "int",
+                "required": true
+              },
+              "ip_address": {
+                "type": "str",
+                "required": false
+              },
+              "unnumbered_interface": {
+                "type": "str",
+                "required": false
+              },
+              "unnumbered_address": {
+                "type": "str",
+                "required": false
+              },
+              "transmit_delay": {
+                "type": "int",
+                "required": false
+              },
+              "state": {
+                "type": "str",
+                "required": false
+              },
+              "priority": {
+                "type": "int",
+                "required": false
+              },
+              "dr_router_id": {
+                "type": "str",
+                "required": false
+              },
+              "dr_address": {
+                "type": "str",
+                "required": false
+              },
+              "bdr_router_id": {
+                "type": "str",
+                "required": false
+              },
+              "bdr_address": {
+                "type": "str",
+                "required": false
+              },
+              "hello_interval": {
+                "type": "int",
+                "required": false
+              },
+              "dead_interval": {
+                "type": "int",
+                "required": false
+              },
+              "wait_interval": {
+                "type": "int",
+                "required": false
+              },
+              "retransmit_interval": {
+                "type": "int",
+                "required": false
+              },
+              "oob_resync_timeout": {
+                "type": "int",
+                "required": false
+              },
+              "hello_due_in": {
+                "type": "str",
+                "required": false
+              },
+              "passive": {
+                "type": "bool",
+                "required": false
+              },
+              "lls": {
+                "type": "bool",
+                "required": false
+              },
+              "graceful_restart": {
+                "type": {
+                  "name": "GracefulRestartEntry",
+                  "fields": {
+                    "cisco_nsf": {
+                      "type": "bool",
+                      "required": true
+                    },
+                    "ietf_nsf": {
+                      "type": "bool",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "authentication": {
+                "type": {
+                  "name": "AuthenticationEntry",
+                  "fields": {
+                    "type": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "key_id": {
+                      "type": "int",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "ttl_security": {
+                "type": {
+                  "name": "TtlSecurityEntry",
+                  "fields": {
+                    "enabled": {
+                      "type": "bool",
+                      "required": true
+                    },
+                    "hops": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "prefix_suppression": {
+                "type": "bool",
+                "required": false
+              },
+              "demand_circuit": {
+                "type": "bool",
+                "required": false
+              },
+              "stub_host": {
+                "type": "bool",
+                "required": false
+              },
+              "bfd_enabled": {
+                "type": "bool",
+                "required": false
+              },
+              "ipfrr_protected": {
+                "type": "bool",
+                "required": false
+              },
+              "ipfrr_candidate": {
+                "type": "bool",
+                "required": false
+              },
+              "ti_lfa_protected": {
+                "type": "bool",
+                "required": false
+              },
+              "flood_stats": {
+                "type": {
+                  "name": "FloodStatsEntry",
+                  "fields": {
+                    "index": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "queue_length": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "last_scan_length": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "max_scan_length": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "last_scan_time_msec": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "max_scan_time_msec": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "total_dcbitless_lsa": {
+                "type": "int",
+                "required": false
+              },
+              "donotage_lsa_allowed": {
+                "type": "bool",
+                "required": false
+              },
+              "neighbor_count": {
+                "type": "int",
+                "required": false
+              },
+              "adjacent_neighbor_count": {
+                "type": "int",
+                "required": false
+              },
+              "suppress_hello_count": {
+                "type": "int",
+                "required": false
+              },
+              "neighbors": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "NeighborEntry",
+                    "fields": {
+                      "role": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "topology": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "TopologyEntry",
+                    "fields": {
+                      "cost": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "disabled": {
+                        "type": "bool",
+                        "required": true
+                      },
+                      "shutdown": {
+                        "type": "bool",
+                        "required": true
+                      },
+                      "name": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Broadcast DR/BDR, loopback stub, sham-link with demand circuit and TTL security",
+      "input": "Loopback0 is up, line protocol is up\n  Internet Address 10.4.1.1/32, Interface ID 11, Area 0\n  Attached via Interface Enable\n  Process ID 1, Router ID 10.4.1.1, Network Type LOOPBACK, Cost: 1\n  Topology-MTID    Cost    Disabled    Shutdown      Topology Name\n        0           1         no          no            Base\n  Enabled by interface config, including secondary ip addresses\n  Loopback interface is treated as a stub Host\nGigabitEthernet2 is up, line protocol is up (connected)\n  Internet Address 10.1.2.1/24, Interface ID 8, Area 0\n  Attached via Interface Enable\n  Process ID 1, Router ID 10.4.1.1, Network Type BROADCAST, Cost: 1\n  Topology-MTID    Cost    Disabled    Shutdown      Topology Name\n        0           1         no          no            Base\n  Enabled by interface config, including secondary ip addresses\n  Transmit Delay is 1 sec, State DR, Priority 1\n  Designated Router (ID) 10.4.1.1, Interface address 10.1.2.1\n  Backup Designated router (ID) 10.16.2.2, Interface address 10.1.2.2\n  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5\n    oob-resync timeout 40\n    Hello due in 00:00:05\n  Supports Link-local Signaling (LLS)\n  Cisco NSF helper support enabled\n  IETF NSF helper support enabled\n  Prefix-suppression is enabled\n  Can be protected by per-prefix Loop-Free FastReroute\n  Can be used for per-prefix Loop-Free FastReroute repair paths\n  Not Protected by per-prefix TI-LFA\n  Index 1/3/3, flood queue length 0\n  Next 0x0(0)/0x0(0)/0x0(0)\n  Last flood scan length is 1, maximum is 3\n  Last flood scan time is 0 msec, maximum is 1 msec\n  Simple password authentication enabled\n  Neighbor Count is 1, Adjacent neighbor count is 1\n    Adjacent with neighbor 10.16.2.2  (Backup Designated Router)\n  Suppress hello for 0 neighbor(s)\nGigabitEthernet1 is up, line protocol is up\n  Internet Address 10.1.4.1/24, Interface ID 7, Area 0\n  Attached via Interface Enable\n  Process ID 1, Router ID 10.4.1.1, Network Type BROADCAST, Cost: 1\n  Topology-MTID    Cost    Disabled    Shutdown      Topology Name\n        0           1         no          no            Base\n  Enabled by interface config, including secondary ip addresses\n  Transmit Delay is 1 sec, State BDR, Priority 1\n  Designated Router (ID) 10.64.4.4, Interface address 10.1.4.4\n  Backup Designated router (ID) 10.4.1.1, Interface address 10.1.4.1\n  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5\n    oob-resync timeout 40\n    Hello due in 00:00:08\n  Supports Link-local Signaling (LLS)\n  Cisco NSF helper support enabled\n  IETF NSF helper support enabled\n  Can be protected by per-prefix Loop-Free FastReroute\n  Can be used for per-prefix Loop-Free FastReroute repair paths\n  Not Protected by per-prefix TI-LFA\n  Index 1/2/2, flood queue length 0\n  Next 0x0(0)/0x0(0)/0x0(0)\n  Last flood scan length is 3, maximum is 3\n  Last flood scan time is 0 msec, maximum is 1 msec\n  Cryptographic authentication enabled\n    Youngest key id is 2\n    Rollover in progress, 1 neighbor(s) using the old key(s):\n    key id 1 algorithm MD5\n  Neighbor Count is 1, Adjacent neighbor count is 1\n    Adjacent with neighbor 10.64.4.4  (Designated Router)\n  Suppress hello for 0 neighbor(s)\nOSPF_SL1 is up, line protocol is up\n  Internet Address 0.0.0.0/0, Interface ID 14, Area 1\n  Attached via Not Attached\n  Process ID 2, Router ID 10.229.11.11, Network Type SHAM_LINK, Cost: 111\n  Topology-MTID    Cost    Disabled    Shutdown      Topology Name\n        0           111       no          no            Base\n  Configured as demand circuit\n  Run as demand circuit\n  DoNotAge LSA not allowed (Number of DCbitless LSA is 1)\n  Transmit Delay is 1 sec, State POINT_TO_POINT\n  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5\n    oob-resync timeout 40\n    Hello due in 00:00:00\n  Supports Link-local Signaling (LLS)\n  Cisco NSF helper support enabled\n  IETF NSF helper support enabled\n  Strict TTL checking enabled, up to 3 hops allowed\n  Can not be protected by per-prefix Loop-Free FastReroute\n  Can not be used for per-prefix Loop-Free FastReroute repair paths\n  Not Protected by per-prefix TI-LFA\n  Index 1/2/2, flood queue length 0\n  Next 0x0(0)/0x0(0)/0x0(0)\n  Last flood scan length is 1, maximum is 5\n  Last flood scan time is 0 msec, maximum is 1 msec\n  Neighbor Count is 1, Adjacent neighbor count is 1\n    Adjacent with neighbor 10.151.22.22\n  Suppress hello for 0 neighbor(s)\nGigabitEthernet3 is up, line protocol is up\n  Internet Address 10.186.5.1/24, Interface ID 9, Area 1\n  Attached via Interface Enable\n  Process ID 2, Router ID 10.229.11.11, Network Type BROADCAST, Cost: 1\n  Topology-MTID    Cost    Disabled    Shutdown      Topology Name\n        0           1         no          no            Base\n  Enabled by interface config, including secondary ip addresses\n  Transmit Delay is 1 sec, State DR, Priority 1\n  Designated Router (ID) 10.229.11.11, Interface address 10.186.5.1\n  Backup Designated router (ID) 10.115.55.55, Interface address 10.186.5.5\n  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5\n    oob-resync timeout 40\n    Hello due in 00:00:08\n  Supports Link-local Signaling (LLS)\n  Cisco NSF helper support enabled\n  IETF NSF helper support enabled\n  Can be protected by per-prefix Loop-Free FastReroute\n  Can be used for per-prefix Loop-Free FastReroute repair paths\n  Not Protected by per-prefix TI-LFA\n  Index 1/1/1, flood queue length 0\n  Next 0x0(0)/0x0(0)/0x0(0)\n  Last flood scan length is 0, maximum is 7\n  Last flood scan time is 0 msec, maximum is 1 msec\n  Neighbor Count is 1, Adjacent neighbor count is 1\n    Adjacent with neighbor 10.115.55.55  (Backup Designated Router)\n  Suppress hello for 0 neighbor(s)\n",
+      "expected": {
+        "interfaces": {
+          "Loopback0": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "10.4.1.1/32",
+            "interface_id": 11,
+            "area": "0.0.0.0",
+            "attached_via": "Interface Enable",
+            "process_id": 1,
+            "router_id": "10.4.1.1",
+            "network_type": "LOOPBACK",
+            "cost": 1,
+            "topology": {
+              "0": {
+                "cost": 1,
+                "disabled": false,
+                "shutdown": false,
+                "name": "Base"
+              }
+            },
+            "stub_host": true
+          },
+          "GigabitEthernet2": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "10.1.2.1/24",
+            "interface_id": 8,
+            "area": "0.0.0.0",
+            "attached_via": "Interface Enable",
+            "process_id": 1,
+            "router_id": "10.4.1.1",
+            "network_type": "BROADCAST",
+            "cost": 1,
+            "transmit_delay": 1,
+            "state": "DR",
+            "priority": 1,
+            "dr_router_id": "10.4.1.1",
+            "dr_address": "10.1.2.1",
+            "bdr_router_id": "10.16.2.2",
+            "bdr_address": "10.1.2.2",
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "oob_resync_timeout": 40,
+            "hello_due_in": "00:00:05",
+            "topology": {
+              "0": {
+                "cost": 1,
+                "disabled": false,
+                "shutdown": false,
+                "name": "Base"
+              }
+            },
+            "lls": true,
+            "prefix_suppression": true,
+            "ipfrr_protected": true,
+            "ipfrr_candidate": true,
+            "ti_lfa_protected": false,
+            "graceful_restart": {
+              "cisco_nsf": true,
+              "ietf_nsf": true
+            },
+            "authentication": {
+              "type": "simple"
+            },
+            "neighbor_count": 1,
+            "adjacent_neighbor_count": 1,
+            "neighbors": {
+              "10.16.2.2": {
+                "role": "Backup Designated Router"
+              }
+            },
+            "suppress_hello_count": 0,
+            "flood_stats": {
+              "index": "1/3/3",
+              "queue_length": 0,
+              "last_scan_length": 1,
+              "max_scan_length": 3,
+              "last_scan_time_msec": 0,
+              "max_scan_time_msec": 1
+            }
+          },
+          "GigabitEthernet1": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "10.1.4.1/24",
+            "interface_id": 7,
+            "area": "0.0.0.0",
+            "attached_via": "Interface Enable",
+            "process_id": 1,
+            "router_id": "10.4.1.1",
+            "network_type": "BROADCAST",
+            "cost": 1,
+            "transmit_delay": 1,
+            "state": "BDR",
+            "priority": 1,
+            "dr_router_id": "10.64.4.4",
+            "dr_address": "10.1.4.4",
+            "bdr_router_id": "10.4.1.1",
+            "bdr_address": "10.1.4.1",
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "oob_resync_timeout": 40,
+            "hello_due_in": "00:00:08",
+            "topology": {
+              "0": {
+                "cost": 1,
+                "disabled": false,
+                "shutdown": false,
+                "name": "Base"
+              }
+            },
+            "lls": true,
+            "ipfrr_protected": true,
+            "ipfrr_candidate": true,
+            "ti_lfa_protected": false,
+            "graceful_restart": {
+              "cisco_nsf": true,
+              "ietf_nsf": true
+            },
+            "authentication": {
+              "type": "md5",
+              "key_id": 2
+            },
+            "neighbor_count": 1,
+            "adjacent_neighbor_count": 1,
+            "neighbors": {
+              "10.64.4.4": {
+                "role": "Designated Router"
+              }
+            },
+            "suppress_hello_count": 0,
+            "flood_stats": {
+              "index": "1/2/2",
+              "queue_length": 0,
+              "last_scan_length": 3,
+              "max_scan_length": 3,
+              "last_scan_time_msec": 0,
+              "max_scan_time_msec": 1
+            }
+          },
+          "OSPF_SL1": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "0.0.0.0/0",
+            "interface_id": 14,
+            "area": "0.0.0.1",
+            "attached_via": "Not Attached",
+            "process_id": 2,
+            "router_id": "10.229.11.11",
+            "network_type": "SHAM_LINK",
+            "cost": 111,
+            "transmit_delay": 1,
+            "state": "POINT_TO_POINT",
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "oob_resync_timeout": 40,
+            "hello_due_in": "00:00:00",
+            "topology": {
+              "0": {
+                "cost": 111,
+                "disabled": false,
+                "shutdown": false,
+                "name": "Base"
+              }
+            },
+            "demand_circuit": true,
+            "total_dcbitless_lsa": 1,
+            "donotage_lsa_allowed": false,
+            "lls": true,
+            "ttl_security": {
+              "enabled": true,
+              "hops": 3
+            },
+            "ipfrr_protected": false,
+            "ipfrr_candidate": false,
+            "ti_lfa_protected": false,
+            "graceful_restart": {
+              "cisco_nsf": true,
+              "ietf_nsf": true
+            },
+            "neighbor_count": 1,
+            "adjacent_neighbor_count": 1,
+            "neighbors": {
+              "10.151.22.22": {}
+            },
+            "suppress_hello_count": 0,
+            "flood_stats": {
+              "index": "1/2/2",
+              "queue_length": 0,
+              "last_scan_length": 1,
+              "max_scan_length": 5,
+              "last_scan_time_msec": 0,
+              "max_scan_time_msec": 1
+            }
+          },
+          "GigabitEthernet3": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "10.186.5.1/24",
+            "interface_id": 9,
+            "area": "0.0.0.1",
+            "attached_via": "Interface Enable",
+            "process_id": 2,
+            "router_id": "10.229.11.11",
+            "network_type": "BROADCAST",
+            "cost": 1,
+            "transmit_delay": 1,
+            "state": "DR",
+            "priority": 1,
+            "dr_router_id": "10.229.11.11",
+            "dr_address": "10.186.5.1",
+            "bdr_router_id": "10.115.55.55",
+            "bdr_address": "10.186.5.5",
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "oob_resync_timeout": 40,
+            "hello_due_in": "00:00:08",
+            "topology": {
+              "0": {
+                "cost": 1,
+                "disabled": false,
+                "shutdown": false,
+                "name": "Base"
+              }
+            },
+            "lls": true,
+            "ipfrr_protected": true,
+            "ipfrr_candidate": true,
+            "ti_lfa_protected": false,
+            "graceful_restart": {
+              "cisco_nsf": true,
+              "ietf_nsf": true
+            },
+            "neighbor_count": 1,
+            "adjacent_neighbor_count": 1,
+            "neighbors": {
+              "10.115.55.55": {
+                "role": "Backup Designated Router"
+              }
+            },
+            "suppress_hello_count": 0,
+            "flood_stats": {
+              "index": "1/1/1",
+              "queue_length": 0,
+              "last_scan_length": 0,
+              "max_scan_length": 7,
+              "last_scan_time_msec": 0,
+              "max_scan_time_msec": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Point-to-point interfaces, passive loopback, unnumbered tunnels, port-channels",
+      "input": "Loopback99 is up, line protocol is up\n  Internet Address 174.20.72.26/32, Interface ID 48, Area 0\n  Attached via Network Statement\n  Process ID 94, Router ID 246.132.205.143, Network Type LOOPBACK, Cost: 1\n  Topology-MTID    Cost    Disabled    Shutdown      Topology Name\n        0           1         no          no            Base\n  Loopback interface is treated as a stub Host\nLoopback0 is up, line protocol is up\n  Internet Address 245.132.205.143/32, Interface ID 49, Area 0\n  Attached via Network Statement\n  Process ID 94, Router ID 246.132.205.143, Network Type POINT_TO_POINT, Cost: 1\n  Topology-MTID    Cost    Disabled    Shutdown      Topology Name\n        0           1         no          no            Base\n  Transmit Delay is 1 sec, State POINT_TO_POINT\n  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5\n    oob-resync timeout 40\n    No Hellos (Passive interface)\n  Supports Link-local Signaling (LLS)\n  Cisco NSF helper support enabled\n  IETF NSF helper support enabled\n  Can be protected by per-prefix Loop-Free FastReroute\n  Can be used for per-prefix Loop-Free FastReroute repair paths\n  Not Protected by per-prefix TI-LFA\n  Index 1/5/5, flood queue length 0\n  Next 0x0(0)/0x0(0)/0x0(0)\n  Last flood scan length is 0, maximum is 0\n  Last flood scan time is 0 msec, maximum is 0 msec\n  Neighbor Count is 0, Adjacent neighbor count is 0\n  Suppress hello for 0 neighbor(s)\nTenGigabitEthernet0/4/0 is up, line protocol is up\n  Internet Address 175.20.248.226/30, Interface ID 31, Area 0\n  Attached via Network Statement\n  Process ID 94, Router ID 245.132.205.143, Network Type POINT_TO_POINT, Cost: 181\n  Topology-MTID    Cost    Disabled    Shutdown      Topology Name\n        0           181       no          no            Base\n  Transmit Delay is 1 sec, State POINT_TO_POINT\n  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5\n    oob-resync timeout 40\n    Hello due in 00:00:08\n  Supports Link-local Signaling (LLS)\n  Cisco NSF helper support enabled\n  IETF NSF helper support enabled\n  Can be protected by per-prefix Loop-Free FastReroute\n  Can be used for per-prefix Loop-Free FastReroute repair paths\n  Not Protected by per-prefix TI-LFA\n  Index 1/9/9, flood queue length 0\n  Next 0x0(0)/0x0(0)/0x0(0)\n  Last flood scan length is 1, maximum is 24\n  Last flood scan time is 0 msec, maximum is 16 msec\n  Neighbor Count is 1, Adjacent neighbor count is 1\n    Adjacent with neighbor 246.132.205.236\n  Suppress hello for 0 neighbor(s)\n  Cryptographic authentication enabled\n    Youngest key id is 1\nGigabitEthernet0/5/6 is up, line protocol is up\n  Internet Address 172.30.79.17/30, Interface ID 45, Area 0\n  Attached via Network Statement\n  Process ID 94, Router ID 246.132.205.143, Network Type POINT_TO_POINT, Cost: 50\n  Topology-MTID    Cost    Disabled    Shutdown      Topology Name\n        0           50        no          no            Base\n  Transmit Delay is 1 sec, State POINT_TO_POINT\n  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5\n    oob-resync timeout 40\n    Hello due in 00:00:05\n  Supports Link-local Signaling (LLS)\n  Cisco NSF helper support enabled\n  IETF NSF helper support enabled\n  Can be protected by per-prefix Loop-Free FastReroute\n  Can be used for per-prefix Loop-Free FastReroute repair paths\n  Not Protected by per-prefix TI-LFA\n  Index 1/8/8, flood queue length 0\n  Next 0x0(0)/0x0(0)/0x0(0)\n  Last flood scan length is 1, maximum is 9\n  Last flood scan time is 0 msec, maximum is 12 msec\n  Neighbor Count is 0, Adjacent neighbor count is 0\n  Suppress hello for 0 neighbor(s)\nTunnel101 is administratively down, line protocol is down\n  Interface is unnumbered, Interface ID 55, Area 0\n  Using address of Loopback0 (245.132.205.143)\n  Attached via Network Statement\n  Process ID 94, Router ID 245.132.205.143, Network Type POINT_TO_POINT, Cost: 65535\n  Topology-MTID    Cost    Disabled    Shutdown      Topology Name\n        0           65535     no          no            Base\n  Transmit Delay is 1 sec, State DOWN\n  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5\n    oob-resync timeout 40\n    No Hellos (Passive interface)\nTunnel100 is administratively down, line protocol is down\n  Interface is unnumbered, Interface ID 54, Area 0\n  Using address of Loopback0 (245.132.205.143)\n  Attached via Network Statement\n  Process ID 94, Router ID 246.132.205.143, Network Type POINT_TO_POINT, Cost: 65535\n  Topology-MTID    Cost    Disabled    Shutdown      Topology Name\n        0           65535     no          no            Base\n  Transmit Delay is 1 sec, State DOWN\n  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5\n    oob-resync timeout 40\n    No Hellos (Passive interface)\nPort-channel1 is up, line protocol is up\n  Internet Address 175.30.79.42/30, Interface ID 50, Area 0\n  Attached via Network Statement\n  Process ID 94, Router ID 246.132.205.143, Network Type POINT_TO_POINT, Cost: 20\n  Topology-MTID    Cost    Disabled    Shutdown      Topology Name\n        0           20        no          no            Base\n  Transmit Delay is 1 sec, State POINT_TO_POINT\n  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5\n    oob-resync timeout 40\n    Hello due in 00:00:05\n  Supports Link-local Signaling (LLS)\n  Cisco NSF helper support enabled\n  IETF NSF helper support enabled\n  Can be protected by per-prefix Loop-Free FastReroute\n  Can be used for per-prefix Loop-Free FastReroute repair paths\n  Not Protected by per-prefix TI-LFA\n  Index 1/4/4, flood queue length 0\n  Next 0x0(0)/0x0(0)/0x0(0)\n  Last flood scan length is 1, maximum is 64\n  Last flood scan time is 0 msec, maximum is 12 msec\n  Neighbor Count is 1, Adjacent neighbor count is 1\n    Adjacent with neighbor 246.132.205.144\n  Suppress hello for 0 neighbor(s)\nPort-channel3 is up, line protocol is up\n  Internet Address 175.30.75.158/30, Interface ID 51, Area 0\n  Attached via Network Statement\n  Process ID 94, Router ID 245.132.205.143, Network Type POINT_TO_POINT, Cost: 7\n  Topology-MTID    Cost    Disabled    Shutdown      Topology Name\n        0           7         no          no            Base\n  Transmit Delay is 1 sec, State POINT_TO_POINT\n  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5\n    oob-resync timeout 40\n    Hello due in 00:00:04\n  Supports Link-local Signaling (LLS)\n  Cisco NSF helper support enabled\n  IETF NSF helper support enabled\n  Can be protected by per-prefix Loop-Free FastReroute\n  Can be used for per-prefix Loop-Free FastReroute repair paths\n  Not Protected by per-prefix TI-LFA\n  Index 1/3/3, flood queue length 0\n  Next 0x0(0)/0x0(0)/0x0(0)\n  Last flood scan length is 4, maximum is 8\n  Last flood scan time is 0 msec, maximum is 12 msec\n  Neighbor Count is 1, Adjacent neighbor count is 1\n    Adjacent with neighbor 246.132.205.141\n  Suppress hello for 0 neighbor(s)\nPort-channel7 is up, line protocol is up\n  Internet Address 172.30.73.158/30, Interface ID 53, Area 0\n  Attached via Network Statement\n  Process ID 94, Router ID 245.133.205.143, Network Type POINT_TO_POINT, Cost: 7\n  Topology-MTID    Cost    Disabled    Shutdown      Topology Name\n        0           7         no          no            Base\n  Transmit Delay is 1 sec, State POINT_TO_POINT\n  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5\n    oob-resync timeout 40\n    Hello due in 00:00:00\n  Supports Link-local Signaling (LLS)\n  Cisco NSF helper support enabled\n  IETF NSF helper support enabled\n  Can be protected by per-prefix Loop-Free FastReroute\n  Can be used for per-prefix Loop-Free FastReroute repair paths\n  Not Protected by per-prefix TI-LFA\n  Index 1/2/2, flood queue length 0\n  Next 0x0(0)/0x0(0)/0x0(0)\n  Last flood scan length is 4, maximum is 8\n  Last flood scan time is 0 msec, maximum is 8 msec\n  Neighbor Count is 1, Adjacent neighbor count is 1\n    Adjacent with neighbor 245.132.205.141\n  Suppress hello for 0 neighbor(s)\n",
+      "expected": {
+        "interfaces": {
+          "Loopback99": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "174.20.72.26/32",
+            "interface_id": 48,
+            "area": "0.0.0.0",
+            "attached_via": "Network Statement",
+            "process_id": 94,
+            "router_id": "246.132.205.143",
+            "network_type": "LOOPBACK",
+            "cost": 1,
+            "topology": {
+              "0": {
+                "cost": 1,
+                "disabled": false,
+                "shutdown": false,
+                "name": "Base"
+              }
+            },
+            "stub_host": true
+          },
+          "Loopback0": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "245.132.205.143/32",
+            "interface_id": 49,
+            "area": "0.0.0.0",
+            "attached_via": "Network Statement",
+            "process_id": 94,
+            "router_id": "246.132.205.143",
+            "network_type": "POINT_TO_POINT",
+            "cost": 1,
+            "transmit_delay": 1,
+            "state": "POINT_TO_POINT",
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "oob_resync_timeout": 40,
+            "passive": true,
+            "topology": {
+              "0": {
+                "cost": 1,
+                "disabled": false,
+                "shutdown": false,
+                "name": "Base"
+              }
+            },
+            "lls": true,
+            "ipfrr_protected": true,
+            "ipfrr_candidate": true,
+            "ti_lfa_protected": false,
+            "graceful_restart": {
+              "cisco_nsf": true,
+              "ietf_nsf": true
+            },
+            "neighbor_count": 0,
+            "adjacent_neighbor_count": 0,
+            "suppress_hello_count": 0,
+            "flood_stats": {
+              "index": "1/5/5",
+              "queue_length": 0,
+              "last_scan_length": 0,
+              "max_scan_length": 0,
+              "last_scan_time_msec": 0,
+              "max_scan_time_msec": 0
+            }
+          },
+          "TenGigabitEthernet0/4/0": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "175.20.248.226/30",
+            "interface_id": 31,
+            "area": "0.0.0.0",
+            "attached_via": "Network Statement",
+            "process_id": 94,
+            "router_id": "245.132.205.143",
+            "network_type": "POINT_TO_POINT",
+            "cost": 181,
+            "transmit_delay": 1,
+            "state": "POINT_TO_POINT",
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "oob_resync_timeout": 40,
+            "hello_due_in": "00:00:08",
+            "topology": {
+              "0": {
+                "cost": 181,
+                "disabled": false,
+                "shutdown": false,
+                "name": "Base"
+              }
+            },
+            "lls": true,
+            "ipfrr_protected": true,
+            "ipfrr_candidate": true,
+            "ti_lfa_protected": false,
+            "graceful_restart": {
+              "cisco_nsf": true,
+              "ietf_nsf": true
+            },
+            "authentication": {
+              "type": "md5",
+              "key_id": 1
+            },
+            "neighbor_count": 1,
+            "adjacent_neighbor_count": 1,
+            "neighbors": {
+              "246.132.205.236": {}
+            },
+            "suppress_hello_count": 0,
+            "flood_stats": {
+              "index": "1/9/9",
+              "queue_length": 0,
+              "last_scan_length": 1,
+              "max_scan_length": 24,
+              "last_scan_time_msec": 0,
+              "max_scan_time_msec": 16
+            }
+          },
+          "GigabitEthernet0/5/6": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "172.30.79.17/30",
+            "interface_id": 45,
+            "area": "0.0.0.0",
+            "attached_via": "Network Statement",
+            "process_id": 94,
+            "router_id": "246.132.205.143",
+            "network_type": "POINT_TO_POINT",
+            "cost": 50,
+            "transmit_delay": 1,
+            "state": "POINT_TO_POINT",
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "oob_resync_timeout": 40,
+            "hello_due_in": "00:00:05",
+            "topology": {
+              "0": {
+                "cost": 50,
+                "disabled": false,
+                "shutdown": false,
+                "name": "Base"
+              }
+            },
+            "lls": true,
+            "ipfrr_protected": true,
+            "ipfrr_candidate": true,
+            "ti_lfa_protected": false,
+            "graceful_restart": {
+              "cisco_nsf": true,
+              "ietf_nsf": true
+            },
+            "neighbor_count": 0,
+            "adjacent_neighbor_count": 0,
+            "suppress_hello_count": 0,
+            "flood_stats": {
+              "index": "1/8/8",
+              "queue_length": 0,
+              "last_scan_length": 1,
+              "max_scan_length": 9,
+              "last_scan_time_msec": 0,
+              "max_scan_time_msec": 12
+            }
+          },
+          "Tunnel101": {
+            "status": "administratively down",
+            "line_protocol": "down",
+            "interface_id": 55,
+            "area": "0.0.0.0",
+            "unnumbered_interface": "Loopback0",
+            "unnumbered_address": "245.132.205.143",
+            "attached_via": "Network Statement",
+            "process_id": 94,
+            "router_id": "245.132.205.143",
+            "network_type": "POINT_TO_POINT",
+            "cost": 65535,
+            "transmit_delay": 1,
+            "state": "DOWN",
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "oob_resync_timeout": 40,
+            "passive": true,
+            "topology": {
+              "0": {
+                "cost": 65535,
+                "disabled": false,
+                "shutdown": false,
+                "name": "Base"
+              }
+            }
+          },
+          "Tunnel100": {
+            "status": "administratively down",
+            "line_protocol": "down",
+            "interface_id": 54,
+            "area": "0.0.0.0",
+            "unnumbered_interface": "Loopback0",
+            "unnumbered_address": "245.132.205.143",
+            "attached_via": "Network Statement",
+            "process_id": 94,
+            "router_id": "246.132.205.143",
+            "network_type": "POINT_TO_POINT",
+            "cost": 65535,
+            "transmit_delay": 1,
+            "state": "DOWN",
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "oob_resync_timeout": 40,
+            "passive": true,
+            "topology": {
+              "0": {
+                "cost": 65535,
+                "disabled": false,
+                "shutdown": false,
+                "name": "Base"
+              }
+            }
+          },
+          "Port-channel1": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "175.30.79.42/30",
+            "interface_id": 50,
+            "area": "0.0.0.0",
+            "attached_via": "Network Statement",
+            "process_id": 94,
+            "router_id": "246.132.205.143",
+            "network_type": "POINT_TO_POINT",
+            "cost": 20,
+            "transmit_delay": 1,
+            "state": "POINT_TO_POINT",
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "oob_resync_timeout": 40,
+            "hello_due_in": "00:00:05",
+            "topology": {
+              "0": {
+                "cost": 20,
+                "disabled": false,
+                "shutdown": false,
+                "name": "Base"
+              }
+            },
+            "lls": true,
+            "ipfrr_protected": true,
+            "ipfrr_candidate": true,
+            "ti_lfa_protected": false,
+            "graceful_restart": {
+              "cisco_nsf": true,
+              "ietf_nsf": true
+            },
+            "neighbor_count": 1,
+            "adjacent_neighbor_count": 1,
+            "neighbors": {
+              "246.132.205.144": {}
+            },
+            "suppress_hello_count": 0,
+            "flood_stats": {
+              "index": "1/4/4",
+              "queue_length": 0,
+              "last_scan_length": 1,
+              "max_scan_length": 64,
+              "last_scan_time_msec": 0,
+              "max_scan_time_msec": 12
+            }
+          },
+          "Port-channel3": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "175.30.75.158/30",
+            "interface_id": 51,
+            "area": "0.0.0.0",
+            "attached_via": "Network Statement",
+            "process_id": 94,
+            "router_id": "245.132.205.143",
+            "network_type": "POINT_TO_POINT",
+            "cost": 7,
+            "transmit_delay": 1,
+            "state": "POINT_TO_POINT",
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "oob_resync_timeout": 40,
+            "hello_due_in": "00:00:04",
+            "topology": {
+              "0": {
+                "cost": 7,
+                "disabled": false,
+                "shutdown": false,
+                "name": "Base"
+              }
+            },
+            "lls": true,
+            "ipfrr_protected": true,
+            "ipfrr_candidate": true,
+            "ti_lfa_protected": false,
+            "graceful_restart": {
+              "cisco_nsf": true,
+              "ietf_nsf": true
+            },
+            "neighbor_count": 1,
+            "adjacent_neighbor_count": 1,
+            "neighbors": {
+              "246.132.205.141": {}
+            },
+            "suppress_hello_count": 0,
+            "flood_stats": {
+              "index": "1/3/3",
+              "queue_length": 0,
+              "last_scan_length": 4,
+              "max_scan_length": 8,
+              "last_scan_time_msec": 0,
+              "max_scan_time_msec": 12
+            }
+          },
+          "Port-channel7": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "172.30.73.158/30",
+            "interface_id": 53,
+            "area": "0.0.0.0",
+            "attached_via": "Network Statement",
+            "process_id": 94,
+            "router_id": "245.133.205.143",
+            "network_type": "POINT_TO_POINT",
+            "cost": 7,
+            "transmit_delay": 1,
+            "state": "POINT_TO_POINT",
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "oob_resync_timeout": 40,
+            "hello_due_in": "00:00:00",
+            "topology": {
+              "0": {
+                "cost": 7,
+                "disabled": false,
+                "shutdown": false,
+                "name": "Base"
+              }
+            },
+            "lls": true,
+            "ipfrr_protected": true,
+            "ipfrr_candidate": true,
+            "ti_lfa_protected": false,
+            "graceful_restart": {
+              "cisco_nsf": true,
+              "ietf_nsf": true
+            },
+            "neighbor_count": 1,
+            "adjacent_neighbor_count": 1,
+            "neighbors": {
+              "245.132.205.141": {}
+            },
+            "suppress_hello_count": 0,
+            "flood_stats": {
+              "index": "1/2/2",
+              "queue_length": 0,
+              "last_scan_length": 4,
+              "max_scan_length": 8,
+              "last_scan_time_msec": 0,
+              "max_scan_time_msec": 8
+            }
+          }
+        }
+      }
+    }
+  ]
+}

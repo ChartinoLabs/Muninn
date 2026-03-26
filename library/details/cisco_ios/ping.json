@@ -1,0 +1,106 @@
+{
+  "os": "cisco_ios",
+  "command": "ping",
+  "schema": {
+    "name": "PingResult",
+    "fields": {
+      "packets_sent": {
+        "type": "int",
+        "required": true
+      },
+      "packets_received": {
+        "type": "int",
+        "required": true
+      },
+      "success_rate_percent": {
+        "type": "int",
+        "required": true
+      },
+      "packet_data": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PingPacketData",
+            "fields": {
+              "result": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "rtt_min_ms": {
+        "type": "int",
+        "required": false
+      },
+      "rtt_avg_ms": {
+        "type": "int",
+        "required": false
+      },
+      "rtt_max_ms": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic successful ping with 100% success rate and RTT statistics",
+      "input": "Type escape sequence to abort.\nSending 5, 100-byte ICMP Echos to 192.168.0.1, timeout is 2 seconds:\n!!!!!\nSuccess rate is 100 percent (5/5), round-trip min/avg/max = 1/2/10 ms\n",
+      "expected": {
+        "success_rate_percent": 100,
+        "packets_received": 5,
+        "packets_sent": 5,
+        "packet_data": {
+          "1": {
+            "result": "successful"
+          },
+          "2": {
+            "result": "successful"
+          },
+          "3": {
+            "result": "successful"
+          },
+          "4": {
+            "result": "successful"
+          },
+          "5": {
+            "result": "successful"
+          }
+        },
+        "rtt_min_ms": 1,
+        "rtt_avg_ms": 2,
+        "rtt_max_ms": 10
+      }
+    },
+    {
+      "name": "Failed ping with 0% success rate and no RTT statistics",
+      "input": "Type escape sequence to abort.\nSending 5, 100-byte ICMP Echos to 10.245.179.14, timeout is 2 seconds:\nU..U.\nSuccess rate is 0 percent (0/5)\n",
+      "expected": {
+        "success_rate_percent": 0,
+        "packets_received": 0,
+        "packets_sent": 5,
+        "packet_data": {
+          "1": {
+            "result": "unreachable"
+          },
+          "2": {
+            "result": "failed"
+          },
+          "3": {
+            "result": "failed"
+          },
+          "4": {
+            "result": "unreachable"
+          },
+          "5": {
+            "result": "failed"
+          }
+        }
+      }
+    }
+  ]
+}

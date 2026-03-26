@@ -1,0 +1,91 @@
+{
+  "os": "cisco_ios",
+  "command": "show snmp user",
+  "schema": {
+    "name": "ShowSnmpUserResult",
+    "fields": {
+      "users": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SnmpUserEntry",
+            "fields": {
+              "engine_id": {
+                "type": "str",
+                "required": true
+              },
+              "storage_type": {
+                "type": "str",
+                "required": true
+              },
+              "authentication_protocol": {
+                "type": "str",
+                "required": true
+              },
+              "privacy_protocol": {
+                "type": "str",
+                "required": false
+              },
+              "group_name": {
+                "type": "str",
+                "required": true
+              },
+              "access_list": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple SNMP users with different auth protocols and access lists",
+      "input": "User name: user_snmp1\nEngine ID: 80000009030000451DEC1085\nstorage-type: nonvolatile        active\nAuthentication Protocol: SHA\nPrivacy Protocol: AES128\nGroup-name: managerpriv\n\nUser name: user_snmp2\nEngine ID: 80000009030000451DEC1085\nstorage-type: nonvolatile       active access-list: 10\nAuthentication Protocol: SHA\nPrivacy Protocol: AES128\nGroup-name: managerpriv\n\nUser name: test-user\nEngine ID: 8000000903005E0000010000\nstorage-type: nonvolatile        active\nAuthentication Protocol: None\nPrivacy Protocol: -\nGroup-name: test-group\n",
+      "expected": {
+        "users": {
+          "test-user": {
+            "authentication_protocol": "None",
+            "engine_id": "8000000903005E0000010000",
+            "group_name": "test-group",
+            "storage_type": "nonvolatile"
+          },
+          "user_snmp1": {
+            "authentication_protocol": "SHA",
+            "engine_id": "80000009030000451DEC1085",
+            "group_name": "managerpriv",
+            "privacy_protocol": "AES128",
+            "storage_type": "nonvolatile"
+          },
+          "user_snmp2": {
+            "access_list": "10",
+            "authentication_protocol": "SHA",
+            "engine_id": "80000009030000451DEC1085",
+            "group_name": "managerpriv",
+            "privacy_protocol": "AES128",
+            "storage_type": "nonvolatile"
+          }
+        }
+      }
+    },
+    {
+      "name": "Single SNMP user with no access list",
+      "input": "User name: admin_v3\nEngine ID: 800000090300AABBCCDD0001\nstorage-type: nonvolatile        active\nAuthentication Protocol: MD5\nPrivacy Protocol: DES\nGroup-name: network-admin\n",
+      "expected": {
+        "users": {
+          "admin_v3": {
+            "authentication_protocol": "MD5",
+            "engine_id": "800000090300AABBCCDD0001",
+            "group_name": "network-admin",
+            "privacy_protocol": "DES",
+            "storage_type": "nonvolatile"
+          }
+        }
+      }
+    }
+  ]
+}

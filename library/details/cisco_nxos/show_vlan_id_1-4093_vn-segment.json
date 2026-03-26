@@ -1,0 +1,67 @@
+{
+  "os": "cisco_nxos",
+  "command": "show vlan id 1-4093 vn-segment",
+  "schema": {
+    "name": "ShowVlanIdVnSegmentResult",
+    "fields": {
+      "vlans": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VlanSegmentEntry",
+            "fields": {
+              "vlan_id": {
+                "type": "str",
+                "required": true
+              },
+              "vn_segment_id": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Show vlan id 1-4093 vn-segment output with multiple VLANs",
+      "input": "best-n6k-pe1# show vlan id 1-4093 vn-segment\n\nVLAN Segment-id\n---- -----------\n10   5010\n20   5020\n30   5030\n40   5040\n50   5050\n555  5555\n556  5556\n",
+      "expected": {
+        "vlans": {
+          "10": {
+            "vlan_id": "10",
+            "vn_segment_id": 5010
+          },
+          "20": {
+            "vlan_id": "20",
+            "vn_segment_id": 5020
+          },
+          "30": {
+            "vlan_id": "30",
+            "vn_segment_id": 5030
+          },
+          "40": {
+            "vlan_id": "40",
+            "vn_segment_id": 5040
+          },
+          "50": {
+            "vlan_id": "50",
+            "vn_segment_id": 5050
+          },
+          "555": {
+            "vlan_id": "555",
+            "vn_segment_id": 5555
+          },
+          "556": {
+            "vlan_id": "556",
+            "vn_segment_id": 5556
+          }
+        }
+      }
+    }
+  ]
+}

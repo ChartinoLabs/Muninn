@@ -1,0 +1,707 @@
+{
+  "os": "cisco_nxos",
+  "command": "show port-channel summary",
+  "schema": {
+    "name": "ShowPortChannelSummaryResult",
+    "fields": {
+      "port_channels": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PortChannelEntry",
+            "fields": {
+              "group": {
+                "type": "int",
+                "required": true
+              },
+              "mode": {
+                "type": "str",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "type": {
+                "type": "str",
+                "required": true
+              },
+              "protocol": {
+                "type": "str",
+                "required": true
+              },
+              "members": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "PortChannelMember",
+                    "fields": {
+                      "status": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "flags": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "Flags:  D - Down        P - Up in port-channel (members)\n        I - Individual  H - Hot-standby (LACP only)\n        s - Suspended   r - Module-removed\n        b - BFD Session Wait\n        S - Switched    R - Routed\n        U - Up (port-channel)\n        p - Up in delay-lacp mode (member)\n        M - Not in use. Min-links not met\n--------------------------------------------------------------------------------\nGroup Port-       Type     Protocol  Member Ports\n      Channel\n--------------------------------------------------------------------------------\n1     Po1(RU)     Eth      LACP      Eth1/1(P)    Eth1/2(P)\n2     Po2(SU)     Eth      LACP      Eth1/3(P)    Eth1/4(P)    Eth1/5(H)\n",
+      "expected": {
+        "port_channels": {
+          "Port-channel1": {
+            "group": 1,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet1/1": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet1/2": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel2": {
+            "group": 2,
+            "mode": "switched",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet1/3": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet1/4": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet1/5": {
+                "status": "hot_standby",
+                "flags": "H"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "002_wrapped_members",
+      "input": "Flags:  D - Down        P - Up in port-channel (members)\n        I - Individual  H - Hot-standby (LACP only)\n        s - Suspended   r - Module-removed\n        S - Switched    R - Routed\n        U - Up (port-channel)\n        M - Not in use. Min-links not met\n--------------------------------------------------------------------------------\nGroup Port-       Type     Protocol  Member Ports\n      Channel\n--------------------------------------------------------------------------------\n1     Po1(SU)     Eth      LACP      Eth1/42(D)   Eth1/43(D)   Eth1/45(P)\n                                     Eth1/46(P)   Eth1/47(D)   Eth1/48(P)\n2     Po2(SU)     Eth      LACP      Eth1/50(P)   Eth1/51(P)\n",
+      "expected": {
+        "port_channels": {
+          "Port-channel1": {
+            "group": 1,
+            "mode": "switched",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet1/42": {
+                "status": "down",
+                "flags": "D"
+              },
+              "Ethernet1/43": {
+                "status": "down",
+                "flags": "D"
+              },
+              "Ethernet1/45": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet1/46": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet1/47": {
+                "status": "down",
+                "flags": "D"
+              },
+              "Ethernet1/48": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel2": {
+            "group": 2,
+            "mode": "switched",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet1/50": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet1/51": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "003_down_and_empty",
+      "input": "Flags:  D - Down        P - Up in port-channel (members)\n        I - Individual  H - Hot-standby (LACP only)\n        s - Suspended   r - Module-removed\n        S - Switched    R - Routed\n        U - Up (port-channel)\n        M - Not in use. Min-links not met\n--------------------------------------------------------------------------------\nGroup Port-       Type     Protocol  Member Ports\n      Channel\n--------------------------------------------------------------------------------\n131   Po131(SU)   Eth      LACP      Eth1/1(P)\n135   Po135(SD)   Eth      NONE      --\n136   Po136(SD)   Eth      LACP      Eth1/6(D)\n141   Po141(SD)   Eth      NONE      --\n",
+      "expected": {
+        "port_channels": {
+          "Port-channel131": {
+            "group": 131,
+            "mode": "switched",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet1/1": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel135": {
+            "group": 135,
+            "mode": "switched",
+            "status": "down",
+            "type": "Eth",
+            "protocol": "NONE",
+            "members": {}
+          },
+          "Port-channel136": {
+            "group": 136,
+            "mode": "switched",
+            "status": "down",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet1/6": {
+                "status": "down",
+                "flags": "D"
+              }
+            }
+          },
+          "Port-channel141": {
+            "group": 141,
+            "mode": "switched",
+            "status": "down",
+            "type": "Eth",
+            "protocol": "NONE",
+            "members": {}
+          }
+        }
+      }
+    },
+    {
+      "name": "004_mixed_states",
+      "input": "Flags:  D - Down        P - Up in port-channel (members)\n        I - Individual  H - Hot-standby (LACP only)\n        s - Suspended   r - Module-removed\n        S - Switched    R - Routed\n        U - Up (port-channel)\n        M - Not in use. Min-links not met\n--------------------------------------------------------------------------------\nGroup Port-       Type     Protocol  Member Ports\n      Channel\n--------------------------------------------------------------------------------\n1     Po1(RU)     Eth      LACP      Eth1/1(P)    Eth2/1(P)\n811   Po811(RU)   Eth      LACP      Eth15/8(P)   Eth15/28(P)  Eth16/8(P)\n                                     Eth16/28(P)\n812   Po812(RU)   Eth      LACP      Eth15/36(P)  Eth16/36(P)  Eth17/8(P)\n                                     Eth18/8(P)\n",
+      "expected": {
+        "port_channels": {
+          "Port-channel1": {
+            "group": 1,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet1/1": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet2/1": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel811": {
+            "group": 811,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet15/8": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet15/28": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet16/8": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet16/28": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel812": {
+            "group": 812,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet15/36": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet16/36": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet17/8": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet18/8": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Large multi-slot chassis with high-numbered port-channels and wrapped member lines",
+      "input": "Flags:  D - Down        P - Up in port-channel (members)\n        I - Individual  H - Hot-standby (LACP only)\n        s - Suspended   r - Module-removed\n        S - Switched    R - Routed\n        U - Up (port-channel)\n        M - Not in use. Min-links not met\n--------------------------------------------------------------------------------\nGroup Port-       Type     Protocol  Member Ports\n      Channel\n--------------------------------------------------------------------------------\n1     Po1(RU)     Eth      LACP      Eth1/1(P)    Eth2/1(P)\n2     Po2(RU)     Eth      LACP      Eth1/2(P)    Eth2/2(P)\n3     Po3(RU)     Eth      LACP      Eth1/3(P)    Eth2/3(P)\n4     Po4(RU)     Eth      LACP      Eth1/4(P)    Eth2/4(P)\n12    Po12(RU)    Eth      LACP      Eth1/5(P)    Eth2/5(P)\n13    Po13(RU)    Eth      LACP      Eth1/6(P)    Eth2/6(P)\n14    Po14(RU)    Eth      LACP      Eth1/7(P)    Eth2/7(P)\n801   Po801(RU)   Eth      LACP      Eth5/6(P)    Eth6/6(P)\n802   Po802(RU)   Eth      LACP      Eth5/7(P)    Eth6/7(P)\n803   Po803(RU)   Eth      LACP      Eth15/17(P)  Eth16/17(P)\n804   Po804(RU)   Eth      LACP      Eth15/24(P)  Eth16/24(P)\n811   Po811(RU)   Eth      LACP      Eth15/8(P)   Eth15/28(P)  Eth16/8(P)\n                                     Eth16/28(P)\n812   Po812(RU)   Eth      LACP      Eth15/36(P)  Eth16/36(P)  Eth17/8(P)\n                                     Eth18/8(P)\n813   Po813(RU)   Eth      LACP      Eth15/15(P)  Eth16/15(P)\n814   Po814(RU)   Eth      LACP      Eth15/22(P)  Eth16/22(P)\n821   Po821(RU)   Eth      LACP      Eth15/30(P)  Eth16/30(P)  Eth17/29(P)\n                                     Eth18/29(P)\n822   Po822(RU)   Eth      LACP      Eth15/38(P)  Eth16/38(P)  Eth17/30(P)\n                                     Eth18/30(P)\n823   Po823(RU)   Eth      LACP      Eth3/9(P)    Eth4/9(P)\n824   Po824(RU)   Eth      LACP      Eth3/10(P)   Eth4/10(P)\n825   Po825(RU)   Eth      LACP      Eth3/3(P)\n826   Po826(RU)   Eth      LACP      Eth4/3(P)\n827   Po827(RU)   Eth      LACP      Eth5/3(P)\n828   Po828(RU)   Eth      LACP      Eth6/3(P)\n",
+      "expected": {
+        "port_channels": {
+          "Port-channel1": {
+            "group": 1,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet1/1": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet2/1": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel2": {
+            "group": 2,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet1/2": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet2/2": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel3": {
+            "group": 3,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet1/3": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet2/3": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel4": {
+            "group": 4,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet1/4": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet2/4": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel12": {
+            "group": 12,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet1/5": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet2/5": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel13": {
+            "group": 13,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet1/6": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet2/6": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel14": {
+            "group": 14,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet1/7": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet2/7": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel801": {
+            "group": 801,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet5/6": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet6/6": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel802": {
+            "group": 802,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet5/7": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet6/7": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel803": {
+            "group": 803,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet15/17": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet16/17": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel804": {
+            "group": 804,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet15/24": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet16/24": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel811": {
+            "group": 811,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet15/8": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet15/28": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet16/8": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet16/28": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel812": {
+            "group": 812,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet15/36": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet16/36": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet17/8": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet18/8": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel813": {
+            "group": 813,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet15/15": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet16/15": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel814": {
+            "group": 814,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet15/22": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet16/22": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel821": {
+            "group": 821,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet15/30": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet16/30": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet17/29": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet18/29": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel822": {
+            "group": 822,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet15/38": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet16/38": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet17/30": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet18/30": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel823": {
+            "group": 823,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet3/9": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet4/9": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel824": {
+            "group": 824,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet3/10": {
+                "status": "up",
+                "flags": "P"
+              },
+              "Ethernet4/10": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel825": {
+            "group": 825,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet3/3": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel826": {
+            "group": 826,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet4/3": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel827": {
+            "group": 827,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet5/3": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          },
+          "Port-channel828": {
+            "group": 828,
+            "mode": "routed",
+            "status": "up",
+            "type": "Eth",
+            "protocol": "LACP",
+            "members": {
+              "Ethernet6/3": {
+                "status": "up",
+                "flags": "P"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

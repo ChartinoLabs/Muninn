@@ -1,0 +1,63 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show meraki",
+  "schema": {
+    "name": "ShowMerakiResult",
+    "fields": {
+      "switches": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SwitchEntry",
+            "fields": {
+              "pid": {
+                "type": "str",
+                "required": true
+              },
+              "serial_number": {
+                "type": "str",
+                "required": true
+              },
+              "meraki_id": {
+                "type": "str",
+                "required": true
+              },
+              "mac_address": {
+                "type": "str",
+                "required": true
+              },
+              "registration_status": {
+                "type": "str",
+                "required": true
+              },
+              "mode": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Single switch with Meraki ID column header",
+      "input": "Switch                 Serial                                           Migration\nNum    PID             Number         Meraki ID       Mac Address       Status       Mode\n-----------------------------------------------------------------------------------------------\n1   C9300-48P          FJC2345T05A    Q5TE-5HWS-J3G8  6c41.0ed8.1780    Registered   C9K-C\n",
+      "expected": {
+        "switches": {
+          "1": {
+            "pid": "C9300-48P",
+            "serial_number": "FJC2345T05A",
+            "meraki_id": "Q5TE-5HWS-J3G8",
+            "mac_address": "6c41.0ed8.1780",
+            "registration_status": "Registered",
+            "mode": "C9K-C"
+          }
+        }
+      }
+    }
+  ]
+}

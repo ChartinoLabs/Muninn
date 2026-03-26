@@ -1,0 +1,364 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show vrf detail",
+  "schema": {
+    "name": "ShowVrfDetailResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfDetailEntry",
+            "fields": {
+              "vrf_id": {
+                "type": "int",
+                "required": true
+              },
+              "default_rd": {
+                "type": "str",
+                "required": false
+              },
+              "default_vpnid": {
+                "type": "str",
+                "required": false
+              },
+              "description": {
+                "type": "str",
+                "required": false
+              },
+              "cli_format": {
+                "type": "str",
+                "required": false
+              },
+              "flags": {
+                "type": "str",
+                "required": false
+              },
+              "being_deleted": {
+                "type": "bool",
+                "required": false
+              },
+              "interfaces": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              },
+              "address_families": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "AddressFamilyEntry",
+                    "fields": {
+                      "table_id": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "flags": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "export_route_targets": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": false
+                      },
+                      "import_route_targets": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": false
+                      },
+                      "import_route_map": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "import_route_map_prefix_limit": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "global_export_route_map": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "global_export_route_map_prefix_limit": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "export_route_map": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "label_distribution_protocol": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "label_allocation_mode": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "route_limit": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "route_warning_limit": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "route_warning_percent": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "route_current_count": {
+                        "type": "int",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple VRFs with import/export route targets and route maps",
+      "input": "VRF VRF1 (VRF Id = 1); default RD 100:1; default VPNID <not set>\n  New CLI format, supports multiple address-families\n  Flags: 0x180C\n    Interfaces:\n        Gi0/0\nAddress family ipv4 unicast (Table ID = 0x1):\n  Flags: 0x2100\n  Export VPN route-target communities\n    RT:100:1                 RT:200:1\n  Import VPN route-target communities\n    RT:100:1                 RT:200:1\n  Import route-map for ipv4 unicast: import_from_global_map (prefix limit: 1000)\n  Global export route-map for ipv4 unicast: export_to_global_map (prefix limit: 1000)\n  No export route-map\n  Route warning limit 10000, current count 0\n  VRF label distribution protocol: not configured\n  VRF label allocation mode: per-prefix\nAddress family ipv6 unicast (Table ID = 0x1E000001):\n  Flags: 0x100\n  Export VPN route-target communities\n    RT:100:1                 RT:300:1\n  Import VPN route-target communities\n    RT:200:1                 RT:400:1\n  No import route-map\n  Global export route-map for ipv6 unicast: export_to_global_map (prefix limit: 1000)\n  No export route-map\n  Route limit 10000, warning limit 70% (7000), current count 1\n  VRF label distribution protocol: not configured\n  VRF label allocation mode: per-prefix\nAddress family ipv4 multicast not active\n\nVRF Mgmt-vrf (VRF Id = 1); default RD <not set>; default VPNID <not set>\n  New CLI format, supports multiple address-families\n  Flags: 0x1808\n  Interfaces:\n    Gi0/0\nAddress family ipv4 unicast (Table ID = 0x1):\n  Flags: 0x0\n  No Export VPN route-target communities\n  No Import VPN route-target communities\n  No import route-map\n  No global export route-map\n  No export route-map\n  VRF label distribution protocol: not configured\n  VRF label allocation mode: per-prefix\nAddress family ipv6 unicast (Table ID = 0x1E000001):\n  Flags: 0x0\n  No Export VPN route-target communities\n  No Import VPN route-target communities\n  No import route-map\n  No global export route-map\n  No export route-map\n  VRF label distribution protocol: not configured\n  VRF label allocation mode: per-prefix\nAddress family ipv4 multicast not active\nAddress family ipv6 multicast not active\n",
+      "expected": {
+        "vrfs": {
+          "Mgmt-vrf": {
+            "address_families": {
+              "ipv4 unicast": {
+                "flags": "0x0",
+                "label_allocation_mode": "per-prefix",
+                "table_id": "0x1"
+              },
+              "ipv6 unicast": {
+                "flags": "0x0",
+                "label_allocation_mode": "per-prefix",
+                "table_id": "0x1E000001"
+              }
+            },
+            "cli_format": "new",
+            "flags": "0x1808",
+            "interfaces": [
+              "GigabitEthernet0/0"
+            ],
+            "vrf_id": 1
+          },
+          "VRF1": {
+            "address_families": {
+              "ipv4 unicast": {
+                "export_route_targets": [
+                  "RT:100:1",
+                  "RT:200:1"
+                ],
+                "flags": "0x2100",
+                "global_export_route_map": "export_to_global_map",
+                "global_export_route_map_prefix_limit": 1000,
+                "import_route_map": "import_from_global_map",
+                "import_route_map_prefix_limit": 1000,
+                "import_route_targets": [
+                  "RT:100:1",
+                  "RT:200:1"
+                ],
+                "label_allocation_mode": "per-prefix",
+                "route_current_count": 0,
+                "route_warning_limit": 10000,
+                "table_id": "0x1"
+              },
+              "ipv6 unicast": {
+                "export_route_targets": [
+                  "RT:100:1",
+                  "RT:300:1"
+                ],
+                "flags": "0x100",
+                "global_export_route_map": "export_to_global_map",
+                "global_export_route_map_prefix_limit": 1000,
+                "import_route_targets": [
+                  "RT:200:1",
+                  "RT:400:1"
+                ],
+                "label_allocation_mode": "per-prefix",
+                "route_current_count": 1,
+                "route_limit": 10000,
+                "route_warning_limit": 7000,
+                "route_warning_percent": 70,
+                "table_id": "0x1E000001"
+              }
+            },
+            "cli_format": "new",
+            "default_rd": "100:1",
+            "flags": "0x180C",
+            "interfaces": [
+              "GigabitEthernet0/0"
+            ],
+            "vrf_id": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": "VRF BLUE (VRF Id = 2); default RD 65000:200; default VPNID <not set>\n  New CLI format, supports multiple address-families\n  Flags: 0x180C\n  Interfaces:\n    Lo20                     Gi2.20                   Gi3.20\nAddress family ipv4 unicast (Table ID = 0x2):\n  Flags: 0x0\n  No Export VPN route-target communities\n  No Import VPN route-target communities\n  No import route-map\n  No global export route-map\n  No export route-map\n  VRF label distribution protocol: not configured\n  VRF label allocation mode: per-prefix\nAddress family ipv6 unicast not active\nAddress family ipv4 multicast not active\nAddress family ipv6 multicast not active\n\nVRF RED (VRF Id = 3); default RD 65000:100; default VPNID <not set>\n  New CLI format, supports multiple address-families\n  Flags: 0x180C\n  Interfaces:\n    Lo10                     Gi2.10                   Gi3.10\nAddress family ipv4 unicast (Table ID = 0x3):\n  Flags: 0x0\n  No Export VPN route-target communities\n  No Import VPN route-target communities\n  No import route-map\n  No global export route-map\n  No export route-map\n  VRF label distribution protocol: not configured\n  VRF label allocation mode: per-prefix\nAddress family ipv6 unicast not active\nAddress family ipv4 multicast not active\nAddress family ipv6 multicast not active\n\nVRF management (VRF Id = 1); default RD <not set>; default VPNID <not set>\n  New CLI format, supports multiple address-families\n  Flags: 0x1808\n  Interfaces:\n    Gi1\nAddress family ipv4 unicast (Table ID = 0x1):\n  Flags: 0x0\n  No Export VPN route-target communities\n  No Import VPN route-target communities\n  No import route-map\n  No global export route-map\n  No export route-map\n  VRF label distribution protocol: not configured\n  VRF label allocation mode: per-prefix\nAddress family ipv6 unicast not active\nAddress family ipv4 multicast not active\nAddress family ipv6 multicast not active\n",
+      "expected": {
+        "vrfs": {
+          "BLUE": {
+            "vrf_id": 2,
+            "default_rd": "65000:200",
+            "cli_format": "new",
+            "flags": "0x180C",
+            "interfaces": [
+              "Loopback20",
+              "GigabitEthernet2.20",
+              "GigabitEthernet3.20"
+            ],
+            "address_families": {
+              "ipv4 unicast": {
+                "table_id": "0x2",
+                "flags": "0x0",
+                "label_allocation_mode": "per-prefix"
+              }
+            }
+          },
+          "RED": {
+            "vrf_id": 3,
+            "default_rd": "65000:100",
+            "cli_format": "new",
+            "flags": "0x180C",
+            "interfaces": [
+              "Loopback10",
+              "GigabitEthernet2.10",
+              "GigabitEthernet3.10"
+            ],
+            "address_families": {
+              "ipv4 unicast": {
+                "table_id": "0x3",
+                "flags": "0x0",
+                "label_allocation_mode": "per-prefix"
+              }
+            }
+          },
+          "management": {
+            "vrf_id": 1,
+            "cli_format": "new",
+            "flags": "0x1808",
+            "interfaces": [
+              "GigabitEthernet1"
+            ],
+            "address_families": {
+              "ipv4 unicast": {
+                "table_id": "0x1",
+                "flags": "0x0",
+                "label_allocation_mode": "per-prefix"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Multiple VRFs with descriptions, multiple interfaces, and dual-stack address families",
+      "input": "VRF GENIE-BACKUP (VRF Id = 12); default RD 50998:106; default VPNID <not set>\nDescription: VPN for CHRH (Backup network)\nNew CLI format, supports multiple address-families\nFlags: 0x180C\nInterfaces:\n    BD106\nAddress family ipv4 unicast (Table ID = 0xC):\nFlags: 0x0\nExport VPN route-target communities\n    RT:50998:1               RT:50998:106\nImport VPN route-target communities\n    RT:50998:106             RT:50998:4094\nNo import route-map\nNo global export route-map\nNo export route-map\nVRF label distribution protocol: not configured\nVRF label allocation mode: per-prefix\nAddress family ipv6 unicast not active\nAddress family ipv4 multicast not active\nAddress family ipv6 multicast not active\n\nVRF GENIE-LAB (VRF Id = 76); default RD 50998:11; default VPNID <not set>\nDescription: VPN for Internet Direct Link Out (Internal FW)\nNew CLI format, supports multiple address-families\nFlags: 0x180C\nInterfaces:\n    Te0/1/1.11               vr92                     vr110\nAddress family ipv4 unicast (Table ID = 0x4C):\nFlags: 0x0\nExport VPN route-target communities\n    RT:50998:11\nImport VPN route-target communities\n    RT:50998:11\nNo import route-map\nNo global export route-map\nNo export route-map\nVRF label distribution protocol: not configured\nVRF label allocation mode: per-prefix\nAddress family ipv6 unicast (Table ID = 0x1E000003):\nFlags: 0x0\nExport VPN route-target communities\n    RT:50998:11\nImport VPN route-target communities\n    RT:50998:11\nNo import route-map\nNo global export route-map\nNo export route-map\nVRF label distribution protocol: not configured\nVRF label allocation mode: per-prefix\nAddress family ipv4 multicast not active\nAddress family ipv6 multicast not active\n",
+      "expected": {
+        "vrfs": {
+          "GENIE-BACKUP": {
+            "address_families": {
+              "ipv4 unicast": {
+                "export_route_targets": [
+                  "RT:50998:1",
+                  "RT:50998:106"
+                ],
+                "flags": "0x0",
+                "import_route_targets": [
+                  "RT:50998:106",
+                  "RT:50998:4094"
+                ],
+                "label_allocation_mode": "per-prefix",
+                "table_id": "0xC"
+              }
+            },
+            "cli_format": "new",
+            "default_rd": "50998:106",
+            "description": "VPN for CHRH (Backup network)",
+            "flags": "0x180C",
+            "interfaces": [
+              "BD106"
+            ],
+            "vrf_id": 12
+          },
+          "GENIE-LAB": {
+            "address_families": {
+              "ipv4 unicast": {
+                "export_route_targets": [
+                  "RT:50998:11"
+                ],
+                "flags": "0x0",
+                "import_route_targets": [
+                  "RT:50998:11"
+                ],
+                "label_allocation_mode": "per-prefix",
+                "table_id": "0x4C"
+              },
+              "ipv6 unicast": {
+                "export_route_targets": [
+                  "RT:50998:11"
+                ],
+                "flags": "0x0",
+                "import_route_targets": [
+                  "RT:50998:11"
+                ],
+                "label_allocation_mode": "per-prefix",
+                "table_id": "0x1E000003"
+              }
+            },
+            "cli_format": "new",
+            "default_rd": "50998:11",
+            "description": "VPN for Internet Direct Link Out (Internal FW)",
+            "flags": "0x180C",
+            "interfaces": [
+              "TenGigabitEthernet0/1/1.11",
+              "vr92",
+              "vr110"
+            ],
+            "vrf_id": 76
+          }
+        }
+      }
+    },
+    {
+      "name": "VRF being deleted with no interfaces",
+      "input": "VRF DEMO (VRF Id = 12); default RD 65001:1; default VPNID <not set>; being deleted\n  Description: demo\n  New CLI format, supports multiple address-families\n  Flags: 0x180D\n  No interfaces\nAddress family ipv4 unicast (Table ID = 0xC); being deleted:\n  Flags: 0x1\n  No Export VPN route-target communities\n  No Import VPN route-target communities\n  No import route-map\n  No global export route-map\n  No export route-map\n  VRF label distribution protocol: not configured\n  VRF label allocation mode: per-prefix\nAddress family ipv6 unicast not active\nAddress family ipv4 multicast not active\nAddress family ipv6 multicast not active\n\n\n* Being deleted\n",
+      "expected": {
+        "vrfs": {
+          "DEMO": {
+            "address_families": {
+              "ipv4 unicast": {
+                "flags": "0x1",
+                "label_allocation_mode": "per-prefix",
+                "table_id": "0xC"
+              }
+            },
+            "being_deleted": true,
+            "cli_format": "new",
+            "default_rd": "65001:1",
+            "description": "demo",
+            "flags": "0x180D",
+            "vrf_id": 12
+          }
+        }
+      }
+    }
+  ]
+}

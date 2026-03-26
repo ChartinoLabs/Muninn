@@ -1,0 +1,336 @@
+{
+  "os": "cisco_ios",
+  "command": "show lldp neighbors detail",
+  "schema": {
+    "name": "ShowLldpNeighborsDetailResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "type": "dict",
+              "key": "str",
+              "value": {
+                "name": "LldpNeighborDetailEntry",
+                "fields": {
+                  "chassis_id": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "port_id": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "port_description": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "system_name": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "system_description": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "time_remaining": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "system_capabilities": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "enabled_capabilities": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "management_addresses": {
+                    "type": {
+                      "type": "list",
+                      "items": "str"
+                    },
+                    "required": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_entries": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple LLDP neighbors with mixed capabilities and management addresses",
+      "input": "------------------------------------------------\nLocal Intf: Gi1/0/2\nChassis id: 7c25.86c9.aaaa\nPort id: 502\nPort Description: ge-0/0/0.0\nSystem Name - not advertised\n\nSystem Description:\nJuniper Networks, Inc. ex2200-24t-4g , version 12.3R9.4 Build date: 2015-02-12 11:25:30 UTC\n\nTime remaining: 116 seconds\nSystem Capabilities: B,R\nEnabled Capabilities: B,R\nManagement Addresses - not advertised\nAuto Negotiation - supported, enabled\nPhysical media capabilities:\n    1000baseT(FD)\n    Symm, Asym Pause(FD)\n    100base-TX(FD)\n    100base-TX(HD)\n    10base-T(FD)\n    10base-T(HD)\nMedia Attachment Unit type - not advertised\nVlan ID: 1\n\nMED Information:\n\n    MED Codes:\n          (NP) Network Policy, (LI) Location Identification\n          (PS) Power Source Entity, (PD) Power Device\n          (IN) Inventory\n\n    Inventory information - not advertised\n    Capabilities: NP, LI, PS\n    Device type: Network connectivity\n    Network Policies - not advertised\n    Power requirements - not advertised\n    Location - not advertised\n\n------------------------------------------------\nLocal Intf: Gi1/0/1\nChassis id: 94f1.2879.5555\nPort id: 94f1.2879.5555\nPort Description: 13\nSystem Name: HpSwitch\n\nSystem Description:\nHPE OfficeConnect Switch 1820 48G J9981A, PT.02.01, Linux 3.6.5-79c95a77, U-Boot 2012.10-00116-g3ab515c (Jul 30 2014 - 10:52:01)\n\nTime remaining: 91 seconds\nSystem Capabilities: B\nEnabled Capabilities: B\nManagement Addresses:\n    IP: 192.168.1.81\n    OID:\n        1.9.46.51.46.54.46.49.46.52.46.49.46.49.49.46.50.46.51.46.55.46.49.49.46.49.54.57.\nAuto Negotiation - not supported\nPhysical media capabilities - not advertised\nMedia Attachment Unit type - not advertised\nVlan ID: - not advertised\n\n------------------------------------------------\nLocal Intf: Gi1/0/9\nChassis id: 4448.c1c4.dddd\nPort id: 4448.c1c4.dddd\nPort Description: eth0\nSystem Name: 44:48:c1:c4:dd:dd\n\nSystem Description:\nArubaOS (MODEL: 225), Version 6.4.2.6-4.1.1.6 (50009)\n\nTime remaining: 110 seconds\nSystem Capabilities: B,W\nEnabled Capabilities: W\nManagement Addresses:\n    IP: 192.168.1.40\nAuto Negotiation - supported, enabled\nPhysical media capabilities:\n    1000baseT(FD)\n    100base-TX(FD)\n    100base-TX(HD)\n    10base-T(FD)\n    10base-T(HD)\nMedia Attachment Unit type: 30\nVlan ID: - not advertised\nPoE+ Power-via-MDI TLV:\n Power Pair: Signal\n Power Class: Class 4\n Power Device Type: Type 2 PD\n Power Source: PSE\n Power Priority: unknown\n Power Requested: 19000 mW\n Power Allocated: 19000 mW\n\n\nTotal entries displayed: 3\n",
+      "expected": {
+        "neighbors": {
+          "GigabitEthernet1/0/2": {
+            "7c25.86c9.aaaa": {
+              "502": {
+                "chassis_id": "7c25.86c9.aaaa",
+                "port_id": "502",
+                "time_remaining": 116,
+                "port_description": "ge-0/0/0.0",
+                "system_description": "Juniper Networks, Inc. ex2200-24t-4g , version 12.3R9.4 Build date: 2015-02-12 11:25:30 UTC",
+                "system_capabilities": "B,R",
+                "enabled_capabilities": "B,R"
+              }
+            }
+          },
+          "GigabitEthernet1/0/1": {
+            "94f1.2879.5555": {
+              "94f1.2879.5555": {
+                "chassis_id": "94f1.2879.5555",
+                "port_id": "94f1.2879.5555",
+                "time_remaining": 91,
+                "port_description": "13",
+                "system_name": "HpSwitch",
+                "system_description": "HPE OfficeConnect Switch 1820 48G J9981A, PT.02.01, Linux 3.6.5-79c95a77, U-Boot 2012.10-00116-g3ab515c (Jul 30 2014 - 10:52:01)",
+                "system_capabilities": "B",
+                "enabled_capabilities": "B",
+                "management_addresses": [
+                  "192.168.1.81"
+                ]
+              }
+            }
+          },
+          "GigabitEthernet1/0/9": {
+            "4448.c1c4.dddd": {
+              "4448.c1c4.dddd": {
+                "chassis_id": "4448.c1c4.dddd",
+                "port_id": "4448.c1c4.dddd",
+                "time_remaining": 110,
+                "port_description": "Ethernet0",
+                "system_name": "44:48:c1:c4:dd:dd",
+                "system_description": "ArubaOS (MODEL: 225), Version 6.4.2.6-4.1.1.6 (50009)",
+                "system_capabilities": "B,W",
+                "enabled_capabilities": "W",
+                "management_addresses": [
+                  "192.168.1.40"
+                ]
+              }
+            }
+          }
+        },
+        "total_entries": 3
+      }
+    },
+    {
+      "name": "Neighbors without Local Intf field and with not-advertised system name and description",
+      "input": "------------------------------------------------\nChassis id: a000.f00e.300d\nPort id: Eth1/6\nPort Description: PO2631-10Gx2-R261R5\nSystem Name: USSC-CAMPUS-CORE-GW2\n\nSystem Description:\nCisco NX-OS(tm) n7700, Software (n7700-s2-dk9), Version 6.2(10), RELEASE SOFTWARE Copyright (c) 2002-2013 by Cisco Systems, Inc. Compiled 10/9/2014 12:00:00\n\nTime remaining: 110 seconds\nSystem Capabilities: B,R\nEnabled Capabilities: B,R\nManagement Addresses:\n    IP: 11.11.11.11\nAuto Negotiation - not supported\nPhysical media capabilities - not advertised\nMedia Attachment Unit type - not advertised\nVlan ID: 1\n\n------------------------------------------------\nChassis id: 2222.0642.7333\nPort id: Eth1/6\nPort Description: PO2631-10Gx2-R261R5\nSystem Name: USSC-CAMPUS-CORE-GW1.acme123.com\n\nSystem Description:\nCisco NX-OS(tm) n7700, Software (n7700-s2-dk9), Version 6.2(10), RELEASE SOFTWARE Copyright (c) 2002-2013 by Cisco Systems, Inc. Compiled 10/9/2014 12:00:00\n\nTime remaining: 118 seconds\nSystem Capabilities: B,R\nEnabled Capabilities: B,R\nManagement Addresses:\n    IP: 33.33.33.3\nAuto Negotiation - not supported\nPhysical media capabilities - not advertised\nMedia Attachment Unit type - not advertised\nVlan ID: 1\n\n------------------------------------------------\nChassis id: 0015.2222.c330\nPort id: Gi2/0/24\nPort Description: GigabitEthernet2/0/24\nSystem Name: DMZ-SW1\n\nSystem Description:\nCisco IOS Software, C3750 Software (C3750-IPSERVICESK9-M), Version 12.2(53)SE2, RELEASE SOFTWARE (fc3)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2010 by Cisco Systems, Inc.\nCompiled Wed 21-Apr-10 04:49 by prod_rel_team\n\nTime remaining: 109 seconds\nSystem Capabilities: B,R\nEnabled Capabilities: B\nManagement Addresses:\n    IP: 55.55.55.55\nAuto Negotiation - supported, enabled\nPhysical media capabilities:\n    1000baseT(FD)\n    100base-TX(FD)\n    100base-TX(HD)\n    10base-T(FD)\n    10base-T(HD)\nMedia Attachment Unit type: 30\nVlan ID: - not advertised\n\n---------------------------------------------\n\n\nChassis id: 0022.1111.2222\nPort id: g2\nPort Description - not advertised\nSystem Name - not advertised\n\nSystem Description - not advertised\n\nTime remaining: 91 seconds\nSystem Capabilities - not advertised\nEnabled Capabilities - not advertised\nManagement Addresses - not advertised\nAuto Negotiation - not supported\nPhysical media capabilities - not advertised\nMedia Attachment Unit type - not advertised\n---------------------------------------------\n",
+      "expected": {
+        "neighbors": {
+          "Ethernet1/6": {
+            "a000.f00e.300d": {
+              "Ethernet1/6": {
+                "chassis_id": "a000.f00e.300d",
+                "port_id": "Ethernet1/6",
+                "time_remaining": 110,
+                "port_description": "PO2631-10Gx2-R261R5",
+                "system_name": "USSC-CAMPUS-CORE-GW2",
+                "system_description": "Cisco NX-OS(tm) n7700, Software (n7700-s2-dk9), Version 6.2(10), RELEASE SOFTWARE Copyright (c) 2002-2013 by Cisco Systems, Inc. Compiled 10/9/2014 12:00:00",
+                "system_capabilities": "B,R",
+                "enabled_capabilities": "B,R",
+                "management_addresses": [
+                  "11.11.11.11"
+                ]
+              }
+            },
+            "2222.0642.7333": {
+              "Ethernet1/6": {
+                "chassis_id": "2222.0642.7333",
+                "port_id": "Ethernet1/6",
+                "time_remaining": 118,
+                "port_description": "PO2631-10Gx2-R261R5",
+                "system_name": "USSC-CAMPUS-CORE-GW1.acme123.com",
+                "system_description": "Cisco NX-OS(tm) n7700, Software (n7700-s2-dk9), Version 6.2(10), RELEASE SOFTWARE Copyright (c) 2002-2013 by Cisco Systems, Inc. Compiled 10/9/2014 12:00:00",
+                "system_capabilities": "B,R",
+                "enabled_capabilities": "B,R",
+                "management_addresses": [
+                  "33.33.33.3"
+                ]
+              }
+            }
+          },
+          "GigabitEthernet2/0/24": {
+            "0015.2222.c330": {
+              "GigabitEthernet2/0/24": {
+                "chassis_id": "0015.2222.c330",
+                "port_id": "GigabitEthernet2/0/24",
+                "time_remaining": 109,
+                "port_description": "GigabitEthernet2/0/24",
+                "system_name": "DMZ-SW1",
+                "system_description": "Cisco IOS Software, C3750 Software (C3750-IPSERVICESK9-M), Version 12.2(53)SE2, RELEASE SOFTWARE (fc3)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2010 by Cisco Systems, Inc.\nCompiled Wed 21-Apr-10 04:49 by prod_rel_team",
+                "system_capabilities": "B,R",
+                "enabled_capabilities": "B",
+                "management_addresses": [
+                  "55.55.55.55"
+                ]
+              }
+            }
+          },
+          "g2": {
+            "0022.1111.2222": {
+              "g2": {
+                "chassis_id": "0022.1111.2222",
+                "port_id": "g2",
+                "time_remaining": 91
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Neighbors with both IPv4 and IPv6 management addresses and Siemens industrial device",
+      "input": "------------------------------------------------\nChassis id: 707d.a99b.aaaa\nPort id: 0\nPort Description: eth0\nSystem Name: system1\n\nSystem Description:\nCisco AP Software, ap3g3-k9w8 Version: 8.10.162.0\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2021 by Cisco Systems, Inc.\nCompiled Sat Jul 24 01:31:59 GMT 2021 by aut\n\nTime remaining: 117 seconds\nSystem Capabilities: B\nEnabled Capabilities: B\nManagement Addresses:\n    IP: 172.31.176.154\nAuto Negotiation - supported, enabled\nPhysical media capabilities:\n    1000baseT(FD)\n    1000baseT(HD)\n    100base-TX(FD)\n    100base-TX(HD)\n    10base-T(FD)\n    10base-T(HD)\nMedia Attachment Unit type: 30\nVlan ID: - not advertised\n\n------------------------------------------------\nChassis id: 0004.7a2a.bbbb\nPort id: 0004.7a2a.bbbb\nPort Description: eth0\nSystem Name: system2\n\nSystem Description:\nDragonfly\n\nTime remaining: 94 seconds\nSystem Capabilities: S\nEnabled Capabilities: S\nManagement Addresses:\n    IP: 10.132.14.52\n    IPV6: 7DFF:7DFF:7DFF:7DFF:7DFF:7DFD\nAuto Negotiation - supported, enabled\nPhysical media capabilities:\n    1000baseT(FD)\n    1000baseT(HD)\n    100base-TX(FD)\n    100base-TX(HD)\n    10base-T(FD)\n    10base-T(HD)\nMedia Attachment Unit type: 16\nVlan ID: - not advertised\nPower via MDI:\n    Power Pair: Spare\n    Power Class: 4\n    Power Device Type: 2\n    Power Source: PSE\n    Power Priority: High\n    Power Requested: 25000 mW\n\nMED Information:\n\n    MED Codes:\n          (NP) Network Policy, (LI) Location Identification\n          (PS) Power Source Entity, (PD) Power Device\n          (IN) Inventory\n\n    Inventory information - not advertised\n    Capabilities: PD\n    Device type: Endpoint Class I\n    Network Policies - not advertised\n    PD device, Power source: PSE, Power Priority: High, Wattage: 25.0\n    Location - not advertised\n\n------------------------------------------------\nChassis id: 0004.7a2a.cccc\nPort id: 0004.7a2a.cccc\nPort Description: eth0\nSystem Name: system3\n\nSystem Description:\nDragonfly\n\nTime remaining: 97 seconds\nSystem Capabilities: S\nEnabled Capabilities: S\nManagement Addresses:\n    IP: 10.132.14.53\n    IPV6: 7DFF:7DFF:7DFF:7DFF:7DFF:7DFE\nAuto Negotiation - supported, enabled\nPhysical media capabilities:\n    1000baseT(FD)\n    1000baseT(HD)\n    100base-TX(FD)\n    100base-TX(HD)\n    10base-T(FD)\n    10base-T(HD)\nMedia Attachment Unit type: 30\nVlan ID: - not advertised\nPower via MDI:\n    Power Pair: Spare\n    Power Class: 4\n    Power Device Type: 2\n    Power Source: PSE\n    Power Priority: High\n    Power Requested: 25000 mW\n\nMED Information:\n\n    MED Codes:\n          (NP) Network Policy, (LI) Location Identification\n          (PS) Power Source Entity, (PD) Power Device\n          (IN) Inventory\n\n    Inventory information - not advertised\n    Capabilities: PD\n    Device type: Endpoint Class I\n    Network Policies - not advertised\n    PD device, Power source: PSE, Power Priority: High, Wattage: 25.0\n    Location - not advertised\n\n------------------------------------------------\nChassis id: S7-1200                   6DS7 212-1BH40-0XB0  S V-LCCC5820        10 V  4  3  1\nPort id: port-001.ploobdfad\nPort Description: Siemens, SIMATIC S7, Ethernet Port, X1 P1\nSystem Name - not advertised\n\nSystem Description:\nSiemens, SIMATIC S7, CPU-1200, 6ES7 211-1CC40-0XB0, HW: 10, FW: V.4.3.1, S V-LDCE8620\n\nTime remaining: 18 seconds\nSystem Capabilities: B,S\nEnabled Capabilities: B,S\nManagement Addresses:\n    IP: 10.176.0.245\n    OID:\n        1.3.6.1.4.1.24686.\nAuto Negotiation - supported, enabled\nPhysical media capabilities:\n    100base-TX(FD)\n    100base-TX(HD)\n    10base-T(FD)\n    10base-T(HD)\nMedia Attachment Unit type: 16\nVlan ID: - not advertised\n\nTotal entries displayed: 4\n",
+      "expected": {
+        "neighbors": {
+          "0": {
+            "707d.a99b.aaaa": {
+              "0": {
+                "chassis_id": "707d.a99b.aaaa",
+                "port_id": "0",
+                "time_remaining": 117,
+                "port_description": "Ethernet0",
+                "system_name": "system1",
+                "system_description": "Cisco AP Software, ap3g3-k9w8 Version: 8.10.162.0\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2021 by Cisco Systems, Inc.\nCompiled Sat Jul 24 01:31:59 GMT 2021 by aut",
+                "system_capabilities": "B",
+                "enabled_capabilities": "B",
+                "management_addresses": [
+                  "172.31.176.154"
+                ]
+              }
+            }
+          },
+          "0004.7a2a.bbbb": {
+            "0004.7a2a.bbbb": {
+              "0004.7a2a.bbbb": {
+                "chassis_id": "0004.7a2a.bbbb",
+                "port_id": "0004.7a2a.bbbb",
+                "time_remaining": 94,
+                "port_description": "Ethernet0",
+                "system_name": "system2",
+                "system_description": "Dragonfly",
+                "system_capabilities": "S",
+                "enabled_capabilities": "S",
+                "management_addresses": [
+                  "10.132.14.52",
+                  "7DFF:7DFF:7DFF:7DFF:7DFF:7DFD"
+                ]
+              }
+            }
+          },
+          "0004.7a2a.cccc": {
+            "0004.7a2a.cccc": {
+              "0004.7a2a.cccc": {
+                "chassis_id": "0004.7a2a.cccc",
+                "port_id": "0004.7a2a.cccc",
+                "time_remaining": 97,
+                "port_description": "Ethernet0",
+                "system_name": "system3",
+                "system_description": "Dragonfly",
+                "system_capabilities": "S",
+                "enabled_capabilities": "S",
+                "management_addresses": [
+                  "10.132.14.53",
+                  "7DFF:7DFF:7DFF:7DFF:7DFF:7DFE"
+                ]
+              }
+            }
+          },
+          "port-001.ploobdfad": {
+            "S7-1200                   6DS7 212-1BH40-0XB0  S V-LCCC5820        10 V  4  3  1": {
+              "port-001.ploobdfad": {
+                "chassis_id": "S7-1200                   6DS7 212-1BH40-0XB0  S V-LCCC5820        10 V  4  3  1",
+                "port_id": "port-001.ploobdfad",
+                "time_remaining": 18,
+                "port_description": "Siemens, SIMATIC S7, Ethernet Port, X1 P1",
+                "system_description": "Siemens, SIMATIC S7, CPU-1200, 6ES7 211-1CC40-0XB0, HW: 10, FW: V.4.3.1, S V-LDCE8620",
+                "system_capabilities": "B,S",
+                "enabled_capabilities": "B,S",
+                "management_addresses": [
+                  "10.176.0.245"
+                ]
+              }
+            }
+          }
+        },
+        "total_entries": 4
+      }
+    },
+    {
+      "name": "Neighbors with Local Intf service instance field and Peer Source MAC",
+      "input": "------------------------------------------------\nLocal Intf: Gi1/1/2\nChassis id: 2416.abcd.abcd\nPort id: Gi1/0/16\nPort Description: GigabitEthernet1/0/16\nSystem Name: sdalab-bldg1-as01.devices.example.com\n\nSystem Description:\nCisco IOS Software [Bengaluru], Catalyst L3 Switch Software (CAT9K_IOSXE), Version 17.6.5, RELEASE SOFTWARE (fc2)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2023 by Cisco Systems, Inc.\nCompiled Wed 25-Jan-23 16:15 by mcpre\n\nTime remaining: 107 seconds\nSystem Capabilities: B,R\nEnabled Capabilities: B,R\nManagement Addresses:\n    IP: 172.16.1.1\nAuto Negotiation - supported, enabled\nPhysical media capabilities:\n    1000baseT(FD)\n    100base-TX(FD)\n    100base-TX(HD)\n    10base-T(FD)\n    10base-T(HD)\nMedia Attachment Unit type: 30\nVlan ID: 1\nPeer Source MAC: 2416.abcd.ab12\n\n------------------------------------------------\nLocal Intf: Gi1/0/1\nChassis id: 10.65.1.11\nPort id: 0060.abbc.abbc\nPort Description: LAN Port\nSystem Name: NEC IP Phone\n\nSystem Description:\nDT700 Series\n\nTime remaining: 119 seconds\nSystem Capabilities: B,T\nEnabled Capabilities: B,T\nManagement Addresses - not advertised\nAuto Negotiation - supported, enabled\nPhysical media capabilities:\n    100base-TX(FD)\n    100base-TX(HD)\n    10base-T(FD)\n    10base-T(HD)\nMedia Attachment Unit type: 16\nVlan ID: - not advertised\nPeer Source MAC: 0060.abbc.adde\n\nMED Information:\n\n    MED Codes:\n          (NP) Network Policy, (LI) Location Identification\n          (PS) Power Source Entity, (PD) Power Device\n          (IN) Inventory\n\n    H/W revision: 9.1.3.3\n    F/W revision: 5.0.9.0\n    S/W revision: -\n    Serial number: -\n    Manufacturer: NEC\n    Model: DT730\n    Asset id: -\n    Capabilities: NP, PD, IN\n    Device type: Endpoint Class III\n    Network Policy(Voice): VLAN 2046, tagged, Layer-2 priority: 5, DSCP: 46\n    PD device, Power source: Unknown, Power Priority: Unknown, Wattage: 6.3\n    Location - not advertised\n\n\nTotal entries displayed: 2\n",
+      "expected": {
+        "neighbors": {
+          "GigabitEthernet1/1/2": {
+            "2416.abcd.abcd": {
+              "GigabitEthernet1/0/16": {
+                "chassis_id": "2416.abcd.abcd",
+                "port_id": "GigabitEthernet1/0/16",
+                "time_remaining": 107,
+                "port_description": "GigabitEthernet1/0/16",
+                "system_name": "sdalab-bldg1-as01.devices.example.com",
+                "system_description": "Cisco IOS Software [Bengaluru], Catalyst L3 Switch Software (CAT9K_IOSXE), Version 17.6.5, RELEASE SOFTWARE (fc2)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2023 by Cisco Systems, Inc.\nCompiled Wed 25-Jan-23 16:15 by mcpre",
+                "system_capabilities": "B,R",
+                "enabled_capabilities": "B,R",
+                "management_addresses": [
+                  "172.16.1.1"
+                ]
+              }
+            }
+          },
+          "GigabitEthernet1/0/1": {
+            "10.65.1.11": {
+              "0060.abbc.abbc": {
+                "chassis_id": "10.65.1.11",
+                "port_id": "0060.abbc.abbc",
+                "time_remaining": 119,
+                "port_description": "LAN Port",
+                "system_name": "NEC IP Phone",
+                "system_description": "DT700 Series",
+                "system_capabilities": "B,T",
+                "enabled_capabilities": "B,T"
+              }
+            }
+          }
+        },
+        "total_entries": 2
+      }
+    },
+    {
+      "name": "Single neighbor with colon-delimited chassis ID format",
+      "input": "------------------------------------------------\nLocal Intf: Tw2/0/33\nChassis id: 00:61:75:F5:B5:FF\nPort id: 0061.75f5.b5ff\nPort Description: eth0\nSystem Name: Foo-BAR-TSC-101-G3\n\nSystem Description:\nQSC (foobar-10)\n\nTime remaining: 77 seconds\nSystem Capabilities: B,W,R,S\nEnabled Capabilities: S\nManagement Addresses - not advertised\nAuto Negotiation - supported, enabled\nPhysical media capabilities:\n    1000baseT(FD)\n    100base-TX(FD)\n    Other/unknown\nMedia Attachment Unit type: 29\nVlan ID: - not advertised\nPeer Source MAC: 0061.75f5.b5ff\n",
+      "expected": {
+        "neighbors": {
+          "TwoGigabitEthernet2/0/33": {
+            "00:61:75:F5:B5:FF": {
+              "0061.75f5.b5ff": {
+                "chassis_id": "00:61:75:F5:B5:FF",
+                "port_id": "0061.75f5.b5ff",
+                "time_remaining": 77,
+                "port_description": "Ethernet0",
+                "system_name": "Foo-BAR-TSC-101-G3",
+                "system_description": "QSC (foobar-10)",
+                "system_capabilities": "B,W,R,S",
+                "enabled_capabilities": "S"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

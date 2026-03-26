@@ -1,0 +1,89 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show dlep neighbor",
+  "schema": {
+    "name": "ShowDlepNeighborResult",
+    "fields": {
+      "blocks": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "DlepNeighborBlock",
+            "fields": {
+              "interface": {
+                "type": "str",
+                "required": true
+              },
+              "local_ip": {
+                "type": "str",
+                "required": true
+              },
+              "neighbors": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": "str"
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "DLEP Neighbors for all interfaces:\n\n\n\nDLEP Neighbors for Interface TenGigabitEthernet0/0/0\nDLEP Local IP=21.21.21.119:22121 Sock=0\n\n\nSID=2181  Remote End-point MAC_Address=88fc.5d32.0b00\n  Addresses:\n  DLEP Remote IP : 21.21.21.111  DLEP Remote IPv6 LL : FE80::8AFC:5DFF:FE32:B00\n  Associated virtual access interface : Virtual-Access3\n Supported Metrics:\n  RLQ RX Metric : 100\n  RLQ TX Metric : 100\n  Resources Metric : 100\n  MTU Metric : 1500\n  Latency Metric : 250 microseconds\n  CDR RX Metric : 100000000 bps\n  CDR TX Metric : 100000000 bps\n  MDR RX Metric : 100000000 bps\n  MDR TX Metric : 100000000 bps\nSID=2182  Remote End-point MAC_Address=44ae.2564.bde0\n  Addresses:\n  DLEP Remote IP : 21.21.21.131  DLEP Remote IPv6 LL : FE80::46AE:25FF:FE64:BDE0\n  Associated virtual access interface : Virtual-Access2\n Supported Metrics:\n  RLQ RX Metric : 100\n  RLQ TX Metric : 100\n  Resources Metric : 100\n  MTU Metric : 1500\n  Latency Metric : 250 microseconds\n  CDR RX Metric : 100000000 bps\n  CDR TX Metric : 100000000 bps\n  MDR RX Metric : 100000000 bps\n  MDR TX Metric : 100000000 bps\n",
+      "expected": {
+        "blocks": {
+          "TenGigabitEthernet0/0/0": {
+            "interface": "TenGigabitEthernet0/0/0",
+            "local_ip": "21.21.21.119:22121",
+            "neighbors": {
+              "2181": {
+                "sid": "2181",
+                "remote_mac": "88fc.5d32.0b00",
+                "dlep_remote_ip": "21.21.21.111",
+                "dlep_remote_ipv6_ll": "FE80::8AFC:5DFF:FE32:B00",
+                "Associated virtual access interface": "Virtual-Access3",
+                "RLQ RX Metric": "100",
+                "RLQ TX Metric": "100",
+                "Resources Metric": "100",
+                "MTU Metric": "1500",
+                "Latency Metric": "250 microseconds",
+                "CDR RX Metric": "100000000 bps",
+                "CDR TX Metric": "100000000 bps",
+                "MDR RX Metric": "100000000 bps",
+                "MDR TX Metric": "100000000 bps"
+              },
+              "2182": {
+                "sid": "2182",
+                "remote_mac": "44ae.2564.bde0",
+                "dlep_remote_ip": "21.21.21.131",
+                "dlep_remote_ipv6_ll": "FE80::46AE:25FF:FE64:BDE0",
+                "Associated virtual access interface": "Virtual-Access2",
+                "RLQ RX Metric": "100",
+                "RLQ TX Metric": "100",
+                "Resources Metric": "100",
+                "MTU Metric": "1500",
+                "Latency Metric": "250 microseconds",
+                "CDR RX Metric": "100000000 bps",
+                "CDR TX Metric": "100000000 bps",
+                "MDR RX Metric": "100000000 bps",
+                "MDR TX Metric": "100000000 bps"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

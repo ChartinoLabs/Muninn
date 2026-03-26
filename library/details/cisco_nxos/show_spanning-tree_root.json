@@ -1,0 +1,123 @@
+{
+  "os": "cisco_nxos",
+  "command": "show spanning-tree root",
+  "schema": {
+    "name": "ShowSpanningTreeRootResult",
+    "fields": {
+      "vlans": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SpanningTreeRootEntry",
+            "fields": {
+              "vlan_id": {
+                "type": "int",
+                "required": true
+              },
+              "root_id": {
+                "type": {
+                  "name": "RootId",
+                  "fields": {
+                    "priority": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "address": {
+                      "type": "str",
+                      "required": true
+                    }
+                  }
+                },
+                "required": true
+              },
+              "root_cost": {
+                "type": "int",
+                "required": true
+              },
+              "hello_time": {
+                "type": "int",
+                "required": true
+              },
+              "max_age": {
+                "type": "int",
+                "required": true
+              },
+              "forward_delay": {
+                "type": "int",
+                "required": true
+              },
+              "root_port": {
+                "type": "str",
+                "required": false
+              },
+              "is_root": {
+                "type": "bool",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic spanning-tree root output with mixed root bridge and non-root VLANs",
+      "input": "                                        Root  Hello Max Fwd\nVlan                   Root ID          Cost  Time  Age Dly  Root Port\n---------------- -------------------- ------- ----- --- ---  ----------------\nVLAN0001             1 1211.a111.1111       0    2   20  10  This bridge is root\nVLAN0002            10 1211.a111.1112       3    2   20  10    port-channel10\nVLAN0003          1111 1211.a111.1113       1    2   20  10     port-channel1\nVLAN0004            11 1211.a111.1114       0    2   20  10  This bridge is root\n",
+      "expected": {
+        "vlans": {
+          "0001": {
+            "vlan_id": 1,
+            "root_id": {
+              "priority": 1,
+              "address": "1211.a111.1111"
+            },
+            "root_cost": 0,
+            "hello_time": 2,
+            "max_age": 20,
+            "forward_delay": 10,
+            "is_root": true
+          },
+          "0002": {
+            "vlan_id": 2,
+            "root_id": {
+              "priority": 10,
+              "address": "1211.a111.1112"
+            },
+            "root_cost": 3,
+            "hello_time": 2,
+            "max_age": 20,
+            "forward_delay": 10,
+            "root_port": "Port-channel10"
+          },
+          "0003": {
+            "vlan_id": 3,
+            "root_id": {
+              "priority": 1111,
+              "address": "1211.a111.1113"
+            },
+            "root_cost": 1,
+            "hello_time": 2,
+            "max_age": 20,
+            "forward_delay": 10,
+            "root_port": "Port-channel1"
+          },
+          "0004": {
+            "vlan_id": 4,
+            "root_id": {
+              "priority": 11,
+              "address": "1211.a111.1114"
+            },
+            "root_cost": 0,
+            "hello_time": 2,
+            "max_age": 20,
+            "forward_delay": 10,
+            "is_root": true
+          }
+        }
+      }
+    }
+  ]
+}

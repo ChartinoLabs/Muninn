@@ -1,0 +1,87 @@
+{
+  "os": "cisco_ios",
+  "command": "show crypto ipsec sa detail",
+  "schema": {
+    "name": "ShowCryptoIpsecSaDetailResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": "str"
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "interface: GigabitEthernet3\n\nCrypto map tag: vpn-crypto-map, local addr 1.1.1.2\n\nprotected vrf: (none)\n\nlocal ident (addr/mask/prot/port): (20.20.20.0/255.255.255.0/0/0)\n\nremote ident (addr/mask/prot/port): (10.10.10.0/255.255.255.0/0/0)\n\ncurrent_peer 1.1.1.1 port 500\n\nPERMIT, flags={origin_is_acl,}\n\n#pkts encaps: 4, #pkts encrypt: 4, #pkts digest: 4\n\n#pkts decaps: 4, #pkts decrypt: 4, #pkts verify: 4\n\n#pkts compressed: 0, #pkts decompressed: 0\n\n#pkts not compressed: 0, #pkts compr. failed: 0\n\n#pkts not decompressed: 0, #pkts decompress failed: 0\n\n#pkts no sa (send) 0, #pkts invalid sa (rcv) 0\n\n#pkts encaps failed (send) 0, #pkts decaps failed (rcv) 0\n\n#pkts invalid prot (recv) 0, #pkts verify failed: 0\n\n#pkts invalid identity (recv) 0, #pkts invalid len (rcv) 0\n\n#pkts replay rollover (send): 0, #pkts replay rollover (rcv) 0\n\n##pkts replay failed (rcv): 0\n\n#pkts tagged (send): 0, #pkts untagged (rcv): 0\n\n#pkts not tagged (send): 0, #pkts not untagged (rcv): 0\n\n#pkts internal err (send): 0, #pkts internal err (recv) 0\n\nlocal crypto endpt.: 1.1.1.2, remote crypto endpt.: 1.1.1.1\n\nplaintext mtu 1438, path mtu 1500, ip mtu 1500, ip mtu idb GigabitEthernet3\n\ncurrent outbound spi: 0x397C36EE(964441838)\n\nPFS (Y/N): N, DH group: none\n\ninbound esp sas:\n\nspi: 0x658F7C11(1703902225)\n\ntransform: esp-256-aes esp-sha256-hmac ,\n\nin use settings ={Tunnel, }\n\nconn id: 2076, flow_id: CSR:76, sibling_flags FFFFFFFF80000048, crypto map: vpn-crypto-map\n\nsa timing: remaining key lifetime (k/sec): (4607999/83143)\n\nIV size: 16 bytes\n\nreplay detection support: Y\n\nStatus: ACTIVE(ACTIVE)\n\ninbound ah sas:\n\ninbound pcp sas:\n\noutbound esp sas:\n\nspi: 0x397C36EE(964441838)\n\ntransform: esp-256-aes esp-sha256-hmac ,\n\nin use settings ={Tunnel, }\n\nconn id: 2075, flow_id: CSR:75, sibling_flags FFFFFFFF80000048, crypto map: vpn-crypto-map\n\nsa timing: remaining key lifetime (k/sec): (4607999/83143)\n\nIV size: 16 bytes\n\nreplay detection support: Y\n\nStatus: ACTIVE(ACTIVE)\n\noutbound ah sas:\n\noutbound pcp sas:\n\nprotected vrf: (none)\n\nlocal ident (addr/mask/prot/port): (40.40.40.0/255.255.255.0/0/0)\n\nremote ident (addr/mask/prot/port): (30.30.30.0/255.255.255.0/0/0)\n\ncurrent_peer 1.1.1.1 port 500\n\nPERMIT, flags={origin_is_acl,}\n\n#pkts encaps: 0, #pkts encrypt: 0, #pkts digest: 0\n\n#pkts decaps: 0, #pkts decrypt: 0, #pkts verify: 0\n\n#pkts compressed: 0, #pkts decompressed: 0\n\n#pkts not compressed: 0, #pkts compr. failed: 0\n\n#pkts not decompressed: 0, #pkts decompress failed: 0\n\n#pkts no sa (send) 0, #pkts invalid sa (rcv) 0\n\n#pkts encaps failed (send) 0, #pkts decaps failed (rcv) 0\n\n#pkts invalid prot (recv) 0, #pkts verify failed: 0\n\n#pkts invalid identity (recv) 0, #pkts invalid len (rcv) 0\n\n#pkts replay rollover (send): 0, #pkts replay rollover (rcv) 0\n\n##pkts replay failed (rcv): 0\n\n#pkts tagged (send): 0, #pkts untagged (rcv): 0\n\n#pkts not tagged (send): 0, #pkts not untagged (rcv): 0\n\n#pkts internal err (send): 0, #pkts internal err (recv) 0\n\nlocal crypto endpt.: 1.1.1.2, remote crypto endpt.: 1.1.1.1\n\nplaintext mtu 1500, path mtu 1500, ip mtu 1500, ip mtu idb GigabitEthernet3\n\ncurrent outbound spi: 0x0(0)\n\nPFS (Y/N): N, DH group: none\n\ninbound esp sas:\n\ninbound ah sas:\n\ninbound pcp sas:\n\noutbound esp sas:\n\noutbound ah sas:\n\noutbound pcp sas:\n\ninterface: Tunnel0\n\nCrypto map tag: Tunnel0-head-0, local addr 2.2.2.2\n\nprotected vrf: (none)\n\nlocal ident (addr/mask/prot/port): (0.0.0.0/0.0.0.0/0/0)\n\nremote ident (addr/mask/prot/port): (0.0.0.0/0.0.0.0/0/0)\n\ncurrent_peer 2.2.2.1 port 500\n\nPERMIT, flags={origin_is_acl,}\n\n#pkts encaps: 0, #pkts encrypt: 0, #pkts digest: 0\n\n#pkts decaps: 0, #pkts decrypt: 0, #pkts verify: 0\n\n#pkts compressed: 0, #pkts decompressed: 0\n\n#pkts not compressed: 0, #pkts compr. failed: 0\n\n#pkts not decompressed: 0, #pkts decompress failed: 0\n\n#pkts no sa (send) 0, #pkts invalid sa (rcv) 0\n\n#pkts encaps failed (send) 0, #pkts decaps failed (rcv) 0\n\n#pkts invalid prot (recv) 0, #pkts verify failed: 0\n\n#pkts invalid identity (recv) 0, #pkts invalid len (rcv) 0\n\n#pkts replay rollover (send): 0, #pkts replay rollover (rcv) 0\n\n##pkts replay failed (rcv): 0\n\n#pkts tagged (send): 0, #pkts untagged (rcv): 0\n\n#pkts not tagged (send): 0, #pkts not untagged (rcv): 0\n\n#pkts internal err (send): 0, #pkts internal err (recv) 0\n\nlocal crypto endpt.: 2.2.2.2, remote crypto endpt.: 2.2.2.1\n\nplaintext mtu 1438, path mtu 1500, ip mtu 1500, ip mtu idb GigabitEthernet5\n\ncurrent outbound spi: 0x2E8482F8(780436216)\n\nPFS (Y/N): N, DH group: none\n\ninbound esp sas:\n\nspi: 0xA54D38A4(2773301412)\n\ntransform: esp-256-aes esp-sha256-hmac ,\n\nin use settings ={Tunnel, }\n\nconn id: 2077, flow_id: CSR:77, sibling_flags FFFFFFFF80004048, crypto map: Tunnel0-head-0\n\nsa timing: remaining key lifetime (k/sec): (4608000/3189)\n\nIV size: 16 bytes\n\nreplay detection support: Y\n\nStatus: ACTIVE(ACTIVE)\n\ninbound ah sas:\n\ninbound pcp sas:\n\noutbound esp sas:\n\nspi: 0x2E8482F8(780436216)\n\ntransform: esp-256-aes esp-sha256-hmac ,\n\nin use settings ={Tunnel, }\n\nconn id: 2078, flow_id: CSR:78, sibling_flags FFFFFFFF80004048, crypto map: Tunnel0-head-0\n\nsa timing: remaining key lifetime (k/sec): (4608000/3189)\n\nIV size: 16 bytes\n\nreplay detection support: Y\n\nStatus: ACTIVE(ACTIVE)\n\noutbound ah sas:\n\noutbound pcp sas:\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet3": {
+            "Crypto map tag": "vpn-crypto-map, local addr 1.1.1.2",
+            "protected vrf": "(none)",
+            "local ident (addr/mask/prot/port)": "(40.40.40.0/255.255.255.0/0/0)",
+            "remote ident (addr/mask/prot/port)": "(30.30.30.0/255.255.255.0/0/0)",
+            "#pkts encaps": "0, #pkts encrypt: 0, #pkts digest: 0",
+            "#pkts decaps": "0, #pkts decrypt: 0, #pkts verify: 0",
+            "#pkts compressed": "0, #pkts decompressed: 0",
+            "#pkts not compressed": "0, #pkts compr. failed: 0",
+            "#pkts not decompressed": "0, #pkts decompress failed: 0",
+            "#pkts invalid prot (recv) 0, #pkts verify failed": "0",
+            "#pkts replay rollover (send)": "0, #pkts replay rollover (rcv) 0",
+            "##pkts replay failed (rcv)": "0",
+            "#pkts tagged (send)": "0, #pkts untagged (rcv): 0",
+            "#pkts not tagged (send)": "0, #pkts not untagged (rcv): 0",
+            "#pkts internal err (send)": "0, #pkts internal err (recv) 0",
+            "local crypto endpt.": "1.1.1.2, remote crypto endpt.: 1.1.1.1",
+            "current outbound spi": "0x0(0)",
+            "PFS (Y/N)": "N, DH group: none",
+            "spi": "0x397C36EE(964441838)",
+            "transform": "esp-256-aes esp-sha256-hmac ,",
+            "conn id": "2075, flow_id: CSR:75, sibling_flags FFFFFFFF80000048, crypto map: vpn-crypto-map",
+            "sa timing": "remaining key lifetime (k/sec): (4607999/83143)",
+            "IV size": "16 bytes",
+            "replay detection support": "Y",
+            "Status": "ACTIVE(ACTIVE)",
+            "interface": "GigabitEthernet3"
+          },
+          "Tunnel0": {
+            "Crypto map tag": "Tunnel0-head-0, local addr 2.2.2.2",
+            "protected vrf": "(none)",
+            "local ident (addr/mask/prot/port)": "(0.0.0.0/0.0.0.0/0/0)",
+            "remote ident (addr/mask/prot/port)": "(0.0.0.0/0.0.0.0/0/0)",
+            "#pkts encaps": "0, #pkts encrypt: 0, #pkts digest: 0",
+            "#pkts decaps": "0, #pkts decrypt: 0, #pkts verify: 0",
+            "#pkts compressed": "0, #pkts decompressed: 0",
+            "#pkts not compressed": "0, #pkts compr. failed: 0",
+            "#pkts not decompressed": "0, #pkts decompress failed: 0",
+            "#pkts invalid prot (recv) 0, #pkts verify failed": "0",
+            "#pkts replay rollover (send)": "0, #pkts replay rollover (rcv) 0",
+            "##pkts replay failed (rcv)": "0",
+            "#pkts tagged (send)": "0, #pkts untagged (rcv): 0",
+            "#pkts not tagged (send)": "0, #pkts not untagged (rcv): 0",
+            "#pkts internal err (send)": "0, #pkts internal err (recv) 0",
+            "local crypto endpt.": "2.2.2.2, remote crypto endpt.: 2.2.2.1",
+            "current outbound spi": "0x2E8482F8(780436216)",
+            "PFS (Y/N)": "N, DH group: none",
+            "spi": "0x2E8482F8(780436216)",
+            "transform": "esp-256-aes esp-sha256-hmac ,",
+            "conn id": "2078, flow_id: CSR:78, sibling_flags FFFFFFFF80004048, crypto map: Tunnel0-head-0",
+            "sa timing": "remaining key lifetime (k/sec): (4608000/3189)",
+            "IV size": "16 bytes",
+            "replay detection support": "Y",
+            "Status": "ACTIVE(ACTIVE)",
+            "interface": "Tunnel0"
+          }
+        }
+      }
+    }
+  ]
+}

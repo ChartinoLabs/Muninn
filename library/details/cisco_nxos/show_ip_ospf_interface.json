@@ -1,0 +1,610 @@
+{
+  "os": "cisco_nxos",
+  "command": "show ip ospf interface",
+  "schema": {
+    "name": "ShowIpOspfInterfaceResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "OspfInterfaceEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "line_protocol": {
+                "type": "str",
+                "required": true
+              },
+              "ip_address": {
+                "type": "str",
+                "required": true
+              },
+              "process_id": {
+                "type": "str",
+                "required": true
+              },
+              "vrf": {
+                "type": "str",
+                "required": true
+              },
+              "area": {
+                "type": "str",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "network_type": {
+                "type": "str",
+                "required": true
+              },
+              "cost": {
+                "type": "int",
+                "required": true
+              },
+              "index": {
+                "type": "int",
+                "required": true
+              },
+              "unnumbered_interface": {
+                "type": "str",
+                "required": false
+              },
+              "enabled_by_interface_config": {
+                "type": "bool",
+                "required": false
+              },
+              "passive": {
+                "type": "bool",
+                "required": false
+              },
+              "bfd_enabled": {
+                "type": "bool",
+                "required": false
+              },
+              "transmit_delay": {
+                "type": "int",
+                "required": false
+              },
+              "router_priority": {
+                "type": "int",
+                "required": false
+              },
+              "dr_router_id": {
+                "type": "str",
+                "required": false
+              },
+              "dr_address": {
+                "type": "str",
+                "required": false
+              },
+              "bdr_router_id": {
+                "type": "str",
+                "required": false
+              },
+              "bdr_address": {
+                "type": "str",
+                "required": false
+              },
+              "neighbors": {
+                "type": "int",
+                "required": false
+              },
+              "flooding_to": {
+                "type": "int",
+                "required": false
+              },
+              "adjacent_with": {
+                "type": "int",
+                "required": false
+              },
+              "hello_interval": {
+                "type": "int",
+                "required": false
+              },
+              "dead_interval": {
+                "type": "int",
+                "required": false
+              },
+              "wait_interval": {
+                "type": "int",
+                "required": false
+              },
+              "retransmit_interval": {
+                "type": "int",
+                "required": false
+              },
+              "hello_timer_due": {
+                "type": "str",
+                "required": false
+              },
+              "authentication": {
+                "type": "str",
+                "required": false
+              },
+              "authentication_keychain": {
+                "type": "str",
+                "required": false
+              },
+              "authentication_key_id": {
+                "type": "int",
+                "required": false
+              },
+              "opaque_link_lsas": {
+                "type": "int",
+                "required": false
+              },
+              "opaque_link_lsas_checksum": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Broadcast, loopback, sham-link, and virtual-link interfaces across multiple VRFs",
+      "input": " Ethernet2/2 is up, line protocol is up\n    IP address 10.2.3.2/24\n    Process ID UNDERLAY VRF default, area 0.0.0.0\n    Enabled by interface configuration\n    State BDR, Network type BROADCAST, cost 1\n    Index 3, Transmit delay 1 sec, Router Priority 1\n    Designated Router ID: 10.36.3.3, address: 10.2.3.3\n    Backup Designated Router ID: 10.100.2.2, address: 10.2.3.2\n    1 Neighbors, flooding to 1, adjacent with 1\n    Timer intervals: Hello 10, Dead 40, Wait 40, Retransmit 5\n      Hello timer due in 00:00:02\n    No authentication\n    Number of opaque link LSAs: 0, checksum sum 0\n Ethernet2/3 is up, line protocol is up\n    IP address 10.2.4.2/24\n    Process ID UNDERLAY VRF default, area 0.0.0.0\n    Enabled by interface configuration\n    State BDR, Network type BROADCAST, cost 1\n    Index 4, Transmit delay 1 sec, Router Priority 1\n    Designated Router ID: 10.64.4.4, address: 10.2.4.4\n    Backup Designated Router ID: 10.100.2.2, address: 10.2.4.2\n    1 Neighbors, flooding to 1, adjacent with 1\n    Timer intervals: Hello 10, Dead 40, Wait 40, Retransmit 5\n      Hello timer due in 00:00:00\n    No authentication\n    Number of opaque link LSAs: 0, checksum sum 0\n loopback0 is up, line protocol is up\n    IP address 10.100.2.2/32\n    Process ID UNDERLAY VRF default, area 0.0.0.0\n    Enabled by interface configuration\n    State LOOPBACK, Network type LOOPBACK, cost 1\n    Index 1\n SL1-0.0.0.0-10.151.22.22-10.229.11.11 is up, line protocol is up\n    Unnumbered interface using IP address of loopback1 (10.151.22.22)\n    Process ID UNDERLAY VRF VRF1, area 0.0.0.1\n    State P2P, Network type P2P, cost 1\n    Index 6, Transmit delay 1 sec\n    1 Neighbors, flooding to 1, adjacent with 1\n    Timer intervals: Hello 10, Dead 40, Wait 40, Retransmit 5\n      Hello timer due in 00:00:07\n    No authentication\n    Number of opaque link LSAs: 0, checksum sum 0\n SL2-0.0.0.0-10.151.22.22-10.21.33.33 is up, line protocol is up\n    Unnumbered interface using IP address of loopback1 (10.151.22.22)\n    Process ID UNDERLAY VRF VRF1, area 0.0.0.1\n    State P2P, Network type P2P, cost 111\n    Index 7, Transmit delay 7 sec\n    0 Neighbors, flooding to 0, adjacent with 0\n    Timer intervals: Hello 3, Dead 13, Wait 13, Retransmit 5\n      Hello timer due in 00:00:00\n    Simple authentication, using keychain test (ready)\n    Number of opaque link LSAs: 0, checksum sum 0\n VL1-0.0.0.0-10.1.8.8-10.66.12.12 is up, line protocol is up\n    Unnumbered interface using IP address of loopback1 (10.151.22.22)\n    Process ID UNDERLAY VRF VRF1, area 0.0.0.1\n    State P2P, Network type P2P, cost 1\n    Index 6, Transmit delay 1 sec\n    1 Neighbors, flooding to 1, adjacent with 1\n    Timer intervals: Hello 10, Dead 40, Wait 40, Retransmit 5\n      Hello timer due in 00:00:07\n    No authentication\n    Number of opaque link LSAs: 0, checksum sum 0\n Ethernet2/1 is up, line protocol is up\n    IP address 10.229.6.2/24\n    Process ID UNDERLAY VRF VRF1, area 0.0.0.1\n    Enabled by interface configuration\n    State BDR, Network type BROADCAST, cost 40\n    Index 2, Transmit delay 1 sec, Router Priority 1\n    Designated Router ID: 10.84.66.66, address: 10.229.6.6\n    Backup Designated Router ID: 10.151.22.22, address: 10.229.6.2\n    1 Neighbors, flooding to 1, adjacent with 1\n    Timer intervals: Hello 10, Dead 40, Wait 40, Retransmit 5\n      Hello timer due in 00:00:07\n    No authentication\n    Number of opaque link LSAs: 0, checksum sum 0\n",
+      "expected": {
+        "interfaces": {
+          "Ethernet2/2": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "10.2.3.2/24",
+            "process_id": "UNDERLAY",
+            "vrf": "default",
+            "area": "0.0.0.0",
+            "enabled_by_interface_config": true,
+            "state": "BDR",
+            "network_type": "BROADCAST",
+            "cost": 1,
+            "index": 3,
+            "transmit_delay": 1,
+            "router_priority": 1,
+            "dr_router_id": "10.36.3.3",
+            "dr_address": "10.2.3.3",
+            "bdr_router_id": "10.100.2.2",
+            "bdr_address": "10.2.3.2",
+            "neighbors": 1,
+            "flooding_to": 1,
+            "adjacent_with": 1,
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "hello_timer_due": "00:00:02",
+            "authentication": "none",
+            "opaque_link_lsas": 0,
+            "opaque_link_lsas_checksum": "0"
+          },
+          "Ethernet2/3": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "10.2.4.2/24",
+            "process_id": "UNDERLAY",
+            "vrf": "default",
+            "area": "0.0.0.0",
+            "enabled_by_interface_config": true,
+            "state": "BDR",
+            "network_type": "BROADCAST",
+            "cost": 1,
+            "index": 4,
+            "transmit_delay": 1,
+            "router_priority": 1,
+            "dr_router_id": "10.64.4.4",
+            "dr_address": "10.2.4.4",
+            "bdr_router_id": "10.100.2.2",
+            "bdr_address": "10.2.4.2",
+            "neighbors": 1,
+            "flooding_to": 1,
+            "adjacent_with": 1,
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "hello_timer_due": "00:00:00",
+            "authentication": "none",
+            "opaque_link_lsas": 0,
+            "opaque_link_lsas_checksum": "0"
+          },
+          "Loopback0": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "10.100.2.2/32",
+            "process_id": "UNDERLAY",
+            "vrf": "default",
+            "area": "0.0.0.0",
+            "enabled_by_interface_config": true,
+            "state": "LOOPBACK",
+            "network_type": "LOOPBACK",
+            "cost": 1,
+            "index": 1
+          },
+          "SL1-0.0.0.0-10.151.22.22-10.229.11.11": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "10.151.22.22",
+            "unnumbered_interface": "Loopback1",
+            "process_id": "UNDERLAY",
+            "vrf": "VRF1",
+            "area": "0.0.0.1",
+            "state": "P2P",
+            "network_type": "P2P",
+            "cost": 1,
+            "index": 6,
+            "transmit_delay": 1,
+            "neighbors": 1,
+            "flooding_to": 1,
+            "adjacent_with": 1,
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "hello_timer_due": "00:00:07",
+            "authentication": "none",
+            "opaque_link_lsas": 0,
+            "opaque_link_lsas_checksum": "0"
+          },
+          "SL2-0.0.0.0-10.151.22.22-10.21.33.33": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "10.151.22.22",
+            "unnumbered_interface": "Loopback1",
+            "process_id": "UNDERLAY",
+            "vrf": "VRF1",
+            "area": "0.0.0.1",
+            "state": "P2P",
+            "network_type": "P2P",
+            "cost": 111,
+            "index": 7,
+            "transmit_delay": 7,
+            "neighbors": 0,
+            "flooding_to": 0,
+            "adjacent_with": 0,
+            "hello_interval": 3,
+            "dead_interval": 13,
+            "wait_interval": 13,
+            "retransmit_interval": 5,
+            "hello_timer_due": "00:00:00",
+            "authentication": "simple",
+            "authentication_keychain": "test",
+            "opaque_link_lsas": 0,
+            "opaque_link_lsas_checksum": "0"
+          },
+          "VL1-0.0.0.0-10.1.8.8-10.66.12.12": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "10.151.22.22",
+            "unnumbered_interface": "Loopback1",
+            "process_id": "UNDERLAY",
+            "vrf": "VRF1",
+            "area": "0.0.0.1",
+            "state": "P2P",
+            "network_type": "P2P",
+            "cost": 1,
+            "index": 6,
+            "transmit_delay": 1,
+            "neighbors": 1,
+            "flooding_to": 1,
+            "adjacent_with": 1,
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "hello_timer_due": "00:00:07",
+            "authentication": "none",
+            "opaque_link_lsas": 0,
+            "opaque_link_lsas_checksum": "0"
+          },
+          "Ethernet2/1": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "10.229.6.2/24",
+            "process_id": "UNDERLAY",
+            "vrf": "VRF1",
+            "area": "0.0.0.1",
+            "enabled_by_interface_config": true,
+            "state": "BDR",
+            "network_type": "BROADCAST",
+            "cost": 40,
+            "index": 2,
+            "transmit_delay": 1,
+            "router_priority": 1,
+            "dr_router_id": "10.84.66.66",
+            "dr_address": "10.229.6.6",
+            "bdr_router_id": "10.151.22.22",
+            "bdr_address": "10.229.6.2",
+            "neighbors": 1,
+            "flooding_to": 1,
+            "adjacent_with": 1,
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "hello_timer_due": "00:00:07",
+            "authentication": "none",
+            "opaque_link_lsas": 0,
+            "opaque_link_lsas_checksum": "0"
+          }
+        }
+      }
+    },
+    {
+      "name": "Passive interfaces, BFD, message-digest auth, line protocol down, multiple VRFs",
+      "input": "Vlan3030 is up, line protocol is up\n    IP address 10.115.128.4/24\n    Process ID 2000 VRF default, area 0.0.0.1\n    Enabled by interface configuration\n    State DR, Network type BROADCAST, cost 1000\n    Index 118, Passive interface\nVlan997 is up, line protocol is up\n    IP address 10.100.17.81/30\n    Process ID 2000 VRF default, area 0.0.0.1\n    Enabled by interface configuration\n    State P2P, Network type P2P, cost 10\n    Index 137, Transmit delay 1 sec\n    1 Neighbors, flooding to 1, adjacent with 1\n    Timer intervals: Hello 10, Dead 40, Wait 40, Retransmit 5\n    Hello timer due in 00:00:04\n    No authentication\n    Number of opaque link LSAs: 1, checksum sum 0xe038\nloopback100 is up, line protocol is up\n    IP address 10.100.0.11/32\n    Process ID 2000 VRF default, area 0.0.0.1\n    Enabled by interface configuration\n    State LOOPBACK, Network type LOOPBACK, cost 1\n    Index 50\nEthernet1/31 is up, line protocol is up\n    IP address 10.100.31.252/31\n    Process ID 2000 VRF default, area 0.0.0.1\n    Enabled by interface configuration\n    State P2P, Network type P2P, cost 100\n    Index 3, Transmit delay 1 sec\n    1 Neighbors, flooding to 1, adjacent with 1\n    Timer intervals: Hello 2, Dead 6, Wait 6, Retransmit 5\n    Hello timer due in 00:00:01\n    Message-digest authentication, using key id 1\n    Number of opaque link LSAs: 1, checksum sum 0xafaf\nEthernet1/45 is up, line protocol is down\n    IP address 10.111.3.2/30\n    Process ID 2000 VRF default, area 0.0.0.1\n    State DOWN, Network type P2P, cost 100\n    Index 1, Transmit delay 1 sec\n    0 Neighbors, flooding to 0, adjacent with 0\n    Timer intervals: Hello 10, Dead 40, Wait 40, Retransmit 5\n    No authentication\n    Number of opaque link LSAs: 0, checksum sum 0\nport-channel1001 is up, line protocol is up\n    IP address 10.100.31.197/30\n    Process ID 1000 VRF GENIE-CORE, area 0.0.0.1\n    Enabled by interface configuration\n    State P2P, Network type P2P, cost 10\n    BFD is enabled\n    Index 5, Transmit delay 1 sec\n    1 Neighbors, flooding to 1, adjacent with 1\n    Timer intervals: Hello 2, Dead 6, Wait 6, Retransmit 5\n    Hello timer due in 00:00:01\n    No authentication\n    Number of opaque link LSAs: 0, checksum sum 0\nEthernet1/2 is up, line protocol is up\n    IP address 10.100.31.27/31\n    Process ID 1000 VRF GENIE-CORE, area 0.0.0.1\n    Enabled by interface configuration\n    State P2P, Network type P2P, cost 20\n    Index 1, Transmit delay 1 sec\n    1 Neighbors, flooding to 1, adjacent with 1\n    Timer intervals: Hello 2, Dead 6, Wait 6, Retransmit 5\n    Hello timer due in 00:00:01\n    Message-digest authentication, using key id 1\n    Number of opaque link LSAs: 0, checksum sum 0\n",
+      "expected": {
+        "interfaces": {
+          "Vlan3030": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "10.115.128.4/24",
+            "process_id": "2000",
+            "vrf": "default",
+            "area": "0.0.0.1",
+            "enabled_by_interface_config": true,
+            "state": "DR",
+            "network_type": "BROADCAST",
+            "cost": 1000,
+            "index": 118,
+            "passive": true
+          },
+          "Vlan997": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "10.100.17.81/30",
+            "process_id": "2000",
+            "vrf": "default",
+            "area": "0.0.0.1",
+            "enabled_by_interface_config": true,
+            "state": "P2P",
+            "network_type": "P2P",
+            "cost": 10,
+            "index": 137,
+            "transmit_delay": 1,
+            "neighbors": 1,
+            "flooding_to": 1,
+            "adjacent_with": 1,
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "hello_timer_due": "00:00:04",
+            "authentication": "none",
+            "opaque_link_lsas": 1,
+            "opaque_link_lsas_checksum": "0xe038"
+          },
+          "Loopback100": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "10.100.0.11/32",
+            "process_id": "2000",
+            "vrf": "default",
+            "area": "0.0.0.1",
+            "enabled_by_interface_config": true,
+            "state": "LOOPBACK",
+            "network_type": "LOOPBACK",
+            "cost": 1,
+            "index": 50
+          },
+          "Ethernet1/31": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "10.100.31.252/31",
+            "process_id": "2000",
+            "vrf": "default",
+            "area": "0.0.0.1",
+            "enabled_by_interface_config": true,
+            "state": "P2P",
+            "network_type": "P2P",
+            "cost": 100,
+            "index": 3,
+            "transmit_delay": 1,
+            "neighbors": 1,
+            "flooding_to": 1,
+            "adjacent_with": 1,
+            "hello_interval": 2,
+            "dead_interval": 6,
+            "wait_interval": 6,
+            "retransmit_interval": 5,
+            "hello_timer_due": "00:00:01",
+            "authentication": "message-digest",
+            "authentication_key_id": 1,
+            "opaque_link_lsas": 1,
+            "opaque_link_lsas_checksum": "0xafaf"
+          },
+          "Ethernet1/45": {
+            "status": "up",
+            "line_protocol": "down",
+            "ip_address": "10.111.3.2/30",
+            "process_id": "2000",
+            "vrf": "default",
+            "area": "0.0.0.1",
+            "state": "DOWN",
+            "network_type": "P2P",
+            "cost": 100,
+            "index": 1,
+            "transmit_delay": 1,
+            "neighbors": 0,
+            "flooding_to": 0,
+            "adjacent_with": 0,
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "authentication": "none",
+            "opaque_link_lsas": 0,
+            "opaque_link_lsas_checksum": "0"
+          },
+          "Port-channel1001": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "10.100.31.197/30",
+            "process_id": "1000",
+            "vrf": "GENIE-CORE",
+            "area": "0.0.0.1",
+            "enabled_by_interface_config": true,
+            "state": "P2P",
+            "network_type": "P2P",
+            "cost": 10,
+            "bfd_enabled": true,
+            "index": 5,
+            "transmit_delay": 1,
+            "neighbors": 1,
+            "flooding_to": 1,
+            "adjacent_with": 1,
+            "hello_interval": 2,
+            "dead_interval": 6,
+            "wait_interval": 6,
+            "retransmit_interval": 5,
+            "hello_timer_due": "00:00:01",
+            "authentication": "none",
+            "opaque_link_lsas": 0,
+            "opaque_link_lsas_checksum": "0"
+          },
+          "Ethernet1/2": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "10.100.31.27/31",
+            "process_id": "1000",
+            "vrf": "GENIE-CORE",
+            "area": "0.0.0.1",
+            "enabled_by_interface_config": true,
+            "state": "P2P",
+            "network_type": "P2P",
+            "cost": 20,
+            "index": 1,
+            "transmit_delay": 1,
+            "neighbors": 1,
+            "flooding_to": 1,
+            "adjacent_with": 1,
+            "hello_interval": 2,
+            "dead_interval": 6,
+            "wait_interval": 6,
+            "retransmit_interval": 5,
+            "hello_timer_due": "00:00:01",
+            "authentication": "message-digest",
+            "authentication_key_id": 1,
+            "opaque_link_lsas": 0,
+            "opaque_link_lsas_checksum": "0"
+          }
+        }
+      }
+    },
+    {
+      "name": "Combined IP address and Process ID on single line, port-channel sub-interfaces, multiple OSPF processes",
+      "input": " port-channel1.103 is up, line protocol is up\n    IP address 192.168.246.1/24, Process ID 2 VRF default, area 0.0.0.1\n    Enabled by interface configuration\n    State BDR, Network type BROADCAST, cost 1\n    Index 1, Transmit delay 1 sec, Router Priority 1\n    Designated Router ID: 192.168.4.1, address: 192.168.246.2\n    Backup Designated Router ID: 192.168.111.1, address: 192.168.246.1\n    1 Neighbors, flooding to 1, adjacent with 1\n    Timer intervals: Hello 10, Dead 40, Wait 40, Retransmit 5\n      Hello timer due in 00:00:05\n    No authentication\n    Number of opaque link LSAs: 0, checksum sum 0\n loopback3 is up, line protocol is up\n    IP address 192.168.51.1/32, Process ID 2 VRF default, area 0.0.0.1\n    Enabled by interface configuration\n    State LOOPBACK, Network type LOOPBACK, cost 1\n    Index 2\n port-channel1.100 is up, line protocol is up\n    IP address 192.168.234.1/24, Process ID 100 VRF default, area 0.0.0.1\n    Enabled by interface configuration\n    State BDR, Network type BROADCAST, cost 1\n    Index 1, Transmit delay 1 sec, Router Priority 1\n    Designated Router ID: 192.168.246.1, address: 192.168.234.2\n    Backup Designated Router ID: 192.168.111.1, address: 192.168.234.1\n    1 Neighbors, flooding to 1, adjacent with 1\n    Timer intervals: Hello 10, Dead 40, Wait 40, Retransmit 5\n      Hello timer due in 00:00:04\n    No authentication\n    Number of opaque link LSAs: 0, checksum sum 0\n loopback0 is up, line protocol is up\n    IP address 192.168.111.1/32, Process ID 100 VRF default, area 0.0.0.1\n    Enabled by interface configuration\n    State LOOPBACK, Network type LOOPBACK, cost 1\n    Index 3\n loopback21 is up, line protocol is up\n    IP address 192.168.136.1/32, Process ID 100 VRF default, area 0.0.0.1\n    Enabled by interface configuration\n    State LOOPBACK, Network type LOOPBACK, cost 1\n    Index 2\n",
+      "expected": {
+        "interfaces": {
+          "Port-channel1.103": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "192.168.246.1/24",
+            "process_id": "2",
+            "vrf": "default",
+            "area": "0.0.0.1",
+            "state": "BDR",
+            "network_type": "BROADCAST",
+            "cost": 1,
+            "index": 1,
+            "transmit_delay": 1,
+            "router_priority": 1,
+            "dr_router_id": "192.168.4.1",
+            "dr_address": "192.168.246.2",
+            "bdr_router_id": "192.168.111.1",
+            "bdr_address": "192.168.246.1",
+            "neighbors": 1,
+            "flooding_to": 1,
+            "adjacent_with": 1,
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "hello_timer_due": "00:00:05",
+            "authentication": "none",
+            "enabled_by_interface_config": true,
+            "opaque_link_lsas": 0,
+            "opaque_link_lsas_checksum": "0"
+          },
+          "Loopback3": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "192.168.51.1/32",
+            "process_id": "2",
+            "vrf": "default",
+            "area": "0.0.0.1",
+            "state": "LOOPBACK",
+            "network_type": "LOOPBACK",
+            "cost": 1,
+            "index": 2,
+            "enabled_by_interface_config": true
+          },
+          "Port-channel1.100": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "192.168.234.1/24",
+            "process_id": "100",
+            "vrf": "default",
+            "area": "0.0.0.1",
+            "state": "BDR",
+            "network_type": "BROADCAST",
+            "cost": 1,
+            "index": 1,
+            "transmit_delay": 1,
+            "router_priority": 1,
+            "dr_router_id": "192.168.246.1",
+            "dr_address": "192.168.234.2",
+            "bdr_router_id": "192.168.111.1",
+            "bdr_address": "192.168.234.1",
+            "neighbors": 1,
+            "flooding_to": 1,
+            "adjacent_with": 1,
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "hello_timer_due": "00:00:04",
+            "authentication": "none",
+            "enabled_by_interface_config": true,
+            "opaque_link_lsas": 0,
+            "opaque_link_lsas_checksum": "0"
+          },
+          "Loopback0": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "192.168.111.1/32",
+            "process_id": "100",
+            "vrf": "default",
+            "area": "0.0.0.1",
+            "state": "LOOPBACK",
+            "network_type": "LOOPBACK",
+            "cost": 1,
+            "index": 3,
+            "enabled_by_interface_config": true
+          },
+          "Loopback21": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "192.168.136.1/32",
+            "process_id": "100",
+            "vrf": "default",
+            "area": "0.0.0.1",
+            "state": "LOOPBACK",
+            "network_type": "LOOPBACK",
+            "cost": 1,
+            "index": 2,
+            "enabled_by_interface_config": true
+          }
+        }
+      }
+    }
+  ]
+}

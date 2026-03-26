@@ -1,0 +1,130 @@
+{
+  "os": "cisco_ios",
+  "command": "show mac-address-table",
+  "schema": {
+    "name": "ShowMacAddressTableResult",
+    "fields": {
+      "mac_table": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "MacTableRow",
+              "fields": {
+                "kind": {
+                  "type": {
+                    "type": "literal",
+                    "values": [
+                      "unicast",
+                      "multicast"
+                    ]
+                  },
+                  "required": false
+                },
+                "type": {
+                  "type": "str",
+                  "required": false
+                },
+                "ports": {
+                  "type": {
+                    "type": "list",
+                    "items": "str"
+                  },
+                  "required": false
+                },
+                "primary": {
+                  "type": "bool",
+                  "required": false
+                },
+                "age": {
+                  "type": "int",
+                  "required": false
+                },
+                "learn": {
+                  "type": "bool",
+                  "required": false
+                },
+                "protocols": {
+                  "type": {
+                    "type": "list",
+                    "items": "str"
+                  },
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "total_mac_addresses": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Standard MAC address table with static, dynamic, special VLAN, and interface normalization",
+      "input": "         Mac Address Table\n-------------------------------------------\n\nVlan    Mac Address       Type        Ports\n----    -----------       --------    -----\n All    0100.0cff.9999    STATIC      CPU\n  20    aaaa.bbff.8888    STATIC      Drop\n 100    3820.56ff.6f75    DYNAMIC     Po12\n 100    58bf.eaff.e508    STATIC      Vl100\n 101    3820.56ff.6f75    DYNAMIC     Po12\n 101    58bf.eaff.e5f7    STATIC      Vl101\nTotal Mac Addresses for this criterion: 6\n",
+      "expected": {
+        "mac_table": {
+          "all": {
+            "0100.0cff.9999": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            }
+          },
+          "20": {
+            "aaaa.bbff.8888": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "Drop"
+              ]
+            }
+          },
+          "100": {
+            "3820.56ff.6f75": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel12"
+              ]
+            },
+            "58bf.eaff.e508": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "VLAN100"
+              ]
+            }
+          },
+          "101": {
+            "3820.56ff.6f75": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel12"
+              ]
+            },
+            "58bf.eaff.e5f7": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "VLAN101"
+              ]
+            }
+          }
+        },
+        "total_mac_addresses": 6
+      }
+    }
+  ]
+}

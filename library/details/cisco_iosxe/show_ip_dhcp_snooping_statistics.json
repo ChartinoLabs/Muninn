@@ -1,0 +1,41 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip dhcp snooping statistics",
+  "schema": {
+    "name": "ShowIpDhcpSnoopingStatisticsResult",
+    "fields": {
+      "packets_forwarded": {
+        "type": "int",
+        "required": true
+      },
+      "packets_dropped": {
+        "type": "int",
+        "required": true
+      },
+      "packets_dropped_from_untrusted_ports": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Show ip dhcp snooping statistics with forwarded and zero drop counters",
+      "input": "Packets Forwarded                                     = 122\nPackets Dropped                                       = 0\nPackets Dropped From untrusted ports                  = 0\n",
+      "expected": {
+        "packets_forwarded": 122,
+        "packets_dropped": 0,
+        "packets_dropped_from_untrusted_ports": 0
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": " Packets Forwarded                                     = 0\n Packets Dropped                                       = 0\n Packets Dropped From untrusted ports                  = 0\n",
+      "expected": {
+        "packets_forwarded": 0,
+        "packets_dropped": 0,
+        "packets_dropped_from_untrusted_ports": 0
+      }
+    }
+  ]
+}

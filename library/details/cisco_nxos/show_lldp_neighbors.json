@@ -1,0 +1,202 @@
+{
+  "os": "cisco_nxos",
+  "command": "show lldp neighbors",
+  "schema": {
+    "name": "ShowLldpNeighborsResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "LldpNeighborEntry",
+              "fields": {
+                "hold_time": {
+                  "type": "int",
+                  "required": true
+                },
+                "port_id": {
+                  "type": "str",
+                  "required": true
+                },
+                "capabilities": {
+                  "type": "str",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_entries": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Imported from ntc-templates cisco_nxos_show_lldp_neighbors.raw",
+      "input": "Capability codes:\n  (R) Router, (B) Bridge, (T) Telephone, (C) DOCSIS Cable Device\n  (W) WLAN Access Point, (P) Repeater, (S) Station, (O) Other\nDevice ID            Local Intf      Hold-time  Capability  Port ID\nnx-osv9000-3-long-name.com\n                     Eth1/1          120        BR          Ethernet1/1\nnx-osv9000-4-extremely-long-name\n                     Eth1/2          120        BR          Ethernet1/1\nnx-osv9000-2         Eth1/3          120        BR          Ethernet1/3\nTotal entries displayed: 3\n",
+      "expected": {
+        "neighbors": {
+          "Ethernet1/1": {
+            "nx-osv9000-3-long-name.com": {
+              "hold_time": 120,
+              "capabilities": "BR",
+              "port_id": "Ethernet1/1"
+            }
+          },
+          "Ethernet1/2": {
+            "nx-osv9000-4-extremely-long-name": {
+              "hold_time": 120,
+              "capabilities": "BR",
+              "port_id": "Ethernet1/1"
+            }
+          },
+          "Ethernet1/3": {
+            "nx-osv9000-2": {
+              "hold_time": 120,
+              "capabilities": "BR",
+              "port_id": "Ethernet1/3"
+            }
+          }
+        },
+        "total_entries": 3
+      }
+    },
+    {
+      "name": "Imported from ntc-templates cisco_nxos_show_lldp_neighbors_multiline.raw",
+      "input": "r1-services# show lldp neighbor\nCapability codes:\n  (R) Router, (B) Bridge, (T) Telephone, (C) DOCSIS Cable Device\n  (W) WLAN Access Point, (P) Repeater, (S) Station, (O) Other\nDevice ID            Local Intf      Hold-time  Capability  Port ID\ndcx3.org.local\n                     mgmt0           120        B            Gi1/0/37\nr2-services          Eth1/1          120        BR           Eth1/1\ndx1.org.local\n                     Eth1/3          120        B            Te1/1/1\nfw1-clinical-partner\n                     Eth1/5          120                     ethernet1/9\nfw1-clinical-partner\n                     Eth1/6          120                     ethernet1/10\nfw2-clinical-partner\n                     Eth1/7          120                     ethernet1/9\nfw2-clinical-partner\n                     Eth1/8          120                     ethernet1/10\ncr-ebc.org.local  Eth3/1          120        BR           Fo1/0/8\nr2-services          Eth3/13         120        BR           Eth3/13\nfw1-services         Eth3/23         120                     ethernet1/21\nfw2-services         Eth3/24         120                     ethernet1/23\ncr-park.org.local\n                     Eth4/1          120        BR           Fo1/0/8\nr2-services          Eth4/13         120        BR           Eth4/13\nfw1-services         Eth4/23         120                     ethernet1/22\nfw2-services         Eth4/24         120                     ethernet1/24\nTotal entries displayed: 15\n",
+      "expected": {
+        "neighbors": {
+          "mgmt0": {
+            "dcx3.org.local": {
+              "hold_time": 120,
+              "capabilities": "B",
+              "port_id": "GigabitEthernet1/0/37"
+            }
+          },
+          "Ethernet1/1": {
+            "r2-services": {
+              "hold_time": 120,
+              "capabilities": "BR",
+              "port_id": "Ethernet1/1"
+            }
+          },
+          "Ethernet1/3": {
+            "dx1.org.local": {
+              "hold_time": 120,
+              "capabilities": "B",
+              "port_id": "TenGigabitEthernet1/1/1"
+            }
+          },
+          "Ethernet1/5": {
+            "fw1-clinical-partner": {
+              "hold_time": 120,
+              "port_id": "Ethernet1/9"
+            }
+          },
+          "Ethernet1/6": {
+            "fw1-clinical-partner": {
+              "hold_time": 120,
+              "port_id": "Ethernet1/10"
+            }
+          },
+          "Ethernet1/7": {
+            "fw2-clinical-partner": {
+              "hold_time": 120,
+              "port_id": "Ethernet1/9"
+            }
+          },
+          "Ethernet1/8": {
+            "fw2-clinical-partner": {
+              "hold_time": 120,
+              "port_id": "Ethernet1/10"
+            }
+          },
+          "Ethernet3/1": {
+            "cr-ebc.org.local": {
+              "hold_time": 120,
+              "capabilities": "BR",
+              "port_id": "FortyGigabitEthernet1/0/8"
+            }
+          },
+          "Ethernet3/13": {
+            "r2-services": {
+              "hold_time": 120,
+              "capabilities": "BR",
+              "port_id": "Ethernet3/13"
+            }
+          },
+          "Ethernet3/23": {
+            "fw1-services": {
+              "hold_time": 120,
+              "port_id": "Ethernet1/21"
+            }
+          },
+          "Ethernet3/24": {
+            "fw2-services": {
+              "hold_time": 120,
+              "port_id": "Ethernet1/23"
+            }
+          },
+          "Ethernet4/1": {
+            "cr-park.org.local": {
+              "hold_time": 120,
+              "capabilities": "BR",
+              "port_id": "FortyGigabitEthernet1/0/8"
+            }
+          },
+          "Ethernet4/13": {
+            "r2-services": {
+              "hold_time": 120,
+              "capabilities": "BR",
+              "port_id": "Ethernet4/13"
+            }
+          },
+          "Ethernet4/23": {
+            "fw1-services": {
+              "hold_time": 120,
+              "port_id": "Ethernet1/22"
+            }
+          },
+          "Ethernet4/24": {
+            "fw2-services": {
+              "hold_time": 120,
+              "port_id": "Ethernet1/24"
+            }
+          }
+        },
+        "total_entries": 15
+      }
+    },
+    {
+      "name": "Imported from Genie ShowLldpNeighborsDetail (equal/golden_output1)",
+      "input": "           Capability codes:\n              (R) Router, (B) Bridge, (T) Telephone, (C) DOCSIS Cable Device\n              (W) WLAN Access Point, (P) Repeater, (S) Station, (O) Other\n            Device ID            Local Intf      Hold-time  Capability  Port ID\n\n            Chassis id: 001e.49ff.24f7\n            Port id: Gi3\n            Local Port id: Eth1/1\n            Port Description: GigabitEthernet3\n            System Name: R1_csr1000v.openstacklocal\n            System Description: Cisco IOS Software [Everest], Virtual XE Software (X86_64_LINUX_IOSD-UNIVERSALK9-M), Version 16.6.1, RELEASE SOFTWARE (fc2)\n            Technical Support: http://www.cisco.com/techsupport\n            Copyright (c) 1986-2017 by Cisco Systems, Inc.\n            Compiled Sat 22-Jul-17 05:51 by\n            Time remaining: 114 seconds\n            System Capabilities: B, R\n            Enabled Capabilities: R\n            Management Address: 10.1.3.1\n            Management Address IPV6: not advertised\n            Vlan ID: not advertised\n\n\n            Chassis id: 000d.bdff.4f04\n            Port id: Gi0/0/0/1\n            Local Port id: Eth1/2\n            Port Description: null\n            System Name: R2_xrv9000\n            System Description: 6.2.2, IOS-XRv 9000\n            Time remaining: 95 seconds\n            System Capabilities: R\n            Enabled Capabilities: R\n            Management Address: 10.2.3.2\n            Management Address IPV6: not advertised\n            Vlan ID: not advertised\n\n            Total entries displayed: 2\n",
+      "expected": {
+        "neighbors": {
+          "Ethernet1/1": {
+            "R1_csr1000v.openstacklocal": {
+              "hold_time": 114,
+              "capabilities": "R",
+              "port_id": "GigabitEthernet3"
+            }
+          },
+          "Ethernet1/2": {
+            "R2_xrv9000": {
+              "hold_time": 95,
+              "capabilities": "R",
+              "port_id": "GigabitEthernet0/0/0/1"
+            }
+          }
+        },
+        "total_entries": 2
+      }
+    }
+  ]
+}

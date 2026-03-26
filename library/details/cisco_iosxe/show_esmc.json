@@ -1,0 +1,124 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show esmc",
+  "schema": {
+    "name": "ShowEsmcResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "EsmcInterfaceEntry",
+            "fields": {
+              "admin": {
+                "type": {
+                  "name": "EsmcAdminConfig",
+                  "fields": {
+                    "mode": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "esmc_tx": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "esmc_rx": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "ql_rx_configured": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "ql_tx_configured": {
+                      "type": "str",
+                      "required": false
+                    }
+                  }
+                },
+                "required": true
+              },
+              "oper": {
+                "type": {
+                  "name": "EsmcOperStatus",
+                  "fields": {
+                    "port_status": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "ql_receive": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "esmc_information_rate": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "esmc_expiry": {
+                      "type": "str",
+                      "required": false
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show esmc output with multiple interfaces and varying QL values",
+      "input": "Router#show esmc\nInterface: GigabitEthernet0/0/0\nAdministrative configurations:\n  Mode: Synchronous\n  ESMC TX: Enable\n  ESMC RX : Enable\n  QL RX configured : NA\n  QL TX configured : NA\nOperational status:\n  Port status: UP\n  QL Receive: QL-SSU-B\n  ESMC Information rate : 1 packet/second\n  ESMC Expiry: 5 second\n\nInterface: GigabitEthernet0/0/1\nAdministrative configurations:\n  Mode: Synchronous\n  ESMC TX: Disable\n  ESMC RX : Enable\n  QL RX configured : QL-PRC\n  QL TX configured : NA\nOperational status:\n  Port status: DOWN\n  QL Receive: QL-DNU\n  ESMC Information rate : 1 packet/second\n  ESMC Expiry: 5 second\n\nInterface: TenGigabitEthernet0/1/0\nAdministrative configurations:\n  Mode: Synchronous\n  ESMC TX: Enable\n  ESMC RX : Enable\n  QL RX configured : NA\n  QL TX configured : QL-SEC\nOperational status:\n  Port status: UP\n  QL Receive: QL-SEC\n  ESMC Information rate : 1 packet/second\n  ESMC Expiry: 5 second\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet0/0/0": {
+            "admin": {
+              "mode": "Synchronous",
+              "esmc_tx": "Enable",
+              "esmc_rx": "Enable"
+            },
+            "oper": {
+              "port_status": "UP",
+              "ql_receive": "QL-SSU-B",
+              "esmc_information_rate": "1 packet/second",
+              "esmc_expiry": "5 second"
+            }
+          },
+          "GigabitEthernet0/0/1": {
+            "admin": {
+              "mode": "Synchronous",
+              "esmc_tx": "Disable",
+              "esmc_rx": "Enable",
+              "ql_rx_configured": "QL-PRC"
+            },
+            "oper": {
+              "port_status": "DOWN",
+              "ql_receive": "QL-DNU",
+              "esmc_information_rate": "1 packet/second",
+              "esmc_expiry": "5 second"
+            }
+          },
+          "TenGigabitEthernet0/1/0": {
+            "admin": {
+              "mode": "Synchronous",
+              "esmc_tx": "Enable",
+              "esmc_rx": "Enable",
+              "ql_tx_configured": "QL-SEC"
+            },
+            "oper": {
+              "port_status": "UP",
+              "ql_receive": "QL-SEC",
+              "esmc_information_rate": "1 packet/second",
+              "esmc_expiry": "5 second"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

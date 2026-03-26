@@ -1,0 +1,100 @@
+{
+  "os": "cisco_ios",
+  "command": "show arp",
+  "schema": {
+    "name": "ShowArpResult",
+    "fields": {
+      "arp_entries": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ArpEntry",
+            "fields": {
+              "hardware_addr": {
+                "type": "str",
+                "required": true
+              },
+              "type": {
+                "type": "str",
+                "required": true
+              },
+              "age": {
+                "type": "int",
+                "required": false
+              },
+              "interface": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic ARP table with multiple entries across different interfaces",
+      "input": "Protocol  Address          Age (min)  Hardware Addr   Type   Interface\nInternet  10.1.18.122             -   58bf.eaff.e5b6  ARPA   GigabitEthernet0/0\nInternet  10.1.18.1              45   0012.7fff.04d7  ARPA   GigabitEthernet0/0\nInternet  10.1.18.13            142   00b0.c2ff.5932  ARPA   GigabitEthernet0/0\nInternet  10.1.18.254           247   5cf3.fcff.d09b  ARPA   GigabitEthernet0/0\n",
+      "expected": {
+        "arp_entries": {
+          "10.1.18.1": {
+            "age": 45,
+            "hardware_addr": "0012.7fff.04d7",
+            "interface": "GigabitEthernet0/0",
+            "type": "ARPA"
+          },
+          "10.1.18.122": {
+            "hardware_addr": "58bf.eaff.e5b6",
+            "interface": "GigabitEthernet0/0",
+            "type": "ARPA"
+          },
+          "10.1.18.13": {
+            "age": 142,
+            "hardware_addr": "00b0.c2ff.5932",
+            "interface": "GigabitEthernet0/0",
+            "type": "ARPA"
+          },
+          "10.1.18.254": {
+            "age": 247,
+            "hardware_addr": "5cf3.fcff.d09b",
+            "interface": "GigabitEthernet0/0",
+            "type": "ARPA"
+          }
+        }
+      }
+    },
+    {
+      "name": "ARP table with incomplete entry that has no MAC address or interface",
+      "input": "Protocol  Address          Age (min)  Hardware Addr   Type   Interface\nInternet  10.100.88.1             -   c4f7.d564.b716  ARPA   Vlan10\nInternet  10.100.88.199           0   Incomplete      ARPA\nInternet  10.152.1.229            0   488f.5a5a.87ea  ARPA   Vlan1\nInternet  1.2.3.4                 0   c4ad.3425.b7be  ARPA   FastEthernet4\nInternet  1.2.3.5                 -   c4f7.d564.b71a  ARPA   FastEthernet4\n",
+      "expected": {
+        "arp_entries": {
+          "1.2.3.4": {
+            "age": 0,
+            "hardware_addr": "c4ad.3425.b7be",
+            "interface": "FastEthernet4",
+            "type": "ARPA"
+          },
+          "1.2.3.5": {
+            "hardware_addr": "c4f7.d564.b71a",
+            "interface": "FastEthernet4",
+            "type": "ARPA"
+          },
+          "10.100.88.1": {
+            "hardware_addr": "c4f7.d564.b716",
+            "interface": "Vlan10",
+            "type": "ARPA"
+          },
+          "10.152.1.229": {
+            "age": 0,
+            "hardware_addr": "488f.5a5a.87ea",
+            "interface": "Vlan1",
+            "type": "ARPA"
+          }
+        }
+      }
+    }
+  ]
+}

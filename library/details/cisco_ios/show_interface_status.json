@@ -1,0 +1,46 @@
+{
+  "os": "cisco_ios",
+  "command": "show interface status",
+  "schema": {
+    "name": "ShowInterfaceStatusResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceStatusEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "duplex": {
+                "type": "str",
+                "required": true
+              },
+              "speed": {
+                "type": "str",
+                "required": true
+              },
+              "name": {
+                "type": "str",
+                "required": false
+              },
+              "vlan": {
+                "type": "str",
+                "required": false
+              },
+              "type": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}

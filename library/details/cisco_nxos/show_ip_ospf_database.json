@@ -1,0 +1,366 @@
+{
+  "os": "cisco_nxos",
+  "command": "show ip ospf database",
+  "schema": {
+    "name": "ShowIpOspfDatabaseResult",
+    "fields": {
+      "router_id": {
+        "type": "str",
+        "required": true
+      },
+      "process_id": {
+        "type": "str",
+        "required": true
+      },
+      "areas": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "AreaEntry",
+            "fields": {
+              "router": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "name": "LsaEntry",
+                      "fields": {
+                        "age": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "seq": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "checksum": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "link_count": {
+                          "type": "int",
+                          "required": false
+                        },
+                        "tag": {
+                          "type": "int",
+                          "required": false
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "network": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "type": "ref",
+                      "name": "LsaEntry"
+                    }
+                  }
+                },
+                "required": false
+              },
+              "summary": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "type": "ref",
+                      "name": "LsaEntry"
+                    }
+                  }
+                },
+                "required": false
+              },
+              "asbr_summary": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "type": "ref",
+                      "name": "LsaEntry"
+                    }
+                  }
+                },
+                "required": false
+              },
+              "opaque_area": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "type": "ref",
+                      "name": "LsaEntry"
+                    }
+                  }
+                },
+                "required": false
+              },
+              "opaque_link": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "type": "ref",
+                      "name": "LsaEntry"
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "external": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "type": "ref",
+              "name": "LsaEntry"
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "OSPF database with router, network, and summary LSA types in a single area",
+      "input": "OSPF Router with ID (50.50.50.50) (Process ID p1)\n\nRouter Link States (Area 0)\n\nLink ID ADV Router Age Seq# Checksum Link Count\n40.40.40.40 40.40.40.40 930 0x80000004 0x2ea1 3\n50.50.50.50 50.50.50.50 935 0x80000002 0x8b52 1\n60.60.60.60 60.60.60.60 943 0x800003c5 0x9854 2\n\nNetwork Link States (Area 0)\n\nLink ID ADV Router Age Seq# Checksum\n209.165.201.3 60.60.60.60 944 0x80000001 0x7179\n192.0.2.1 50.50.50.50 935 0x80000001 0x516a\n\nSummary Network Link States (Area 0)\n\nLink ID ADV Router Age Seq# Checksum\n209.165.201.1 40.40.40.40 929 0x80000001 0x2498\n209.165.201.1 50.50.50.50 928 0x80000001 0x5b2f\n209.165.201.1 60.60.60.60 1265 0x800003c3 0xf49b\n192.0.2.0 40.40.40.40 943 0x80000001 0x53f3\n192.0.2.0 50.50.50.50 935 0x80000001 0x26f8\n192.0.2.0 60.60.60.60 930 0x80000001 0x7b51\n",
+      "expected": {
+        "areas": {
+          "0.0.0.0": {
+            "network": {
+              "192.0.2.1": {
+                "50.50.50.50": {
+                  "age": 935,
+                  "checksum": "0x516a",
+                  "seq": "0x80000001"
+                }
+              },
+              "209.165.201.3": {
+                "60.60.60.60": {
+                  "age": 944,
+                  "checksum": "0x7179",
+                  "seq": "0x80000001"
+                }
+              }
+            },
+            "router": {
+              "40.40.40.40": {
+                "40.40.40.40": {
+                  "age": 930,
+                  "checksum": "0x2ea1",
+                  "link_count": 3,
+                  "seq": "0x80000004"
+                }
+              },
+              "50.50.50.50": {
+                "50.50.50.50": {
+                  "age": 935,
+                  "checksum": "0x8b52",
+                  "link_count": 1,
+                  "seq": "0x80000002"
+                }
+              },
+              "60.60.60.60": {
+                "60.60.60.60": {
+                  "age": 943,
+                  "checksum": "0x9854",
+                  "link_count": 2,
+                  "seq": "0x800003c5"
+                }
+              }
+            },
+            "summary": {
+              "192.0.2.0": {
+                "40.40.40.40": {
+                  "age": 943,
+                  "checksum": "0x53f3",
+                  "seq": "0x80000001"
+                },
+                "50.50.50.50": {
+                  "age": 935,
+                  "checksum": "0x26f8",
+                  "seq": "0x80000001"
+                },
+                "60.60.60.60": {
+                  "age": 930,
+                  "checksum": "0x7b51",
+                  "seq": "0x80000001"
+                }
+              },
+              "209.165.201.1": {
+                "40.40.40.40": {
+                  "age": 929,
+                  "checksum": "0x2498",
+                  "seq": "0x80000001"
+                },
+                "50.50.50.50": {
+                  "age": 928,
+                  "checksum": "0x5b2f",
+                  "seq": "0x80000001"
+                },
+                "60.60.60.60": {
+                  "age": 1265,
+                  "checksum": "0xf49b",
+                  "seq": "0x800003c3"
+                }
+              }
+            }
+          }
+        },
+        "process_id": "p1",
+        "router_id": "50.50.50.50"
+      }
+    },
+    {
+      "name": "OSPF database with multiple areas, ASBR summary, and Type-5 external LSAs",
+      "input": "OSPF Router with ID (10.1.1.1) (Process ID 100)\n\nRouter Link States (Area 0.0.0.0)\n\nLink ID ADV Router Age Seq# Checksum Link Count\n10.1.1.1 10.1.1.1 456 0x80000012 0xab34 4\n10.2.2.2 10.2.2.2 789 0x80000008 0xcd56 3\n\nNetwork Link States (Area 0.0.0.0)\n\nLink ID ADV Router Age Seq# Checksum\n10.0.0.1 10.1.1.1 456 0x80000003 0xef78\n\nSummary Network Link States (Area 0.0.0.0)\n\nLink ID ADV Router Age Seq# Checksum\n172.16.1.0 10.1.1.1 300 0x80000001 0x1234\n172.16.2.0 10.2.2.2 400 0x80000002 0x5678\n\nSummary ASB Link States (Area 0.0.0.0)\n\nLink ID ADV Router Age Seq# Checksum\n10.3.3.3 10.1.1.1 500 0x80000001 0x9abc\n\nRouter Link States (Area 0.0.0.1)\n\nLink ID ADV Router Age Seq# Checksum Link Count\n10.1.1.1 10.1.1.1 456 0x80000010 0xde01 2\n10.4.4.4 10.4.4.4 123 0x80000005 0xf234 1\n\nSummary Network Link States (Area 0.0.0.1)\n\nLink ID ADV Router Age Seq# Checksum\n10.0.0.0 10.1.1.1 300 0x80000001 0x4567\n\nType-5 AS External Link States\n\nLink ID ADV Router Age Seq# Checksum Tag\n0.0.0.0 10.3.3.3 600 0x80000001 0xaaaa 0\n192.168.1.0 10.3.3.3 600 0x80000002 0xbbbb 100\n192.168.2.0 10.3.3.3 500 0x80000001 0xcccc 200\n",
+      "expected": {
+        "areas": {
+          "0.0.0.0": {
+            "asbr_summary": {
+              "10.3.3.3": {
+                "10.1.1.1": {
+                  "age": 500,
+                  "checksum": "0x9abc",
+                  "seq": "0x80000001"
+                }
+              }
+            },
+            "network": {
+              "10.0.0.1": {
+                "10.1.1.1": {
+                  "age": 456,
+                  "checksum": "0xef78",
+                  "seq": "0x80000003"
+                }
+              }
+            },
+            "router": {
+              "10.1.1.1": {
+                "10.1.1.1": {
+                  "age": 456,
+                  "checksum": "0xab34",
+                  "link_count": 4,
+                  "seq": "0x80000012"
+                }
+              },
+              "10.2.2.2": {
+                "10.2.2.2": {
+                  "age": 789,
+                  "checksum": "0xcd56",
+                  "link_count": 3,
+                  "seq": "0x80000008"
+                }
+              }
+            },
+            "summary": {
+              "172.16.1.0": {
+                "10.1.1.1": {
+                  "age": 300,
+                  "checksum": "0x1234",
+                  "seq": "0x80000001"
+                }
+              },
+              "172.16.2.0": {
+                "10.2.2.2": {
+                  "age": 400,
+                  "checksum": "0x5678",
+                  "seq": "0x80000002"
+                }
+              }
+            }
+          },
+          "0.0.0.1": {
+            "router": {
+              "10.1.1.1": {
+                "10.1.1.1": {
+                  "age": 456,
+                  "checksum": "0xde01",
+                  "link_count": 2,
+                  "seq": "0x80000010"
+                }
+              },
+              "10.4.4.4": {
+                "10.4.4.4": {
+                  "age": 123,
+                  "checksum": "0xf234",
+                  "link_count": 1,
+                  "seq": "0x80000005"
+                }
+              }
+            },
+            "summary": {
+              "10.0.0.0": {
+                "10.1.1.1": {
+                  "age": 300,
+                  "checksum": "0x4567",
+                  "seq": "0x80000001"
+                }
+              }
+            }
+          }
+        },
+        "external": {
+          "0.0.0.0": {
+            "10.3.3.3": {
+              "age": 600,
+              "checksum": "0xaaaa",
+              "seq": "0x80000001",
+              "tag": 0
+            }
+          },
+          "192.168.1.0": {
+            "10.3.3.3": {
+              "age": 600,
+              "checksum": "0xbbbb",
+              "seq": "0x80000002",
+              "tag": 100
+            }
+          },
+          "192.168.2.0": {
+            "10.3.3.3": {
+              "age": 500,
+              "checksum": "0xcccc",
+              "seq": "0x80000001",
+              "tag": 200
+            }
+          }
+        },
+        "process_id": "100",
+        "router_id": "10.1.1.1"
+      }
+    }
+  ]
+}

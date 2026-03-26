@@ -1,0 +1,103 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show dlep clients",
+  "schema": {
+    "name": "ShowDlepClientsResult",
+    "fields": {
+      "blocks": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "DlepClientBlock",
+            "fields": {
+              "interface": {
+                "type": "str",
+                "required": true
+              },
+              "server_ip": {
+                "type": "str",
+                "required": true
+              },
+              "clients": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "DlepClientEntry",
+                    "fields": {
+                      "client_ip": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "fields": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": "str"
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "DLEP Clients for all interfaces:\n\n\n\nDLEP Clients for Interface GigabitEthernet3\nDLEP Server IP=9.9.9.11:11111 Sock=0\n\n\nDLEP Client IP=9.9.9.12:859 TCP Socket fd=1\n Peer ID=6, Virtual template=1\n Description: radio_1\n Peer Timers (all values in milliseconds):\n  Heartbeat=5000, Dead Interval=10000, Terminate ACK=20000\n Neighbor Timers (all values in seconds):\n  Activity timeout=0, Neighbor Down ACK=10\n\n Supported Metrics:\n  Link RLQ RX Metric : 100\n  Link RLQ TX Metric : 100\n  Link Resources Metric : 100\n  Link MTU Metric : 100\n  Link Latency Metric : 250 microseconds\n  Link CDR RX Metric : 100000000 bps\n  Link CDR TX Metric : 100000000 bps\n  Link MDR RX Metric : 100000000 bps\n  Link MDR TX Metric : 100000000 bps\n\nDLEP Clients for Interface GigabitEthernet5\nDLEP Server IP=8.8.8.11:11115 Sock=2\n\n\nDLEP Client IP=8.8.8.12:856 TCP Socket fd=3\n Peer ID=5, Virtual template=2\n Description: radio_2\n Peer Timers (all values in milliseconds):\n  Heartbeat=5000, Dead Interval=10000, Terminate ACK=20000\n Neighbor Timers (all values in seconds):\n  Activity timeout=0, Neighbor Down ACK=10\n\n Supported Metrics:\n  Link RLQ RX Metric : 100\n  Link RLQ TX Metric : 100\n  Link Resources Metric : 100\n  Link MTU Metric : 100\n  Link Latency Metric : 250 microseconds\n  Link CDR RX Metric : 100000000 bps\n  Link CDR TX Metric : 100000000 bps\n  Link MDR RX Metric : 100000000 bps\n  Link MDR TX Metric : 100000000 bps\n",
+      "expected": {
+        "blocks": {
+          "GigabitEthernet3": {
+            "interface": "GigabitEthernet3",
+            "server_ip": "9.9.9.11:11111",
+            "clients": {
+              "9.9.9.12:859": {
+                "client_ip": "9.9.9.12:859",
+                "fields": {
+                  "RLQ RX Metric": "100",
+                  "RLQ TX Metric": "100",
+                  "Resources Metric": "100",
+                  "MTU Metric": "100",
+                  "Latency Metric": "250 microseconds",
+                  "CDR RX Metric": "100000000 bps",
+                  "CDR TX Metric": "100000000 bps",
+                  "MDR RX Metric": "100000000 bps",
+                  "MDR TX Metric": "100000000 bps"
+                }
+              }
+            }
+          },
+          "GigabitEthernet5": {
+            "interface": "GigabitEthernet5",
+            "server_ip": "8.8.8.11:11115",
+            "clients": {
+              "8.8.8.12:856": {
+                "client_ip": "8.8.8.12:856",
+                "fields": {
+                  "RLQ RX Metric": "100",
+                  "RLQ TX Metric": "100",
+                  "Resources Metric": "100",
+                  "MTU Metric": "100",
+                  "Latency Metric": "250 microseconds",
+                  "CDR RX Metric": "100000000 bps",
+                  "CDR TX Metric": "100000000 bps",
+                  "MDR RX Metric": "100000000 bps",
+                  "MDR TX Metric": "100000000 bps"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

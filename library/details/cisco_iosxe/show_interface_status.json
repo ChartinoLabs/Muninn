@@ -1,0 +1,285 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show interface status",
+  "schema": {
+    "name": "ShowInterfaceStatusResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceStatusEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "duplex": {
+                "type": "str",
+                "required": true
+              },
+              "speed": {
+                "type": "str",
+                "required": true
+              },
+              "name": {
+                "type": "str",
+                "required": false
+              },
+              "vlan": {
+                "type": "str",
+                "required": false
+              },
+              "type": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic interface status with connected and notconnect ports",
+      "input": "Port      Name               Status       Vlan       Duplex  Speed Type\nGi1/0/1                      notconnect   1            auto   auto 10/100/1000BaseTX\nGi1/0/2   AccessPoint        connected    8          a-full a-1000 10/100/1000BaseTX\nGi1/0/3   John's Office      notconnect   1            auto   auto 10/100/1000BaseTX\nGi1/0/4   SingleName         connected    1          a-full  a-100 10/100/1000BaseTX\nGi1/0/5   Dashed-Name        connected    1000       a-full a-1000 10/100/1000BaseTX\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1/0/1": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/2": {
+            "status": "connected",
+            "duplex": "a-full",
+            "speed": "a-1000",
+            "name": "AccessPoint",
+            "vlan": "8",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/3": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "name": "John's Office",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/4": {
+            "status": "connected",
+            "duplex": "a-full",
+            "speed": "a-100",
+            "name": "SingleName",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/5": {
+            "status": "connected",
+            "duplex": "a-full",
+            "speed": "a-1000",
+            "name": "Dashed-Name",
+            "vlan": "1000",
+            "type": "10/100/1000BaseTX"
+          }
+        }
+      }
+    },
+    {
+      "name": "Interfaces with multi-word descriptions and SFP types",
+      "input": "Port      Name               Status       Vlan       Duplex  Speed Type\nGi1/0/6   Spaced Example     connected    8          a-full  a-100 10/100/1000BaseTX\nGi1/0/7   Trunk Example      suspended    trunk      a-full a-1000 1000BaseSX SFP\nGi1/0/8   SFP Not Present    notconnect   1            auto   auto Not Present\nGi1/0/10  Management         notconnect   routed       auto   auto 10/100BaseTX\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1/0/6": {
+            "status": "connected",
+            "duplex": "a-full",
+            "speed": "a-100",
+            "name": "Spaced Example",
+            "vlan": "8",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/7": {
+            "status": "suspended",
+            "duplex": "a-full",
+            "speed": "a-1000",
+            "name": "Trunk Example",
+            "vlan": "trunk",
+            "type": "1000BaseSX SFP"
+          },
+          "GigabitEthernet1/0/8": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "name": "SFP Not Present",
+            "vlan": "1",
+            "type": "Not Present"
+          },
+          "GigabitEthernet1/0/10": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "name": "Management",
+            "vlan": "routed",
+            "type": "10/100BaseTX"
+          }
+        }
+      }
+    },
+    {
+      "name": "Half duplex ports and unassigned VLAN",
+      "input": "Port      Name               Status       Vlan       Duplex  Speed Type\nGi1/0/11  2960S Port         notconnect   16         a-half   auto 10/100BaseTX\nGi1/0/12  Half Duplex 2950   notconnect   16         a-half   auto 10/100BaseTX\nGi1/0/13  Half Duplex 2950-S notconnect   16         a-half   auto 10/100BaseTX\nGi1/0/14  Half Duplex 2950-S notconnect   16         a-half   auto Not Present\nGi1/0/15  Multi Space to the notconnect   16         a-half   auto 10/100BaseTX\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1/0/11": {
+            "status": "notconnect",
+            "duplex": "a-half",
+            "speed": "auto",
+            "name": "2960S Port",
+            "vlan": "16",
+            "type": "10/100BaseTX"
+          },
+          "GigabitEthernet1/0/12": {
+            "status": "notconnect",
+            "duplex": "a-half",
+            "speed": "auto",
+            "name": "Half Duplex 2950",
+            "vlan": "16",
+            "type": "10/100BaseTX"
+          },
+          "GigabitEthernet1/0/13": {
+            "status": "notconnect",
+            "duplex": "a-half",
+            "speed": "auto",
+            "name": "Half Duplex 2950-S",
+            "vlan": "16",
+            "type": "10/100BaseTX"
+          },
+          "GigabitEthernet1/0/14": {
+            "status": "notconnect",
+            "duplex": "a-half",
+            "speed": "auto",
+            "name": "Half Duplex 2950-S",
+            "vlan": "16",
+            "type": "Not Present"
+          },
+          "GigabitEthernet1/0/15": {
+            "status": "notconnect",
+            "duplex": "a-half",
+            "speed": "auto",
+            "name": "Multi Space to the",
+            "vlan": "16",
+            "type": "10/100BaseTX"
+          }
+        }
+      }
+    },
+    {
+      "name": "Err-disabled, disabled, and monitoring status ports",
+      "input": "Port      Name               Status       Vlan       Duplex  Speed Type\nGi1/0/16  Multi Space to the err-disabled 16         a-half   auto 10/100BaseTX\nGi1/0/17  Multi Space        disabled     16         a-half   auto 10/100BaseTX\nGi1/0/18  Monitoring Port    monitoring   routed     a-full   auto 10/100/1000BaseT\nGi1/0/21  Monitoring Port    monitoring   unassigned     a-full   auto 10/100/1000BaseT\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1/0/16": {
+            "status": "err-disabled",
+            "duplex": "a-half",
+            "speed": "auto",
+            "name": "Multi Space to the",
+            "vlan": "16",
+            "type": "10/100BaseTX"
+          },
+          "GigabitEthernet1/0/17": {
+            "status": "disabled",
+            "duplex": "a-half",
+            "speed": "auto",
+            "name": "Multi Space",
+            "vlan": "16",
+            "type": "10/100BaseTX"
+          },
+          "GigabitEthernet1/0/18": {
+            "status": "monitoring",
+            "duplex": "a-full",
+            "speed": "auto",
+            "name": "Monitoring Port",
+            "vlan": "routed",
+            "type": "10/100/1000BaseT"
+          },
+          "GigabitEthernet1/0/21": {
+            "status": "monitoring",
+            "duplex": "a-full",
+            "speed": "auto",
+            "name": "Monitoring Port",
+            "vlan": "unassigned",
+            "type": "10/100/1000BaseT"
+          }
+        }
+      }
+    },
+    {
+      "name": "Status values with colon and additional text (e.g. TDR diagnostics)",
+      "input": "Port      Name               Status       Vlan       Duplex  Speed Type\nGi1/0/19  No Description     notconnect:    1         a-full  a-100 10/100/1000BaseTX\nGi1/0/20  No Description     connected:     1         a-full  a-100 10/100/1000BaseTX\nGi1/0/22  addl status text   notconnect: TD 1         a-full  a-100 10/100/1000BaseTX\nGi1/0/23  addl status text   connected: TDR 1         a-full  a-100 10/100/1000BaseTX\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1/0/19": {
+            "status": "notconnect",
+            "duplex": "a-full",
+            "speed": "a-100",
+            "name": "No Description",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/20": {
+            "status": "connected",
+            "duplex": "a-full",
+            "speed": "a-100",
+            "name": "No Description",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/22": {
+            "status": "notconnect",
+            "duplex": "a-full",
+            "speed": "a-100",
+            "name": "addl status text",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/23": {
+            "status": "connected",
+            "duplex": "a-full",
+            "speed": "a-100",
+            "name": "addl status text",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          }
+        }
+      }
+    },
+    {
+      "name": "Port-channel and FastEthernet interfaces, some without type field",
+      "input": "Port      Name               Status       Vlan       Duplex  Speed Type\nFa1/6     test               notconnect   1            auto    auto 10/100BaseTX\nPo1       ethchl             connected    trunk      a-full a-1000\n",
+      "expected": {
+        "interfaces": {
+          "FastEthernet1/6": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "name": "test",
+            "vlan": "1",
+            "type": "10/100BaseTX"
+          },
+          "Port-channel1": {
+            "status": "connected",
+            "duplex": "a-full",
+            "speed": "a-1000",
+            "name": "ethchl",
+            "vlan": "trunk"
+          }
+        }
+      }
+    }
+  ]
+}

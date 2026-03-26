@@ -1,0 +1,119 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show network-clocks synchronization",
+  "schema": {
+    "name": "ShowNetworkClocksSynchronizationResult",
+    "fields": {
+      "settings": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": "str"
+        },
+        "required": true
+      },
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "NetworkClockInterfaceRow",
+            "fields": {
+              "interface": {
+                "type": "str",
+                "required": true
+              },
+              "selected": {
+                "type": "bool",
+                "required": true
+              },
+              "sig_type": {
+                "type": "str",
+                "required": false
+              },
+              "mode_ql": {
+                "type": "str",
+                "required": true
+              },
+              "prio": {
+                "type": "int",
+                "required": true
+              },
+              "ql_in": {
+                "type": "str",
+                "required": true
+              },
+              "esmc_tx": {
+                "type": "str",
+                "required": false
+              },
+              "esmc_rx": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "Symbols:     En - Enable, Dis - Disable, Adis - Admin Disable\n             NA - Not Applicable\n             *  - Synchronization source selected\n             #  - Synchronization source force selected\n             &  - Synchronization source manually switched\n\nAutomatic selection process : Enable\nEquipment Clock : 2048 (EEC-Option1)\nClock Mode : QL-Enable\nESMC : Enabled\nSSM Option : 1\nT0 : GigabitEthernet0/0/2\nHold-off (global) : 300 ms\nWait-to-restore (global) : 10 sec\nTsm Delay : 180 ms\nRevertive : Yes\n\nNominated Interfaces\n\n Interface            SigType     Mode/QL      Prio  QL_IN  ESMC Tx  ESMC Rx\n Internal             NA          NA/Dis       251   QL-SEC    NA        NA\n*Gi0/0/2              NA          Sync/En      1     QL-SEC    -         -\n Gi0/0/6              NA          Sync/En      2     QL-SEC    -         -\n Te0/0/10             NA          Sync/En      3     QL-SEC    -         -\n Tw0/0/18             NA          Sync/En      4     QL-SEC    -         -\n",
+      "expected": {
+        "settings": {
+          "Symbols": "En - Enable, Dis - Disable, Adis - Admin Disable",
+          "Automatic selection process": "Enable",
+          "Equipment Clock": "2048 (EEC-Option1)",
+          "Clock Mode": "QL-Enable",
+          "ESMC": "Enabled",
+          "SSM Option": "1",
+          "T0": "GigabitEthernet0/0/2",
+          "Hold-off (global)": "300 ms",
+          "Wait-to-restore (global)": "10 sec",
+          "Tsm Delay": "180 ms",
+          "Revertive": "Yes"
+        },
+        "interfaces": {
+          "Internal": {
+            "interface": "Internal",
+            "selected": false,
+            "mode_ql": "NA/Dis",
+            "prio": 251,
+            "ql_in": "QL-SEC"
+          },
+          "GigabitEthernet0/0/2": {
+            "interface": "GigabitEthernet0/0/2",
+            "selected": true,
+            "mode_ql": "Sync/En",
+            "prio": 1,
+            "ql_in": "QL-SEC"
+          },
+          "GigabitEthernet0/0/6": {
+            "interface": "GigabitEthernet0/0/6",
+            "selected": false,
+            "mode_ql": "Sync/En",
+            "prio": 2,
+            "ql_in": "QL-SEC"
+          },
+          "TenGigabitEthernet0/0/10": {
+            "interface": "TenGigabitEthernet0/0/10",
+            "selected": false,
+            "mode_ql": "Sync/En",
+            "prio": 3,
+            "ql_in": "QL-SEC"
+          },
+          "TwoGigabitEthernet0/0/18": {
+            "interface": "TwoGigabitEthernet0/0/18",
+            "selected": false,
+            "mode_ql": "Sync/En",
+            "prio": 4,
+            "ql_in": "QL-SEC"
+          }
+        }
+      }
+    }
+  ]
+}

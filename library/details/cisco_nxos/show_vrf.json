@@ -1,0 +1,72 @@
+{
+  "os": "cisco_nxos",
+  "command": "show vrf",
+  "schema": {
+    "name": "ShowVrfResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfEntry",
+            "fields": {
+              "vrf_id": {
+                "type": "int",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "reason": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple VRFs in Up state",
+      "input": "VRF-Name                           VRF-ID State   Reason\nVRF                                     5 Up      --\nVRF1                                    3 Up      --\nVRF2                                    4 Up      --\ndefault                                 1 Up      --\n",
+      "expected": {
+        "vrfs": {
+          "VRF": {
+            "state": "Up",
+            "vrf_id": 5
+          },
+          "VRF1": {
+            "state": "Up",
+            "vrf_id": 3
+          },
+          "VRF2": {
+            "state": "Up",
+            "vrf_id": 4
+          },
+          "default": {
+            "state": "Up",
+            "vrf_id": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "Single VRF in Admin Down state with reason",
+      "input": "VRF-Name                           VRF-ID State   Reason\nVRF                                     5 Down    Admin Down\n",
+      "expected": {
+        "vrfs": {
+          "VRF": {
+            "reason": "Admin Down",
+            "state": "Down",
+            "vrf_id": 5
+          }
+        }
+      }
+    }
+  ]
+}

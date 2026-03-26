@@ -1,0 +1,54 @@
+{
+  "os": "cisco_ios",
+  "command": "show ip dhcp snooping binding",
+  "schema": {
+    "name": "ShowIpDhcpSnoopingBindingResult",
+    "fields": {
+      "total_bindings": {
+        "type": "int",
+        "required": true
+      },
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "DhcpSnoopingInterface",
+            "fields": {
+              "vlan": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "DhcpSnoopingBindingEntry",
+                    "fields": {
+                      "mac": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "ip": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "lease": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "type": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": []
+}

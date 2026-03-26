@@ -1,0 +1,75 @@
+{
+  "os": "cisco_nxos",
+  "command": "show license usage",
+  "schema": {
+    "name": "ShowLicenseUsageResult",
+    "fields": {
+      "licenses": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "LicenseEntry",
+            "fields": {
+              "installed": {
+                "type": "bool",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "license_count": {
+                "type": "int",
+                "required": false
+              },
+              "expiry_date": {
+                "type": "str",
+                "required": false
+              },
+              "comments": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with multiple license packages showing various states",
+      "input": "Feature                      Ins  Lic   Status Expiry Date Comments\n                                  Count\n--------------------------------------------------------------------------------\nLAN_ENTERPRISE_SERVICES_PKG   Yes   -   In use Never       -\nLAN_ADVANCED_SERVICES_PKG     No    -   In use             Grace 119D 22H\nFC_PORT_ACTIVATION_PKG        No    0   Unused             -\nFM_SERVER_PKG                 No    -   Unused             -\nENTERPRISE_PKG                Yes   -   In use never       -\n--------------------------------------------------------------------------------\n",
+      "expected": {
+        "licenses": {
+          "ENTERPRISE_PKG": {
+            "expiry_date": "never",
+            "installed": true,
+            "status": "in use"
+          },
+          "FC_PORT_ACTIVATION_PKG": {
+            "installed": false,
+            "license_count": 0,
+            "status": "unused"
+          },
+          "FM_SERVER_PKG": {
+            "installed": false,
+            "status": "unused"
+          },
+          "LAN_ADVANCED_SERVICES_PKG": {
+            "comments": "Grace 119D 22H",
+            "installed": false,
+            "status": "in use"
+          },
+          "LAN_ENTERPRISE_SERVICES_PKG": {
+            "expiry_date": "never",
+            "installed": true,
+            "status": "in use"
+          }
+        }
+      }
+    }
+  ]
+}

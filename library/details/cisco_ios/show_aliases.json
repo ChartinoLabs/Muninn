@@ -1,0 +1,92 @@
+{
+  "os": "cisco_ios",
+  "command": "show aliases",
+  "schema": {
+    "name": "ShowAliasesResult",
+    "fields": {
+      "modes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ModeEntry",
+            "fields": {
+              "aliases": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "AliasEntry",
+                    "fields": {
+                      "command": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple modes with default and custom aliases",
+      "input": "Exec mode aliases:\n  h                     help\n  lo                    logout\n  p                     ping\n  r                     resume\n  s                     show\n  u                     undebug\n  un                    undebug\n  w                     where\nInterface configuration mode aliases:\n  nosh                  no shutdown\n  si                    shutdown\nLine configuration mode aliases:\n  still                 no exec-timeout\n",
+      "expected": {
+        "modes": {
+          "exec": {
+            "aliases": {
+              "h": {
+                "command": "help"
+              },
+              "lo": {
+                "command": "logout"
+              },
+              "p": {
+                "command": "ping"
+              },
+              "r": {
+                "command": "resume"
+              },
+              "s": {
+                "command": "show"
+              },
+              "u": {
+                "command": "undebug"
+              },
+              "un": {
+                "command": "undebug"
+              },
+              "w": {
+                "command": "where"
+              }
+            }
+          },
+          "interface_configuration": {
+            "aliases": {
+              "nosh": {
+                "command": "no shutdown"
+              },
+              "si": {
+                "command": "shutdown"
+              }
+            }
+          },
+          "line_configuration": {
+            "aliases": {
+              "still": {
+                "command": "no exec-timeout"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

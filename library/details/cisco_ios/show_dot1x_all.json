@@ -1,0 +1,258 @@
+{
+  "os": "cisco_ios",
+  "command": "show dot1x all",
+  "schema": {
+    "name": "ShowDot1xAllResult",
+    "fields": {
+      "sysauthcontrol": {
+        "type": "str",
+        "required": false
+      },
+      "protocol_version": {
+        "type": "int",
+        "required": false
+      },
+      "critical_recovery_delay": {
+        "type": "int",
+        "required": false
+      },
+      "critical_eapol": {
+        "type": "str",
+        "required": false
+      },
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "Dot1xInterfaceEntry",
+            "fields": {
+              "interface": {
+                "type": "str",
+                "required": true
+              },
+              "pae": {
+                "type": "str",
+                "required": true
+              },
+              "port_control": {
+                "type": "str",
+                "required": false
+              },
+              "control_direction": {
+                "type": "str",
+                "required": false
+              },
+              "host_mode": {
+                "type": "str",
+                "required": false
+              },
+              "re_authentication": {
+                "type": "str",
+                "required": false
+              },
+              "quiet_period": {
+                "type": "int",
+                "required": false
+              },
+              "server_timeout": {
+                "type": "int",
+                "required": false
+              },
+              "supp_timeout": {
+                "type": "int",
+                "required": false
+              },
+              "re_auth_period": {
+                "type": "int",
+                "required": false
+              },
+              "re_auth_period_source": {
+                "type": "str",
+                "required": false
+              },
+              "re_auth_max": {
+                "type": "int",
+                "required": false
+              },
+              "max_req": {
+                "type": "int",
+                "required": false
+              },
+              "tx_period": {
+                "type": "int",
+                "required": false
+              },
+              "rate_limit_period": {
+                "type": "int",
+                "required": false
+              },
+              "start_period": {
+                "type": "int",
+                "required": false
+              },
+              "auth_period": {
+                "type": "int",
+                "required": false
+              },
+              "held_period": {
+                "type": "int",
+                "required": false
+              },
+              "max_start": {
+                "type": "int",
+                "required": false
+              },
+              "credentials_profile": {
+                "type": "str",
+                "required": false
+              },
+              "eap_profile": {
+                "type": "str",
+                "required": false
+              },
+              "clients": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "Dot1xClientEntry",
+                    "fields": {
+                      "eap_method": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "mac_address": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "auth_sm_state": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "auth_bend_sm_state": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Two authenticator interfaces with standard timers, global settings present",
+      "input": "Sysauthcontrol             Disabled\nDot1x Protocol Version            2\nCritical Recovery Delay         100\nCritical EAPOL             Disabled\n\nDot1x Info for Ethernet1/0\n-----------------------------------\nPAE                       = AUTHENTICATOR\nPortControl               = AUTO\nControlDirection          = Both\nHostMode                  = SINGLE_HOST\nReAuthentication          = Disabled\nQuietPeriod               = 60\nServerTimeout             = 30\nSuppTimeout               = 30\nReAuthPeriod              = 3600 (Locally configured)\nReAuthMax                 = 2\nMaxReq                    = 2\nTxPeriod                  = 30\nRateLimitPeriod           = 0\n\nDot1x Info for Ethernet1/2\n-----------------------------------\n\nPAE                       = AUTHENTICATOR\nPortControl               = AUTO\nControlDirection          = Both\nHostMode                  = SINGLE_HOST\nReAuthentication          = Disabled\nQuietPeriod               = 60\nServerTimeout             = 30\nSuppTimeout               = 30\nReAuthPeriod              = 3600 (Locally configured)\nReAuthMax                 = 2\nMaxReq                    = 2\nTxPeriod                  = 30\nRateLimitPeriod           = 0\n",
+      "expected": {
+        "interfaces": {
+          "Ethernet1/0": {
+            "interface": "Ethernet1/0",
+            "pae": "AUTHENTICATOR",
+            "port_control": "AUTO",
+            "control_direction": "Both",
+            "host_mode": "SINGLE_HOST",
+            "re_authentication": "Disabled",
+            "quiet_period": 60,
+            "server_timeout": 30,
+            "supp_timeout": 30,
+            "re_auth_period": 3600,
+            "re_auth_period_source": "Locally configured",
+            "re_auth_max": 2,
+            "max_req": 2,
+            "tx_period": 30,
+            "rate_limit_period": 0
+          },
+          "Ethernet1/2": {
+            "interface": "Ethernet1/2",
+            "pae": "AUTHENTICATOR",
+            "port_control": "AUTO",
+            "control_direction": "Both",
+            "host_mode": "SINGLE_HOST",
+            "re_authentication": "Disabled",
+            "quiet_period": 60,
+            "server_timeout": 30,
+            "supp_timeout": 30,
+            "re_auth_period": 3600,
+            "re_auth_period_source": "Locally configured",
+            "re_auth_max": 2,
+            "max_req": 2,
+            "tx_period": 30,
+            "rate_limit_period": 0
+          }
+        },
+        "sysauthcontrol": "Disabled",
+        "protocol_version": 2,
+        "critical_recovery_delay": 100,
+        "critical_eapol": "Disabled"
+      }
+    },
+    {
+      "name": "Authenticator interface with two authenticated clients in client list",
+      "input": "Sysauthcontrol                 Enabled\nDot1x Protocol Version               3\n\nDot1x Info for FastEthernet7/1\n-----------------------------------\nPAE                       = AUTHENTICATOR\nPortControl               = AUTO\nControlDirection          = Both\nHostMode                  = SINGLE_HOST\nReAuthentication          = Disabled\nQuietPeriod               = 60\nServerTimeout             = 30\nSuppTimeout               = 30\nReAuthPeriod              = 3600 (Locally configured)\nReAuthMax                 = 2\nMaxReq                    = 2\nTxPeriod                  = 30\nRateLimitPeriod           = 0\nDot1x Authenticator Client List\n-------------------------------\nEAP Method                = MD5\nSupplicant                = fa16.3eff.c0c3\nSession ID                = 000000000000000E00110F79\n    Auth SM State         = HELD\n    Auth BEND SM State    = IDLE\n\nEAP Method                = MD5\nSupplicant                = fa16.3eff.40c7\nSession ID                = 000000000000000C00108250\n    Auth SM State         = AUTHENTICATED\n    Auth BEND SM State    = IDLE\n",
+      "expected": {
+        "interfaces": {
+          "FastEthernet7/1": {
+            "interface": "FastEthernet7/1",
+            "pae": "AUTHENTICATOR",
+            "port_control": "AUTO",
+            "control_direction": "Both",
+            "host_mode": "SINGLE_HOST",
+            "re_authentication": "Disabled",
+            "quiet_period": 60,
+            "server_timeout": 30,
+            "supp_timeout": 30,
+            "re_auth_period": 3600,
+            "re_auth_period_source": "Locally configured",
+            "re_auth_max": 2,
+            "max_req": 2,
+            "tx_period": 30,
+            "rate_limit_period": 0,
+            "clients": {
+              "000000000000000E00110F79": {
+                "eap_method": "MD5",
+                "mac_address": "fa16.3eff.c0c3",
+                "auth_sm_state": "HELD",
+                "auth_bend_sm_state": "IDLE"
+              },
+              "000000000000000C00108250": {
+                "eap_method": "MD5",
+                "mac_address": "fa16.3eff.40c7",
+                "auth_sm_state": "AUTHENTICATED",
+                "auth_bend_sm_state": "IDLE"
+              }
+            }
+          }
+        },
+        "sysauthcontrol": "Enabled",
+        "protocol_version": 3
+      }
+    },
+    {
+      "name": "Single supplicant interface with credentials and EAP profile, empty client list",
+      "input": "Sysauthcontrol                 Enabled\nDot1x Protocol Version               3\nDot1x Info for GigabitEthernet1/0/9\n--------------------------------------------\nPAE                       = SUPPLICANT\nStartPeriod               = 30\nAuthPeriod                = 30\nHeldPeriod                = 60\nMaxStart                  = 3\nCredentials profile       = switch4\nEAP profile               = EAP-METH\nDot1x Supplicant Client List Empty\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1/0/9": {
+            "interface": "GigabitEthernet1/0/9",
+            "pae": "SUPPLICANT",
+            "start_period": 30,
+            "auth_period": 30,
+            "held_period": 60,
+            "max_start": 3,
+            "credentials_profile": "switch4",
+            "eap_profile": "EAP-METH"
+          }
+        },
+        "sysauthcontrol": "Enabled",
+        "protocol_version": 3
+      }
+    }
+  ]
+}

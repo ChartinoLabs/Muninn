@@ -1,0 +1,27 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show netconf session",
+  "schema": {
+    "name": "ShowNetconfSessionResult",
+    "fields": {
+      "open_sessions": {
+        "type": "int",
+        "required": true
+      },
+      "maximum_sessions": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "NETCONF session count and maximum (issue",
+      "input": "Netconf Sessions: 0 open, maximum is 4\n",
+      "expected": {
+        "open_sessions": 0,
+        "maximum_sessions": 4
+      }
+    }
+  ]
+}

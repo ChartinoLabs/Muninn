@@ -1,0 +1,508 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip bgp",
+  "schema": {
+    "name": "ShowIpBgpResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfEntry",
+            "fields": {
+              "address_families": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "AddressFamilyEntry",
+                    "fields": {
+                      "table_version": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "router_id": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "routes": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "RouteEntry",
+                            "fields": {
+                              "paths": {
+                                "type": {
+                                  "type": "list",
+                                  "items": {
+                                    "name": "PathEntry",
+                                    "fields": {
+                                      "status_codes": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "path_type": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "next_hop": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "metric": {
+                                        "type": "int",
+                                        "required": false
+                                      },
+                                      "locprf": {
+                                        "type": "int",
+                                        "required": false
+                                      },
+                                      "weight": {
+                                        "type": "int",
+                                        "required": true
+                                      },
+                                      "as_path": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "origin": {
+                                        "type": "str",
+                                        "required": true
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": true
+                              }
+                            }
+                          }
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with local and eBGP routes, no iBGP",
+      "input": "BGP table version is 9, local router ID is 10.101.1.1\nStatus codes: s suppressed, d damped, h history, * valid, > best, i - internal,\n              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,\n              x best-external, a additional-path, c RIB-compressed,\nOrigin codes: i - IGP, e - EGP, ? - incomplete\nRPKI validation codes: V valid, I invalid, N Not found\n\n     Network          Next Hop            Metric LocPrf Weight Path\n *>  10.101.1.0/24    0.0.0.0                  0         32768 i\n *>  10.101.2.0/24    0.0.0.0                  0         32768 i\n *>  10.101.3.0/24    0.0.0.0                  0         32768 i\n *>  10.101.4.0/24    0.0.0.0                  0         32768 i\n *>  10.102.1.0/24    10.10.10.2               0             0 102 i\n *>  10.102.2.0/24    10.10.10.2               0             0 102 i\n *>  10.102.3.0/24    10.10.10.2               0             0 102 i\n *>  10.102.4.0/24    10.10.10.2               0             0 102 i\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "address_families": {
+              "IPv4 Unicast": {
+                "router_id": "10.101.1.1",
+                "routes": {
+                  "10.101.1.0/24": {
+                    "paths": [
+                      {
+                        "as_path": "",
+                        "metric": 0,
+                        "next_hop": "0.0.0.0",
+                        "origin": "i",
+                        "path_type": "",
+                        "status_codes": "*>",
+                        "weight": 32768
+                      }
+                    ]
+                  },
+                  "10.101.2.0/24": {
+                    "paths": [
+                      {
+                        "as_path": "",
+                        "metric": 0,
+                        "next_hop": "0.0.0.0",
+                        "origin": "i",
+                        "path_type": "",
+                        "status_codes": "*>",
+                        "weight": 32768
+                      }
+                    ]
+                  },
+                  "10.101.3.0/24": {
+                    "paths": [
+                      {
+                        "as_path": "",
+                        "metric": 0,
+                        "next_hop": "0.0.0.0",
+                        "origin": "i",
+                        "path_type": "",
+                        "status_codes": "*>",
+                        "weight": 32768
+                      }
+                    ]
+                  },
+                  "10.101.4.0/24": {
+                    "paths": [
+                      {
+                        "as_path": "",
+                        "metric": 0,
+                        "next_hop": "0.0.0.0",
+                        "origin": "i",
+                        "path_type": "",
+                        "status_codes": "*>",
+                        "weight": 32768
+                      }
+                    ]
+                  },
+                  "10.102.1.0/24": {
+                    "paths": [
+                      {
+                        "as_path": "102",
+                        "metric": 0,
+                        "next_hop": "10.10.10.2",
+                        "origin": "i",
+                        "path_type": "",
+                        "status_codes": "*>",
+                        "weight": 0
+                      }
+                    ]
+                  },
+                  "10.102.2.0/24": {
+                    "paths": [
+                      {
+                        "as_path": "102",
+                        "metric": 0,
+                        "next_hop": "10.10.10.2",
+                        "origin": "i",
+                        "path_type": "",
+                        "status_codes": "*>",
+                        "weight": 0
+                      }
+                    ]
+                  },
+                  "10.102.3.0/24": {
+                    "paths": [
+                      {
+                        "as_path": "102",
+                        "metric": 0,
+                        "next_hop": "10.10.10.2",
+                        "origin": "i",
+                        "path_type": "",
+                        "status_codes": "*>",
+                        "weight": 0
+                      }
+                    ]
+                  },
+                  "10.102.4.0/24": {
+                    "paths": [
+                      {
+                        "as_path": "102",
+                        "metric": 0,
+                        "next_hop": "10.10.10.2",
+                        "origin": "i",
+                        "path_type": "",
+                        "status_codes": "*>",
+                        "weight": 0
+                      }
+                    ]
+                  }
+                },
+                "table_version": 9
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Mixed iBGP and eBGP routes with backup paths and continuation lines",
+      "input": "\n BGP table version is 22, local router ID is 10.1.1.1\n Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,\n               r RIB-failure, S Stale, m multipath, b backup-path, x best-external\n Origin codes: i - IGP, e - EGP, ? - incomplete\n\n    Network          Next Hop            Metric LocPrf Weight Path\n *> 10.1.1.1/32      0.0.0.0                  0         32768 i\n *>i10.2.2.2/32      172.16.1.2               0    100      0 i\n *bi10.9.9.9/32      192.168.3.2              0    100      0 10 10 i\n *>                  192.168.1.2                            0 10 10 i\n * i172.16.1.0/24    172.16.1.2               0    100      0 i\n *>                  0.0.0.0                  0         32768 i\n *> 192.168.1.0      0.0.0.0                  0         32768 i\n *>i192.168.3.0      172.16.1.2               0    100      0 i\n *bi192.168.9.0      192.168.3.2              0    100      0 10 10 i\n *>                  192.168.1.2                            0 10 10 i\n *bi192.168.13.0     192.168.3.2              0    100      0 10 10 i\n *>                  192.168.1.2                            0 10 10 i\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "address_families": {
+              "IPv4 Unicast": {
+                "router_id": "10.1.1.1",
+                "routes": {
+                  "10.1.1.1/32": {
+                    "paths": [
+                      {
+                        "as_path": "",
+                        "metric": 0,
+                        "next_hop": "0.0.0.0",
+                        "origin": "i",
+                        "path_type": "",
+                        "status_codes": "*>",
+                        "weight": 32768
+                      }
+                    ]
+                  },
+                  "10.2.2.2/32": {
+                    "paths": [
+                      {
+                        "as_path": "",
+                        "locprf": 100,
+                        "metric": 0,
+                        "next_hop": "172.16.1.2",
+                        "origin": "i",
+                        "path_type": "i",
+                        "status_codes": "*>",
+                        "weight": 0
+                      }
+                    ]
+                  },
+                  "10.9.9.9/32": {
+                    "paths": [
+                      {
+                        "as_path": "10 10",
+                        "locprf": 100,
+                        "metric": 0,
+                        "next_hop": "192.168.3.2",
+                        "origin": "i",
+                        "path_type": "i",
+                        "status_codes": "*b",
+                        "weight": 0
+                      },
+                      {
+                        "as_path": "10 10",
+                        "next_hop": "192.168.1.2",
+                        "origin": "i",
+                        "path_type": "",
+                        "status_codes": "*>",
+                        "weight": 0
+                      }
+                    ]
+                  },
+                  "172.16.1.0/24": {
+                    "paths": [
+                      {
+                        "as_path": "",
+                        "locprf": 100,
+                        "metric": 0,
+                        "next_hop": "172.16.1.2",
+                        "origin": "i",
+                        "path_type": "i",
+                        "status_codes": "*",
+                        "weight": 0
+                      },
+                      {
+                        "as_path": "",
+                        "metric": 0,
+                        "next_hop": "0.0.0.0",
+                        "origin": "i",
+                        "path_type": "",
+                        "status_codes": "*>",
+                        "weight": 32768
+                      }
+                    ]
+                  },
+                  "192.168.1.0": {
+                    "paths": [
+                      {
+                        "as_path": "",
+                        "metric": 0,
+                        "next_hop": "0.0.0.0",
+                        "origin": "i",
+                        "path_type": "",
+                        "status_codes": "*>",
+                        "weight": 32768
+                      }
+                    ]
+                  },
+                  "192.168.13.0": {
+                    "paths": [
+                      {
+                        "as_path": "10 10",
+                        "locprf": 100,
+                        "metric": 0,
+                        "next_hop": "192.168.3.2",
+                        "origin": "i",
+                        "path_type": "i",
+                        "status_codes": "*b",
+                        "weight": 0
+                      },
+                      {
+                        "as_path": "10 10",
+                        "next_hop": "192.168.1.2",
+                        "origin": "i",
+                        "path_type": "",
+                        "status_codes": "*>",
+                        "weight": 0
+                      }
+                    ]
+                  },
+                  "192.168.3.0": {
+                    "paths": [
+                      {
+                        "as_path": "",
+                        "locprf": 100,
+                        "metric": 0,
+                        "next_hop": "172.16.1.2",
+                        "origin": "i",
+                        "path_type": "i",
+                        "status_codes": "*>",
+                        "weight": 0
+                      }
+                    ]
+                  },
+                  "192.168.9.0": {
+                    "paths": [
+                      {
+                        "as_path": "10 10",
+                        "locprf": 100,
+                        "metric": 0,
+                        "next_hop": "192.168.3.2",
+                        "origin": "i",
+                        "path_type": "i",
+                        "status_codes": "*b",
+                        "weight": 0
+                      },
+                      {
+                        "as_path": "10 10",
+                        "next_hop": "192.168.1.2",
+                        "origin": "i",
+                        "path_type": "",
+                        "status_codes": "*>",
+                        "weight": 0
+                      }
+                    ]
+                  }
+                },
+                "table_version": 22
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Long network prefixes that wrap to the next line",
+      "input": "BGP table version is 61449, local router ID is 200.200.10.2\nStatus codes: s suppressed, d damped, h history, * valid, > best, i - internal,\n              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,\n              x best-external, a additional-path, c RIB-compressed,\nOrigin codes: i - IGP, e - EGP, ? - incomplete\nRPKI validation codes: V valid, I invalid, N Not found\n\n     Network          Next Hop            Metric LocPrf Weight Path\n *>  10.16.0.0/20     200.200.200.234          0         32768 i\n *>i 10.20.0.0/16     200.200.200.194          0    100  50000 65005 65026 65008 65000 i\n * i                  200.200.200.195          0    100  40000 65005 65026 65008 65000 i\n * i 10.104.128.208/29\n                       200.200.200.195         20    100  40000 65006 65026 64608 65028 64788 i\n *>i                  200.200.200.194          0    100  50000 65006 65026 64608 65028 64788 i\n *>i 10.104.192.192/28\n                       200.200.200.194          0    100  50000 65005 65026 64608 64600 65025 i\n * i                  200.200.200.195          0    100  40000 65005 65026 64608 64600 65025 i\n *>i 100.205.200.32/28\n                       200.200.200.194          0    100  50000 65006 65026 64608 65028 65025 65027 i\n * i                  200.200.200.195         20    100  40000 65006 65026 64608 65028 65025 65027 i\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "address_families": {
+              "IPv4 Unicast": {
+                "router_id": "200.200.10.2",
+                "routes": {
+                  "10.104.128.208/29": {
+                    "paths": [
+                      {
+                        "as_path": "65006 65026 64608 65028 64788",
+                        "locprf": 100,
+                        "metric": 20,
+                        "next_hop": "200.200.200.195",
+                        "origin": "i",
+                        "path_type": "i",
+                        "status_codes": "*",
+                        "weight": 40000
+                      },
+                      {
+                        "as_path": "65006 65026 64608 65028 64788",
+                        "locprf": 100,
+                        "metric": 0,
+                        "next_hop": "200.200.200.194",
+                        "origin": "i",
+                        "path_type": "i",
+                        "status_codes": "*>",
+                        "weight": 50000
+                      }
+                    ]
+                  },
+                  "10.104.192.192/28": {
+                    "paths": [
+                      {
+                        "as_path": "65005 65026 64608 64600 65025",
+                        "locprf": 100,
+                        "metric": 0,
+                        "next_hop": "200.200.200.194",
+                        "origin": "i",
+                        "path_type": "i",
+                        "status_codes": "*>",
+                        "weight": 50000
+                      },
+                      {
+                        "as_path": "65005 65026 64608 64600 65025",
+                        "locprf": 100,
+                        "metric": 0,
+                        "next_hop": "200.200.200.195",
+                        "origin": "i",
+                        "path_type": "i",
+                        "status_codes": "*",
+                        "weight": 40000
+                      }
+                    ]
+                  },
+                  "10.16.0.0/20": {
+                    "paths": [
+                      {
+                        "as_path": "",
+                        "metric": 0,
+                        "next_hop": "200.200.200.234",
+                        "origin": "i",
+                        "path_type": "",
+                        "status_codes": "*>",
+                        "weight": 32768
+                      }
+                    ]
+                  },
+                  "10.20.0.0/16": {
+                    "paths": [
+                      {
+                        "as_path": "65005 65026 65008 65000",
+                        "locprf": 100,
+                        "metric": 0,
+                        "next_hop": "200.200.200.194",
+                        "origin": "i",
+                        "path_type": "i",
+                        "status_codes": "*>",
+                        "weight": 50000
+                      },
+                      {
+                        "as_path": "65005 65026 65008 65000",
+                        "locprf": 100,
+                        "metric": 0,
+                        "next_hop": "200.200.200.195",
+                        "origin": "i",
+                        "path_type": "i",
+                        "status_codes": "*",
+                        "weight": 40000
+                      }
+                    ]
+                  },
+                  "100.205.200.32/28": {
+                    "paths": [
+                      {
+                        "as_path": "65006 65026 64608 65028 65025 65027",
+                        "locprf": 100,
+                        "metric": 0,
+                        "next_hop": "200.200.200.194",
+                        "origin": "i",
+                        "path_type": "i",
+                        "status_codes": "*>",
+                        "weight": 50000
+                      },
+                      {
+                        "as_path": "65006 65026 64608 65028 65025 65027",
+                        "locprf": 100,
+                        "metric": 20,
+                        "next_hop": "200.200.200.195",
+                        "origin": "i",
+                        "path_type": "i",
+                        "status_codes": "*",
+                        "weight": 40000
+                      }
+                    ]
+                  }
+                },
+                "table_version": 61449
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,281 @@
+{
+  "os": "cisco_nxos",
+  "command": "show module",
+  "schema": {
+    "name": "ShowModuleResult",
+    "fields": {
+      "modules": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ModuleEntry",
+            "fields": {
+              "module_number": {
+                "type": "int",
+                "required": true
+              },
+              "ports": {
+                "type": "int",
+                "required": true
+              },
+              "module_type": {
+                "type": "str",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "model": {
+                "type": "str",
+                "required": false
+              },
+              "software_version": {
+                "type": "str",
+                "required": false
+              },
+              "hardware_version": {
+                "type": "str",
+                "required": false
+              },
+              "slot": {
+                "type": "str",
+                "required": false
+              },
+              "mac_address_range": {
+                "type": "str",
+                "required": false
+              },
+              "serial_number": {
+                "type": "str",
+                "required": false
+              },
+              "online_diag_status": {
+                "type": "str",
+                "required": false
+              },
+              "world_wide_name": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "xbar_modules": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "ref",
+            "name": "ModuleEntry"
+          }
+        },
+        "required": false
+      },
+      "fabric_modules": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "ref",
+            "name": "ModuleEntry"
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic NX-OSv output with supervisor and ethernet modules",
+      "input": "Mod  Ports  Module-Type                         Model              Status\n---  -----  ----------------------------------- ------------------ ----------\n1    0      NX-OSv Supervisor Module            N7K-SUP1           active *\n2    48     NX-OSv Ethernet Module              N7K-F248XP-25      ok\n3    48     NX-OSv Ethernet Module              N7K-F248XP-25      ok\n4    48     NX-OSv Ethernet Module              N7K-F248XP-25      ok\n\nMod  Sw               Hw      World-Wide-Name(s) (WWN)\n---  ---------------  ------  --------------------------------------------------\n1    7.3(1)D1(0.10)   0.0     --\n2    NA               0.0     --\n3    NA               0.0     --\n4    NA               0.0     --\n\n\nMod  MAC-Address(es)                         Serial-Num\n---  --------------------------------------  ----------\n1    2c-c2-60-17-d7-60 to 2c-c2-60-17-df-5f  TM6017D760B\n2    02-00-0c-00-02-00 to 02-00-0c-00-02-7f  TM6017D760C\n3    02-00-0c-00-03-00 to 02-00-0c-00-03-7f  TM6017D760D\n4    02-00-0c-00-04-00 to 02-00-0c-00-04-7f  TM6017D760E\n\n* this terminal session\n",
+      "expected": {
+        "modules": {
+          "1": {
+            "hardware_version": "0.0",
+            "mac_address_range": "2c-c2-60-17-d7-60 to 2c-c2-60-17-df-5f",
+            "model": "N7K-SUP1",
+            "module_number": 1,
+            "module_type": "NX-OSv Supervisor Module",
+            "ports": 0,
+            "serial_number": "TM6017D760B",
+            "software_version": "7.3(1)D1(0.10)",
+            "status": "active"
+          },
+          "2": {
+            "hardware_version": "0.0",
+            "mac_address_range": "02-00-0c-00-02-00 to 02-00-0c-00-02-7f",
+            "model": "N7K-F248XP-25",
+            "module_number": 2,
+            "module_type": "NX-OSv Ethernet Module",
+            "ports": 48,
+            "serial_number": "TM6017D760C",
+            "status": "ok"
+          },
+          "3": {
+            "hardware_version": "0.0",
+            "mac_address_range": "02-00-0c-00-03-00 to 02-00-0c-00-03-7f",
+            "model": "N7K-F248XP-25",
+            "module_number": 3,
+            "module_type": "NX-OSv Ethernet Module",
+            "ports": 48,
+            "serial_number": "TM6017D760D",
+            "status": "ok"
+          },
+          "4": {
+            "hardware_version": "0.0",
+            "mac_address_range": "02-00-0c-00-04-00 to 02-00-0c-00-04-7f",
+            "model": "N7K-F248XP-25",
+            "module_number": 4,
+            "module_type": "NX-OSv Ethernet Module",
+            "ports": 48,
+            "serial_number": "TM6017D760E",
+            "status": "ok"
+          }
+        }
+      }
+    },
+    {
+      "name": "N7K output with multiple module types, xbar fabric modules, and online diag",
+      "input": "Mod  Ports  Module-Type                         Model              Status\n---  -----  ----------------------------------- ------------------ ----------\n1    0      Supervisor Module-2                 N7K-SUP2           active *\n2    0      Supervisor Module-2                 N7K-SUP2           ha-standby\n3    48     1/10 Gbps Ethernet Module           N7K-F248XP-25E     ok\n4    12     10/40 Gbps Ethernet Module          N7K-F312FQ-25      ok\n6    32     10 Gbps Ethernet XL Module          N7K-M132XP-12L     ok\n7    24     10 Gbps Ethernet Module             N7K-M224XP-23L     ok\n8    48     10/100/1000 Mbps Ethernet XL Module N7K-M148GT-11L     ok\n\nMod  Sw               Hw\n---  ---------------  ------\n1    8.3(0)CV(0.658)  1.0\n2    8.3(0)CV(0.658)  1.0\n3    8.3(0)CV(0.658)  1.0\n4    8.3(0)CV(0.658)  1.0\n6    8.3(0)CV(0.658)  2.0\n7    8.3(0)CV(0.658)  1.0\n8    8.3(0)CV(0.658)  2.1\n\n\n\nMod  MAC-Address(es)                         Serial-Num\n---  --------------------------------------  ----------\n1    84-78-ac-ff-d3-dc to 84-78-ac-ff-d3-ee  JAF1708AGTH\n2    84-78-ac-ff-c8-0f to 84-78-ac-ff-c8-21  JAF1708AGQH\n3    84-78-ac-ff-f5-48 to 84-78-ac-ff-f5-7b  JAF1717AAND\n4    54-4a-00-ff-c6-ed to 54-4a-00-ff-c6-29  JAE18120FLU\n6    bc-16-65-ff-04-b8 to bc-16-65-ff-04-db  JAF1719AHMB\n7    d8-67-d9-ff-9f-d6 to d8-67-d9-ff-9f-f1  JAF1641APPF\n8    bc-16-65-ff-f2-0b to bc-16-65-ff-f3-3d  JAF1717BEAT\n\nMod  Online Diag Status\n---  ------------------\n1    Pass\n2    Pass\n3    Pass\n4    Pass\n6    Pass\n7    Pass\n8    Pass\n\nXbar Ports  Module-Type                         Model              Status\n---  -----  ----------------------------------- ------------------ ----------\n1    0      Fabric Module 2                     N7K-C7009-FAB-2    ok\n2    0      Fabric Module 2                     N7K-C7009-FAB-2    ok\n3    0      Fabric Module 2                     N7K-C7009-FAB-2    ok\n4    0      Fabric Module 2                     N7K-C7009-FAB-2    ok\n5    0      Fabric Module 2                     N7K-C7009-FAB-2    ok\n\nXbar Sw               Hw\n---  ---------------  ------\n1    NA               3.1\n2    NA               3.1\n3    NA               3.1\n4    NA               3.1\n5    NA               3.1\n\n\n\nXbar MAC-Address(es)                         Serial-Num\n---  --------------------------------------  ----------\n1    NA                                      JAF1705AEEF\n2    NA                                      JAF1705BFBM\n3    NA                                      JAF1705AELK\n4    NA                                      JAF1705BFCF\n5    NA                                      JAF1704APQH\n\n* this terminal session\n",
+      "expected": {
+        "modules": {
+          "1": {
+            "hardware_version": "1.0",
+            "mac_address_range": "84-78-ac-ff-d3-dc to 84-78-ac-ff-d3-ee",
+            "model": "N7K-SUP2",
+            "module_number": 1,
+            "module_type": "Supervisor Module-2",
+            "online_diag_status": "Pass",
+            "ports": 0,
+            "serial_number": "JAF1708AGTH",
+            "software_version": "8.3(0)CV(0.658)",
+            "status": "active"
+          },
+          "2": {
+            "hardware_version": "1.0",
+            "mac_address_range": "84-78-ac-ff-c8-0f to 84-78-ac-ff-c8-21",
+            "model": "N7K-SUP2",
+            "module_number": 2,
+            "module_type": "Supervisor Module-2",
+            "online_diag_status": "Pass",
+            "ports": 0,
+            "serial_number": "JAF1708AGQH",
+            "software_version": "8.3(0)CV(0.658)",
+            "status": "ha-standby"
+          },
+          "3": {
+            "hardware_version": "1.0",
+            "mac_address_range": "84-78-ac-ff-f5-48 to 84-78-ac-ff-f5-7b",
+            "model": "N7K-F248XP-25E",
+            "module_number": 3,
+            "module_type": "1/10 Gbps Ethernet Module",
+            "online_diag_status": "Pass",
+            "ports": 48,
+            "serial_number": "JAF1717AAND",
+            "software_version": "8.3(0)CV(0.658)",
+            "status": "ok"
+          },
+          "4": {
+            "hardware_version": "1.0",
+            "mac_address_range": "54-4a-00-ff-c6-ed to 54-4a-00-ff-c6-29",
+            "model": "N7K-F312FQ-25",
+            "module_number": 4,
+            "module_type": "10/40 Gbps Ethernet Module",
+            "online_diag_status": "Pass",
+            "ports": 12,
+            "serial_number": "JAE18120FLU",
+            "software_version": "8.3(0)CV(0.658)",
+            "status": "ok"
+          },
+          "6": {
+            "hardware_version": "2.0",
+            "mac_address_range": "bc-16-65-ff-04-b8 to bc-16-65-ff-04-db",
+            "model": "N7K-M132XP-12L",
+            "module_number": 6,
+            "module_type": "10 Gbps Ethernet XL Module",
+            "online_diag_status": "Pass",
+            "ports": 32,
+            "serial_number": "JAF1719AHMB",
+            "software_version": "8.3(0)CV(0.658)",
+            "status": "ok"
+          },
+          "7": {
+            "hardware_version": "1.0",
+            "mac_address_range": "d8-67-d9-ff-9f-d6 to d8-67-d9-ff-9f-f1",
+            "model": "N7K-M224XP-23L",
+            "module_number": 7,
+            "module_type": "10 Gbps Ethernet Module",
+            "online_diag_status": "Pass",
+            "ports": 24,
+            "serial_number": "JAF1641APPF",
+            "software_version": "8.3(0)CV(0.658)",
+            "status": "ok"
+          },
+          "8": {
+            "hardware_version": "2.1",
+            "mac_address_range": "bc-16-65-ff-f2-0b to bc-16-65-ff-f3-3d",
+            "model": "N7K-M148GT-11L",
+            "module_number": 8,
+            "module_type": "10/100/1000 Mbps Ethernet XL Module",
+            "online_diag_status": "Pass",
+            "ports": 48,
+            "serial_number": "JAF1717BEAT",
+            "software_version": "8.3(0)CV(0.658)",
+            "status": "ok"
+          }
+        },
+        "xbar_modules": {
+          "1": {
+            "hardware_version": "3.1",
+            "model": "N7K-C7009-FAB-2",
+            "module_number": 1,
+            "module_type": "Fabric Module 2",
+            "ports": 0,
+            "serial_number": "JAF1705AEEF",
+            "status": "ok"
+          },
+          "2": {
+            "hardware_version": "3.1",
+            "model": "N7K-C7009-FAB-2",
+            "module_number": 2,
+            "module_type": "Fabric Module 2",
+            "ports": 0,
+            "serial_number": "JAF1705BFBM",
+            "status": "ok"
+          },
+          "3": {
+            "hardware_version": "3.1",
+            "model": "N7K-C7009-FAB-2",
+            "module_number": 3,
+            "module_type": "Fabric Module 2",
+            "ports": 0,
+            "serial_number": "JAF1705AELK",
+            "status": "ok"
+          },
+          "4": {
+            "hardware_version": "3.1",
+            "model": "N7K-C7009-FAB-2",
+            "module_number": 4,
+            "module_type": "Fabric Module 2",
+            "ports": 0,
+            "serial_number": "JAF1705BFCF",
+            "status": "ok"
+          },
+          "5": {
+            "hardware_version": "3.1",
+            "model": "N7K-C7009-FAB-2",
+            "module_number": 5,
+            "module_type": "Fabric Module 2",
+            "ports": 0,
+            "serial_number": "JAF1704APQH",
+            "status": "ok"
+          }
+        }
+      }
+    }
+  ]
+}

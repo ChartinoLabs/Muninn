@@ -1,0 +1,422 @@
+{
+  "os": "cisco_ios",
+  "command": "show platform",
+  "schema": {
+    "name": "ShowPlatformResult",
+    "fields": {
+      "chassis_type": {
+        "type": "str",
+        "required": false
+      },
+      "slots": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SlotEntry",
+            "fields": {
+              "state": {
+                "type": "str",
+                "required": false
+              },
+              "type": {
+                "type": "str",
+                "required": false
+              },
+              "insert_time": {
+                "type": "str",
+                "required": false
+              },
+              "cpld_version": {
+                "type": "str",
+                "required": false
+              },
+              "firmware_version": {
+                "type": "str",
+                "required": false
+              },
+              "subslots": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "SubslotEntry",
+                    "fields": {
+                      "type": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "state": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "insert_time": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "switches": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SwitchEntry",
+            "fields": {
+              "ports": {
+                "type": "int",
+                "required": true
+              },
+              "model": {
+                "type": "str",
+                "required": true
+              },
+              "serial_no": {
+                "type": "str",
+                "required": true
+              },
+              "mac_address": {
+                "type": "str",
+                "required": true
+              },
+              "hw_version": {
+                "type": "str",
+                "required": true
+              },
+              "sw_version": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "stack": {
+        "type": {
+          "name": "StackInfo",
+          "fields": {
+            "mac_address": {
+              "type": "str",
+              "required": false
+            },
+            "mac_persistency_wait_time": {
+              "type": "str",
+              "required": false
+            },
+            "members": {
+              "type": {
+                "type": "dict",
+                "key": "str",
+                "value": {
+                  "name": "StackMemberEntry",
+                  "fields": {
+                    "role": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "priority": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "state": {
+                      "type": "str",
+                      "required": true
+                    }
+                  }
+                }
+              },
+              "required": true
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "ASR1006 chassis with multiple line cards, subslots, redundant RPs, and CPLD/firmware versions",
+      "input": "Chassis type: ASR1006\n\nSlot      Type                State                 Insert time (ago)\n--------- ------------------- --------------------- -----------------\n0         ASR1000-SIP40       ok                    00:33:53\n 0/0      SPA-1XCHSTM1/OC3    ok                    2d00h\n 0/1      SPA-2XT3/E3         ok                    2d00h\n 0/2      SPA-1XOC48POS/RPR   ok                    2d00h\n 0/3      SPA-5X1GE-V2        ok                    2d00h\n1         ASR1000-2T+20X1GE   ok                    2d00h\n 1/0      BUILT-IN-2T+20X1GE  ok                    2d00h\n2         ASR1000-6TGE        ok                    2d00h\n 2/0      BUILT-IN-6TGE       ok                    2d00h\n4                             unknown               2d00h\nR0        ASR1000-RP2         ok, active            00:33:53\nR1        ASR1000-RP2         ok, standby           00:33:53\nF0        ASR1000-ESP20       ok, active            00:33:53\nP0        ASR1006-PWR-AC      ok                    00:33:18\nP1        ASR1006-PWR-AC      ps, fail              00:33:17\n\nSlot      CPLD Version        Firmware Version\n--------- ------------------- ---------------------------------------\n0         00200800            16.2(1r)\n1         14011701            16.3(2r)\n2         14011701            16.3(2r)\n4         N/A                 N/A\nR0        10021901            16.2(1r)\nR1        14111801            16.2(1r)\nF0        08041102            16.2(1r)\n",
+      "expected": {
+        "chassis_type": "ASR1006",
+        "slots": {
+          "0": {
+            "state": "ok",
+            "type": "ASR1000-SIP40",
+            "insert_time": "00:33:53",
+            "subslots": {
+              "0": {
+                "type": "SPA-1XCHSTM1/OC3",
+                "state": "ok",
+                "insert_time": "2d00h"
+              },
+              "1": {
+                "type": "SPA-2XT3/E3",
+                "state": "ok",
+                "insert_time": "2d00h"
+              },
+              "2": {
+                "type": "SPA-1XOC48POS/RPR",
+                "state": "ok",
+                "insert_time": "2d00h"
+              },
+              "3": {
+                "type": "SPA-5X1GE-V2",
+                "state": "ok",
+                "insert_time": "2d00h"
+              }
+            },
+            "cpld_version": "00200800",
+            "firmware_version": "16.2(1r)"
+          },
+          "1": {
+            "state": "ok",
+            "type": "ASR1000-2T+20X1GE",
+            "insert_time": "2d00h",
+            "subslots": {
+              "0": {
+                "type": "BUILT-IN-2T+20X1GE",
+                "state": "ok",
+                "insert_time": "2d00h"
+              }
+            },
+            "cpld_version": "14011701",
+            "firmware_version": "16.3(2r)"
+          },
+          "2": {
+            "state": "ok",
+            "type": "ASR1000-6TGE",
+            "insert_time": "2d00h",
+            "subslots": {
+              "0": {
+                "type": "BUILT-IN-6TGE",
+                "state": "ok",
+                "insert_time": "2d00h"
+              }
+            },
+            "cpld_version": "14011701",
+            "firmware_version": "16.3(2r)"
+          },
+          "4": {
+            "state": "unknown",
+            "insert_time": "2d00h"
+          },
+          "R0": {
+            "state": "ok, active",
+            "type": "ASR1000-RP2",
+            "insert_time": "00:33:53",
+            "cpld_version": "10021901",
+            "firmware_version": "16.2(1r)"
+          },
+          "R1": {
+            "state": "ok, standby",
+            "type": "ASR1000-RP2",
+            "insert_time": "00:33:53",
+            "cpld_version": "14111801",
+            "firmware_version": "16.2(1r)"
+          },
+          "F0": {
+            "state": "ok, active",
+            "type": "ASR1000-ESP20",
+            "insert_time": "00:33:53",
+            "cpld_version": "08041102",
+            "firmware_version": "16.2(1r)"
+          },
+          "P0": {
+            "state": "ok",
+            "type": "ASR1006-PWR-AC",
+            "insert_time": "00:33:18"
+          },
+          "P1": {
+            "state": "ps, fail",
+            "type": "ASR1006-PWR-AC",
+            "insert_time": "00:33:17"
+          }
+        }
+      }
+    },
+    {
+      "name": "Catalyst 3850 five-member stack with switch inventory, stack roles, and MAC persistency",
+      "input": "Switch  Ports    Model                Serial No.   MAC address     Hw Ver.       Sw Ver.\n------  -----   ---------             -----------  --------------  -------       --------\n 1       32     WS-C3850-24P-E        FCW1947C0HH  0057.d2ff.e71b  V07           16.6.1\n 2       32     WS-C3850-24P-E        FCW1932D0TF  3820.56ff.e9db  V06           16.6.1\n 3       32     WS-C3850-24P-E        FCW1932D0L8  3820.56ff.b729  V06           16.6.1\n 4       32     WS-C3850-24P-E        FCW1932C0VB  3820.56ff.04a9  V06           16.6.1\n 5       32     WS-C3850-24P-E        FCW1932C0M9  3820.56ff.a329  V06           16.6.1\nSwitch/Stack Mac Address : 0057.d2ff.e71b - Local Mac Address\nMac persistency wait time: Indefinite\n                                   Current\nSwitch#   Role        Priority      State\n-------------------------------------------\n*1       Active          3          Ready\n 2       Member          1          Ready\n 3       Member          1          Ready\n 4       Member          1          Ready\n 5       Standby         1          Ready\n",
+      "expected": {
+        "switches": {
+          "1": {
+            "ports": 32,
+            "model": "WS-C3850-24P-E",
+            "serial_no": "FCW1947C0HH",
+            "mac_address": "0057.d2ff.e71b",
+            "hw_version": "V07",
+            "sw_version": "16.6.1"
+          },
+          "2": {
+            "ports": 32,
+            "model": "WS-C3850-24P-E",
+            "serial_no": "FCW1932D0TF",
+            "mac_address": "3820.56ff.e9db",
+            "hw_version": "V06",
+            "sw_version": "16.6.1"
+          },
+          "3": {
+            "ports": 32,
+            "model": "WS-C3850-24P-E",
+            "serial_no": "FCW1932D0L8",
+            "mac_address": "3820.56ff.b729",
+            "hw_version": "V06",
+            "sw_version": "16.6.1"
+          },
+          "4": {
+            "ports": 32,
+            "model": "WS-C3850-24P-E",
+            "serial_no": "FCW1932C0VB",
+            "mac_address": "3820.56ff.04a9",
+            "hw_version": "V06",
+            "sw_version": "16.6.1"
+          },
+          "5": {
+            "ports": 32,
+            "model": "WS-C3850-24P-E",
+            "serial_no": "FCW1932C0M9",
+            "mac_address": "3820.56ff.a329",
+            "hw_version": "V06",
+            "sw_version": "16.6.1"
+          }
+        },
+        "stack": {
+          "members": {
+            "1": {
+              "role": "Active",
+              "priority": 3,
+              "state": "Ready"
+            },
+            "2": {
+              "role": "Member",
+              "priority": 1,
+              "state": "Ready"
+            },
+            "3": {
+              "role": "Member",
+              "priority": 1,
+              "state": "Ready"
+            },
+            "4": {
+              "role": "Member",
+              "priority": 1,
+              "state": "Ready"
+            },
+            "5": {
+              "role": "Standby",
+              "priority": 1,
+              "state": "Ready"
+            }
+          },
+          "mac_address": "0057.d2ff.e71b",
+          "mac_persistency_wait_time": "Indefinite"
+        }
+      }
+    },
+    {
+      "name": "ASR1002 chassis with active power supply state and year-based insert time format",
+      "input": "Chassis type: ASR1002\n\nSlot      Type                State                 Insert time (ago)\n--------- ------------------- --------------------- -----------------\n0         ASR1002-SIP10       ok                    2y30w\n 0/0      SPA-2X1GE-V2        ok                    2y30w\n 0/1      4XGE-BUILT-IN       ok                    2y30w\nR0        ASR1002-RP1         ok, active            2y30w\nF0        ASR1000-ESP10       ok, active            2y30w\nP0        ASR1002-PWR-AC      ok, active            2y30w\nP1        ASR1002-PWR-AC      ok                    2y30w\n\nSlot      CPLD Version        Firmware Version\n--------- ------------------- ---------------------------------------\n0         07123456            16.1(5r)S\nR0        08123456            16.1(5r)S\nF0        09123456            16.1(5r)S\n",
+      "expected": {
+        "chassis_type": "ASR1002",
+        "slots": {
+          "0": {
+            "state": "ok",
+            "type": "ASR1002-SIP10",
+            "insert_time": "2y30w",
+            "subslots": {
+              "0": {
+                "type": "SPA-2X1GE-V2",
+                "state": "ok",
+                "insert_time": "2y30w"
+              },
+              "1": {
+                "type": "4XGE-BUILT-IN",
+                "state": "ok",
+                "insert_time": "2y30w"
+              }
+            },
+            "cpld_version": "07123456",
+            "firmware_version": "16.1(5r)S"
+          },
+          "R0": {
+            "state": "ok, active",
+            "type": "ASR1002-RP1",
+            "insert_time": "2y30w",
+            "cpld_version": "08123456",
+            "firmware_version": "16.1(5r)S"
+          },
+          "F0": {
+            "state": "ok, active",
+            "type": "ASR1000-ESP10",
+            "insert_time": "2y30w",
+            "cpld_version": "09123456",
+            "firmware_version": "16.1(5r)S"
+          },
+          "P0": {
+            "state": "ok, active",
+            "type": "ASR1002-PWR-AC",
+            "insert_time": "2y30w"
+          },
+          "P1": {
+            "state": "ok",
+            "type": "ASR1002-PWR-AC",
+            "insert_time": "2y30w"
+          }
+        }
+      }
+    },
+    {
+      "name": "C9500-32QC chassis with blank lines between rows and bracket-format firmware version",
+      "input": "Chassis type: C9500-32QC\n\n\n\nSlot      Type                State                 Insert time (ago)\n\n--------- ------------------- --------------------- -----------------\n\n1         C9500-32QC          ok                    1d18h\n\n 1/0      C9500-32QC          ok                    1d18h\n\nR0        C9500-32QC          ok, active            1d18h\n\nP0        C9K-PWR-650WAC-R    ok                    1d18h\n\nP2        C9K-T1-FANTRAY      ok                    1d18h\n\nP3        C9K-T1-FANTRAY      ok                    1d18h\n\n\n\nSlot      CPLD Version        Firmware Version\n\n--------- ------------------- ---------------------------------------\n\n1         19061022            17.1.1[FC2]\n",
+      "expected": {
+        "chassis_type": "C9500-32QC",
+        "slots": {
+          "1": {
+            "state": "ok",
+            "type": "C9500-32QC",
+            "insert_time": "1d18h",
+            "subslots": {
+              "0": {
+                "type": "C9500-32QC",
+                "state": "ok",
+                "insert_time": "1d18h"
+              }
+            },
+            "cpld_version": "19061022",
+            "firmware_version": "17.1.1[FC2]"
+          },
+          "R0": {
+            "state": "ok, active",
+            "type": "C9500-32QC",
+            "insert_time": "1d18h"
+          },
+          "P0": {
+            "state": "ok",
+            "type": "C9K-PWR-650WAC-R",
+            "insert_time": "1d18h"
+          },
+          "P2": {
+            "state": "ok",
+            "type": "C9K-T1-FANTRAY",
+            "insert_time": "1d18h"
+          },
+          "P3": {
+            "state": "ok",
+            "type": "C9K-T1-FANTRAY",
+            "insert_time": "1d18h"
+          }
+        }
+      }
+    }
+  ]
+}

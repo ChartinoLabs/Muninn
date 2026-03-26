@@ -1,0 +1,35 @@
+{
+  "os": "cisco_ios",
+  "command": "show power supplies",
+  "schema": {
+    "name": "ShowPowerSuppliesResult",
+    "fields": {
+      "needed": {
+        "type": "int",
+        "required": true
+      },
+      "available": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Single power supply needed and available",
+      "input": "Power supplies needed by system    : 1\nPower supplies currently available : 1\n",
+      "expected": {
+        "available": 1,
+        "needed": 1
+      }
+    },
+    {
+      "name": "Redundant power supplies with two available",
+      "input": "Power supplies needed by system    : 1\nPower supplies currently available : 2\n",
+      "expected": {
+        "available": 2,
+        "needed": 1
+      }
+    }
+  ]
+}

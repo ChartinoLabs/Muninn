@@ -1,0 +1,228 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show sdwan control connections",
+  "schema": {
+    "name": "ShowSdwanControlConnectionsResult",
+    "fields": {
+      "connections": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "ControlConnectionEntry",
+              "fields": {
+                "peer_type": {
+                  "type": "str",
+                  "required": true
+                },
+                "peer_protocol": {
+                  "type": "str",
+                  "required": true
+                },
+                "peer_system_ip": {
+                  "type": "str",
+                  "required": true
+                },
+                "site_id": {
+                  "type": "int",
+                  "required": true
+                },
+                "domain_id": {
+                  "type": "int",
+                  "required": true
+                },
+                "peer_private_ip": {
+                  "type": "str",
+                  "required": true
+                },
+                "peer_private_port": {
+                  "type": "int",
+                  "required": true
+                },
+                "peer_public_ip": {
+                  "type": "str",
+                  "required": true
+                },
+                "peer_public_port": {
+                  "type": "int",
+                  "required": true
+                },
+                "organization": {
+                  "type": "str",
+                  "required": false
+                },
+                "local_color": {
+                  "type": "str",
+                  "required": true
+                },
+                "proxy": {
+                  "type": "str",
+                  "required": true
+                },
+                "state": {
+                  "type": "str",
+                  "required": true
+                },
+                "uptime": {
+                  "type": "str",
+                  "required": true
+                },
+                "controller_group_id": {
+                  "type": "int",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with multiple vsmart peers across two colors without organization column",
+      "input": "vEdge# show control connections\n                                                                                       PEER                                          PEER                                          CONTROLLER\nPEER    PEER PEER            SITE       DOMAIN PEER                                    PRIV  PEER                                    PUB                                           GROUP\nTYPE    PROT SYSTEM IP       ID         ID     PRIVATE IP                              PORT  PUBLIC IP                               PORT  LOCAL COLOR     PROXY STATE UPTIME      ID\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\nvsmart  tls  172.16.255.20   200        1      10.0.12.20                              23556 10.0.12.20                              23556 mpls            No    up     0:00:16:30  0\nvsmart  tls  172.16.255.20   200        1      10.0.12.20                              23556 10.0.37.20                              23556 lte             Yes   up     0:00:16:22  0\nvsmart  tls  172.16.255.19   300        1      10.0.12.19                              23556 10.0.12.19                              23556 mpls            No    up     0:00:16:30  0\nvsmart  tls  172.16.255.19   300        1      10.0.12.19                              23556 10.0.37.19                              23556 lte             Yes   up     0:00:16:22  0\n",
+      "expected": {
+        "connections": {
+          "172.16.255.19": {
+            "lte": {
+              "controller_group_id": 0,
+              "domain_id": 1,
+              "local_color": "lte",
+              "peer_private_ip": "10.0.12.19",
+              "peer_private_port": 23556,
+              "peer_protocol": "tls",
+              "peer_public_ip": "10.0.37.19",
+              "peer_public_port": 23556,
+              "peer_system_ip": "172.16.255.19",
+              "peer_type": "vsmart",
+              "proxy": "Yes",
+              "site_id": 300,
+              "state": "up",
+              "uptime": "0:00:16:22"
+            },
+            "mpls": {
+              "controller_group_id": 0,
+              "domain_id": 1,
+              "local_color": "mpls",
+              "peer_private_ip": "10.0.12.19",
+              "peer_private_port": 23556,
+              "peer_protocol": "tls",
+              "peer_public_ip": "10.0.12.19",
+              "peer_public_port": 23556,
+              "peer_system_ip": "172.16.255.19",
+              "peer_type": "vsmart",
+              "proxy": "No",
+              "site_id": 300,
+              "state": "up",
+              "uptime": "0:00:16:30"
+            }
+          },
+          "172.16.255.20": {
+            "lte": {
+              "controller_group_id": 0,
+              "domain_id": 1,
+              "local_color": "lte",
+              "peer_private_ip": "10.0.12.20",
+              "peer_private_port": 23556,
+              "peer_protocol": "tls",
+              "peer_public_ip": "10.0.37.20",
+              "peer_public_port": 23556,
+              "peer_system_ip": "172.16.255.20",
+              "peer_type": "vsmart",
+              "proxy": "Yes",
+              "site_id": 200,
+              "state": "up",
+              "uptime": "0:00:16:22"
+            },
+            "mpls": {
+              "controller_group_id": 0,
+              "domain_id": 1,
+              "local_color": "mpls",
+              "peer_private_ip": "10.0.12.20",
+              "peer_private_port": 23556,
+              "peer_protocol": "tls",
+              "peer_public_ip": "10.0.12.20",
+              "peer_public_port": 23556,
+              "peer_system_ip": "172.16.255.20",
+              "peer_type": "vsmart",
+              "proxy": "No",
+              "site_id": 200,
+              "state": "up",
+              "uptime": "0:00:16:30"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Output with organization column and mixed vsmart/vmanage peer types",
+      "input": "show sdwan control connections\n                                                                                       PEER                                          PEER                                          CONTROLLER\nPEER    PEER PEER            SITE       DOMAIN PEER                                    PRIV  PEER                                    PUB                                           GROUP\nTYPE    PROT SYSTEM IP       ID         ID     PRIVATE IP                              PORT  PUBLIC IP                               PORT  ORGANIZATION            LOCAL COLOR     PROXY STATE UPTIME      ID\n----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\nvsmart  dtls 1.1.1.5         4294950463 1      10.0.5.64                               12346 34.250.253.50                           12346 SDWAN-VIPTELA - 249781  custom1         No    up     24:22:07:45 0\nvsmart  dtls 1.1.1.4         4294950464 1      10.0.2.163                              12346 52.28.233.22                            12346 SDWAN-VIPTELA - 249781  custom1         No    up     17:08:27:45 0\nvmanage dtls 1.1.1.6         4294950465 0      10.0.2.33                               12746 3.123.213.130                           12746 SDWAN-VIPTELA - 249781  custom1         No    up     17:08:28:03 0\n",
+      "expected": {
+        "connections": {
+          "1.1.1.4": {
+            "custom1": {
+              "controller_group_id": 0,
+              "domain_id": 1,
+              "local_color": "custom1",
+              "organization": "SDWAN-VIPTELA - 249781",
+              "peer_private_ip": "10.0.2.163",
+              "peer_private_port": 12346,
+              "peer_protocol": "dtls",
+              "peer_public_ip": "52.28.233.22",
+              "peer_public_port": 12346,
+              "peer_system_ip": "1.1.1.4",
+              "peer_type": "vsmart",
+              "proxy": "No",
+              "site_id": 4294950464,
+              "state": "up",
+              "uptime": "17:08:27:45"
+            }
+          },
+          "1.1.1.5": {
+            "custom1": {
+              "controller_group_id": 0,
+              "domain_id": 1,
+              "local_color": "custom1",
+              "organization": "SDWAN-VIPTELA - 249781",
+              "peer_private_ip": "10.0.5.64",
+              "peer_private_port": 12346,
+              "peer_protocol": "dtls",
+              "peer_public_ip": "34.250.253.50",
+              "peer_public_port": 12346,
+              "peer_system_ip": "1.1.1.5",
+              "peer_type": "vsmart",
+              "proxy": "No",
+              "site_id": 4294950463,
+              "state": "up",
+              "uptime": "24:22:07:45"
+            }
+          },
+          "1.1.1.6": {
+            "custom1": {
+              "controller_group_id": 0,
+              "domain_id": 0,
+              "local_color": "custom1",
+              "organization": "SDWAN-VIPTELA - 249781",
+              "peer_private_ip": "10.0.2.33",
+              "peer_private_port": 12746,
+              "peer_protocol": "dtls",
+              "peer_public_ip": "3.123.213.130",
+              "peer_public_port": 12746,
+              "peer_system_ip": "1.1.1.6",
+              "peer_type": "vmanage",
+              "proxy": "No",
+              "site_id": 4294950465,
+              "state": "up",
+              "uptime": "17:08:28:03"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

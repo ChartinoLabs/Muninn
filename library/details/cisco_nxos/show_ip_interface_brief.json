@@ -1,0 +1,388 @@
+{
+  "os": "cisco_nxos",
+  "command": "show ip interface brief",
+  "schema": {
+    "name": "ShowIpInterfaceBriefResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfEntry",
+            "fields": {
+              "vrf_id": {
+                "type": "int",
+                "required": true
+              },
+              "interfaces": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "InterfaceBriefEntry",
+                    "fields": {
+                      "ip_address": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "protocol_status": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "link_status": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "admin_status": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "unnumbered_source": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple VRFs with interfaces in different states",
+      "input": "IP Interface Status for VRF \"default\"(1)\nInterface            IP Address      Interface Status\nEth1/1               10.1.1.11       protocol-down/link-down/admin-up\nEth1/2               10.1.1.12       protocol-up/link-up/admin-up\nLo0                  192.168.4.1     protocol-up/link-up/admin-up\n\nIP Interface Status for VRF \"management\"(2)\nInterface            IP Address      Interface Status\nmgmt0                192.168.149.11  protocol-up/link-up/admin-up\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "vrf_id": 1,
+            "interfaces": {
+              "Ethernet1/1": {
+                "ip_address": "10.1.1.11",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/2": {
+                "ip_address": "10.1.1.12",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Loopback0": {
+                "ip_address": "192.168.4.1",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              }
+            }
+          },
+          "management": {
+            "vrf_id": 2,
+            "interfaces": {
+              "mgmt0": {
+                "ip_address": "192.168.149.11",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Interfaces with unnumbered IP addresses",
+      "input": "IP Interface Status for VRF \"default\"(1)\nInterface            IP Address      Interface Status\nLo0                  192.168.4.1       protocol-up/link-up/admin-up\ntunnel-te11          unnumbered      protocol-up/link-up/admin-up\n                     (loopback0)\ntunnel-te12          unnumbered      protocol-up/link-up/admin-up\n                     (loopback0)\nPo2.100              192.168.196.1      protocol-up/link-up/admin-up\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "vrf_id": 1,
+            "interfaces": {
+              "Loopback0": {
+                "ip_address": "192.168.4.1",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "tunnel-te11": {
+                "ip_address": "unnumbered",
+                "unnumbered_source": "Loopback0",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "tunnel-te12": {
+                "ip_address": "unnumbered",
+                "unnumbered_source": "Loopback0",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Port-channel2.100": {
+                "ip_address": "192.168.196.1",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Port-channel sub-interfaces, tunnels with unnumbered, and down interfaces",
+      "input": "IP Interface Status for VRF \"default\"(1)\nInterface            IP Address      Interface Status\nVlan23               192.168.186.1     protocol-up/link-up/admin-up\nLo0                  192.168.4.1       protocol-up/link-up/admin-up\nLo1                  192.168.154.1       protocol-up/link-up/admin-up\nLo2                  192.168.51.1       protocol-up/link-up/admin-up\nLo3                  192.168.205.1       protocol-up/link-up/admin-up\nLo10                 192.168.64.1      protocol-up/link-up/admin-up\nLo11                 192.168.151.1      protocol-up/link-up/admin-up\nPo2.100              192.168.196.1      protocol-up/link-up/admin-up\nPo1.101              192.168.151.2      protocol-up/link-up/admin-up\nPo2.101              192.168.135.1      protocol-up/link-up/admin-up\nPo1.102              192.168.70.2      protocol-up/link-up/admin-up\nPo2.102              192.168.76.1      protocol-up/link-up/admin-up\nPo1.103              192.168.246.2      protocol-up/link-up/admin-up\nPo2.103              192.168.19.1      protocol-up/link-up/admin-up\nPo2.107              192.168.66.1      protocol-up/link-up/admin-up\nEth5/48.100          10.81.0.1       protocol-down/link-down/admin-up\nEth5/48.101          10.81.1.1       protocol-down/link-down/admin-up\nEth5/48.102          10.81.2.1       protocol-down/link-down/admin-up\nEth5/48.103          10.81.3.1       protocol-down/link-down/admin-up\nEth5/48.104          10.81.4.1       protocol-down/link-down/admin-up\nEth5/48.105          10.81.5.1       protocol-down/link-down/admin-up\nEth5/48.106          10.81.6.1       protocol-down/link-down/admin-up\nEth5/48.110          10.81.10.1      protocol-down/link-down/admin-up\nEth6/22              192.168.145.1     protocol-up/link-up/admin-up\ntunnel-te11          unnumbered      protocol-up/link-up/admin-up\n                     (loopback0)\ntunnel-te12          unnumbered      protocol-up/link-up/admin-up\n                     (loopback0)\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "vrf_id": 1,
+            "interfaces": {
+              "Vlan23": {
+                "ip_address": "192.168.186.1",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Loopback0": {
+                "ip_address": "192.168.4.1",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Loopback1": {
+                "ip_address": "192.168.154.1",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Loopback2": {
+                "ip_address": "192.168.51.1",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Loopback3": {
+                "ip_address": "192.168.205.1",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Loopback10": {
+                "ip_address": "192.168.64.1",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Loopback11": {
+                "ip_address": "192.168.151.1",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Port-channel2.100": {
+                "ip_address": "192.168.196.1",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Port-channel1.101": {
+                "ip_address": "192.168.151.2",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Port-channel2.101": {
+                "ip_address": "192.168.135.1",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Port-channel1.102": {
+                "ip_address": "192.168.70.2",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Port-channel2.102": {
+                "ip_address": "192.168.76.1",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Port-channel1.103": {
+                "ip_address": "192.168.246.2",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Port-channel2.103": {
+                "ip_address": "192.168.19.1",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Port-channel2.107": {
+                "ip_address": "192.168.66.1",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Ethernet5/48.100": {
+                "ip_address": "10.81.0.1",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet5/48.101": {
+                "ip_address": "10.81.1.1",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet5/48.102": {
+                "ip_address": "10.81.2.1",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet5/48.103": {
+                "ip_address": "10.81.3.1",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet5/48.104": {
+                "ip_address": "10.81.4.1",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet5/48.105": {
+                "ip_address": "10.81.5.1",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet5/48.106": {
+                "ip_address": "10.81.6.1",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet5/48.110": {
+                "ip_address": "10.81.10.1",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet6/22": {
+                "ip_address": "192.168.145.1",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "tunnel-te11": {
+                "ip_address": "unnumbered",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "unnumbered_source": "Loopback0"
+              },
+              "tunnel-te12": {
+                "ip_address": "unnumbered",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "unnumbered_source": "Loopback0"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Three VRFs including custom VRF with forward-enabled interface",
+      "input": "IP Interface Status for VRF \"default\"(1)\nInterface            IP Address      Interface Status\nVlan3600             10.120.224.25    protocol-up/link-up/admin-up\nLo0                  10.120.26.1      protocol-up/link-up/admin-up\nLo1                  10.120.27.3      protocol-up/link-up/admin-up\nEth1/107             10.120.224.53    protocol-up/link-up/admin-up\nEth1/108             10.120.224.9     protocol-up/link-up/admin-up\n\nIP Interface Status for VRF \"management\"(2)\nInterface            IP Address      Interface Status\nmgmt0                10.143.253.22   protocol-up/link-up/admin-up\n\nIP Interface Status for VRF \"ntc\"(3)\nInterface            IP Address      Interface Status\nVlan83               10.207.83.1    protocol-up/link-up/admin-up\nVlan2003             forward-enabled protocol-up/link-up/admin-up\nLo19                 10.143.100.12   protocol-up/link-up/admin-up\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "vrf_id": 1,
+            "interfaces": {
+              "Vlan3600": {
+                "ip_address": "10.120.224.25",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Loopback0": {
+                "ip_address": "10.120.26.1",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Loopback1": {
+                "ip_address": "10.120.27.3",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Ethernet1/107": {
+                "ip_address": "10.120.224.53",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Ethernet1/108": {
+                "ip_address": "10.120.224.9",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              }
+            }
+          },
+          "management": {
+            "vrf_id": 2,
+            "interfaces": {
+              "mgmt0": {
+                "ip_address": "10.143.253.22",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              }
+            }
+          },
+          "ntc": {
+            "vrf_id": 3,
+            "interfaces": {
+              "Vlan83": {
+                "ip_address": "10.207.83.1",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Vlan2003": {
+                "ip_address": "forward-enabled",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Loopback19": {
+                "ip_address": "10.143.100.12",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,226 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show module",
+  "schema": {
+    "name": "ShowModuleResult",
+    "fields": {
+      "chassis_type": {
+        "type": "str",
+        "required": false
+      },
+      "modules": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ModuleEntry",
+            "fields": {
+              "ports": {
+                "type": "int",
+                "required": true
+              },
+              "card_type": {
+                "type": "str",
+                "required": true
+              },
+              "model": {
+                "type": "str",
+                "required": true
+              },
+              "serial": {
+                "type": "str",
+                "required": false
+              },
+              "mac_address": {
+                "type": "str",
+                "required": false
+              },
+              "hw": {
+                "type": "str",
+                "required": false
+              },
+              "fw": {
+                "type": "str",
+                "required": false
+              },
+              "sw": {
+                "type": "str",
+                "required": false
+              },
+              "status": {
+                "type": "str",
+                "required": false
+              },
+              "redundancy_role": {
+                "type": "str",
+                "required": false
+              },
+              "operating_redundancy_mode": {
+                "type": "str",
+                "required": false
+              },
+              "configured_redundancy_mode": {
+                "type": "str",
+                "required": false
+              },
+              "redundancy_status": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "chassis": {
+        "type": {
+          "name": "ChassisInfo",
+          "fields": {
+            "number_of_mac_addresses": {
+              "type": "int",
+              "required": true
+            },
+            "mac_address_lower": {
+              "type": "str",
+              "required": true
+            },
+            "mac_address_upper": {
+              "type": "str",
+              "required": true
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with two modules and redundancy on C9606R",
+      "input": "Chassis Type: C9606R\n\nMod Ports Card Type                                   Model          Serial No.\n---+-----+--------------------------------------+--------------+--------------\n1   48   48-Port 10GE / 25GE                         C9600-LC-48YL    CAT2431L0MD\n3   0    Supervisor 1 Module                         C9600-SUP-1      FDO24261BQN\n\nMod MAC addresses                    Hw   Fw           Sw                 Status\n---+--------------------------------+----+------------+------------------+--------\n1   E41F.7B6D.F280 to E41F.7B6D.F2FF 1.1  17.8.1r       S2C                power-deny\n3   9077.EE4D.9700 to 9077.EE4D.977F 1.1  17.8.1r       S2C                ok\n\nMod Redundancy Role     Operating Redundancy Mode Configured Redundancy Mode\n---+-------------------+-------------------------+---------------------------\n3   Active              non-redundant             sso\n\nChassis MAC address range: 64 addresses from 3c57.31bc.2b80 to 3c57.31bc.2bbf\n",
+      "expected": {
+        "chassis": {
+          "mac_address_lower": "3c57.31bc.2b80",
+          "mac_address_upper": "3c57.31bc.2bbf",
+          "number_of_mac_addresses": 64
+        },
+        "chassis_type": "C9606R",
+        "modules": {
+          "1": {
+            "card_type": "48-Port 10GE / 25GE",
+            "fw": "17.8.1r",
+            "hw": "1.1",
+            "mac_address": "E41F.7B6D.F280 to E41F.7B6D.F2FF",
+            "model": "C9600-LC-48YL",
+            "ports": 48,
+            "serial": "CAT2431L0MD",
+            "status": "power-deny",
+            "sw": "S2C"
+          },
+          "3": {
+            "card_type": "Supervisor 1 Module",
+            "configured_redundancy_mode": "sso",
+            "fw": "17.8.1r",
+            "hw": "1.1",
+            "mac_address": "9077.EE4D.9700 to 9077.EE4D.977F",
+            "model": "C9600-SUP-1",
+            "operating_redundancy_mode": "non-redundant",
+            "ports": 0,
+            "redundancy_role": "Active",
+            "serial": "FDO24261BQN",
+            "status": "ok",
+            "sw": "S2C"
+          }
+        }
+      }
+    },
+    {
+      "name": "Output with blank module slots and no chassis MAC range",
+      "input": "Chassis Type: C9606R\n\nMod Ports Card Type                                   Model          Serial No.\n---+-----+--------------------------------------+--------------+--------------\n1   24   24-Port 40GE / 100GE                        C9600-LC-24C     CAT2252L0PV\n2   0    Blank Module                                C9600-SLOT-BLANK N/A\n3   0    Blank Module                                C9600-SLOT-BLANK N/A\n4   0    Supervisor 2 Module                         C9600X-SUP-2     FDO271904CG\n5   0    Blank Module                                C9600-SLOT-BLANK N/A\n6   48   48-Port 10GE / 25GE / 50GE                  C9600-LC-48YL    CAT2312L2G4\n\nMod MAC addresses                    Hw   Fw           Sw                 Status\n---+--------------------------------+----+------------+------------------+--------\n1   70B3.175A.8580 to 70B3.175A.85FF 1.0  17.10.1r      BLD_POLARIS_DEV_LA ok\n4   5856.9FB2.A080 to 5856.9FB2.A0FF 2.1  17.10.1r      BLD_POLARIS_DEV_LA ok\n6   DC8C.37A0.4480 to DC8C.37A0.44FF 1.0  17.10.1r      BLD_POLARIS_DEV_LA ok\n\nMod Redundancy Role     Operating Redundancy Mode Configured Redundancy Mode\n---+-------------------+-------------------------+---------------------------\n4   Active              non-redundant             sso\n",
+      "expected": {
+        "chassis_type": "C9606R",
+        "modules": {
+          "1": {
+            "card_type": "24-Port 40GE / 100GE",
+            "fw": "17.10.1r",
+            "hw": "1.0",
+            "mac_address": "70B3.175A.8580 to 70B3.175A.85FF",
+            "model": "C9600-LC-24C",
+            "ports": 24,
+            "serial": "CAT2252L0PV",
+            "status": "ok",
+            "sw": "BLD_POLARIS_DEV_LA"
+          },
+          "2": {
+            "card_type": "Blank Module",
+            "model": "C9600-SLOT-BLANK",
+            "ports": 0
+          },
+          "3": {
+            "card_type": "Blank Module",
+            "model": "C9600-SLOT-BLANK",
+            "ports": 0
+          },
+          "4": {
+            "card_type": "Supervisor 2 Module",
+            "configured_redundancy_mode": "sso",
+            "fw": "17.10.1r",
+            "hw": "2.1",
+            "mac_address": "5856.9FB2.A080 to 5856.9FB2.A0FF",
+            "model": "C9600X-SUP-2",
+            "operating_redundancy_mode": "non-redundant",
+            "ports": 0,
+            "redundancy_role": "Active",
+            "serial": "FDO271904CG",
+            "status": "ok",
+            "sw": "BLD_POLARIS_DEV_LA"
+          },
+          "5": {
+            "card_type": "Blank Module",
+            "model": "C9600-SLOT-BLANK",
+            "ports": 0
+          },
+          "6": {
+            "card_type": "48-Port 10GE / 25GE / 50GE",
+            "fw": "17.10.1r",
+            "hw": "1.0",
+            "mac_address": "DC8C.37A0.4480 to DC8C.37A0.44FF",
+            "model": "C9600-LC-48YL",
+            "ports": 48,
+            "serial": "CAT2312L2G4",
+            "status": "ok",
+            "sw": "BLD_POLARIS_DEV_LA"
+          }
+        }
+      }
+    },
+    {
+      "name": "Single switch with many modules and redundancy status on C9500X",
+      "input": "Chassis Type: C9500X-28C8D\n\nMod Ports Card Type                                   Model          Serial No.\n---+-----+--------------------------------------+--------------+--------------\n1   38   Cisco Catalyst 9500X-28C8D Switch           C9500X-28C8D     FDO25030SLN\n\nMod MAC addresses                    Hw   Fw           Sw                 Status\n---+--------------------------------+----+------------+------------------+--------\n1   F87A.4125.1400 to F87A.4125.147D 0.2  17.7.1r[FC3]  2021-09-30_14.02_a ok\n\nMod Redundancy Role     Operating Redundancy Mode Configured Redundancy Mode\n---+-------------------+-------------------------+---------------------------\n1   Active              non-redundant             Non-redundant\n\nChassis MAC address range: 512 addresses from f87a.4125.1400 to f87a.4125.15ff\n",
+      "expected": {
+        "chassis": {
+          "mac_address_lower": "f87a.4125.1400",
+          "mac_address_upper": "f87a.4125.15ff",
+          "number_of_mac_addresses": 512
+        },
+        "chassis_type": "C9500X-28C8D",
+        "modules": {
+          "1": {
+            "card_type": "Cisco Catalyst 9500X-28C8D Switch",
+            "configured_redundancy_mode": "Non-redundant",
+            "fw": "17.7.1r[FC3]",
+            "hw": "0.2",
+            "mac_address": "F87A.4125.1400 to F87A.4125.147D",
+            "model": "C9500X-28C8D",
+            "operating_redundancy_mode": "non-redundant",
+            "ports": 38,
+            "redundancy_role": "Active",
+            "serial": "FDO25030SLN",
+            "status": "ok",
+            "sw": "2021-09-30_14.02_a"
+          }
+        }
+      }
+    }
+  ]
+}

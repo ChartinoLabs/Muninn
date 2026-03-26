@@ -1,0 +1,211 @@
+{
+  "os": "cisco_ios",
+  "command": "show ip ospf interface brief",
+  "schema": {
+    "name": "ShowIpOspfInterfaceBriefResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "OspfInterfaceBriefEntry",
+            "fields": {
+              "process_id": {
+                "type": "int",
+                "required": true
+              },
+              "area": {
+                "type": "str",
+                "required": true
+              },
+              "ip_address": {
+                "type": "str",
+                "required": true
+              },
+              "prefix_length": {
+                "type": "int",
+                "required": true
+              },
+              "cost": {
+                "type": "int",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "neighbors_full": {
+                "type": "int",
+                "required": true
+              },
+              "neighbors_count": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Standard OSPF interface brief with loopback, serial, fastethernet, tunnel, and port-channel interfaces",
+      "input": "Interface    PID   Area  IP Address/Mask    Cost  State Nbrs F/C\nLo0          1     0     172.16.0.11/32     1     LOOP  0/0\nSe0/0/0.100  1     0     172.16.1.1/30      50    P2P   1/1\nFa0/0        1     0     10.0.0.5/24        1     BDR   1/1\nFa0/1        1     11    10.1.2.1/24        1     DR    0/0\nTu1610 \t\t 1\t   0 \t 0.0.0.0/0\t\t\t50 \t  P2P \t0/0\nLo5 \t\t 1\t   0 \t 10.48.8.5/32\t\t1 \t  LOOP \t0/0\nLo4 \t\t 1\t   0 \t 10.48.8.4/32\t\t1 \t  LOOP \t0/0\nTu1603 \t\t 1\t   0 \t 0.0.0.0/0\t\t\t50\t  DOWN \t0/0\nTu1602 \t\t 1\t   0 \t 0.0.0.0/0\t\t\t50\t  P2P \t0/0\nPO4/0 \t\t 1\t   0 \t 10.1.232.6/30 \t\t6 \t  P2P\t1/1\nSe3/2:0 \t 1\t   0 \t 10.1.224.218/30 \t6\t  P2P\t1/1\nSe3/1:0 \t 1\t   0 \t 10.1.225.150/30 \t6\t  P2P\t1/1\n",
+      "expected": {
+        "interfaces": {
+          "FastEthernet0/0": {
+            "area": "0.0.0.0",
+            "cost": 1,
+            "ip_address": "10.0.0.5",
+            "neighbors_count": 1,
+            "neighbors_full": 1,
+            "prefix_length": 24,
+            "process_id": 1,
+            "state": "BDR"
+          },
+          "FastEthernet0/1": {
+            "area": "0.0.0.11",
+            "cost": 1,
+            "ip_address": "10.1.2.1",
+            "neighbors_count": 0,
+            "neighbors_full": 0,
+            "prefix_length": 24,
+            "process_id": 1,
+            "state": "DR"
+          },
+          "Loopback0": {
+            "area": "0.0.0.0",
+            "cost": 1,
+            "ip_address": "172.16.0.11",
+            "neighbors_count": 0,
+            "neighbors_full": 0,
+            "prefix_length": 32,
+            "process_id": 1,
+            "state": "LOOP"
+          },
+          "Loopback4": {
+            "area": "0.0.0.0",
+            "cost": 1,
+            "ip_address": "10.48.8.4",
+            "neighbors_count": 0,
+            "neighbors_full": 0,
+            "prefix_length": 32,
+            "process_id": 1,
+            "state": "LOOP"
+          },
+          "Loopback5": {
+            "area": "0.0.0.0",
+            "cost": 1,
+            "ip_address": "10.48.8.5",
+            "neighbors_count": 0,
+            "neighbors_full": 0,
+            "prefix_length": 32,
+            "process_id": 1,
+            "state": "LOOP"
+          },
+          "POS4/0": {
+            "area": "0.0.0.0",
+            "cost": 6,
+            "ip_address": "10.1.232.6",
+            "neighbors_count": 1,
+            "neighbors_full": 1,
+            "prefix_length": 30,
+            "process_id": 1,
+            "state": "P2P"
+          },
+          "Serial0/0/0.100": {
+            "area": "0.0.0.0",
+            "cost": 50,
+            "ip_address": "172.16.1.1",
+            "neighbors_count": 1,
+            "neighbors_full": 1,
+            "prefix_length": 30,
+            "process_id": 1,
+            "state": "P2P"
+          },
+          "Serial3/1:0": {
+            "area": "0.0.0.0",
+            "cost": 6,
+            "ip_address": "10.1.225.150",
+            "neighbors_count": 1,
+            "neighbors_full": 1,
+            "prefix_length": 30,
+            "process_id": 1,
+            "state": "P2P"
+          },
+          "Serial3/2:0": {
+            "area": "0.0.0.0",
+            "cost": 6,
+            "ip_address": "10.1.224.218",
+            "neighbors_count": 1,
+            "neighbors_full": 1,
+            "prefix_length": 30,
+            "process_id": 1,
+            "state": "P2P"
+          },
+          "Tunnel1602": {
+            "area": "0.0.0.0",
+            "cost": 50,
+            "ip_address": "0.0.0.0",
+            "neighbors_count": 0,
+            "neighbors_full": 0,
+            "prefix_length": 0,
+            "process_id": 1,
+            "state": "P2P"
+          },
+          "Tunnel1603": {
+            "area": "0.0.0.0",
+            "cost": 50,
+            "ip_address": "0.0.0.0",
+            "neighbors_count": 0,
+            "neighbors_full": 0,
+            "prefix_length": 0,
+            "process_id": 1,
+            "state": "DOWN"
+          },
+          "Tunnel1610": {
+            "area": "0.0.0.0",
+            "cost": 50,
+            "ip_address": "0.0.0.0",
+            "neighbors_count": 0,
+            "neighbors_full": 0,
+            "prefix_length": 0,
+            "process_id": 1,
+            "state": "P2P"
+          }
+        }
+      }
+    },
+    {
+      "name": "OSPF interface brief with dotted area notation",
+      "input": "Interface    PID   Area            IP Address/Mask    Cost  State Nbrs F/C\nLo0          1     0.0.0.0         10.0.0.2/32        1     LOOP  0/0\nEt0/2        1     0.0.0.0         10.1.0.6/30        10    P2P   1/1\n",
+      "expected": {
+        "interfaces": {
+          "Ethernet0/2": {
+            "area": "0.0.0.0",
+            "cost": 10,
+            "ip_address": "10.1.0.6",
+            "neighbors_count": 1,
+            "neighbors_full": 1,
+            "prefix_length": 30,
+            "process_id": 1,
+            "state": "P2P"
+          },
+          "Loopback0": {
+            "area": "0.0.0.0",
+            "cost": 1,
+            "ip_address": "10.0.0.2",
+            "neighbors_count": 0,
+            "neighbors_full": 0,
+            "prefix_length": 32,
+            "process_id": 1,
+            "state": "LOOP"
+          }
+        }
+      }
+    }
+  ]
+}

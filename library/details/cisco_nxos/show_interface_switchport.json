@@ -1,0 +1,144 @@
+{
+  "os": "cisco_nxos",
+  "command": "show interface switchport",
+  "schema": {
+    "name": "ShowInterfaceSwitchportResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SwitchportEntry",
+            "fields": {
+              "switchport": {
+                "type": "str",
+                "required": true
+              },
+              "operational_mode": {
+                "type": "str",
+                "required": true
+              },
+              "access_vlan": {
+                "type": "int",
+                "required": true
+              },
+              "trunk_native_vlan": {
+                "type": "int",
+                "required": true
+              },
+              "trunk_vlans_allowed": {
+                "type": "str",
+                "required": true
+              },
+              "switchport_monitor": {
+                "type": "str",
+                "required": false
+              },
+              "switchport_isolated": {
+                "type": "str",
+                "required": false
+              },
+              "switchport_block_multicast": {
+                "type": "str",
+                "required": false
+              },
+              "switchport_block_unicast": {
+                "type": "str",
+                "required": false
+              },
+              "access_vlan_name": {
+                "type": "str",
+                "required": false
+              },
+              "trunk_native_vlan_name": {
+                "type": "str",
+                "required": false
+              },
+              "voice_vlan": {
+                "type": "int",
+                "required": false
+              },
+              "extended_trust_state": {
+                "type": "str",
+                "required": false
+              },
+              "admin_private_vlan": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": "str"
+                },
+                "required": false
+              },
+              "operational_private_vlan": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic switchport output with access and trunk interfaces including port-channel",
+      "input": "Name: Ethernet1/1\n  Switchport: Enabled\n  Switchport Monitor: Not enabled\n  Switchport Isolated : Not enabled\n  Switchport Block Multicast: Not enabled\n  Switchport Block Unicast: Not enabled\n  Operational Mode: access\n  Access Mode VLAN: 3 (Vlan not created)\n  Trunking Native Mode VLAN: 1 (default)\n  Trunking VLANs Allowed: 1-4094\n  Voice VLAN: none\n  Extended Trust State : not trusted [COS = 0]\n  Administrative private-vlan primary host-association: none\n  Administrative private-vlan secondary host-association: none\n  Administrative private-vlan primary mapping: none\n  Administrative private-vlan secondary mapping: none\n  Administrative private-vlan trunk native VLAN: none\n  Administrative private-vlan trunk encapsulation: dot1q\n  Administrative private-vlan trunk normal VLANs: none\n  Administrative private-vlan trunk private VLANs: none\n  Operational private-vlan: none\nName: Ethernet1/2\n  Switchport: Enabled\n  Switchport Monitor: Not enabled\n  Switchport Isolated : Not enabled\n  Switchport Block Multicast: Not enabled\n  Switchport Block Unicast: Not enabled\n  Operational Mode: trunk\n  Access Mode VLAN: 1 (default)\n  Trunking Native Mode VLAN: 5 (Vlan not created)\n  Trunking VLANs Allowed: 1-4094\n  Voice VLAN: none\n  Extended Trust State : not trusted [COS = 0]\n  Administrative private-vlan primary host-association: none\n  Administrative private-vlan secondary host-association: none\n  Administrative private-vlan primary mapping: none\n  Administrative private-vlan secondary mapping: none\n  Administrative private-vlan trunk native VLAN: none\n  Administrative private-vlan trunk encapsulation: dot1q\n  Administrative private-vlan trunk normal VLANs: none\n  Administrative private-vlan trunk private VLANs: none\n  Operational private-vlan: none\nName: port-channel24\n  Switchport: Enabled\n  Switchport Monitor: Not enabled\n  Switchport Block Multicast: Not enabled\n  Switchport Block Unicast: Not enabled\n  Operational Mode: trunk\n  Access Mode VLAN: 1 (default)\n  Trunking Native Mode VLAN: 1 (default)\n  Trunking VLANs Allowed: 120,134,501,800,804\n  Administrative private-vlan primary host-association: none\n  Administrative private-vlan secondary host-association: none\n  Administrative private-vlan primary mapping: none\n  Administrative private-vlan secondary mapping: none\n  Administrative private-vlan trunk native VLAN: none\n  Administrative private-vlan trunk encapsulation: dot1q\n  Administrative private-vlan trunk normal VLANs: none\n  Administrative private-vlan trunk private VLANs: none\n  Operational private-vlan: none\n",
+      "expected": {
+        "interfaces": {
+          "Ethernet1/1": {
+            "switchport": "Enabled",
+            "operational_mode": "access",
+            "access_vlan": 3,
+            "trunk_native_vlan": 1,
+            "trunk_vlans_allowed": "1-4094",
+            "access_vlan_name": "Vlan not created",
+            "trunk_native_vlan_name": "default",
+            "switchport_monitor": "Not enabled",
+            "switchport_isolated": "Not enabled",
+            "switchport_block_multicast": "Not enabled",
+            "switchport_block_unicast": "Not enabled",
+            "extended_trust_state": "not trusted [COS = 0]",
+            "admin_private_vlan": {
+              "trunk_encapsulation": "dot1q"
+            }
+          },
+          "Ethernet1/2": {
+            "switchport": "Enabled",
+            "operational_mode": "trunk",
+            "access_vlan": 1,
+            "trunk_native_vlan": 5,
+            "trunk_vlans_allowed": "1-4094",
+            "access_vlan_name": "default",
+            "trunk_native_vlan_name": "Vlan not created",
+            "switchport_monitor": "Not enabled",
+            "switchport_isolated": "Not enabled",
+            "switchport_block_multicast": "Not enabled",
+            "switchport_block_unicast": "Not enabled",
+            "extended_trust_state": "not trusted [COS = 0]",
+            "admin_private_vlan": {
+              "trunk_encapsulation": "dot1q"
+            }
+          },
+          "Port-channel24": {
+            "switchport": "Enabled",
+            "operational_mode": "trunk",
+            "access_vlan": 1,
+            "trunk_native_vlan": 1,
+            "trunk_vlans_allowed": "120,134,501,800,804",
+            "access_vlan_name": "default",
+            "trunk_native_vlan_name": "default",
+            "switchport_monitor": "Not enabled",
+            "switchport_block_multicast": "Not enabled",
+            "switchport_block_unicast": "Not enabled",
+            "admin_private_vlan": {
+              "trunk_encapsulation": "dot1q"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

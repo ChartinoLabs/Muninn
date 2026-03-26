@@ -1,0 +1,276 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show environment all",
+  "schema": {
+    "name": "ShowEnvironmentAllResult",
+    "fields": {
+      "switches": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SwitchEntry",
+            "fields": {
+              "system_temperature_state": {
+                "type": "str",
+                "required": false
+              },
+              "fans": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "FanEntry",
+                    "fields": {
+                      "speed": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "state": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "fan_power_supplies": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "FanPsEntry",
+                    "fields": {
+                      "state": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "inlet_temperature": {
+                "type": {
+                  "name": "TemperatureEntry",
+                  "fields": {
+                    "value": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "state": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "yellow_threshold": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "red_threshold": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "outlet_temperature": {
+                "type": {
+                  "type": "ref",
+                  "name": "TemperatureEntry"
+                },
+                "required": false
+              },
+              "hotspot_temperature": {
+                "type": {
+                  "type": "ref",
+                  "name": "TemperatureEntry"
+                },
+                "required": false
+              },
+              "power_supplies": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "PowerSupplyEntry",
+                    "fields": {
+                      "status": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "pid": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "serial_number": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "system_power": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "poe_power": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "watts": {
+                        "type": "int",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with five fans, two power supplies, and three temperature sensors",
+      "input": "show environment all\nSwitch   FAN   Speed   State\n---------------------------------------------------\n  1     1 35840     OK\n  1     2 35840     OK\n  1     3 35840     OK\n  1     4 35840     OK\n  1     5 35840     OK\nFAN PS-1 is NOT PRESENT\nFAN PS-2 is OK\nSwitch 1: SYSTEM TEMPERATURE is OK\nInlet Temperature Value: 29 Degree Celsius\nTemperature State: GREEN\nYellow Threshold : 46 Degree Celsius\nRed Threshold    : 56 Degree Celsius\nOutlet Temperature Value: 40 Degree Celsius\nTemperature State: GREEN\nYellow Threshold : 105 Degree Celsius\nRed Threshold    : 125 Degree Celsius\nHotspot Temperature Value: 55 Degree Celsius\nTemperature State: GREEN\nYellow Threshold : 105 Degree Celsius\nRed Threshold    : 125 Degree Celsius\nSW  PID                 Serial#     Status           Sys Pwr  PoE Pwr  Watts\n--  ------------------  ----------  ---------------  -------  -------  -----\n1A  PWR-C4-950WAC-R     GEN222700VU  No Input Power  Bad      n/a      950\n1B  PWR-C4-950WAC-R     GEN222700VT  OK              Good     n/a      950\n",
+      "expected": {
+        "switches": {
+          "1": {
+            "fan_power_supplies": {
+              "1": {
+                "state": "not present"
+              },
+              "2": {
+                "state": "ok"
+              }
+            },
+            "fans": {
+              "1": {
+                "speed": 35840,
+                "state": "ok"
+              },
+              "2": {
+                "speed": 35840,
+                "state": "ok"
+              },
+              "3": {
+                "speed": 35840,
+                "state": "ok"
+              },
+              "4": {
+                "speed": 35840,
+                "state": "ok"
+              },
+              "5": {
+                "speed": 35840,
+                "state": "ok"
+              }
+            },
+            "hotspot_temperature": {
+              "red_threshold": 125,
+              "state": "green",
+              "value": 55,
+              "yellow_threshold": 105
+            },
+            "inlet_temperature": {
+              "red_threshold": 56,
+              "state": "green",
+              "value": 29,
+              "yellow_threshold": 46
+            },
+            "outlet_temperature": {
+              "red_threshold": 125,
+              "state": "green",
+              "value": 40,
+              "yellow_threshold": 105
+            },
+            "power_supplies": {
+              "A": {
+                "pid": "PWR-C4-950WAC-R",
+                "serial_number": "GEN222700VU",
+                "status": "no input power",
+                "system_power": "bad",
+                "watts": 950
+              },
+              "B": {
+                "pid": "PWR-C4-950WAC-R",
+                "serial_number": "GEN222700VT",
+                "status": "ok",
+                "system_power": "good",
+                "watts": 950
+              }
+            },
+            "system_temperature_state": "ok"
+          }
+        }
+      }
+    },
+    {
+      "name": "Single switch with three fans, one power supply present and one not present",
+      "input": "show environment all\nSwitch\t FAN\t Speed\t State\n---------------------------------------------------\n  3  \t  1\t13760 \t  OK\n  3  \t  2\t13760 \t  OK\n  3  \t  3\t13760 \t  OK\nFAN PS-1 is OK\nFAN PS-2 is NOT PRESENT\nSwitch 3: SYSTEM TEMPERATURE is OK\nInlet Temperature Value: 32 Degree Celsius\nTemperature State: GREEN\nYellow Threshold : 46 Degree Celsius\nRed Threshold    : 56 Degree Celsius\n\nOutlet Temperature Value: 42 Degree Celsius\nTemperature State: GREEN\nYellow Threshold : 105 Degree Celsius\nRed Threshold    : 125 Degree Celsius\n\nHotspot Temperature Value: 55 Degree Celsius\nTemperature State: GREEN\nYellow Threshold : 105 Degree Celsius\nRed Threshold    : 125 Degree Celsius\nSW  PID                 Serial#     Status           Sys Pwr  PoE Pwr  Watts\n--  ------------------  ----------  ---------------  -------  -------  -----\n3A  PWR-C1-715WAC       DCA2120G474  OK              Good     Good     715\n3B  Not Present\n",
+      "expected": {
+        "switches": {
+          "3": {
+            "fan_power_supplies": {
+              "1": {
+                "state": "ok"
+              },
+              "2": {
+                "state": "not present"
+              }
+            },
+            "fans": {
+              "1": {
+                "speed": 13760,
+                "state": "ok"
+              },
+              "2": {
+                "speed": 13760,
+                "state": "ok"
+              },
+              "3": {
+                "speed": 13760,
+                "state": "ok"
+              }
+            },
+            "hotspot_temperature": {
+              "red_threshold": 125,
+              "state": "green",
+              "value": 55,
+              "yellow_threshold": 105
+            },
+            "inlet_temperature": {
+              "red_threshold": 56,
+              "state": "green",
+              "value": 32,
+              "yellow_threshold": 46
+            },
+            "outlet_temperature": {
+              "red_threshold": 125,
+              "state": "green",
+              "value": 42,
+              "yellow_threshold": 105
+            },
+            "power_supplies": {
+              "A": {
+                "pid": "PWR-C1-715WAC",
+                "poe_power": "good",
+                "serial_number": "DCA2120G474",
+                "status": "ok",
+                "system_power": "good",
+                "watts": 715
+              },
+              "B": {
+                "status": "not present"
+              }
+            },
+            "system_temperature_state": "ok"
+          }
+        }
+      }
+    }
+  ]
+}

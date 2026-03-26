@@ -1,0 +1,170 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show dlep counters",
+  "schema": {
+    "name": "ShowDlepCountersResult",
+    "fields": {
+      "sections": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "DlepCounterSection",
+            "fields": {
+              "name": {
+                "type": "str",
+                "required": true
+              },
+              "header": {
+                "type": {
+                  "name": "DlepHeaderInfo",
+                  "fields": {
+                    "dlep_version": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "dlep_local_ip": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "dlepv5_tcp_port": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "last_clear_time": {
+                      "type": "str",
+                      "required": false
+                    }
+                  }
+                },
+                "required": true
+              },
+              "counters": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": "int"
+                },
+                "required": true
+              },
+              "timer_wheel": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": "str"
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "DLEP Counters for TenGigabitEthernet0/0/1\n\nLast Clear Time =\n\nDLEP Version = RFC 8175\nDLEP Local IP=19.19.19.151:55113\nDLEPv5 TCP Port = 55114\n\nPeer Counters:\n RX Peer Discovery     0      TX Peer Offer             0\n RX Peer Offer         0      TX Peer Discovery         0\n RX Peer Init          0      TX Peer Init Ack          0\n RX Peer Init Ack      1      TX Peer Init              1\n RX Heartbeat          33     TX Heartbeat              33\n RX Peer Terminate     0      TX Peer Terminate Ack     0\n RX Peer Terminate Ack 0      TX Peer Terminate         0\n\nNeighbor Counters:\n RX Neighbor Up        1      TX Neighbor Up Ack        1\n RX Metric             0\n RX Neighbor Down      0      TX Neighbor Down Ack      0\n RX Neighbor Down Ack  0      TX Neighbor Down          0\n\nException Counters:\n RX Invalid Message    0      RX Unknown Message        0\n Pre-Existing Neighbor 0      Neighbor Resource Error   0\n Neighbor Not Found    0      Neighbor Msg Peer Not Up  0\n\nTimer Counters:\n Peer Heartbeat Timer         33\n Peer Terminate Ack Timer     0\n Neighbor Terminate Ack Timer 0\n Neighbor Activity Timer      0\n Radio Connect Timer          0\n\n\nDLEP Counters for TenGigabitEthernet0/0/2.200\n\nLast Clear Time =\n\nDLEP Version = RFC 8175\nDLEP Local IP=18.18.18.111:21115\nDLEPv5 TCP Port = 21116\n\nPeer Counters:\n RX Peer Discovery     0      TX Peer Offer             0\n RX Peer Offer         0      TX Peer Discovery         0\n RX Peer Init          0      TX Peer Init Ack          0\n RX Peer Init Ack      1      TX Peer Init              1\n RX Heartbeat          32     TX Heartbeat              32\n RX Peer Terminate     0      TX Peer Terminate Ack     0\n RX Peer Terminate Ack 0      TX Peer Terminate         0\n\nNeighbor Counters:\n RX Neighbor Up        1      TX Neighbor Up Ack        1\n RX Metric             0\n RX Neighbor Down      0      TX Neighbor Down Ack      0\n RX Neighbor Down Ack  0      TX Neighbor Down          0\n\nException Counters:\n RX Invalid Message    0      RX Unknown Message        0\n Pre-Existing Neighbor 0      Neighbor Resource Error   0\n Neighbor Not Found    0      Neighbor Msg Peer Not Up  0\n\nTimer Counters:\n Peer Heartbeat Timer         32\n Peer Terminate Ack Timer     0\n Neighbor Terminate Ack Timer 0\n Neighbor Activity Timer      0\n Radio Connect Timer          0\n\nSingle Timer Wheel \"Manet Infra Wheel\"\n  Granularity      = 250 msec\n  Wheel size       = 4096\n  Spoke index      = 1196\n  Tick count       = 119980\n  Flags            = 0x00\n  Active timers    = 2\n  High water mark  = 3\n  Started timers   = 8391\n  Restarted timers = 7\n  Cancelled timers = 22\n  Expired timers   = 8360\n  Long timers      = 0\n  Long timer revs  = 0\n  Timer suspends   = 0\n",
+      "expected": {
+        "sections": {
+          "TenGigabitEthernet0/0/1": {
+            "name": "TenGigabitEthernet0/0/1",
+            "header": {
+              "dlep_version": "RFC 8175",
+              "dlep_local_ip": "19.19.19.151:55113",
+              "dlepv5_tcp_port": 55114
+            },
+            "counters": {
+              "RX Peer Discovery": 0,
+              "TX Peer Offer": 0,
+              "RX Peer Offer": 0,
+              "TX Peer Discovery": 0,
+              "RX Peer Init": 0,
+              "TX Peer Init Ack": 0,
+              "RX Peer Init Ack": 1,
+              "TX Peer Init": 1,
+              "RX Heartbeat": 33,
+              "TX Heartbeat": 33,
+              "RX Peer Terminate": 0,
+              "TX Peer Terminate Ack": 0,
+              "TX Peer Terminate": 0,
+              "RX Neighbor Up": 1,
+              "TX Neighbor Up Ack": 1,
+              "RX Metric": 0,
+              "RX Neighbor Down": 0,
+              "TX Neighbor Down Ack": 0,
+              "RX Neighbor Down Ack": 0,
+              "TX Neighbor Down": 0,
+              "RX Invalid Message": 0,
+              "RX Unknown Message": 0,
+              "Neighbor Resource Error": 0,
+              "Neighbor Not Found": 0,
+              "Neighbor Msg Peer Not Up": 0,
+              "Peer Heartbeat Timer": 33,
+              "Peer Terminate Ack Timer": 0,
+              "Neighbor Activity Timer": 0,
+              "Radio Connect Timer": 0
+            }
+          },
+          "TenGigabitEthernet0/0/2.200": {
+            "name": "TenGigabitEthernet0/0/2.200",
+            "header": {
+              "dlep_version": "RFC 8175",
+              "dlep_local_ip": "18.18.18.111:21115",
+              "dlepv5_tcp_port": 21116
+            },
+            "counters": {
+              "RX Peer Discovery": 0,
+              "TX Peer Offer": 0,
+              "RX Peer Offer": 0,
+              "TX Peer Discovery": 0,
+              "RX Peer Init": 0,
+              "TX Peer Init Ack": 0,
+              "RX Peer Init Ack": 1,
+              "TX Peer Init": 1,
+              "RX Heartbeat": 32,
+              "TX Heartbeat": 32,
+              "RX Peer Terminate": 0,
+              "TX Peer Terminate Ack": 0,
+              "TX Peer Terminate": 0,
+              "RX Neighbor Up": 1,
+              "TX Neighbor Up Ack": 1,
+              "RX Metric": 0,
+              "RX Neighbor Down": 0,
+              "TX Neighbor Down Ack": 0,
+              "RX Neighbor Down Ack": 0,
+              "TX Neighbor Down": 0,
+              "RX Invalid Message": 0,
+              "RX Unknown Message": 0,
+              "Neighbor Resource Error": 0,
+              "Neighbor Not Found": 0,
+              "Neighbor Msg Peer Not Up": 0,
+              "Peer Heartbeat Timer": 32,
+              "Peer Terminate Ack Timer": 0,
+              "Neighbor Activity Timer": 0,
+              "Radio Connect Timer": 0
+            },
+            "timer_wheel": {
+              "wheel_name": "Manet Infra Wheel",
+              "Granularity": "250 msec",
+              "Wheel size": "4096",
+              "Spoke index": "1196",
+              "Tick count": "119980",
+              "Flags": "0x00",
+              "Active timers": "2",
+              "High water mark": "3",
+              "Started timers": "8391",
+              "Restarted timers": "7",
+              "Cancelled timers": "22",
+              "Expired timers": "8360",
+              "Long timers": "0",
+              "Long timer revs": "0",
+              "Timer suspends": "0"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

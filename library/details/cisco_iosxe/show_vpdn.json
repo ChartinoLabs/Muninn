@@ -1,0 +1,151 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show vpdn",
+  "schema": {
+    "name": "ShowVpdnResult",
+    "fields": {
+      "total_tunnels": {
+        "type": "int",
+        "required": false
+      },
+      "total_sessions": {
+        "type": "int",
+        "required": false
+      },
+      "tunnels": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VpdnTunnelEntry",
+            "fields": {
+              "local_tunnel_id": {
+                "type": "int",
+                "required": true
+              },
+              "remote_tunnel_id": {
+                "type": "int",
+                "required": true
+              },
+              "remote_name": {
+                "type": "str",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "remote_address": {
+                "type": "str",
+                "required": true
+              },
+              "session_count": {
+                "type": "int",
+                "required": true
+              },
+              "vpdn_group": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "sessions": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VpdnSessionEntry",
+            "fields": {
+              "local_id": {
+                "type": "int",
+                "required": true
+              },
+              "remote_id": {
+                "type": "int",
+                "required": true
+              },
+              "tunnel_id": {
+                "type": "int",
+                "required": true
+              },
+              "username": {
+                "type": "str",
+                "required": true
+              },
+              "interface": {
+                "type": "str",
+                "required": false
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "last_change": {
+                "type": "str",
+                "required": true
+              },
+              "unique_id": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic VPDN output with two L2TP tunnels and two sessions",
+      "input": "L2TP Tunnel and Session Information Total tunnels 2 sessions 2\n\n LocTunID   RemTunID   Remote Name   State  Remote Address  Sessn L2TP Class/\n                                                            Count VPDN Group\n 7658       8656       LAC           est    18.18.18.1      1     1\n\n LocID      RemID      TunID      Username, Intf/      State  Last Chg Uniq ID\n                                  Vcid, Circuit\n 3542       56774      7658       lns@cisco.com, -     est    00:10:09 645\n\n LocTunID   RemTunID   Remote Name   State  Remote Address  Sessn L2TP Class/\n                                                            Count VPDN Group\n 11479      56539      LNS2          est    14.14.14.2      1     TowardsLNS2\n\n LocID      RemID      TunID      Username, Intf/      State  Last Chg Uniq ID\n                                  Vcid, Circuit\n 24593      3791       11479      lns@cisco.com, -     est    00:10:08 645\n",
+      "expected": {
+        "total_tunnels": 2,
+        "total_sessions": 2,
+        "tunnels": {
+          "7658": {
+            "local_tunnel_id": 7658,
+            "remote_tunnel_id": 8656,
+            "remote_name": "LAC",
+            "state": "est",
+            "remote_address": "18.18.18.1",
+            "session_count": 1,
+            "vpdn_group": "1"
+          },
+          "11479": {
+            "local_tunnel_id": 11479,
+            "remote_tunnel_id": 56539,
+            "remote_name": "LNS2",
+            "state": "est",
+            "remote_address": "14.14.14.2",
+            "session_count": 1,
+            "vpdn_group": "TowardsLNS2"
+          }
+        },
+        "sessions": {
+          "3542": {
+            "local_id": 3542,
+            "remote_id": 56774,
+            "tunnel_id": 7658,
+            "username": "lns@cisco.com",
+            "state": "est",
+            "last_change": "00:10:09",
+            "unique_id": 645
+          },
+          "24593": {
+            "local_id": 24593,
+            "remote_id": 3791,
+            "tunnel_id": 11479,
+            "username": "lns@cisco.com",
+            "state": "est",
+            "last_change": "00:10:08",
+            "unique_id": 645
+          }
+        }
+      }
+    }
+  ]
+}

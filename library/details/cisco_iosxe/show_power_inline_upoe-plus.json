@@ -1,0 +1,128 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show power inline upoe-plus",
+  "schema": {
+    "name": "ShowPowerInlineUpoePlusResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceEntry",
+            "fields": {
+              "admin_state": {
+                "type": "str",
+                "required": true
+              },
+              "oper_state": {
+                "type": "str",
+                "required": true
+              },
+              "allocated_power": {
+                "type": "float",
+                "required": true
+              },
+              "utilized_power": {
+                "type": "float",
+                "required": true
+              },
+              "type": {
+                "type": "str",
+                "required": false
+              },
+              "class_": {
+                "type": "str",
+                "required": false
+              },
+              "device": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple interfaces with various power states and types",
+      "input": "Interface Admin  Type  Oper       Allocated   Utilized  Class   Device\n                 (CSS) State      Power       Power\n--------- ------ ----- ---------- ----------- --------- ------- ------\nGi1/0/1     auto   n/a  off           0.0       0.0       n/a\nGi1/0/2     auto   n/a  off           0.0       0.0       n/a\nGi1/0/3     auto   n/a  off           0.0       0.0       n/a\nGi1/0/4     auto   SP   on            4.0       3.8       1       Ieee PD\nGi1/0/15    auto   SS   on,on         60.0      10.5      6       Ieee PD\nGi1/0/23    auto   DS   on,on         45.4      26.9      3,4     Ieee PD\nTw1/0/25    auto   n/a  lldp-shutdown 0.0       0.0       0\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1/0/1": {
+            "admin_state": "auto",
+            "allocated_power": 0.0,
+            "oper_state": "off",
+            "utilized_power": 0.0
+          },
+          "GigabitEthernet1/0/15": {
+            "admin_state": "auto",
+            "allocated_power": 60.0,
+            "class_": "6",
+            "device": "Ieee PD",
+            "oper_state": "on,on",
+            "type": "SS",
+            "utilized_power": 10.5
+          },
+          "GigabitEthernet1/0/2": {
+            "admin_state": "auto",
+            "allocated_power": 0.0,
+            "oper_state": "off",
+            "utilized_power": 0.0
+          },
+          "GigabitEthernet1/0/23": {
+            "admin_state": "auto",
+            "allocated_power": 45.4,
+            "class_": "3,4",
+            "device": "Ieee PD",
+            "oper_state": "on,on",
+            "type": "DS",
+            "utilized_power": 26.9
+          },
+          "GigabitEthernet1/0/3": {
+            "admin_state": "auto",
+            "allocated_power": 0.0,
+            "oper_state": "off",
+            "utilized_power": 0.0
+          },
+          "GigabitEthernet1/0/4": {
+            "admin_state": "auto",
+            "allocated_power": 4.0,
+            "class_": "1",
+            "device": "Ieee PD",
+            "oper_state": "on",
+            "type": "SP",
+            "utilized_power": 3.8
+          },
+          "TwoGigabitEthernet1/0/25": {
+            "admin_state": "auto",
+            "allocated_power": 0.0,
+            "class_": "0",
+            "oper_state": "lldp-shutdown",
+            "utilized_power": 0.0
+          }
+        }
+      }
+    },
+    {
+      "name": "Single powered interface with device detected",
+      "input": "Interface Admin  Type  Oper       Allocated   Utilized  Class   Device\n                 (CSS) State      Power       Power\n--------- ------ ----- ---------- ----------- --------- ------- ------\nGi2/0/1     auto   SP   on            15.4      12.3      3       IP Phone\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet2/0/1": {
+            "admin_state": "auto",
+            "allocated_power": 15.4,
+            "class_": "3",
+            "device": "IP Phone",
+            "oper_state": "on",
+            "type": "SP",
+            "utilized_power": 12.3
+          }
+        }
+      }
+    }
+  ]
+}

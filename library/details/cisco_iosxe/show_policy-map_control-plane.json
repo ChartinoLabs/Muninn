@@ -1,0 +1,279 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show policy-map control-plane",
+  "schema": {
+    "name": "ShowPolicyMapControlPlaneResult",
+    "fields": {
+      "policy_maps": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PolicyMapEntry",
+            "fields": {
+              "class_map": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "ClassMapEntry",
+                    "fields": {
+                      "match_evaluation": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "packets": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "bytes": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "rate": {
+                        "type": {
+                          "name": "RateEntry",
+                          "fields": {
+                            "interval": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "offered_rate_bps": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "drop_rate_bps": {
+                              "type": "int",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": true
+                      },
+                      "match": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": true
+                      },
+                      "police": {
+                        "type": {
+                          "name": "PoliceEntry",
+                          "fields": {
+                            "cir_bps": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "cir_bc_bytes": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "cir_be_bytes": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "police_bps": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "police_limit": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "extended_limit": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "conformed": {
+                              "type": {
+                                "name": "PoliceCounters",
+                                "fields": {
+                                  "packets": {
+                                    "type": "int",
+                                    "required": true
+                                  },
+                                  "bytes": {
+                                    "type": "int",
+                                    "required": true
+                                  },
+                                  "actions": {
+                                    "type": {
+                                      "type": "dict",
+                                      "key": "str",
+                                      "value": "bool"
+                                    },
+                                    "required": true
+                                  },
+                                  "bps": {
+                                    "type": "int",
+                                    "required": true
+                                  }
+                                }
+                              },
+                              "required": false
+                            },
+                            "exceeded": {
+                              "type": {
+                                "type": "ref",
+                                "name": "PoliceCounters"
+                              },
+                              "required": false
+                            },
+                            "violated": {
+                              "type": {
+                                "type": "ref",
+                                "name": "PoliceCounters"
+                              },
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "qos_set": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "type": "dict",
+                            "key": "str",
+                            "value": {
+                              "name": "QosSetValue",
+                              "fields": {
+                                "marker_statistics": {
+                                  "type": "str",
+                                  "required": true
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "CoPP policy-map with police, QoS set, and class-default entries",
+      "input": "Control Plane\n\nService-policy input: Control_Plane_In\n\n    Class-map: Ping_Class (match-all)\n        0 packets, 0 bytes\n        5 minute offered rate 0000 bps, drop rate 0000 bps\n        Match: access-group name Ping_Option\n        police:\n            cir 8000 bps, bc 1500 bytes\n            conformed 0 packets, 0 bytes; actions:\n                drop\n            exceeded 0 packets, 0 bytes; actions:\n                drop\n            conformed 0000 bps, exceeded 0000 bps\n\n    Class-map: BGP_Class (match-all)\n        32 packets, 2032 bytes\n        5 minute offered rate 0000 bps, drop rate 0000 bps\n        Match: access-group name BGP_Permit\n        QoS Set\n            ip precedence 6\n            Marker statistics: Disabled\n\n    Class-map: ICMP_Class2 (match-all)\n        4 packets, 482 bytes\n        5 minute offered rate 0000 bps, drop rate 0000 bps\n        Match: access-group name ICMP_Permit2\n        police:\n            cir 12000000 bps, bc 150000 bytes\n            conformed 4 packets, 482 bytes; actions:\n                transmit\n            exceeded 0 packets, 0 bytes; actions:\n                drop\n            conformed 0000 bps, exceeded 0000 bps\n\n    Class-map: class-default (match-any)\n        276 packets, 16554 bytes\n        5 minute offered rate 0000 bps, drop rate 0000 bps\n        Match: any\n",
+      "expected": {
+        "policy_maps": {
+          "Control_Plane_In": {
+            "class_map": {
+              "BGP_Class": {
+                "bytes": 2032,
+                "match": [
+                  "access-group name BGP_Permit"
+                ],
+                "match_evaluation": "match-all",
+                "packets": 32,
+                "qos_set": {
+                  "ip precedence": {
+                    "6": {
+                      "marker_statistics": "Disabled"
+                    }
+                  }
+                },
+                "rate": {
+                  "drop_rate_bps": 0,
+                  "interval": 300,
+                  "offered_rate_bps": 0
+                }
+              },
+              "ICMP_Class2": {
+                "bytes": 482,
+                "match": [
+                  "access-group name ICMP_Permit2"
+                ],
+                "match_evaluation": "match-all",
+                "packets": 4,
+                "police": {
+                  "cir_bc_bytes": 150000,
+                  "cir_bps": 12000000,
+                  "conformed": {
+                    "actions": {
+                      "transmit": true
+                    },
+                    "bps": 0,
+                    "bytes": 482,
+                    "packets": 4
+                  },
+                  "exceeded": {
+                    "actions": {
+                      "drop": true
+                    },
+                    "bps": 0,
+                    "bytes": 0,
+                    "packets": 0
+                  }
+                },
+                "rate": {
+                  "drop_rate_bps": 0,
+                  "interval": 300,
+                  "offered_rate_bps": 0
+                }
+              },
+              "Ping_Class": {
+                "bytes": 0,
+                "match": [
+                  "access-group name Ping_Option"
+                ],
+                "match_evaluation": "match-all",
+                "packets": 0,
+                "police": {
+                  "cir_bc_bytes": 1500,
+                  "cir_bps": 8000,
+                  "conformed": {
+                    "actions": {
+                      "drop": true
+                    },
+                    "bps": 0,
+                    "bytes": 0,
+                    "packets": 0
+                  },
+                  "exceeded": {
+                    "actions": {
+                      "drop": true
+                    },
+                    "bps": 0,
+                    "bytes": 0,
+                    "packets": 0
+                  }
+                },
+                "rate": {
+                  "drop_rate_bps": 0,
+                  "interval": 300,
+                  "offered_rate_bps": 0
+                }
+              },
+              "class-default": {
+                "bytes": 16554,
+                "match": [
+                  "any"
+                ],
+                "match_evaluation": "match-any",
+                "packets": 276,
+                "rate": {
+                  "drop_rate_bps": 0,
+                  "interval": 300,
+                  "offered_rate_bps": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

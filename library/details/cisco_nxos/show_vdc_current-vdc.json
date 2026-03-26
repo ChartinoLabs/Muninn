@@ -1,0 +1,37 @@
+{
+  "os": "cisco_nxos",
+  "command": "show vdc current-vdc",
+  "schema": {
+    "name": "ShowVdcCurrentResult",
+    "fields": {
+      "current_vdc": {
+        "type": {
+          "name": "VdcCurrentInfo",
+          "fields": {
+            "id": {
+              "type": "str",
+              "required": true
+            },
+            "name": {
+              "type": "str",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Show vdc current-vdc output with ID and name",
+      "input": "Current vdc is 1 - PE1\n",
+      "expected": {
+        "current_vdc": {
+          "id": "1",
+          "name": "PE1"
+        }
+      }
+    }
+  ]
+}

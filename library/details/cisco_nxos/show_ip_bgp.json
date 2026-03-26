@@ -1,0 +1,541 @@
+{
+  "os": "cisco_nxos",
+  "command": "show ip bgp",
+  "schema": {
+    "name": "ShowIpBgpResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfEntry",
+            "fields": {
+              "address_families": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "AddressFamilyEntry",
+                    "fields": {
+                      "table_version": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "router_id": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "routes": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "RouteEntry",
+                            "fields": {
+                              "paths": {
+                                "type": {
+                                  "type": "list",
+                                  "items": {
+                                    "name": "PathEntry",
+                                    "fields": {
+                                      "status_codes": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "path_type": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "next_hop": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "metric": {
+                                        "type": "int",
+                                        "required": false
+                                      },
+                                      "locprf": {
+                                        "type": "int",
+                                        "required": false
+                                      },
+                                      "weight": {
+                                        "type": "int",
+                                        "required": true
+                                      },
+                                      "as_path": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "origin": {
+                                        "type": "str",
+                                        "required": true
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": true
+                              }
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "route_distinguishers": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "RouteDistinguisherEntry",
+                            "fields": {
+                              "rd_vrf": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "routes": {
+                                "type": {
+                                  "type": "dict",
+                                  "key": "str",
+                                  "value": {
+                                    "type": "ref",
+                                    "name": "RouteEntry"
+                                  }
+                                },
+                                "required": true
+                              }
+                            }
+                          }
+                        },
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Various status codes, multipath, AS-SETs, deleted routes, continuation routes for same network",
+      "input": "BGP routing table information for VRF default, address family IPv4 Unicast\nBGP table version is 100, local router ID is 10.10.0.1\nStatus: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best\nPath type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-injected\nOrigin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup\n\n   Network            Next Hop            Metric     LocPrf     Weight Path\n*>l10.10.0.1/32       0.0.0.0                           100      32768 i\nx e10.10.0.2/32       10.10.2.1                                      0 64102 64002 i\n*>e                   10.10.1.1                                      0 64101 64002 i\n*>e10.10.0.201/32     10.10.2.1                                      0 64102 64201 i\n* e                   10.10.1.1                                      0 64101 64201 i\n*>e100.100.100.108/30 10.10.2.1                                      0 64102 {64201 64202} i\n*>r10.16.1.0/24       0.0.0.0               4444        100      32768 ?\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "address_families": {
+              "IPv4 Unicast": {
+                "table_version": 100,
+                "router_id": "10.10.0.1",
+                "routes": {
+                  "10.10.0.1/32": {
+                    "paths": [
+                      {
+                        "status_codes": "*>",
+                        "path_type": "l",
+                        "next_hop": "0.0.0.0",
+                        "locprf": 100,
+                        "weight": 32768,
+                        "as_path": "",
+                        "origin": "i"
+                      }
+                    ]
+                  },
+                  "10.10.0.2/32": {
+                    "paths": [
+                      {
+                        "status_codes": "x",
+                        "path_type": "e",
+                        "next_hop": "10.10.2.1",
+                        "weight": 0,
+                        "as_path": "64102 64002",
+                        "origin": "i"
+                      },
+                      {
+                        "status_codes": "*>",
+                        "path_type": "e",
+                        "next_hop": "10.10.1.1",
+                        "weight": 0,
+                        "as_path": "64101 64002",
+                        "origin": "i"
+                      }
+                    ]
+                  },
+                  "10.10.0.201/32": {
+                    "paths": [
+                      {
+                        "status_codes": "*>",
+                        "path_type": "e",
+                        "next_hop": "10.10.2.1",
+                        "weight": 0,
+                        "as_path": "64102 64201",
+                        "origin": "i"
+                      },
+                      {
+                        "status_codes": "*",
+                        "path_type": "e",
+                        "next_hop": "10.10.1.1",
+                        "weight": 0,
+                        "as_path": "64101 64201",
+                        "origin": "i"
+                      }
+                    ]
+                  },
+                  "100.100.100.108/30": {
+                    "paths": [
+                      {
+                        "status_codes": "*>",
+                        "path_type": "e",
+                        "next_hop": "10.10.2.1",
+                        "weight": 0,
+                        "as_path": "64102 {64201 64202}",
+                        "origin": "i"
+                      }
+                    ]
+                  },
+                  "10.16.1.0/24": {
+                    "paths": [
+                      {
+                        "status_codes": "*>",
+                        "path_type": "r",
+                        "next_hop": "0.0.0.0",
+                        "metric": 4444,
+                        "locprf": 100,
+                        "weight": 32768,
+                        "as_path": "",
+                        "origin": "?"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Multiple VRFs with local and external routes, simple paths",
+      "input": "BGP routing table information for VRF default, address family IPv4 Unicast\nBGP table version is 4, Local Router ID is 10.253.253.253\nStatus: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best\nPath type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-injected\nOrigin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup, 2 - best2\n\n   Network            Next Hop            Metric     LocPrf     Weight Path\n*>l10.253.253.253/32  0.0.0.0                           100      32768 i\n*>e10.254.254.254/32  10.255.255.254                                 0 65535 i\n\nBGP routing table information for VRF vrf_a, address family IPv4 Unicast\nBGP table version is 7, Local Router ID is 10.0.0.0\nStatus: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best\nPath type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-injected\nOrigin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup, 2 - best2\n\n   Network            Next Hop            Metric     LocPrf     Weight Path\n*>l10.0.0.0/32        0.0.0.0                           100      32768 i\n*>e10.1.1.1/32        10.255.255.2                                   0 65535 i\n\nBGP routing table information for VRF vrf_b, address family IPv4 Unicast\nBGP table version is 8, Local Router ID is 10.0.2.0\nStatus: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best\nPath type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-injected\nOrigin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup, 2 - best2\n\n   Network            Next Hop            Metric     LocPrf     Weight Path\n*>l10.0.2.0/32        0.0.0.0                           100      32768 i\n*>e10.3.3.1/32        10.255.255.6                                   0 65535 i\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "address_families": {
+              "IPv4 Unicast": {
+                "table_version": 4,
+                "router_id": "10.253.253.253",
+                "routes": {
+                  "10.253.253.253/32": {
+                    "paths": [
+                      {
+                        "status_codes": "*>",
+                        "path_type": "l",
+                        "next_hop": "0.0.0.0",
+                        "locprf": 100,
+                        "weight": 32768,
+                        "as_path": "",
+                        "origin": "i"
+                      }
+                    ]
+                  },
+                  "10.254.254.254/32": {
+                    "paths": [
+                      {
+                        "status_codes": "*>",
+                        "path_type": "e",
+                        "next_hop": "10.255.255.254",
+                        "weight": 0,
+                        "as_path": "65535",
+                        "origin": "i"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "vrf_a": {
+            "address_families": {
+              "IPv4 Unicast": {
+                "table_version": 7,
+                "router_id": "10.0.0.0",
+                "routes": {
+                  "10.0.0.0/32": {
+                    "paths": [
+                      {
+                        "status_codes": "*>",
+                        "path_type": "l",
+                        "next_hop": "0.0.0.0",
+                        "locprf": 100,
+                        "weight": 32768,
+                        "as_path": "",
+                        "origin": "i"
+                      }
+                    ]
+                  },
+                  "10.1.1.1/32": {
+                    "paths": [
+                      {
+                        "status_codes": "*>",
+                        "path_type": "e",
+                        "next_hop": "10.255.255.2",
+                        "weight": 0,
+                        "as_path": "65535",
+                        "origin": "i"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "vrf_b": {
+            "address_families": {
+              "IPv4 Unicast": {
+                "table_version": 8,
+                "router_id": "10.0.2.0",
+                "routes": {
+                  "10.0.2.0/32": {
+                    "paths": [
+                      {
+                        "status_codes": "*>",
+                        "path_type": "l",
+                        "next_hop": "0.0.0.0",
+                        "locprf": 100,
+                        "weight": 32768,
+                        "as_path": "",
+                        "origin": "i"
+                      }
+                    ]
+                  },
+                  "10.3.3.1/32": {
+                    "paths": [
+                      {
+                        "status_codes": "*>",
+                        "path_type": "e",
+                        "next_hop": "10.255.255.6",
+                        "weight": 0,
+                        "as_path": "65535",
+                        "origin": "i"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "VPNv4 and VPNv6 with Route Distinguisher groups, multiple RDs per address family",
+      "input": "BGP routing table information for VRF default, address family VPNv4 Unicast\nBGP table version is 23, Local Router ID is 10.186.101.1\nStatus: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best\nPath type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-injected\nOrigin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup\n\n   Network            Next Hop            Metric     LocPrf     Weight Path\nRoute Distinguisher: 1:100    (VRF vpn1)\n*>l10.4.1.0/24         0.0.0.0                           100      32768 i\n*>r10.16.1.0/24        0.0.0.0               4444        100      32768 ?\n*>i10.16.0.0/8         10.186.0.2               0        100          0 ?\n\nRoute Distinguisher: 2:100    (VRF vpn2)\n*>r10.16.1.0/24        0.0.0.0               4444        100      32768 ?\n*>r10.106.0.0/8        0.0.0.0               4444        100      32768 ?\n\nBGP routing table information for VRF default, address family VPNv6 Unicast\nBGP table version is 7, Local Router ID is 10.186.101.1\nStatus: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best\nPath type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-injected\nOrigin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup\n\n   Network            Next Hop            Metric     LocPrf     Weight Path\nRoute Distinguisher: 1:100    (VRF vpn1)\n*>r2001:11::1/128     0::                      0        100      32768 ?\n\nRoute Distinguisher: 2:100    (VRF vpn2)\n*>r2001:11::1/128     0::                      0        100      32768 ?\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "address_families": {
+              "VPNv4 Unicast": {
+                "table_version": 23,
+                "router_id": "10.186.101.1",
+                "route_distinguishers": {
+                  "1:100": {
+                    "rd_vrf": "vpn1",
+                    "routes": {
+                      "10.4.1.0/24": {
+                        "paths": [
+                          {
+                            "status_codes": "*>",
+                            "path_type": "l",
+                            "next_hop": "0.0.0.0",
+                            "locprf": 100,
+                            "weight": 32768,
+                            "as_path": "",
+                            "origin": "i"
+                          }
+                        ]
+                      },
+                      "10.16.1.0/24": {
+                        "paths": [
+                          {
+                            "status_codes": "*>",
+                            "path_type": "r",
+                            "next_hop": "0.0.0.0",
+                            "metric": 4444,
+                            "locprf": 100,
+                            "weight": 32768,
+                            "as_path": "",
+                            "origin": "?"
+                          }
+                        ]
+                      },
+                      "10.16.0.0/8": {
+                        "paths": [
+                          {
+                            "status_codes": "*>",
+                            "path_type": "i",
+                            "next_hop": "10.186.0.2",
+                            "metric": 0,
+                            "locprf": 100,
+                            "weight": 0,
+                            "as_path": "",
+                            "origin": "?"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "2:100": {
+                    "rd_vrf": "vpn2",
+                    "routes": {
+                      "10.16.1.0/24": {
+                        "paths": [
+                          {
+                            "status_codes": "*>",
+                            "path_type": "r",
+                            "next_hop": "0.0.0.0",
+                            "metric": 4444,
+                            "locprf": 100,
+                            "weight": 32768,
+                            "as_path": "",
+                            "origin": "?"
+                          }
+                        ]
+                      },
+                      "10.106.0.0/8": {
+                        "paths": [
+                          {
+                            "status_codes": "*>",
+                            "path_type": "r",
+                            "next_hop": "0.0.0.0",
+                            "metric": 4444,
+                            "locprf": 100,
+                            "weight": 32768,
+                            "as_path": "",
+                            "origin": "?"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "VPNv6 Unicast": {
+                "table_version": 7,
+                "router_id": "10.186.101.1",
+                "route_distinguishers": {
+                  "1:100": {
+                    "rd_vrf": "vpn1",
+                    "routes": {
+                      "2001:11::1/128": {
+                        "paths": [
+                          {
+                            "status_codes": "*>",
+                            "path_type": "r",
+                            "next_hop": "0::",
+                            "metric": 0,
+                            "locprf": 100,
+                            "weight": 32768,
+                            "as_path": "",
+                            "origin": "?"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "2:100": {
+                    "rd_vrf": "vpn2",
+                    "routes": {
+                      "2001:11::1/128": {
+                        "paths": [
+                          {
+                            "status_codes": "*>",
+                            "path_type": "r",
+                            "next_hop": "0::",
+                            "metric": 0,
+                            "locprf": 100,
+                            "weight": 32768,
+                            "as_path": "",
+                            "origin": "?"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "IPv6 Unicast with long prefixes wrapping to next line, continuation routes",
+      "input": "BGP routing table information for VRF default, address family IPv6 Unicast\nBGP table version is 177, Local Router ID is 1.1.1.1\nStatus: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best\nPath type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-injected\nOrigin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup, 2 - best2\n\n   Network            Next Hop            Metric     LocPrf     Weight Path\n*>r110:110:110::110/128\n                      0::                      0        100      32768 ?\n*>e122:122::122:122/128\n                      99:99:99::99                                  30 2 i\n  e123:123::123:123/128\n                      99:99:99::99                                  10 2 i\n*>i                   98:98:98::98                      100         20 3 2 i\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "address_families": {
+              "IPv6 Unicast": {
+                "table_version": 177,
+                "router_id": "1.1.1.1",
+                "routes": {
+                  "110:110:110::110/128": {
+                    "paths": [
+                      {
+                        "status_codes": "*>",
+                        "path_type": "r",
+                        "next_hop": "0::",
+                        "metric": 0,
+                        "locprf": 100,
+                        "weight": 32768,
+                        "as_path": "",
+                        "origin": "?"
+                      }
+                    ]
+                  },
+                  "122:122::122:122/128": {
+                    "paths": [
+                      {
+                        "status_codes": "*>",
+                        "path_type": "e",
+                        "next_hop": "99:99:99::99",
+                        "weight": 30,
+                        "as_path": "2",
+                        "origin": "i"
+                      }
+                    ]
+                  },
+                  "123:123::123:123/128": {
+                    "paths": [
+                      {
+                        "status_codes": "",
+                        "path_type": "e",
+                        "next_hop": "99:99:99::99",
+                        "weight": 10,
+                        "as_path": "2",
+                        "origin": "i"
+                      },
+                      {
+                        "status_codes": "*>",
+                        "path_type": "i",
+                        "next_hop": "98:98:98::98",
+                        "locprf": 100,
+                        "weight": 20,
+                        "as_path": "3 2",
+                        "origin": "i"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

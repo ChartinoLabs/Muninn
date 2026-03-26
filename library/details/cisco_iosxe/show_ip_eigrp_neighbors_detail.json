@@ -1,0 +1,142 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip eigrp neighbors detail",
+  "schema": {
+    "name": "ShowIpEigrpNeighborsDetailResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "EigrpDetailNeighborEntry",
+              "fields": {
+                "handle": {
+                  "type": "int",
+                  "required": true
+                },
+                "hold_time": {
+                  "type": "int",
+                  "required": true
+                },
+                "uptime": {
+                  "type": "str",
+                  "required": true
+                },
+                "srtt": {
+                  "type": "int",
+                  "required": true
+                },
+                "rto": {
+                  "type": "int",
+                  "required": true
+                },
+                "queue_count": {
+                  "type": "int",
+                  "required": true
+                },
+                "sequence_number": {
+                  "type": "int",
+                  "required": true
+                },
+                "software_version": {
+                  "type": "str",
+                  "required": true
+                },
+                "retransmit_count": {
+                  "type": "int",
+                  "required": true
+                },
+                "retry_count": {
+                  "type": "int",
+                  "required": true
+                },
+                "prefixes": {
+                  "type": "int",
+                  "required": false
+                },
+                "topology_ids_from_peer": {
+                  "type": "int",
+                  "required": true
+                },
+                "topology_advert_to_peer": {
+                  "type": "str",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Two EIGRP neighbors on the same tunnel interface",
+      "input": "EIGRP-IPv4 Neighbors for AS(215)\nH   Address                 Interface              Hold Uptime   SRTT   RTO  Q  Seq\n                                                   (sec)         (ms)       Cnt Num\n1   81.211.127.255          Tu5                      13 18:52:46   55   330  0  1042408760\n   Version 25.0/2.0, Retrans: 1, Retries: 0, Prefixes: 952\n   Topology-ids from peer - 0\n0   83.151.157.254          Tu5                      12 6d08h      50   300  0  564418354\n   Version 25.0/2.0, Retrans: 6, Retries: 0, Prefixes: 952\n   Topology-ids from peer - 0\nMax Nbrs: 0, Current Nbrs: 0\n",
+      "expected": {
+        "neighbors": {
+          "Tunnel5": {
+            "81.211.127.255": {
+              "handle": 1,
+              "hold_time": 13,
+              "prefixes": 952,
+              "queue_count": 0,
+              "retransmit_count": 1,
+              "retry_count": 0,
+              "rto": 330,
+              "sequence_number": 1042408760,
+              "software_version": "25.0/2.0",
+              "srtt": 55,
+              "topology_ids_from_peer": 0,
+              "uptime": "18:52:46"
+            },
+            "83.151.157.254": {
+              "handle": 0,
+              "hold_time": 12,
+              "prefixes": 952,
+              "queue_count": 0,
+              "retransmit_count": 6,
+              "retry_count": 0,
+              "rto": 300,
+              "sequence_number": 564418354,
+              "software_version": "25.0/2.0",
+              "srtt": 50,
+              "topology_ids_from_peer": 0,
+              "uptime": "6d08h"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Single neighbor with topology advertised to peer field",
+      "input": "EIGRP-IPv4 Neighbors for AS(100)\nH   Address                 Interface              Hold Uptime   SRTT   RTO  Q  Seq\n                                                   (sec)         (ms)       Cnt Num\n0   10.1.2.1                Et1/0                    11 00:02:31   12   200  0  6\n   Version 5.1/3.0, Retrans: 2, Retries: 0, Prefixes: 1\n   Topology-ids from peer - 0\n   Topologies advertised to peer:   base\n",
+      "expected": {
+        "neighbors": {
+          "Ethernet1/0": {
+            "10.1.2.1": {
+              "handle": 0,
+              "hold_time": 11,
+              "prefixes": 1,
+              "queue_count": 0,
+              "retransmit_count": 2,
+              "retry_count": 0,
+              "rto": 200,
+              "sequence_number": 6,
+              "software_version": "5.1/3.0",
+              "srtt": 12,
+              "topology_advert_to_peer": "base",
+              "topology_ids_from_peer": 0,
+              "uptime": "00:02:31"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

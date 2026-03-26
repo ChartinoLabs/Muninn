@@ -1,0 +1,59 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ppp all",
+  "schema": {
+    "name": "ShowPppAllResult",
+    "fields": {
+      "sessions": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PppAllRow",
+            "fields": {
+              "interface": {
+                "type": "str",
+                "required": true
+              },
+              "open_nego": {
+                "type": "str",
+                "required": true
+              },
+              "stage": {
+                "type": "str",
+                "required": true
+              },
+              "peer_address": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "Interface/ID OPEN+ Nego* Fail-     Stage    Peer Address\n------------ --------------------- -------- ---------------\nVi1.2        LCP+ IPCP+            LocalT   51.0.0.1\nVi1.1        LCP+ IPV6CP+ IPV6CP+  LocalT   0.0.0.0\n",
+      "expected": {
+        "sessions": {
+          "Virtual-Access1.2": {
+            "interface": "Virtual-Access1.2",
+            "open_nego": "LCP+ IPCP+",
+            "stage": "LocalT",
+            "peer_address": "51.0.0.1"
+          },
+          "Virtual-Access1.1": {
+            "interface": "Virtual-Access1.1",
+            "open_nego": "LCP+ IPV6CP+ IPV6CP+",
+            "stage": "LocalT",
+            "peer_address": "0.0.0.0"
+          }
+        }
+      }
+    }
+  ]
+}

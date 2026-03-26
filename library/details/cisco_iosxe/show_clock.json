@@ -1,0 +1,83 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show clock",
+  "schema": {
+    "name": "ShowClockResult",
+    "fields": {
+      "time": {
+        "type": "str",
+        "required": true
+      },
+      "timezone": {
+        "type": "str",
+        "required": true
+      },
+      "day_of_week": {
+        "type": "str",
+        "required": true
+      },
+      "month": {
+        "type": "str",
+        "required": true
+      },
+      "day": {
+        "type": "str",
+        "required": true
+      },
+      "year": {
+        "type": "str",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show clock output with NTP time source header",
+      "input": "Router#show clock\nLoad for five secs: 1%/0%; one minute: 2%; five minutes: 3%\nTime source is NTP, 18:56:04.554 EST Mon Oct 17 2016\n\n18:56:04.554 EST Mon Oct 17 2016\n",
+      "expected": {
+        "time": "18:56:04.554",
+        "timezone": "EST",
+        "day_of_week": "Mon",
+        "month": "Oct",
+        "day": "17",
+        "year": "2016"
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": "*04:25:14.130 UTC Thu Mar 19 2026\n",
+      "expected": {
+        "time": "04:25:14.130",
+        "timezone": "UTC",
+        "day_of_week": "Thu",
+        "month": "Mar",
+        "day": "19",
+        "year": "2026"
+      }
+    },
+    {
+      "name": "Show clock with asterisk prefix (clock not authoritative)",
+      "input": "wilson_19#show clock\n*04:45:00.857 UTC Thu Aug 7 2025\n",
+      "expected": {
+        "time": "04:45:00.857",
+        "timezone": "UTC",
+        "day_of_week": "Thu",
+        "month": "Aug",
+        "day": "7",
+        "year": "2025"
+      }
+    },
+    {
+      "name": "Show clock with dot prefix (unsynchronized)",
+      "input": "wilson_19#show clock\n.04:37:54.849 UTC Thu Aug 7 2025\n",
+      "expected": {
+        "time": "04:37:54.849",
+        "timezone": "UTC",
+        "day_of_week": "Thu",
+        "month": "Aug",
+        "day": "7",
+        "year": "2025"
+      }
+    }
+  ]
+}

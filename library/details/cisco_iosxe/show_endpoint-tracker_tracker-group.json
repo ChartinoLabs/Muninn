@@ -1,0 +1,139 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show endpoint-tracker tracker-group",
+  "schema": {
+    "name": "ShowEndpointTrackerTrackerGroupResult",
+    "fields": {
+      "tracker_groups": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "TrackerGroupEntry",
+            "fields": {
+              "element_trackers": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "rtt_in_msec": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": true
+              },
+              "probe_ids": {
+                "type": {
+                  "type": "list",
+                  "items": "int"
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple tracker groups with UP and DOWN states including Timeout RTT values",
+      "input": "show endpoint-tracker tracker-group\n\nTracker Name            Element trackers name    Status                 RTT in msec       Probe ID\ngroup-udp-tcp-10001     tcp-10002, udp-10002      UP(UP OR UP)          1, 1              7, 8\ngroup2                  track1, track2            UP(UP OR UP)          14, 14            201, 202\ngroup3                  track1, track2            DOWN(DOWN OR DOWN)    Timeout, Timeout  0, 0\n",
+      "expected": {
+        "tracker_groups": {
+          "group-udp-tcp-10001": {
+            "element_trackers": [
+              "tcp-10002",
+              "udp-10002"
+            ],
+            "probe_ids": [
+              7,
+              8
+            ],
+            "rtt_in_msec": [
+              "1",
+              "1"
+            ],
+            "status": "UP(UP OR UP)"
+          },
+          "group2": {
+            "element_trackers": [
+              "track1",
+              "track2"
+            ],
+            "probe_ids": [
+              201,
+              202
+            ],
+            "rtt_in_msec": [
+              "14",
+              "14"
+            ],
+            "status": "UP(UP OR UP)"
+          },
+          "group3": {
+            "element_trackers": [
+              "track1",
+              "track2"
+            ],
+            "probe_ids": [
+              0,
+              0
+            ],
+            "rtt_in_msec": [
+              "Timeout",
+              "Timeout"
+            ],
+            "status": "DOWN(DOWN OR DOWN)"
+          }
+        }
+      }
+    },
+    {
+      "name": "Tracker groups using both OR and AND boolean logic",
+      "input": "Tracker Name                     Element trackers name              Status                       RTT in msec      Probe ID\ntrkgrp_grp1                      trk_google-web, trk_umbrella       UP(UP OR UP)                 16, 3            5, 6\ntrkgrp_endpoint                  trk_google-web1, trk_umbrella1     UP(UP AND UP)                16, 3            5, 6\n",
+      "expected": {
+        "tracker_groups": {
+          "trkgrp_endpoint": {
+            "element_trackers": [
+              "trk_google-web1",
+              "trk_umbrella1"
+            ],
+            "probe_ids": [
+              5,
+              6
+            ],
+            "rtt_in_msec": [
+              "16",
+              "3"
+            ],
+            "status": "UP(UP AND UP)"
+          },
+          "trkgrp_grp1": {
+            "element_trackers": [
+              "trk_google-web",
+              "trk_umbrella"
+            ],
+            "probe_ids": [
+              5,
+              6
+            ],
+            "rtt_in_msec": [
+              "16",
+              "3"
+            ],
+            "status": "UP(UP OR UP)"
+          }
+        }
+      }
+    }
+  ]
+}

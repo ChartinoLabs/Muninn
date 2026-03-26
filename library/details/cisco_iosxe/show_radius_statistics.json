@@ -1,0 +1,210 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show radius statistics",
+  "schema": {
+    "name": "ShowRadiusStatisticsResult",
+    "fields": {
+      "triple_counters": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RadiusTripleCounter",
+            "fields": {
+              "both": {
+                "type": "str",
+                "required": true
+              },
+              "auth": {
+                "type": "str",
+                "required": false
+              },
+              "acct": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "single_counters": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": "str"
+        },
+        "required": true
+      },
+      "source_port_range": {
+        "type": "str",
+        "required": false
+      },
+      "source_port_span": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": false
+      },
+      "last_source_port_identifier": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": false
+      },
+      "elapsed_since_clear": {
+        "type": "str",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "Maximum inQ length:             NA         NA         0\nMaximum waitQ length:           NA         NA         2\nMaximum doneQ length:           NA         NA         0\nTotal responses seen:           0          0          0\nPackets with responses:         0          0          0\nPackets without responses:      4          0          4\nRadius Timers Started:         20          0         20\nRadius Timers Created:         20          0         20\nRadius Timers Stopped:         20          0         20\nRadius Timers Outstanding:      0          0          0\nRadius Timers Added:           20          0         20\nRadius Timers Jitterred:        0          0          0\nDuplicate ID detects:           0          0          0\nBuffer Allocation Failures:     0          0          0\nAccess Rejects           :          0\nAccess Accepts           :          0\nNumber of Radius timeouts:         20          0         20\nRadius Timers Create Failed:        0          0          0\nRadius Timers Stop Failed:          0          0          0\nRadius Timers Add Failed:           0          0          0\nRadius Timers Jitter Failed:        0          0          0\nAverage response delay(ms):          0          0          0\nMaximum response delay(ms):          0          0          0\nMaximum Buffer Size (bytes):        310          0        310\nMalformed Responses        :          0          0          0\nBad Authenticators         :          0          0          0\nUnknown Responses          :          0          0          0\nSource Port Range: (2 ports only)\n1645 - 1646\nLast used Source Port/Identifier:\n1645/0\nElapsed time since counters last cleared: 1d11h15m\n",
+      "expected": {
+        "triple_counters": {
+          "Maximum inQ length": {
+            "both": "0"
+          },
+          "Maximum waitQ length": {
+            "both": "2"
+          },
+          "Maximum doneQ length": {
+            "both": "0"
+          },
+          "Total responses seen": {
+            "auth": "0",
+            "acct": "0",
+            "both": "0"
+          },
+          "Packets with responses": {
+            "auth": "0",
+            "acct": "0",
+            "both": "0"
+          },
+          "Packets without responses": {
+            "auth": "4",
+            "acct": "0",
+            "both": "4"
+          },
+          "Radius Timers Started": {
+            "auth": "20",
+            "acct": "0",
+            "both": "20"
+          },
+          "Radius Timers Created": {
+            "auth": "20",
+            "acct": "0",
+            "both": "20"
+          },
+          "Radius Timers Stopped": {
+            "auth": "20",
+            "acct": "0",
+            "both": "20"
+          },
+          "Radius Timers Outstanding": {
+            "auth": "0",
+            "acct": "0",
+            "both": "0"
+          },
+          "Radius Timers Added": {
+            "auth": "20",
+            "acct": "0",
+            "both": "20"
+          },
+          "Radius Timers Jitterred": {
+            "auth": "0",
+            "acct": "0",
+            "both": "0"
+          },
+          "Duplicate ID detects": {
+            "auth": "0",
+            "acct": "0",
+            "both": "0"
+          },
+          "Buffer Allocation Failures": {
+            "auth": "0",
+            "acct": "0",
+            "both": "0"
+          },
+          "Number of Radius timeouts": {
+            "auth": "20",
+            "acct": "0",
+            "both": "20"
+          },
+          "Radius Timers Create Failed": {
+            "auth": "0",
+            "acct": "0",
+            "both": "0"
+          },
+          "Radius Timers Stop Failed": {
+            "auth": "0",
+            "acct": "0",
+            "both": "0"
+          },
+          "Radius Timers Add Failed": {
+            "auth": "0",
+            "acct": "0",
+            "both": "0"
+          },
+          "Radius Timers Jitter Failed": {
+            "auth": "0",
+            "acct": "0",
+            "both": "0"
+          },
+          "Average response delay(ms)": {
+            "auth": "0",
+            "acct": "0",
+            "both": "0"
+          },
+          "Maximum response delay(ms)": {
+            "auth": "0",
+            "acct": "0",
+            "both": "0"
+          },
+          "Maximum Buffer Size (bytes)": {
+            "auth": "310",
+            "acct": "0",
+            "both": "310"
+          },
+          "Malformed Responses": {
+            "auth": "0",
+            "acct": "0",
+            "both": "0"
+          },
+          "Bad Authenticators": {
+            "auth": "0",
+            "acct": "0",
+            "both": "0"
+          },
+          "Unknown Responses": {
+            "auth": "0",
+            "acct": "0",
+            "both": "0"
+          },
+          "Source Port Range": {
+            "auth": "(2",
+            "acct": "ports",
+            "both": "only)"
+          }
+        },
+        "single_counters": {
+          "Access Rejects": "0",
+          "Access Accepts": "0"
+        },
+        "elapsed_since_clear": "1d11h15m",
+        "source_port_span": [
+          "1645",
+          "1646"
+        ],
+        "last_source_port_identifier": [
+          "1645",
+          "0"
+        ]
+      }
+    }
+  ]
+}

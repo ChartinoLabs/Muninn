@@ -1,0 +1,228 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show logging onboard rp active environment detail",
+  "schema": {
+    "name": "ShowLoggingOnboardRpActiveEnvironmentDetailResult",
+    "fields": {
+      "summary": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SummaryEntry",
+            "fields": {
+              "date": {
+                "type": "str",
+                "required": true
+              },
+              "time": {
+                "type": "str",
+                "required": true
+              },
+              "ins_count": {
+                "type": "int",
+                "required": true
+              },
+              "rem_count": {
+                "type": "int",
+                "required": true
+              },
+              "hardware": {
+                "type": {
+                  "name": "HardwareInfo",
+                  "fields": {
+                    "vid": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "pid": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "tan": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "serial_no": {
+                      "type": "str",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "continuous": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ContinuousEntry",
+            "fields": {
+              "date": {
+                "type": "str",
+                "required": true
+              },
+              "time": {
+                "type": "str",
+                "required": true
+              },
+              "device_name": {
+                "type": "str",
+                "required": true
+              },
+              "ios_version": {
+                "type": "str",
+                "required": true
+              },
+              "fw_version": {
+                "type": "int",
+                "required": true
+              },
+              "bios_version": {
+                "type": "str",
+                "required": true
+              },
+              "ram_kb": {
+                "type": "int",
+                "required": true
+              },
+              "event": {
+                "type": "str",
+                "required": true
+              },
+              "hardware": {
+                "type": {
+                  "type": "ref",
+                  "name": "HardwareInfo"
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with two summary entries and five continuous entries for a fan module",
+      "input": "--------------------------------------------------------------------------------\nENVIRONMENT SUMMARY INFORMATION\n--------------------------------------------------------------------------------\nMM/DD/YYYY HH:MM:SS   Ins count    Rem count\n                    ------------------------------------------------------------\n                    VID PID                  TAN          Serial No\n--------------------------------------------------------------------------------\n04/04/2023 10:36:47 27         0\n                    V01 C9407-FAN                    C1   FXS222800XL\n04/04/2023 10:36:47 27         0\n                    V01 C9407-FAN                    C1   FXS222800XL\n\n--------------------------------------------------------------------------------\nENVIRONMENT CONTINUOUS INFORMATION\n--------------------------------------------------------------------------------\nMM/DD/YYYY HH:MM:SS Device Name        IOS Version F/W Ver BIOSVer RAM(KB) Event\n                    ------------------------------------------------------------\n                    VID PID                  TAN          Serial No\n--------------------------------------------------------------------------------\n03/30/2023 02:32:41 obfl0:             17.06.04    386204  17.10.1r 0       Ins\n                    V01 C9407-FAN                    C1   FXS222800XL\n03/30/2023 02:36:41 obfl0:             17.06.04    386204  17.10.1r 0       Ins\n                    V01 C9407-FAN                    C1   FXS222800XL\n04/02/2023 09:47:02 obfl0:             17.06.04    386204  17.10.1r 0       Ins\n                    V01 C9407-FAN                    C1   FXS222800XL\n04/04/2023 10:36:47 obfl0:             17.06.04    386204  17.10.1r 0       Ins\n                    V01 C9407-FAN                    C1   FXS222800XL\n04/05/2023 07:33:49 obfl0:             17.06.04    386204  17.10.1r 0       Ins\n                    V01 C9407-FAN                    C1   FXS222800XL\n\n--------------------------------------------------------------------------------\n",
+      "expected": {
+        "summary": {
+          "04/04/2023 10:36:47": {
+            "date": "04/04/2023",
+            "time": "10:36:47",
+            "ins_count": 27,
+            "rem_count": 0,
+            "hardware": {
+              "vid": "V01",
+              "pid": "C9407-FAN",
+              "tan": "C1",
+              "serial_no": "FXS222800XL"
+            }
+          },
+          "04/04/2023 10:36:47_2": {
+            "date": "04/04/2023",
+            "time": "10:36:47",
+            "ins_count": 27,
+            "rem_count": 0,
+            "hardware": {
+              "vid": "V01",
+              "pid": "C9407-FAN",
+              "tan": "C1",
+              "serial_no": "FXS222800XL"
+            }
+          }
+        },
+        "continuous": {
+          "03/30/2023 02:32:41": {
+            "date": "03/30/2023",
+            "time": "02:32:41",
+            "device_name": "obfl0",
+            "ios_version": "17.06.04",
+            "fw_version": 386204,
+            "bios_version": "17.10.1r",
+            "ram_kb": 0,
+            "event": "Ins",
+            "hardware": {
+              "vid": "V01",
+              "pid": "C9407-FAN",
+              "tan": "C1",
+              "serial_no": "FXS222800XL"
+            }
+          },
+          "03/30/2023 02:36:41": {
+            "date": "03/30/2023",
+            "time": "02:36:41",
+            "device_name": "obfl0",
+            "ios_version": "17.06.04",
+            "fw_version": 386204,
+            "bios_version": "17.10.1r",
+            "ram_kb": 0,
+            "event": "Ins",
+            "hardware": {
+              "vid": "V01",
+              "pid": "C9407-FAN",
+              "tan": "C1",
+              "serial_no": "FXS222800XL"
+            }
+          },
+          "04/02/2023 09:47:02": {
+            "date": "04/02/2023",
+            "time": "09:47:02",
+            "device_name": "obfl0",
+            "ios_version": "17.06.04",
+            "fw_version": 386204,
+            "bios_version": "17.10.1r",
+            "ram_kb": 0,
+            "event": "Ins",
+            "hardware": {
+              "vid": "V01",
+              "pid": "C9407-FAN",
+              "tan": "C1",
+              "serial_no": "FXS222800XL"
+            }
+          },
+          "04/04/2023 10:36:47": {
+            "date": "04/04/2023",
+            "time": "10:36:47",
+            "device_name": "obfl0",
+            "ios_version": "17.06.04",
+            "fw_version": 386204,
+            "bios_version": "17.10.1r",
+            "ram_kb": 0,
+            "event": "Ins",
+            "hardware": {
+              "vid": "V01",
+              "pid": "C9407-FAN",
+              "tan": "C1",
+              "serial_no": "FXS222800XL"
+            }
+          },
+          "04/05/2023 07:33:49": {
+            "date": "04/05/2023",
+            "time": "07:33:49",
+            "device_name": "obfl0",
+            "ios_version": "17.06.04",
+            "fw_version": 386204,
+            "bios_version": "17.10.1r",
+            "ram_kb": 0,
+            "event": "Ins",
+            "hardware": {
+              "vid": "V01",
+              "pid": "C9407-FAN",
+              "tan": "C1",
+              "serial_no": "FXS222800XL"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,404 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip interface brief",
+  "schema": {
+    "name": "ShowIpInterfaceBriefResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceBriefEntry",
+            "fields": {
+              "ip_address": {
+                "type": "str",
+                "required": true
+              },
+              "ok": {
+                "type": "str",
+                "required": true
+              },
+              "method": {
+                "type": "str",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "protocol": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Live device output",
+      "input": "Interface              IP-Address      OK? Method Status                Protocol\nGigabitEthernet1       192.168.255.14  YES NVRAM  up                    up\nGigabitEthernet2       10.34.0.2       YES other  up                    up\nGigabitEthernet2.10    10.34.10.2      YES other  up                    up\nGigabitEthernet2.20    10.34.20.2      YES other  up                    up\nGigabitEthernet3       10.24.0.2       YES other  up                    up\nGigabitEthernet3.10    10.24.10.2      YES other  up                    up\nGigabitEthernet3.20    10.24.20.2      YES other  up                    up\nGigabitEthernet4       unassigned      YES NVRAM  administratively down down\nLoopback0              192.0.2.4       YES other  up                    up\nLoopback10             198.51.100.4    YES other  up                    up\nLoopback20             203.0.113.4     YES other  up                    up\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1": {
+            "ip_address": "192.168.255.14",
+            "ok": "YES",
+            "method": "NVRAM",
+            "status": "up",
+            "protocol": "up"
+          },
+          "GigabitEthernet2": {
+            "ip_address": "10.34.0.2",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          },
+          "GigabitEthernet2.10": {
+            "ip_address": "10.34.10.2",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          },
+          "GigabitEthernet2.20": {
+            "ip_address": "10.34.20.2",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          },
+          "GigabitEthernet3": {
+            "ip_address": "10.24.0.2",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          },
+          "GigabitEthernet3.10": {
+            "ip_address": "10.24.10.2",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          },
+          "GigabitEthernet3.20": {
+            "ip_address": "10.24.20.2",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          },
+          "GigabitEthernet4": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "NVRAM",
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "Loopback0": {
+            "ip_address": "192.0.2.4",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Loopback10": {
+            "ip_address": "198.51.100.4",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Loopback20": {
+            "ip_address": "203.0.113.4",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          }
+        }
+      }
+    },
+    {
+      "name": "IOS-XE interfaces with mixed status including administratively down",
+      "input": "Interface              IP-Address      OK? Method Status                Protocol\nGigabitEthernet0/0/0   10.105.44.23    YES other  up                    up\nGigabitEthernet0/0/1   10.174.10.1     YES other  up                    up\nTe0/0/4                10.121.10.1     YES other  up                    up\nTe0/0/5                unassigned      YES unset  down                  down\nucse1/0/0              10.19.14.1      YES other  administratively down down\nLoopback65528          192.168.1.1     YES other  up                    up\nTunnel1                10.174.10.1     YES TFTP   up                    up\nVirtualPortGroup0      192.0.2.1       YES other  up                    up\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet0/0/0": {
+            "ip_address": "10.105.44.23",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          },
+          "GigabitEthernet0/0/1": {
+            "ip_address": "10.174.10.1",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          },
+          "TenGigabitEthernet0/0/4": {
+            "ip_address": "10.121.10.1",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          },
+          "TenGigabitEthernet0/0/5": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "unset",
+            "status": "down",
+            "protocol": "down"
+          },
+          "ucse1/0/0": {
+            "ip_address": "10.19.14.1",
+            "ok": "YES",
+            "method": "other",
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "Loopback65528": {
+            "ip_address": "192.168.1.1",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Tunnel1": {
+            "ip_address": "10.174.10.1",
+            "ok": "YES",
+            "method": "TFTP",
+            "status": "up",
+            "protocol": "up"
+          },
+          "VirtualPortGroup0": {
+            "ip_address": "192.0.2.1",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          }
+        }
+      }
+    },
+    {
+      "name": "SD-WAN router with many interface types including Tunnels, VirtualPortGroups, NVI, and abbreviated names",
+      "input": "Interface              IP-Address      OK? Method Status                Protocol\nGigabitEthernet0/0/0   10.105.44.23    YES other  up                    up\nGigabitEthernet0/0/1   10.174.10.1     YES other  up                    up\nGigabitEthernet0/0/2   10.64.10.1      YES other  up                    up\nGigabitEthernet0/0/3   10.186.10.1     YES other  up                    up\nTe0/0/4                10.121.10.1     YES other  up                    up\nTe0/0/5                unassigned      YES unset  down                  down\nTw0/1/0                unassigned      YES unset  up                    up\nTw0/2/0                unassigned      YES unset  up                    up\nucse1/0/0              10.19.14.1      YES other  administratively down down\nucse1/0/1              unassigned      YES unset  administratively down down\nSdwan-system-intf      192.168.10.64   YES unset  up                    up\nLoopback65528          192.168.1.1     YES other  up                    up\nNVI0                   unassigned      YES unset  up                    up\nTunnel1                10.174.10.1     YES TFTP   up                    up\nTunnel3                10.186.10.1     YES TFTP   up                    up\nTunnel2000000001       192.168.2.1     YES unset  up                    up\nTunnel2000000002       192.168.166.1   YES unset  up                    up\nVirtualPortGroup0      192.0.2.1       YES other  up                    up\nVirtualPortGroup1      192.168.2.1     YES other  up                    up\nVirtualPortGroup3      192.168.3.1     YES other  up                    up\nVirtualPortGroup4      192.168.166.1   YES other  up                    up\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet0/0/0": {
+            "ip_address": "10.105.44.23",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          },
+          "GigabitEthernet0/0/1": {
+            "ip_address": "10.174.10.1",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          },
+          "GigabitEthernet0/0/2": {
+            "ip_address": "10.64.10.1",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          },
+          "GigabitEthernet0/0/3": {
+            "ip_address": "10.186.10.1",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          },
+          "TenGigabitEthernet0/0/4": {
+            "ip_address": "10.121.10.1",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          },
+          "TenGigabitEthernet0/0/5": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "unset",
+            "status": "down",
+            "protocol": "down"
+          },
+          "TwoGigabitEthernet0/1/0": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "unset",
+            "status": "up",
+            "protocol": "up"
+          },
+          "TwoGigabitEthernet0/2/0": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "unset",
+            "status": "up",
+            "protocol": "up"
+          },
+          "ucse1/0/0": {
+            "ip_address": "10.19.14.1",
+            "ok": "YES",
+            "method": "other",
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "ucse1/0/1": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "unset",
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "Sdwan-system-intf": {
+            "ip_address": "192.168.10.64",
+            "ok": "YES",
+            "method": "unset",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Loopback65528": {
+            "ip_address": "192.168.1.1",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          },
+          "NVI0": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "unset",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Tunnel1": {
+            "ip_address": "10.174.10.1",
+            "ok": "YES",
+            "method": "TFTP",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Tunnel3": {
+            "ip_address": "10.186.10.1",
+            "ok": "YES",
+            "method": "TFTP",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Tunnel2000000001": {
+            "ip_address": "192.168.2.1",
+            "ok": "YES",
+            "method": "unset",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Tunnel2000000002": {
+            "ip_address": "192.168.166.1",
+            "ok": "YES",
+            "method": "unset",
+            "status": "up",
+            "protocol": "up"
+          },
+          "VirtualPortGroup0": {
+            "ip_address": "192.0.2.1",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          },
+          "VirtualPortGroup1": {
+            "ip_address": "192.168.2.1",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          },
+          "VirtualPortGroup3": {
+            "ip_address": "192.168.3.1",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          },
+          "VirtualPortGroup4": {
+            "ip_address": "192.168.166.1",
+            "ok": "YES",
+            "method": "other",
+            "status": "up",
+            "protocol": "up"
+          }
+        }
+      }
+    },
+    {
+      "name": "Interfaces with deleted subinterface status and NVRAM method",
+      "input": "Interface                  IP-Address      OK? Method Status                Protocol\nEthernet0/0                unassigned      YES NVRAM  up                    up\nEthernet0/0.11             10.0.1.38       YES NVRAM  up                    up\nEthernet0/0.100            unassigned      YES NVRAM  deleted               down\nEthernet0/1                1.1.1.1         YES NVRAM  up                    up\nEthernet0/2                unassigned      YES NVRAM  administratively down down\nEthernet0/3                unassigned      YES NVRAM  administratively down down\nLoopback0                  10.0.1.2        YES NVRAM  up                    up\n",
+      "expected": {
+        "interfaces": {
+          "Ethernet0/0": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "NVRAM",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Ethernet0/0.11": {
+            "ip_address": "10.0.1.38",
+            "ok": "YES",
+            "method": "NVRAM",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Ethernet0/0.100": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "NVRAM",
+            "status": "deleted",
+            "protocol": "down"
+          },
+          "Ethernet0/1": {
+            "ip_address": "1.1.1.1",
+            "ok": "YES",
+            "method": "NVRAM",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Ethernet0/2": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "NVRAM",
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "Ethernet0/3": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "NVRAM",
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "Loopback0": {
+            "ip_address": "10.0.1.2",
+            "ok": "YES",
+            "method": "NVRAM",
+            "status": "up",
+            "protocol": "up"
+          }
+        }
+      }
+    }
+  ]
+}

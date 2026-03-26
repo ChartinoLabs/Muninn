@@ -1,0 +1,203 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show stack-power detail",
+  "schema": {
+    "name": "ShowStackPowerDetailResult",
+    "fields": {
+      "power_stacks": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PowerStackDetailEntry",
+            "fields": {
+              "summary_mode": {
+                "type": "str",
+                "required": true
+              },
+              "summary_topology": {
+                "type": "str",
+                "required": true
+              },
+              "total_power": {
+                "type": "int",
+                "required": true
+              },
+              "reserved_power": {
+                "type": "int",
+                "required": true
+              },
+              "allocated_power": {
+                "type": "int",
+                "required": true
+              },
+              "switch_available_power": {
+                "type": "int",
+                "required": true
+              },
+              "num_switches": {
+                "type": "int",
+                "required": true
+              },
+              "num_power_supplies": {
+                "type": "int",
+                "required": true
+              },
+              "stack_mode": {
+                "type": "str",
+                "required": true
+              },
+              "stack_topology": {
+                "type": "str",
+                "required": true
+              },
+              "switch": {
+                "type": {
+                  "name": "SwitchPowerDetail",
+                  "fields": {
+                    "switch_number": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "power_budget": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "power_allocated": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "low_port_priority_value": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "high_port_priority_value": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "switch_priority_value": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "port_status": {
+                      "type": {
+                        "type": "dict",
+                        "key": "str",
+                        "value": "str"
+                      },
+                      "required": true
+                    },
+                    "neighbor_on_port": {
+                      "type": {
+                        "type": "dict",
+                        "key": "str",
+                        "value": "str"
+                      },
+                      "required": true
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Stack-power summary table with per-stack detail blocks",
+      "input": "Power Stack                      Stack   Stack    Total   Rsvd    Alloc   Sw_Avail Num  Num\n    Name                             Mode    Topolgy  Pwr(W)  Pwr(W)  Pwr(W)   Pwr(W)  SW   PS\n    --------------------             ------  -------  ------  ------  ------  ------  ----- -----\n    Powerstack-1                     SP-PS   Stndaln  1100    0       243     857       1    1\n    Powerstack-2                     SP-PS   Stndaln  1100    0       510     590       1    1\n    Powerstack-3                     SP-PS   Stndaln  1100    0       510     590       1    1\n\nPower stack name: Powerstack-1\n    Stack mode: Power sharing\n    Stack topology: Standalone\n    Switch 1:\n        Power budget: 1100\n        Power allocated: 243\n        Low port priority value: 22\n        High port priority value: 13\n        Switch priority value: 4\n        Port 1 status: Not connected\n        Port 2 status: Not connected\n        Neighbor on port 1: 0000.0000.0000\n        Neighbor on port 2: 0000.0000.0000\n\nPower stack name: Powerstack-2\n    Stack mode: Power sharing\n    Stack topology: Standalone\n    Switch 2:\n        Power budget: 1100\n        Power allocated: 510\n        Low port priority value: 22\n        High port priority value: 13\n        Switch priority value: 4\n        Port 1 status: Not connected\n        Port 2 status: Not connected\n        Neighbor on port 1: 0000.0000.0000\n        Neighbor on port 2: 0000.0000.0000\n\nPower stack name: Powerstack-3\n    Stack mode: Power sharing\n    Stack topology: Standalone\n    Switch 3:\n        Power budget: 1100\n        Power allocated: 510\n        Low port priority value: 22\n        High port priority value: 13\n        Switch priority value: 4\n        Port 1 status: Not connected\n        Port 2 status: Not connected\n        Neighbor on port 1: 0000.0000.0000\n        Neighbor on port 2: 0000.0000.0000\n",
+      "expected": {
+        "power_stacks": {
+          "Powerstack-1": {
+            "summary_mode": "SP-PS",
+            "summary_topology": "Stndaln",
+            "total_power": 1100,
+            "reserved_power": 0,
+            "allocated_power": 243,
+            "switch_available_power": 857,
+            "num_switches": 1,
+            "num_power_supplies": 1,
+            "stack_mode": "Power sharing",
+            "stack_topology": "Standalone",
+            "switch": {
+              "switch_number": 1,
+              "power_budget": 1100,
+              "power_allocated": 243,
+              "low_port_priority_value": 22,
+              "high_port_priority_value": 13,
+              "switch_priority_value": 4,
+              "port_status": {
+                "1": "Not connected",
+                "2": "Not connected"
+              },
+              "neighbor_on_port": {
+                "1": "0000.0000.0000",
+                "2": "0000.0000.0000"
+              }
+            }
+          },
+          "Powerstack-2": {
+            "summary_mode": "SP-PS",
+            "summary_topology": "Stndaln",
+            "total_power": 1100,
+            "reserved_power": 0,
+            "allocated_power": 510,
+            "switch_available_power": 590,
+            "num_switches": 1,
+            "num_power_supplies": 1,
+            "stack_mode": "Power sharing",
+            "stack_topology": "Standalone",
+            "switch": {
+              "switch_number": 2,
+              "power_budget": 1100,
+              "power_allocated": 510,
+              "low_port_priority_value": 22,
+              "high_port_priority_value": 13,
+              "switch_priority_value": 4,
+              "port_status": {
+                "1": "Not connected",
+                "2": "Not connected"
+              },
+              "neighbor_on_port": {
+                "1": "0000.0000.0000",
+                "2": "0000.0000.0000"
+              }
+            }
+          },
+          "Powerstack-3": {
+            "summary_mode": "SP-PS",
+            "summary_topology": "Stndaln",
+            "total_power": 1100,
+            "reserved_power": 0,
+            "allocated_power": 510,
+            "switch_available_power": 590,
+            "num_switches": 1,
+            "num_power_supplies": 1,
+            "stack_mode": "Power sharing",
+            "stack_topology": "Standalone",
+            "switch": {
+              "switch_number": 3,
+              "power_budget": 1100,
+              "power_allocated": 510,
+              "low_port_priority_value": 22,
+              "high_port_priority_value": 13,
+              "switch_priority_value": 4,
+              "port_status": {
+                "1": "Not connected",
+                "2": "Not connected"
+              },
+              "neighbor_on_port": {
+                "1": "0000.0000.0000",
+                "2": "0000.0000.0000"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

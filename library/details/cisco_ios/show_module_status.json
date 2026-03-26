@@ -1,0 +1,134 @@
+{
+  "os": "cisco_ios",
+  "command": "show module status",
+  "schema": {
+    "name": "ShowModuleStatusResult",
+    "fields": {
+      "modules": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ModuleStatusEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "hw_version": {
+                "type": "str",
+                "required": false
+              },
+              "fw_version": {
+                "type": "str",
+                "required": false
+              },
+              "sw_version": {
+                "type": "str",
+                "required": false
+              },
+              "mac_address": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with six modules from a Catalyst 6500 series",
+      "input": "Mod MAC addresses                       Hw    Fw           Sw           Status\n--- ---------------------------------- ------ ------------ ------------ -------\n  1  aaaa.aaaa.0000 to aaaa.aaaa.ffff   2.1   12.2(18r)S1  15.2(1)SY5   Ok\n  2  bbbb.bbbb.0000 to bbbb.bbbb.ffff   2.5   12.2(14r)S5  15.2(1)SY5   Ok\n  3  cccc.cccc.0000 to cccc.cccc.ffff   2.5   12.2(14r)S5  15.2(1)SY5   Ok\n  4  dddd.dddd.0000 to dddd.dddd.ffff   2.3   12.2(18r)S1  15.2(1)SY5   Ok\n  5  eeee.eeee.0000 to eeee.eeee.ffff   1.5   12.2(50r)SYS 15.2(1)SY5   Ok\n  6  ffff.ffff.0000 to ffff.ffff.ffff   1.5   12.2(50r)SYS 15.2(1)SY5   Ok\n",
+      "expected": {
+        "modules": {
+          "1": {
+            "fw_version": "12.2(18r)S1",
+            "hw_version": "2.1",
+            "mac_address": "aaaa.aaaa.0000 to aaaa.aaaa.ffff",
+            "status": "Ok",
+            "sw_version": "15.2(1)SY5"
+          },
+          "2": {
+            "fw_version": "12.2(14r)S5",
+            "hw_version": "2.5",
+            "mac_address": "bbbb.bbbb.0000 to bbbb.bbbb.ffff",
+            "status": "Ok",
+            "sw_version": "15.2(1)SY5"
+          },
+          "3": {
+            "fw_version": "12.2(14r)S5",
+            "hw_version": "2.5",
+            "mac_address": "cccc.cccc.0000 to cccc.cccc.ffff",
+            "status": "Ok",
+            "sw_version": "15.2(1)SY5"
+          },
+          "4": {
+            "fw_version": "12.2(18r)S1",
+            "hw_version": "2.3",
+            "mac_address": "dddd.dddd.0000 to dddd.dddd.ffff",
+            "status": "Ok",
+            "sw_version": "15.2(1)SY5"
+          },
+          "5": {
+            "fw_version": "12.2(50r)SYS",
+            "hw_version": "1.5",
+            "mac_address": "eeee.eeee.0000 to eeee.eeee.ffff",
+            "status": "Ok",
+            "sw_version": "15.2(1)SY5"
+          },
+          "6": {
+            "fw_version": "12.2(50r)SYS",
+            "hw_version": "1.5",
+            "mac_address": "ffff.ffff.0000 to ffff.ffff.ffff",
+            "status": "Ok",
+            "sw_version": "15.2(1)SY5"
+          }
+        }
+      }
+    },
+    {
+      "name": "Output with hw-faulty module missing MAC address and modules missing firmware",
+      "input": "Mod MAC addresses                    Hw   Fw           Sw                 Status\n---+--------------------------------+----+------------+------------------+--------\n1   A093.511A.AAAA to A093.511C.BBBB 1.1  17.6.1r[FC2]  17.09.03           ok\n2   780C.F01A.BBBB to 780C.F0BC.CCCC 1.1  17.6.1r[FC2]  17.09.03           ok\n3   40CE.241A.CCCC to 40CE.2499.DDDD 1.0  17.6.1r[FC2]  17.09.03           ok\n4                                         17.6.1r[FC2]  17.09.03           hw-faulty\n5   00FC.BA1A.DDDD to 00FC.BA9D.AAAA 1.0  17.6.1r[FC2]  17.09.03           ok\n\nMod Redundancy Role     Operating Mode  Configured Mode  Redundancy Status\n---+-------------------+---------------+---------------+------------------\n5   Active              non-redundant   sso              Active\n",
+      "expected": {
+        "modules": {
+          "1": {
+            "fw_version": "17.6.1r[FC2]",
+            "hw_version": "1.1",
+            "mac_address": "A093.511A.AAAA to A093.511C.BBBB",
+            "status": "ok",
+            "sw_version": "17.09.03"
+          },
+          "2": {
+            "fw_version": "17.6.1r[FC2]",
+            "hw_version": "1.1",
+            "mac_address": "780C.F01A.BBBB to 780C.F0BC.CCCC",
+            "status": "ok",
+            "sw_version": "17.09.03"
+          },
+          "3": {
+            "fw_version": "17.6.1r[FC2]",
+            "hw_version": "1.0",
+            "mac_address": "40CE.241A.CCCC to 40CE.2499.DDDD",
+            "status": "ok",
+            "sw_version": "17.09.03"
+          },
+          "4": {
+            "fw_version": "17.6.1r[FC2]",
+            "status": "hw-faulty",
+            "sw_version": "17.09.03"
+          },
+          "5": {
+            "fw_version": "17.6.1r[FC2]",
+            "hw_version": "1.0",
+            "mac_address": "00FC.BA1A.DDDD to 00FC.BA9D.AAAA",
+            "status": "ok",
+            "sw_version": "17.09.03"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip igmp snooping groups count",
+  "schema": {
+    "name": "ShowIpIgmpSnoopingGroupsCountResult",
+    "fields": {
+      "total_number_of_groups": {
+        "type": {
+          "name": "IgmpGroupsCount",
+          "fields": {
+            "igmp_groups_count": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Show ip igmp snooping groups count output with total groups",
+      "input": "Total number of groups:   112\n",
+      "expected": {
+        "total_number_of_groups": {
+          "igmp_groups_count": 112
+        }
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": "Total number of groups:   0\nTotal number of  (S,G):   0\n",
+      "expected": {
+        "total_number_of_groups": {
+          "igmp_groups_count": 0
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,529 @@
+{
+  "os": "cisco_nxos",
+  "command": "show bgp vrf all all neighbors",
+  "schema": {
+    "name": "ShowBgpVrfAllAllNeighborsResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "NeighborEntry",
+              "fields": {
+                "remote_as": {
+                  "type": "int",
+                  "required": true
+                },
+                "link_type": {
+                  "type": "str",
+                  "required": true
+                },
+                "peer_index": {
+                  "type": "int",
+                  "required": true
+                },
+                "description": {
+                  "type": "str",
+                  "required": true
+                },
+                "peer_template": {
+                  "type": "str",
+                  "required": true
+                },
+                "bgp_version": {
+                  "type": "int",
+                  "required": true
+                },
+                "router_id": {
+                  "type": "str",
+                  "required": true
+                },
+                "bgp_state": {
+                  "type": "str",
+                  "required": true
+                },
+                "state_reason": {
+                  "type": "str",
+                  "required": true
+                },
+                "state_duration": {
+                  "type": "str",
+                  "required": true
+                },
+                "update_source": {
+                  "type": "str",
+                  "required": true
+                },
+                "attached_interface": {
+                  "type": "str",
+                  "required": true
+                },
+                "local_as": {
+                  "type": "int",
+                  "required": true
+                },
+                "bfd_enabled": {
+                  "type": "bool",
+                  "required": true
+                },
+                "bfd_state": {
+                  "type": "str",
+                  "required": true
+                },
+                "hold_time": {
+                  "type": "int",
+                  "required": true
+                },
+                "keepalive_interval": {
+                  "type": "int",
+                  "required": true
+                },
+                "last_read": {
+                  "type": "str",
+                  "required": true
+                },
+                "last_written": {
+                  "type": "str",
+                  "required": true
+                },
+                "msgs_sent": {
+                  "type": "int",
+                  "required": true
+                },
+                "msgs_rcvd": {
+                  "type": "int",
+                  "required": true
+                },
+                "notifications_sent": {
+                  "type": "int",
+                  "required": true
+                },
+                "notifications_rcvd": {
+                  "type": "int",
+                  "required": true
+                },
+                "bytes_in_queue_sent": {
+                  "type": "int",
+                  "required": true
+                },
+                "bytes_in_queue_rcvd": {
+                  "type": "int",
+                  "required": true
+                },
+                "connections_established": {
+                  "type": "int",
+                  "required": true
+                },
+                "connections_dropped": {
+                  "type": "int",
+                  "required": true
+                },
+                "connection_attempts": {
+                  "type": "int",
+                  "required": true
+                },
+                "last_reset_by_us": {
+                  "type": "str",
+                  "required": true
+                },
+                "last_reset_by_us_reason": {
+                  "type": "str",
+                  "required": true
+                },
+                "last_reset_by_peer": {
+                  "type": "str",
+                  "required": true
+                },
+                "last_reset_by_peer_reason": {
+                  "type": "str",
+                  "required": true
+                },
+                "message_stats": {
+                  "type": {
+                    "name": "MessageStats",
+                    "fields": {
+                      "opens_sent": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "opens_rcvd": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "notifications_sent": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "notifications_rcvd": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "updates_sent": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "updates_rcvd": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "keepalives_sent": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "keepalives_rcvd": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "route_refresh_sent": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "route_refresh_rcvd": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "capability_sent": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "capability_rcvd": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "total_sent": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "total_rcvd": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "total_bytes_sent": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "total_bytes_rcvd": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "bytes_in_queue_sent": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "bytes_in_queue_rcvd": {
+                        "type": "int",
+                        "required": true
+                      }
+                    }
+                  },
+                  "required": true
+                },
+                "address_families": {
+                  "type": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "name": "AddressFamilyInfo",
+                      "fields": {
+                        "table_version": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "neighbor_version": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "accepted_paths": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "accepted_paths_memory": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "sent_paths": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "inbound_route_map": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "outbound_route_map": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "inbound_soft_reconfig": {
+                          "type": "bool",
+                          "required": true
+                        },
+                        "community_attr_sent": {
+                          "type": "bool",
+                          "required": true
+                        },
+                        "extended_community_attr_sent": {
+                          "type": "bool",
+                          "required": true
+                        },
+                        "max_prefixes": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "max_prefix_warning_threshold": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "route_reflector_client": {
+                          "type": "bool",
+                          "required": true
+                        }
+                      }
+                    }
+                  },
+                  "required": true
+                },
+                "local_host": {
+                  "type": "str",
+                  "required": true
+                },
+                "local_port": {
+                  "type": "int",
+                  "required": true
+                },
+                "foreign_host": {
+                  "type": "str",
+                  "required": true
+                },
+                "foreign_port": {
+                  "type": "int",
+                  "required": true
+                },
+                "fd": {
+                  "type": "int",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple VRFs with established, shut, and idle BGP neighbors",
+      "input": "\nshow bgp vrf default all neighbors\n\nBGP neighbor is 10.16.2.2,  remote AS 100, ibgp link,  Peer index 1\n  Description: nei_desc\n  BGP version 4, remote router ID 10.16.2.2\n  BGP state = Established, up for 02:20:02\n  Using loopback0 as update source for this peer\n  BFD live-detection is configured\n  Neighbor local-as command not active\n  Last read 00:00:15, hold time = 99, keepalive interval is 33 seconds\n  Last written 00:00:13, keepalive timer expiry due 00:00:19\n  Received 261 messages, 0 notifications, 0 bytes in queue\n  Sent 263 messages, 0 notifications, 0 bytes in queue\n  Connections established 1, dropped 0\n  Last reset by us never, due to No error\n  Last reset by peer never, due to No error\n\n  Neighbor capabilities:\n  Dynamic capability: advertised (mp, refresh, gr) received (mp, refresh, gr)\n  Dynamic capability (old): advertised received\n  Route refresh capability (new): advertised received\n  Route refresh capability (old): advertised received\n  4-Byte AS capability: disabled\n  Address family VPNv4 Unicast: advertised received\n  Address family VPNv6 Unicast: advertised received\n  Address family IPv4 MVPN: advertised received\n  Graceful Restart capability: advertised received\n\n  Graceful Restart Parameters:\n  Address families advertised to peer:\n    VPNv4 Unicast  VPNv6 Unicast\n  Address families received from peer:\n    VPNv4 Unicast  VPNv6 Unicast\n  Forwarding state preserved by peer for:\n  Restart time advertised to peer: 240 seconds\n  Stale time for routes advertised by peer: 600 seconds\n  Restart time advertised by peer: 120 seconds\n\n  Message statistics:\n\t\t\t      Sent               Rcvd\n  Opens:                         1                  1\n  Notifications:                 0                  0\n  Updates:                       6                  4\n  Keepalives:                  256                256\n  Route Refresh:                 0                  0\n  Capability:                    0                  0\n  Total:                       263                261\n  Total bytes:                5311               5139\n  Bytes in queue:                0                  0\n\n  For address family: VPNv4 Unicast\n  BGP table version 11, neighbor version 11\n  1 accepted paths consume 48 bytes of memory\n  2 sent paths\n  Community attribute sent to this neighbor\n  Extended community attribute sent to this neighbor\n  Third-party Nexthop will not be computed.\n  Maximum prefixes allowed 300000\n  Inbound route-map configured is genie_redistribution, handle obtained\n  Outbound route-map configured is genie_redistribution, handle obtained\n\n  For address family: VPNv6 Unicast\n  BGP table version 10, neighbor version 10\n  1 accepted paths consume 48 bytes of memory\n  2 sent paths\n  Community attribute sent to this neighbor\n  Extended community attribute sent to this neighbor\n  Third-party Nexthop will not be computed.\n\n  Local host: 10.4.1.1, Local port: 57144\n  Foreign host: 10.16.2.2, Foreign port: 179\n  fd = 44\n\nBGP neighbor is 10.16.2.5,  remote AS 200, local AS 333, ebgp link,  Peer index 2\n  Inherits session configuration from session-template PEER-SESSION\n  Description: PEER-SESSION\n  BGP version 4, remote router ID 0.0.0.0\n  BGP state = Shut (Admin), down for 02:20:09\n  Using loopback0 as update source for this peer\n  Connected check is disabled\n  BFD live-detection is configured and enabled, state is Up\n  Private AS numbers removed from updates sent to this neighbor\n  External BGP peer might be upto 255 hops away\n  TCP MD5 authentication is enabled\n  Only passive connection setup allowed\n  Last read never, hold time = 45, keepalive interval is 15 seconds\n  Last written never, keepalive timer not running\n  Received 0 messages, 0 notifications, 0 bytes in queue\n  Sent 0 messages, 0 notifications, 0 bytes in queue\n  Connections established 0, dropped 0\n  Last reset by us never, due to No error\n  Last reset by peer never, due to No error\n\n  Message statistics:\n\t\t\t      Sent               Rcvd\n  Opens:                         0                  0\n  Notifications:                 0                  0\n  Updates:                       0                  0\n  Keepalives:                    0                  0\n  Route Refresh:                 0                  0\n  Capability:                    0                  0\n  Total:                         0                  0\n  Total bytes:                   0                  0\n  Bytes in queue:                0                  0\n\n  For address family: IPv4 Unicast\n  BGP table version 2, neighbor version 0\n  0 accepted paths consume 0 bytes of memory\n  0 sent paths\n  Inbound soft reconfiguration allowed\n  Community attribute sent to this neighbor\n  Extended community attribute sent to this neighbor\n  Nexthop set to local peering address, 0.0.0.0\n  Maximum prefixes allowed 300\n  Inbound route-map configured is test-map, handle obtained\n  Outbound route-map configured is test-map, handle obtained\n\n  No established BGP session with peer\n\nshow bgp vrf VRF1 all neighbors\nBGP neighbor is 10.16.2.10,  remote AS 0, unknown link,  Peer index 1\n  BGP version 4, remote router ID 0.0.0.0\n  BGP state = Idle, down for 02:19:37, retry in 0.000000\n  Last read never, hold time = 180, keepalive interval is 60 seconds\n  Last written never, keepalive timer not running\n  Received 0 messages, 0 notifications, 0 bytes in queue\n  Sent 0 messages, 0 notifications, 0 bytes in queue\n  Connections established 0, dropped 0\n  Connection attempts 0\n  Last reset by us never, due to No error\n  Last reset by peer never, due to No error\n\n  Message statistics:\n\t\t\t      Sent               Rcvd\n  Opens:                         0                  0\n  Notifications:                 0                  0\n  Updates:                       0                  0\n  Keepalives:                    0                  0\n  Route Refresh:                 0                  0\n  Capability:                    0                  0\n  Total:                         0                  0\n  Total bytes:                   0                  0\n  Bytes in queue:                0                  0\n\n  For address family: IPv4 Unicast\n  BGP table version 21, neighbor version 0\n  0 accepted paths consume 0 bytes of memory\n  0 sent paths\n  Third-party Nexthop will not be computed.\n\n  No established BGP session with peer\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "10.16.2.2": {
+              "remote_as": 100,
+              "link_type": "ibgp",
+              "peer_index": 1,
+              "bgp_version": 4,
+              "router_id": "10.16.2.2",
+              "bgp_state": "Established",
+              "hold_time": 99,
+              "keepalive_interval": 33,
+              "last_read": "00:00:15",
+              "last_written": "00:00:13",
+              "msgs_sent": 263,
+              "msgs_rcvd": 261,
+              "notifications_sent": 0,
+              "notifications_rcvd": 0,
+              "bytes_in_queue_sent": 0,
+              "bytes_in_queue_rcvd": 0,
+              "connections_established": 1,
+              "connections_dropped": 0,
+              "message_stats": {
+                "opens_sent": 1,
+                "opens_rcvd": 1,
+                "notifications_sent": 0,
+                "notifications_rcvd": 0,
+                "updates_sent": 6,
+                "updates_rcvd": 4,
+                "keepalives_sent": 256,
+                "keepalives_rcvd": 256,
+                "route_refresh_sent": 0,
+                "route_refresh_rcvd": 0,
+                "capability_sent": 0,
+                "capability_rcvd": 0,
+                "total_sent": 263,
+                "total_rcvd": 261,
+                "total_bytes_sent": 5311,
+                "total_bytes_rcvd": 5139,
+                "bytes_in_queue_sent": 0,
+                "bytes_in_queue_rcvd": 0
+              },
+              "address_families": {
+                "VPNv4 Unicast": {
+                  "table_version": 11,
+                  "neighbor_version": 11,
+                  "accepted_paths": 1,
+                  "accepted_paths_memory": 48,
+                  "sent_paths": 2,
+                  "community_attr_sent": true,
+                  "extended_community_attr_sent": true,
+                  "max_prefixes": 300000,
+                  "inbound_route_map": "genie_redistribution",
+                  "outbound_route_map": "genie_redistribution"
+                },
+                "VPNv6 Unicast": {
+                  "table_version": 10,
+                  "neighbor_version": 10,
+                  "accepted_paths": 1,
+                  "accepted_paths_memory": 48,
+                  "sent_paths": 2,
+                  "community_attr_sent": true,
+                  "extended_community_attr_sent": true
+                }
+              },
+              "description": "nei_desc",
+              "state_duration": "02:20:02",
+              "update_source": "Loopback0",
+              "bfd_enabled": true,
+              "last_reset_by_us": "never",
+              "last_reset_by_us_reason": "No error",
+              "last_reset_by_peer": "never",
+              "last_reset_by_peer_reason": "No error",
+              "local_host": "10.4.1.1",
+              "local_port": 57144,
+              "foreign_host": "10.16.2.2",
+              "foreign_port": 179,
+              "fd": 44
+            },
+            "10.16.2.5": {
+              "remote_as": 200,
+              "link_type": "ebgp",
+              "peer_index": 2,
+              "bgp_version": 4,
+              "router_id": "0.0.0.0",
+              "bgp_state": "Shut",
+              "hold_time": 45,
+              "keepalive_interval": 15,
+              "last_read": "never",
+              "last_written": "never",
+              "msgs_sent": 0,
+              "msgs_rcvd": 0,
+              "notifications_sent": 0,
+              "notifications_rcvd": 0,
+              "bytes_in_queue_sent": 0,
+              "bytes_in_queue_rcvd": 0,
+              "connections_established": 0,
+              "connections_dropped": 0,
+              "message_stats": {
+                "opens_sent": 0,
+                "opens_rcvd": 0,
+                "notifications_sent": 0,
+                "notifications_rcvd": 0,
+                "updates_sent": 0,
+                "updates_rcvd": 0,
+                "keepalives_sent": 0,
+                "keepalives_rcvd": 0,
+                "route_refresh_sent": 0,
+                "route_refresh_rcvd": 0,
+                "capability_sent": 0,
+                "capability_rcvd": 0,
+                "total_sent": 0,
+                "total_rcvd": 0,
+                "total_bytes_sent": 0,
+                "total_bytes_rcvd": 0,
+                "bytes_in_queue_sent": 0,
+                "bytes_in_queue_rcvd": 0
+              },
+              "address_families": {
+                "IPv4 Unicast": {
+                  "table_version": 2,
+                  "neighbor_version": 0,
+                  "accepted_paths": 0,
+                  "accepted_paths_memory": 0,
+                  "sent_paths": 0,
+                  "inbound_soft_reconfig": true,
+                  "community_attr_sent": true,
+                  "extended_community_attr_sent": true,
+                  "max_prefixes": 300,
+                  "inbound_route_map": "test-map",
+                  "outbound_route_map": "test-map"
+                }
+              },
+              "local_as": 333,
+              "peer_template": "PEER-SESSION",
+              "description": "PEER-SESSION",
+              "state_duration": "02:20:09",
+              "state_reason": "Admin",
+              "update_source": "Loopback0",
+              "bfd_enabled": true,
+              "bfd_state": "Up",
+              "last_reset_by_us": "never",
+              "last_reset_by_us_reason": "No error",
+              "last_reset_by_peer": "never",
+              "last_reset_by_peer_reason": "No error"
+            }
+          },
+          "VRF1": {
+            "10.16.2.10": {
+              "remote_as": 0,
+              "link_type": "unknown",
+              "peer_index": 1,
+              "bgp_version": 4,
+              "router_id": "0.0.0.0",
+              "bgp_state": "Idle",
+              "hold_time": 180,
+              "keepalive_interval": 60,
+              "last_read": "never",
+              "last_written": "never",
+              "msgs_sent": 0,
+              "msgs_rcvd": 0,
+              "notifications_sent": 0,
+              "notifications_rcvd": 0,
+              "bytes_in_queue_sent": 0,
+              "bytes_in_queue_rcvd": 0,
+              "connections_established": 0,
+              "connections_dropped": 0,
+              "message_stats": {
+                "opens_sent": 0,
+                "opens_rcvd": 0,
+                "notifications_sent": 0,
+                "notifications_rcvd": 0,
+                "updates_sent": 0,
+                "updates_rcvd": 0,
+                "keepalives_sent": 0,
+                "keepalives_rcvd": 0,
+                "route_refresh_sent": 0,
+                "route_refresh_rcvd": 0,
+                "capability_sent": 0,
+                "capability_rcvd": 0,
+                "total_sent": 0,
+                "total_rcvd": 0,
+                "total_bytes_sent": 0,
+                "total_bytes_rcvd": 0,
+                "bytes_in_queue_sent": 0,
+                "bytes_in_queue_rcvd": 0
+              },
+              "address_families": {
+                "IPv4 Unicast": {
+                  "table_version": 21,
+                  "neighbor_version": 0,
+                  "accepted_paths": 0,
+                  "accepted_paths_memory": 0,
+                  "sent_paths": 0
+                }
+              },
+              "state_duration": "02:19:37",
+              "connection_attempts": 0,
+              "last_reset_by_us": "never",
+              "last_reset_by_us_reason": "No error",
+              "last_reset_by_peer": "never",
+              "last_reset_by_peer_reason": "No error"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

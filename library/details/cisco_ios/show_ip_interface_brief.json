@@ -1,0 +1,150 @@
+{
+  "os": "cisco_ios",
+  "command": "show ip interface brief",
+  "schema": {
+    "name": "ShowIpInterfaceBriefResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceBriefEntry",
+            "fields": {
+              "ip_address": {
+                "type": "str",
+                "required": true
+              },
+              "ok": {
+                "type": "str",
+                "required": true
+              },
+              "method": {
+                "type": "str",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "protocol": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "IOS interfaces with subinterfaces and deleted status",
+      "input": "Interface                  IP-Address      OK? Method Status                Protocol\nEthernet0/0                unassigned      YES NVRAM  up                    up\nEthernet0/0.11             10.0.1.38       YES NVRAM  up                    up\nEthernet0/0.100            unassigned      YES NVRAM  deleted               down\nEthernet0/1                1.1.1.1         YES NVRAM  up                    up\nEthernet0/2                unassigned      YES NVRAM  administratively down down\nEthernet0/3                unassigned      YES NVRAM  administratively down down\nLoopback0                  10.0.1.2        YES NVRAM  up                    up\n",
+      "expected": {
+        "interfaces": {
+          "Ethernet0/0": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "NVRAM",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Ethernet0/0.11": {
+            "ip_address": "10.0.1.38",
+            "ok": "YES",
+            "method": "NVRAM",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Ethernet0/0.100": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "NVRAM",
+            "status": "deleted",
+            "protocol": "down"
+          },
+          "Ethernet0/1": {
+            "ip_address": "1.1.1.1",
+            "ok": "YES",
+            "method": "NVRAM",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Ethernet0/2": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "NVRAM",
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "Ethernet0/3": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "NVRAM",
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "Loopback0": {
+            "ip_address": "10.0.1.2",
+            "ok": "YES",
+            "method": "NVRAM",
+            "status": "up",
+            "protocol": "up"
+          }
+        }
+      }
+    },
+    {
+      "name": "Classic IOS interfaces with FastEthernet, Serial, and VLAN SVIs",
+      "input": "Interface                  IP-Address      OK? Method Status                Protocol\nFastEthernet0/0            192.168.1.1     YES manual up                    up\nFastEthernet0/1            unassigned      YES unset  administratively down down\nSerial0/0/0                10.1.1.1        YES manual up                    up\nSerial0/0/1                unassigned      YES unset  down                  down\nVlan1                      172.16.0.1      YES NVRAM  up                    up\nVlan100                    10.100.0.1      YES NVRAM  up                    down\n",
+      "expected": {
+        "interfaces": {
+          "FastEthernet0/0": {
+            "ip_address": "192.168.1.1",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "FastEthernet0/1": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "unset",
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "Serial0/0/0": {
+            "ip_address": "10.1.1.1",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Serial0/0/1": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "unset",
+            "status": "down",
+            "protocol": "down"
+          },
+          "Vlan1": {
+            "ip_address": "172.16.0.1",
+            "ok": "YES",
+            "method": "NVRAM",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Vlan100": {
+            "ip_address": "10.100.0.1",
+            "ok": "YES",
+            "method": "NVRAM",
+            "status": "up",
+            "protocol": "down"
+          }
+        }
+      }
+    }
+  ]
+}

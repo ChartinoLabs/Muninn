@@ -1,0 +1,194 @@
+{
+  "os": "cisco_nxos",
+  "command": "show bgp all dampening flap-statistics",
+  "schema": {
+    "name": "ShowBgpAllDampeningFlapStatisticsResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfEntry",
+            "fields": {
+              "address_families": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "AddressFamilyEntry",
+                    "fields": {
+                      "networks": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "type": "list",
+                            "items": {
+                              "name": "FlapEntry",
+                              "fields": {
+                                "status": {
+                                  "type": "str",
+                                  "required": false
+                                },
+                                "path_type": {
+                                  "type": "str",
+                                  "required": false
+                                },
+                                "peer": {
+                                  "type": "str",
+                                  "required": true
+                                },
+                                "flaps": {
+                                  "type": "int",
+                                  "required": true
+                                },
+                                "duration": {
+                                  "type": "str",
+                                  "required": true
+                                },
+                                "reuse": {
+                                  "type": "str",
+                                  "required": true
+                                },
+                                "path": {
+                                  "type": "str",
+                                  "required": true
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic BGP dampening flap-statistics with multiple address families and prefixes",
+      "input": "BGP routing table information for VRF default, address family IPv4 Unicast\n   Network            Peer            Flaps    Duration    Reuse       Path\nd e10.1.0.0/24       192.168.1.1        35    6d02h       00:01:50    65001 65002 i\nd e10.2.0.0/24       192.168.1.1        12    3d05h       00:02:10    65001 i\n* i10.3.0.0/24       192.168.1.2         5    1d12h       00:00:30    65003 i\n\nBGP routing table information for VRF default, address family IPv6 Unicast\n   Network            Peer            Flaps    Duration    Reuse       Path\nd e2001:db8:1::/48   2001:db8::1        20    2d08h       00:01:00    65001 65004 i\n* i2001:db8:2::/48   2001:db8::2         3    0d06h       00:00:15    65005 i\n\nBGP routing table information for VRF PROD, address family IPv4 Unicast\n   Network            Peer            Flaps    Duration    Reuse       Path\nd e172.16.0.0/16     10.0.0.1           42    8d14h       00:03:00    65010 65020 65030 i\ns e172.16.1.0/24     10.0.0.1          100    12d01h      00:05:30    65010 i\nh e172.16.2.0/24     10.0.0.2            8    0d04h       00:00:45    65010 65021 i\n",
+      "expected": {
+        "vrfs": {
+          "PROD": {
+            "address_families": {
+              "IPv4 Unicast": {
+                "networks": {
+                  "172.16.0.0/16": [
+                    {
+                      "duration": "8d14h",
+                      "flaps": 42,
+                      "path": "65010 65020 65030 i",
+                      "path_type": "external",
+                      "peer": "10.0.0.1",
+                      "reuse": "00:03:00",
+                      "status": "dampened"
+                    }
+                  ],
+                  "172.16.1.0/24": [
+                    {
+                      "duration": "12d01h",
+                      "flaps": 100,
+                      "path": "65010 i",
+                      "path_type": "external",
+                      "peer": "10.0.0.1",
+                      "reuse": "00:05:30",
+                      "status": "suppressed"
+                    }
+                  ],
+                  "172.16.2.0/24": [
+                    {
+                      "duration": "0d04h",
+                      "flaps": 8,
+                      "path": "65010 65021 i",
+                      "path_type": "external",
+                      "peer": "10.0.0.2",
+                      "reuse": "00:00:45",
+                      "status": "history"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "address_families": {
+              "IPv4 Unicast": {
+                "networks": {
+                  "10.1.0.0/24": [
+                    {
+                      "duration": "6d02h",
+                      "flaps": 35,
+                      "path": "65001 65002 i",
+                      "path_type": "external",
+                      "peer": "192.168.1.1",
+                      "reuse": "00:01:50",
+                      "status": "dampened"
+                    }
+                  ],
+                  "10.2.0.0/24": [
+                    {
+                      "duration": "3d05h",
+                      "flaps": 12,
+                      "path": "65001 i",
+                      "path_type": "external",
+                      "peer": "192.168.1.1",
+                      "reuse": "00:02:10",
+                      "status": "dampened"
+                    }
+                  ],
+                  "10.3.0.0/24": [
+                    {
+                      "duration": "1d12h",
+                      "flaps": 5,
+                      "path": "65003 i",
+                      "path_type": "internal",
+                      "peer": "192.168.1.2",
+                      "reuse": "00:00:30",
+                      "status": "valid"
+                    }
+                  ]
+                }
+              },
+              "IPv6 Unicast": {
+                "networks": {
+                  "2001:db8:1::/48": [
+                    {
+                      "duration": "2d08h",
+                      "flaps": 20,
+                      "path": "65001 65004 i",
+                      "path_type": "external",
+                      "peer": "2001:db8::1",
+                      "reuse": "00:01:00",
+                      "status": "dampened"
+                    }
+                  ],
+                  "2001:db8:2::/48": [
+                    {
+                      "duration": "0d06h",
+                      "flaps": 3,
+                      "path": "65005 i",
+                      "path_type": "internal",
+                      "peer": "2001:db8::2",
+                      "reuse": "00:00:15",
+                      "status": "valid"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

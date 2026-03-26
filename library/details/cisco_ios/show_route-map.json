@@ -1,0 +1,139 @@
+{
+  "os": "cisco_ios",
+  "command": "show route-map",
+  "schema": {
+    "name": "ShowRouteMapResult",
+    "fields": {
+      "route_maps": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RouteMapEntry",
+            "fields": {
+              "sequences": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "RouteMapSequenceEntry",
+                    "fields": {
+                      "action": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "match_clauses": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": true
+                      },
+                      "set_clauses": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": true
+                      },
+                      "policy_routing_packets": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "policy_routing_bytes": {
+                        "type": "int",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic route-map with two sequences showing match and set clauses",
+      "input": "route-map equal, permit, sequence 10\n   Match clauses:\n     length 150 200\n   Set clauses:\n     ip next-hop 10.10.11.254\n   Policy routing matches: 0 packets, 0 bytes\nroute-map equal, permit, sequence 20\n  Match clauses:\n    ip address prefix-lists: PFX\n    ip address (access-lists): 101\n  Set clauses:\n    ip next-hop 10.10.11.14\n  Policy routing matches: 144 packets, 15190 bytes\n",
+      "expected": {
+        "route_maps": {
+          "equal": {
+            "sequences": {
+              "10": {
+                "action": "permit",
+                "match_clauses": [
+                  "length 150 200"
+                ],
+                "policy_routing_bytes": 0,
+                "policy_routing_packets": 0,
+                "set_clauses": [
+                  "ip next-hop 10.10.11.254"
+                ]
+              },
+              "20": {
+                "action": "permit",
+                "match_clauses": [
+                  "ip address prefix-lists: PFX",
+                  "ip address (access-lists): 101"
+                ],
+                "policy_routing_bytes": 15190,
+                "policy_routing_packets": 144,
+                "set_clauses": [
+                  "ip next-hop 10.10.11.14"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Route-maps with deny action, empty clauses, and STATIC/DYNAMIC headers",
+      "input": "STATIC routemaps\nroute-map RM-PBR_APPS_TO_MPLS, deny, sequence 5\n  Match clauses:\n    ip address (access-lists): PBR-EXCLUSION-SITE-SUBNET\n  Set clauses:\n  Policy routing matches: 0 packets, 0 bytes\nroute-map RM-PBR_APPS_TO_MPLS, permit, sequence 10\n  Match clauses:\n    ip address (access-lists): ACL-APPLICATION-SAP-DC\n  Set clauses:\n    ip next-hop 172.16.154.94 172.16.154.102\n  Policy routing matches: 0 packets, 0 bytes\nroute-map RM-FILTER-REDISTRIBUTED-DMVPN-ROUTES-IN, permit, sequence 20\n  Match clauses:\n  Set clauses:\n  Policy routing matches: 0 packets, 0 bytes\nDYNAMIC routemaps\nCurrent active dynamic routemaps = 0\n",
+      "expected": {
+        "route_maps": {
+          "RM-FILTER-REDISTRIBUTED-DMVPN-ROUTES-IN": {
+            "sequences": {
+              "20": {
+                "action": "permit",
+                "match_clauses": [],
+                "policy_routing_bytes": 0,
+                "policy_routing_packets": 0,
+                "set_clauses": []
+              }
+            }
+          },
+          "RM-PBR_APPS_TO_MPLS": {
+            "sequences": {
+              "10": {
+                "action": "permit",
+                "match_clauses": [
+                  "ip address (access-lists): ACL-APPLICATION-SAP-DC"
+                ],
+                "policy_routing_bytes": 0,
+                "policy_routing_packets": 0,
+                "set_clauses": [
+                  "ip next-hop 172.16.154.94 172.16.154.102"
+                ]
+              },
+              "5": {
+                "action": "deny",
+                "match_clauses": [
+                  "ip address (access-lists): PBR-EXCLUSION-SITE-SUBNET"
+                ],
+                "policy_routing_bytes": 0,
+                "policy_routing_packets": 0,
+                "set_clauses": []
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

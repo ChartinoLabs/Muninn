@@ -1,0 +1,44 @@
+{
+  "os": "cisco_ios",
+  "command": "show spanning-tree root",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Multiple VLANs with root bridge info, mix of root bridge and non-root with root port",
+      "input": "                                        Root    Hello Max Fwd\nVlan                   Root ID          Cost    Time  Age Dly  Root Port\n---------------- -------------------- --------- ----- --- ---  ------------\nVLAN0001         11175 5c6e.f0a7.a0b0         0    2   20  15\nVLAN0002         11185 5c6e.f0a7.a0b0         0    2   20  15\nVLAN0003         11195 5c6e.f0a7.a0b0         0    2   20  15  Po34\n",
+      "expected": {
+        "1": {
+          "root_id": {
+            "priority": 11175,
+            "address": "5c6e.f0a7.a0b0"
+          },
+          "root_cost": 0,
+          "hello_time": 2,
+          "max_age": 20,
+          "forward_delay": 15
+        },
+        "2": {
+          "root_id": {
+            "priority": 11185,
+            "address": "5c6e.f0a7.a0b0"
+          },
+          "root_cost": 0,
+          "hello_time": 2,
+          "max_age": 20,
+          "forward_delay": 15
+        },
+        "3": {
+          "root_id": {
+            "priority": 11195,
+            "address": "5c6e.f0a7.a0b0"
+          },
+          "root_cost": 0,
+          "hello_time": 2,
+          "max_age": 20,
+          "forward_delay": 15,
+          "root_port": "Port-channel34"
+        }
+      }
+    }
+  ]
+}

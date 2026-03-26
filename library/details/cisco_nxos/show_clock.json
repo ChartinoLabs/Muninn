@@ -1,0 +1,59 @@
+{
+  "os": "cisco_nxos",
+  "command": "show clock",
+  "schema": {
+    "name": "ShowClockResult",
+    "fields": {
+      "time": {
+        "type": "str",
+        "required": true
+      },
+      "timezone": {
+        "type": "str",
+        "required": true
+      },
+      "day_of_week": {
+        "type": "str",
+        "required": true
+      },
+      "month": {
+        "type": "str",
+        "required": true
+      },
+      "day": {
+        "type": "str",
+        "required": true
+      },
+      "year": {
+        "type": "str",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic clock output with UTC timezone",
+      "input": "18:57:38.347 UTC Mon Oct 19 2015\n",
+      "expected": {
+        "day": "19",
+        "day_of_week": "Mon",
+        "month": "Oct",
+        "time": "18:57:38.347",
+        "timezone": "UTC",
+        "year": "2015"
+      }
+    },
+    {
+      "name": "Clock output with device prompt and PST timezone",
+      "input": "switch# show clock\n09:23:15.210 PST Wed Mar 4 2026\n",
+      "expected": {
+        "day": "4",
+        "day_of_week": "Wed",
+        "month": "Mar",
+        "time": "09:23:15.210",
+        "timezone": "PST",
+        "year": "2026"
+      }
+    }
+  ]
+}

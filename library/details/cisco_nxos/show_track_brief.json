@@ -1,0 +1,138 @@
+{
+  "os": "cisco_nxos",
+  "command": "show track brief",
+  "schema": {
+    "name": "ShowTrackBriefResult",
+    "fields": {
+      "track": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "TrackBriefEntry",
+            "fields": {
+              "tracktype": {
+                "type": "str",
+                "required": true
+              },
+              "instance": {
+                "type": "str",
+                "required": true
+              },
+              "parameter": {
+                "type": "str",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "last_change": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Show track brief output with IP route entry",
+      "input": "Track Type       Instance                 Parameter         State    Last Change\n4     IP Route     10.1.1.1/32         Reachability           DOWN    7w2d\n",
+      "expected": {
+        "track": {
+          "4": {
+            "tracktype": "IP Route",
+            "instance": "10.1.1.1/32",
+            "parameter": "Reachability",
+            "state": "DOWN",
+            "last_change": "7w2d"
+          }
+        }
+      }
+    },
+    {
+      "name": "Imported from Genie ShowTrackBrief (equal)",
+      "input": "Track Type       Instance                 Parameter         State    Last Change\n5     IP SLA       121                 Reachability           DOWN    7w1d\n6     IP SLA       120                 State                  DOWN    7w1d\n4     IP Route     10.1.1.1/32         Reachability           DOWN    7w1d\n",
+      "expected": {
+        "track": {
+          "5": {
+            "tracktype": "IP SLA",
+            "instance": "121",
+            "parameter": "Reachability",
+            "state": "DOWN",
+            "last_change": "7w1d"
+          },
+          "6": {
+            "tracktype": "IP SLA",
+            "instance": "120",
+            "parameter": "State",
+            "state": "DOWN",
+            "last_change": "7w1d"
+          },
+          "4": {
+            "tracktype": "IP Route",
+            "instance": "10.1.1.1/32",
+            "parameter": "Reachability",
+            "state": "DOWN",
+            "last_change": "7w1d"
+          }
+        }
+      }
+    },
+    {
+      "name": "Imported from Genie ShowTrackBrief (equal)",
+      "input": "Track Type       Instance                 Parameter         State    Last Change\n5     IP SLA       121                 Reachability           DOWN    7w1d\n6     IP SLA       120                 State                  DOWN    7w1d\n",
+      "expected": {
+        "track": {
+          "5": {
+            "tracktype": "IP SLA",
+            "instance": "121",
+            "parameter": "Reachability",
+            "state": "DOWN",
+            "last_change": "7w1d"
+          },
+          "6": {
+            "tracktype": "IP SLA",
+            "instance": "120",
+            "parameter": "State",
+            "state": "DOWN",
+            "last_change": "7w1d"
+          }
+        }
+      }
+    },
+    {
+      "name": "Imported from Genie ShowTrackBrief (equal)",
+      "input": "Track Type       Instance                 Parameter         State    Last Change\n1     Interface    Ethernet1/4         IP Routing             DOWN    3w5d\n2     Interface    Ethernet1/2         IPv6 Routing           DOWN    3w5d\n3     Interface    Ethernet1/3         Line Protocol          DOWN    3w5d\n",
+      "expected": {
+        "track": {
+          "1": {
+            "tracktype": "Interface",
+            "instance": "Ethernet1/4",
+            "parameter": "IP Routing",
+            "state": "DOWN",
+            "last_change": "3w5d"
+          },
+          "2": {
+            "tracktype": "Interface",
+            "instance": "Ethernet1/2",
+            "parameter": "IPv6 Routing",
+            "state": "DOWN",
+            "last_change": "3w5d"
+          },
+          "3": {
+            "tracktype": "Interface",
+            "instance": "Ethernet1/3",
+            "parameter": "Line Protocol",
+            "state": "DOWN",
+            "last_change": "3w5d"
+          }
+        }
+      }
+    }
+  ]
+}

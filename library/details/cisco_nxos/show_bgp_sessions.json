@@ -1,0 +1,279 @@
+{
+  "os": "cisco_nxos",
+  "command": "show bgp sessions",
+  "schema": {
+    "name": "ShowBgpSessionsResult",
+    "fields": {
+      "total_peers": {
+        "type": "int",
+        "required": true
+      },
+      "total_established_peers": {
+        "type": "int",
+        "required": true
+      },
+      "local_as": {
+        "type": "int",
+        "required": true
+      },
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfEntry",
+            "fields": {
+              "local_as": {
+                "type": "int",
+                "required": true
+              },
+              "peers": {
+                "type": "int",
+                "required": true
+              },
+              "established_peers": {
+                "type": "int",
+                "required": true
+              },
+              "router_id": {
+                "type": "str",
+                "required": true
+              },
+              "neighbors": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "NeighborEntry",
+                    "fields": {
+                      "remote_as": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "flaps": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "last_flap": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "last_read": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "last_write": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "state": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "local_port": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "remote_port": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "notifications_sent": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "notifications_received": {
+                        "type": "int",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple VRFs with neighbors in various states including idle, and an empty VRF",
+      "input": "\nTotal peers 3, established peers 2\nASN 333\nVRF default, local ASN 333\npeers 3, established peers 2, local router-id 10.106.0.6\nState: I-Idle, A-Active, O-Open, E-Established, C-Closing, S-Shutdown\n\nNeighbor        ASN    Flaps LastUpDn|LastRead|LastWrit St Port(L/R)  Notif(S/R)\n10.106.101.1        333 0     01:03:35|00:00:41|00:00:09 E   179/48392      0/0\n10.106.102.3        888 0     01:03:39|never   |never    I   0/0          0/0\n10.106.102.4        333 0     01:03:35|00:00:41|00:00:09 E   179/36462      0/0\n\nVRF vpn1, local ASN 333\npeers 0, established peers 0, local router-id 10.229.11.11\nState: I-Idle, A-Active, O-Open, E-Established, C-Closing, S-Shutdown\n\nNeighbor        ASN    Flaps LastUpDn|LastRead|LastWrit St Port(L/R)  Notif(S/R)\n",
+      "expected": {
+        "local_as": 333,
+        "total_established_peers": 2,
+        "total_peers": 3,
+        "vrfs": {
+          "default": {
+            "established_peers": 2,
+            "local_as": 333,
+            "neighbors": {
+              "10.106.101.1": {
+                "flaps": 0,
+                "last_flap": "01:03:35",
+                "last_read": "00:00:41",
+                "last_write": "00:00:09",
+                "local_port": 179,
+                "notifications_received": 0,
+                "notifications_sent": 0,
+                "remote_as": 333,
+                "remote_port": 48392,
+                "state": "established"
+              },
+              "10.106.102.3": {
+                "flaps": 0,
+                "last_flap": "01:03:39",
+                "last_read": "never",
+                "last_write": "never",
+                "local_port": 0,
+                "notifications_received": 0,
+                "notifications_sent": 0,
+                "remote_as": 888,
+                "remote_port": 0,
+                "state": "idle"
+              },
+              "10.106.102.4": {
+                "flaps": 0,
+                "last_flap": "01:03:35",
+                "last_read": "00:00:41",
+                "last_write": "00:00:09",
+                "local_port": 179,
+                "notifications_received": 0,
+                "notifications_sent": 0,
+                "remote_as": 333,
+                "remote_port": 36462,
+                "state": "established"
+              }
+            },
+            "peers": 3,
+            "router_id": "10.106.0.6"
+          },
+          "vpn1": {
+            "established_peers": 0,
+            "local_as": 333,
+            "peers": 0,
+            "router_id": "10.229.11.11"
+          }
+        }
+      }
+    },
+    {
+      "name": "Large ASN values that cause neighbor rows to wrap across two lines",
+      "input": "Total peers 8, established peers 8\nASN 1\nVRF default, local ASN 1\npeers 8, established peers 8, local router-id 98.98.98.98\nState: I-Idle, A-Active, O-Open, E-Established, C-Closing, S-Shutdown\n\nNeighbor        ASN    Flaps LastUpDn|LastRead|LastWrit St Port(L/R)  Notif(S/R)\n1.1.1.1             1 0     00:11:38|00:00:22|00:00:42 E   51736/179        0/0\n2.2.2.1             1 0     00:11:32|00:00:43|00:00:22 E   30880/179        0/0\n3.3.3.1             3 0     00:10:45|00:00:21|00:00:22 E   179/40694      0/0\n4.4.4.1         4275307571\n                      0     00:10:30|00:00:21|00:00:22 E   26058/179        0/0\n1:1:1::1            1 0     00:11:39|00:00:38|00:00:52 E   48824/179        0/0\n2:2:2::1            1 0     00:11:37|00:00:02|00:00:37 E   35738/179        0/0\n3:3:3::1            3 0     00:10:53|00:00:36|00:00:37 E   179/15002      0/0\n4:4:4::1        4275307571\n                      0     00:10:48|00:00:36|00:00:37 E   34744/179        0/0\n",
+      "expected": {
+        "local_as": 1,
+        "total_established_peers": 8,
+        "total_peers": 8,
+        "vrfs": {
+          "default": {
+            "established_peers": 8,
+            "local_as": 1,
+            "neighbors": {
+              "1.1.1.1": {
+                "flaps": 0,
+                "last_flap": "00:11:38",
+                "last_read": "00:00:22",
+                "last_write": "00:00:42",
+                "local_port": 51736,
+                "notifications_received": 0,
+                "notifications_sent": 0,
+                "remote_as": 1,
+                "remote_port": 179,
+                "state": "established"
+              },
+              "1:1:1::1": {
+                "flaps": 0,
+                "last_flap": "00:11:39",
+                "last_read": "00:00:38",
+                "last_write": "00:00:52",
+                "local_port": 48824,
+                "notifications_received": 0,
+                "notifications_sent": 0,
+                "remote_as": 1,
+                "remote_port": 179,
+                "state": "established"
+              },
+              "2.2.2.1": {
+                "flaps": 0,
+                "last_flap": "00:11:32",
+                "last_read": "00:00:43",
+                "last_write": "00:00:22",
+                "local_port": 30880,
+                "notifications_received": 0,
+                "notifications_sent": 0,
+                "remote_as": 1,
+                "remote_port": 179,
+                "state": "established"
+              },
+              "2:2:2::1": {
+                "flaps": 0,
+                "last_flap": "00:11:37",
+                "last_read": "00:00:02",
+                "last_write": "00:00:37",
+                "local_port": 35738,
+                "notifications_received": 0,
+                "notifications_sent": 0,
+                "remote_as": 1,
+                "remote_port": 179,
+                "state": "established"
+              },
+              "3.3.3.1": {
+                "flaps": 0,
+                "last_flap": "00:10:45",
+                "last_read": "00:00:21",
+                "last_write": "00:00:22",
+                "local_port": 179,
+                "notifications_received": 0,
+                "notifications_sent": 0,
+                "remote_as": 3,
+                "remote_port": 40694,
+                "state": "established"
+              },
+              "3:3:3::1": {
+                "flaps": 0,
+                "last_flap": "00:10:53",
+                "last_read": "00:00:36",
+                "last_write": "00:00:37",
+                "local_port": 179,
+                "notifications_received": 0,
+                "notifications_sent": 0,
+                "remote_as": 3,
+                "remote_port": 15002,
+                "state": "established"
+              },
+              "4.4.4.1": {
+                "flaps": 0,
+                "last_flap": "00:10:30",
+                "last_read": "00:00:21",
+                "last_write": "00:00:22",
+                "local_port": 26058,
+                "notifications_received": 0,
+                "notifications_sent": 0,
+                "remote_as": 4275307571,
+                "remote_port": 179,
+                "state": "established"
+              },
+              "4:4:4::1": {
+                "flaps": 0,
+                "last_flap": "00:10:48",
+                "last_read": "00:00:36",
+                "last_write": "00:00:37",
+                "local_port": 34744,
+                "notifications_received": 0,
+                "notifications_sent": 0,
+                "remote_as": 4275307571,
+                "remote_port": 179,
+                "state": "established"
+              }
+            },
+            "peers": 8,
+            "router_id": "98.98.98.98"
+          }
+        }
+      }
+    }
+  ]
+}

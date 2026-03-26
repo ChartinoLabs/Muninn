@@ -1,0 +1,38 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show platform software nat ipalias",
+  "schema": {
+    "name": "ShowPlatformSoftwareNatIpaliasResult",
+    "fields": {
+      "ip_address": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "IpAliasEntry",
+            "fields": {
+              "table_id": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with a single IP alias entry",
+      "input": "IP Address          Table ID\n80.0.0.11           0\n",
+      "expected": {
+        "ip_address": {
+          "80.0.0.11": {
+            "table_id": 0
+          }
+        }
+      }
+    }
+  ]
+}

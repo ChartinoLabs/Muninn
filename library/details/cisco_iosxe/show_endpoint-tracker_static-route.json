@@ -1,0 +1,59 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show endpoint-tracker static-route",
+  "schema": {
+    "name": "ShowEndpointTrackerStaticRouteResult",
+    "fields": {
+      "rows": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "EndpointTrackerStaticRouteRow",
+            "fields": {
+              "tracker_name": {
+                "type": "str",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "rtt_msec": {
+                "type": "int",
+                "required": true
+              },
+              "probe_id": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "show endpoint-tracker static-route\n\nTracker Name \t\t\t\tStatus \t\t\t\tRTT in msec \t\t\t\tProbe ID\ntcp-10001 \t\t                UP \t\t\t\t    2 \t\t\t\t\t   2\nudp-10001 \t\t\t\tUP \t\t\t\t    1 \t\t\t\t\t   3\n",
+      "expected": {
+        "rows": {
+          "tcp-10001": {
+            "tracker_name": "tcp-10001",
+            "status": "UP",
+            "rtt_msec": 2,
+            "probe_id": 2
+          },
+          "udp-10001": {
+            "tracker_name": "udp-10001",
+            "status": "UP",
+            "rtt_msec": 1,
+            "probe_id": 3
+          }
+        }
+      }
+    }
+  ]
+}

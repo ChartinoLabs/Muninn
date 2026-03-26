@@ -1,0 +1,161 @@
+{
+  "os": "cisco_nxos",
+  "command": "show route-map",
+  "schema": {
+    "name": "ShowRouteMapResult",
+    "fields": {
+      "route_maps": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RouteMapEntry",
+            "fields": {
+              "sequences": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "RouteMapSequenceEntry",
+                    "fields": {
+                      "action": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "match_clauses": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": true
+                      },
+                      "set_clauses": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": true
+                      },
+                      "description": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple route-maps with various match and set clauses",
+      "input": "route-map RM-TEST-OUT, permit, sequence 10\n  Match clauses:\n    as-path (as-path filter): AS-TEST\n  Set clauses:\nroute-map RM-BGP-TO-OSPF, deny, sequence 10\n  Match clauses:\n    tag: 12345\n  Set clauses:\nroute-map RM-BGP-TO-OSPF, permit, sequence 20\n  Match clauses:\n  Set clauses:\nroute-map RM-ISP1-IN, permit, sequence 1000\n  Match clauses:\n  Set clauses:\n    local-preference 300\nroute-map RM-ISP1-OUT, permit, sequence 1000\n  Match clauses:\n    as-path (as-path filter): AS-ISP2\n  Set clauses:\nroute-map TEST_THIS, permit, sequence 10\n  Match clauses:\n    ip address (access-lists): AL_TEST_TEST\n  Set clauses:\n    ip next-hop 2.2.2.2\nroute-map RM-N3K1-TO-N3K2, permit, sequence 10\n  Match clauses:\n    ip address prefix-lists: PF-N3K1-TO-N3K2\n  Set clauses:\n    extcommunity RT:100:1\n",
+      "expected": {
+        "route_maps": {
+          "RM-BGP-TO-OSPF": {
+            "sequences": {
+              "10": {
+                "action": "deny",
+                "match_clauses": [
+                  "tag: 12345"
+                ],
+                "set_clauses": []
+              },
+              "20": {
+                "action": "permit",
+                "match_clauses": [],
+                "set_clauses": []
+              }
+            }
+          },
+          "RM-ISP1-IN": {
+            "sequences": {
+              "1000": {
+                "action": "permit",
+                "match_clauses": [],
+                "set_clauses": [
+                  "local-preference 300"
+                ]
+              }
+            }
+          },
+          "RM-ISP1-OUT": {
+            "sequences": {
+              "1000": {
+                "action": "permit",
+                "match_clauses": [
+                  "as-path (as-path filter): AS-ISP2"
+                ],
+                "set_clauses": []
+              }
+            }
+          },
+          "RM-N3K1-TO-N3K2": {
+            "sequences": {
+              "10": {
+                "action": "permit",
+                "match_clauses": [
+                  "ip address prefix-lists: PF-N3K1-TO-N3K2"
+                ],
+                "set_clauses": [
+                  "extcommunity RT:100:1"
+                ]
+              }
+            }
+          },
+          "RM-TEST-OUT": {
+            "sequences": {
+              "10": {
+                "action": "permit",
+                "match_clauses": [
+                  "as-path (as-path filter): AS-TEST"
+                ],
+                "set_clauses": []
+              }
+            }
+          },
+          "TEST_THIS": {
+            "sequences": {
+              "10": {
+                "action": "permit",
+                "match_clauses": [
+                  "ip address (access-lists): AL_TEST_TEST"
+                ],
+                "set_clauses": [
+                  "ip next-hop 2.2.2.2"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Single route-map with one sequence",
+      "input": "route-map RM-SIMPLE, permit, sequence 10\n  Match clauses:\n    ip address prefix-lists: PF-DEFAULT\n  Set clauses:\n    local-preference 200\n",
+      "expected": {
+        "route_maps": {
+          "RM-SIMPLE": {
+            "sequences": {
+              "10": {
+                "action": "permit",
+                "match_clauses": [
+                  "ip address prefix-lists: PF-DEFAULT"
+                ],
+                "set_clauses": [
+                  "local-preference 200"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show udld neighbor",
+  "schema": {
+    "name": "ShowUdldNeighborResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "UdldNeighborEntry",
+            "fields": {
+              "device_name": {
+                "type": "str",
+                "required": true
+              },
+              "device_id": {
+                "type": "int",
+                "required": true
+              },
+              "port_id": {
+                "type": "str",
+                "required": true
+              },
+              "neighbor_state": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_bidirectional_entries": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Single UDLD neighbor on one interface",
+      "input": "Port           Device Name     Device ID    Port ID         Neighbor State\n----           -----------     ---------    -------         --------------\nGi1/0/7        A4B43937780     1            Gi1/0/6         Bidirectional\n\nTotal number of bidirectional entries displayed: 1\n",
+      "expected": {
+        "neighbors": {
+          "GigabitEthernet1/0/7": {
+            "device_id": 1,
+            "device_name": "A4B43937780",
+            "neighbor_state": "Bidirectional",
+            "port_id": "GigabitEthernet1/0/6"
+          }
+        },
+        "total_bidirectional_entries": 1
+      }
+    },
+    {
+      "name": "Multiple UDLD neighbors across different interface types",
+      "input": "Port           Device Name     Device ID    Port ID         Neighbor State\n----           -----------     ---------    -------         --------------\nFo3/1/1        78725D298A40    1            Fo1/0/15        Bidirectional\nFo3/1/2        78725D298A40    1            Fo2/0/15        Bidirectional\nTe4/1/1        7C21E167CB8     1            Te2/6/0/7       Bidirectional\n\nTotal number of bidirectional entries displayed: 3\n",
+      "expected": {
+        "neighbors": {
+          "FortyGigabitEthernet3/1/1": {
+            "device_id": 1,
+            "device_name": "78725D298A40",
+            "neighbor_state": "Bidirectional",
+            "port_id": "FortyGigabitEthernet1/0/15"
+          },
+          "FortyGigabitEthernet3/1/2": {
+            "device_id": 1,
+            "device_name": "78725D298A40",
+            "neighbor_state": "Bidirectional",
+            "port_id": "FortyGigabitEthernet2/0/15"
+          },
+          "TenGigabitEthernet4/1/1": {
+            "device_id": 1,
+            "device_name": "7C21E167CB8",
+            "neighbor_state": "Bidirectional",
+            "port_id": "TenGigabitEthernet2/6/0/7"
+          }
+        },
+        "total_bidirectional_entries": 3
+      }
+    }
+  ]
+}

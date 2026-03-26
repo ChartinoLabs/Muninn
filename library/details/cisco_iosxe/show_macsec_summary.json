@@ -1,0 +1,162 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show macsec summary",
+  "schema": {
+    "name": "ShowMacsecSummaryResult",
+    "fields": {
+      "has_secure_channels": {
+        "type": "bool",
+        "required": true
+      },
+      "summary_interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "MacsecSummaryInterface",
+            "fields": {
+              "transmit_sc": {
+                "type": "int",
+                "required": true
+              },
+              "receive_sc": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "macsec_capable": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "MacsecCapableInterface",
+            "fields": {
+              "extension": {
+                "type": "str",
+                "required": true
+              },
+              "installed_rx_sc": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "macsec_enabled": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "MacsecEnabledInterface",
+            "fields": {
+              "receive_sc": {
+                "type": "int",
+                "required": true
+              },
+              "vlan": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Show macsec summary output with no secure channels",
+      "input": "%No Secure Channels\n",
+      "expected": {
+        "has_secure_channels": false,
+        "summary_interfaces": {},
+        "macsec_capable": {},
+        "macsec_enabled": {}
+      }
+    },
+    {
+      "name": "Show macsec summary output with interface transmit/receive SC",
+      "input": "Interface                     Transmit SC         Receive SC\nTe1/0/6                            1                   1\nTe2/0/13                           1                   1\n",
+      "expected": {
+        "has_secure_channels": true,
+        "summary_interfaces": {
+          "TenGigabitEthernet1/0/6": {
+            "transmit_sc": 1,
+            "receive_sc": 1
+          },
+          "TenGigabitEthernet2/0/13": {
+            "transmit_sc": 1,
+            "receive_sc": 1
+          }
+        },
+        "macsec_capable": {},
+        "macsec_enabled": {}
+      }
+    },
+    {
+      "name": "Show macsec summary output with capable and enabled interfaces",
+      "input": "MACsec Capable Interface                Extension              Installed Rx SC\n---------------------------------------------------------------------------------\nTenGigabitEthernet0/0/0                 One tag-in-clear                 1\nTenGigabitEthernet0/0/1                 One tag-in-clear\nTenGigabitEthernet0/0/2                 One tag-in-clear\nTenGigabitEthernet0/0/3                 One tag-in-clear\nTenGigabitEthernet0/0/4                 One tag-in-clear                 1\nTenGigabitEthernet0/0/5                 One tag-in-clear\nTenGigabitEthernet0/0/6                 One tag-in-clear\nTenGigabitEthernet0/0/7                 One tag-in-clear\nTenGigabitEthernet0/0/8                 One tag-in-clear\nTenGigabitEthernet0/0/9                 One tag-in-clear\nTenGigabitEthernet0/0/10                One tag-in-clear\nTenGigabitEthernet0/0/11                One tag-in-clear\n\nMACsec Enabled Interface         Receive SC   VLAN\n-----------------------------------------------------\nTenGigabitEthernet0/0/0.10   :        1       10\nTenGigabitEthernet0/0/1.10   :        1       10\n",
+      "expected": {
+        "has_secure_channels": true,
+        "summary_interfaces": {},
+        "macsec_capable": {
+          "TenGigabitEthernet0/0/0": {
+            "extension": "One tag-in-clear",
+            "installed_rx_sc": 1
+          },
+          "TenGigabitEthernet0/0/1": {
+            "extension": "One tag-in-clear"
+          },
+          "TenGigabitEthernet0/0/2": {
+            "extension": "One tag-in-clear"
+          },
+          "TenGigabitEthernet0/0/3": {
+            "extension": "One tag-in-clear"
+          },
+          "TenGigabitEthernet0/0/4": {
+            "extension": "One tag-in-clear",
+            "installed_rx_sc": 1
+          },
+          "TenGigabitEthernet0/0/5": {
+            "extension": "One tag-in-clear"
+          },
+          "TenGigabitEthernet0/0/6": {
+            "extension": "One tag-in-clear"
+          },
+          "TenGigabitEthernet0/0/7": {
+            "extension": "One tag-in-clear"
+          },
+          "TenGigabitEthernet0/0/8": {
+            "extension": "One tag-in-clear"
+          },
+          "TenGigabitEthernet0/0/9": {
+            "extension": "One tag-in-clear"
+          },
+          "TenGigabitEthernet0/0/10": {
+            "extension": "One tag-in-clear"
+          },
+          "TenGigabitEthernet0/0/11": {
+            "extension": "One tag-in-clear"
+          }
+        },
+        "macsec_enabled": {
+          "TenGigabitEthernet0/0/0.10": {
+            "receive_sc": 1,
+            "vlan": 10
+          },
+          "TenGigabitEthernet0/0/1.10": {
+            "receive_sc": 1,
+            "vlan": 10
+          }
+        }
+      }
+    }
+  ]
+}

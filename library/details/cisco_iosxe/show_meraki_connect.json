@@ -1,0 +1,114 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show meraki connect",
+  "schema": {
+    "name": "ShowMerakiConnectResult",
+    "fields": {
+      "service_line": {
+        "type": "str",
+        "required": true
+      },
+      "sections": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": "str"
+          }
+        },
+        "required": true
+      },
+      "device_registration_devices": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": "str"
+          }
+        },
+        "required": false
+      },
+      "device_registration_prefix": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": "str"
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "Service meraki connect: enable\n\nMeraki Tunnel Config\n------------------------------------\n  Fetch State:                Config fetch succeeded\n  Fetch Fail:                 no failure\n  Last Fetch(UTC):            2015-01-04 10:46:06\n  Next Fetch(UTC):            2015-01-04 11:53:13\n  Config Server:              example-config.meraki.com\n  Primary:                    primary.nt.meraki.com\n  Secondary:                  secondary.nt.meraki.com\n  Client IPv6 Addr:           XXXX:XXXX:XXXX:X:XXX:XXXX:XXXX:XXXX\n\nMeraki Tunnel State\n------------------------------------\n  Primary:                    Up\n  Secondary:                  Up\n  Primary Last Change(UTC):   2015-01-04 06:59:43\n  Secondary Last Change(UTC): 2015-01-04 06:59:43\n  Client Last Restart(UTC):   2015-01-04 06:59:32\n\nMeraki Tunnel Interface\n------------------------------------\n  Status:                     Enable\n  Rx Packets:                 20658\n  Tx Packets:                 18532\n  Rx Errors:                  0\n  Tx Errors:                  0\n  Rx Drop Packets:            0\n  Tx Drop Packets:            0\n\nMeraki Device Registration\n------------------------------------\n  url:                        https://example.meraki.com/nodes/register\n  Device Number:              1\n  PID:                        C9300-24U\n  Serial Number:              XXXXXXXXXXX\n  Meraki ID:                  XXXX-XXXX-XXXX\n  Mac Address:                XX:XX:XX:XX:XX:XX\n  Status:                     Registered\n  Timestamp(UTC):             2015-01-04 06:59:22\n\n  Device Number:              2\n  PID:                        C9300-24T\n  Serial Number:              YYYYYYYYYYY\n  Meraki ID:                  YYYY-YYYY-YYYY\n  Mac Address:                YY:YY:YY:YY:YY:YY\n  Status:                     Registered\n  Timestamp(UTC):             2015-01-04 06:59:22\n\n  Device Number:              3\n  PID:                        C9300-24UX\n  Serial Number:              ZZZZZZZZZZZ\n  Meraki ID:                  ZZZZ-ZZZZ-ZZZZ\n  Mac Address:                ZZ:ZZ:ZZ:ZZ:ZZ:ZZ\n  Status:                     Registered\n  Timestamp(UTC):             2015-01-04 06:59:20\n",
+      "expected": {
+        "service_line": "Service meraki connect: enable",
+        "sections": {
+          "Meraki Tunnel Config": {
+            "Fetch State": "Config fetch succeeded",
+            "Fetch Fail": "no failure",
+            "Last Fetch(UTC)": "2015-01-04 10:46:06",
+            "Next Fetch(UTC)": "2015-01-04 11:53:13",
+            "Config Server": "example-config.meraki.com",
+            "Primary": "primary.nt.meraki.com",
+            "Secondary": "secondary.nt.meraki.com",
+            "Client IPv6 Addr": "XXXX:XXXX:XXXX:X:XXX:XXXX:XXXX:XXXX"
+          },
+          "Meraki Tunnel State": {
+            "Primary": "Up",
+            "Secondary": "Up",
+            "Primary Last Change(UTC)": "2015-01-04 06:59:43",
+            "Secondary Last Change(UTC)": "2015-01-04 06:59:43",
+            "Client Last Restart(UTC)": "2015-01-04 06:59:32"
+          },
+          "Meraki Tunnel Interface": {
+            "Status": "Enable",
+            "Rx Packets": "20658",
+            "Tx Packets": "18532",
+            "Rx Errors": "0",
+            "Tx Errors": "0",
+            "Rx Drop Packets": "0",
+            "Tx Drop Packets": "0"
+          }
+        },
+        "device_registration_devices": {
+          "1": {
+            "Device Number": "1",
+            "PID": "C9300-24U",
+            "Serial Number": "XXXXXXXXXXX",
+            "Meraki ID": "XXXX-XXXX-XXXX",
+            "Mac Address": "XX:XX:XX:XX:XX:XX",
+            "Status": "Registered",
+            "Timestamp(UTC)": "2015-01-04 06:59:22"
+          },
+          "2": {
+            "Device Number": "2",
+            "PID": "C9300-24T",
+            "Serial Number": "YYYYYYYYYYY",
+            "Meraki ID": "YYYY-YYYY-YYYY",
+            "Mac Address": "YY:YY:YY:YY:YY:YY",
+            "Status": "Registered",
+            "Timestamp(UTC)": "2015-01-04 06:59:22"
+          },
+          "3": {
+            "Device Number": "3",
+            "PID": "C9300-24UX",
+            "Serial Number": "ZZZZZZZZZZZ",
+            "Meraki ID": "ZZZZ-ZZZZ-ZZZZ",
+            "Mac Address": "ZZ:ZZ:ZZ:ZZ:ZZ:ZZ",
+            "Status": "Registered",
+            "Timestamp(UTC)": "2015-01-04 06:59:20"
+          }
+        },
+        "device_registration_prefix": {
+          "url": "https://example.meraki.com/nodes/register"
+        }
+      }
+    }
+  ]
+}

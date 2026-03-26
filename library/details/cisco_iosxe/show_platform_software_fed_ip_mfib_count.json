@@ -1,0 +1,32 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show platform software fed ip mfib count",
+  "schema": {
+    "name": "ShowPlatformSoftwareFedIpMfibCountResult",
+    "fields": {
+      "mfib_count": {
+        "type": {
+          "name": "MfibCount",
+          "fields": {
+            "number_of_entries": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Show platform software fed ip mfib count output with entry count",
+      "input": "Number of entries = 7896\n",
+      "expected": {
+        "mfib_count": {
+          "number_of_entries": 7896
+        }
+      }
+    }
+  ]
+}

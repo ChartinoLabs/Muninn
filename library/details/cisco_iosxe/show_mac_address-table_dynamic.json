@@ -1,0 +1,98 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show mac address-table dynamic",
+  "schema": {
+    "name": "ShowMacAddressTableDynamicResult",
+    "fields": {
+      "vlans": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VlanMacs",
+            "fields": {
+              "macs": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "MacAddressEntry",
+                    "fields": {
+                      "type": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "ports": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Show mac address-table dynamic output with two entries",
+      "input": "Mac Address Table\n-------------------------------------------\n\nVlan    Mac Address       Type        Ports\n----    -----------       --------    -----\n1000    f87a.4125.2702    DYNAMIC     Hu1/0/3\n1000    f87a.4125.2703    DYNAMIC     Hu1/0/4\n",
+      "expected": {
+        "vlans": {
+          "1000": {
+            "macs": {
+              "f87a.4125.2702": {
+                "type": "DYNAMIC",
+                "ports": [
+                  "HundredGigabitEthernet1/0/3"
+                ]
+              },
+              "f87a.4125.2703": {
+                "type": "DYNAMIC",
+                "ports": [
+                  "HundredGigabitEthernet1/0/4"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Show mac address-table dynamic output with multiple VLANs",
+      "input": "-------------------------------------------\n\nVlan    Mac Address       Type        Ports\n----    -----------       --------    -----\n400    f87a.4125.2702    DYNAMIC      Vl400\n1000   f87a.4125.2702    DYNAMIC     Hu1/0/3\n",
+      "expected": {
+        "vlans": {
+          "400": {
+            "macs": {
+              "f87a.4125.2702": {
+                "type": "DYNAMIC",
+                "ports": [
+                  "VLAN400"
+                ]
+              }
+            }
+          },
+          "1000": {
+            "macs": {
+              "f87a.4125.2702": {
+                "type": "DYNAMIC",
+                "ports": [
+                  "HundredGigabitEthernet1/0/3"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

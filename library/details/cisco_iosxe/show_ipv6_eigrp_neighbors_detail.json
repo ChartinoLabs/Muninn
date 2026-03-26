@@ -1,0 +1,125 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ipv6 eigrp neighbors detail",
+  "schema": {
+    "name": "ShowIpv6EigrpNeighborsDetailResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "Ipv6EigrpDetailNeighborEntry",
+              "fields": {
+                "handle": {
+                  "type": "int",
+                  "required": true
+                },
+                "interface": {
+                  "type": "str",
+                  "required": true
+                },
+                "hold_time": {
+                  "type": "int",
+                  "required": true
+                },
+                "uptime": {
+                  "type": "str",
+                  "required": true
+                },
+                "srtt": {
+                  "type": "int",
+                  "required": true
+                },
+                "rto": {
+                  "type": "int",
+                  "required": true
+                },
+                "queue_count": {
+                  "type": "int",
+                  "required": true
+                },
+                "sequence_number": {
+                  "type": "int",
+                  "required": true
+                },
+                "software_version": {
+                  "type": "str",
+                  "required": true
+                },
+                "retransmit_count": {
+                  "type": "int",
+                  "required": true
+                },
+                "retry_count": {
+                  "type": "int",
+                  "required": true
+                },
+                "prefixes": {
+                  "type": "int",
+                  "required": false
+                },
+                "topology_ids_from_peer": {
+                  "type": "int",
+                  "required": true
+                },
+                "topology_advert_to_peer": {
+                  "type": "str",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Two IPv6 EIGRP neighbors on different interfaces in AS 1",
+      "input": "EIGRP-IPv6 Neighbors for AS(1)\nH   Address                 Interface              Hold Uptime   SRTT   RTO  Q  Seq\n                                                   (sec)         (ms)       Cnt Num\n0   FE80::F816:3EFF:FE0B:1  Gi2                      12 00:05:30   20   200  0  5\n   Version 12.0/2.0, Retrans: 0, Retries: 0, Prefixes: 3\n   Topology-ids from peer - 0\n   Topologies advertised to peer:   base\n1   FE80::F816:3EFF:FE9A:2  Gi3                      14 01:22:05   15   100  0  12\n   Version 23.0/2.0, Retrans: 2, Retries: 0, Prefixes: 5\n   Topology-ids from peer - 0\n   Topologies advertised to peer:   base\nMax Nbrs: 0, Current Nbrs: 0\n",
+      "expected": {
+        "neighbors": {
+          "1": {
+            "FE80::F816:3EFF:FE0B:1": {
+              "handle": 0,
+              "hold_time": 12,
+              "interface": "GigabitEthernet2",
+              "prefixes": 3,
+              "queue_count": 0,
+              "retransmit_count": 0,
+              "retry_count": 0,
+              "rto": 200,
+              "sequence_number": 5,
+              "software_version": "12.0/2.0",
+              "srtt": 20,
+              "topology_advert_to_peer": "base",
+              "topology_ids_from_peer": 0,
+              "uptime": "00:05:30"
+            },
+            "FE80::F816:3EFF:FE9A:2": {
+              "handle": 1,
+              "hold_time": 14,
+              "interface": "GigabitEthernet3",
+              "prefixes": 5,
+              "queue_count": 0,
+              "retransmit_count": 2,
+              "retry_count": 0,
+              "rto": 100,
+              "sequence_number": 12,
+              "software_version": "23.0/2.0",
+              "srtt": 15,
+              "topology_advert_to_peer": "base",
+              "topology_ids_from_peer": 0,
+              "uptime": "01:22:05"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

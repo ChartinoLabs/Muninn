@@ -1,0 +1,541 @@
+{
+  "os": "cisco_ios",
+  "command": "show ipv6 access-lists",
+  "schema": {
+    "name": "ShowIpv6AccessListsResult",
+    "fields": {
+      "access_lists": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "Ipv6AccessList",
+            "fields": {
+              "entries": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "Ipv6AccessListEntry",
+                    "fields": {
+                      "sequence": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "action": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "line": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "parsed": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": "<class 'object'>"
+                        },
+                        "required": true
+                      },
+                      "matches": {
+                        "type": "int",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              },
+              "per_user": {
+                "type": "bool",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Real IOS-XE show ipv6 access-list output with per-user entries from Genie",
+      "input": "Device> show ipv6 access-list\n    IPv6 access list inbound\n        permit tcp any any eq bgp (8 matches) sequence 10\n        permit tcp any any eq telnet (15 matches) sequence 20\n        permit udp any any sequence 30\n    IPv6 access list Virtual-Access2.1#427819008151 (per-user)\n        permit tcp host 2001:DB8:1::32 eq bgp host 2001:DB8:2::32 eq 11000 sequence 1\n        permit tcp host 2001:DB8:1::32 eq telnet host 2001:DB8:2::32 eq 11001 sequence 2\n",
+      "expected": {
+        "access_lists": {
+          "Virtual-Access2.1#427819008151": {
+            "entries": {
+              "1": {
+                "action": "permit",
+                "line": "permit tcp host 2001:DB8:1::32 eq bgp host 2001:DB8:2::32 eq 11000",
+                "parsed": {
+                  "destination": {
+                    "kind": "host",
+                    "value": "2001:DB8:2::32"
+                  },
+                  "destination_port": {
+                    "operator": "eq",
+                    "ports": [
+                      "11000"
+                    ]
+                  },
+                  "protocol": "tcp",
+                  "source": {
+                    "kind": "host",
+                    "value": "2001:DB8:1::32"
+                  },
+                  "source_port": {
+                    "operator": "eq",
+                    "ports": [
+                      "bgp"
+                    ]
+                  }
+                },
+                "sequence": 1
+              },
+              "2": {
+                "action": "permit",
+                "line": "permit tcp host 2001:DB8:1::32 eq telnet host 2001:DB8:2::32 eq 11001",
+                "parsed": {
+                  "destination": {
+                    "kind": "host",
+                    "value": "2001:DB8:2::32"
+                  },
+                  "destination_port": {
+                    "operator": "eq",
+                    "ports": [
+                      "11001"
+                    ]
+                  },
+                  "protocol": "tcp",
+                  "source": {
+                    "kind": "host",
+                    "value": "2001:DB8:1::32"
+                  },
+                  "source_port": {
+                    "operator": "eq",
+                    "ports": [
+                      "telnet"
+                    ]
+                  }
+                },
+                "sequence": 2
+              }
+            },
+            "per_user": true
+          },
+          "inbound": {
+            "entries": {
+              "10": {
+                "action": "permit",
+                "line": "permit tcp any any eq bgp",
+                "matches": 8,
+                "parsed": {
+                  "destination": {
+                    "kind": "any"
+                  },
+                  "destination_port": {
+                    "operator": "eq",
+                    "ports": [
+                      "bgp"
+                    ]
+                  },
+                  "protocol": "tcp",
+                  "source": {
+                    "kind": "any"
+                  }
+                },
+                "sequence": 10
+              },
+              "20": {
+                "action": "permit",
+                "line": "permit tcp any any eq telnet",
+                "matches": 15,
+                "parsed": {
+                  "destination": {
+                    "kind": "any"
+                  },
+                  "destination_port": {
+                    "operator": "eq",
+                    "ports": [
+                      "telnet"
+                    ]
+                  },
+                  "protocol": "tcp",
+                  "source": {
+                    "kind": "any"
+                  }
+                },
+                "sequence": 20
+              },
+              "30": {
+                "action": "permit",
+                "line": "permit udp any any",
+                "parsed": {
+                  "destination": {
+                    "kind": "any"
+                  },
+                  "protocol": "udp",
+                  "source": {
+                    "kind": "any"
+                  }
+                },
+                "sequence": 30
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Real IOS-XE show ipv6 access-list output with dscp, log-input, and ICMP messages from Genie",
+      "input": "    Router# show ipv6 access-list OutFilter_IPv6\nIPv6 access list OutFilter_IPv6\n    permit icmp any any mld-query sequence 30\n    permit icmp any any router-advertisement sequence 40\n    deny 103 any any sequence 50\n    permit icmp any any packet-too-big sequence 60\n    deny icmp any any sequence 70\n    deny ipv6 2001:DB8:B30A:DC63::/64 any sequence 74\n    deny ipv6 2001:DB8:B30A:F442::/64 any sequence 75\n    permit ipv6 any 2001:db8:1d14::/16 log-input sequence 80\n    deny ipv6 2001:DB8:B30A:FE9B::/64 any sequence 90\n    deny ipv6 2001:DB8:B30A:213::/64 any sequence 100\n    deny ipv6 2001:db8:5254:1000::/35 2001:db8:5254:1000::/35 dscp default sequence 110\n    permit ipv6 any any (3974749339 matches) sequence 120\n",
+      "expected": {
+        "access_lists": {
+          "OutFilter_IPv6": {
+            "entries": {
+              "100": {
+                "action": "deny",
+                "line": "deny ipv6 2001:DB8:B30A:213::/64 any",
+                "parsed": {
+                  "destination": {
+                    "kind": "any"
+                  },
+                  "protocol": "ipv6",
+                  "source": {
+                    "kind": "prefix",
+                    "value": "2001:DB8:B30A:213::/64"
+                  }
+                },
+                "sequence": 100
+              },
+              "110": {
+                "action": "deny",
+                "line": "deny ipv6 2001:db8:5254:1000::/35 2001:db8:5254:1000::/35 dscp default",
+                "parsed": {
+                  "destination": {
+                    "kind": "prefix",
+                    "value": "2001:db8:5254:1000::/35"
+                  },
+                  "dscp": "default",
+                  "protocol": "ipv6",
+                  "source": {
+                    "kind": "prefix",
+                    "value": "2001:db8:5254:1000::/35"
+                  }
+                },
+                "sequence": 110
+              },
+              "120": {
+                "action": "permit",
+                "line": "permit ipv6 any any",
+                "matches": 3974749339,
+                "parsed": {
+                  "destination": {
+                    "kind": "any"
+                  },
+                  "protocol": "ipv6",
+                  "source": {
+                    "kind": "any"
+                  }
+                },
+                "sequence": 120
+              },
+              "30": {
+                "action": "permit",
+                "line": "permit icmp any any mld-query",
+                "parsed": {
+                  "destination": {
+                    "kind": "any"
+                  },
+                  "icmp_message": "mld-query",
+                  "protocol": "icmp",
+                  "source": {
+                    "kind": "any"
+                  }
+                },
+                "sequence": 30
+              },
+              "40": {
+                "action": "permit",
+                "line": "permit icmp any any router-advertisement",
+                "parsed": {
+                  "destination": {
+                    "kind": "any"
+                  },
+                  "icmp_message": "router-advertisement",
+                  "protocol": "icmp",
+                  "source": {
+                    "kind": "any"
+                  }
+                },
+                "sequence": 40
+              },
+              "50": {
+                "action": "deny",
+                "line": "deny 103 any any",
+                "parsed": {
+                  "destination": {
+                    "kind": "any"
+                  },
+                  "protocol": "103",
+                  "source": {
+                    "kind": "any"
+                  }
+                },
+                "sequence": 50
+              },
+              "60": {
+                "action": "permit",
+                "line": "permit icmp any any packet-too-big",
+                "parsed": {
+                  "destination": {
+                    "kind": "any"
+                  },
+                  "icmp_message": "packet-too-big",
+                  "protocol": "icmp",
+                  "source": {
+                    "kind": "any"
+                  }
+                },
+                "sequence": 60
+              },
+              "70": {
+                "action": "deny",
+                "line": "deny icmp any any",
+                "parsed": {
+                  "destination": {
+                    "kind": "any"
+                  },
+                  "protocol": "icmp",
+                  "source": {
+                    "kind": "any"
+                  }
+                },
+                "sequence": 70
+              },
+              "74": {
+                "action": "deny",
+                "line": "deny ipv6 2001:DB8:B30A:DC63::/64 any",
+                "parsed": {
+                  "destination": {
+                    "kind": "any"
+                  },
+                  "protocol": "ipv6",
+                  "source": {
+                    "kind": "prefix",
+                    "value": "2001:DB8:B30A:DC63::/64"
+                  }
+                },
+                "sequence": 74
+              },
+              "75": {
+                "action": "deny",
+                "line": "deny ipv6 2001:DB8:B30A:F442::/64 any",
+                "parsed": {
+                  "destination": {
+                    "kind": "any"
+                  },
+                  "protocol": "ipv6",
+                  "source": {
+                    "kind": "prefix",
+                    "value": "2001:DB8:B30A:F442::/64"
+                  }
+                },
+                "sequence": 75
+              },
+              "80": {
+                "action": "permit",
+                "line": "permit ipv6 any 2001:db8:1d14::/16 log-input",
+                "parsed": {
+                  "destination": {
+                    "kind": "prefix",
+                    "value": "2001:db8:1d14::/16"
+                  },
+                  "log_input": true,
+                  "protocol": "ipv6",
+                  "source": {
+                    "kind": "any"
+                  }
+                },
+                "sequence": 80
+              },
+              "90": {
+                "action": "deny",
+                "line": "deny ipv6 2001:DB8:B30A:FE9B::/64 any",
+                "parsed": {
+                  "destination": {
+                    "kind": "any"
+                  },
+                  "protocol": "ipv6",
+                  "source": {
+                    "kind": "prefix",
+                    "value": "2001:DB8:B30A:FE9B::/64"
+                  }
+                },
+                "sequence": 90
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Real IOS-XE show ipv6 access-list output with time-range entries from Genie",
+      "input": "show ipv6 access-list time_based\nIPv6 access list time_based\npermit tcp host 2000::1 host 2002::1 time-range GO (active) sequence 10\ndeny udp host 2000::1 host 2002::1 sequence 20\npermit tcp host 2000::1 host 2003::1 sequence 30\ndeny udp host 2000::1 host 2003::1 time-range GO (active) sequence 40\npermit udp host 2000::1 host 2004::1 time-range GO (active) sequence 50\ndeny tcp host 2000::1 host 2004::1 sequence 60\npermit udp host 2000::1 host 2004::1 sequence 70\ndeny tcp host 2000::1 host 2004::1 time-range GO (active) sequence 80\n",
+      "expected": {
+        "access_lists": {
+          "time_based": {
+            "entries": {
+              "10": {
+                "action": "permit",
+                "line": "permit tcp host 2000::1 host 2002::1 time-range GO (active)",
+                "parsed": {
+                  "destination": {
+                    "kind": "host",
+                    "value": "2002::1"
+                  },
+                  "protocol": "tcp",
+                  "source": {
+                    "kind": "host",
+                    "value": "2000::1"
+                  },
+                  "time_range": {
+                    "name": "GO",
+                    "status": "active"
+                  }
+                },
+                "sequence": 10
+              },
+              "20": {
+                "action": "deny",
+                "line": "deny udp host 2000::1 host 2002::1",
+                "parsed": {
+                  "destination": {
+                    "kind": "host",
+                    "value": "2002::1"
+                  },
+                  "protocol": "udp",
+                  "source": {
+                    "kind": "host",
+                    "value": "2000::1"
+                  }
+                },
+                "sequence": 20
+              },
+              "30": {
+                "action": "permit",
+                "line": "permit tcp host 2000::1 host 2003::1",
+                "parsed": {
+                  "destination": {
+                    "kind": "host",
+                    "value": "2003::1"
+                  },
+                  "protocol": "tcp",
+                  "source": {
+                    "kind": "host",
+                    "value": "2000::1"
+                  }
+                },
+                "sequence": 30
+              },
+              "40": {
+                "action": "deny",
+                "line": "deny udp host 2000::1 host 2003::1 time-range GO (active)",
+                "parsed": {
+                  "destination": {
+                    "kind": "host",
+                    "value": "2003::1"
+                  },
+                  "protocol": "udp",
+                  "source": {
+                    "kind": "host",
+                    "value": "2000::1"
+                  },
+                  "time_range": {
+                    "name": "GO",
+                    "status": "active"
+                  }
+                },
+                "sequence": 40
+              },
+              "50": {
+                "action": "permit",
+                "line": "permit udp host 2000::1 host 2004::1 time-range GO (active)",
+                "parsed": {
+                  "destination": {
+                    "kind": "host",
+                    "value": "2004::1"
+                  },
+                  "protocol": "udp",
+                  "source": {
+                    "kind": "host",
+                    "value": "2000::1"
+                  },
+                  "time_range": {
+                    "name": "GO",
+                    "status": "active"
+                  }
+                },
+                "sequence": 50
+              },
+              "60": {
+                "action": "deny",
+                "line": "deny tcp host 2000::1 host 2004::1",
+                "parsed": {
+                  "destination": {
+                    "kind": "host",
+                    "value": "2004::1"
+                  },
+                  "protocol": "tcp",
+                  "source": {
+                    "kind": "host",
+                    "value": "2000::1"
+                  }
+                },
+                "sequence": 60
+              },
+              "70": {
+                "action": "permit",
+                "line": "permit udp host 2000::1 host 2004::1",
+                "parsed": {
+                  "destination": {
+                    "kind": "host",
+                    "value": "2004::1"
+                  },
+                  "protocol": "udp",
+                  "source": {
+                    "kind": "host",
+                    "value": "2000::1"
+                  }
+                },
+                "sequence": 70
+              },
+              "80": {
+                "action": "deny",
+                "line": "deny tcp host 2000::1 host 2004::1 time-range GO (active)",
+                "parsed": {
+                  "destination": {
+                    "kind": "host",
+                    "value": "2004::1"
+                  },
+                  "protocol": "tcp",
+                  "source": {
+                    "kind": "host",
+                    "value": "2000::1"
+                  },
+                  "time_range": {
+                    "name": "GO",
+                    "status": "active"
+                  }
+                },
+                "sequence": 80
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,296 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show pppoe statistics",
+  "schema": {
+    "name": "ShowPppoeStatisticsResult",
+    "fields": {
+      "pppoe_events": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PppoeCounterRow",
+            "fields": {
+              "name": {
+                "type": "str",
+                "required": true
+              },
+              "total": {
+                "type": "int",
+                "required": true
+              },
+              "since_cleared": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "pppoe_statistics": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "ref",
+            "name": "PppoeCounterRow"
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "Load for five secs: 3%/1%; one minute: 3%; five minutes: 3%\nTime source is user configuration, 11:09:16.506 IST Thu Feb 17 2022\n\nPPPoE Events                   TOTAL         SINCE CLEARED\n------------------------------ ------------- -------------\nINVALID                        0             0\nPRE-SERVICE FOUND              0             0\nPRE-SERVICE NONE               0             0\nSSS CONNECT LOCAL              12110         12110\nSSS FORWARDING                 0             0\nSSS FORWARDED                  0             0\nSSS MORE KEYS                  146772        146772\nSSS DISCONNECT                 762           762\nSSS DISCONNECT ACK             0             0\nCONFIG UPDATE                  0             0\nSTATIC BIND RESPONSE           12110         12110\nPPP FORWARDING                 134258        134258\nPPP FORWARDED                  133843        133843\nPPP DISCONNECT                 12110         12110\nPPP RENEGOTIATION              0             0\nSSM PROVISIONED                146772        146772\nSSM UPDATED                    12110         12110\nSSM ACCT STATS UPDATED         0             0\nSSM DISCONNECT                 0             0\n                               0             0\n\nPPPoE Statistics               TOTAL         SINCE CLEARED\n------------------------------ ------------- -------------\nSSS Request                    146772        146772\nSSS Response Stale             0             0\nSSS Disconnect                 146010        146010\nPPPoE Handles Allocated        146772        146772\nPPPoE Handles Freed            146772        146772\nDynamic Bind Request           146772        146772\nStatic Bind Request            12110         12110\nSSM Async Stats Request        0             0\nATM VCD Retrieval Errors       0             0\nPADX Retrieval Errors (sync)   0             0\nPADR Processing Errors (sync)  0             0\nBase VA Create Errors (sync)   0             0\nCall Admin Drops               0             0\nMax PADR Size Pkts             0             0\nBad MAC Addr                   0             0\nBad Cookie                     0             0\nBad Service Name               0             0\nMax Sess Reach                 0             0\nDup PADRs Rcvd                 0             0\nMemory Fails                   0             0\nTags Processing Errors         0             0\nBBA Grp Errors                 0             0\nMAC Elem Errors                0             0\nVlan Cfg Fails                 0             0\nVlan Id Mismatchs              0             0\nInvalid Versions               0             0\nNull Sess Ids                  0             0\nMalformed PADX Received        0             0\nInvalid Tag Ignored            0             0\n",
+      "expected": {
+        "pppoe_events": {
+          "INVALID": {
+            "name": "INVALID",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "PRE-SERVICE FOUND": {
+            "name": "PRE-SERVICE FOUND",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "PRE-SERVICE NONE": {
+            "name": "PRE-SERVICE NONE",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "SSS CONNECT LOCAL": {
+            "name": "SSS CONNECT LOCAL",
+            "total": 12110,
+            "since_cleared": 12110
+          },
+          "SSS FORWARDING": {
+            "name": "SSS FORWARDING",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "SSS FORWARDED": {
+            "name": "SSS FORWARDED",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "SSS MORE KEYS": {
+            "name": "SSS MORE KEYS",
+            "total": 146772,
+            "since_cleared": 146772
+          },
+          "SSS DISCONNECT": {
+            "name": "SSS DISCONNECT",
+            "total": 762,
+            "since_cleared": 762
+          },
+          "SSS DISCONNECT ACK": {
+            "name": "SSS DISCONNECT ACK",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "CONFIG UPDATE": {
+            "name": "CONFIG UPDATE",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "STATIC BIND RESPONSE": {
+            "name": "STATIC BIND RESPONSE",
+            "total": 12110,
+            "since_cleared": 12110
+          },
+          "PPP FORWARDING": {
+            "name": "PPP FORWARDING",
+            "total": 134258,
+            "since_cleared": 134258
+          },
+          "PPP FORWARDED": {
+            "name": "PPP FORWARDED",
+            "total": 133843,
+            "since_cleared": 133843
+          },
+          "PPP DISCONNECT": {
+            "name": "PPP DISCONNECT",
+            "total": 12110,
+            "since_cleared": 12110
+          },
+          "PPP RENEGOTIATION": {
+            "name": "PPP RENEGOTIATION",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "SSM PROVISIONED": {
+            "name": "SSM PROVISIONED",
+            "total": 146772,
+            "since_cleared": 146772
+          },
+          "SSM UPDATED": {
+            "name": "SSM UPDATED",
+            "total": 12110,
+            "since_cleared": 12110
+          },
+          "SSM ACCT STATS UPDATED": {
+            "name": "SSM ACCT STATS UPDATED",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "SSM DISCONNECT": {
+            "name": "SSM DISCONNECT",
+            "total": 0,
+            "since_cleared": 0
+          }
+        },
+        "pppoe_statistics": {
+          "SSS Request": {
+            "name": "SSS Request",
+            "total": 146772,
+            "since_cleared": 146772
+          },
+          "SSS Response Stale": {
+            "name": "SSS Response Stale",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "SSS Disconnect": {
+            "name": "SSS Disconnect",
+            "total": 146010,
+            "since_cleared": 146010
+          },
+          "PPPoE Handles Allocated": {
+            "name": "PPPoE Handles Allocated",
+            "total": 146772,
+            "since_cleared": 146772
+          },
+          "PPPoE Handles Freed": {
+            "name": "PPPoE Handles Freed",
+            "total": 146772,
+            "since_cleared": 146772
+          },
+          "Dynamic Bind Request": {
+            "name": "Dynamic Bind Request",
+            "total": 146772,
+            "since_cleared": 146772
+          },
+          "Static Bind Request": {
+            "name": "Static Bind Request",
+            "total": 12110,
+            "since_cleared": 12110
+          },
+          "SSM Async Stats Request": {
+            "name": "SSM Async Stats Request",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "ATM VCD Retrieval Errors": {
+            "name": "ATM VCD Retrieval Errors",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "PADX Retrieval Errors (sync)": {
+            "name": "PADX Retrieval Errors (sync)",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "PADR Processing Errors (sync)": {
+            "name": "PADR Processing Errors (sync)",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "Base VA Create Errors (sync)": {
+            "name": "Base VA Create Errors (sync)",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "Call Admin Drops": {
+            "name": "Call Admin Drops",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "Max PADR Size Pkts": {
+            "name": "Max PADR Size Pkts",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "Bad MAC Addr": {
+            "name": "Bad MAC Addr",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "Bad Cookie": {
+            "name": "Bad Cookie",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "Bad Service Name": {
+            "name": "Bad Service Name",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "Max Sess Reach": {
+            "name": "Max Sess Reach",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "Dup PADRs Rcvd": {
+            "name": "Dup PADRs Rcvd",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "Memory Fails": {
+            "name": "Memory Fails",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "Tags Processing Errors": {
+            "name": "Tags Processing Errors",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "BBA Grp Errors": {
+            "name": "BBA Grp Errors",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "MAC Elem Errors": {
+            "name": "MAC Elem Errors",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "Vlan Cfg Fails": {
+            "name": "Vlan Cfg Fails",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "Vlan Id Mismatchs": {
+            "name": "Vlan Id Mismatchs",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "Invalid Versions": {
+            "name": "Invalid Versions",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "Null Sess Ids": {
+            "name": "Null Sess Ids",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "Malformed PADX Received": {
+            "name": "Malformed PADX Received",
+            "total": 0,
+            "since_cleared": 0
+          },
+          "Invalid Tag Ignored": {
+            "name": "Invalid Tag Ignored",
+            "total": 0,
+            "since_cleared": 0
+          }
+        }
+      }
+    }
+  ]
+}

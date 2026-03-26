@@ -1,0 +1,1337 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip bgp all detail",
+  "schema": {
+    "name": "ShowBgpAllDetailResult",
+    "fields": {
+      "address_families": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "AddressFamilyEntry",
+            "fields": {
+              "routes": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "RouteEntry",
+                    "fields": {
+                      "version": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "paths_available": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "best_path": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "table": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "paths": {
+                        "type": {
+                          "type": "list",
+                          "items": {
+                            "name": "PathEntry",
+                            "fields": {
+                              "as_path": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "origin": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "next_hop": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "from_peer": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "router_id": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "metric": {
+                                "type": "int",
+                                "required": false
+                              },
+                              "localpref": {
+                                "type": "int",
+                                "required": false
+                              },
+                              "weight": {
+                                "type": "int",
+                                "required": false
+                              },
+                              "valid": {
+                                "type": "bool",
+                                "required": true
+                              },
+                              "best": {
+                                "type": "bool",
+                                "required": true
+                              },
+                              "internal": {
+                                "type": "bool",
+                                "required": false
+                              },
+                              "sourced": {
+                                "type": "bool",
+                                "required": false
+                              },
+                              "multipath": {
+                                "type": "bool",
+                                "required": false
+                              },
+                              "refresh_epoch": {
+                                "type": "int",
+                                "required": false
+                              },
+                              "rx_pathid": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "tx_pathid": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "community": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "extended_community": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "originator": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "cluster_list": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "mpls_labels_in": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "mpls_labels_out": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "evpn_esi": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "gateway_address": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "local_vtep": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "external": {
+                                "type": "bool",
+                                "required": false
+                              },
+                              "received_only": {
+                                "type": "bool",
+                                "required": false
+                              },
+                              "via": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "next_hop_metric": {
+                                "type": "int",
+                                "required": false
+                              },
+                              "evpn_label": {
+                                "type": "int",
+                                "required": false
+                              },
+                              "updated": {
+                                "type": "str",
+                                "required": false
+                              }
+                            }
+                          }
+                        },
+                        "required": true
+                      },
+                      "no_best_path": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "not_advertised_to_any_peer": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "advertised_to_update_groups": {
+                        "type": {
+                          "type": "list",
+                          "items": "int"
+                        },
+                        "required": false
+                      },
+                      "flag": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "rib_failure": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "multipath": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "bestpath": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "route_distinguishers": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "RouteDistinguisherEntry",
+                    "fields": {
+                      "default_vrf": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "rd": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "routes": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "type": "ref",
+                            "name": "RouteEntry"
+                          }
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Live device output",
+      "input": "For address family: IPv4 Unicast\n\n\nFor address family: VPNv4 Unicast\n\n\nRoute Distinguisher: 65000:100 (default for vrf RED)\nBGP routing table entry for 65000:100:10.12.10.0/30, version 12\n  Paths: (2 available, best #2, table RED, RIB-failure(17))\n  Not advertised to any peer\n  Refresh Epoch 2\n  Local\n    198.51.100.1 (metric 3) (via vrf RED) from 198.51.100.1 (192.0.2.1)\n      Origin incomplete, metric 0, localpref 100, valid, internal\n      rx pathid: 0, tx pathid: 0\n      Updated on Mar 8 2026 00:32:12 UTC\n  Refresh Epoch 2\n  Local\n    198.51.100.2 (metric 2) (via vrf RED) from 198.51.100.2 (192.0.2.2)\n      Origin incomplete, metric 0, localpref 100, valid, internal, best\n      rx pathid: 0, tx pathid: 0x0\n      Updated on Mar 8 2026 00:32:06 UTC\nBGP routing table entry for 65000:100:10.13.10.0/30, version 16\n  Paths: (2 available, best #1, table RED, RIB-failure(17))\n  Flag: 0x100\n  Not advertised to any peer\n  Refresh Epoch 2\n  Local\n    198.51.100.3 (metric 2) (via vrf RED) from 198.51.100.3 (192.0.2.3)\n      Origin incomplete, metric 0, localpref 100, valid, internal, best\n      rx pathid: 0, tx pathid: 0x0\n      Updated on Mar 8 2026 00:32:15 UTC\n  Refresh Epoch 2\n  Local\n    198.51.100.1 (metric 3) (via vrf RED) from 198.51.100.1 (192.0.2.1)\n      Origin incomplete, metric 0, localpref 100, valid, internal\n      rx pathid: 0, tx pathid: 0\n      Updated on Mar 8 2026 00:32:12 UTC\nBGP routing table entry for 65000:100:10.24.10.0/30, version 5\n  Paths: (2 available, best #2, table RED)\n  Advertised to update-groups:\n     2\n  Refresh Epoch 2\n  Local\n    198.51.100.2 (metric 2) (via vrf RED) from 198.51.100.2 (192.0.2.2)\n      Origin incomplete, metric 0, localpref 100, valid, internal\n      rx pathid: 0, tx pathid: 0\n      Updated on Mar 8 2026 00:32:06 UTC\n  Refresh Epoch 1\n  Local\n    0.0.0.0 (via vrf RED) from 0.0.0.0 (192.0.2.4)\n      Origin incomplete, metric 0, localpref 100, weight 32768, valid, sourced, best\n      rx pathid: 0, tx pathid: 0x0\n      Updated on Mar 8 2026 00:31:07 UTC\nBGP routing table entry for 65000:100:10.34.10.0/30, version 6\n  Paths: (2 available, best #2, table RED)\n  Advertised to update-groups:\n     2\n  Refresh Epoch 2\n  Local\n    198.51.100.3 (metric 2) (via vrf RED) from 198.51.100.3 (192.0.2.3)\n      Origin incomplete, metric 0, localpref 100, valid, internal\n      rx pathid: 0, tx pathid: 0\n      Updated on Mar 8 2026 00:32:15 UTC\n  Refresh Epoch 1\n  Local\n    0.0.0.0 (via vrf RED) from 0.0.0.0 (192.0.2.4)\n      Origin incomplete, metric 0, localpref 100, weight 32768, valid, sourced, best\n      rx pathid: 0, tx pathid: 0x0\n      Updated on Mar 8 2026 00:31:07 UTC\nBGP routing table entry for 65000:100:198.51.100.1/32, version 15\n  Paths: (1 available, best #1, table RED, RIB-failure(17))\n  Flag: 0x100\n  Not advertised to any peer\n  Refresh Epoch 2\n  Local\n    198.51.100.1 (metric 3) (via vrf RED) from 198.51.100.1 (192.0.2.1)\n      Origin incomplete, metric 0, localpref 100, valid, internal, best\n      rx pathid: 0, tx pathid: 0x0\n      Updated on Mar 8 2026 00:32:12 UTC\nBGP routing table entry for 65000:100:198.51.100.2/32, version 13\n  Paths: (1 available, best #1, table RED, RIB-failure(17))\n  Not advertised to any peer\n  Refresh Epoch 2\n  Local\n    198.51.100.2 (metric 2) (via vrf RED) from 198.51.100.2 (192.0.2.2)\n      Origin incomplete, metric 0, localpref 100, valid, internal, best\n      rx pathid: 0, tx pathid: 0x0\n      Updated on Mar 8 2026 00:32:06 UTC\nBGP routing table entry for 65000:100:198.51.100.3/32, version 17\n  Paths: (1 available, best #1, table RED, RIB-failure(17))\n  Flag: 0x100\n  Not advertised to any peer\n  Refresh Epoch 2\n  Local\n    198.51.100.3 (metric 2) (via vrf RED) from 198.51.100.3 (192.0.2.3)\n      Origin incomplete, metric 0, localpref 100, valid, internal, best\n      rx pathid: 0, tx pathid: 0x0\n      Updated on Mar 8 2026 00:32:15 UTC\nBGP routing table entry for 65000:100:198.51.100.4/32, version 7\n  Paths: (1 available, best #1, table RED)\n  Advertised to update-groups:\n     2\n  Refresh Epoch 1\n  Local\n    0.0.0.0 (via vrf RED) from 0.0.0.0 (192.0.2.4)\n      Origin incomplete, metric 0, localpref 100, weight 32768, valid, sourced, best\n      rx pathid: 0, tx pathid: 0x0\n      Updated on Mar 8 2026 00:31:07 UTC\n\nRoute Distinguisher: 65000:200 (default for vrf BLUE)\nBGP routing table entry for 65000:200:10.12.20.0/30, version 8\n  Paths: (2 available, best #2, table BLUE, RIB-failure(17))\n  Not advertised to any peer\n  Refresh Epoch 2\n  Local\n    203.0.113.1 (metric 3) (via vrf BLUE) from 203.0.113.1 (192.0.2.1)\n      Origin incomplete, metric 0, localpref 100, valid, internal\n      rx pathid: 0, tx pathid: 0\n      Updated on Mar 8 2026 00:32:17 UTC\n  Refresh Epoch 1\n  Local\n    203.0.113.2 (metric 2) (via vrf BLUE) from 203.0.113.2 (192.0.2.2)\n      Origin incomplete, metric 0, localpref 100, valid, internal, best\n      rx pathid: 0, tx pathid: 0x0\n      Updated on Mar 8 2026 00:31:51 UTC\nBGP routing table entry for 65000:200:10.13.20.0/30, version 10\n  Paths: (2 available, best #2, table BLUE, RIB-failure(17))\n  Not advertised to any peer\n  Refresh Epoch 2\n  Local\n    203.0.113.1 (metric 3) (via vrf BLUE) from 203.0.113.1 (192.0.2.1)\n      Origin incomplete, metric 0, localpref 100, valid, internal\n      rx pathid: 0, tx pathid: 0\n      Updated on Mar 8 2026 00:32:17 UTC\n  Refresh Epoch 2\n  Local\n    203.0.113.3 (metric 2) (via vrf BLUE) from 203.0.113.3 (192.0.2.3)\n      Origin incomplete, metric 0, localpref 100, valid, internal, best\n      rx pathid: 0, tx pathid: 0x0\n      Updated on Mar 8 2026 00:32:00 UTC\nBGP routing table entry for 65000:200:10.24.20.0/30, version 2\n  Paths: (2 available, best #2, table BLUE)\n  Advertised to update-groups:\n     1\n  Refresh Epoch 1\n  Local\n    203.0.113.2 (metric 2) (via vrf BLUE) from 203.0.113.2 (192.0.2.2)\n      Origin incomplete, metric 0, localpref 100, valid, internal\n      rx pathid: 0, tx pathid: 0\n      Updated on Mar 8 2026 00:31:51 UTC\n  Refresh Epoch 1\n  Local\n    0.0.0.0 (via vrf BLUE) from 0.0.0.0 (192.0.2.4)\n      Origin incomplete, metric 0, localpref 100, weight 32768, valid, sourced, best\n      rx pathid: 0, tx pathid: 0x0\n      Updated on Mar 8 2026 00:31:07 UTC\nBGP routing table entry for 65000:200:10.34.20.0/30, version 3\n  Paths: (2 available, best #2, table BLUE)\n  Advertised to update-groups:\n     1\n  Refresh Epoch 2\n  Local\n    203.0.113.3 (metric 2) (via vrf BLUE) from 203.0.113.3 (192.0.2.3)\n      Origin incomplete, metric 0, localpref 100, valid, internal\n      rx pathid: 0, tx pathid: 0\n      Updated on Mar 8 2026 00:32:00 UTC\n  Refresh Epoch 1\n  Local\n    0.0.0.0 (via vrf BLUE) from 0.0.0.0 (192.0.2.4)\n      Origin incomplete, metric 0, localpref 100, weight 32768, valid, sourced, best\n      rx pathid: 0, tx pathid: 0x0\n      Updated on Mar 8 2026 00:31:07 UTC\nBGP routing table entry for 65000:200:203.0.113.1/32, version 18\n  Paths: (1 available, best #1, table BLUE, RIB-failure(17))\n  Flag: 0x100\n  Not advertised to any peer\n  Refresh Epoch 2\n  Local\n    203.0.113.1 (metric 3) (via vrf BLUE) from 203.0.113.1 (192.0.2.1)\n      Origin incomplete, metric 0, localpref 100, valid, internal, best\n      rx pathid: 0, tx pathid: 0x0\n      Updated on Mar 8 2026 00:32:17 UTC\nBGP routing table entry for 65000:200:203.0.113.2/32, version 9\n  Paths: (1 available, best #1, table BLUE, RIB-failure(17))\n  Not advertised to any peer\n  Refresh Epoch 1\n  Local\n    203.0.113.2 (metric 2) (via vrf BLUE) from 203.0.113.2 (192.0.2.2)\n      Origin incomplete, metric 0, localpref 100, valid, internal, best\n      rx pathid: 0, tx pathid: 0x0\n      Updated on Mar 8 2026 00:31:51 UTC\nBGP routing table entry for 65000:200:203.0.113.3/32, version 11\n  Paths: (1 available, best #1, table BLUE, RIB-failure(17))\n  Not advertised to any peer\n  Refresh Epoch 2\n  Local\n    203.0.113.3 (metric 2) (via vrf BLUE) from 203.0.113.3 (192.0.2.3)\n      Origin incomplete, metric 0, localpref 100, valid, internal, best\n      rx pathid: 0, tx pathid: 0x0\n      Updated on Mar 8 2026 00:32:00 UTC\nBGP routing table entry for 65000:200:203.0.113.4/32, version 4\n  Paths: (1 available, best #1, table BLUE)\n  Advertised to update-groups:\n     1\n  Refresh Epoch 1\n  Local\n    0.0.0.0 (via vrf BLUE) from 0.0.0.0 (192.0.2.4)\n      Origin incomplete, metric 0, localpref 100, weight 32768, valid, sourced, best\n      rx pathid: 0, tx pathid: 0x0\n      Updated on Mar 8 2026 00:31:07 UTC\n\nFor address family: IPv4 Multicast\n",
+      "expected": {
+        "address_families": {
+          "VPNv4 Unicast": {
+            "route_distinguishers": {
+              "65000:100": {
+                "routes": {
+                  "10.12.10.0/30": {
+                    "version": 12,
+                    "paths_available": 2,
+                    "paths": [
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "198.51.100.1",
+                        "from_peer": "198.51.100.1",
+                        "router_id": "192.0.2.1",
+                        "valid": true,
+                        "best": false,
+                        "next_hop_metric": 3,
+                        "via": "vrf RED",
+                        "metric": 0,
+                        "localpref": 100,
+                        "internal": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0",
+                        "updated": "Mar 8 2026 00:32:12 UTC",
+                        "refresh_epoch": 2
+                      },
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "198.51.100.2",
+                        "from_peer": "198.51.100.2",
+                        "router_id": "192.0.2.2",
+                        "valid": true,
+                        "best": true,
+                        "next_hop_metric": 2,
+                        "via": "vrf RED",
+                        "metric": 0,
+                        "localpref": 100,
+                        "internal": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "updated": "Mar 8 2026 00:32:06 UTC",
+                        "refresh_epoch": 2
+                      }
+                    ],
+                    "best_path": 2,
+                    "table": "RED",
+                    "not_advertised_to_any_peer": true,
+                    "rib_failure": "RIB-failure(17)"
+                  },
+                  "10.13.10.0/30": {
+                    "version": 16,
+                    "paths_available": 2,
+                    "paths": [
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "198.51.100.3",
+                        "from_peer": "198.51.100.3",
+                        "router_id": "192.0.2.3",
+                        "valid": true,
+                        "best": true,
+                        "next_hop_metric": 2,
+                        "via": "vrf RED",
+                        "metric": 0,
+                        "localpref": 100,
+                        "internal": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "updated": "Mar 8 2026 00:32:15 UTC",
+                        "refresh_epoch": 2
+                      },
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "198.51.100.1",
+                        "from_peer": "198.51.100.1",
+                        "router_id": "192.0.2.1",
+                        "valid": true,
+                        "best": false,
+                        "next_hop_metric": 3,
+                        "via": "vrf RED",
+                        "metric": 0,
+                        "localpref": 100,
+                        "internal": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0",
+                        "updated": "Mar 8 2026 00:32:12 UTC",
+                        "refresh_epoch": 2
+                      }
+                    ],
+                    "best_path": 1,
+                    "table": "RED",
+                    "not_advertised_to_any_peer": true,
+                    "flag": "0x100",
+                    "rib_failure": "RIB-failure(17)"
+                  },
+                  "10.24.10.0/30": {
+                    "version": 5,
+                    "paths_available": 2,
+                    "paths": [
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "198.51.100.2",
+                        "from_peer": "198.51.100.2",
+                        "router_id": "192.0.2.2",
+                        "valid": true,
+                        "best": false,
+                        "next_hop_metric": 2,
+                        "via": "vrf RED",
+                        "metric": 0,
+                        "localpref": 100,
+                        "internal": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0",
+                        "updated": "Mar 8 2026 00:32:06 UTC",
+                        "refresh_epoch": 2
+                      },
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "0.0.0.0",
+                        "from_peer": "0.0.0.0",
+                        "router_id": "192.0.2.4",
+                        "valid": true,
+                        "best": true,
+                        "via": "vrf RED",
+                        "metric": 0,
+                        "localpref": 100,
+                        "weight": 32768,
+                        "sourced": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "updated": "Mar 8 2026 00:31:07 UTC",
+                        "refresh_epoch": 1
+                      }
+                    ],
+                    "best_path": 2,
+                    "table": "RED",
+                    "advertised_to_update_groups": [
+                      2
+                    ]
+                  },
+                  "10.34.10.0/30": {
+                    "version": 6,
+                    "paths_available": 2,
+                    "paths": [
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "198.51.100.3",
+                        "from_peer": "198.51.100.3",
+                        "router_id": "192.0.2.3",
+                        "valid": true,
+                        "best": false,
+                        "next_hop_metric": 2,
+                        "via": "vrf RED",
+                        "metric": 0,
+                        "localpref": 100,
+                        "internal": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0",
+                        "updated": "Mar 8 2026 00:32:15 UTC",
+                        "refresh_epoch": 2
+                      },
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "0.0.0.0",
+                        "from_peer": "0.0.0.0",
+                        "router_id": "192.0.2.4",
+                        "valid": true,
+                        "best": true,
+                        "via": "vrf RED",
+                        "metric": 0,
+                        "localpref": 100,
+                        "weight": 32768,
+                        "sourced": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "updated": "Mar 8 2026 00:31:07 UTC",
+                        "refresh_epoch": 1
+                      }
+                    ],
+                    "best_path": 2,
+                    "table": "RED",
+                    "advertised_to_update_groups": [
+                      2
+                    ]
+                  },
+                  "198.51.100.1/32": {
+                    "version": 15,
+                    "paths_available": 1,
+                    "paths": [
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "198.51.100.1",
+                        "from_peer": "198.51.100.1",
+                        "router_id": "192.0.2.1",
+                        "valid": true,
+                        "best": true,
+                        "next_hop_metric": 3,
+                        "via": "vrf RED",
+                        "metric": 0,
+                        "localpref": 100,
+                        "internal": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "updated": "Mar 8 2026 00:32:12 UTC",
+                        "refresh_epoch": 2
+                      }
+                    ],
+                    "best_path": 1,
+                    "table": "RED",
+                    "not_advertised_to_any_peer": true,
+                    "flag": "0x100",
+                    "rib_failure": "RIB-failure(17)"
+                  },
+                  "198.51.100.2/32": {
+                    "version": 13,
+                    "paths_available": 1,
+                    "paths": [
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "198.51.100.2",
+                        "from_peer": "198.51.100.2",
+                        "router_id": "192.0.2.2",
+                        "valid": true,
+                        "best": true,
+                        "next_hop_metric": 2,
+                        "via": "vrf RED",
+                        "metric": 0,
+                        "localpref": 100,
+                        "internal": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "updated": "Mar 8 2026 00:32:06 UTC",
+                        "refresh_epoch": 2
+                      }
+                    ],
+                    "best_path": 1,
+                    "table": "RED",
+                    "not_advertised_to_any_peer": true,
+                    "rib_failure": "RIB-failure(17)"
+                  },
+                  "198.51.100.3/32": {
+                    "version": 17,
+                    "paths_available": 1,
+                    "paths": [
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "198.51.100.3",
+                        "from_peer": "198.51.100.3",
+                        "router_id": "192.0.2.3",
+                        "valid": true,
+                        "best": true,
+                        "next_hop_metric": 2,
+                        "via": "vrf RED",
+                        "metric": 0,
+                        "localpref": 100,
+                        "internal": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "updated": "Mar 8 2026 00:32:15 UTC",
+                        "refresh_epoch": 2
+                      }
+                    ],
+                    "best_path": 1,
+                    "table": "RED",
+                    "not_advertised_to_any_peer": true,
+                    "flag": "0x100",
+                    "rib_failure": "RIB-failure(17)"
+                  },
+                  "198.51.100.4/32": {
+                    "version": 7,
+                    "paths_available": 1,
+                    "paths": [
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "0.0.0.0",
+                        "from_peer": "0.0.0.0",
+                        "router_id": "192.0.2.4",
+                        "valid": true,
+                        "best": true,
+                        "via": "vrf RED",
+                        "metric": 0,
+                        "localpref": 100,
+                        "weight": 32768,
+                        "sourced": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "updated": "Mar 8 2026 00:31:07 UTC",
+                        "refresh_epoch": 1
+                      }
+                    ],
+                    "best_path": 1,
+                    "table": "RED",
+                    "advertised_to_update_groups": [
+                      2
+                    ]
+                  }
+                },
+                "rd": "65000:100",
+                "default_vrf": "RED"
+              },
+              "65000:200": {
+                "routes": {
+                  "10.12.20.0/30": {
+                    "version": 8,
+                    "paths_available": 2,
+                    "paths": [
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "203.0.113.1",
+                        "from_peer": "203.0.113.1",
+                        "router_id": "192.0.2.1",
+                        "valid": true,
+                        "best": false,
+                        "next_hop_metric": 3,
+                        "via": "vrf BLUE",
+                        "metric": 0,
+                        "localpref": 100,
+                        "internal": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0",
+                        "updated": "Mar 8 2026 00:32:17 UTC",
+                        "refresh_epoch": 2
+                      },
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "203.0.113.2",
+                        "from_peer": "203.0.113.2",
+                        "router_id": "192.0.2.2",
+                        "valid": true,
+                        "best": true,
+                        "next_hop_metric": 2,
+                        "via": "vrf BLUE",
+                        "metric": 0,
+                        "localpref": 100,
+                        "internal": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "updated": "Mar 8 2026 00:31:51 UTC",
+                        "refresh_epoch": 1
+                      }
+                    ],
+                    "best_path": 2,
+                    "table": "BLUE",
+                    "not_advertised_to_any_peer": true,
+                    "rib_failure": "RIB-failure(17)"
+                  },
+                  "10.13.20.0/30": {
+                    "version": 10,
+                    "paths_available": 2,
+                    "paths": [
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "203.0.113.1",
+                        "from_peer": "203.0.113.1",
+                        "router_id": "192.0.2.1",
+                        "valid": true,
+                        "best": false,
+                        "next_hop_metric": 3,
+                        "via": "vrf BLUE",
+                        "metric": 0,
+                        "localpref": 100,
+                        "internal": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0",
+                        "updated": "Mar 8 2026 00:32:17 UTC",
+                        "refresh_epoch": 2
+                      },
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "203.0.113.3",
+                        "from_peer": "203.0.113.3",
+                        "router_id": "192.0.2.3",
+                        "valid": true,
+                        "best": true,
+                        "next_hop_metric": 2,
+                        "via": "vrf BLUE",
+                        "metric": 0,
+                        "localpref": 100,
+                        "internal": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "updated": "Mar 8 2026 00:32:00 UTC",
+                        "refresh_epoch": 2
+                      }
+                    ],
+                    "best_path": 2,
+                    "table": "BLUE",
+                    "not_advertised_to_any_peer": true,
+                    "rib_failure": "RIB-failure(17)"
+                  },
+                  "10.24.20.0/30": {
+                    "version": 2,
+                    "paths_available": 2,
+                    "paths": [
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "203.0.113.2",
+                        "from_peer": "203.0.113.2",
+                        "router_id": "192.0.2.2",
+                        "valid": true,
+                        "best": false,
+                        "next_hop_metric": 2,
+                        "via": "vrf BLUE",
+                        "metric": 0,
+                        "localpref": 100,
+                        "internal": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0",
+                        "updated": "Mar 8 2026 00:31:51 UTC",
+                        "refresh_epoch": 1
+                      },
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "0.0.0.0",
+                        "from_peer": "0.0.0.0",
+                        "router_id": "192.0.2.4",
+                        "valid": true,
+                        "best": true,
+                        "via": "vrf BLUE",
+                        "metric": 0,
+                        "localpref": 100,
+                        "weight": 32768,
+                        "sourced": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "updated": "Mar 8 2026 00:31:07 UTC",
+                        "refresh_epoch": 1
+                      }
+                    ],
+                    "best_path": 2,
+                    "table": "BLUE",
+                    "advertised_to_update_groups": [
+                      1
+                    ]
+                  },
+                  "10.34.20.0/30": {
+                    "version": 3,
+                    "paths_available": 2,
+                    "paths": [
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "203.0.113.3",
+                        "from_peer": "203.0.113.3",
+                        "router_id": "192.0.2.3",
+                        "valid": true,
+                        "best": false,
+                        "next_hop_metric": 2,
+                        "via": "vrf BLUE",
+                        "metric": 0,
+                        "localpref": 100,
+                        "internal": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0",
+                        "updated": "Mar 8 2026 00:32:00 UTC",
+                        "refresh_epoch": 2
+                      },
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "0.0.0.0",
+                        "from_peer": "0.0.0.0",
+                        "router_id": "192.0.2.4",
+                        "valid": true,
+                        "best": true,
+                        "via": "vrf BLUE",
+                        "metric": 0,
+                        "localpref": 100,
+                        "weight": 32768,
+                        "sourced": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "updated": "Mar 8 2026 00:31:07 UTC",
+                        "refresh_epoch": 1
+                      }
+                    ],
+                    "best_path": 2,
+                    "table": "BLUE",
+                    "advertised_to_update_groups": [
+                      1
+                    ]
+                  },
+                  "203.0.113.1/32": {
+                    "version": 18,
+                    "paths_available": 1,
+                    "paths": [
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "203.0.113.1",
+                        "from_peer": "203.0.113.1",
+                        "router_id": "192.0.2.1",
+                        "valid": true,
+                        "best": true,
+                        "next_hop_metric": 3,
+                        "via": "vrf BLUE",
+                        "metric": 0,
+                        "localpref": 100,
+                        "internal": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "updated": "Mar 8 2026 00:32:17 UTC",
+                        "refresh_epoch": 2
+                      }
+                    ],
+                    "best_path": 1,
+                    "table": "BLUE",
+                    "not_advertised_to_any_peer": true,
+                    "flag": "0x100",
+                    "rib_failure": "RIB-failure(17)"
+                  },
+                  "203.0.113.2/32": {
+                    "version": 9,
+                    "paths_available": 1,
+                    "paths": [
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "203.0.113.2",
+                        "from_peer": "203.0.113.2",
+                        "router_id": "192.0.2.2",
+                        "valid": true,
+                        "best": true,
+                        "next_hop_metric": 2,
+                        "via": "vrf BLUE",
+                        "metric": 0,
+                        "localpref": 100,
+                        "internal": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "updated": "Mar 8 2026 00:31:51 UTC",
+                        "refresh_epoch": 1
+                      }
+                    ],
+                    "best_path": 1,
+                    "table": "BLUE",
+                    "not_advertised_to_any_peer": true,
+                    "rib_failure": "RIB-failure(17)"
+                  },
+                  "203.0.113.3/32": {
+                    "version": 11,
+                    "paths_available": 1,
+                    "paths": [
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "203.0.113.3",
+                        "from_peer": "203.0.113.3",
+                        "router_id": "192.0.2.3",
+                        "valid": true,
+                        "best": true,
+                        "next_hop_metric": 2,
+                        "via": "vrf BLUE",
+                        "metric": 0,
+                        "localpref": 100,
+                        "internal": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "updated": "Mar 8 2026 00:32:00 UTC",
+                        "refresh_epoch": 2
+                      }
+                    ],
+                    "best_path": 1,
+                    "table": "BLUE",
+                    "not_advertised_to_any_peer": true,
+                    "rib_failure": "RIB-failure(17)"
+                  },
+                  "203.0.113.4/32": {
+                    "version": 4,
+                    "paths_available": 1,
+                    "paths": [
+                      {
+                        "as_path": "Local",
+                        "origin": "incomplete",
+                        "next_hop": "0.0.0.0",
+                        "from_peer": "0.0.0.0",
+                        "router_id": "192.0.2.4",
+                        "valid": true,
+                        "best": true,
+                        "via": "vrf BLUE",
+                        "metric": 0,
+                        "localpref": 100,
+                        "weight": 32768,
+                        "sourced": true,
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "updated": "Mar 8 2026 00:31:07 UTC",
+                        "refresh_epoch": 1
+                      }
+                    ],
+                    "best_path": 1,
+                    "table": "BLUE",
+                    "advertised_to_update_groups": [
+                      1
+                    ]
+                  }
+                },
+                "rd": "65000:200",
+                "default_vrf": "BLUE"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "VPNv4 Unicast with two route distinguishers, multiple prefixes with single and dual paths",
+      "input": "For address family: IPv4 Unicast\n\n\nFor address family: IPv6 Unicast\n\n\nFor address family: VPNv4 Unicast\n\n\nRoute Distinguisher: 65000:100 (default for vrf VRF100)\nBGP routing table entry for 65000:100:192.168.111.0/24, version 2\n  Paths: (1 available, best #1, table VRF100)\n  Advertised to update-groups:\n     1          3\n  Refresh Epoch 1\n  Local\n    172.16.111.2 (via vrf VRF100) from 0.0.0.0 (10.5.5.5)\n      Origin incomplete, metric 0, localpref 100, weight 32768, valid, sourced, best\n      Extended Community: RT:65000:100\n      mpls labels in/out 28/nolabel\n      rx pathid: 0, tx pathid: 0x0\nBGP routing table entry for 65000:100:192.168.112.0/24, version 3\n  Paths: (1 available, best #1, table VRF100)\n  Advertised to update-groups:\n     3\n  Refresh Epoch 1\n  65001\n    172.17.111.2 (via vrf VRF100) from 172.17.111.2 (172.16.1.209)\n      Origin IGP, metric 0, localpref 100, valid, external, best\n      Extended Community: RT:65000:100\n      mpls labels in/out 29/nolabel\n      rx pathid: 0, tx pathid: 0x0\nBGP routing table entry for 65000:100:192.168.121.0/24, version 10\n  Paths: (2 available, best #2, table VRF100)\n  Flag: 0x100\n  Advertised to update-groups:\n     1\n  Refresh Epoch 1\n  Local\n    10.6.6.6 (metric 4) (via default) from 10.2.2.2 (10.2.2.2)\n      Origin incomplete, metric 0, localpref 100, valid, internal\n      Extended Community: RT:65000:100\n      Originator: 10.6.6.6, Cluster list: 10.2.2.2\n      mpls labels in/out nolabel/28\n      rx pathid: 0, tx pathid: 0\n  Refresh Epoch 1\n  Local\n    10.6.6.6 (metric 4) (via default) from 10.1.1.1 (10.1.1.1)\n      Origin incomplete, metric 0, localpref 100, valid, internal, best\n      Extended Community: RT:65000:100\n      Originator: 10.6.6.6, Cluster list: 10.1.1.1\n      mpls labels in/out nolabel/28\n      rx pathid: 0, tx pathid: 0x0\nBGP routing table entry for 65000:100:192.168.122.0/24, version 11\n  Paths: (2 available, best #2, table VRF100)\n  Flag: 0x100\n  Advertised to update-groups:\n     1\n  Refresh Epoch 1\n  65001\n    10.6.6.6 (metric 4) (via default) from 10.2.2.2 (10.2.2.2)\n      Origin IGP, metric 0, localpref 100, valid, internal\n      Extended Community: RT:65000:100\n      Originator: 10.6.6.6, Cluster list: 10.2.2.2\n      mpls labels in/out nolabel/30\n      rx pathid: 0, tx pathid: 0\n  Refresh Epoch 1\n  65001\n    10.6.6.6 (metric 4) (via default) from 10.1.1.1 (10.1.1.1)\n      Origin IGP, metric 0, localpref 100, valid, internal, best\n      Extended Community: RT:65000:100\n      Originator: 10.6.6.6, Cluster list: 10.1.1.1\n      mpls labels in/out nolabel/30\n      rx pathid: 0, tx pathid: 0x0\n\nRoute Distinguisher: 65000:200 (default for vrf VRF200)\nBGP routing table entry for 65000:200:192.168.211.0/24, version 4\n  Paths: (1 available, best #1, table VRF200)\n  Advertised to update-groups:\n     2          3\n  Refresh Epoch 1\n  Local\n    172.16.211.2 (via vrf VRF200) from 0.0.0.0 (10.5.5.5)\n      Origin incomplete, metric 0, localpref 100, weight 32768, valid, sourced, best\n      Extended Community: RT:65000:200\n      mpls labels in/out 30/nolabel\n      rx pathid: 0, tx pathid: 0x0\nBGP routing table entry for 65000:200:192.168.212.0/24, version 5\n  Paths: (1 available, best #1, table VRF200)\n  Advertised to update-groups:\n     3\n  Refresh Epoch 1\n  65001\n    172.17.211.2 (via vrf VRF200) from 172.17.211.2 (172.16.1.209)\n      Origin IGP, metric 0, localpref 100, valid, external, best\n      Extended Community: RT:65000:200\n      mpls labels in/out 31/nolabel\n      rx pathid: 0, tx pathid: 0x0\nBGP routing table entry for 65000:200:192.168.221.0/24, version 12\n  Paths: (2 available, best #2, table VRF200)\n  Flag: 0x100\n  Advertised to update-groups:\n     2\n  Refresh Epoch 1\n  Local\n    10.6.6.6 (metric 4) (via default) from 10.2.2.2 (10.2.2.2)\n      Origin incomplete, metric 0, localpref 100, valid, internal\n      Extended Community: RT:65000:200\n      Originator: 10.6.6.6, Cluster list: 10.2.2.2\n      mpls labels in/out nolabel/29\n      rx pathid: 0, tx pathid: 0\n  Refresh Epoch 1\n  Local\n    10.6.6.6 (metric 4) (via default) from 10.1.1.1 (10.1.1.1)\n      Origin incomplete, metric 0, localpref 100, valid, internal, best\n      Extended Community: RT:65000:200\n      Originator: 10.6.6.6, Cluster list: 10.1.1.1\n      mpls labels in/out nolabel/29\n      rx pathid: 0, tx pathid: 0x0\nBGP routing table entry for 65000:200:192.168.222.0/24, version 13\n  Paths: (2 available, best #2, table VRF200)\n  Flag: 0x100\n  Advertised to update-groups:\n     2\n  Refresh Epoch 1\n  65001\n    10.6.6.6 (metric 4) (via default) from 10.2.2.2 (10.2.2.2)\n      Origin IGP, metric 0, localpref 100, valid, internal\n      Extended Community: RT:65000:200\n      Originator: 10.6.6.6, Cluster list: 10.2.2.2\n      mpls labels in/out nolabel/31\n      rx pathid: 0, tx pathid: 0\n  Refresh Epoch 1\n  65001\n    10.6.6.6 (metric 4) (via default) from 10.1.1.1 (10.1.1.1)\n      Origin IGP, metric 0, localpref 100, valid, internal, best\n      Extended Community: RT:65000:200\n      Originator: 10.6.6.6, Cluster list: 10.1.1.1\n      mpls labels in/out nolabel/31\n      rx pathid: 0, tx pathid: 0x0\n\nFor address family: IPv4 Multicast\n\n\nFor address family: L2VPN E-VPN\n\n\nFor address family: VPNv4 Multicast\n\n\nFor address family: MVPNv4 Unicast\n\n\nFor address family: MVPNv6 Unicast\n\n\nFor address family: VPNv4 Flowspec\n",
+      "expected": {
+        "address_families": {
+          "VPNv4 Unicast": {
+            "route_distinguishers": {
+              "65000:100": {
+                "default_vrf": "VRF100",
+                "rd": "65000:100",
+                "routes": {
+                  "192.168.111.0/24": {
+                    "advertised_to_update_groups": [
+                      1,
+                      3
+                    ],
+                    "best_path": 1,
+                    "paths": [
+                      {
+                        "as_path": "Local",
+                        "best": true,
+                        "extended_community": "RT:65000:100",
+                        "from_peer": "0.0.0.0",
+                        "localpref": 100,
+                        "metric": 0,
+                        "mpls_labels_in": "28",
+                        "mpls_labels_out": "nolabel",
+                        "next_hop": "172.16.111.2",
+                        "origin": "incomplete",
+                        "refresh_epoch": 1,
+                        "router_id": "10.5.5.5",
+                        "rx_pathid": "0",
+                        "sourced": true,
+                        "tx_pathid": "0x0",
+                        "valid": true,
+                        "via": "vrf VRF100",
+                        "weight": 32768
+                      }
+                    ],
+                    "paths_available": 1,
+                    "table": "VRF100",
+                    "version": 2
+                  },
+                  "192.168.112.0/24": {
+                    "advertised_to_update_groups": [
+                      3
+                    ],
+                    "best_path": 1,
+                    "paths": [
+                      {
+                        "as_path": "65001",
+                        "best": true,
+                        "extended_community": "RT:65000:100",
+                        "external": true,
+                        "from_peer": "172.17.111.2",
+                        "localpref": 100,
+                        "metric": 0,
+                        "mpls_labels_in": "29",
+                        "mpls_labels_out": "nolabel",
+                        "next_hop": "172.17.111.2",
+                        "origin": "IGP",
+                        "refresh_epoch": 1,
+                        "router_id": "172.16.1.209",
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "valid": true,
+                        "via": "vrf VRF100"
+                      }
+                    ],
+                    "paths_available": 1,
+                    "table": "VRF100",
+                    "version": 3
+                  },
+                  "192.168.121.0/24": {
+                    "advertised_to_update_groups": [
+                      1
+                    ],
+                    "best_path": 2,
+                    "flag": "0x100",
+                    "paths": [
+                      {
+                        "as_path": "Local",
+                        "best": false,
+                        "cluster_list": "10.2.2.2",
+                        "extended_community": "RT:65000:100",
+                        "from_peer": "10.2.2.2",
+                        "internal": true,
+                        "localpref": 100,
+                        "metric": 0,
+                        "mpls_labels_in": "nolabel",
+                        "mpls_labels_out": "28",
+                        "next_hop": "10.6.6.6",
+                        "next_hop_metric": 4,
+                        "origin": "incomplete",
+                        "originator": "10.6.6.6",
+                        "refresh_epoch": 1,
+                        "router_id": "10.2.2.2",
+                        "rx_pathid": "0",
+                        "tx_pathid": "0",
+                        "valid": true,
+                        "via": "default"
+                      },
+                      {
+                        "as_path": "Local",
+                        "best": true,
+                        "cluster_list": "10.1.1.1",
+                        "extended_community": "RT:65000:100",
+                        "from_peer": "10.1.1.1",
+                        "internal": true,
+                        "localpref": 100,
+                        "metric": 0,
+                        "mpls_labels_in": "nolabel",
+                        "mpls_labels_out": "28",
+                        "next_hop": "10.6.6.6",
+                        "next_hop_metric": 4,
+                        "origin": "incomplete",
+                        "originator": "10.6.6.6",
+                        "refresh_epoch": 1,
+                        "router_id": "10.1.1.1",
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "valid": true,
+                        "via": "default"
+                      }
+                    ],
+                    "paths_available": 2,
+                    "table": "VRF100",
+                    "version": 10
+                  },
+                  "192.168.122.0/24": {
+                    "advertised_to_update_groups": [
+                      1
+                    ],
+                    "best_path": 2,
+                    "flag": "0x100",
+                    "paths": [
+                      {
+                        "as_path": "65001",
+                        "best": false,
+                        "cluster_list": "10.2.2.2",
+                        "extended_community": "RT:65000:100",
+                        "from_peer": "10.2.2.2",
+                        "internal": true,
+                        "localpref": 100,
+                        "metric": 0,
+                        "mpls_labels_in": "nolabel",
+                        "mpls_labels_out": "30",
+                        "next_hop": "10.6.6.6",
+                        "next_hop_metric": 4,
+                        "origin": "IGP",
+                        "originator": "10.6.6.6",
+                        "refresh_epoch": 1,
+                        "router_id": "10.2.2.2",
+                        "rx_pathid": "0",
+                        "tx_pathid": "0",
+                        "valid": true,
+                        "via": "default"
+                      },
+                      {
+                        "as_path": "65001",
+                        "best": true,
+                        "cluster_list": "10.1.1.1",
+                        "extended_community": "RT:65000:100",
+                        "from_peer": "10.1.1.1",
+                        "internal": true,
+                        "localpref": 100,
+                        "metric": 0,
+                        "mpls_labels_in": "nolabel",
+                        "mpls_labels_out": "30",
+                        "next_hop": "10.6.6.6",
+                        "next_hop_metric": 4,
+                        "origin": "IGP",
+                        "originator": "10.6.6.6",
+                        "refresh_epoch": 1,
+                        "router_id": "10.1.1.1",
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "valid": true,
+                        "via": "default"
+                      }
+                    ],
+                    "paths_available": 2,
+                    "table": "VRF100",
+                    "version": 11
+                  }
+                }
+              },
+              "65000:200": {
+                "default_vrf": "VRF200",
+                "rd": "65000:200",
+                "routes": {
+                  "192.168.211.0/24": {
+                    "advertised_to_update_groups": [
+                      2,
+                      3
+                    ],
+                    "best_path": 1,
+                    "paths": [
+                      {
+                        "as_path": "Local",
+                        "best": true,
+                        "extended_community": "RT:65000:200",
+                        "from_peer": "0.0.0.0",
+                        "localpref": 100,
+                        "metric": 0,
+                        "mpls_labels_in": "30",
+                        "mpls_labels_out": "nolabel",
+                        "next_hop": "172.16.211.2",
+                        "origin": "incomplete",
+                        "refresh_epoch": 1,
+                        "router_id": "10.5.5.5",
+                        "rx_pathid": "0",
+                        "sourced": true,
+                        "tx_pathid": "0x0",
+                        "valid": true,
+                        "via": "vrf VRF200",
+                        "weight": 32768
+                      }
+                    ],
+                    "paths_available": 1,
+                    "table": "VRF200",
+                    "version": 4
+                  },
+                  "192.168.212.0/24": {
+                    "advertised_to_update_groups": [
+                      3
+                    ],
+                    "best_path": 1,
+                    "paths": [
+                      {
+                        "as_path": "65001",
+                        "best": true,
+                        "extended_community": "RT:65000:200",
+                        "external": true,
+                        "from_peer": "172.17.211.2",
+                        "localpref": 100,
+                        "metric": 0,
+                        "mpls_labels_in": "31",
+                        "mpls_labels_out": "nolabel",
+                        "next_hop": "172.17.211.2",
+                        "origin": "IGP",
+                        "refresh_epoch": 1,
+                        "router_id": "172.16.1.209",
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "valid": true,
+                        "via": "vrf VRF200"
+                      }
+                    ],
+                    "paths_available": 1,
+                    "table": "VRF200",
+                    "version": 5
+                  },
+                  "192.168.221.0/24": {
+                    "advertised_to_update_groups": [
+                      2
+                    ],
+                    "best_path": 2,
+                    "flag": "0x100",
+                    "paths": [
+                      {
+                        "as_path": "Local",
+                        "best": false,
+                        "cluster_list": "10.2.2.2",
+                        "extended_community": "RT:65000:200",
+                        "from_peer": "10.2.2.2",
+                        "internal": true,
+                        "localpref": 100,
+                        "metric": 0,
+                        "mpls_labels_in": "nolabel",
+                        "mpls_labels_out": "29",
+                        "next_hop": "10.6.6.6",
+                        "next_hop_metric": 4,
+                        "origin": "incomplete",
+                        "originator": "10.6.6.6",
+                        "refresh_epoch": 1,
+                        "router_id": "10.2.2.2",
+                        "rx_pathid": "0",
+                        "tx_pathid": "0",
+                        "valid": true,
+                        "via": "default"
+                      },
+                      {
+                        "as_path": "Local",
+                        "best": true,
+                        "cluster_list": "10.1.1.1",
+                        "extended_community": "RT:65000:200",
+                        "from_peer": "10.1.1.1",
+                        "internal": true,
+                        "localpref": 100,
+                        "metric": 0,
+                        "mpls_labels_in": "nolabel",
+                        "mpls_labels_out": "29",
+                        "next_hop": "10.6.6.6",
+                        "next_hop_metric": 4,
+                        "origin": "incomplete",
+                        "originator": "10.6.6.6",
+                        "refresh_epoch": 1,
+                        "router_id": "10.1.1.1",
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "valid": true,
+                        "via": "default"
+                      }
+                    ],
+                    "paths_available": 2,
+                    "table": "VRF200",
+                    "version": 12
+                  },
+                  "192.168.222.0/24": {
+                    "advertised_to_update_groups": [
+                      2
+                    ],
+                    "best_path": 2,
+                    "flag": "0x100",
+                    "paths": [
+                      {
+                        "as_path": "65001",
+                        "best": false,
+                        "cluster_list": "10.2.2.2",
+                        "extended_community": "RT:65000:200",
+                        "from_peer": "10.2.2.2",
+                        "internal": true,
+                        "localpref": 100,
+                        "metric": 0,
+                        "mpls_labels_in": "nolabel",
+                        "mpls_labels_out": "31",
+                        "next_hop": "10.6.6.6",
+                        "next_hop_metric": 4,
+                        "origin": "IGP",
+                        "originator": "10.6.6.6",
+                        "refresh_epoch": 1,
+                        "router_id": "10.2.2.2",
+                        "rx_pathid": "0",
+                        "tx_pathid": "0",
+                        "valid": true,
+                        "via": "default"
+                      },
+                      {
+                        "as_path": "65001",
+                        "best": true,
+                        "cluster_list": "10.1.1.1",
+                        "extended_community": "RT:65000:200",
+                        "from_peer": "10.1.1.1",
+                        "internal": true,
+                        "localpref": 100,
+                        "metric": 0,
+                        "mpls_labels_in": "nolabel",
+                        "mpls_labels_out": "31",
+                        "next_hop": "10.6.6.6",
+                        "next_hop_metric": 4,
+                        "origin": "IGP",
+                        "originator": "10.6.6.6",
+                        "refresh_epoch": 1,
+                        "router_id": "10.1.1.1",
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "valid": true,
+                        "via": "default"
+                      }
+                    ],
+                    "paths_available": 2,
+                    "table": "VRF200",
+                    "version": 13
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "VPNv4 with no best path, received-only paths, and community attributes",
+      "input": "For address family: IPv4 Unicast\n\n\nFor address family: VPNv4 Unicast\n\n\nRoute Distinguisher: 101:101 (default for vrf vrf_1)\nBGP routing table entry for 101:101:10.64.4.0/22, version 0\n  Paths: (1 available, no best path)\n  Not advertised to any peer\n  Refresh Epoch 1\n  65000 65201 4400004007 4400004507 4400004001, (received-only)\n    10.9.3.4 (via vrf vrf_1) from 10.9.3.4 (10.9.3.4)\n      Origin IGP, localpref 100, valid, external\n      Community: 65100:106 65100:500 65100:601 65361:3\n      Extended Community: RT:65000:31838\n      rx pathid: 0, tx pathid: 0\nBGP routing table entry for 101:101:10.64.4.0/24, version 1863365\n  Paths: (2 available, best #2, table vrf_1)\n  Advertised to update-groups:\n     2          3          47\n  Refresh Epoch 1\n  65000 65211 4400002007, (received-only)\n    10.9.3.4 (via vrf vrf_1) from 10.9.3.4 (10.9.3.4)\n      Origin IGP, localpref 100, valid, external\n      Community: 9:9 65100:106 65100:508 65100:704 65371:2\n      Extended Community: RT:65000:31838\n      rx pathid: 0, tx pathid: 0\n  Refresh Epoch 1\n  65000 65211 4400002007\n    10.105.3.80 (via vrf vrf_1) from 10.105.3.80 (10.105.2.26)\n      Origin IGP, localpref 100, valid, external, best\n      Community: 9:9 65100:106 65100:508 65100:700 65100:704 65371:2\n      rx pathid: 0, tx pathid: 0x0\n\nFor address family: IPv4 Multicast\n",
+      "expected": {
+        "address_families": {
+          "VPNv4 Unicast": {
+            "route_distinguishers": {
+              "101:101": {
+                "default_vrf": "vrf_1",
+                "rd": "101:101",
+                "routes": {
+                  "10.64.4.0/22": {
+                    "no_best_path": true,
+                    "not_advertised_to_any_peer": true,
+                    "paths": [
+                      {
+                        "as_path": "65000 65201 4400004007 4400004507 4400004001",
+                        "best": false,
+                        "community": "65100:106 65100:500 65100:601 65361:3",
+                        "extended_community": "RT:65000:31838",
+                        "external": true,
+                        "from_peer": "10.9.3.4",
+                        "localpref": 100,
+                        "next_hop": "10.9.3.4",
+                        "origin": "IGP",
+                        "received_only": true,
+                        "refresh_epoch": 1,
+                        "router_id": "10.9.3.4",
+                        "rx_pathid": "0",
+                        "tx_pathid": "0",
+                        "valid": true,
+                        "via": "vrf vrf_1"
+                      }
+                    ],
+                    "paths_available": 1,
+                    "version": 0
+                  },
+                  "10.64.4.0/24": {
+                    "advertised_to_update_groups": [
+                      2,
+                      3,
+                      47
+                    ],
+                    "best_path": 2,
+                    "paths": [
+                      {
+                        "as_path": "65000 65211 4400002007",
+                        "best": false,
+                        "community": "9:9 65100:106 65100:508 65100:704 65371:2",
+                        "extended_community": "RT:65000:31838",
+                        "external": true,
+                        "from_peer": "10.9.3.4",
+                        "localpref": 100,
+                        "next_hop": "10.9.3.4",
+                        "origin": "IGP",
+                        "received_only": true,
+                        "refresh_epoch": 1,
+                        "router_id": "10.9.3.4",
+                        "rx_pathid": "0",
+                        "tx_pathid": "0",
+                        "valid": true,
+                        "via": "vrf vrf_1"
+                      },
+                      {
+                        "as_path": "65000 65211 4400002007",
+                        "best": true,
+                        "community": "9:9 65100:106 65100:508 65100:700 65100:704 65371:2",
+                        "external": true,
+                        "from_peer": "10.105.3.80",
+                        "localpref": 100,
+                        "next_hop": "10.105.3.80",
+                        "origin": "IGP",
+                        "refresh_epoch": 1,
+                        "router_id": "10.105.2.26",
+                        "rx_pathid": "0",
+                        "tx_pathid": "0x0",
+                        "valid": true,
+                        "via": "vrf vrf_1"
+                      }
+                    ],
+                    "paths_available": 2,
+                    "table": "vrf_1",
+                    "version": 1863365
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

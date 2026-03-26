@@ -1,0 +1,155 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip eigrp interfaces",
+  "schema": {
+    "name": "ShowIpEigrpInterfacesResult",
+    "fields": {
+      "as_number": {
+        "type": "int",
+        "required": true
+      },
+      "address_family": {
+        "type": "str",
+        "required": true
+      },
+      "named_mode": {
+        "type": "bool",
+        "required": true
+      },
+      "vrf": {
+        "type": "str",
+        "required": false
+      },
+      "name": {
+        "type": "str",
+        "required": false
+      },
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "EigrpInterfaceEntry",
+            "fields": {
+              "peers": {
+                "type": "int",
+                "required": true
+              },
+              "xmit_q_unreliable": {
+                "type": "int",
+                "required": true
+              },
+              "xmit_q_reliable": {
+                "type": "int",
+                "required": true
+              },
+              "peer_q_unreliable": {
+                "type": "int",
+                "required": true
+              },
+              "peer_q_reliable": {
+                "type": "int",
+                "required": true
+              },
+              "mean_srtt": {
+                "type": "int",
+                "required": true
+              },
+              "pacing_time_unreliable": {
+                "type": "int",
+                "required": true
+              },
+              "pacing_time_reliable": {
+                "type": "int",
+                "required": true
+              },
+              "mcast_flow_timer": {
+                "type": "int",
+                "required": true
+              },
+              "pending_routes": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with multiple interfaces including loopback",
+      "input": "EIGRP-IPv4 Interfaces for AS(1)\n                              Xmit Queue   PeerQ        Mean   Pacing Time   Multicast    Pending\nInterface              Peers  Un/Reliable  Un/Reliable  SRTT   Un/Reliable   Flow Timer   Routes\nGi1                      1        0/0       0/0          20       0/0           84           0\nGi2                      1        0/0       0/0           5       0/0           50           0\nLo0                      0        0/0       0/0           0       0/0            0           0\n",
+      "expected": {
+        "address_family": "ipv4",
+        "as_number": 1,
+        "interfaces": {
+          "GigabitEthernet1": {
+            "mcast_flow_timer": 84,
+            "mean_srtt": 20,
+            "pacing_time_reliable": 0,
+            "pacing_time_unreliable": 0,
+            "peer_q_reliable": 0,
+            "peer_q_unreliable": 0,
+            "peers": 1,
+            "pending_routes": 0,
+            "xmit_q_reliable": 0,
+            "xmit_q_unreliable": 0
+          },
+          "GigabitEthernet2": {
+            "mcast_flow_timer": 50,
+            "mean_srtt": 5,
+            "pacing_time_reliable": 0,
+            "pacing_time_unreliable": 0,
+            "peer_q_reliable": 0,
+            "peer_q_unreliable": 0,
+            "peers": 1,
+            "pending_routes": 0,
+            "xmit_q_reliable": 0,
+            "xmit_q_unreliable": 0
+          },
+          "Loopback0": {
+            "mcast_flow_timer": 0,
+            "mean_srtt": 0,
+            "pacing_time_reliable": 0,
+            "pacing_time_unreliable": 0,
+            "peer_q_reliable": 0,
+            "peer_q_unreliable": 0,
+            "peers": 0,
+            "pending_routes": 0,
+            "xmit_q_reliable": 0,
+            "xmit_q_unreliable": 0
+          }
+        },
+        "named_mode": false
+      }
+    },
+    {
+      "name": "Named mode EIGRP with VRF and subinterface",
+      "input": "EIGRP-IPv4 VR(test) Address-Family Interfaces for AS(100)\n           VRF(1)\n                              Xmit Queue   PeerQ        Mean   Pacing Time   Multicast    Pending\nInterface              Peers  Un/Reliable  Un/Reliable  SRTT   Un/Reliable   Flow Timer   Routes\nGi0/0/0.1                0        0/0       0/0           0       0/0            0           0\n",
+      "expected": {
+        "address_family": "ipv4",
+        "as_number": 100,
+        "interfaces": {
+          "GigabitEthernet0/0/0.1": {
+            "mcast_flow_timer": 0,
+            "mean_srtt": 0,
+            "pacing_time_reliable": 0,
+            "pacing_time_unreliable": 0,
+            "peer_q_reliable": 0,
+            "peer_q_unreliable": 0,
+            "peers": 0,
+            "pending_routes": 0,
+            "xmit_q_reliable": 0,
+            "xmit_q_unreliable": 0
+          }
+        },
+        "name": "test",
+        "named_mode": true,
+        "vrf": "1"
+      }
+    }
+  ]
+}

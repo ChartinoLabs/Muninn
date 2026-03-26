@@ -1,0 +1,79 @@
+{
+  "os": "cisco_ios",
+  "command": "show interfaces transceiver",
+  "schema": {
+    "name": "ShowInterfaceTransceiverResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "TransceiverEntry",
+            "fields": {
+              "temperature": {
+                "type": "float",
+                "required": false
+              },
+              "voltage": {
+                "type": "float",
+                "required": false
+              },
+              "current": {
+                "type": "float",
+                "required": false
+              },
+              "tx_power": {
+                "type": "float",
+                "required": false
+              },
+              "rx_power": {
+                "type": "float",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple interfaces with transceiver DOM readings",
+      "input": "If device is externally calibrated, only calibrated values are printed.\n++ : high alarm, +  : high warning, -  : low warning, -- : low alarm.\nNA or N/A: not applicable, Tx: transmit, Rx: receive.\nmA: milliamperes, dBm: decibels (milliwatts).\n\n                                               Optical   Optical\n               Temperature  Voltage  Current   Tx Power  Rx Power\n    Port       (Celsius)    (Volts)  (mA)      (dBm)     (dBm)\n    ---------  -----------  -------  --------  --------  --------\n    Gi0/9        32.5       3.20     385.1      -5.5      -5.0\n    Gi0/10       36.9       3.25     537.7      -4.5      -9.7\n    Gi0/11       35.8       3.22     393.6      -5.5      -5.0\n    Te0/1        28.1       3.30      19.8       2.4      -4.2\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet0/9": {
+            "temperature": 32.5,
+            "voltage": 3.2,
+            "current": 385.1,
+            "tx_power": -5.5,
+            "rx_power": -5.0
+          },
+          "GigabitEthernet0/10": {
+            "temperature": 36.9,
+            "voltage": 3.25,
+            "current": 537.7,
+            "tx_power": -4.5,
+            "rx_power": -9.7
+          },
+          "GigabitEthernet0/11": {
+            "temperature": 35.8,
+            "voltage": 3.22,
+            "current": 393.6,
+            "tx_power": -5.5,
+            "rx_power": -5.0
+          },
+          "TenGigabitEthernet0/1": {
+            "temperature": 28.1,
+            "voltage": 3.3,
+            "current": 19.8,
+            "tx_power": 2.4,
+            "rx_power": -4.2
+          }
+        }
+      }
+    }
+  ]
+}

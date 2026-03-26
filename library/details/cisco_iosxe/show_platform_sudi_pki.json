@@ -1,0 +1,49 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show platform sudi pki",
+  "schema": {
+    "name": "ShowPlatformSudiPkiResult",
+    "fields": {
+      "certificate_status": {
+        "type": "str",
+        "required": false
+      },
+      "issuers": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SudiIssuerEntry",
+            "fields": {
+              "validation_status": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with all issuers valid and certificate enabled",
+      "input": "'Cisco Manufacturing CA III' certificate : Enabled\n\nSUDI Issuer-CN                      Validation status\n-----------------------------------------------------\nCisco Manufacturing CA              Valid\nCisco Manufacturing CA III          Valid\nCisco Manufacturing CA SHA2         Valid\n",
+      "expected": {
+        "issuers": {
+          "Cisco Manufacturing CA": {
+            "validation_status": "Valid"
+          },
+          "Cisco Manufacturing CA III": {
+            "validation_status": "Valid"
+          },
+          "Cisco Manufacturing CA SHA2": {
+            "validation_status": "Valid"
+          }
+        },
+        "certificate_status": "Enabled"
+      }
+    }
+  ]
+}

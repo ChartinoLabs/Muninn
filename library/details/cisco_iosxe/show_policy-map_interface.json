@@ -1,0 +1,141 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show policy-map interface",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Basic input policy with police and QoS set actions",
+      "input": " HundredGigE1/0/3\n\n  Service-policy input: map1_table\n\n    Class-map: class-default (match-any)\n      2482448 packets\n      Match: any\n      police:\n          rate 500000000 bps, burst 10240 bytes\n        conformed 1865503500 bytes; actions:\n          transmit\n        exceeded 1858168500 bytes; actions:\n          drop\n        conformed 46055000 bps, exceeded 45873000 bps\n      QoS Set\n         dscp dscp table t1\n         traffic-class dscp table t1\n",
+      "expected": {
+        "HundredGigabitEthernet1/0/3": {
+          "service_policies": {
+            "map1_table": {
+              "direction": "input",
+              "classes": {
+                "class-default": {
+                  "match_type": "match-any",
+                  "packets": 2482448,
+                  "bytes": 0,
+                  "police": {
+                    "rate_bps": 500000000,
+                    "burst_bytes": 10240,
+                    "conformed_bytes": 1865503500,
+                    "conformed_action": "transmit",
+                    "exceeded_bytes": 1858168500,
+                    "exceeded_action": "drop",
+                    "conformed_bps": 46055000,
+                    "exceeded_bps": 45873000
+                  },
+                  "qos_set": {
+                    "dscp": {
+                      "dscp": {
+                        "table": "t1"
+                      }
+                    },
+                    "traffic-class": {
+                      "dscp": {
+                        "table": "t1"
+                      }
+                    }
+                  },
+                  "match": [
+                    "any"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Output policy with shaping, child policy, and queueing",
+      "input": "\nTenGigabitEthernet0/0/0.101\n\n  Service-policy input: L3VPN_in\n\n    Class-map: class-default (match-any)\n      0 packets, 0 bytes\n      5 minute offered rate 0000 bps, drop rate 0000 bps\n      Match: any\n      police:\n          cir 400000 bps, bc 400000 bytes\n        conformed 0 packets, 0 bytes; actions:\n          transmit\n        exceeded 0 packets, 0 bytes; actions:\n          drop\n        conformed 0000 bps, exceeded 0000 bps\n\n  Service-policy output: L3VPN_out\n\n    Class-map: class-default (match-any)\n      2121212 packets, 121212 bytes\n      5 minute offered rate 11111171 bps, drop rate 1118111 bps\n      Match: any\n      Queueing\n      queue limit 64 packets\n      (queue depth/total drops/no-buffer drops) 0/11111/0\n      (pkts output/bytes output) 11511/111611\n      shape (average) cir 111222, bc 2323, be 3434\n      target shape rate 454545\n\n      Service-policy : leeaf\n\n        Class-map: IPP67 (match-all)\n          123 packets, 4567 bytes\n          5 minute offered rate 123123123 bps, drop rate 456456456 bps\n          Match: ip precedence 6  7\n          Queueing\n          queue limit 64 packets\n          (queue depth/total drops/no-buffer drops) 63/2655550/0\n          (pkts output/bytes output) 6612304/819909328\n          bandwidth 50% (234 kbps)\n",
+      "expected": {
+        "TenGigabitEthernet0/0/0.101": {
+          "service_policies": {
+            "L3VPN_in": {
+              "direction": "input",
+              "classes": {
+                "class-default": {
+                  "match_type": "match-any",
+                  "packets": 0,
+                  "bytes": 0,
+                  "offered_rate_bps": 0,
+                  "drop_rate_bps": 0,
+                  "police": {
+                    "cir_bps": 400000,
+                    "bc_bytes": 400000,
+                    "conformed_packets": 0,
+                    "conformed_bytes": 0,
+                    "conformed_action": "transmit",
+                    "exceeded_packets": 0,
+                    "exceeded_bytes": 0,
+                    "exceeded_action": "drop",
+                    "conformed_bps": 0,
+                    "exceeded_bps": 0
+                  },
+                  "match": [
+                    "any"
+                  ]
+                }
+              }
+            },
+            "L3VPN_out": {
+              "direction": "output",
+              "classes": {
+                "class-default": {
+                  "match_type": "match-any",
+                  "packets": 2121212,
+                  "bytes": 121212,
+                  "offered_rate_bps": 11111171,
+                  "drop_rate_bps": 1118111,
+                  "queueing": {
+                    "queue_limit_packets": 64,
+                    "queue_depth": 0,
+                    "total_drops": 11111,
+                    "no_buffer_drops": 0,
+                    "pkts_output": 11511,
+                    "bytes_output": 111611
+                  },
+                  "shape": {
+                    "type": "average",
+                    "cir": 111222,
+                    "bc": 2323,
+                    "be": 3434,
+                    "target_rate": 454545
+                  },
+                  "child_policy": "leeaf",
+                  "child_classes": {
+                    "IPP67": {
+                      "match_type": "match-all",
+                      "packets": 123,
+                      "bytes": 4567,
+                      "offered_rate_bps": 123123123,
+                      "drop_rate_bps": 456456456,
+                      "queueing": {
+                        "queue_limit_packets": 64,
+                        "queue_depth": 63,
+                        "total_drops": 2655550,
+                        "no_buffer_drops": 0,
+                        "pkts_output": 6612304,
+                        "bytes_output": 819909328,
+                        "bandwidth_percent": 50
+                      },
+                      "match": [
+                        "ip precedence 6  7"
+                      ]
+                    }
+                  },
+                  "match": [
+                    "any"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

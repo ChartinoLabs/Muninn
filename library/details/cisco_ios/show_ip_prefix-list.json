@@ -1,0 +1,132 @@
+{
+  "os": "cisco_ios",
+  "command": "show ip prefix-list",
+  "schema": {
+    "name": "ShowIpPrefixListResult",
+    "fields": {
+      "prefix_lists": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PrefixListInfo",
+            "fields": {
+              "count": {
+                "type": "int",
+                "required": true
+              },
+              "entries": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "PrefixEntry",
+                    "fields": {
+                      "seq": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "action": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "network": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "ge": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "le": {
+                        "type": "int",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Single prefix-list with permit, deny, and ge/le entries",
+      "input": "ip prefix-list OSPF_Redist: 2 entries\n   seq 5 deny 10.0.0.0/24\n   seq 10 permit 0.0.0.0/0 le 32\n   seq 15 deny 10.0.0.0/8 ge 10 le 20\n",
+      "expected": {
+        "prefix_lists": {
+          "OSPF_Redist": {
+            "count": 2,
+            "entries": {
+              "5": {
+                "action": "deny",
+                "network": "10.0.0.0/24",
+                "seq": 5
+              },
+              "10": {
+                "action": "permit",
+                "le": 32,
+                "network": "0.0.0.0/0",
+                "seq": 10
+              },
+              "15": {
+                "action": "deny",
+                "ge": 10,
+                "le": 20,
+                "network": "10.0.0.0/8",
+                "seq": 15
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Multiple prefix-lists with varying entry counts",
+      "input": "ip prefix-list INBOUND: 3 entries\n   seq 5 permit 192.168.1.0/24\n   seq 10 permit 172.16.0.0/12 le 24\n   seq 15 deny 0.0.0.0/0 le 32\nip prefix-list OUTBOUND: 1 entries\n   seq 10 permit 10.0.0.0/8 ge 16 le 24\n",
+      "expected": {
+        "prefix_lists": {
+          "INBOUND": {
+            "count": 3,
+            "entries": {
+              "5": {
+                "action": "permit",
+                "network": "192.168.1.0/24",
+                "seq": 5
+              },
+              "10": {
+                "action": "permit",
+                "le": 24,
+                "network": "172.16.0.0/12",
+                "seq": 10
+              },
+              "15": {
+                "action": "deny",
+                "le": 32,
+                "network": "0.0.0.0/0",
+                "seq": 15
+              }
+            }
+          },
+          "OUTBOUND": {
+            "count": 1,
+            "entries": {
+              "10": {
+                "action": "permit",
+                "ge": 16,
+                "le": 24,
+                "network": "10.0.0.0/8",
+                "seq": 10
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

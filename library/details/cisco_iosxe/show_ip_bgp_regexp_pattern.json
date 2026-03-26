@@ -1,0 +1,97 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip bgp regexp <pattern>",
+  "schema": {
+    "name": "ShowIpBgpResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfEntry",
+            "fields": {
+              "address_families": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "AddressFamilyEntry",
+                    "fields": {
+                      "table_version": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "router_id": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "routes": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "RouteEntry",
+                            "fields": {
+                              "paths": {
+                                "type": {
+                                  "type": "list",
+                                  "items": {
+                                    "name": "PathEntry",
+                                    "fields": {
+                                      "status_codes": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "path_type": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "next_hop": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "metric": {
+                                        "type": "int",
+                                        "required": false
+                                      },
+                                      "locprf": {
+                                        "type": "int",
+                                        "required": false
+                                      },
+                                      "weight": {
+                                        "type": "int",
+                                        "required": true
+                                      },
+                                      "as_path": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "origin": {
+                                        "type": "str",
+                                        "required": true
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": true
+                              }
+                            }
+                          }
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}

@@ -1,0 +1,154 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show stack-power budgeting",
+  "schema": {
+    "name": "ShowStackPowerBudgetingResult",
+    "fields": {
+      "power_stacks": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "StackPowerBudgetingEntry",
+            "fields": {
+              "mode": {
+                "type": "str",
+                "required": true
+              },
+              "topology": {
+                "type": "str",
+                "required": true
+              },
+              "total_power_w": {
+                "type": "int",
+                "required": true
+              },
+              "reserved_power_w": {
+                "type": "int",
+                "required": true
+              },
+              "allocated_power_w": {
+                "type": "int",
+                "required": true
+              },
+              "switch_available_power_w": {
+                "type": "int",
+                "required": true
+              },
+              "num_switches": {
+                "type": "int",
+                "required": true
+              },
+              "num_power_supplies": {
+                "type": "int",
+                "required": true
+              },
+              "switches": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "StackPowerBudgetingSwitchEntry",
+                    "fields": {
+                      "power_supply_a_w": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "power_supply_b_w": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "power_budget_w": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "allocated_power_w": {
+                        "type": "float",
+                        "required": true
+                      },
+                      "poe_available_power_w": {
+                        "type": "float",
+                        "required": true
+                      },
+                      "consumed_sys_w": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "consumed_poe_w": {
+                        "type": "float",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "totals": {
+        "type": {
+          "name": "StackPowerBudgetingTotals",
+          "fields": {
+            "allocated_power_w": {
+              "type": "float",
+              "required": true
+            },
+            "poe_available_power_w": {
+              "type": "float",
+              "required": true
+            },
+            "consumed_sys_w": {
+              "type": "int",
+              "required": true
+            },
+            "consumed_poe_w": {
+              "type": "float",
+              "required": true
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Stack power budgeting summary and per-switch allocation (issue",
+      "input": " Power Stack                      Stack   Stack    Total   Rsvd    Alloc   Sw_Avail Num  Num\n    Name                             Mode    Topolgy  Pwr(W)  Pwr(W)  Pwr(W)   Pwr(W)  SW   PS\n    --------------------             ------  -------  ------  ------  ------  ------  ----- -----\n    Powerstack-1                     SP-PS   Stndaln  350     0       235     115       1    1\n\n    Power Stack                      PS-A   PS-B   Power     Alloc     Poe_Avail   Consumd Pwr\nSW  Name                             (W)    (W)    Budgt(W)  Power(W)    Pwr(W)    Sys/PoE(W)\n--  --------------------             -----  -----  --------  --------   --------  ------------\n1   Powerstack-1                     350    0      235       235.0      0.0       139/0.0\n--  --------------------             -----  -----  --------  --------   --------  ------------\nTotals:                                                      235.0      0.0       139/0.0\n",
+      "expected": {
+        "power_stacks": {
+          "Powerstack-1": {
+            "mode": "SP-PS",
+            "topology": "Stndaln",
+            "total_power_w": 350,
+            "reserved_power_w": 0,
+            "allocated_power_w": 235,
+            "switch_available_power_w": 115,
+            "num_switches": 1,
+            "num_power_supplies": 1,
+            "switches": {
+              "1": {
+                "power_supply_a_w": 350,
+                "power_supply_b_w": 0,
+                "power_budget_w": 235,
+                "allocated_power_w": 235.0,
+                "poe_available_power_w": 0.0,
+                "consumed_sys_w": 139,
+                "consumed_poe_w": 0.0
+              }
+            }
+          }
+        },
+        "totals": {
+          "allocated_power_w": 235.0,
+          "poe_available_power_w": 0.0,
+          "consumed_sys_w": 139,
+          "consumed_poe_w": 0.0
+        }
+      }
+    }
+  ]
+}

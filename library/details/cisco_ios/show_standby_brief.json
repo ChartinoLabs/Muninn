@@ -1,0 +1,135 @@
+{
+  "os": "cisco_ios",
+  "command": "show standby brief",
+  "schema": {
+    "name": "ShowStandbyBriefResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "HsrpInterfaceBriefEntry",
+            "fields": {
+              "groups": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "HsrpGroupEntry",
+                    "fields": {
+                      "priority": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "preempt": {
+                        "type": "bool",
+                        "required": true
+                      },
+                      "state": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "active": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "standby": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "virtual_ip": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Mixed Active/Init states with IPv4/IPv6, wrapped interface name, and unknown peers",
+      "input": "                     P indicates configured to preempt.\n                     |\nInterface   Grp  Pri P State   Active          Standby         Virtual IP\nVl1         1    120 P Active  local           10.1.1.3      10.1.1.1\nVl1         6    120 P Active  local           FE80::B         FE80::DEF\nVl51        1    120 P Init    unknown         unknown         10.1.51.1\nVl51        6    120 P Init    unknown         unknown         FE80::DEF\nVl500       1    120 P Active  local           10.1.5.3      10.1.5.1\nVl500       6    120 P Active  local           FE80::B         FE80::DEF\nVl4010\n     1    120 P Active  local           10.1.254.3    10.1.254.1\n",
+      "expected": {
+        "interfaces": {
+          "VLAN1": {
+            "groups": {
+              "1": {
+                "priority": 120,
+                "preempt": true,
+                "state": "Active",
+                "active": "local",
+                "standby": "10.1.1.3",
+                "virtual_ip": "10.1.1.1"
+              },
+              "6": {
+                "priority": 120,
+                "preempt": true,
+                "state": "Active",
+                "active": "local",
+                "standby": "FE80::B",
+                "virtual_ip": "FE80::DEF"
+              }
+            }
+          },
+          "VLAN51": {
+            "groups": {
+              "1": {
+                "priority": 120,
+                "preempt": true,
+                "state": "Init",
+                "virtual_ip": "10.1.51.1"
+              },
+              "6": {
+                "priority": 120,
+                "preempt": true,
+                "state": "Init",
+                "virtual_ip": "FE80::DEF"
+              }
+            }
+          },
+          "VLAN500": {
+            "groups": {
+              "1": {
+                "priority": 120,
+                "preempt": true,
+                "state": "Active",
+                "active": "local",
+                "standby": "10.1.5.3",
+                "virtual_ip": "10.1.5.1"
+              },
+              "6": {
+                "priority": 120,
+                "preempt": true,
+                "state": "Active",
+                "active": "local",
+                "standby": "FE80::B",
+                "virtual_ip": "FE80::DEF"
+              }
+            }
+          },
+          "VLAN4010": {
+            "groups": {
+              "1": {
+                "priority": 120,
+                "preempt": true,
+                "state": "Active",
+                "active": "local",
+                "standby": "10.1.254.3",
+                "virtual_ip": "10.1.254.1"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

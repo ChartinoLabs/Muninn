@@ -1,0 +1,442 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show bgp neighbors",
+  "schema": {
+    "name": "ShowIpBgpNeighborsResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "NeighborEntry",
+            "fields": {
+              "remote_as": {
+                "type": "int",
+                "required": true
+              },
+              "local_as": {
+                "type": "int",
+                "required": false
+              },
+              "link_type": {
+                "type": "str",
+                "required": true
+              },
+              "vrf": {
+                "type": "str",
+                "required": false
+              },
+              "description": {
+                "type": "str",
+                "required": false
+              },
+              "peer_group": {
+                "type": "str",
+                "required": false
+              },
+              "bgp_version": {
+                "type": "int",
+                "required": true
+              },
+              "router_id": {
+                "type": "str",
+                "required": true
+              },
+              "bgp_state": {
+                "type": "str",
+                "required": true
+              },
+              "state_duration": {
+                "type": "str",
+                "required": false
+              },
+              "hold_time": {
+                "type": "int",
+                "required": true
+              },
+              "keepalive_interval": {
+                "type": "int",
+                "required": true
+              },
+              "last_read": {
+                "type": "str",
+                "required": true
+              },
+              "last_write": {
+                "type": "str",
+                "required": true
+              },
+              "message_stats": {
+                "type": {
+                  "name": "MessageStats",
+                  "fields": {
+                    "opens_sent": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "opens_rcvd": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "notifications_sent": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "notifications_rcvd": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "updates_sent": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "updates_rcvd": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "keepalives_sent": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "keepalives_rcvd": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "route_refresh_sent": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "route_refresh_rcvd": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "total_sent": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "total_rcvd": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": true
+              },
+              "connections_established": {
+                "type": "int",
+                "required": true
+              },
+              "connections_dropped": {
+                "type": "int",
+                "required": true
+              },
+              "last_reset": {
+                "type": "str",
+                "required": false
+              },
+              "address_families": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "AddressFamilyInfo",
+                    "fields": {
+                      "table_version": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "neighbor_version": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "peer_group": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "inbound_soft_reconfig": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "community_attr_sent": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "prefix_activity": {
+                        "type": {
+                          "name": "PrefixActivity",
+                          "fields": {
+                            "prefixes_current_sent": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "prefixes_current_rcvd": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "prefixes_total_sent": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "prefixes_total_rcvd": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "implicit_withdraw_sent": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "implicit_withdraw_rcvd": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "explicit_withdraw_sent": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "explicit_withdraw_rcvd": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "used_as_bestpath": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "used_as_multipath": {
+                              "type": "int",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              },
+              "local_host": {
+                "type": "str",
+                "required": false
+              },
+              "local_port": {
+                "type": "int",
+                "required": false
+              },
+              "foreign_host": {
+                "type": "str",
+                "required": false
+              },
+              "foreign_port": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Two internal iBGP neighbors with IPv4 and VPNv4 address families",
+      "input": "BGP neighbor is 10.1.1.1,  remote AS 65000, internal link\n  BGP version 4, remote router ID 10.1.1.1\n  BGP state = Established, up for 3d21h\n  Last read 00:00:46, last write 00:00:33, hold time is 180, keepalive interval is 60 seconds\n  Neighbor sessions:\n    1 active, is not multisession capable (disabled)\n  Neighbor capabilities:\n    Route refresh: advertised and received(new)\n    Four-octets ASN Capability: advertised and received\n    Address family IPv4 Unicast: advertised and received\n    Address family VPNv4 Unicast: advertised and received\n    Enhanced Refresh Capability: advertised and received\n    Multisession Capability:\n    Stateful switchover support enabled: NO for session 1\n  Message statistics:\n    InQ depth is 0\n    OutQ depth is 0\n\n                             Sent       Rcvd\n    Opens:                  1          1\n    Notifications:          0          0\n    Updates:               10         14\n    Keepalives:          6146       6147\n    Route Refresh:          0          0\n    Total:               6157       6162\n  Do log neighbor state changes (via global configuration)\n  Default minimum time between advertisement runs is 0 seconds\n\n For address family: IPv4 Unicast\n  Session: 10.1.1.1\n  BGP table version 1, neighbor version 1/0\n  Output queue size : 0\n  Index 1, Advertise bit 0\n  1 update-group member\n  Slow-peer detection is disabled\n  Slow-peer split-update-group dynamic is disabled\n                                     Sent       Rcvd\n  Prefix activity:               ----       ----\n    Prefixes Current:               0          0\n    Prefixes Total:                 0          0\n    Implicit Withdraw:              0          0\n    Explicit Withdraw:              0          0\n    Used as bestpath:             n/a          0\n    Used as multipath:            n/a          0\n    Used as secondary:            n/a          0\n\n                                       Outbound    Inbound\n  Local Policy Denied Prefixes:    --------    -------\n    Total:                                0          0\n  Number of NLRIs in the update sent: max 0, min 0\n  Last detected as dynamic slow peer: never\n  Dynamic slow peer recovered: never\n  Refresh Epoch: 1\n  Last Sent Refresh Start-of-rib: never\n  Last Sent Refresh End-of-rib: never\n  Last Received Refresh Start-of-rib: never\n  Last Received Refresh End-of-rib: never\n                           Sent   Rcvd\n    Refresh activity:          ----   ----\n      Refresh Start-of-RIB          0          0\n      Refresh End-of-RIB            0          0\n\n For address family: VPNv4 Unicast\n  Session: 10.1.1.1\n  BGP table version 21, neighbor version 21/0\n  Output queue size : 0\n  Index 3, Advertise bit 1\n  3 update-group member\n  Extended-community attribute sent to this neighbor\n  Slow-peer detection is disabled\n  Slow-peer split-update-group dynamic is disabled\n                                     Sent       Rcvd\n  Prefix activity:               ----       ----\n    Prefixes Current:               4          4 (Consumes 544 bytes)\n    Prefixes Total:                 8          4\n    Implicit Withdraw:              4          0\n    Explicit Withdraw:              0          0\n    Used as bestpath:             n/a          4\n    Used as multipath:            n/a          0\n    Used as secondary:            n/a          0\n\n                                       Outbound    Inbound\n  Local Policy Denied Prefixes:    --------    -------\n    ORIGINATOR loop:                    n/a          8\n    Bestpath from this peer:              4        n/a\n    Bestpath from iBGP peer:              4        n/a\n    AF Permit Check:                      4        n/a\n    Total:                               12          8\n  Number of NLRIs in the update sent: max 1, min 0\n  Last detected as dynamic slow peer: never\n  Dynamic slow peer recovered: never\n  Refresh Epoch: 1\n  Last Sent Refresh Start-of-rib: never\n  Last Sent Refresh End-of-rib: never\n  Last Received Refresh Start-of-rib: never\n  Last Received Refresh End-of-rib: never\n                           Sent   Rcvd\n    Refresh activity:          ----   ----\n      Refresh Start-of-RIB          0          0\n      Refresh End-of-RIB            0          0\n\n  Address tracking is enabled, the RIB does have a route to 10.1.1.1\n  Route to peer address reachability Up: 2; Down: 1\n    Last notification 3d20h\n  Connections established 1; dropped 0\n  Last reset never\n  Interface associated: (none) (peering address NOT in same link)\n  Transport(tcp) path-mtu-discovery is enabled\n  Graceful-Restart is disabled\n  SSO is disabled\nConnection state is ESTAB, I/O status: 1, unread input bytes: 0\nConnection is ECN Disabled, Mininum incoming TTL 0, Outgoing TTL 255\nLocal host: 10.5.5.5, Local port: 179\nForeign host: 10.1.1.1, Foreign port: 44730\n\nBGP neighbor is 10.2.2.2,  remote AS 65000, internal link\n  BGP version 4, remote router ID 10.2.2.2\n  BGP state = Established, up for 3d21h\n  Last read 00:00:04, last write 00:00:28, hold time is 180, keepalive interval is 60 seconds\n  Neighbor sessions:\n    1 active, is not multisession capable (disabled)\n  Neighbor capabilities:\n    Route refresh: advertised and received(new)\n    Four-octets ASN Capability: advertised and received\n    Address family IPv4 Unicast: advertised and received\n    Address family VPNv4 Unicast: advertised and received\n    Enhanced Refresh Capability: advertised and received\n    Multisession Capability:\n    Stateful switchover support enabled: NO for session 1\n  Message statistics:\n    InQ depth is 0\n    OutQ depth is 0\n\n                             Sent       Rcvd\n    Opens:                  1          1\n    Notifications:          0          0\n    Updates:               10         14\n    Keepalives:          6134       6139\n    Route Refresh:          0          0\n    Total:               6145       6154\n  Do log neighbor state changes (via global configuration)\n  Default minimum time between advertisement runs is 0 seconds\n\n For address family: IPv4 Unicast\n  Session: 10.2.2.2\n  BGP table version 1, neighbor version 1/0\n  Output queue size : 0\n  Index 1, Advertise bit 0\n  1 update-group member\n  Slow-peer detection is disabled\n  Slow-peer split-update-group dynamic is disabled\n                                     Sent       Rcvd\n  Prefix activity:               ----       ----\n    Prefixes Current:               0          0\n    Prefixes Total:                 0          0\n    Implicit Withdraw:              0          0\n    Explicit Withdraw:              0          0\n    Used as bestpath:             n/a          0\n    Used as multipath:            n/a          0\n    Used as secondary:            n/a          0\n\n                                       Outbound    Inbound\n  Local Policy Denied Prefixes:    --------    -------\n    Total:                                0          0\n  Number of NLRIs in the update sent: max 0, min 0\n  Last detected as dynamic slow peer: never\n  Dynamic slow peer recovered: never\n  Refresh Epoch: 1\n  Last Sent Refresh Start-of-rib: never\n  Last Sent Refresh End-of-rib: never\n  Last Received Refresh Start-of-rib: never\n  Last Received Refresh End-of-rib: never\n                           Sent   Rcvd\n    Refresh activity:          ----   ----\n      Refresh Start-of-RIB          0          0\n      Refresh End-of-RIB            0          0\n\n For address family: VPNv4 Unicast\n  Session: 10.2.2.2\n  BGP table version 21, neighbor version 21/0\n  Output queue size : 0\n  Index 3, Advertise bit 1\n  3 update-group member\n  Extended-community attribute sent to this neighbor\n  Slow-peer detection is disabled\n  Slow-peer split-update-group dynamic is disabled\n                                     Sent       Rcvd\n  Prefix activity:               ----       ----\n    Prefixes Current:               4          4 (Consumes 544 bytes)\n    Prefixes Total:                 8          4\n    Implicit Withdraw:              4          0\n    Explicit Withdraw:              0          0\n    Used as bestpath:             n/a          0\n    Used as multipath:            n/a          0\n    Used as secondary:            n/a          0\n\n                                       Outbound    Inbound\n  Local Policy Denied Prefixes:    --------    -------\n    ORIGINATOR loop:                    n/a          8\n    Bestpath from this peer:              4        n/a\n    Bestpath from iBGP peer:              4        n/a\n    AF Permit Check:                      4        n/a\n    Total:                               12          8\n  Number of NLRIs in the update sent: max 1, min 0\n  Last detected as dynamic slow peer: never\n  Dynamic slow peer recovered: never\n  Refresh Epoch: 1\n  Last Sent Refresh Start-of-rib: never\n  Last Sent Refresh End-of-rib: never\n  Last Received Refresh Start-of-rib: never\n  Last Received Refresh End-of-rib: never\n                           Sent   Rcvd\n    Refresh activity:          ----   ----\n      Refresh Start-of-RIB          0          0\n      Refresh End-of-RIB            0          0\n\n  Address tracking is enabled, the RIB does have a route to 10.2.2.2\n  Route to peer address reachability Up: 2; Down: 1\n    Last notification 3d20h\n  Connections established 1; dropped 0\n  Last reset never\n  Interface associated: (none) (peering address NOT in same link)\n  Transport(tcp) path-mtu-discovery is enabled\n  Graceful-Restart is disabled\n  SSO is disabled\nConnection state is ESTAB, I/O status: 1, unread input bytes: 0\nConnection is ECN Disabled, Mininum incoming TTL 0, Outgoing TTL 255\nLocal host: 10.5.5.5, Local port: 179\nForeign host: 10.2.2.2, Foreign port: 43047\n",
+      "expected": {
+        "neighbors": {
+          "10.1.1.1": {
+            "address_families": {
+              "IPv4 Unicast": {
+                "neighbor_version": 1,
+                "prefix_activity": {
+                  "explicit_withdraw_rcvd": 0,
+                  "explicit_withdraw_sent": 0,
+                  "implicit_withdraw_rcvd": 0,
+                  "implicit_withdraw_sent": 0,
+                  "prefixes_current_rcvd": 0,
+                  "prefixes_current_sent": 0,
+                  "prefixes_total_rcvd": 0,
+                  "prefixes_total_sent": 0,
+                  "used_as_bestpath": 0,
+                  "used_as_multipath": 0
+                },
+                "table_version": 1
+              },
+              "VPNv4 Unicast": {
+                "neighbor_version": 21,
+                "prefix_activity": {
+                  "explicit_withdraw_rcvd": 0,
+                  "explicit_withdraw_sent": 0,
+                  "implicit_withdraw_rcvd": 0,
+                  "implicit_withdraw_sent": 4,
+                  "prefixes_current_rcvd": 4,
+                  "prefixes_current_sent": 4,
+                  "prefixes_total_rcvd": 4,
+                  "prefixes_total_sent": 8,
+                  "used_as_bestpath": 4,
+                  "used_as_multipath": 0
+                },
+                "table_version": 21
+              }
+            },
+            "bgp_state": "Established",
+            "bgp_version": 4,
+            "connections_dropped": 0,
+            "connections_established": 1,
+            "foreign_host": "10.1.1.1",
+            "foreign_port": 44730,
+            "hold_time": 180,
+            "keepalive_interval": 60,
+            "last_read": "00:00:46",
+            "last_write": "00:00:33",
+            "link_type": "internal",
+            "local_host": "10.5.5.5",
+            "local_port": 179,
+            "message_stats": {
+              "keepalives_rcvd": 6147,
+              "keepalives_sent": 6146,
+              "notifications_rcvd": 0,
+              "notifications_sent": 0,
+              "opens_rcvd": 1,
+              "opens_sent": 1,
+              "route_refresh_rcvd": 0,
+              "route_refresh_sent": 0,
+              "total_rcvd": 6162,
+              "total_sent": 6157,
+              "updates_rcvd": 14,
+              "updates_sent": 10
+            },
+            "remote_as": 65000,
+            "router_id": "10.1.1.1",
+            "state_duration": "3d21h"
+          },
+          "10.2.2.2": {
+            "address_families": {
+              "IPv4 Unicast": {
+                "neighbor_version": 1,
+                "prefix_activity": {
+                  "explicit_withdraw_rcvd": 0,
+                  "explicit_withdraw_sent": 0,
+                  "implicit_withdraw_rcvd": 0,
+                  "implicit_withdraw_sent": 0,
+                  "prefixes_current_rcvd": 0,
+                  "prefixes_current_sent": 0,
+                  "prefixes_total_rcvd": 0,
+                  "prefixes_total_sent": 0,
+                  "used_as_bestpath": 0,
+                  "used_as_multipath": 0
+                },
+                "table_version": 1
+              },
+              "VPNv4 Unicast": {
+                "neighbor_version": 21,
+                "prefix_activity": {
+                  "explicit_withdraw_rcvd": 0,
+                  "explicit_withdraw_sent": 0,
+                  "implicit_withdraw_rcvd": 0,
+                  "implicit_withdraw_sent": 4,
+                  "prefixes_current_rcvd": 4,
+                  "prefixes_current_sent": 4,
+                  "prefixes_total_rcvd": 4,
+                  "prefixes_total_sent": 8,
+                  "used_as_bestpath": 0,
+                  "used_as_multipath": 0
+                },
+                "table_version": 21
+              }
+            },
+            "bgp_state": "Established",
+            "bgp_version": 4,
+            "connections_dropped": 0,
+            "connections_established": 1,
+            "foreign_host": "10.2.2.2",
+            "foreign_port": 43047,
+            "hold_time": 180,
+            "keepalive_interval": 60,
+            "last_read": "00:00:04",
+            "last_write": "00:00:28",
+            "link_type": "internal",
+            "local_host": "10.5.5.5",
+            "local_port": 179,
+            "message_stats": {
+              "keepalives_rcvd": 6139,
+              "keepalives_sent": 6134,
+              "notifications_rcvd": 0,
+              "notifications_sent": 0,
+              "opens_rcvd": 1,
+              "opens_sent": 1,
+              "route_refresh_rcvd": 0,
+              "route_refresh_sent": 0,
+              "total_rcvd": 6154,
+              "total_sent": 6145,
+              "updates_rcvd": 14,
+              "updates_sent": 10
+            },
+            "remote_as": 65000,
+            "router_id": "10.2.2.2",
+            "state_duration": "3d21h"
+          }
+        }
+      }
+    },
+    {
+      "name": "Single external eBGP neighbor in VRF with VPNv4 address family",
+      "input": "BGP neighbor is 172.17.211.2,  vrf VRF200,  remote AS 65001, external link\n  BGP version 4, remote router ID 172.16.1.156\n  BGP state = Established, up for 4d21h\n  Last read 00:00:39, last write 00:00:39, hold time is 180, keepalive interval is 60 seconds\n  Neighbor sessions:\n    1 active, is not multisession capable (disabled)\n  Neighbor capabilities:\n    Route refresh: advertised and received(new)\n    Four-octets ASN Capability: advertised and received\n    Address family IPv4 Unicast: advertised and received\n    Enhanced Refresh Capability: advertised and received\n    Multisession Capability:\n    Stateful switchover support enabled: NO for session 1\n  Message statistics:\n    InQ depth is 0\n    OutQ depth is 0\n\n                             Sent       Rcvd\n    Opens:                  1          1\n    Notifications:          0          0\n    Updates:                7          2\n    Keepalives:          7779       7772\n    Route Refresh:          0          0\n    Total:               7787       7775\n  Do log neighbor state changes (via global configuration)\n  Default minimum time between advertisement runs is 0 seconds\n\n For address family: VPNv4 Unicast\n  Translates address family IPv4 Unicast for VRF VRF200\n  Session: 172.17.211.2\n  BGP table version 21, neighbor version 21/0\n  Output queue size : 0\n  Index 2, Advertise bit 0\n  2 update-group member\n  Overrides the neighbor AS with my AS before sending updates\n  Slow-peer detection is disabled\n  Slow-peer split-update-group dynamic is disabled\n                                     Sent       Rcvd\n  Prefix activity:               ----       ----\n    Prefixes Current:               3          1 (Consumes 136 bytes)\n    Prefixes Total:                 6          1\n    Implicit Withdraw:              3          0\n    Explicit Withdraw:              0          0\n    Used as bestpath:             n/a          1\n    Used as multipath:            n/a          0\n    Used as secondary:            n/a          0\n\n                                       Outbound    Inbound\n  Local Policy Denied Prefixes:    --------    -------\n    Bestpath from this peer:              2        n/a\n    Total:                                2          0\n  Number of NLRIs in the update sent: max 1, min 0\n  Last detected as dynamic slow peer: never\n  Dynamic slow peer recovered: never\n  Refresh Epoch: 1\n  Last Sent Refresh Start-of-rib: never\n  Last Sent Refresh End-of-rib: never\n  Last Received Refresh Start-of-rib: never\n  Last Received Refresh End-of-rib: never\n                           Sent   Rcvd\n    Refresh activity:          ----   ----\n      Refresh Start-of-RIB          0          0\n      Refresh End-of-RIB            0          0\n\n  Address tracking is enabled, the RIB does have a route to 172.17.211.2\n  Route to peer address reachability Up: 1; Down: 0\n    Last notification 4d21h\n  Connections established 1; dropped 0\n  Last reset never\n  External BGP neighbor configured for connected checks (single-hop no-disable-connected-check)\n  Interface associated: GigabitEthernet3.200 (peering address in same link)\n  Transport(tcp) path-mtu-discovery is enabled\n  Graceful-Restart is disabled\n  SSO is disabled\nConnection state is ESTAB, I/O status: 1, unread input bytes: 0\nConnection is ECN Disabled, Mininum incoming TTL 0, Outgoing TTL 1\nLocal host: 172.17.211.1, Local port: 48585\nForeign host: 172.17.211.2, Foreign port: 179\n",
+      "expected": {
+        "neighbors": {
+          "172.17.211.2": {
+            "address_families": {
+              "VPNv4 Unicast": {
+                "neighbor_version": 21,
+                "prefix_activity": {
+                  "explicit_withdraw_rcvd": 0,
+                  "explicit_withdraw_sent": 0,
+                  "implicit_withdraw_rcvd": 0,
+                  "implicit_withdraw_sent": 3,
+                  "prefixes_current_rcvd": 1,
+                  "prefixes_current_sent": 3,
+                  "prefixes_total_rcvd": 1,
+                  "prefixes_total_sent": 6,
+                  "used_as_bestpath": 1,
+                  "used_as_multipath": 0
+                },
+                "table_version": 21
+              }
+            },
+            "bgp_state": "Established",
+            "bgp_version": 4,
+            "connections_dropped": 0,
+            "connections_established": 1,
+            "foreign_host": "172.17.211.2",
+            "foreign_port": 179,
+            "hold_time": 180,
+            "keepalive_interval": 60,
+            "last_read": "00:00:39",
+            "last_write": "00:00:39",
+            "link_type": "external",
+            "local_host": "172.17.211.1",
+            "local_port": 48585,
+            "message_stats": {
+              "keepalives_rcvd": 7772,
+              "keepalives_sent": 7779,
+              "notifications_rcvd": 0,
+              "notifications_sent": 0,
+              "opens_rcvd": 1,
+              "opens_sent": 1,
+              "route_refresh_rcvd": 0,
+              "route_refresh_sent": 0,
+              "total_rcvd": 7775,
+              "total_sent": 7787,
+              "updates_rcvd": 2,
+              "updates_sent": 7
+            },
+            "remote_as": 65001,
+            "router_id": "172.16.1.156",
+            "state_duration": "4d21h",
+            "vrf": "VRF200"
+          }
+        }
+      }
+    }
+  ]
+}

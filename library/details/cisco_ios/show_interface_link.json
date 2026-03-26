@@ -1,0 +1,116 @@
+{
+  "os": "cisco_ios",
+  "command": "show interface link",
+  "schema": {
+    "name": "ShowInterfaceLinkResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceLinkEntry",
+            "fields": {
+              "down_time": {
+                "type": "str",
+                "required": true
+              },
+              "name": {
+                "type": "str",
+                "required": false
+              },
+              "up_time": {
+                "type": "str",
+                "required": false
+              },
+              "down_since": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Standard interface link output with mixed up/down ports and various time formats",
+      "input": "Port           Name               Down Time      Up Time\nGi1/0/1                           30w6d\nGi1/0/3        0308-ab15mgm0007-d 00:00:00       30w5d\nGi1/0/5        23PD-PDU-a         00:00:00       30w5d\nGi1/0/11       1001-HP3parStorage 30w6d\nGi1/0/15       3201-ab15erp0006-d 00:00:00       5d01h\nTe1/0/26       5803-gh01erp8003-d 00:00:00       2w1d\nTe1/0/44       Access Port        00:00:00       01:59:13\nGi2/0/22       Access Port        00:17:18\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1/0/1": {
+            "down_time": "30w6d"
+          },
+          "GigabitEthernet1/0/11": {
+            "down_time": "30w6d",
+            "name": "1001-HP3parStorage"
+          },
+          "GigabitEthernet1/0/15": {
+            "down_time": "00:00:00",
+            "name": "3201-ab15erp0006-d",
+            "up_time": "5d01h"
+          },
+          "GigabitEthernet1/0/3": {
+            "down_time": "00:00:00",
+            "name": "0308-ab15mgm0007-d",
+            "up_time": "30w5d"
+          },
+          "GigabitEthernet1/0/5": {
+            "down_time": "00:00:00",
+            "name": "23PD-PDU-a",
+            "up_time": "30w5d"
+          },
+          "GigabitEthernet2/0/22": {
+            "down_time": "00:17:18",
+            "name": "Access Port"
+          },
+          "TenGigabitEthernet1/0/26": {
+            "down_time": "00:00:00",
+            "name": "5803-gh01erp8003-d",
+            "up_time": "2w1d"
+          },
+          "TenGigabitEthernet1/0/44": {
+            "down_time": "00:00:00",
+            "name": "Access Port",
+            "up_time": "01:59:13"
+          }
+        }
+      }
+    },
+    {
+      "name": "Down Since variant with verbose time formats and timestamps",
+      "input": "Port    Name               Down Time        Down Since\nGi1/1                      37 weeks, 3 days, 5 hours, 52 minutes 18 secs      08:07:10  Mon Feb 14 2022\nGi1/6                      15 weeks, 11 minutes 57 secs      13:47:31  Thu Jul 21 2022\nGi1/10   Fitness           10 weeks, 5 days, 20 hours, 26 minutes 38 secs      17:32:50  Fri Aug 19 2022\nGi1/11                     00 secs\nGi1/24   SV-Service-Office 1 year , 25 weeks, 2 days, 4 hours, 17 minutes 24 secs      09:42:04  Mon May 10 2021\nGi1/48   WERFBZW5236KARA   00 secs\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1/1": {
+            "down_since": "08:07:10  Mon Feb 14 2022",
+            "down_time": "37 weeks, 3 days, 5 hours, 52 minutes 18 secs"
+          },
+          "GigabitEthernet1/10": {
+            "down_since": "17:32:50  Fri Aug 19 2022",
+            "down_time": "10 weeks, 5 days, 20 hours, 26 minutes 38 secs",
+            "name": "Fitness"
+          },
+          "GigabitEthernet1/11": {
+            "down_time": "00 secs"
+          },
+          "GigabitEthernet1/24": {
+            "down_since": "09:42:04  Mon May 10 2021",
+            "down_time": "1 year , 25 weeks, 2 days, 4 hours, 17 minutes 24 secs",
+            "name": "SV-Service-Office"
+          },
+          "GigabitEthernet1/48": {
+            "down_time": "00 secs",
+            "name": "WERFBZW5236KARA"
+          },
+          "GigabitEthernet1/6": {
+            "down_since": "13:47:31  Thu Jul 21 2022",
+            "down_time": "15 weeks, 11 minutes 57 secs"
+          }
+        }
+      }
+    }
+  ]
+}

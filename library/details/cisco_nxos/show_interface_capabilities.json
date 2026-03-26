@@ -1,0 +1,194 @@
+{
+  "os": "cisco_nxos",
+  "command": "show interface capabilities",
+  "schema": {
+    "name": "ShowInterfaceCapabilitiesResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceCapabilitiesEntry",
+            "fields": {
+              "model": {
+                "type": "str",
+                "required": true
+              },
+              "speed": {
+                "type": "str",
+                "required": true
+              },
+              "duplex": {
+                "type": "str",
+                "required": true
+              },
+              "trunk_encap_type": {
+                "type": "str",
+                "required": true
+              },
+              "channel": {
+                "type": "str",
+                "required": true
+              },
+              "broadcast_suppression": {
+                "type": "str",
+                "required": true
+              },
+              "flowcontrol": {
+                "type": "str",
+                "required": true
+              },
+              "qos_scheduling": {
+                "type": "str",
+                "required": true
+              },
+              "cos_rewrite": {
+                "type": "str",
+                "required": true
+              },
+              "tos_rewrite": {
+                "type": "str",
+                "required": true
+              },
+              "span": {
+                "type": "str",
+                "required": true
+              },
+              "udld": {
+                "type": "str",
+                "required": true
+              },
+              "link_debounce": {
+                "type": "str",
+                "required": true
+              },
+              "link_debounce_time": {
+                "type": "str",
+                "required": true
+              },
+              "mdix": {
+                "type": "str",
+                "required": true
+              },
+              "type": {
+                "type": "str",
+                "required": false
+              },
+              "rate_mode": {
+                "type": "str",
+                "required": false
+              },
+              "port_group_members": {
+                "type": "str",
+                "required": false
+              },
+              "pvlan_trunk_capable": {
+                "type": "str",
+                "required": false
+              },
+              "tdr_capable": {
+                "type": "str",
+                "required": false
+              },
+              "fabricpath_capable": {
+                "type": "str",
+                "required": false
+              },
+              "port_mode": {
+                "type": "str",
+                "required": false
+              },
+              "fex_fabric": {
+                "type": "str",
+                "required": false
+              },
+              "switched_fex_fabric": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple interfaces with varying capabilities",
+      "input": "Ethernet1/1\n  Model:                 N5K-C5020P-BF-XL-SU\n  Type (SFP capable):    SFP-H10GB-CU1M\n  Speed:                 1000,10000\n  Duplex:                full\n  Trunk encap. type:     802.1Q\n  Channel:               yes\n  Broadcast suppression: percentage(0-100)\n  Flowcontrol:           rx-(off/on),tx-(off/on)\n  Rate mode:             none\n  QOS scheduling:        rx-(6q1t),tx-(1p6q0t)\n  CoS rewrite:           no\n  ToS rewrite:           no\n  SPAN:                  yes\n  UDLD:                  yes\n  Link Debounce:         yes\n  Link Debounce Time:    yes\n  MDIX:                  no\n  Pvlan Trunk capable:   yes\n  TDR capable:           no\n  Port mode:             Switched\n  FEX Fabric:            yes\n\nEthernet2/7\n  Model:                 COPPER\n  Type:                  1000BaseT\n  Speed:                 10,100,1000,auto\n  Duplex:                half/full/auto\n  Trunk encap. type:     802.1Q\n  Channel:               yes\n  Broadcast suppression: percentage(0-100)\n  Flowcontrol:           rx-(off/on/desired),tx-(off/on/desired)\n  Rate mode:             dedicated\n  QOS scheduling:        rx-(2q4t),tx-(1p3q4t)\n  CoS rewrite:           yes\n  ToS rewrite:           yes\n  SPAN:                  yes\n  UDLD:                  yes\n  Link Debounce:         yes\n  Link Debounce Time:    yes\n  MDIX:                  yes\n  Port Group Members:    none\n\nEthernet1/2\n  Model:                 N6K-C6004-M12Q-FIX\n  Type (SFP capable):    unknown\n  Speed:                 40000\n  Duplex:                full\n  Trunk encap. type:     802.1Q\n  Channel:               yes\n  Broadcast suppression: no\n  Flowcontrol:           rx-(off/on),tx-(off/on)\n  Rate mode:             none\n  QOS scheduling:        rx-(6q1t),tx-(1p6q0t)\n  CoS rewrite:           no\n  ToS rewrite:           no\n  SPAN:                  yes\n  UDLD:                  yes\n  MDIX:                  no\n  Link Debounce:         yes\n  Link Debounce Time:    yes\n  Pvlan Trunk capable:   yes\n  TDR capable:           no\n  FabricPath capable:    yes\n  Port mode:             Switched\n  FEX Fabric:            yes\n",
+      "expected": {
+        "interfaces": {
+          "Ethernet1/1": {
+            "model": "N5K-C5020P-BF-XL-SU",
+            "speed": "1000,10000",
+            "duplex": "full",
+            "trunk_encap_type": "802.1Q",
+            "channel": "yes",
+            "broadcast_suppression": "percentage(0-100)",
+            "flowcontrol": "rx-(off/on),tx-(off/on)",
+            "qos_scheduling": "rx-(6q1t),tx-(1p6q0t)",
+            "cos_rewrite": "no",
+            "tos_rewrite": "no",
+            "span": "yes",
+            "udld": "yes",
+            "link_debounce": "yes",
+            "link_debounce_time": "yes",
+            "mdix": "no",
+            "type": "SFP-H10GB-CU1M",
+            "rate_mode": "none",
+            "pvlan_trunk_capable": "yes",
+            "tdr_capable": "no",
+            "port_mode": "Switched",
+            "fex_fabric": "yes"
+          },
+          "Ethernet2/7": {
+            "model": "COPPER",
+            "speed": "10,100,1000,auto",
+            "duplex": "half/full/auto",
+            "trunk_encap_type": "802.1Q",
+            "channel": "yes",
+            "broadcast_suppression": "percentage(0-100)",
+            "flowcontrol": "rx-(off/on/desired),tx-(off/on/desired)",
+            "qos_scheduling": "rx-(2q4t),tx-(1p3q4t)",
+            "cos_rewrite": "yes",
+            "tos_rewrite": "yes",
+            "span": "yes",
+            "udld": "yes",
+            "link_debounce": "yes",
+            "link_debounce_time": "yes",
+            "mdix": "yes",
+            "type": "1000BaseT",
+            "rate_mode": "dedicated",
+            "port_group_members": "none"
+          },
+          "Ethernet1/2": {
+            "model": "N6K-C6004-M12Q-FIX",
+            "speed": "40000",
+            "duplex": "full",
+            "trunk_encap_type": "802.1Q",
+            "channel": "yes",
+            "broadcast_suppression": "no",
+            "flowcontrol": "rx-(off/on),tx-(off/on)",
+            "qos_scheduling": "rx-(6q1t),tx-(1p6q0t)",
+            "cos_rewrite": "no",
+            "tos_rewrite": "no",
+            "span": "yes",
+            "udld": "yes",
+            "link_debounce": "yes",
+            "link_debounce_time": "yes",
+            "mdix": "no",
+            "type": "unknown",
+            "rate_mode": "none",
+            "pvlan_trunk_capable": "yes",
+            "tdr_capable": "no",
+            "fabricpath_capable": "yes",
+            "port_mode": "Switched",
+            "fex_fabric": "yes"
+          }
+        }
+      }
+    }
+  ]
+}

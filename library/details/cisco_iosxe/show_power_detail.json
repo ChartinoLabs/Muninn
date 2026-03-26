@@ -1,0 +1,243 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show power detail",
+  "schema": {
+    "name": "ShowPowerDetailResult",
+    "fields": {
+      "switches": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SwitchPowerDetail",
+            "fields": {
+              "power_supplies": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "PowerSupplyEntry",
+                    "fields": {
+                      "model_no": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "type": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "status": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "capacity_watts": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "fan_state_0": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "fan_state_1": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              },
+              "fan_trays": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "FanTrayEntry",
+                    "fields": {
+                      "status": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "fan_state_0": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "fan_state_1": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multi-switch stacked output with power supplies and fan trays",
+      "input": "show power detail\nSwitch:1\n\nPower                                                    Fan States\nSupply  Model No              Type  Capacity  Status     0     1\n------  --------------------  ----  --------  ---------  -----------\nPS1     C9K-PWR-1500WAC-R     ac    n.a.      bad-input  n.a.  n.a.\nPS2     C9K-PWR-1500WAC-R     ac    1500 W    active     good  n.a.\n\nFan                 Fan States\nTray    Status      0     1\n------  ----------  -----------\nFT1     active      good  good\nFT2     active      good  good\nFT3     active      good  good\nFT4     active      good  good\nFT5     active      good  good\nFT6     active      good  good\n\nSwitch:2\n\nPower                                                    Fan States\nSupply  Model No              Type  Capacity  Status     0     1\n------  --------------------  ----  --------  ---------  -----------\nPS1     C9K-PWR-1500WAC-R     ac    n.a.      bad-input  n.a.  n.a.\nPS2     C9K-PWR-1500WAC-R     ac    1500 W    active     good  n.a.\n\nFan                 Fan States\nTray    Status      0     1\n------  ----------  -----------\nFT1     active      good  good\nFT2     active      good  good\nFT3     active      good  good\nFT4     active      good  good\nFT5     active      good  good\nFT6     active      good  good\n",
+      "expected": {
+        "switches": {
+          "1": {
+            "fan_trays": {
+              "FT1": {
+                "fan_state_0": "good",
+                "fan_state_1": "good",
+                "status": "active"
+              },
+              "FT2": {
+                "fan_state_0": "good",
+                "fan_state_1": "good",
+                "status": "active"
+              },
+              "FT3": {
+                "fan_state_0": "good",
+                "fan_state_1": "good",
+                "status": "active"
+              },
+              "FT4": {
+                "fan_state_0": "good",
+                "fan_state_1": "good",
+                "status": "active"
+              },
+              "FT5": {
+                "fan_state_0": "good",
+                "fan_state_1": "good",
+                "status": "active"
+              },
+              "FT6": {
+                "fan_state_0": "good",
+                "fan_state_1": "good",
+                "status": "active"
+              }
+            },
+            "power_supplies": {
+              "PS1": {
+                "model_no": "C9K-PWR-1500WAC-R",
+                "status": "bad-input",
+                "type": "ac"
+              },
+              "PS2": {
+                "capacity_watts": 1500,
+                "fan_state_0": "good",
+                "model_no": "C9K-PWR-1500WAC-R",
+                "status": "active",
+                "type": "ac"
+              }
+            }
+          },
+          "2": {
+            "fan_trays": {
+              "FT1": {
+                "fan_state_0": "good",
+                "fan_state_1": "good",
+                "status": "active"
+              },
+              "FT2": {
+                "fan_state_0": "good",
+                "fan_state_1": "good",
+                "status": "active"
+              },
+              "FT3": {
+                "fan_state_0": "good",
+                "fan_state_1": "good",
+                "status": "active"
+              },
+              "FT4": {
+                "fan_state_0": "good",
+                "fan_state_1": "good",
+                "status": "active"
+              },
+              "FT5": {
+                "fan_state_0": "good",
+                "fan_state_1": "good",
+                "status": "active"
+              },
+              "FT6": {
+                "fan_state_0": "good",
+                "fan_state_1": "good",
+                "status": "active"
+              }
+            },
+            "power_supplies": {
+              "PS1": {
+                "model_no": "C9K-PWR-1500WAC-R",
+                "status": "bad-input",
+                "type": "ac"
+              },
+              "PS2": {
+                "capacity_watts": 1500,
+                "fan_state_0": "good",
+                "model_no": "C9K-PWR-1500WAC-R",
+                "status": "active",
+                "type": "ac"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Single switch with one active and one failed power supply",
+      "input": "show power detail\nSwitch:1\n\nPower                                                    Fan States\nSupply  Model No              Type  Capacity  Status     0     1\n------  --------------------  ----  --------  ---------  -----------\nPS1     C9K-PWR-1500WAC-R     ac    1500 W    active     good  n.a.\nPS2     C9K-PWR-1500WAC-R     ac    n.a.      bad-input  n.a.  n.a.\n\nFan                 Fan States\nTray    Status      0     1\n------  ----------  -----------\nFT1     active      good  good\nFT2     active      good  good\nFT3     active      good  good\nFT4     active      good  good\nFT5     active      good  good\nFT6     active      good  good\n",
+      "expected": {
+        "switches": {
+          "1": {
+            "fan_trays": {
+              "FT1": {
+                "fan_state_0": "good",
+                "fan_state_1": "good",
+                "status": "active"
+              },
+              "FT2": {
+                "fan_state_0": "good",
+                "fan_state_1": "good",
+                "status": "active"
+              },
+              "FT3": {
+                "fan_state_0": "good",
+                "fan_state_1": "good",
+                "status": "active"
+              },
+              "FT4": {
+                "fan_state_0": "good",
+                "fan_state_1": "good",
+                "status": "active"
+              },
+              "FT5": {
+                "fan_state_0": "good",
+                "fan_state_1": "good",
+                "status": "active"
+              },
+              "FT6": {
+                "fan_state_0": "good",
+                "fan_state_1": "good",
+                "status": "active"
+              }
+            },
+            "power_supplies": {
+              "PS1": {
+                "capacity_watts": 1500,
+                "fan_state_0": "good",
+                "model_no": "C9K-PWR-1500WAC-R",
+                "status": "active",
+                "type": "ac"
+              },
+              "PS2": {
+                "model_no": "C9K-PWR-1500WAC-R",
+                "status": "bad-input",
+                "type": "ac"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

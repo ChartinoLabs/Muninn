@@ -1,0 +1,143 @@
+{
+  "os": "cisco_nxos",
+  "command": "show vrf interface",
+  "schema": {
+    "name": "ShowVrfInterfaceResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfInterfaceEntry",
+            "fields": {
+              "vrf_name": {
+                "type": "str",
+                "required": true
+              },
+              "vrf_id": {
+                "type": "int",
+                "required": true
+              },
+              "site_of_origin": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with interfaces across two VRFs",
+      "input": "Interface                 VRF-Name                        VRF-ID  Site-of-Origin\nloopback0                 default                              1  --\nNull0                     default                              1  --\nEthernet1/1               default                              1  --\nEthernet1/2               default                              1  --\nmgmt0                     management                           2  --\n",
+      "expected": {
+        "interfaces": {
+          "Ethernet1/1": {
+            "vrf_id": 1,
+            "vrf_name": "default"
+          },
+          "Ethernet1/2": {
+            "vrf_id": 1,
+            "vrf_name": "default"
+          },
+          "Loopback0": {
+            "vrf_id": 1,
+            "vrf_name": "default"
+          },
+          "Null0": {
+            "vrf_id": 1,
+            "vrf_name": "default"
+          },
+          "mgmt0": {
+            "vrf_id": 2,
+            "vrf_name": "management"
+          }
+        }
+      }
+    },
+    {
+      "name": "Output with many interfaces across multiple VRFs",
+      "input": "Interface                 VRF-Name                        VRF-ID  Site-of-Origin\nVlan6001                  ADMIN                                6  --\nVlan6700                  ADMIN                                6  --\nVlan5302                  AXNET                                7  --\nVlan7202                  AXNET                                7  --\nVlan6302                  AXNET                                7  --\nVlan5301                  MARKING                              4  --\nVlan7201                  MARKING                              4  --\nVlan6301                  MARKING                              4  --\nEthernet1/10              Keepalive                            3  --\nVlan1                     default                              1  --\nVlan100                   default                              1  --\nloopback0                 default                              1  --\nloopback1                 default                              1  --\nEthernet1/25              default                              1  --\nEthernet1/30              default                              1  --\nEthernet1/17              default                              1  --\nEthernet1/42              default                              1  --\nmgmt0                     management                           2  --\n",
+      "expected": {
+        "interfaces": {
+          "Ethernet1/10": {
+            "vrf_id": 3,
+            "vrf_name": "Keepalive"
+          },
+          "Ethernet1/17": {
+            "vrf_id": 1,
+            "vrf_name": "default"
+          },
+          "Ethernet1/25": {
+            "vrf_id": 1,
+            "vrf_name": "default"
+          },
+          "Ethernet1/30": {
+            "vrf_id": 1,
+            "vrf_name": "default"
+          },
+          "Ethernet1/42": {
+            "vrf_id": 1,
+            "vrf_name": "default"
+          },
+          "Loopback0": {
+            "vrf_id": 1,
+            "vrf_name": "default"
+          },
+          "Loopback1": {
+            "vrf_id": 1,
+            "vrf_name": "default"
+          },
+          "Vlan1": {
+            "vrf_id": 1,
+            "vrf_name": "default"
+          },
+          "Vlan100": {
+            "vrf_id": 1,
+            "vrf_name": "default"
+          },
+          "Vlan5301": {
+            "vrf_id": 4,
+            "vrf_name": "MARKING"
+          },
+          "Vlan5302": {
+            "vrf_id": 7,
+            "vrf_name": "AXNET"
+          },
+          "Vlan6001": {
+            "vrf_id": 6,
+            "vrf_name": "ADMIN"
+          },
+          "Vlan6301": {
+            "vrf_id": 4,
+            "vrf_name": "MARKING"
+          },
+          "Vlan6302": {
+            "vrf_id": 7,
+            "vrf_name": "AXNET"
+          },
+          "Vlan6700": {
+            "vrf_id": 6,
+            "vrf_name": "ADMIN"
+          },
+          "Vlan7201": {
+            "vrf_id": 4,
+            "vrf_name": "MARKING"
+          },
+          "Vlan7202": {
+            "vrf_id": 7,
+            "vrf_name": "AXNET"
+          },
+          "mgmt0": {
+            "vrf_id": 2,
+            "vrf_name": "management"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "os": "cisco_nxos",
+  "command": "show boot mode",
+  "schema": {
+    "name": "ShowBootModeResult",
+    "fields": {
+      "bootmode": {
+        "type": "str",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Show boot mode output with native mode",
+      "input": "Current mode is native\n",
+      "expected": {
+        "bootmode": "native"
+      }
+    },
+    {
+      "name": "Show boot mode output with lxc mode",
+      "input": "Current mode is lxc\n",
+      "expected": {
+        "bootmode": "lxc"
+      }
+    }
+  ]
+}

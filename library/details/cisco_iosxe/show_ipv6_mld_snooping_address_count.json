@@ -1,0 +1,32 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ipv6 mld snooping address count",
+  "schema": {
+    "name": "ShowIpv6MldSnoopingAddressCountResult",
+    "fields": {
+      "total_number_of_groups": {
+        "type": {
+          "name": "MldGroupsCount",
+          "fields": {
+            "mld_groups_count": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Show ipv6 mld snooping address count output with total groups",
+      "input": "Total number of groups:   114\n",
+      "expected": {
+        "total_number_of_groups": {
+          "mld_groups_count": 114
+        }
+      }
+    }
+  ]
+}

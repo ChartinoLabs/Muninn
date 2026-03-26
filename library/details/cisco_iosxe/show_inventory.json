@@ -1,0 +1,1215 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show inventory",
+  "schema": {
+    "name": "ShowInventoryResult",
+    "fields": {
+      "inventory": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InventoryItem",
+            "fields": {
+              "name": {
+                "type": "str",
+                "required": true
+              },
+              "description": {
+                "type": "str",
+                "required": true
+              },
+              "pid": {
+                "type": "str",
+                "required": false
+              },
+              "vid": {
+                "type": "str",
+                "required": false
+              },
+              "serial_number": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "IOS-XE inventory from ASR1006 router with modules and transceivers",
+      "input": "\nNAME: \"Chassis\", DESCR: \"Cisco ASR1006 Chassis\"\nPID: ASR1006           , VID: V01  , SN: FOX1204G6WN\n\nNAME: \"module 0\", DESCR: \"Cisco ASR1000 SPA Interface Processor 40\"\nPID: ASR1000-SIP40     , VID: V02  , SN: JAE200609WP\n\nNAME: \"SPA subslot 0/0\", DESCR: \"5-port Gigabit Ethernet Shared Port Adapter\"\nPID: SPA-5X1GE-V2      , VID: V02  , SN: JAE151203T2\n\nNAME: \"subslot 0/0 transceiver 0\", DESCR: \"GE T\"\nPID: SP7041-E          , VID: E    , SN: MTC164204VE\n\nNAME: \"module R0\", DESCR: \"Cisco ASR1000 Route Processor 2\"\nPID: ASR1000-RP2       , VID: V02  , SN: JAE153408NJ\n\nNAME: \"Power Supply Module 0\", DESCR: \"Cisco ASR1006 AC Power Supply\"\nPID: ASR1006-PWR-AC    , VID: V01  , SN: ART1210Q049\n",
+      "expected": {
+        "inventory": {
+          "Chassis": {
+            "name": "Chassis",
+            "description": "Cisco ASR1006 Chassis",
+            "pid": "ASR1006",
+            "vid": "V01",
+            "serial_number": "FOX1204G6WN"
+          },
+          "module 0": {
+            "name": "module 0",
+            "description": "Cisco ASR1000 SPA Interface Processor 40",
+            "pid": "ASR1000-SIP40",
+            "vid": "V02",
+            "serial_number": "JAE200609WP"
+          },
+          "SPA subslot 0/0": {
+            "name": "SPA subslot 0/0",
+            "description": "5-port Gigabit Ethernet Shared Port Adapter",
+            "pid": "SPA-5X1GE-V2",
+            "vid": "V02",
+            "serial_number": "JAE151203T2"
+          },
+          "subslot 0/0 transceiver 0": {
+            "name": "subslot 0/0 transceiver 0",
+            "description": "GE T",
+            "pid": "SP7041-E",
+            "vid": "E",
+            "serial_number": "MTC164204VE"
+          },
+          "module R0": {
+            "name": "module R0",
+            "description": "Cisco ASR1000 Route Processor 2",
+            "pid": "ASR1000-RP2",
+            "vid": "V02",
+            "serial_number": "JAE153408NJ"
+          },
+          "Power Supply Module 0": {
+            "name": "Power Supply Module 0",
+            "description": "Cisco ASR1006 AC Power Supply",
+            "pid": "ASR1006-PWR-AC",
+            "vid": "V01",
+            "serial_number": "ART1210Q049"
+          }
+        }
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": "NAME: \"Chassis\", DESCR: \"Cisco Catalyst 8000V Edge Chassis\"\nPID: C8000V            , VID: V00  , SN: 91P1DTBIC6N\n\nNAME: \"module R0\", DESCR: \"Cisco Catalyst 8000V Edge Route Processor\"\nPID: C8000V            , VID: V00  , SN: JAB1303001C\n\nNAME: \"module F0\", DESCR: \"Cisco Catalyst 8000V Edge Embedded Services Processor\"\nPID: C8000V            , VID:      , SN:\n",
+      "expected": {
+        "inventory": {
+          "Chassis": {
+            "name": "Chassis",
+            "description": "Cisco Catalyst 8000V Edge Chassis",
+            "pid": "C8000V",
+            "vid": "V00",
+            "serial_number": "91P1DTBIC6N"
+          },
+          "module R0": {
+            "name": "module R0",
+            "description": "Cisco Catalyst 8000V Edge Route Processor",
+            "pid": "C8000V",
+            "vid": "V00",
+            "serial_number": "JAB1303001C"
+          },
+          "module F0": {
+            "name": "module F0",
+            "description": "Cisco Catalyst 8000V Edge Embedded Services Processor",
+            "pid": "C8000V"
+          }
+        }
+      }
+    },
+    {
+      "name": "ISR4451 with NIM modules and empty VID/SN fields",
+      "input": "NAME: \"Chassis\", DESCR: \"Cisco ISR4451 Chassis\"\nPID: ISR4451-X/K9 , VID: V01 , SN: FGL172511Q5\n\nNAME: \"Power Supply Module 0\", DESCR: \"450W AC Power Supply for Cisco ISR4450, ISR4350\"\nPID: PWR-4450-AC , VID: V01 , SN: DCA1645X0EK\n\nNAME: \"Fan Tray\", DESCR: \"Cisco ISR4450, ISR4350 Fan Assembly\"\nPID: ACS-4450-FANASSY , VID: , SN:\n\nNAME: \"module 0\", DESCR: \"Cisco ISR4451 Built-In NIM controller\"\nPID: ISR4451-X/K9 , VID: , SN:\n\nNAME: \"NIM subslot 0/1\", DESCR: \"NIM-ES2-4\"\nPID: NIM-ES2-4 , VID: V01 , SN: FOC1831B0TS\n\nNAME: \"NIM subslot 0/2\", DESCR: \"24 ports Async Serial NIM\"\nPID: NIM-24A , VID: V01 , SN: DNI2047033J\n\nNAME: \"NIM subslot 0/3\", DESCR: \"NIM SSD Module\"\nPID: NIM-SSD , VID: V01 , SN: FOC17356NWR\n\nNAME: \"subslot 0/3 disk1\", DESCR: \"harddisk\"\nPID: Samsung SSD 860 EVO 250GB , VID: RVT03B6Q, SN: S3Y9NX0M604745D\n\nNAME: \"PVDM subslot 0/4\", DESCR: \"PVDM4-32 Voice DSP Module\"\nPID: PVDM4-32 , VID: V01 , SN: FOC17176BKC\n\nNAME: \"NIM subslot 0/0\", DESCR: \"Front Panel 4 ports Gigabitethernet Module\"\nPID: ISR4451-X-4x1GE , VID: V01 , SN:\n\nNAME: \"module 1\", DESCR: \"Cisco ISR4451 Built-In SM controller\"\nPID: ISR4451-X/K9 , VID: , SN:\n\nNAME: \"module 2\", DESCR: \"Cisco ISR4451 Built-In SM controller\"\nPID: ISR4451-X/K9 , VID: , SN:\n\nNAME: \"module R0\", DESCR: \"Cisco ISR4451 Route Processor\"\nPID: ISR4451-X/K9 , VID: V01 , SN: FOC17042FN5\n\nNAME: \"module F0\", DESCR: \"Cisco ISR4451 Forwarding Processor\"\nPID: ISR4451-X/K9 , VID: , SN:\n",
+      "expected": {
+        "inventory": {
+          "Chassis": {
+            "name": "Chassis",
+            "description": "Cisco ISR4451 Chassis",
+            "pid": "ISR4451-X/K9",
+            "vid": "V01",
+            "serial_number": "FGL172511Q5"
+          },
+          "Power Supply Module 0": {
+            "name": "Power Supply Module 0",
+            "description": "450W AC Power Supply for Cisco ISR4450, ISR4350",
+            "pid": "PWR-4450-AC",
+            "vid": "V01",
+            "serial_number": "DCA1645X0EK"
+          },
+          "Fan Tray": {
+            "name": "Fan Tray",
+            "description": "Cisco ISR4450, ISR4350 Fan Assembly",
+            "pid": "ACS-4450-FANASSY"
+          },
+          "module 0": {
+            "name": "module 0",
+            "description": "Cisco ISR4451 Built-In NIM controller",
+            "pid": "ISR4451-X/K9"
+          },
+          "NIM subslot 0/1": {
+            "name": "NIM subslot 0/1",
+            "description": "NIM-ES2-4",
+            "pid": "NIM-ES2-4",
+            "vid": "V01",
+            "serial_number": "FOC1831B0TS"
+          },
+          "NIM subslot 0/2": {
+            "name": "NIM subslot 0/2",
+            "description": "24 ports Async Serial NIM",
+            "pid": "NIM-24A",
+            "vid": "V01",
+            "serial_number": "DNI2047033J"
+          },
+          "NIM subslot 0/3": {
+            "name": "NIM subslot 0/3",
+            "description": "NIM SSD Module",
+            "pid": "NIM-SSD",
+            "vid": "V01",
+            "serial_number": "FOC17356NWR"
+          },
+          "subslot 0/3 disk1": {
+            "name": "subslot 0/3 disk1",
+            "description": "harddisk",
+            "pid": "Samsung SSD 860 EVO 250GB",
+            "vid": "RVT03B6Q",
+            "serial_number": "S3Y9NX0M604745D"
+          },
+          "PVDM subslot 0/4": {
+            "name": "PVDM subslot 0/4",
+            "description": "PVDM4-32 Voice DSP Module",
+            "pid": "PVDM4-32",
+            "vid": "V01",
+            "serial_number": "FOC17176BKC"
+          },
+          "NIM subslot 0/0": {
+            "name": "NIM subslot 0/0",
+            "description": "Front Panel 4 ports Gigabitethernet Module",
+            "pid": "ISR4451-X-4x1GE",
+            "vid": "V01"
+          },
+          "module 1": {
+            "name": "module 1",
+            "description": "Cisco ISR4451 Built-In SM controller",
+            "pid": "ISR4451-X/K9"
+          },
+          "module 2": {
+            "name": "module 2",
+            "description": "Cisco ISR4451 Built-In SM controller",
+            "pid": "ISR4451-X/K9"
+          },
+          "module R0": {
+            "name": "module R0",
+            "description": "Cisco ISR4451 Route Processor",
+            "pid": "ISR4451-X/K9",
+            "vid": "V01",
+            "serial_number": "FOC17042FN5"
+          },
+          "module F0": {
+            "name": "module F0",
+            "description": "Cisco ISR4451 Forwarding Processor",
+            "pid": "ISR4451-X/K9"
+          }
+        }
+      }
+    },
+    {
+      "name": "C1111 ISR with license UDI banner and extra whitespace",
+      "input": "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n\nINFO: Please use \"show license UDI\" to get serial number for licensing.\n\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n\n\n\nNAME: \"Chassis\", DESCR: \"Cisco C1111-8PLTELA Chassis\"\n\nPID: C1111-8PLTELA     , VID: V01  , SN: FGL221190VF\n\n\n\nNAME: \"Power Supply Module 0\", DESCR: \"External Power Supply Module\"\n\nPID: PWR-12V           , VID: V01  , SN: JAB0929092D\n\n\n\nNAME: \"module 0\", DESCR: \"Cisco C1111-8PLTELA Built-In NIM controller\"\n\nPID: C1111-8PLTELA     , VID:      , SN:\n\n\n\nNAME: \"NIM subslot 0/0\", DESCR: \"Front Panel 2 port Gigabitethernet Module\"\n\nPID: C1111-2x1GE       , VID: V01  , SN:\n\n\n\nNAME: \"NIM subslot 0/1\", DESCR: \"C1111-ES-8\"\n\nPID: C1111-ES-8        , VID: V01  , SN:\n\n\n\nNAME: \"NIM subslot 0/2\", DESCR: \"C1111-LTE Module\"\n\nPID: C1111-LTE         , VID: V01  , SN:\n\n\n\nNAME: \"Modem 0 on Cellular0/2/0\", DESCR: \"Sierra Wireless EM7455/EM7430\"\n\nPID: EM7455/EM7430     , VID: 1.0  , SN: 355813070074072\n\n\n\nNAME: \"module R0\", DESCR: \"Cisco C1111-8PLTELA Route Processor\"\n\nPID: C1111-8PLTELA     , VID: V01  , SN: FOC21520MF1\n\n\n\nNAME: \"module F0\", DESCR: \"Cisco C1111-8PLTELA Forwarding Processor\"\n\nPID: C1111-8PLTELA     , VID:      , SN:\n",
+      "expected": {
+        "inventory": {
+          "Chassis": {
+            "name": "Chassis",
+            "description": "Cisco C1111-8PLTELA Chassis",
+            "pid": "C1111-8PLTELA",
+            "vid": "V01",
+            "serial_number": "FGL221190VF"
+          },
+          "Power Supply Module 0": {
+            "name": "Power Supply Module 0",
+            "description": "External Power Supply Module",
+            "pid": "PWR-12V",
+            "vid": "V01",
+            "serial_number": "JAB0929092D"
+          },
+          "module 0": {
+            "name": "module 0",
+            "description": "Cisco C1111-8PLTELA Built-In NIM controller",
+            "pid": "C1111-8PLTELA"
+          },
+          "NIM subslot 0/0": {
+            "name": "NIM subslot 0/0",
+            "description": "Front Panel 2 port Gigabitethernet Module",
+            "pid": "C1111-2x1GE",
+            "vid": "V01"
+          },
+          "NIM subslot 0/1": {
+            "name": "NIM subslot 0/1",
+            "description": "C1111-ES-8",
+            "pid": "C1111-ES-8",
+            "vid": "V01"
+          },
+          "NIM subslot 0/2": {
+            "name": "NIM subslot 0/2",
+            "description": "C1111-LTE Module",
+            "pid": "C1111-LTE",
+            "vid": "V01"
+          },
+          "Modem 0 on Cellular0/2/0": {
+            "name": "Modem 0 on Cellular0/2/0",
+            "description": "Sierra Wireless EM7455/EM7430",
+            "pid": "EM7455/EM7430",
+            "vid": "1.0",
+            "serial_number": "355813070074072"
+          },
+          "module R0": {
+            "name": "module R0",
+            "description": "Cisco C1111-8PLTELA Route Processor",
+            "pid": "C1111-8PLTELA",
+            "vid": "V01",
+            "serial_number": "FOC21520MF1"
+          },
+          "module F0": {
+            "name": "module F0",
+            "description": "Cisco C1111-8PLTELA Forwarding Processor",
+            "pid": "C1111-8PLTELA"
+          }
+        }
+      }
+    },
+    {
+      "name": "Catalyst 4507R+E VSS with clock modules and mux buffers",
+      "input": "NAME: \"Switch1 System\", DESCR: \"Cisco Systems, Inc. WS-C4507R+E 7 slot switch \"\nPID: WS-C4507R+E       , VID: V09  , SN: FXS1941Q20T\n\nNAME: \"Switch1 Clock Module\", DESCR: \"Clock Module\"\nPID: WS-X4K-CLOCK-E    , VID:      , SN: FXS193805C1\n\nNAME: \"Switch1 Mux Buffer 1 \", DESCR: \"Mux Buffers for Redundancy Logic\"\nPID: WS-X4590-EX=      , VID:      , SN: FXS193800RL\n\nNAME: \"Switch1 Mux Buffer 2 \", DESCR: \"Mux Buffers for Redundancy Logic\"\nPID: WS-X4590-EX=      , VID:      , SN: FXS193800RK\n\nNAME: \"Switch1 Mux Buffer 5 \", DESCR: \"Mux Buffers for Redundancy Logic\"\nPID: WS-X4590-EX=      , VID:      , SN: FXS193900AF\n\nNAME: \"Switch1 Mux Buffer 6 \", DESCR: \"Mux Buffers for Redundancy Logic\"\nPID: WS-X4590-EX=      , VID:      , SN: FXS193900AH\n\nNAME: \"Switch1 Mux Buffer 7 \", DESCR: \"Mux Buffers for Redundancy Logic\"\nPID: WS-X4590-EX=      , VID:      , SN: FXS193800RG\n\nNAME: \"Switch1 Linecard 1 (virtual slot 1)\", DESCR: \"10/100/1000BaseT (RJ45)+V E Series with 48 10/100/1000 baseT Premium PoE ports (Cisco/IEEE)\"\nPID: WS-X4748-RJ45V+E  , VID: V05  , SN: CAT1948L2JF\n\nNAME: \"Switch1 Linecard 2 (virtual slot 2)\", DESCR: \"10/100/1000BaseT (RJ45)+V E Series with 48 10/100/1000 baseT Premium PoE ports (Cisco/IEEE)\"\nPID: WS-X4748-RJ45V+E  , VID: V05  , SN: CAT1948L2S1\n\nNAME: \"Switch1 Supervisor 3 (virtual slot 3)\", DESCR: \"Sup 8-E 10GE (SFP+), 1000BaseX (SFP) with 8 SFP+ Ports\"\nPID: WS-X45-SUP8-E     , VID: V05  , SN: CAT1947L6E4\n\nNAME: \"TenGigabitEthernet1/3/1\", DESCR: \"SFP-10Gbase-LRM\"\nPID: SFP-10G-LRM       , VID: V03  , SN: FNS1946164Q\n\nNAME: \"TenGigabitEthernet1/3/2\", DESCR: \"SFP-10Gbase-LRM\"\nPID: SFP-10G-LRM       , VID: V03  , SN: FNS1946169N\n\nNAME: \"TenGigabitEthernet1/3/3\", DESCR: \"1000BaseSX\"\nPID: Unspecified       , VID:      , SN: A58069025\n\nNAME: \"TenGigabitEthernet1/3/4\", DESCR: \"1000BaseSX\"\nPID: Unspecified       , VID:      , SN: A58072076\n\nNAME: \"TenGigabitEthernet1/3/5\", DESCR: \"1000BaseSX\"\nPID: Unspecified       , VID:      , SN: Z2005291\n\nNAME: \"TenGigabitEthernet1/3/6\", DESCR: \"1000BaseSX\"\nPID: Unspecified       , VID:      , SN: AGM1549L6SN\n\nNAME: \"Switch1 Linecard 5 (virtual slot 5)\", DESCR: \"10/100/1000BaseT (RJ45)+V E Series with 48 10/100/1000 baseT Premium PoE ports (Cisco/IEEE)\"\nPID: WS-X4748-RJ45V+E  , VID: V05  , SN: CAT1948L14U\n\nNAME: \"Switch1 Linecard 7 (virtual slot 7)\", DESCR: \"10/100/1000BaseT (RJ45)+V E Series with 48 10/100/1000 baseT Premium PoE ports (Cisco/IEEE)\"\nPID: WS-X4748-RJ45V+E  , VID: V05  , SN: CAT1948L1BT\n\nNAME: \"Switch1 FanTray 1\", DESCR: \"FanTray\"\nPID: WS-X4597+E        , VID: V04  , SN: FXS1941Q0K6\n\nNAME: \"Switch1 Power Supply 1\", DESCR: \"Power Supply ( AC 2800W )\"\nPID: PWR-C45-2800ACV   , VID: V07  , SN: SDG1940EA1T\n\nNAME: \"Switch1 Power Supply 2\", DESCR: \"Power Supply ( AC 2800W )\"\nPID: PWR-C45-2800ACV   , VID: V07  , SN: SDG1940EA0U\n\nNAME: \"Switch2 System\", DESCR: \"Cisco Systems, Inc. WS-C4506-E 6 slot switch \"\nPID: WS-C4506-E        , VID: V02  , SN: FOX1353G062\n\nNAME: \"Switch2 Supervisor 1 (virtual slot 11)\", DESCR: \"Sup 8-E 10GE (SFP+), 1000BaseX (SFP) with 8 SFP+ Ports\"\nPID: WS-X45-SUP8-E     , VID: V05  , SN: CAT1947L2JB\n\nNAME: \"TenGigabitEthernet2/1/1\", DESCR: \"SFP-10Gbase-LRM\"\nPID: SFP-10G-LRM       , VID: V03  , SN: AGD1944V1X0\n\nNAME: \"TenGigabitEthernet2/1/2\", DESCR: \"SFP-10Gbase-LRM\"\nPID: SFP-10G-LRM       , VID: V03  , SN: FNS19461646\n\nNAME: \"TenGigabitEthernet2/1/3\", DESCR: \"1000BaseSX\"\nPID: Unspecified       , VID:      , SN: A58069142\n\nNAME: \"TenGigabitEthernet2/1/4\", DESCR: \"1000BaseSX\"\nPID: Unspecified       , VID:      , SN: Z2005495\n\nNAME: \"Switch2 Linecard 2 (virtual slot 12)\", DESCR: \"10/100/1000BaseT (RJ45)+V E Series with 48 10/100/1000 baseT Premium PoE ports (Cisco/IEEE)\"\nPID: WS-X4648-RJ45V+E  , VID: V05  , SN: JAE140539YZ\n\nNAME: \"Switch2 Linecard 3 (virtual slot 13)\", DESCR: \"10/100/1000BaseT (RJ45)+V E Series with 48 10/100/1000 baseT Premium PoE ports (Cisco/IEEE)\"\nPID: WS-X4648-RJ45V+E  , VID: V05  , SN: JAE14053A0H\n\nNAME: \"Switch2 FanTray 1\", DESCR: \"FanTray\"\nPID: WS-X4596-E        , VID: V03  , SN: FOX1352H2X8\n\nNAME: \"Switch2 Power Supply 1\", DESCR: \"Power Supply ( AC 2800W )\"\nPID: PWR-C45-2800ACV   , VID: V07  , SN: SNI1937A7JL\n\nNAME: \"Switch2 Power Supply 2\", DESCR: \"Power Supply ( AC 2800W )\"\nPID: PWR-C45-2800ACV   , VID: V07  , SN: SNI1937A7EB\n",
+      "expected": {
+        "inventory": {
+          "Switch1 System": {
+            "name": "Switch1 System",
+            "description": "Cisco Systems, Inc. WS-C4507R+E 7 slot switch ",
+            "pid": "WS-C4507R+E",
+            "vid": "V09",
+            "serial_number": "FXS1941Q20T"
+          },
+          "Switch1 Clock Module": {
+            "name": "Switch1 Clock Module",
+            "description": "Clock Module",
+            "pid": "WS-X4K-CLOCK-E",
+            "serial_number": "FXS193805C1"
+          },
+          "Switch1 Mux Buffer 1 ": {
+            "name": "Switch1 Mux Buffer 1 ",
+            "description": "Mux Buffers for Redundancy Logic",
+            "pid": "WS-X4590-EX=",
+            "serial_number": "FXS193800RL"
+          },
+          "Switch1 Mux Buffer 2 ": {
+            "name": "Switch1 Mux Buffer 2 ",
+            "description": "Mux Buffers for Redundancy Logic",
+            "pid": "WS-X4590-EX=",
+            "serial_number": "FXS193800RK"
+          },
+          "Switch1 Mux Buffer 5 ": {
+            "name": "Switch1 Mux Buffer 5 ",
+            "description": "Mux Buffers for Redundancy Logic",
+            "pid": "WS-X4590-EX=",
+            "serial_number": "FXS193900AF"
+          },
+          "Switch1 Mux Buffer 6 ": {
+            "name": "Switch1 Mux Buffer 6 ",
+            "description": "Mux Buffers for Redundancy Logic",
+            "pid": "WS-X4590-EX=",
+            "serial_number": "FXS193900AH"
+          },
+          "Switch1 Mux Buffer 7 ": {
+            "name": "Switch1 Mux Buffer 7 ",
+            "description": "Mux Buffers for Redundancy Logic",
+            "pid": "WS-X4590-EX=",
+            "serial_number": "FXS193800RG"
+          },
+          "Switch1 Linecard 1 (virtual slot 1)": {
+            "name": "Switch1 Linecard 1 (virtual slot 1)",
+            "description": "10/100/1000BaseT (RJ45)+V E Series with 48 10/100/1000 baseT Premium PoE ports (Cisco/IEEE)",
+            "pid": "WS-X4748-RJ45V+E",
+            "vid": "V05",
+            "serial_number": "CAT1948L2JF"
+          },
+          "Switch1 Linecard 2 (virtual slot 2)": {
+            "name": "Switch1 Linecard 2 (virtual slot 2)",
+            "description": "10/100/1000BaseT (RJ45)+V E Series with 48 10/100/1000 baseT Premium PoE ports (Cisco/IEEE)",
+            "pid": "WS-X4748-RJ45V+E",
+            "vid": "V05",
+            "serial_number": "CAT1948L2S1"
+          },
+          "Switch1 Supervisor 3 (virtual slot 3)": {
+            "name": "Switch1 Supervisor 3 (virtual slot 3)",
+            "description": "Sup 8-E 10GE (SFP+), 1000BaseX (SFP) with 8 SFP+ Ports",
+            "pid": "WS-X45-SUP8-E",
+            "vid": "V05",
+            "serial_number": "CAT1947L6E4"
+          },
+          "TenGigabitEthernet1/3/1": {
+            "name": "TenGigabitEthernet1/3/1",
+            "description": "SFP-10Gbase-LRM",
+            "pid": "SFP-10G-LRM",
+            "vid": "V03",
+            "serial_number": "FNS1946164Q"
+          },
+          "TenGigabitEthernet1/3/2": {
+            "name": "TenGigabitEthernet1/3/2",
+            "description": "SFP-10Gbase-LRM",
+            "pid": "SFP-10G-LRM",
+            "vid": "V03",
+            "serial_number": "FNS1946169N"
+          },
+          "TenGigabitEthernet1/3/3": {
+            "name": "TenGigabitEthernet1/3/3",
+            "description": "1000BaseSX",
+            "pid": "Unspecified",
+            "serial_number": "A58069025"
+          },
+          "TenGigabitEthernet1/3/4": {
+            "name": "TenGigabitEthernet1/3/4",
+            "description": "1000BaseSX",
+            "pid": "Unspecified",
+            "serial_number": "A58072076"
+          },
+          "TenGigabitEthernet1/3/5": {
+            "name": "TenGigabitEthernet1/3/5",
+            "description": "1000BaseSX",
+            "pid": "Unspecified",
+            "serial_number": "Z2005291"
+          },
+          "TenGigabitEthernet1/3/6": {
+            "name": "TenGigabitEthernet1/3/6",
+            "description": "1000BaseSX",
+            "pid": "Unspecified",
+            "serial_number": "AGM1549L6SN"
+          },
+          "Switch1 Linecard 5 (virtual slot 5)": {
+            "name": "Switch1 Linecard 5 (virtual slot 5)",
+            "description": "10/100/1000BaseT (RJ45)+V E Series with 48 10/100/1000 baseT Premium PoE ports (Cisco/IEEE)",
+            "pid": "WS-X4748-RJ45V+E",
+            "vid": "V05",
+            "serial_number": "CAT1948L14U"
+          },
+          "Switch1 Linecard 7 (virtual slot 7)": {
+            "name": "Switch1 Linecard 7 (virtual slot 7)",
+            "description": "10/100/1000BaseT (RJ45)+V E Series with 48 10/100/1000 baseT Premium PoE ports (Cisco/IEEE)",
+            "pid": "WS-X4748-RJ45V+E",
+            "vid": "V05",
+            "serial_number": "CAT1948L1BT"
+          },
+          "Switch1 FanTray 1": {
+            "name": "Switch1 FanTray 1",
+            "description": "FanTray",
+            "pid": "WS-X4597+E",
+            "vid": "V04",
+            "serial_number": "FXS1941Q0K6"
+          },
+          "Switch1 Power Supply 1": {
+            "name": "Switch1 Power Supply 1",
+            "description": "Power Supply ( AC 2800W )",
+            "pid": "PWR-C45-2800ACV",
+            "vid": "V07",
+            "serial_number": "SDG1940EA1T"
+          },
+          "Switch1 Power Supply 2": {
+            "name": "Switch1 Power Supply 2",
+            "description": "Power Supply ( AC 2800W )",
+            "pid": "PWR-C45-2800ACV",
+            "vid": "V07",
+            "serial_number": "SDG1940EA0U"
+          },
+          "Switch2 System": {
+            "name": "Switch2 System",
+            "description": "Cisco Systems, Inc. WS-C4506-E 6 slot switch ",
+            "pid": "WS-C4506-E",
+            "vid": "V02",
+            "serial_number": "FOX1353G062"
+          },
+          "Switch2 Supervisor 1 (virtual slot 11)": {
+            "name": "Switch2 Supervisor 1 (virtual slot 11)",
+            "description": "Sup 8-E 10GE (SFP+), 1000BaseX (SFP) with 8 SFP+ Ports",
+            "pid": "WS-X45-SUP8-E",
+            "vid": "V05",
+            "serial_number": "CAT1947L2JB"
+          },
+          "TenGigabitEthernet2/1/1": {
+            "name": "TenGigabitEthernet2/1/1",
+            "description": "SFP-10Gbase-LRM",
+            "pid": "SFP-10G-LRM",
+            "vid": "V03",
+            "serial_number": "AGD1944V1X0"
+          },
+          "TenGigabitEthernet2/1/2": {
+            "name": "TenGigabitEthernet2/1/2",
+            "description": "SFP-10Gbase-LRM",
+            "pid": "SFP-10G-LRM",
+            "vid": "V03",
+            "serial_number": "FNS19461646"
+          },
+          "TenGigabitEthernet2/1/3": {
+            "name": "TenGigabitEthernet2/1/3",
+            "description": "1000BaseSX",
+            "pid": "Unspecified",
+            "serial_number": "A58069142"
+          },
+          "TenGigabitEthernet2/1/4": {
+            "name": "TenGigabitEthernet2/1/4",
+            "description": "1000BaseSX",
+            "pid": "Unspecified",
+            "serial_number": "Z2005495"
+          },
+          "Switch2 Linecard 2 (virtual slot 12)": {
+            "name": "Switch2 Linecard 2 (virtual slot 12)",
+            "description": "10/100/1000BaseT (RJ45)+V E Series with 48 10/100/1000 baseT Premium PoE ports (Cisco/IEEE)",
+            "pid": "WS-X4648-RJ45V+E",
+            "vid": "V05",
+            "serial_number": "JAE140539YZ"
+          },
+          "Switch2 Linecard 3 (virtual slot 13)": {
+            "name": "Switch2 Linecard 3 (virtual slot 13)",
+            "description": "10/100/1000BaseT (RJ45)+V E Series with 48 10/100/1000 baseT Premium PoE ports (Cisco/IEEE)",
+            "pid": "WS-X4648-RJ45V+E",
+            "vid": "V05",
+            "serial_number": "JAE14053A0H"
+          },
+          "Switch2 FanTray 1": {
+            "name": "Switch2 FanTray 1",
+            "description": "FanTray",
+            "pid": "WS-X4596-E",
+            "vid": "V03",
+            "serial_number": "FOX1352H2X8"
+          },
+          "Switch2 Power Supply 1": {
+            "name": "Switch2 Power Supply 1",
+            "description": "Power Supply ( AC 2800W )",
+            "pid": "PWR-C45-2800ACV",
+            "vid": "V07",
+            "serial_number": "SNI1937A7JL"
+          },
+          "Switch2 Power Supply 2": {
+            "name": "Switch2 Power Supply 2",
+            "description": "Power Supply ( AC 2800W )",
+            "pid": "PWR-C45-2800ACV",
+            "vid": "V07",
+            "serial_number": "SNI1937A7EB"
+          }
+        }
+      }
+    },
+    {
+      "name": "Single compact Catalyst 3560CX switch",
+      "input": "NAME: \"1\", DESCR: \"WS-C3560CX-12PC-S\"\nPID: WS-C3560CX-12PC-S , VID: V03  , SN: FOC2419L9KY\n",
+      "expected": {
+        "inventory": {
+          "1": {
+            "name": "1",
+            "description": "WS-C3560CX-12PC-S",
+            "pid": "WS-C3560CX-12PC-S",
+            "vid": "V03",
+            "serial_number": "FOC2419L9KY"
+          }
+        }
+      }
+    },
+    {
+      "name": "Catalyst 9400 chassis with linecards and supervisor",
+      "input": "show inventory\nNAME: \"Chassis\", DESCR: \"Cisco Catalyst 9400 Series 7 Slot Chassis\"\nPID: C9407R            , VID: V01  , SN: ******\n\nNAME: \"Slot 1 Linecard\", DESCR: \"Cisco Catalyst 9400 Series 48-Port POE 10/100/1000 (RJ-45)\"\nPID: C9400-LC-48P      , VID: V01  , SN: ******\n\nNAME: \"Slot 2 Linecard\", DESCR: \"Cisco Catalyst 9400 Series 48-Port POE 10/100/1000 (RJ-45)\"\nPID: C9400-LC-48P      , VID: V01  , SN: ******\n\nNAME: \"Slot 5 Linecard\", DESCR: \"Cisco Catalyst 9400 Series 48-Port POE 10/100/1000 (RJ-45)\"\nPID: C9400-LC-48P      , VID: V01  , SN: ******\n\nNAME: \"Slot 6 Linecard\", DESCR: \"Cisco Catalyst 9400 Series 48-Port POE 10/100/1000 (RJ-45)\"\nPID: C9400-LC-48P      , VID: V01  , SN: ******\n\nNAME: \"Slot 3 Supervisor\", DESCR: \"Cisco Catalyst 9400 Series Supervisor 1 Module\"\nPID: C9400-SUP-1       , VID: V02  , SN: ******\n\nNAME: \"TenGigabitEthernet3/0/1\", DESCR: \"SFP 10GBASE-SR\"\nPID: SFP-10G-SR          , VID: 01   , SN: ******\n\nNAME: \"TenGigabitEthernet3/0/2\", DESCR: \"SFP 10GBASE-SR\"\nPID: SFP-10G-SR          , VID: 01   , SN: ******\n\nNAME: \"TenGigabitEthernet3/0/3\", DESCR: \"SFP 10GBASE-SR\"\nPID: SFP-10G-SR          , VID: 01   , SN: ******\n\nNAME: \"TenGigabitEthernet3/0/4\", DESCR: \"SFP 10GBASE-SR\"\nPID: SFP-10G-SR          , VID: 01   , SN: ******\n\nNAME: \"TenGigabitEthernet3/0/8\", DESCR: \"GE SX\"\nPID: QFBR-5798L        , VID:      , SN: ******\n\nNAME: \"Power Supply Module 1\", DESCR: \"Cisco Catalyst 9400 Series 3200W AC Power Supply\"\nPID: C9400-PWR-3200AC  , VID: V01  , SN: ******\n\nNAME: \"Power Supply Module 2\", DESCR: \"Cisco Catalyst 9400 Series 3200W AC Power Supply\"\nPID: C9400-PWR-3200AC  , VID: V01  , SN: DTM224703G0\n\nNAME: \"Fan Tray\", DESCR: \"Cisco Catalyst 9400 Series 7 Slot Chassis Fan Tray\"\nPID: C9407-FAN         , VID: V01  , SN: ******\n",
+      "expected": {
+        "inventory": {
+          "Chassis": {
+            "name": "Chassis",
+            "description": "Cisco Catalyst 9400 Series 7 Slot Chassis",
+            "pid": "C9407R",
+            "vid": "V01",
+            "serial_number": "******"
+          },
+          "Slot 1 Linecard": {
+            "name": "Slot 1 Linecard",
+            "description": "Cisco Catalyst 9400 Series 48-Port POE 10/100/1000 (RJ-45)",
+            "pid": "C9400-LC-48P",
+            "vid": "V01",
+            "serial_number": "******"
+          },
+          "Slot 2 Linecard": {
+            "name": "Slot 2 Linecard",
+            "description": "Cisco Catalyst 9400 Series 48-Port POE 10/100/1000 (RJ-45)",
+            "pid": "C9400-LC-48P",
+            "vid": "V01",
+            "serial_number": "******"
+          },
+          "Slot 5 Linecard": {
+            "name": "Slot 5 Linecard",
+            "description": "Cisco Catalyst 9400 Series 48-Port POE 10/100/1000 (RJ-45)",
+            "pid": "C9400-LC-48P",
+            "vid": "V01",
+            "serial_number": "******"
+          },
+          "Slot 6 Linecard": {
+            "name": "Slot 6 Linecard",
+            "description": "Cisco Catalyst 9400 Series 48-Port POE 10/100/1000 (RJ-45)",
+            "pid": "C9400-LC-48P",
+            "vid": "V01",
+            "serial_number": "******"
+          },
+          "Slot 3 Supervisor": {
+            "name": "Slot 3 Supervisor",
+            "description": "Cisco Catalyst 9400 Series Supervisor 1 Module",
+            "pid": "C9400-SUP-1",
+            "vid": "V02",
+            "serial_number": "******"
+          },
+          "TenGigabitEthernet3/0/1": {
+            "name": "TenGigabitEthernet3/0/1",
+            "description": "SFP 10GBASE-SR",
+            "pid": "SFP-10G-SR",
+            "vid": "01",
+            "serial_number": "******"
+          },
+          "TenGigabitEthernet3/0/2": {
+            "name": "TenGigabitEthernet3/0/2",
+            "description": "SFP 10GBASE-SR",
+            "pid": "SFP-10G-SR",
+            "vid": "01",
+            "serial_number": "******"
+          },
+          "TenGigabitEthernet3/0/3": {
+            "name": "TenGigabitEthernet3/0/3",
+            "description": "SFP 10GBASE-SR",
+            "pid": "SFP-10G-SR",
+            "vid": "01",
+            "serial_number": "******"
+          },
+          "TenGigabitEthernet3/0/4": {
+            "name": "TenGigabitEthernet3/0/4",
+            "description": "SFP 10GBASE-SR",
+            "pid": "SFP-10G-SR",
+            "vid": "01",
+            "serial_number": "******"
+          },
+          "TenGigabitEthernet3/0/8": {
+            "name": "TenGigabitEthernet3/0/8",
+            "description": "GE SX",
+            "pid": "QFBR-5798L",
+            "serial_number": "******"
+          },
+          "Power Supply Module 1": {
+            "name": "Power Supply Module 1",
+            "description": "Cisco Catalyst 9400 Series 3200W AC Power Supply",
+            "pid": "C9400-PWR-3200AC",
+            "vid": "V01",
+            "serial_number": "******"
+          },
+          "Power Supply Module 2": {
+            "name": "Power Supply Module 2",
+            "description": "Cisco Catalyst 9400 Series 3200W AC Power Supply",
+            "pid": "C9400-PWR-3200AC",
+            "vid": "V01",
+            "serial_number": "DTM224703G0"
+          },
+          "Fan Tray": {
+            "name": "Fan Tray",
+            "description": "Cisco Catalyst 9400 Series 7 Slot Chassis Fan Tray",
+            "pid": "C9407-FAN",
+            "vid": "V01",
+            "serial_number": "******"
+          }
+        }
+      }
+    },
+    {
+      "name": "Catalyst 9300 stack with stack ports",
+      "input": "NAME: \"c93xx Stack\", DESCR: \"c93xx Stack\"\nPID: C9300-48U         , VID: V02  , SN: FCW88888888\n\nNAME: \"Switch 1\", DESCR: \"C9300-48U\"\nPID: C9300-48U         , VID: V02  , SN: FCW999999999\n\nNAME: \"StackPort1/1\", DESCR: \"StackPort1/1\"\nPID: STACK-T1-50CM     , VID: V01  , SN: MOC3333333\n\nNAME: \"StackPort1/2\", DESCR: \"StackPort1/2\"\nPID: STACK-T1-50CM     , VID: V01  , SN: MOC4444444\n",
+      "expected": {
+        "inventory": {
+          "c93xx Stack": {
+            "name": "c93xx Stack",
+            "description": "c93xx Stack",
+            "pid": "C9300-48U",
+            "vid": "V02",
+            "serial_number": "FCW88888888"
+          },
+          "Switch 1": {
+            "name": "Switch 1",
+            "description": "C9300-48U",
+            "pid": "C9300-48U",
+            "vid": "V02",
+            "serial_number": "FCW999999999"
+          },
+          "StackPort1/1": {
+            "name": "StackPort1/1",
+            "description": "StackPort1/1",
+            "pid": "STACK-T1-50CM",
+            "vid": "V01",
+            "serial_number": "MOC3333333"
+          },
+          "StackPort1/2": {
+            "name": "StackPort1/2",
+            "description": "StackPort1/2",
+            "pid": "STACK-T1-50CM",
+            "vid": "V01",
+            "serial_number": "MOC4444444"
+          }
+        }
+      }
+    },
+    {
+      "name": "5-switch C3850 stack with empty DESCR field",
+      "input": "NAME: \"c38xx Stack\", DESCR: \"c38xx Stack\"\nPID: WS-C3850-24P-E    , VID: V01  , SN: FCW1932D0LB\n\nNAME: \"Switch 1\", DESCR: \"WS-C3850-24P-E\"\nPID: WS-C3850-24P-E    , VID: V01  , SN: FCW1932D0LB\n\nNAME: \"StackPort1/1\", DESCR: \"StackPort1/1\"\nPID: STACK-T1-50CM     , VID: V01  , SN: LCC1921G11G\n\nNAME: \"StackPort1/2\", DESCR: \"StackPort1/2\"\nPID: STACK-T1-50CM     , VID: V01  , SN: LCC1921G250\n\nNAME: \"Switch 1 - Power Supply A\", DESCR: \"Switch 1 - Power Supply A\"\nPID: C3KX-PWR-715WAC   , VID: V01  , SN: LIT14291MTJ\n\nNAME: \"Switch 2\", DESCR: \"WS-C3850-24P-E\"\nPID: WS-C3850-24P-E    , VID: V04  , SN: FOC1932X0K1\n\nNAME: \"StackPort2/1\", DESCR: \"StackPort2/1\"\nPID: STACK-T1-50CM     , VID: V01  , SN: MOC1932A0BU\n\nNAME: \"StackPort2/2\", DESCR: \"StackPort2/2\"\nPID: STACK-T1-50CM     , VID: V01  , SN: LCC1921G10J\n\nNAME: \"Switch 2 - Power Supply A\", DESCR: \"Switch 2 - Power Supply A\"\nPID: C3KX-PWR-715WAC   , VID: V01  , SN: LIT15090DUL\n\nNAME: \"Switch 3\", DESCR: \"WS-C3850-24P-E\"\nPID: WS-C3850-24P-E    , VID: V04  , SN: FCW1932C0MA\n\nNAME: \"StackPort3/1\", DESCR: \"StackPort3/1\"\nPID: STACK-T1-50CM     , VID: V01  , SN: LCC1921G10J\n\nNAME: \"StackPort3/2\", DESCR: \"StackPort3/2\"\nPID: STACK-T1-50CM     , VID: V01  , SN: LCC1921G106\n\nNAME: \"Switch 3 - Power Supply A\", DESCR: \"Switch 3 - Power Supply A\"\nPID: PWR-C1-715WAC     , VID: V01  , SN: LIT19220MG1\n\nNAME: \"Switch 4\", DESCR: \"WS-C3850-24P-E\"\nPID: WS-C3850-24P-E    , VID: V04  , SN: FCW1932D0L0\n\nNAME: \"StackPort4/1\", DESCR: \"StackPort4/1\"\nPID: STACK-T1-50CM     , VID: V01  , SN: LCC1921G250\n\nNAME: \"StackPort4/2\", DESCR: \"StackPort4/2\"\nPID: STACK-T1-50CM     , VID: V01  , SN: MOC1932A0BU\n\nNAME: \"Switch 4 - Power Supply A\", DESCR: \"\"\nPID: C3KX-PWR-715WAC   , VID: V01  , SN: LIT15140DEP\n\nNAME: \"Switch 5\", DESCR: \"WS-C3850-24P-E\"\nPID: WS-C3850-24P-E    , VID: V04  , SN: FOC1932X0F9\n\nNAME: \"StackPort5/1\", DESCR: \"StackPort5/1\"\nPID: STACK-T1-50CM     , VID: V01  , SN: LCC1921G106\n\nNAME: \"StackPort5/2\", DESCR: \"StackPort5/2\"\nPID: STACK-T1-50CM     , VID: V01  , SN: LCC1921G11G\n\nNAME: \"Switch 5 - Power Supply A\", DESCR: \"Switch 5 - Power Supply A\"\nPID: PWR-C1-715WAC     , VID: V01  , SN: LIT17130ZDU\n",
+      "expected": {
+        "inventory": {
+          "c38xx Stack": {
+            "name": "c38xx Stack",
+            "description": "c38xx Stack",
+            "pid": "WS-C3850-24P-E",
+            "vid": "V01",
+            "serial_number": "FCW1932D0LB"
+          },
+          "Switch 1": {
+            "name": "Switch 1",
+            "description": "WS-C3850-24P-E",
+            "pid": "WS-C3850-24P-E",
+            "vid": "V01",
+            "serial_number": "FCW1932D0LB"
+          },
+          "StackPort1/1": {
+            "name": "StackPort1/1",
+            "description": "StackPort1/1",
+            "pid": "STACK-T1-50CM",
+            "vid": "V01",
+            "serial_number": "LCC1921G11G"
+          },
+          "StackPort1/2": {
+            "name": "StackPort1/2",
+            "description": "StackPort1/2",
+            "pid": "STACK-T1-50CM",
+            "vid": "V01",
+            "serial_number": "LCC1921G250"
+          },
+          "Switch 1 - Power Supply A": {
+            "name": "Switch 1 - Power Supply A",
+            "description": "Switch 1 - Power Supply A",
+            "pid": "C3KX-PWR-715WAC",
+            "vid": "V01",
+            "serial_number": "LIT14291MTJ"
+          },
+          "Switch 2": {
+            "name": "Switch 2",
+            "description": "WS-C3850-24P-E",
+            "pid": "WS-C3850-24P-E",
+            "vid": "V04",
+            "serial_number": "FOC1932X0K1"
+          },
+          "StackPort2/1": {
+            "name": "StackPort2/1",
+            "description": "StackPort2/1",
+            "pid": "STACK-T1-50CM",
+            "vid": "V01",
+            "serial_number": "MOC1932A0BU"
+          },
+          "StackPort2/2": {
+            "name": "StackPort2/2",
+            "description": "StackPort2/2",
+            "pid": "STACK-T1-50CM",
+            "vid": "V01",
+            "serial_number": "LCC1921G10J"
+          },
+          "Switch 2 - Power Supply A": {
+            "name": "Switch 2 - Power Supply A",
+            "description": "Switch 2 - Power Supply A",
+            "pid": "C3KX-PWR-715WAC",
+            "vid": "V01",
+            "serial_number": "LIT15090DUL"
+          },
+          "Switch 3": {
+            "name": "Switch 3",
+            "description": "WS-C3850-24P-E",
+            "pid": "WS-C3850-24P-E",
+            "vid": "V04",
+            "serial_number": "FCW1932C0MA"
+          },
+          "StackPort3/1": {
+            "name": "StackPort3/1",
+            "description": "StackPort3/1",
+            "pid": "STACK-T1-50CM",
+            "vid": "V01",
+            "serial_number": "LCC1921G10J"
+          },
+          "StackPort3/2": {
+            "name": "StackPort3/2",
+            "description": "StackPort3/2",
+            "pid": "STACK-T1-50CM",
+            "vid": "V01",
+            "serial_number": "LCC1921G106"
+          },
+          "Switch 3 - Power Supply A": {
+            "name": "Switch 3 - Power Supply A",
+            "description": "Switch 3 - Power Supply A",
+            "pid": "PWR-C1-715WAC",
+            "vid": "V01",
+            "serial_number": "LIT19220MG1"
+          },
+          "Switch 4": {
+            "name": "Switch 4",
+            "description": "WS-C3850-24P-E",
+            "pid": "WS-C3850-24P-E",
+            "vid": "V04",
+            "serial_number": "FCW1932D0L0"
+          },
+          "StackPort4/1": {
+            "name": "StackPort4/1",
+            "description": "StackPort4/1",
+            "pid": "STACK-T1-50CM",
+            "vid": "V01",
+            "serial_number": "LCC1921G250"
+          },
+          "StackPort4/2": {
+            "name": "StackPort4/2",
+            "description": "StackPort4/2",
+            "pid": "STACK-T1-50CM",
+            "vid": "V01",
+            "serial_number": "MOC1932A0BU"
+          },
+          "Switch 4 - Power Supply A": {
+            "name": "Switch 4 - Power Supply A",
+            "description": "",
+            "pid": "C3KX-PWR-715WAC",
+            "vid": "V01",
+            "serial_number": "LIT15140DEP"
+          },
+          "Switch 5": {
+            "name": "Switch 5",
+            "description": "WS-C3850-24P-E",
+            "pid": "WS-C3850-24P-E",
+            "vid": "V04",
+            "serial_number": "FOC1932X0F9"
+          },
+          "StackPort5/1": {
+            "name": "StackPort5/1",
+            "description": "StackPort5/1",
+            "pid": "STACK-T1-50CM",
+            "vid": "V01",
+            "serial_number": "LCC1921G106"
+          },
+          "StackPort5/2": {
+            "name": "StackPort5/2",
+            "description": "StackPort5/2",
+            "pid": "STACK-T1-50CM",
+            "vid": "V01",
+            "serial_number": "LCC1921G11G"
+          },
+          "Switch 5 - Power Supply A": {
+            "name": "Switch 5 - Power Supply A",
+            "description": "Switch 5 - Power Supply A",
+            "pid": "PWR-C1-715WAC",
+            "vid": "V01",
+            "serial_number": "LIT17130ZDU"
+          }
+        }
+      }
+    },
+    {
+      "name": "ISR4461 with show inventory raw and license UDI banner",
+      "input": "show inventory raw\n\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\nINFO: Please use \"show license UDI\" to get serial number for licensing.\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n\nNAME: \"Chassis\", DESCR: \"Cisco ISR4461 Chassis\"\nPID: ISR4461/K9        , VID: V00  , SN: FDO2151A2HJ\n\nNAME: \"Power Supply Module 0\", DESCR: \"1000W AC Power Supply for Cisco ISR4450, ISR4460, VG450\"\nPID: PWR-4450-1000W-AC , VID: V02  , SN: DCA2128Y07N\n\nNAME: \"Fan Tray\", DESCR: \"Cisco ISR4460 Forward-flow Fan Assembly\"\nPID: ACS-4460-FANASSY  , VID:      , SN:\n\nNAME: \"module 0\", DESCR: \"Cisco ISR4461 Built-In NIM controller\"\nPID: ISR4461/K9        , VID:      , SN:\n\nNAME: \"NIM subslot 0/1\", DESCR: \"NIM-2GE-CU-SFP\"\nPID: NIM-2GE-CU-SFP    , VID: V02  , SN: FOC22010WTB\n\nNAME: \"NIM subslot 0/0\", DESCR: \"Front Panel 6 ports Ten/Gigabitethernet Module\"\nPID: ISR4461-4x1G-2xTG , VID: V01  , SN:\n\nNAME: \"subslot 0/0 transceiver 5\", DESCR: \"SFP+ 10GBASE-SR\"\nPID: SFP-10G-SR-S        , VID: V01  , SN: FNS22030KVN\n\nNAME: \"module 1\", DESCR: \"Cisco ISR4461 Built-In SM controller\"\nPID: ISR4461/K9        , VID:      , SN:\n\nNAME: \"SM subslot 1/0\", DESCR: \"SM-X-6X1G\"\nPID: SM-X-6X1G         , VID: V02  , SN: FOC22032B37\n\nNAME: \"subslot 1/0 transceiver 2\", DESCR: \"GE SX\"\nPID: GLC-SX-MMD          , VID: V01  , SN: FNS1742149W\n\nNAME: \"module 2\", DESCR: \"Cisco ISR4461 Built-In SM controller\"\nPID: ISR4461/K9        , VID:      , SN:\n\nNAME: \"module 3\", DESCR: \"Cisco ISR4461 Built-In SM controller\"\nPID: ISR4461/K9        , VID:      , SN:\n\nNAME: \"module R0\", DESCR: \"Cisco ISR4461 Route Processor\"\nPID: ISR4461/K9        , VID: V00  , SN: FDO21481BWN\n\nNAME: \"module F0\", DESCR: \"Cisco ISR4461 Forwarding Processor\"\nPID: ISR4461/K9        , VID:      , SN:\n",
+      "expected": {
+        "inventory": {
+          "Chassis": {
+            "name": "Chassis",
+            "description": "Cisco ISR4461 Chassis",
+            "pid": "ISR4461/K9",
+            "vid": "V00",
+            "serial_number": "FDO2151A2HJ"
+          },
+          "Power Supply Module 0": {
+            "name": "Power Supply Module 0",
+            "description": "1000W AC Power Supply for Cisco ISR4450, ISR4460, VG450",
+            "pid": "PWR-4450-1000W-AC",
+            "vid": "V02",
+            "serial_number": "DCA2128Y07N"
+          },
+          "Fan Tray": {
+            "name": "Fan Tray",
+            "description": "Cisco ISR4460 Forward-flow Fan Assembly",
+            "pid": "ACS-4460-FANASSY"
+          },
+          "module 0": {
+            "name": "module 0",
+            "description": "Cisco ISR4461 Built-In NIM controller",
+            "pid": "ISR4461/K9"
+          },
+          "NIM subslot 0/1": {
+            "name": "NIM subslot 0/1",
+            "description": "NIM-2GE-CU-SFP",
+            "pid": "NIM-2GE-CU-SFP",
+            "vid": "V02",
+            "serial_number": "FOC22010WTB"
+          },
+          "NIM subslot 0/0": {
+            "name": "NIM subslot 0/0",
+            "description": "Front Panel 6 ports Ten/Gigabitethernet Module",
+            "pid": "ISR4461-4x1G-2xTG",
+            "vid": "V01"
+          },
+          "subslot 0/0 transceiver 5": {
+            "name": "subslot 0/0 transceiver 5",
+            "description": "SFP+ 10GBASE-SR",
+            "pid": "SFP-10G-SR-S",
+            "vid": "V01",
+            "serial_number": "FNS22030KVN"
+          },
+          "module 1": {
+            "name": "module 1",
+            "description": "Cisco ISR4461 Built-In SM controller",
+            "pid": "ISR4461/K9"
+          },
+          "SM subslot 1/0": {
+            "name": "SM subslot 1/0",
+            "description": "SM-X-6X1G",
+            "pid": "SM-X-6X1G",
+            "vid": "V02",
+            "serial_number": "FOC22032B37"
+          },
+          "subslot 1/0 transceiver 2": {
+            "name": "subslot 1/0 transceiver 2",
+            "description": "GE SX",
+            "pid": "GLC-SX-MMD",
+            "vid": "V01",
+            "serial_number": "FNS1742149W"
+          },
+          "module 2": {
+            "name": "module 2",
+            "description": "Cisco ISR4461 Built-In SM controller",
+            "pid": "ISR4461/K9"
+          },
+          "module 3": {
+            "name": "module 3",
+            "description": "Cisco ISR4461 Built-In SM controller",
+            "pid": "ISR4461/K9"
+          },
+          "module R0": {
+            "name": "module R0",
+            "description": "Cisco ISR4461 Route Processor",
+            "pid": "ISR4461/K9",
+            "vid": "V00",
+            "serial_number": "FDO21481BWN"
+          },
+          "module F0": {
+            "name": "module F0",
+            "description": "Cisco ISR4461 Forwarding Processor",
+            "pid": "ISR4461/K9"
+          }
+        }
+      }
+    },
+    {
+      "name": "ASR1002-X with empty SN and VID fields",
+      "input": "router#\nNAME: \"Chassis\", DESCR: \"Cisco ASR1002-X Chassis\"\nPID: ASR1002-X         , VID: V07, SN: FOX1111P1M1\n\nNAME: \"Power Supply Module 0\", DESCR: \"Cisco ASR1002 AC Power Supply\"\nPID: ASR1002-PWR-AC    , VID: V04, SN: ABC111111EJ\n\nNAME: \"Power Supply Module 1\", DESCR: \"Cisco ASR1002 AC Power Supply\"\nPID: ASR1002-PWR-AC    , VID: V04, SN: DCB222222EK\n\nNAME: \"module 0\", DESCR: \"Cisco ASR1002-X SPA Interface Processor\"\nPID: ASR1002-X         , VID:    , SN:\n\nNAME: \"SPA subslot 0/0\", DESCR: \"6-port Built-in GE SPA\"\nPID: 6XGE-BUILT-IN     , VID:    , SN:\n\nNAME: \"subslot 0/0 transceiver 0\", DESCR: \"GE SX\"\nPID: GLC-SX-MMD          , VID: 001 , SN: AGJ3333R1GC\n\nNAME: \"subslot 0/0 transceiver 1\", DESCR: \"GE SX\"\nPID: GLC-SX-MMD          , VID: 001 , SN: AGJ1111R1G1\n\nNAME: \"subslot 0/0 transceiver 2\", DESCR: \"GE SX\"\nPID: GLC-SX-MMD          , VID: 001 , SN: AGJ9999R1FL\n\nNAME: \"subslot 0/0 transceiver 3\", DESCR: \"GE SX\"\nPID: GLC-SX-MMD          , VID: 001 , SN: AGJ5555RAFM\n\nNAME: \"module R0\", DESCR: \"Cisco ASR1002-X Route Processor\"\nPID: ASR1002-X         , VID: V07, SN: JAD333333AQ\n\nNAME: \"module F0\", DESCR: \"Cisco ASR1002-X Embedded Services Processor\"\nPID: ASR1002-X         , VID:    , SN:\n",
+      "expected": {
+        "inventory": {
+          "Chassis": {
+            "name": "Chassis",
+            "description": "Cisco ASR1002-X Chassis",
+            "pid": "ASR1002-X",
+            "vid": "V07",
+            "serial_number": "FOX1111P1M1"
+          },
+          "Power Supply Module 0": {
+            "name": "Power Supply Module 0",
+            "description": "Cisco ASR1002 AC Power Supply",
+            "pid": "ASR1002-PWR-AC",
+            "vid": "V04",
+            "serial_number": "ABC111111EJ"
+          },
+          "Power Supply Module 1": {
+            "name": "Power Supply Module 1",
+            "description": "Cisco ASR1002 AC Power Supply",
+            "pid": "ASR1002-PWR-AC",
+            "vid": "V04",
+            "serial_number": "DCB222222EK"
+          },
+          "module 0": {
+            "name": "module 0",
+            "description": "Cisco ASR1002-X SPA Interface Processor",
+            "pid": "ASR1002-X"
+          },
+          "SPA subslot 0/0": {
+            "name": "SPA subslot 0/0",
+            "description": "6-port Built-in GE SPA",
+            "pid": "6XGE-BUILT-IN"
+          },
+          "subslot 0/0 transceiver 0": {
+            "name": "subslot 0/0 transceiver 0",
+            "description": "GE SX",
+            "pid": "GLC-SX-MMD",
+            "vid": "001",
+            "serial_number": "AGJ3333R1GC"
+          },
+          "subslot 0/0 transceiver 1": {
+            "name": "subslot 0/0 transceiver 1",
+            "description": "GE SX",
+            "pid": "GLC-SX-MMD",
+            "vid": "001",
+            "serial_number": "AGJ1111R1G1"
+          },
+          "subslot 0/0 transceiver 2": {
+            "name": "subslot 0/0 transceiver 2",
+            "description": "GE SX",
+            "pid": "GLC-SX-MMD",
+            "vid": "001",
+            "serial_number": "AGJ9999R1FL"
+          },
+          "subslot 0/0 transceiver 3": {
+            "name": "subslot 0/0 transceiver 3",
+            "description": "GE SX",
+            "pid": "GLC-SX-MMD",
+            "vid": "001",
+            "serial_number": "AGJ5555RAFM"
+          },
+          "module R0": {
+            "name": "module R0",
+            "description": "Cisco ASR1002-X Route Processor",
+            "pid": "ASR1002-X",
+            "vid": "V07",
+            "serial_number": "JAD333333AQ"
+          },
+          "module F0": {
+            "name": "module F0",
+            "description": "Cisco ASR1002-X Embedded Services Processor",
+            "pid": "ASR1002-X"
+          }
+        }
+      }
+    },
+    {
+      "name": "ASR920 with SFP+ and SONET/OC modules",
+      "input": "NAME: \"Chassis\", DESCR: \"Cisco ASR920 Series - 24GE and 4-10GE- Modular PSU and IM\"\nPID: ASR-920-24SZ-IM   , VID: V01  , SN: CAT1902V19M\n\nNAME: \"subslot 0/0 transceiver 26\", DESCR: \"SFP+ 10GBASE-LR\"\nPID: SFP-10G-LR          , VID: CSCO , SN: CD180456291\n\nNAME: \"subslot 0/0 transceiver 27\", DESCR: \"SFP+ 10GBASE-LR\"\nPID: SFP-10G-LR          , VID: CSCO , SN: CD180456292\n\nNAME: \"IM subslot 0/1\", DESCR: \"ASR 900 Combo 4 port DS3 12 DS1 and 4 OCx\"\nPID: A900-IMA3G-IMSG   , VID: V01  , SN: FOC2204PAP1\n\nNAME: \"subslot 0/1 transceiver 16\", DESCR: \"Dual-Rate OC3/12 IR-1\"\nPID: ONS-SI-622-I1       , VID: A    , SN: ECL133706C3\n\nNAME: \"Power Supply Module 0\", DESCR: \"ASR 920 250W DC Power Supply\"\nPID: ASR-920-PWR-D     , VID: V01  , SN: ART1832F11X\n\nNAME: \"Fan Tray\", DESCR: \"ASR 920 Fan tray\"\nPID: ASR-920-FAN-M     , VID: V01  , SN: CAT1903V028\n",
+      "expected": {
+        "inventory": {
+          "Chassis": {
+            "name": "Chassis",
+            "description": "Cisco ASR920 Series - 24GE and 4-10GE- Modular PSU and IM",
+            "pid": "ASR-920-24SZ-IM",
+            "vid": "V01",
+            "serial_number": "CAT1902V19M"
+          },
+          "subslot 0/0 transceiver 26": {
+            "name": "subslot 0/0 transceiver 26",
+            "description": "SFP+ 10GBASE-LR",
+            "pid": "SFP-10G-LR",
+            "vid": "CSCO",
+            "serial_number": "CD180456291"
+          },
+          "subslot 0/0 transceiver 27": {
+            "name": "subslot 0/0 transceiver 27",
+            "description": "SFP+ 10GBASE-LR",
+            "pid": "SFP-10G-LR",
+            "vid": "CSCO",
+            "serial_number": "CD180456292"
+          },
+          "IM subslot 0/1": {
+            "name": "IM subslot 0/1",
+            "description": "ASR 900 Combo 4 port DS3 12 DS1 and 4 OCx",
+            "pid": "A900-IMA3G-IMSG",
+            "vid": "V01",
+            "serial_number": "FOC2204PAP1"
+          },
+          "subslot 0/1 transceiver 16": {
+            "name": "subslot 0/1 transceiver 16",
+            "description": "Dual-Rate OC3/12 IR-1",
+            "pid": "ONS-SI-622-I1",
+            "vid": "A",
+            "serial_number": "ECL133706C3"
+          },
+          "Power Supply Module 0": {
+            "name": "Power Supply Module 0",
+            "description": "ASR 920 250W DC Power Supply",
+            "pid": "ASR-920-PWR-D",
+            "vid": "V01",
+            "serial_number": "ART1832F11X"
+          },
+          "Fan Tray": {
+            "name": "Fan Tray",
+            "description": "ASR 920 Fan tray",
+            "pid": "ASR-920-FAN-M",
+            "vid": "V01",
+            "serial_number": "CAT1903V028"
+          }
+        }
+      }
+    },
+    {
+      "name": "IE-3300 industrial switch with expansion module",
+      "input": "NAME: \"Chassis\", DESCR: \"IE-3300-8U2X Expandable 4PPoE Chassis\"\nPID: IE-3300-8U2X      , VID: V00  , SN: FCW2449P5SK\n\nNAME: \"Supervisor\", DESCR: \"IE-3300 Expandable System: 8GE Copper (4PPoE) & 2 10G SFP\"\nPID: IE-3300-8U2X      , VID: V00  , SN: FCW2449P5SK\n\nNAME: \"TenGigabitEthernet1/1\", DESCR: \"1000BaseLX SFP\"\nPID: GLC-LH-SMD          , VID: V02  , SN: ACW24443CJC\n\nNAME: \"TenGigabitEthernet1/2\", DESCR: \"10/100/1000BaseTX SFP\"\nPID: GLC-TE              , VID: V03  , SN: AVC2435035M\n\nNAME: \"Expansion Module\", DESCR: \"IEM-3300: 8 Port GE Copper Exp Module Basic\"\nPID: IEM-3300-8T       , VID: V01  , SN: FOC2251V2JA\n",
+      "expected": {
+        "inventory": {
+          "Chassis": {
+            "name": "Chassis",
+            "description": "IE-3300-8U2X Expandable 4PPoE Chassis",
+            "pid": "IE-3300-8U2X",
+            "vid": "V00",
+            "serial_number": "FCW2449P5SK"
+          },
+          "Supervisor": {
+            "name": "Supervisor",
+            "description": "IE-3300 Expandable System: 8GE Copper (4PPoE) & 2 10G SFP",
+            "pid": "IE-3300-8U2X",
+            "vid": "V00",
+            "serial_number": "FCW2449P5SK"
+          },
+          "TenGigabitEthernet1/1": {
+            "name": "TenGigabitEthernet1/1",
+            "description": "1000BaseLX SFP",
+            "pid": "GLC-LH-SMD",
+            "vid": "V02",
+            "serial_number": "ACW24443CJC"
+          },
+          "TenGigabitEthernet1/2": {
+            "name": "TenGigabitEthernet1/2",
+            "description": "10/100/1000BaseTX SFP",
+            "pid": "GLC-TE",
+            "vid": "V03",
+            "serial_number": "AVC2435035M"
+          },
+          "Expansion Module": {
+            "name": "Expansion Module",
+            "description": "IEM-3300: 8 Port GE Copper Exp Module Basic",
+            "pid": "IEM-3300-8T",
+            "vid": "V01",
+            "serial_number": "FOC2251V2JA"
+          }
+        }
+      }
+    },
+    {
+      "name": "ISR4331 with license UDI banner and mixed VID states",
+      "input": "show inventory\n\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\nINFO: Please use \"show license UDI\" to get serial number for licensing.\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n\nNAME: \"Chassis\", DESCR: \"Cisco ISR4331 Chassis\"\nPID: ISR4331/K9        , VID: V04  , SN: FDO2201A0SR\n\nNAME: \"Power Supply Module 0\", DESCR: \"250W AC Power Supply for Cisco ISR 4330\"\nPID: PWR-4330-AC       , VID: V02  , SN: PST2150N1E2\n\nNAME: \"Fan Tray\", DESCR: \"Cisco ISR4330 Fan Assembly\"\nPID: ACS-4330-FANASSY  , VID:      , SN:\n\nNAME: \"module 0\", DESCR: \"Cisco ISR4331 Built-In NIM controller\"\nPID: ISR4331/K9        , VID:      , SN:\n\nNAME: \"NIM subslot 0/1\", DESCR: \"NIM-ES2-4\"\nPID: NIM-ES2-4         , VID: V01  , SN: FOC21486SRL\n\nNAME: \"NIM subslot 0/2\", DESCR: \"NIM-ES2-8\"\nPID: NIM-ES2-8         , VID: V01  , SN: FOC22384AXC\n\nNAME: \"NIM subslot 0/0\", DESCR: \"Front Panel 3 ports Gigabitethernet Module\"\nPID: ISR4331-3x1GE     , VID: V01  , SN:\n\nNAME: \"subslot 0/0 transceiver 2\", DESCR: \"GE T\"\nPID: SFP-GE-T            , VID: V02  , SN: MTC2139029X\n\nNAME: \"module 1\", DESCR: \"Cisco ISR4331 Built-In SM controller\"\nPID: ISR4331/K9        , VID:      , SN:\n\nNAME: \"module R0\", DESCR: \"Cisco ISR4331 Route Processor\"\nPID: ISR4331/K9        , VID: V04  , SN: FDO21520TGH\n\nNAME: \"module F0\", DESCR: \"Cisco ISR4331 Forwarding Processor\"\nPID: ISR4331/K9        , VID:      , SN:\n",
+      "expected": {
+        "inventory": {
+          "Chassis": {
+            "name": "Chassis",
+            "description": "Cisco ISR4331 Chassis",
+            "pid": "ISR4331/K9",
+            "vid": "V04",
+            "serial_number": "FDO2201A0SR"
+          },
+          "Power Supply Module 0": {
+            "name": "Power Supply Module 0",
+            "description": "250W AC Power Supply for Cisco ISR 4330",
+            "pid": "PWR-4330-AC",
+            "vid": "V02",
+            "serial_number": "PST2150N1E2"
+          },
+          "Fan Tray": {
+            "name": "Fan Tray",
+            "description": "Cisco ISR4330 Fan Assembly",
+            "pid": "ACS-4330-FANASSY"
+          },
+          "module 0": {
+            "name": "module 0",
+            "description": "Cisco ISR4331 Built-In NIM controller",
+            "pid": "ISR4331/K9"
+          },
+          "NIM subslot 0/1": {
+            "name": "NIM subslot 0/1",
+            "description": "NIM-ES2-4",
+            "pid": "NIM-ES2-4",
+            "vid": "V01",
+            "serial_number": "FOC21486SRL"
+          },
+          "NIM subslot 0/2": {
+            "name": "NIM subslot 0/2",
+            "description": "NIM-ES2-8",
+            "pid": "NIM-ES2-8",
+            "vid": "V01",
+            "serial_number": "FOC22384AXC"
+          },
+          "NIM subslot 0/0": {
+            "name": "NIM subslot 0/0",
+            "description": "Front Panel 3 ports Gigabitethernet Module",
+            "pid": "ISR4331-3x1GE",
+            "vid": "V01"
+          },
+          "subslot 0/0 transceiver 2": {
+            "name": "subslot 0/0 transceiver 2",
+            "description": "GE T",
+            "pid": "SFP-GE-T",
+            "vid": "V02",
+            "serial_number": "MTC2139029X"
+          },
+          "module 1": {
+            "name": "module 1",
+            "description": "Cisco ISR4331 Built-In SM controller",
+            "pid": "ISR4331/K9"
+          },
+          "module R0": {
+            "name": "module R0",
+            "description": "Cisco ISR4331 Route Processor",
+            "pid": "ISR4331/K9",
+            "vid": "V04",
+            "serial_number": "FDO21520TGH"
+          },
+          "module F0": {
+            "name": "module F0",
+            "description": "Cisco ISR4331 Forwarding Processor",
+            "pid": "ISR4331/K9"
+          }
+        }
+      }
+    },
+    {
+      "name": "C8300 ISR 9000 series with SM-NIM adapter",
+      "input": "NAME: \"Chassis\", DESCR: \"Cisco isr9000 Series Chassis\"\nPID: C8300-1N1S-6G , VID: V00 , SN: FDO2319A1RM\n\nNAME: \"Fan Tray\", DESCR: \"Cisco C8300 1RU Fan Assembly\"\nPID: C8300-FAN-1R , VID: , SN:\n\nNAME: \"module 0\", DESCR: \"Cisco isr9000 series Unknown Module\"\nPID: C8300-1N1S-6G , VID: , SN:\n\nNAME: \"NIM subslot 0/0\", DESCR: \"Front Panel 6 ports Gigabitethernet Module\"\nPID: 4x1G-2xSFP , VID: V01 , SN:\n\nNAME: \"module 1\", DESCR: \"Cisco C-SM-NIM-ADPT SM to NIM adapter\"\nPID: C-SM-NIM-ADPT , VID: V01 , SN: FDO23370TB8\n\nNAME: \"NIM subslot 1/0\", DESCR: \"NIM-8MFT-T1/E1 - T1/E1 Serial Module\"\nPID: NIM-8MFT-T1/E1 , VID: V04 , SN: FOC21032R9L\n\nNAME: \"module R0\", DESCR: \"Cisco isr9000 Series Route Processor\"\nPID: C8300-1N1S-6G , VID: V00 , SN: FDO231403QN\n\nNAME: \"module F0\", DESCR: \"Cisco isr9000 Series Forwarding Processor\"\nPID: C8300-1N1S-6G , VID: , SN:\n",
+      "expected": {
+        "inventory": {
+          "Chassis": {
+            "name": "Chassis",
+            "description": "Cisco isr9000 Series Chassis",
+            "pid": "C8300-1N1S-6G",
+            "vid": "V00",
+            "serial_number": "FDO2319A1RM"
+          },
+          "Fan Tray": {
+            "name": "Fan Tray",
+            "description": "Cisco C8300 1RU Fan Assembly",
+            "pid": "C8300-FAN-1R"
+          },
+          "module 0": {
+            "name": "module 0",
+            "description": "Cisco isr9000 series Unknown Module",
+            "pid": "C8300-1N1S-6G"
+          },
+          "NIM subslot 0/0": {
+            "name": "NIM subslot 0/0",
+            "description": "Front Panel 6 ports Gigabitethernet Module",
+            "pid": "4x1G-2xSFP",
+            "vid": "V01"
+          },
+          "module 1": {
+            "name": "module 1",
+            "description": "Cisco C-SM-NIM-ADPT SM to NIM adapter",
+            "pid": "C-SM-NIM-ADPT",
+            "vid": "V01",
+            "serial_number": "FDO23370TB8"
+          },
+          "NIM subslot 1/0": {
+            "name": "NIM subslot 1/0",
+            "description": "NIM-8MFT-T1/E1 - T1/E1 Serial Module",
+            "pid": "NIM-8MFT-T1/E1",
+            "vid": "V04",
+            "serial_number": "FOC21032R9L"
+          },
+          "module R0": {
+            "name": "module R0",
+            "description": "Cisco isr9000 Series Route Processor",
+            "pid": "C8300-1N1S-6G",
+            "vid": "V00",
+            "serial_number": "FDO231403QN"
+          },
+          "module F0": {
+            "name": "module F0",
+            "description": "Cisco isr9000 Series Forwarding Processor",
+            "pid": "C8300-1N1S-6G"
+          }
+        }
+      }
+    }
+  ]
+}

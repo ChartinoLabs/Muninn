@@ -1,0 +1,290 @@
+{
+  "os": "cisco_ios",
+  "command": "show ip eigrp topology",
+  "schema": {
+    "name": "ShowIpEigrpTopologyResult",
+    "fields": {
+      "autonomous_systems": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "AutonomousSystemEntry",
+            "fields": {
+              "as_number": {
+                "type": "int",
+                "required": true
+              },
+              "router_id": {
+                "type": "str",
+                "required": true
+              },
+              "routes": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "TopologyEntry",
+                    "fields": {
+                      "code": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "successor_count": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "feasible_distance": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "tag": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "paths": {
+                        "type": {
+                          "type": "list",
+                          "items": {
+                            "name": "PathEntry",
+                            "fields": {
+                              "next_hop": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "interface": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "reported_distance": {
+                                "type": "int",
+                                "required": false
+                              }
+                            }
+                          }
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic EIGRP topology with connected and learned routes",
+      "input": "EIGRP-IPv4 Topology Table for AS(1)/ID(172.16.0.1)\nCodes: P - Passive, A - Active, U - Update, Q - Query, R - Reply,\nr - reply Status, s - sia Status\n\nP 172.16.0.1/32, 1 successors, FD is 128256\nvia Connected, Loopback0\nP 172.16.0.2/32, 1 successors, FD is 130816\nvia 192.168.100.1 (130816/128256), GigabitEthernet0/0\nP 10.2.2.0/24, 1 successors, FD is 3072\nvia 192.168.100.1 (3072/2816), GigabitEthernet0/0\nP 192.168.100.4/31, 1 successors, FD is 3072\nvia 192.168.100.1 (3072/2816), GigabitEthernet0/0\nP 192.168.100.0/31, 1 successors, FD is 2816\nvia Connected, GigabitEthernet0/0\nP 192.168.100.2/31, 1 successors, FD is 2816\nvia Connected, GigabitEthernet0/1\nP 192.168.100.6/31, 1 successors, FD is 3072\nvia 192.168.100.1 (3072/2816), GigabitEthernet0/0\n",
+      "expected": {
+        "autonomous_systems": {
+          "1": {
+            "as_number": 1,
+            "router_id": "172.16.0.1",
+            "routes": {
+              "10.2.2.0/24": {
+                "code": "P",
+                "feasible_distance": 3072,
+                "paths": [
+                  {
+                    "interface": "GigabitEthernet0/0",
+                    "next_hop": "192.168.100.1",
+                    "reported_distance": 2816
+                  }
+                ],
+                "successor_count": 1
+              },
+              "172.16.0.1/32": {
+                "code": "P",
+                "feasible_distance": 128256,
+                "paths": [
+                  {
+                    "interface": "Loopback0",
+                    "next_hop": "Connected"
+                  }
+                ],
+                "successor_count": 1
+              },
+              "172.16.0.2/32": {
+                "code": "P",
+                "feasible_distance": 130816,
+                "paths": [
+                  {
+                    "interface": "GigabitEthernet0/0",
+                    "next_hop": "192.168.100.1",
+                    "reported_distance": 128256
+                  }
+                ],
+                "successor_count": 1
+              },
+              "192.168.100.0/31": {
+                "code": "P",
+                "feasible_distance": 2816,
+                "paths": [
+                  {
+                    "interface": "GigabitEthernet0/0",
+                    "next_hop": "Connected"
+                  }
+                ],
+                "successor_count": 1
+              },
+              "192.168.100.2/31": {
+                "code": "P",
+                "feasible_distance": 2816,
+                "paths": [
+                  {
+                    "interface": "GigabitEthernet0/1",
+                    "next_hop": "Connected"
+                  }
+                ],
+                "successor_count": 1
+              },
+              "192.168.100.4/31": {
+                "code": "P",
+                "feasible_distance": 3072,
+                "paths": [
+                  {
+                    "interface": "GigabitEthernet0/0",
+                    "next_hop": "192.168.100.1",
+                    "reported_distance": 2816
+                  }
+                ],
+                "successor_count": 1
+              },
+              "192.168.100.6/31": {
+                "code": "P",
+                "feasible_distance": 3072,
+                "paths": [
+                  {
+                    "interface": "GigabitEthernet0/0",
+                    "next_hop": "192.168.100.1",
+                    "reported_distance": 2816
+                  }
+                ],
+                "successor_count": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Multiple autonomous systems with tags, inaccessible FD, and special next-hops",
+      "input": "IP-EIGRP Topology Table for AS(100)/ID(10.255.11.6)\n\nCodes: P - Passive, A - Active, U - Update, Q - Query, R - Reply,\n       r - reply Status, s - sia Status\n\nP 66.128.208.232/32, 2 successors, FD is 264448\n        via 10.254.11.9, TenGigabitEthernet1/1\n        via 10.254.11.33, TenGigabitEthernet2/1\nP 10.254.6.8/30, 1 successors, FD is 1024\n        via 10.254.6.14, Port-channel10\nP 67.230.223.128/28, 2 successors, FD is 5632, tag is 53471\n        via 10.254.11.9, TenGigabitEthernet1/1\n        via 10.254.11.33, TenGigabitEthernet2/1\n\nIP-EIGRP Topology Table for AS(65000)/ID(10.2.0.1)\n\nCodes: P - Passive, A - Active, U - Update, Q - Query, R - Reply,\n       r - reply Status, s - sia Status\n\nP 10.50.20.4/32, 2 successors, FD is 128039168\n        via 10.4.0.1, GigabitEthernet1/1\n        via 10.4.0.2, GigabitEthernet1/2\nP 10.50.21.0/27, 0 successors, FD is Inaccessible, tag is 6508497\n        via 10.4.0.1, GigabitEthernet1/1\n        via 10.4.0.2, GigabitEthernet1/2\nP 10.50.75.0/24, 1 successors, FD is 2816\n        via Rstatic\nP 10.50.23.92/30, 1 successors, FD is 3840256, tag is 5507497\n        via Redistributed\n",
+      "expected": {
+        "autonomous_systems": {
+          "100": {
+            "as_number": 100,
+            "router_id": "10.255.11.6",
+            "routes": {
+              "10.254.6.8/30": {
+                "code": "P",
+                "feasible_distance": 1024,
+                "paths": [
+                  {
+                    "interface": "Port-channel10",
+                    "next_hop": "10.254.6.14"
+                  }
+                ],
+                "successor_count": 1
+              },
+              "66.128.208.232/32": {
+                "code": "P",
+                "feasible_distance": 264448,
+                "paths": [
+                  {
+                    "interface": "TenGigabitEthernet1/1",
+                    "next_hop": "10.254.11.9"
+                  },
+                  {
+                    "interface": "TenGigabitEthernet2/1",
+                    "next_hop": "10.254.11.33"
+                  }
+                ],
+                "successor_count": 2
+              },
+              "67.230.223.128/28": {
+                "code": "P",
+                "feasible_distance": 5632,
+                "paths": [
+                  {
+                    "interface": "TenGigabitEthernet1/1",
+                    "next_hop": "10.254.11.9"
+                  },
+                  {
+                    "interface": "TenGigabitEthernet2/1",
+                    "next_hop": "10.254.11.33"
+                  }
+                ],
+                "successor_count": 2,
+                "tag": 53471
+              }
+            }
+          },
+          "65000": {
+            "as_number": 65000,
+            "router_id": "10.2.0.1",
+            "routes": {
+              "10.50.20.4/32": {
+                "code": "P",
+                "feasible_distance": 128039168,
+                "paths": [
+                  {
+                    "interface": "GigabitEthernet1/1",
+                    "next_hop": "10.4.0.1"
+                  },
+                  {
+                    "interface": "GigabitEthernet1/2",
+                    "next_hop": "10.4.0.2"
+                  }
+                ],
+                "successor_count": 2
+              },
+              "10.50.21.0/27": {
+                "code": "P",
+                "paths": [
+                  {
+                    "interface": "GigabitEthernet1/1",
+                    "next_hop": "10.4.0.1"
+                  },
+                  {
+                    "interface": "GigabitEthernet1/2",
+                    "next_hop": "10.4.0.2"
+                  }
+                ],
+                "successor_count": 0,
+                "tag": 6508497
+              },
+              "10.50.23.92/30": {
+                "code": "P",
+                "feasible_distance": 3840256,
+                "paths": [
+                  {
+                    "next_hop": "Redistributed"
+                  }
+                ],
+                "successor_count": 1,
+                "tag": 5507497
+              },
+              "10.50.75.0/24": {
+                "code": "P",
+                "feasible_distance": 2816,
+                "paths": [
+                  {
+                    "next_hop": "Rstatic"
+                  }
+                ],
+                "successor_count": 1
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

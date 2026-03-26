@@ -1,0 +1,337 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show policy-map multipoint",
+  "schema": {
+    "name": "ShowPolicyMapMultipointResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "PeerEntry",
+              "fields": {
+                "service_policy": {
+                  "type": {
+                    "name": "ServicePolicyEntry",
+                    "fields": {
+                      "output": {
+                        "type": {
+                          "name": "ServicePolicyDirection",
+                          "fields": {
+                            "policy_name": {
+                              "type": {
+                                "type": "dict",
+                                "key": "str",
+                                "value": {
+                                  "name": "PolicyMapEntry",
+                                  "fields": {
+                                    "class_map": {
+                                      "type": {
+                                        "type": "dict",
+                                        "key": "str",
+                                        "value": {
+                                          "name": "ClassMapEntry",
+                                          "fields": {
+                                            "match_evaluation": {
+                                              "type": "str",
+                                              "required": true
+                                            },
+                                            "packets": {
+                                              "type": "int",
+                                              "required": true
+                                            },
+                                            "bytes": {
+                                              "type": "int",
+                                              "required": true
+                                            },
+                                            "rate": {
+                                              "type": {
+                                                "name": "RateEntry",
+                                                "fields": {
+                                                  "interval": {
+                                                    "type": "int",
+                                                    "required": true
+                                                  },
+                                                  "offered_rate_bps": {
+                                                    "type": "int",
+                                                    "required": true
+                                                  },
+                                                  "drop_rate_bps": {
+                                                    "type": "int",
+                                                    "required": true
+                                                  }
+                                                }
+                                              },
+                                              "required": true
+                                            },
+                                            "match": {
+                                              "type": {
+                                                "type": "list",
+                                                "items": "str"
+                                              },
+                                              "required": true
+                                            },
+                                            "qos_set": {
+                                              "type": {
+                                                "name": "QosSetEntry",
+                                                "fields": {
+                                                  "dscp": {
+                                                    "type": {
+                                                      "type": "dict",
+                                                      "key": "str",
+                                                      "value": {
+                                                        "name": "MarkerEntry",
+                                                        "fields": {
+                                                          "marker_statistics": {
+                                                            "type": "str",
+                                                            "required": true
+                                                          }
+                                                        }
+                                                      }
+                                                    },
+                                                    "required": false
+                                                  }
+                                                }
+                                              },
+                                              "required": false
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "required": true
+                                    }
+                                  }
+                                }
+                              },
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "input": {
+                        "type": {
+                          "type": "ref",
+                          "name": "ServicePolicyDirection"
+                        },
+                        "required": false
+                      }
+                    }
+                  },
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic multipoint policy-map with two IPv4 peers and QoS marking",
+      "input": "Interface Tunnel1 <--> 21.50.50.122\n\n  Service-policy output: spoke1_group\n\n    Class-map: abc (match-any)\n      215 packets, 27520 bytes\n      5 minute offered rate 0000 bps, drop rate 0000 bps\n      Match: protocol ipv6-icmp\n      QoS Set\n        dscp af43\n          Marker statistics: Disabled\n\n    Class-map: class-default (match-any)\n      138 packets, 16129 bytes\n      5 minute offered rate 0000 bps, drop rate 0000 bps\n      Match: any\n\nInterface Tunnel1 <--> 22.51.51.123\n\n  Service-policy output: spoke2_group\n\n    Class-map: abc (match-any)\n      215 packets, 27520 bytes\n      5 minute offered rate 0000 bps, drop rate 0000 bps\n      Match: protocol ipv6-icmp\n      QoS Set\n        dscp af11\n          Marker statistics: Disabled\n\n    Class-map: class-default (match-any)\n      131 packets, 15309 bytes\n      5 minute offered rate 0000 bps, drop rate 0000 bps\n      Match: any\n",
+      "expected": {
+        "interfaces": {
+          "Tunnel1": {
+            "21.50.50.122": {
+              "service_policy": {
+                "output": {
+                  "policy_name": {
+                    "spoke1_group": {
+                      "class_map": {
+                        "abc": {
+                          "bytes": 27520,
+                          "match": [
+                            "protocol ipv6-icmp"
+                          ],
+                          "match_evaluation": "match-any",
+                          "packets": 215,
+                          "qos_set": {
+                            "dscp": {
+                              "af43": {
+                                "marker_statistics": "Disabled"
+                              }
+                            }
+                          },
+                          "rate": {
+                            "drop_rate_bps": 0,
+                            "interval": 5,
+                            "offered_rate_bps": 0
+                          }
+                        },
+                        "class-default": {
+                          "bytes": 16129,
+                          "match": [
+                            "any"
+                          ],
+                          "match_evaluation": "match-any",
+                          "packets": 138,
+                          "rate": {
+                            "drop_rate_bps": 0,
+                            "interval": 5,
+                            "offered_rate_bps": 0
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "22.51.51.123": {
+              "service_policy": {
+                "output": {
+                  "policy_name": {
+                    "spoke2_group": {
+                      "class_map": {
+                        "abc": {
+                          "bytes": 27520,
+                          "match": [
+                            "protocol ipv6-icmp"
+                          ],
+                          "match_evaluation": "match-any",
+                          "packets": 215,
+                          "qos_set": {
+                            "dscp": {
+                              "af11": {
+                                "marker_statistics": "Disabled"
+                              }
+                            }
+                          },
+                          "rate": {
+                            "drop_rate_bps": 0,
+                            "interval": 5,
+                            "offered_rate_bps": 0
+                          }
+                        },
+                        "class-default": {
+                          "bytes": 15309,
+                          "match": [
+                            "any"
+                          ],
+                          "match_evaluation": "match-any",
+                          "packets": 131,
+                          "rate": {
+                            "drop_rate_bps": 0,
+                            "interval": 5,
+                            "offered_rate_bps": 0
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Multipoint policy-map with IPv6 peer addresses",
+      "input": "Interface Tunnel1 <--> 2001:DB8:1201::122\n\n  Service-policy output: spoke1_group\n\n    Class-map: abc (match-any)\n      215 packets, 31820 bytes\n      5 minute offered rate 0000 bps, drop rate 0000 bps\n      Match: protocol icmp\n      QoS Set\n        dscp af43\n          Marker statistics: Disabled\n\n    Class-map: class-default (match-any)\n      118 packets, 12949 bytes\n      5 minute offered rate 0000 bps, drop rate 0000 bps\n      Match: any\n\nInterface Tunnel1 <--> 2001:DB8:1202::123\n\n  Service-policy output: spoke2_group\n\n    Class-map: abc (match-any)\n      215 packets, 31820 bytes\n      5 minute offered rate 0000 bps, drop rate 0000 bps\n      Match: protocol icmp\n      QoS Set\n        dscp af11\n          Marker statistics: Disabled\n\n    Class-map: class-default (match-any)\n      111 packets, 12211 bytes\n      5 minute offered rate 0000 bps, drop rate 0000 bps\n      Match: any\n",
+      "expected": {
+        "interfaces": {
+          "Tunnel1": {
+            "2001:DB8:1201::122": {
+              "service_policy": {
+                "output": {
+                  "policy_name": {
+                    "spoke1_group": {
+                      "class_map": {
+                        "abc": {
+                          "bytes": 31820,
+                          "match": [
+                            "protocol icmp"
+                          ],
+                          "match_evaluation": "match-any",
+                          "packets": 215,
+                          "qos_set": {
+                            "dscp": {
+                              "af43": {
+                                "marker_statistics": "Disabled"
+                              }
+                            }
+                          },
+                          "rate": {
+                            "drop_rate_bps": 0,
+                            "interval": 5,
+                            "offered_rate_bps": 0
+                          }
+                        },
+                        "class-default": {
+                          "bytes": 12949,
+                          "match": [
+                            "any"
+                          ],
+                          "match_evaluation": "match-any",
+                          "packets": 118,
+                          "rate": {
+                            "drop_rate_bps": 0,
+                            "interval": 5,
+                            "offered_rate_bps": 0
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "2001:DB8:1202::123": {
+              "service_policy": {
+                "output": {
+                  "policy_name": {
+                    "spoke2_group": {
+                      "class_map": {
+                        "abc": {
+                          "bytes": 31820,
+                          "match": [
+                            "protocol icmp"
+                          ],
+                          "match_evaluation": "match-any",
+                          "packets": 215,
+                          "qos_set": {
+                            "dscp": {
+                              "af11": {
+                                "marker_statistics": "Disabled"
+                              }
+                            }
+                          },
+                          "rate": {
+                            "drop_rate_bps": 0,
+                            "interval": 5,
+                            "offered_rate_bps": 0
+                          }
+                        },
+                        "class-default": {
+                          "bytes": 12211,
+                          "match": [
+                            "any"
+                          ],
+                          "match_evaluation": "match-any",
+                          "packets": 111,
+                          "rate": {
+                            "drop_rate_bps": 0,
+                            "interval": 5,
+                            "offered_rate_bps": 0
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

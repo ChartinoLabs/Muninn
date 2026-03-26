@@ -1,0 +1,355 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip ospf database",
+  "schema": {
+    "name": "ShowIpOspfDatabaseResult",
+    "fields": {
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ProcessEntry",
+            "fields": {
+              "router_id": {
+                "type": "str",
+                "required": true
+              },
+              "sections": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "list",
+                    "items": {
+                      "name": "LsaTypeSection",
+                      "fields": {
+                        "area": {
+                          "type": "str",
+                          "required": false
+                        },
+                        "lsas": {
+                          "type": {
+                            "type": "dict",
+                            "key": "str",
+                            "value": {
+                              "type": "dict",
+                              "key": "str",
+                              "value": {
+                                "name": "LsaEntry",
+                                "fields": {
+                                  "adv_router": {
+                                    "type": "str",
+                                    "required": true
+                                  },
+                                  "age": {
+                                    "type": "int",
+                                    "required": true
+                                  },
+                                  "seq": {
+                                    "type": "str",
+                                    "required": true
+                                  },
+                                  "checksum": {
+                                    "type": "str",
+                                    "required": true
+                                  },
+                                  "link_count": {
+                                    "type": "int",
+                                    "required": false
+                                  },
+                                  "tag": {
+                                    "type": "int",
+                                    "required": false
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "required": true
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple OSPF processes with Router and Net Link States",
+      "input": "\n            OSPF Router with ID (192.0.2.4) (Process ID 1)\n\n                Router Link States (Area 0)\n\nLink ID         ADV Router      Age         Seq#       Checksum Link count\n192.0.2.1       192.0.2.1       2006        0x800001E4 0x00344D 3\n192.0.2.2       192.0.2.2       995         0x800001E3 0x003C2C 3\n192.0.2.3       192.0.2.3       479         0x800001E3 0x00341B 3\n192.0.2.4       192.0.2.4       892         0x800001E5 0x0033FF 3\n\n                Net Link States (Area 0)\n\nLink ID         ADV Router      Age         Seq#       Checksum\n10.12.0.2       192.0.2.2       995         0x800001DF 0x00A057\n10.13.0.2       192.0.2.3       479         0x800001DF 0x00985C\n10.24.0.2       192.0.2.4       892         0x800001DF 0x0026C0\n10.34.0.2       192.0.2.4       892         0x800001DF 0x00BB20\n\n            OSPF Router with ID (198.51.100.4) (Process ID 10)\n\n                Router Link States (Area 0)\n\nLink ID         ADV Router      Age         Seq#       Checksum Link count\n198.51.100.1    198.51.100.1    217         0x800001E7 0x0087FA 3\n198.51.100.2    198.51.100.2    1753        0x800001E6 0x008FD9 3\n198.51.100.3    198.51.100.3    1192        0x800001E3 0x008DC5 3\n198.51.100.4    198.51.100.4    965         0x800001E4 0x008EA9 3\n\n                Net Link States (Area 0)\n\nLink ID         ADV Router      Age         Seq#       Checksum\n10.12.10.2      198.51.100.2    1753        0x800001DF 0x009288\n10.13.10.2      198.51.100.3    1192        0x800001DF 0x008A8D\n10.24.10.2      198.51.100.4    965         0x800001DF 0x0018F1\n10.34.10.2      198.51.100.4    965         0x800001DF 0x00AD51\n\n            OSPF Router with ID (203.0.113.4) (Process ID 20)\n\n                Router Link States (Area 0)\n\nLink ID         ADV Router      Age         Seq#       Checksum Link count\n203.0.113.1     203.0.113.1     1961        0x800001E3 0x00C1FF 3\n203.0.113.2     203.0.113.2     46          0x800001E5 0x00C3E1 3\n203.0.113.3     203.0.113.3     1760        0x800001E5 0x00BBD0 3\n203.0.113.4     203.0.113.4     740         0x800001E5 0x00BEB3 3\n\n                Net Link States (Area 0)\n\nLink ID         ADV Router      Age         Seq#       Checksum\n10.12.20.2      203.0.113.2     46          0x800001DF 0x00AEC5\n10.13.20.2      203.0.113.3     1760        0x800001DF 0x00A6CA\n10.24.20.2      203.0.113.4     740         0x800001DF 0x00342F\n10.34.20.2      203.0.113.4     740         0x800001DF 0x00C98E\n",
+      "expected": {
+        "processes": {
+          "1": {
+            "router_id": "192.0.2.4",
+            "sections": {
+              "Router": [
+                {
+                  "area": "0",
+                  "lsas": {
+                    "192.0.2.1": {
+                      "192.0.2.1": {
+                        "adv_router": "192.0.2.1",
+                        "age": 2006,
+                        "checksum": "0x00344D",
+                        "link_count": 3,
+                        "seq": "0x800001E4"
+                      }
+                    },
+                    "192.0.2.2": {
+                      "192.0.2.2": {
+                        "adv_router": "192.0.2.2",
+                        "age": 995,
+                        "checksum": "0x003C2C",
+                        "link_count": 3,
+                        "seq": "0x800001E3"
+                      }
+                    },
+                    "192.0.2.3": {
+                      "192.0.2.3": {
+                        "adv_router": "192.0.2.3",
+                        "age": 479,
+                        "checksum": "0x00341B",
+                        "link_count": 3,
+                        "seq": "0x800001E3"
+                      }
+                    },
+                    "192.0.2.4": {
+                      "192.0.2.4": {
+                        "adv_router": "192.0.2.4",
+                        "age": 892,
+                        "checksum": "0x0033FF",
+                        "link_count": 3,
+                        "seq": "0x800001E5"
+                      }
+                    }
+                  }
+                }
+              ],
+              "Net": [
+                {
+                  "area": "0",
+                  "lsas": {
+                    "10.12.0.2": {
+                      "192.0.2.2": {
+                        "adv_router": "192.0.2.2",
+                        "age": 995,
+                        "checksum": "0x00A057",
+                        "seq": "0x800001DF"
+                      }
+                    },
+                    "10.13.0.2": {
+                      "192.0.2.3": {
+                        "adv_router": "192.0.2.3",
+                        "age": 479,
+                        "checksum": "0x00985C",
+                        "seq": "0x800001DF"
+                      }
+                    },
+                    "10.24.0.2": {
+                      "192.0.2.4": {
+                        "adv_router": "192.0.2.4",
+                        "age": 892,
+                        "checksum": "0x0026C0",
+                        "seq": "0x800001DF"
+                      }
+                    },
+                    "10.34.0.2": {
+                      "192.0.2.4": {
+                        "adv_router": "192.0.2.4",
+                        "age": 892,
+                        "checksum": "0x00BB20",
+                        "seq": "0x800001DF"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "10": {
+            "router_id": "198.51.100.4",
+            "sections": {
+              "Router": [
+                {
+                  "area": "0",
+                  "lsas": {
+                    "198.51.100.1": {
+                      "198.51.100.1": {
+                        "adv_router": "198.51.100.1",
+                        "age": 217,
+                        "checksum": "0x0087FA",
+                        "link_count": 3,
+                        "seq": "0x800001E7"
+                      }
+                    },
+                    "198.51.100.2": {
+                      "198.51.100.2": {
+                        "adv_router": "198.51.100.2",
+                        "age": 1753,
+                        "checksum": "0x008FD9",
+                        "link_count": 3,
+                        "seq": "0x800001E6"
+                      }
+                    },
+                    "198.51.100.3": {
+                      "198.51.100.3": {
+                        "adv_router": "198.51.100.3",
+                        "age": 1192,
+                        "checksum": "0x008DC5",
+                        "link_count": 3,
+                        "seq": "0x800001E3"
+                      }
+                    },
+                    "198.51.100.4": {
+                      "198.51.100.4": {
+                        "adv_router": "198.51.100.4",
+                        "age": 965,
+                        "checksum": "0x008EA9",
+                        "link_count": 3,
+                        "seq": "0x800001E4"
+                      }
+                    }
+                  }
+                }
+              ],
+              "Net": [
+                {
+                  "area": "0",
+                  "lsas": {
+                    "10.12.10.2": {
+                      "198.51.100.2": {
+                        "adv_router": "198.51.100.2",
+                        "age": 1753,
+                        "checksum": "0x009288",
+                        "seq": "0x800001DF"
+                      }
+                    },
+                    "10.13.10.2": {
+                      "198.51.100.3": {
+                        "adv_router": "198.51.100.3",
+                        "age": 1192,
+                        "checksum": "0x008A8D",
+                        "seq": "0x800001DF"
+                      }
+                    },
+                    "10.24.10.2": {
+                      "198.51.100.4": {
+                        "adv_router": "198.51.100.4",
+                        "age": 965,
+                        "checksum": "0x0018F1",
+                        "seq": "0x800001DF"
+                      }
+                    },
+                    "10.34.10.2": {
+                      "198.51.100.4": {
+                        "adv_router": "198.51.100.4",
+                        "age": 965,
+                        "checksum": "0x00AD51",
+                        "seq": "0x800001DF"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "20": {
+            "router_id": "203.0.113.4",
+            "sections": {
+              "Router": [
+                {
+                  "area": "0",
+                  "lsas": {
+                    "203.0.113.1": {
+                      "203.0.113.1": {
+                        "adv_router": "203.0.113.1",
+                        "age": 1961,
+                        "checksum": "0x00C1FF",
+                        "link_count": 3,
+                        "seq": "0x800001E3"
+                      }
+                    },
+                    "203.0.113.2": {
+                      "203.0.113.2": {
+                        "adv_router": "203.0.113.2",
+                        "age": 46,
+                        "checksum": "0x00C3E1",
+                        "link_count": 3,
+                        "seq": "0x800001E5"
+                      }
+                    },
+                    "203.0.113.3": {
+                      "203.0.113.3": {
+                        "adv_router": "203.0.113.3",
+                        "age": 1760,
+                        "checksum": "0x00BBD0",
+                        "link_count": 3,
+                        "seq": "0x800001E5"
+                      }
+                    },
+                    "203.0.113.4": {
+                      "203.0.113.4": {
+                        "adv_router": "203.0.113.4",
+                        "age": 740,
+                        "checksum": "0x00BEB3",
+                        "link_count": 3,
+                        "seq": "0x800001E5"
+                      }
+                    }
+                  }
+                }
+              ],
+              "Net": [
+                {
+                  "area": "0",
+                  "lsas": {
+                    "10.12.20.2": {
+                      "203.0.113.2": {
+                        "adv_router": "203.0.113.2",
+                        "age": 46,
+                        "checksum": "0x00AEC5",
+                        "seq": "0x800001DF"
+                      }
+                    },
+                    "10.13.20.2": {
+                      "203.0.113.3": {
+                        "adv_router": "203.0.113.3",
+                        "age": 1760,
+                        "checksum": "0x00A6CA",
+                        "seq": "0x800001DF"
+                      }
+                    },
+                    "10.24.20.2": {
+                      "203.0.113.4": {
+                        "adv_router": "203.0.113.4",
+                        "age": 740,
+                        "checksum": "0x00342F",
+                        "seq": "0x800001DF"
+                      }
+                    },
+                    "10.34.20.2": {
+                      "203.0.113.4": {
+                        "adv_router": "203.0.113.4",
+                        "age": 740,
+                        "checksum": "0x00C98E",
+                        "seq": "0x800001DF"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

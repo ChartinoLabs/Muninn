@@ -1,0 +1,161 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip arp",
+  "schema": {
+    "name": "ShowIpArpResult",
+    "fields": {
+      "arp_entries": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ArpEntry",
+            "fields": {
+              "hardware_addr": {
+                "type": "str",
+                "required": true
+              },
+              "type": {
+                "type": "str",
+                "required": true
+              },
+              "age": {
+                "type": "int",
+                "required": false
+              },
+              "interface": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "IOS-XE ARP table with subinterfaces",
+      "input": "\nProtocol  Address          Age (min)  Hardware Addr   Type   Interface\nInternet  10.12.90.1              -   fa16.3eff.9c9e  ARPA   GigabitEthernet2.390\nInternet  10.12.90.2            139   fa16.3eff.5a76  ARPA   GigabitEthernet2.390\nInternet  10.12.110.1             -   fa16.3eff.9c9e  ARPA   GigabitEthernet2.410\n",
+      "expected": {
+        "arp_entries": {
+          "10.12.90.1": {
+            "hardware_addr": "fa16.3eff.9c9e",
+            "type": "ARPA",
+            "interface": "GigabitEthernet2.390"
+          },
+          "10.12.90.2": {
+            "age": 139,
+            "hardware_addr": "fa16.3eff.5a76",
+            "type": "ARPA",
+            "interface": "GigabitEthernet2.390"
+          },
+          "10.12.110.1": {
+            "hardware_addr": "fa16.3eff.9c9e",
+            "type": "ARPA",
+            "interface": "GigabitEthernet2.410"
+          }
+        }
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": "Protocol  Address          Age (min)  Hardware Addr   Type   Interface\nInternet  10.24.0.1               9   5254.0053.ccc5  ARPA   GigabitEthernet3\nInternet  10.24.0.2               -   5254.0022.28dc  ARPA   GigabitEthernet3\nInternet  10.34.0.1             246   5254.0022.2e01  ARPA   GigabitEthernet2\nInternet  10.34.0.2               -   5254.001d.82bf  ARPA   GigabitEthernet2\n",
+      "expected": {
+        "arp_entries": {
+          "10.24.0.1": {
+            "hardware_addr": "5254.0053.ccc5",
+            "type": "ARPA",
+            "age": 9,
+            "interface": "GigabitEthernet3"
+          },
+          "10.24.0.2": {
+            "hardware_addr": "5254.0022.28dc",
+            "type": "ARPA",
+            "interface": "GigabitEthernet3"
+          },
+          "10.34.0.1": {
+            "hardware_addr": "5254.0022.2e01",
+            "type": "ARPA",
+            "age": 246,
+            "interface": "GigabitEthernet2"
+          },
+          "10.34.0.2": {
+            "hardware_addr": "5254.001d.82bf",
+            "type": "ARPA",
+            "interface": "GigabitEthernet2"
+          }
+        }
+      }
+    },
+    {
+      "name": "ARP entries on VLAN interfaces with private VLAN suffixes",
+      "input": "Protocol Address Age (min) Hardware Addr Type Interface\nInternet 172.16.255.1 - 28af.fdea.ccdf ARPA Vlan200\nInternet 192.168.1.201 3 0000.0000.0001 ARPA Vlan201 pv 202\nInternet 192.168.1.203 3 0015.0100.0001 ARPA Vlan201 pv 203\n",
+      "expected": {
+        "arp_entries": {
+          "172.16.255.1": {
+            "hardware_addr": "28af.fdea.ccdf",
+            "type": "ARPA",
+            "interface": "Vlan200"
+          },
+          "192.168.1.201": {
+            "hardware_addr": "0000.0000.0001",
+            "type": "ARPA",
+            "age": 3,
+            "interface": "Vlan201"
+          },
+          "192.168.1.203": {
+            "hardware_addr": "0015.0100.0001",
+            "type": "ARPA",
+            "age": 3,
+            "interface": "Vlan201"
+          }
+        }
+      }
+    },
+    {
+      "name": "Multiple subnets with SRP-A entry missing interface",
+      "input": "Protocol  Address              Age(min)       Hardware Addr     Type      Interface\nInternet  172.16.233.229       -              0000.0c59.f892    ARPA      Ethernet0/0\nInternet  172.16.233.218       -              0000.0c07.ac00    ARPA      Ethernet0/0\nInternet  172.16.233.19        -              0000.0c63.1300    ARPA      Ethernet0/0\nInternet  172.16.233.209       -              0000.0c36.6965    ARPA      Ethernet0/0\nInternet  172.16.168.11        -              0000.0c63.1300    ARPA      Ethernet0/0\nInternet  172.16.168.254       9              0000.0c36.6965    ARPA      Ethernet0/0\nInternet  10.0.0.0             -              aabb.cc03.8200    SRP-A\n",
+      "expected": {
+        "arp_entries": {
+          "172.16.233.229": {
+            "hardware_addr": "0000.0c59.f892",
+            "type": "ARPA",
+            "interface": "Ethernet0/0"
+          },
+          "172.16.233.218": {
+            "hardware_addr": "0000.0c07.ac00",
+            "type": "ARPA",
+            "interface": "Ethernet0/0"
+          },
+          "172.16.233.19": {
+            "hardware_addr": "0000.0c63.1300",
+            "type": "ARPA",
+            "interface": "Ethernet0/0"
+          },
+          "172.16.233.209": {
+            "hardware_addr": "0000.0c36.6965",
+            "type": "ARPA",
+            "interface": "Ethernet0/0"
+          },
+          "172.16.168.11": {
+            "hardware_addr": "0000.0c63.1300",
+            "type": "ARPA",
+            "interface": "Ethernet0/0"
+          },
+          "172.16.168.254": {
+            "hardware_addr": "0000.0c36.6965",
+            "type": "ARPA",
+            "age": 9,
+            "interface": "Ethernet0/0"
+          },
+          "10.0.0.0": {
+            "hardware_addr": "aabb.cc03.8200",
+            "type": "SRP-A"
+          }
+        }
+      }
+    }
+  ]
+}

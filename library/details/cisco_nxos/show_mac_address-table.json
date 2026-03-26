@@ -1,0 +1,441 @@
+{
+  "os": "cisco_nxos",
+  "command": "show mac address-table",
+  "schema": {
+    "name": "ShowMacAddressTableResult",
+    "fields": {
+      "mac_table": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "MacTableRow",
+              "fields": {
+                "kind": {
+                  "type": {
+                    "type": "literal",
+                    "values": [
+                      "unicast"
+                    ]
+                  },
+                  "required": false
+                },
+                "type": {
+                  "type": "str",
+                  "required": false
+                },
+                "secure": {
+                  "type": "bool",
+                  "required": false
+                },
+                "ntfy": {
+                  "type": "bool",
+                  "required": false
+                },
+                "port": {
+                  "type": "str",
+                  "required": false
+                },
+                "is_routed": {
+                  "type": "bool",
+                  "required": false
+                },
+                "age": {
+                  "type": "int",
+                  "required": false
+                },
+                "entry_flag": {
+                  "type": "str",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Mixed static entries with gateway, primary, and unflagged entries including Drop, sup-eth1, and vPC Peer-Link ports",
+      "input": "N95_1# show mac address-table\nLegend:\n    * - primary entry, G - Gateway MAC, (R) - Routed MAC, O - Overlay MAC\n    age - seconds since last seen,+ - primary entry using vPC Peer-Link,\n    (T) - True, (F) - False, C - ControlPlane MAC, ~ - vsan\n   VLAN     MAC Address      Type      age     Secure NTFY Ports\n---------+-----------------+--------+---------+------+----+---------------\n*   10     aaaa.bbff.8888   static   -         F      F    Eth1/2\n*   20     aaaa.bbff.8888   static   -         F      F    Drop\n*   30     aaaa.bbff.8888   static   -         F      F    Drop\nG    -     0000.deff.6c9d   static   -         F      F    sup-eth1(R)\nG    -     5e00.c0ff.0007   static   -         F      F     (R)\nG    -     5e00.c0ff.0007   static   -         F      F  sup-eth1(R) (Lo0)\nG  100     5e00.c0ff.0007   static   -         F      F    sup-eth1(R)\nG  101     5e00.c0ff.0007   static   -         F      F    sup-eth1(R)\nG  102     5e00.c0ff.0007   static   -         F      F    sup-eth1(R)\n  2000     7e00.c0ff.0007    static       -       F    F  vPC Peer-Link(R)\n  3000     5e00.c0ff.0007   static   -         F      F    sup-eth1(R)\n  4000     5e00.c0ff.0007   static   ~~~         F      F    sup-eth1(R)\n",
+      "expected": {
+        "mac_table": {
+          "10": {
+            "aaaa.bbff.8888": {
+              "kind": "unicast",
+              "type": "static",
+              "secure": false,
+              "ntfy": false,
+              "port": "Ethernet1/2",
+              "is_routed": false,
+              "entry_flag": "primary"
+            }
+          },
+          "20": {
+            "aaaa.bbff.8888": {
+              "kind": "unicast",
+              "type": "static",
+              "secure": false,
+              "ntfy": false,
+              "port": "Drop",
+              "is_routed": false,
+              "entry_flag": "primary"
+            }
+          },
+          "30": {
+            "aaaa.bbff.8888": {
+              "kind": "unicast",
+              "type": "static",
+              "secure": false,
+              "ntfy": false,
+              "port": "Drop",
+              "is_routed": false,
+              "entry_flag": "primary"
+            }
+          },
+          "none": {
+            "0000.deff.6c9d": {
+              "kind": "unicast",
+              "type": "static",
+              "secure": false,
+              "ntfy": false,
+              "port": "sup-eth1(R)",
+              "is_routed": true,
+              "entry_flag": "gateway"
+            },
+            "5e00.c0ff.0007": {
+              "kind": "unicast",
+              "type": "static",
+              "secure": false,
+              "ntfy": false,
+              "port": "sup-eth1(R) (Lo0)",
+              "is_routed": true,
+              "entry_flag": "gateway"
+            }
+          },
+          "100": {
+            "5e00.c0ff.0007": {
+              "kind": "unicast",
+              "type": "static",
+              "secure": false,
+              "ntfy": false,
+              "port": "sup-eth1(R)",
+              "is_routed": true,
+              "entry_flag": "gateway"
+            }
+          },
+          "101": {
+            "5e00.c0ff.0007": {
+              "kind": "unicast",
+              "type": "static",
+              "secure": false,
+              "ntfy": false,
+              "port": "sup-eth1(R)",
+              "is_routed": true,
+              "entry_flag": "gateway"
+            }
+          },
+          "102": {
+            "5e00.c0ff.0007": {
+              "kind": "unicast",
+              "type": "static",
+              "secure": false,
+              "ntfy": false,
+              "port": "sup-eth1(R)",
+              "is_routed": true,
+              "entry_flag": "gateway"
+            }
+          },
+          "2000": {
+            "7e00.c0ff.0007": {
+              "kind": "unicast",
+              "type": "static",
+              "secure": false,
+              "ntfy": false,
+              "port": "vPC Peer-Link(R)",
+              "is_routed": true
+            }
+          },
+          "3000": {
+            "5e00.c0ff.0007": {
+              "kind": "unicast",
+              "type": "static",
+              "secure": false,
+              "ntfy": false,
+              "port": "sup-eth1(R)",
+              "is_routed": true
+            }
+          },
+          "4000": {
+            "5e00.c0ff.0007": {
+              "kind": "unicast",
+              "type": "static",
+              "secure": false,
+              "ntfy": false,
+              "port": "sup-eth1(R)",
+              "is_routed": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Dynamic entries with primary and vPC peer-link flags on port-channel interfaces",
+      "input": "Legend:\n    * - primary entry, G - Gateway MAC, (R) - Routed MAC, O - Overlay MAC\n    age - seconds since last seen,+ - primary entry using vPC Peer-Link,\n    (T) - True, (F) - False, C - ControlPlane MAC, ~ - vsan\n   VLAN     MAC Address      Type      age     Secure NTFY Ports\n---------+-----------------+--------+---------+------+----+------------------\n*  390     000f.53ff.e5a5   dynamic  0         F      F    Po113\n+  390     000f.53ff.1446   dynamic  0         F      F    Po103\n+  390     000f.53ff.d708   dynamic  0         F      F    Po115\n*  390     000f.53ff.fd77   dynamic  0         F      F    Po116\n*  390     000f.53ff.d0fc   dynamic  0         F      F    Po127\n*  390     000f.53ff.037d   dynamic  0         F      F    Po133\n+  390     000f.53ff.061e   dynamic  0         F      F    Po132\n*  390     000f.53ff.1e9c   dynamic  0         F      F    Po124\n+  390     000f.53ff.1f1d   dynamic  0         F      F    Po125\n",
+      "expected": {
+        "mac_table": {
+          "390": {
+            "000f.53ff.e5a5": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "secure": false,
+              "ntfy": false,
+              "port": "Port-channel113",
+              "is_routed": false,
+              "age": 0,
+              "entry_flag": "primary"
+            },
+            "000f.53ff.1446": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "secure": false,
+              "ntfy": false,
+              "port": "Port-channel103",
+              "is_routed": false,
+              "age": 0,
+              "entry_flag": "vpc_peer_link"
+            },
+            "000f.53ff.d708": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "secure": false,
+              "ntfy": false,
+              "port": "Port-channel115",
+              "is_routed": false,
+              "age": 0,
+              "entry_flag": "vpc_peer_link"
+            },
+            "000f.53ff.fd77": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "secure": false,
+              "ntfy": false,
+              "port": "Port-channel116",
+              "is_routed": false,
+              "age": 0,
+              "entry_flag": "primary"
+            },
+            "000f.53ff.d0fc": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "secure": false,
+              "ntfy": false,
+              "port": "Port-channel127",
+              "is_routed": false,
+              "age": 0,
+              "entry_flag": "primary"
+            },
+            "000f.53ff.037d": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "secure": false,
+              "ntfy": false,
+              "port": "Port-channel133",
+              "is_routed": false,
+              "age": 0,
+              "entry_flag": "primary"
+            },
+            "000f.53ff.061e": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "secure": false,
+              "ntfy": false,
+              "port": "Port-channel132",
+              "is_routed": false,
+              "age": 0,
+              "entry_flag": "vpc_peer_link"
+            },
+            "000f.53ff.1e9c": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "secure": false,
+              "ntfy": false,
+              "port": "Port-channel124",
+              "is_routed": false,
+              "age": 0,
+              "entry_flag": "primary"
+            },
+            "000f.53ff.1f1d": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "secure": false,
+              "ntfy": false,
+              "port": "Port-channel125",
+              "is_routed": false,
+              "age": 0,
+              "entry_flag": "vpc_peer_link"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Entries with NA age values, mixed entry flags including vpc peer-link, unflagged, and gateway",
+      "input": "Legend:\n    * - primary entry, G - Gateway MAC, (R) - Routed MAC, O - Overlay MAC\n    age - seconds since last seen,+ - primary entry using vPC Peer-Link,\n    (T) - True, (F) - False, C - ControlPlane MAC, ~ - vsan\n   VLAN     MAC Address      Type      age     Secure NTFY Ports\n---------+-----------------+--------+---------+------+----+------------------\n+ 100 0000.0000.1111 dynamic NA F F Po100\n100 0000.0000.1112 dynamic NA F F Po100\n100 0000.0000.1113 dynamic NA F F Po100\n+ 100 0000.0000.111a dynamic NA F F Po100\n* 100 0010.9400.0002 dynamic NA F F Po100\nG - 44ae.2502.a907 static - F F sup-eth1(R)\n",
+      "expected": {
+        "mac_table": {
+          "100": {
+            "0000.0000.1111": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "secure": false,
+              "ntfy": false,
+              "port": "Port-channel100",
+              "is_routed": false,
+              "entry_flag": "vpc_peer_link"
+            },
+            "0000.0000.1112": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "secure": false,
+              "ntfy": false,
+              "port": "Port-channel100",
+              "is_routed": false
+            },
+            "0000.0000.1113": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "secure": false,
+              "ntfy": false,
+              "port": "Port-channel100",
+              "is_routed": false
+            },
+            "0000.0000.111a": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "secure": false,
+              "ntfy": false,
+              "port": "Port-channel100",
+              "is_routed": false,
+              "entry_flag": "vpc_peer_link"
+            },
+            "0010.9400.0002": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "secure": false,
+              "ntfy": false,
+              "port": "Port-channel100",
+              "is_routed": false,
+              "entry_flag": "primary"
+            }
+          },
+          "none": {
+            "44ae.2502.a907": {
+              "kind": "unicast",
+              "type": "static",
+              "secure": false,
+              "ntfy": false,
+              "port": "sup-eth1(R)",
+              "is_routed": true,
+              "entry_flag": "gateway"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "VLAN/BD header format with Drop port containing sub-interface info and vPC Peer-Link routed entries",
+      "input": " Note: MAC table entries displayed are getting read from software.\n Use the 'hardware-age' keyword to get information related to 'Age'\n\n Legend:\n        * - primary entry, G - Gateway MAC, (R) - Routed MAC, O - Overlay MAC\n        age - seconds since last seen,+ - primary entry using vPC Peer-Link, E - EVPN entry\n        (T) - True, (F) - False ,  ~~~ - use 'hardware-age' keyword to retrieve age info\n  VLAN/BD   MAC Address      Type      age     Secure NTFY Ports/SWID.SSID.LID\n---------+-----------------+--------+---------+------+----+------------------\nG     -    0000.eeef.f113    static       -       F    F  sup-eth1(R) (Po90.275)\n*     -    0000.eeef.f118    static       -       F    F  Drop (Eth17/3.280)\nG 301      0000.eeef.f12d    static       -       F    F  sup-eth1(R)\nG 440      0000.eeef.f1b8    static       -       F    F  vPC Peer-Link(R)\n",
+      "expected": {
+        "mac_table": {
+          "none": {
+            "0000.eeef.f113": {
+              "kind": "unicast",
+              "type": "static",
+              "secure": false,
+              "ntfy": false,
+              "port": "sup-eth1(R) (Po90.275)",
+              "is_routed": true,
+              "entry_flag": "gateway"
+            },
+            "0000.eeef.f118": {
+              "kind": "unicast",
+              "type": "static",
+              "secure": false,
+              "ntfy": false,
+              "port": "Drop (Eth17/3.280)",
+              "is_routed": false,
+              "entry_flag": "primary"
+            }
+          },
+          "301": {
+            "0000.eeef.f12d": {
+              "kind": "unicast",
+              "type": "static",
+              "secure": false,
+              "ntfy": false,
+              "port": "sup-eth1(R)",
+              "is_routed": true,
+              "entry_flag": "gateway"
+            }
+          },
+          "440": {
+            "0000.eeef.f1b8": {
+              "kind": "unicast",
+              "type": "static",
+              "secure": false,
+              "ntfy": false,
+              "port": "vPC Peer-Link(R)",
+              "is_routed": true,
+              "entry_flag": "gateway"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Gateway and primary static entries with wider column formatting, Drop port and Port-channel normalization",
+      "input": "Legend:\n        * - primary entry, G - Gateway MAC, (R) - Routed MAC, O - Overlay MAC\n        age - seconds since last seen,+ - primary entry using vPC Peer-Link,\n        (T) - True, (F) - False\n     VLAN       MAC Address       Type     age    Secure  NTFY     Ports\n------------+-----------------+----------+-------+------+------+------------------\nG    100      5087.89a1.de75     static     -        F      F    sup-eth1(R)\n*    145        000a.000a.000a   static     -        F      F    Drop\n*    145        000e.000e.000e   static     -        F      F    Po10\n",
+      "expected": {
+        "mac_table": {
+          "100": {
+            "5087.89a1.de75": {
+              "kind": "unicast",
+              "type": "static",
+              "secure": false,
+              "ntfy": false,
+              "port": "sup-eth1(R)",
+              "is_routed": true,
+              "entry_flag": "gateway"
+            }
+          },
+          "145": {
+            "000a.000a.000a": {
+              "kind": "unicast",
+              "type": "static",
+              "secure": false,
+              "ntfy": false,
+              "port": "Drop",
+              "is_routed": false,
+              "entry_flag": "primary"
+            },
+            "000e.000e.000e": {
+              "kind": "unicast",
+              "type": "static",
+              "secure": false,
+              "ntfy": false,
+              "port": "Port-channel10",
+              "is_routed": false,
+              "entry_flag": "primary"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

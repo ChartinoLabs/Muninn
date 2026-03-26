@@ -1,0 +1,267 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show vrrp all",
+  "schema": {
+    "name": "ShowVrrpAllResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "VrrpGroupEntry",
+              "fields": {
+                "state": {
+                  "type": "str",
+                  "required": true
+                },
+                "virtual_ip_address": {
+                  "type": "str",
+                  "required": true
+                },
+                "virtual_mac_address": {
+                  "type": "str",
+                  "required": true
+                },
+                "advertisement_interval_secs": {
+                  "type": "float",
+                  "required": true
+                },
+                "preemption": {
+                  "type": "str",
+                  "required": true
+                },
+                "priority": {
+                  "type": "int",
+                  "required": true
+                },
+                "configured_priority": {
+                  "type": "int",
+                  "required": false
+                },
+                "master_router_ip": {
+                  "type": "str",
+                  "required": false
+                },
+                "master_router_is_local": {
+                  "type": "bool",
+                  "required": false
+                },
+                "master_router_priority": {
+                  "type": "int",
+                  "required": false
+                },
+                "master_advertisement_interval_secs": {
+                  "type": "float",
+                  "required": false
+                },
+                "master_down_interval_secs": {
+                  "type": "float",
+                  "required": false
+                },
+                "master_down_expires_secs": {
+                  "type": "float",
+                  "required": false
+                },
+                "master_advertisement_expires_msec": {
+                  "type": "int",
+                  "required": false
+                },
+                "track_objects": {
+                  "type": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "name": "TrackObjectEntry",
+                      "fields": {
+                        "state": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "decrement": {
+                          "type": "int",
+                          "required": true
+                        }
+                      }
+                    }
+                  },
+                  "required": false
+                },
+                "address_family": {
+                  "type": "str",
+                  "required": false
+                },
+                "description": {
+                  "type": "str",
+                  "required": false
+                },
+                "flags": {
+                  "type": "str",
+                  "required": false
+                },
+                "authentication": {
+                  "type": "str",
+                  "required": false
+                },
+                "state_duration_secs": {
+                  "type": "float",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple VRRP groups across subinterfaces with various states",
+      "input": "FastEthernet0/1 - Group 1\n  State is Master\n  Virtual IP address is 192.168.88.1\n  Virtual MAC address is 0000.5e00.0101\n  Advertisement interval is 1.000 sec\n  Preemption enabled\n  Priority is 110\n    Track object 1 state Up decrement 10\n  Authentication MD5, key-string \"highavailability\"\n  Master Router is 192.168.88.2 (local), priority is 110\n  Master Advertisement interval is 1.000 sec\n  Master Down interval is 3.570 sec\n\nFastEthernet0/1.2 - Group 2\n  State is Master\n  Virtual IP address is 10.0.2.1\n  Virtual MAC address is 0000.5e00.0102\n  Advertisement interval is 1.000 sec\n  Preemption enabled\n  Priority is 110\n    Track object 1 state Up decrement 10\n  Master Router is 10.0.2.2 (local), priority is 110\n  Master Advertisement interval is 1.000 sec\n  Master Down interval is 3.570 sec\n\nFastEthernet0/1.3 - Group 3\n  State is Backup\n  Virtual IP address is 10.0.3.1\n  Virtual MAC address is 0000.5e00.0103\n  Advertisement interval is 1.000 sec\n  Preemption enabled\n  Priority is 110\n    Track object 1 state Up decrement 10\n  Master Router is 10.0.3.3, priority is 120\n  Master Advertisement interval is 1.000 sec\n  Master Down interval is 3.570 sec (expires in 2.738 sec)\n\nFastEthernet0/1.5 - Group 5\n  State is Backup\n  Virtual IP address is 10.0.5.1\n  Virtual MAC address is 0000.5e00.0105\n  Advertisement interval is 1.000 sec\n  Preemption enabled\n  Priority is 90  (cfgd 110)\n    Track object 2 state Down decrement 20\n  Master Router is 10.0.5.3, priority is 105\n  Master Advertisement interval is 1.000 sec\n  Master Down interval is 3.570 sec (expires in 2.706 sec)\n",
+      "expected": {
+        "interfaces": {
+          "FastEthernet0/1": {
+            "1": {
+              "advertisement_interval_secs": 1.0,
+              "authentication": "MD5, key-string \"highavailability\"",
+              "master_advertisement_interval_secs": 1.0,
+              "master_down_interval_secs": 3.57,
+              "master_router_ip": "192.168.88.2",
+              "master_router_is_local": true,
+              "master_router_priority": 110,
+              "preemption": "enabled",
+              "priority": 110,
+              "state": "Master",
+              "track_objects": {
+                "1": {
+                  "decrement": 10,
+                  "state": "Up"
+                }
+              },
+              "virtual_ip_address": "192.168.88.1",
+              "virtual_mac_address": "0000.5e00.0101"
+            }
+          },
+          "FastEthernet0/1.2": {
+            "2": {
+              "advertisement_interval_secs": 1.0,
+              "master_advertisement_interval_secs": 1.0,
+              "master_down_interval_secs": 3.57,
+              "master_router_ip": "10.0.2.2",
+              "master_router_is_local": true,
+              "master_router_priority": 110,
+              "preemption": "enabled",
+              "priority": 110,
+              "state": "Master",
+              "track_objects": {
+                "1": {
+                  "decrement": 10,
+                  "state": "Up"
+                }
+              },
+              "virtual_ip_address": "10.0.2.1",
+              "virtual_mac_address": "0000.5e00.0102"
+            }
+          },
+          "FastEthernet0/1.3": {
+            "3": {
+              "advertisement_interval_secs": 1.0,
+              "master_advertisement_interval_secs": 1.0,
+              "master_down_expires_secs": 2.738,
+              "master_down_interval_secs": 3.57,
+              "master_router_ip": "10.0.3.3",
+              "master_router_priority": 120,
+              "preemption": "enabled",
+              "priority": 110,
+              "state": "Backup",
+              "track_objects": {
+                "1": {
+                  "decrement": 10,
+                  "state": "Up"
+                }
+              },
+              "virtual_ip_address": "10.0.3.1",
+              "virtual_mac_address": "0000.5e00.0103"
+            }
+          },
+          "FastEthernet0/1.5": {
+            "5": {
+              "advertisement_interval_secs": 1.0,
+              "configured_priority": 110,
+              "master_advertisement_interval_secs": 1.0,
+              "master_down_expires_secs": 2.706,
+              "master_down_interval_secs": 3.57,
+              "master_router_ip": "10.0.5.3",
+              "master_router_priority": 105,
+              "preemption": "enabled",
+              "priority": 90,
+              "state": "Backup",
+              "track_objects": {
+                "2": {
+                  "decrement": 20,
+                  "state": "Down"
+                }
+              },
+              "virtual_ip_address": "10.0.5.1",
+              "virtual_mac_address": "0000.5e00.0105"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "VRRPv3 output with address family, description, and state duration fields",
+      "input": "GigabitEthernet3.420 - Group 10\n  State is Master\n  Virtual IP address is 10.13.120.254\n  Virtual MAC address is 0000.5eff.010a\n  Advertisement interval is 1.000 sec\n  Preemption enabled\n  Priority is 100\n    Track object 1 state Up decrement 15\n  Master Router is 10.13.120.1 (local), priority is 100\n  Master Advertisement interval is 1.000 sec\n  Master Down interval is 3.609 sec\n  FLAGS: 1/1\n\nGigabitEthernet1/0/19 - Group 1 - Address-Family IPv4\n  Description is \"single_Vrrp\"\n  State is MASTER\n  State duration 23.134 secs\n  Virtual IP address is 10.50.10.104\n  Virtual MAC address is 0000.5E00.0101\n  Advertisement interval is 1000 msec\n  Preemption enabled\n  Priority is 100\n  Master Router is 10.50.10.106 (local), priority is 100\n  Master Advertisement interval is 1000 msec (expires in 441 msec)\n  Master Down interval is 3.609 sec\n  FLAGS: 1/1\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1/0/19": {
+            "1": {
+              "address_family": "IPv4",
+              "advertisement_interval_secs": 1.0,
+              "description": "single_Vrrp",
+              "flags": "1/1",
+              "master_advertisement_expires_msec": 441,
+              "master_advertisement_interval_secs": 1.0,
+              "master_down_interval_secs": 3.609,
+              "master_router_ip": "10.50.10.106",
+              "master_router_is_local": true,
+              "master_router_priority": 100,
+              "preemption": "enabled",
+              "priority": 100,
+              "state": "MASTER",
+              "state_duration_secs": 23.134,
+              "virtual_ip_address": "10.50.10.104",
+              "virtual_mac_address": "0000.5E00.0101"
+            }
+          },
+          "GigabitEthernet3.420": {
+            "10": {
+              "advertisement_interval_secs": 1.0,
+              "flags": "1/1",
+              "master_advertisement_interval_secs": 1.0,
+              "master_down_interval_secs": 3.609,
+              "master_router_ip": "10.13.120.1",
+              "master_router_is_local": true,
+              "master_router_priority": 100,
+              "preemption": "enabled",
+              "priority": 100,
+              "state": "Master",
+              "track_objects": {
+                "1": {
+                  "decrement": 15,
+                  "state": "Up"
+                }
+              },
+              "virtual_ip_address": "10.13.120.254",
+              "virtual_mac_address": "0000.5eff.010a"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

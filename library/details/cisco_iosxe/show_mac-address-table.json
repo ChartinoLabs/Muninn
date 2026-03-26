@@ -1,0 +1,70 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show mac-address-table",
+  "schema": {
+    "name": "ShowMacAddressTableResult",
+    "fields": {
+      "mac_table": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "MacTableRow",
+              "fields": {
+                "kind": {
+                  "type": {
+                    "type": "literal",
+                    "values": [
+                      "unicast",
+                      "multicast"
+                    ]
+                  },
+                  "required": false
+                },
+                "type": {
+                  "type": "str",
+                  "required": false
+                },
+                "ports": {
+                  "type": {
+                    "type": "list",
+                    "items": "str"
+                  },
+                  "required": false
+                },
+                "primary": {
+                  "type": "bool",
+                  "required": false
+                },
+                "age": {
+                  "type": "int",
+                  "required": false
+                },
+                "learn": {
+                  "type": "bool",
+                  "required": false
+                },
+                "protocols": {
+                  "type": {
+                    "type": "list",
+                    "items": "str"
+                  },
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "total_mac_addresses": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": []
+}

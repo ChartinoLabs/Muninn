@@ -1,0 +1,88 @@
+{
+  "os": "cisco_nxos",
+  "command": "show ipv6 interface brief vrf <vrf-name>",
+  "schema": {
+    "name": "ShowIPv6InterfaceBriefResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfEntry",
+            "fields": {
+              "vrf_id": {
+                "type": "int",
+                "required": true
+              },
+              "interfaces": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "IPv6InterfaceBriefEntry",
+                    "fields": {
+                      "ipv6_addresses": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "IPv6GlobalAddressInfo",
+                            "fields": {
+                              "flags": {
+                                "type": {
+                                  "type": "list",
+                                  "items": "str"
+                                },
+                                "required": false
+                              }
+                            }
+                          }
+                        },
+                        "required": true
+                      },
+                      "protocol_status": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "link_status": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "admin_status": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "link_local": {
+                        "type": {
+                          "name": "IPv6AddressEntry",
+                          "fields": {
+                            "address": {
+                              "type": "str",
+                              "required": true
+                            },
+                            "flags": {
+                              "type": {
+                                "type": "list",
+                                "items": "str"
+                              },
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}

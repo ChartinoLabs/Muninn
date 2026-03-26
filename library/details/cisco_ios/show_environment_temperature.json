@@ -1,0 +1,113 @@
+{
+  "os": "cisco_ios",
+  "command": "show environment temperature",
+  "schema": {
+    "name": "ShowEnvironmentTemperatureResult",
+    "fields": {
+      "switches": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SwitchTemperatureEntry",
+            "fields": {
+              "system_temperature": {
+                "type": "str",
+                "required": true
+              },
+              "inlet": {
+                "type": {
+                  "name": "TemperatureSensorEntry",
+                  "fields": {
+                    "temperature_value": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "temperature_state": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "yellow_threshold": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "red_threshold": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "hotspot": {
+                "type": {
+                  "type": "ref",
+                  "name": "TemperatureSensorEntry"
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Stack with two switches showing inlet and hotspot temperatures",
+      "input": "Switch 1: SYSTEM TEMPERATURE is OK\nInlet Temperature Value: 29 Degree Celsius\nTemperature State: GREEN\nYellow Threshold : 46 Degree Celsius\nRed Threshold    : 56 Degree Celsius\n\nHotspot Temperature Value: 67 Degree Celsius\nTemperature State: GREEN\nYellow Threshold : 105 Degree Celsius\nRed Threshold    : 125 Degree Celsius\nSwitch 2: SYSTEM TEMPERATURE is OK\nInlet Temperature Value: 28 Degree Celsius\nTemperature State: GREEN\nYellow Threshold : 46 Degree Celsius\nRed Threshold    : 56 Degree Celsius\n\nHotspot Temperature Value: 69 Degree Celsius\nTemperature State: GREEN\nYellow Threshold : 105 Degree Celsius\nRed Threshold    : 125 Degree Celsius\n",
+      "expected": {
+        "switches": {
+          "1": {
+            "hotspot": {
+              "red_threshold": 125,
+              "temperature_state": "GREEN",
+              "temperature_value": 67,
+              "yellow_threshold": 105
+            },
+            "inlet": {
+              "red_threshold": 56,
+              "temperature_state": "GREEN",
+              "temperature_value": 29,
+              "yellow_threshold": 46
+            },
+            "system_temperature": "OK"
+          },
+          "2": {
+            "hotspot": {
+              "red_threshold": 125,
+              "temperature_state": "GREEN",
+              "temperature_value": 69,
+              "yellow_threshold": 105
+            },
+            "inlet": {
+              "red_threshold": 56,
+              "temperature_state": "GREEN",
+              "temperature_value": 28,
+              "yellow_threshold": 46
+            },
+            "system_temperature": "OK"
+          }
+        }
+      }
+    },
+    {
+      "name": "Single switch with only inlet temperature sensor",
+      "input": "Switch 1: SYSTEM TEMPERATURE is OK\nInlet Temperature Value: 32 Degree Celsius\nTemperature State: YELLOW\nYellow Threshold : 46 Degree Celsius\nRed Threshold    : 56 Degree Celsius\n",
+      "expected": {
+        "switches": {
+          "1": {
+            "inlet": {
+              "red_threshold": 56,
+              "temperature_state": "YELLOW",
+              "temperature_value": 32,
+              "yellow_threshold": 46
+            },
+            "system_temperature": "OK"
+          }
+        }
+      }
+    }
+  ]
+}

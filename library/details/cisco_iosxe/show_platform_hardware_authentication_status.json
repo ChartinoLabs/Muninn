@@ -1,0 +1,127 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show platform hardware authentication status",
+  "schema": {
+    "name": "ShowPlatformHardwareAuthenticationStatusResult",
+    "fields": {
+      "switches": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SwitchEntry",
+            "fields": {
+              "components": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "ComponentAuthEntry",
+                    "fields": {
+                      "status": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic switch-based hardware authentication status with two switches",
+      "input": "Switch 1:\n    Mainboard Authentication:     Passed\n    FRU Authentication:           Not Available\n    Stack Cable A Authentication: Passed\n    Stack Cable B Authentication: Passed\n    Stack Adapter A Authentication: Passed\n    Stack Adapter B Authentication: Passed\n\nSwitch 2:\n    Mainboard Authentication:     Not Available\n    FRU Authentication:           Not Available\n    Stack Cable A Authentication: Not Available\n    Stack Cable B Authentication: Not Available\n    Stack Adapter A Authentication: Not Available\n    Stack Adapter B Authentication: Not Available\n",
+      "expected": {
+        "switches": {
+          "1": {
+            "components": {
+              "Mainboard": {
+                "status": "Passed"
+              },
+              "FRU": {
+                "status": "Not Available"
+              },
+              "Stack Cable A": {
+                "status": "Passed"
+              },
+              "Stack Cable B": {
+                "status": "Passed"
+              },
+              "Stack Adapter A": {
+                "status": "Passed"
+              },
+              "Stack Adapter B": {
+                "status": "Passed"
+              }
+            }
+          },
+          "2": {
+            "components": {
+              "Mainboard": {
+                "status": "Not Available"
+              },
+              "FRU": {
+                "status": "Not Available"
+              },
+              "Stack Cable A": {
+                "status": "Not Available"
+              },
+              "Stack Cable B": {
+                "status": "Not Available"
+              },
+              "Stack Adapter A": {
+                "status": "Not Available"
+              },
+              "Stack Adapter B": {
+                "status": "Not Available"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Chassis-based hardware authentication status on Catalyst 9400",
+      "input": "       Fan Tray Authentication:  pass\n    Line Card:1 Authentication:  Not Available\n    Line Card:2 Authentication:  pass\n           SUP0 Authentication:  Not Available\n           SUP1 Authentication:  pass\n    Line Card:5 Authentication:  Not Available\n    Line Card:6 Authentication:  Not Available\n    Line Card:7 Authentication:  Not Available\n",
+      "expected": {
+        "switches": {
+          "1": {
+            "components": {
+              "Fan Tray": {
+                "status": "pass"
+              },
+              "Line Card:1": {
+                "status": "Not Available"
+              },
+              "Line Card:2": {
+                "status": "pass"
+              },
+              "SUP0": {
+                "status": "Not Available"
+              },
+              "SUP1": {
+                "status": "pass"
+              },
+              "Line Card:5": {
+                "status": "Not Available"
+              },
+              "Line Card:6": {
+                "status": "Not Available"
+              },
+              "Line Card:7": {
+                "status": "Not Available"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

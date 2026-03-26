@@ -1,0 +1,77 @@
+{
+  "os": "cisco_ios",
+  "command": "show users",
+  "schema": {
+    "name": "ShowUsersResult",
+    "fields": {
+      "lines": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "UserEntry",
+              "fields": {
+                "active": {
+                  "type": "bool",
+                  "required": true
+                },
+                "host": {
+                  "type": "str",
+                  "required": false
+                },
+                "user": {
+                  "type": "str",
+                  "required": false
+                },
+                "idle": {
+                  "type": "str",
+                  "required": false
+                },
+                "location": {
+                  "type": "str",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show users with console and VTY sessions including active marker",
+      "input": "    Line       User       Host(s)              Idle       Location\n *  0 con 0                idle                 01:58\n   10 vty 0                Virtual-Access2        0        1212321\n    3 vty 1     testuser   idle                 00:41:43   10.0.0.2\n\n  Interface    User               Mode         Idle     Peer Address\n",
+      "expected": {
+        "lines": {
+          "con": {
+            "0": {
+              "active": true,
+              "host": "idle",
+              "idle": "01:58"
+            }
+          },
+          "vty": {
+            "0": {
+              "active": false,
+              "host": "Virtual-Access2",
+              "idle": "0",
+              "location": "1212321"
+            },
+            "1": {
+              "active": false,
+              "user": "testuser",
+              "host": "idle",
+              "idle": "00:41:43",
+              "location": "10.0.0.2"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

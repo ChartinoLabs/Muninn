@@ -1,0 +1,635 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip bgp all",
+  "schema": {
+    "name": "ShowBgpAllResult",
+    "fields": {
+      "address_families": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "AddressFamilyEntry",
+            "fields": {
+              "table_version": {
+                "type": "int",
+                "required": false
+              },
+              "router_id": {
+                "type": "str",
+                "required": false
+              },
+              "route_distinguishers": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "RdEntry",
+                    "fields": {
+                      "rd": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "default_vrf": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "vrf_router_id": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "af_private_import_to_af": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "pfx_count": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "pfx_limit": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "routes": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "RouteEntry",
+                            "fields": {
+                              "paths": {
+                                "type": {
+                                  "type": "list",
+                                  "items": {
+                                    "name": "PathEntry",
+                                    "fields": {
+                                      "status_codes": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "path_type": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "next_hop": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "metric": {
+                                        "type": "int",
+                                        "required": false
+                                      },
+                                      "locprf": {
+                                        "type": "int",
+                                        "required": false
+                                      },
+                                      "weight": {
+                                        "type": "int",
+                                        "required": true
+                                      },
+                                      "as_path": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "origin": {
+                                        "type": "str",
+                                        "required": true
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": true
+                              }
+                            }
+                          }
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "routes": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "ref",
+                    "name": "RouteEntry"
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Live device output",
+      "input": "For address family: IPv4 Unicast\n\n\nFor address family: VPNv4 Unicast\n\nBGP table version is 18, local router ID is 192.0.2.4\nStatus codes: s suppressed, d damped, h history, * valid, > best, i - internal,\n              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,\n              x best-external, a additional-path, c RIB-compressed,\n              t secondary path, L long-lived-stale,\nOrigin codes: i - IGP, e - EGP, ? - incomplete\nRPKI validation codes: V valid, I invalid, N Not found\n\n     Network          Next Hop            Metric LocPrf Weight Path\nRoute Distinguisher: 65000:100 (default for vrf RED)\n r i  10.12.10.0/30    198.51.100.1             0    100      0 ?\n r>i                   198.51.100.2             0    100      0 ?\n r>i  10.13.10.0/30    198.51.100.3             0    100      0 ?\n r i                   198.51.100.1             0    100      0 ?\n * i  10.24.10.0/30    198.51.100.2             0    100      0 ?\n *>                    0.0.0.0                  0         32768 ?\n * i  10.34.10.0/30    198.51.100.3             0    100      0 ?\n *>                    0.0.0.0                  0         32768 ?\n r>i  198.51.100.1/32  198.51.100.1             0    100      0 ?\n r>i  198.51.100.2/32  198.51.100.2             0    100      0 ?\n r>i  198.51.100.3/32  198.51.100.3             0    100      0 ?\n *>   198.51.100.4/32  0.0.0.0                  0         32768 ?\nRoute Distinguisher: 65000:200 (default for vrf BLUE)\n r i  10.12.20.0/30    203.0.113.1              0    100      0 ?\n r>i                   203.0.113.2              0    100      0 ?\n r i  10.13.20.0/30    203.0.113.1              0    100      0 ?\n r>i                   203.0.113.3              0    100      0 ?\n * i  10.24.20.0/30    203.0.113.2              0    100      0 ?\n *>                    0.0.0.0                  0         32768 ?\n * i  10.34.20.0/30    203.0.113.3              0    100      0 ?\n *>                    0.0.0.0                  0         32768 ?\n r>i  203.0.113.1/32   203.0.113.1              0    100      0 ?\n r>i  203.0.113.2/32   203.0.113.2              0    100      0 ?\n r>i  203.0.113.3/32   203.0.113.3              0    100      0 ?\n *>   203.0.113.4/32   0.0.0.0                  0         32768 ?\n\nFor address family: IPv4 Multicast\n",
+      "expected": {
+        "address_families": {
+          "VPNv4 Unicast": {
+            "table_version": 18,
+            "router_id": "192.0.2.4",
+            "route_distinguishers": {
+              "65000:100": {
+                "rd": "65000:100",
+                "routes": {
+                  "10.12.10.0/30": {
+                    "paths": [
+                      {
+                        "status_codes": "r",
+                        "path_type": "i",
+                        "next_hop": "198.51.100.1",
+                        "weight": 0,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0,
+                        "locprf": 100
+                      },
+                      {
+                        "status_codes": "r>",
+                        "path_type": "i",
+                        "next_hop": "198.51.100.2",
+                        "weight": 0,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0,
+                        "locprf": 100
+                      }
+                    ]
+                  },
+                  "10.13.10.0/30": {
+                    "paths": [
+                      {
+                        "status_codes": "r>",
+                        "path_type": "i",
+                        "next_hop": "198.51.100.3",
+                        "weight": 0,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0,
+                        "locprf": 100
+                      },
+                      {
+                        "status_codes": "r",
+                        "path_type": "i",
+                        "next_hop": "198.51.100.1",
+                        "weight": 0,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0,
+                        "locprf": 100
+                      }
+                    ]
+                  },
+                  "10.24.10.0/30": {
+                    "paths": [
+                      {
+                        "status_codes": "*",
+                        "path_type": "i",
+                        "next_hop": "198.51.100.2",
+                        "weight": 0,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0,
+                        "locprf": 100
+                      },
+                      {
+                        "status_codes": "*>",
+                        "path_type": "",
+                        "next_hop": "0.0.0.0",
+                        "weight": 32768,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0
+                      }
+                    ]
+                  },
+                  "10.34.10.0/30": {
+                    "paths": [
+                      {
+                        "status_codes": "*",
+                        "path_type": "i",
+                        "next_hop": "198.51.100.3",
+                        "weight": 0,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0,
+                        "locprf": 100
+                      },
+                      {
+                        "status_codes": "*>",
+                        "path_type": "",
+                        "next_hop": "0.0.0.0",
+                        "weight": 32768,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0
+                      }
+                    ]
+                  },
+                  "198.51.100.1/32": {
+                    "paths": [
+                      {
+                        "status_codes": "r>",
+                        "path_type": "i",
+                        "next_hop": "198.51.100.1",
+                        "weight": 0,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0,
+                        "locprf": 100
+                      }
+                    ]
+                  },
+                  "198.51.100.2/32": {
+                    "paths": [
+                      {
+                        "status_codes": "r>",
+                        "path_type": "i",
+                        "next_hop": "198.51.100.2",
+                        "weight": 0,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0,
+                        "locprf": 100
+                      }
+                    ]
+                  },
+                  "198.51.100.3/32": {
+                    "paths": [
+                      {
+                        "status_codes": "r>",
+                        "path_type": "i",
+                        "next_hop": "198.51.100.3",
+                        "weight": 0,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0,
+                        "locprf": 100
+                      }
+                    ]
+                  },
+                  "198.51.100.4/32": {
+                    "paths": [
+                      {
+                        "status_codes": "*>",
+                        "path_type": "",
+                        "next_hop": "0.0.0.0",
+                        "weight": 32768,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0
+                      }
+                    ]
+                  }
+                },
+                "default_vrf": "RED"
+              },
+              "65000:200": {
+                "rd": "65000:200",
+                "routes": {
+                  "10.12.20.0/30": {
+                    "paths": [
+                      {
+                        "status_codes": "r",
+                        "path_type": "i",
+                        "next_hop": "203.0.113.1",
+                        "weight": 0,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0,
+                        "locprf": 100
+                      },
+                      {
+                        "status_codes": "r>",
+                        "path_type": "i",
+                        "next_hop": "203.0.113.2",
+                        "weight": 0,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0,
+                        "locprf": 100
+                      }
+                    ]
+                  },
+                  "10.13.20.0/30": {
+                    "paths": [
+                      {
+                        "status_codes": "r",
+                        "path_type": "i",
+                        "next_hop": "203.0.113.1",
+                        "weight": 0,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0,
+                        "locprf": 100
+                      },
+                      {
+                        "status_codes": "r>",
+                        "path_type": "i",
+                        "next_hop": "203.0.113.3",
+                        "weight": 0,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0,
+                        "locprf": 100
+                      }
+                    ]
+                  },
+                  "10.24.20.0/30": {
+                    "paths": [
+                      {
+                        "status_codes": "*",
+                        "path_type": "i",
+                        "next_hop": "203.0.113.2",
+                        "weight": 0,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0,
+                        "locprf": 100
+                      },
+                      {
+                        "status_codes": "*>",
+                        "path_type": "",
+                        "next_hop": "0.0.0.0",
+                        "weight": 32768,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0
+                      }
+                    ]
+                  },
+                  "10.34.20.0/30": {
+                    "paths": [
+                      {
+                        "status_codes": "*",
+                        "path_type": "i",
+                        "next_hop": "203.0.113.3",
+                        "weight": 0,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0,
+                        "locprf": 100
+                      },
+                      {
+                        "status_codes": "*>",
+                        "path_type": "",
+                        "next_hop": "0.0.0.0",
+                        "weight": 32768,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0
+                      }
+                    ]
+                  },
+                  "203.0.113.1/32": {
+                    "paths": [
+                      {
+                        "status_codes": "r>",
+                        "path_type": "i",
+                        "next_hop": "203.0.113.1",
+                        "weight": 0,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0,
+                        "locprf": 100
+                      }
+                    ]
+                  },
+                  "203.0.113.2/32": {
+                    "paths": [
+                      {
+                        "status_codes": "r>",
+                        "path_type": "i",
+                        "next_hop": "203.0.113.2",
+                        "weight": 0,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0,
+                        "locprf": 100
+                      }
+                    ]
+                  },
+                  "203.0.113.3/32": {
+                    "paths": [
+                      {
+                        "status_codes": "r>",
+                        "path_type": "i",
+                        "next_hop": "203.0.113.3",
+                        "weight": 0,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0,
+                        "locprf": 100
+                      }
+                    ]
+                  },
+                  "203.0.113.4/32": {
+                    "paths": [
+                      {
+                        "status_codes": "*>",
+                        "path_type": "",
+                        "next_hop": "0.0.0.0",
+                        "weight": 32768,
+                        "as_path": "",
+                        "origin": "?",
+                        "metric": 0
+                      }
+                    ]
+                  }
+                },
+                "default_vrf": "BLUE"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "VPNv4 Unicast with wrapped network prefix and VRF Router ID",
+      "input": "Router#show ip bgp all\nLoad for five secs: 4%/0%; one minute: 5%; five minutes: 4%\nTime source is NTP, 09:44:45.434 EST Tue Jun 8 2016\nFor address family: IPv4 Unicast\n\n\nFor address family: VPNv4 Unicast\n\nBGP table version is 27013588, local router ID is 10.169.197.254\nStatus codes: s suppressed, d damped, h history, * valid, > best, i - internal,\n              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,\n              x best-external, a additional-path, c RIB-compressed,\nOrigin codes: i - IGP, e - EGP, ? - incomplete\nRPKI validation codes: V valid, I invalid, N Not found\n\n     Network          Next Hop            Metric LocPrf Weight Path\nRoute Distinguisher: 5918:50 (default for vrf L3VPN-0050) VRF Router ID 192.168.10.254\n *>i 172.16.200.1/32  10.13.202.64                  100      0 60000 i\n *>i 172.16.200.2/32  10.13.202.64                  100      0 60000 i\n *>i 172.16.200.3/32  10.13.202.64                  100      0 60000 i\n *>i 172.16.200.99/32\n                   10.13.202.64                  100      0 60000 i\n",
+      "expected": {
+        "address_families": {
+          "VPNv4 Unicast": {
+            "route_distinguishers": {
+              "5918:50": {
+                "default_vrf": "L3VPN-0050",
+                "rd": "5918:50",
+                "routes": {
+                  "172.16.200.1/32": {
+                    "paths": [
+                      {
+                        "as_path": "60000",
+                        "locprf": 100,
+                        "next_hop": "10.13.202.64",
+                        "origin": "i",
+                        "path_type": "i",
+                        "status_codes": "*>",
+                        "weight": 0
+                      }
+                    ]
+                  },
+                  "172.16.200.2/32": {
+                    "paths": [
+                      {
+                        "as_path": "60000",
+                        "locprf": 100,
+                        "next_hop": "10.13.202.64",
+                        "origin": "i",
+                        "path_type": "i",
+                        "status_codes": "*>",
+                        "weight": 0
+                      }
+                    ]
+                  },
+                  "172.16.200.3/32": {
+                    "paths": [
+                      {
+                        "as_path": "60000",
+                        "locprf": 100,
+                        "next_hop": "10.13.202.64",
+                        "origin": "i",
+                        "path_type": "i",
+                        "status_codes": "*>",
+                        "weight": 0
+                      }
+                    ]
+                  },
+                  "172.16.200.99/32": {
+                    "paths": [
+                      {
+                        "as_path": "60000",
+                        "locprf": 100,
+                        "next_hop": "10.13.202.64",
+                        "origin": "i",
+                        "path_type": "i",
+                        "status_codes": "*>",
+                        "weight": 0
+                      }
+                    ]
+                  }
+                },
+                "vrf_router_id": "192.168.10.254"
+              }
+            },
+            "router_id": "10.169.197.254",
+            "table_version": 27013588
+          }
+        }
+      }
+    },
+    {
+      "name": "Multiple address families with VPNv4 and L2VPN E-VPN data",
+      "input": "R1_CE#show ip bgp all\nFor address family: IPv4 Unicast\n\n\nFor address family: IPv6 Unicast\n\n\nFor address family: VPNv4 Unicast\n\nBGP table version is 5, local router ID is 10.21.33.33\nStatus codes: s suppressed, d damped, h history, * valid, > best, i - internal,\n              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,\n              x best-external, a additional-path, c RIB-compressed,\n              t secondary path,\nOrigin codes: i - IGP, e - EGP, ? - incomplete\nRPKI validation codes: V valid, I invalid, N Not found\n\n     Network          Next Hop            Metric LocPrf Weight Path\nRoute Distinguisher: 65535:1 (default for vrf evpn1)\nAF-Private Import to Address-Family: L2VPN E-VPN, Pfx Count/Limit: 2/1000\n *    10.36.3.0/24       10.36.3.254                0             0 65530 ?\n *>                    0.0.0.0                  0         32768 ?\n *>   10.1.1.0/24     0.0.0.0                  0         32768 ?\n\nFor address family: IPv4 Multicast\n\nFor address family: L2VPN E-VPN\n\nBGP table version is 4, local router ID is 10.21.33.33\nStatus codes: s suppressed, d damped, h history, * valid, > best, i - internal,\n              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,\n              x best-external, a additional-path, c RIB-compressed,\n              t secondary path,\nOrigin codes: i - IGP, e - EGP, ? - incomplete\nRPKI validation codes: V valid, I invalid, N Not found\n\n     Network          Next Hop            Metric LocPrf Weight Path\nRoute Distinguisher: 65535:1 (default for vrf evpn1)\n *>   [5][65535:1][0][24][10.36.3.0]/17\n                      0.0.0.0                  0         32768 ?\n *                     10.36.3.254                0             0 65530 ?\n *>   [5][65535:1][0][24][10.1.1.0]/17\n                      0.0.0.0                  0         32768 ?\n\n\nFor address family: VPNv4 Multicast\n\n\nFor address family: MVPNv4 Unicast\n\n\nFor address family: MVPNv6 Unicast\n\n\nFor address family: VPNv4 Flowspec\n",
+      "expected": {
+        "address_families": {
+          "L2VPN E-VPN": {
+            "route_distinguishers": {
+              "65535:1": {
+                "default_vrf": "evpn1",
+                "rd": "65535:1",
+                "routes": {
+                  "[5][65535:1][0][24][10.1.1.0]/17": {
+                    "paths": [
+                      {
+                        "as_path": "",
+                        "metric": 0,
+                        "next_hop": "0.0.0.0",
+                        "origin": "?",
+                        "path_type": "",
+                        "status_codes": "*>",
+                        "weight": 32768
+                      }
+                    ]
+                  },
+                  "[5][65535:1][0][24][10.36.3.0]/17": {
+                    "paths": [
+                      {
+                        "as_path": "",
+                        "metric": 0,
+                        "next_hop": "0.0.0.0",
+                        "origin": "?",
+                        "path_type": "",
+                        "status_codes": "*>",
+                        "weight": 32768
+                      },
+                      {
+                        "as_path": "65530",
+                        "locprf": 0,
+                        "next_hop": "10.36.3.254",
+                        "origin": "?",
+                        "path_type": "",
+                        "status_codes": "*",
+                        "weight": 0
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "router_id": "10.21.33.33",
+            "table_version": 4
+          },
+          "VPNv4 Unicast": {
+            "route_distinguishers": {
+              "65535:1": {
+                "af_private_import_to_af": "L2VPN E-VPN",
+                "default_vrf": "evpn1",
+                "pfx_count": 2,
+                "pfx_limit": 1000,
+                "rd": "65535:1",
+                "routes": {
+                  "10.1.1.0/24": {
+                    "paths": [
+                      {
+                        "as_path": "",
+                        "metric": 0,
+                        "next_hop": "0.0.0.0",
+                        "origin": "?",
+                        "path_type": "",
+                        "status_codes": "*>",
+                        "weight": 32768
+                      }
+                    ]
+                  },
+                  "10.36.3.0/24": {
+                    "paths": [
+                      {
+                        "as_path": "65530",
+                        "locprf": 0,
+                        "next_hop": "10.36.3.254",
+                        "origin": "?",
+                        "path_type": "",
+                        "status_codes": "*",
+                        "weight": 0
+                      },
+                      {
+                        "as_path": "",
+                        "metric": 0,
+                        "next_hop": "0.0.0.0",
+                        "origin": "?",
+                        "path_type": "",
+                        "status_codes": "*>",
+                        "weight": 32768
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "router_id": "10.21.33.33",
+            "table_version": 5
+          }
+        }
+      }
+    }
+  ]
+}

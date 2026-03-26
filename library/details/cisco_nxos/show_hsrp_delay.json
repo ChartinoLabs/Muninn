@@ -1,0 +1,25 @@
+{
+  "os": "cisco_nxos",
+  "command": "show hsrp delay",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Show hsrp delay output with two interfaces",
+      "input": "Interface          Minimum Reload\nGigabitEthernet1   99      888\nGigabitEthernet3   1       5\n",
+      "expected": {
+        "GigabitEthernet1": {
+          "delay": {
+            "minimum_delay": 99,
+            "reload_delay": 888
+          }
+        },
+        "GigabitEthernet3": {
+          "delay": {
+            "minimum_delay": 1,
+            "reload_delay": 5
+          }
+        }
+      }
+    }
+  ]
+}

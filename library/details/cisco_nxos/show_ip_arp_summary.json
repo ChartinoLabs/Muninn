@@ -1,0 +1,53 @@
+{
+  "os": "cisco_nxos",
+  "command": "show ip arp summary",
+  "schema": {
+    "name": "ShowIpArpSummaryResult",
+    "fields": {
+      "resolved": {
+        "type": "int",
+        "required": true
+      },
+      "incomplete": {
+        "type": "int",
+        "required": true
+      },
+      "throttled": {
+        "type": "int",
+        "required": true
+      },
+      "unknown": {
+        "type": "int",
+        "required": true
+      },
+      "total": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Show ip arp summary output with resolved and incomplete counts",
+      "input": "N95_1# show ip arp summary\n\nIP ARP Table - Adjacency Summary\n\n  Resolved   : 12\n  Incomplete : 0 (Throttled : 0)\n  Unknown    : 0\n  Total      : 12\n",
+      "expected": {
+        "incomplete": 0,
+        "throttled": 0,
+        "resolved": 12,
+        "total": 12,
+        "unknown": 0
+      }
+    },
+    {
+      "name": "Imported from Genie ShowIpArpSummaryVrfAll (equal)",
+      "input": "N95_1# show ip arp summary vrf all\n\nIP ARP Table - Adjacency Summary\n\n  Resolved   : 12\n  Incomplete : 0 (Throttled : 0)\n  Unknown    : 0\n  Total      : 12\n",
+      "expected": {
+        "resolved": 12,
+        "incomplete": 0,
+        "throttled": 0,
+        "unknown": 0,
+        "total": 12
+      }
+    }
+  ]
+}

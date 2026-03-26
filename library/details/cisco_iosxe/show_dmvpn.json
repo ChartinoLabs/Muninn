@@ -1,0 +1,199 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show dmvpn",
+  "schema": {
+    "name": "ShowDmvpnResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "DmvpnInterfaceEntry",
+            "fields": {
+              "type": {
+                "type": "str",
+                "required": true
+              },
+              "nhrp_peer_count": {
+                "type": "int",
+                "required": true
+              },
+              "peers": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "DmvpnPeerEntry",
+                    "fields": {
+                      "peer_nbma_address": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "peer_tunnel_address": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "state": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "uptime": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "attribute": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "entry_count": {
+                        "type": "int",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              },
+              "address_family": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic spoke output with two NHRP peers",
+      "input": "Legend: Attrb --> S - Static, D - Dynamic, I - Incomplete\n        N - NATed, L - Local, X - No Socket\n        T1 - Route Installed, T2 - Nexthop-override\n        C - CTS Capable\n        # Ent --> Number of NHRP entries with same NBMA peer\n        NHS Status: E --> Expecting Replies, R --> Responding, W --> Waiting\n        UpDn Time --> Up or Down Time for a Tunnel\n==========================================================================\n\nInterface: Tunnel100, IPv4 NHRP Details\nType:Spoke, NHRP Peers:2,\n\n # Ent  Peer NBMA Addr Peer Tunnel Add State  UpDn Tm Attrb\n ----- --------------- --------------- ----- -------- -----\n     1 10.200.0.3           10.253.0.1    UP 03:19:46     S\n     1 10.202.0.170         10.253.0.2  NHRP    48w0d     S\n",
+      "expected": {
+        "interfaces": {
+          "Tunnel100": {
+            "nhrp_peer_count": 2,
+            "peers": {
+              "1": {
+                "attribute": "S",
+                "entry_count": 1,
+                "peer_nbma_address": "10.200.0.3",
+                "peer_tunnel_address": "10.253.0.1",
+                "state": "UP",
+                "uptime": "03:19:46"
+              },
+              "2": {
+                "attribute": "S",
+                "entry_count": 1,
+                "peer_nbma_address": "10.202.0.170",
+                "peer_tunnel_address": "10.253.0.2",
+                "state": "NHRP",
+                "uptime": "48w0d"
+              }
+            },
+            "type": "Spoke"
+          }
+        }
+      }
+    },
+    {
+      "name": "Multiple interfaces with multi-entry peers and continuation rows",
+      "input": "Legend: Attrb --> S - Static, D - Dynamic, I - Incomplete\n        N - NATed, L - Local, X - No Socket\n        T1 - Route Installed, T2 - Nexthop-override\n        C - CTS Capable\n        # Ent --> Number of NHRP entries with same NBMA peer\n        NHS Status: E --> Expecting Replies, R --> Responding, W --> Waiting\n        UpDn Time --> Up or Down Time for a Tunnel\n==========================================================================\n\nInterface: Tunnel84, IPv4 NHRP Details\nType:Spoke, NHRP Peers:1,\n\n # Ent  Peer NBMA Addr Peer Tunnel Add State  UpDn Tm Attrb\n ----- --------------- --------------- ----- -------- -----\n     1 172.30.84.1          172.29.0.1  NHRP    never    SC\n\nInterface: Tunnel90, IPv4 NHRP Details\nType:Spoke, NHRP Peers:3,\n\n # Ent  Peer NBMA Addr Peer Tunnel Add State  UpDn Tm Attrb\n ----- --------------- --------------- ----- -------- -----\n     1 172.29.0.1          172.30.90.1   IKE     3w5d     S\n     2 172.29.0.2          172.30.90.2    UP    6d12h     S\n                           172.30.90.25   UP    6d12h     S\n     2 172.29.134.1       172.30.72.72    UP 00:29:40   DT2\n                          172.30.72.72    UP 00:29:40   DT1\n",
+      "expected": {
+        "interfaces": {
+          "Tunnel84": {
+            "nhrp_peer_count": 1,
+            "peers": {
+              "1": {
+                "attribute": "SC",
+                "entry_count": 1,
+                "peer_nbma_address": "172.30.84.1",
+                "peer_tunnel_address": "172.29.0.1",
+                "state": "NHRP",
+                "uptime": "never"
+              }
+            },
+            "type": "Spoke"
+          },
+          "Tunnel90": {
+            "nhrp_peer_count": 3,
+            "peers": {
+              "1": {
+                "attribute": "S",
+                "entry_count": 1,
+                "peer_nbma_address": "172.29.0.1",
+                "peer_tunnel_address": "172.30.90.1",
+                "state": "IKE",
+                "uptime": "3w5d"
+              },
+              "2": {
+                "attribute": "S",
+                "entry_count": 2,
+                "peer_nbma_address": "172.29.0.2",
+                "peer_tunnel_address": "172.30.90.2",
+                "state": "UP",
+                "uptime": "6d12h"
+              },
+              "3": {
+                "attribute": "S",
+                "entry_count": 2,
+                "peer_nbma_address": "172.29.0.2",
+                "peer_tunnel_address": "172.30.90.25",
+                "state": "UP",
+                "uptime": "6d12h"
+              },
+              "4": {
+                "attribute": "DT2",
+                "entry_count": 2,
+                "peer_nbma_address": "172.29.134.1",
+                "peer_tunnel_address": "172.30.72.72",
+                "state": "UP",
+                "uptime": "00:29:40"
+              },
+              "5": {
+                "attribute": "DT1",
+                "entry_count": 2,
+                "peer_nbma_address": "172.29.134.1",
+                "peer_tunnel_address": "172.30.72.72",
+                "state": "UP",
+                "uptime": "00:29:40"
+              }
+            },
+            "type": "Spoke"
+          }
+        }
+      }
+    },
+    {
+      "name": "Hub type with IPv6 NBMA addresses that wrap to continuation lines",
+      "input": "Legend: Attrb --> S - Static, D - Dynamic, I - Incomplete\n\tN - NATed, L - Local, X - No Socket\n\tT1 - Route Installed, T2 - Nexthop-override, B - BGP\n\tC - CTS Capable, I2 - Temporary\n\t# Ent --> Number of NHRP entries with same NBMA peer\n\tNHS Status: E --> Expecting Replies, R --> Responding, W --> Waiting\n\tUpDn Time --> Up or Down Time for a Tunnel\n==========================================================================\n\nInterface: Tunnel1, IPv4 NHRP Details\nType:Hub, NHRP Peers:2,\n\n # Ent  Peer NBMA Addr Peer Tunnel Add State  UpDn Tm Attrb\n ----- --------------- --------------- ----- -------- -----\n     1 2001:DB8:1201::122\n                           192.2.1.122    UP 00:02:19     D\n     1 2001:DB8:1202::123\n                           192.3.1.123    UP 00:02:08     D\n",
+      "expected": {
+        "interfaces": {
+          "Tunnel1": {
+            "nhrp_peer_count": 2,
+            "peers": {
+              "1": {
+                "attribute": "D",
+                "entry_count": 1,
+                "peer_nbma_address": "2001:DB8:1201::122",
+                "peer_tunnel_address": "192.2.1.122",
+                "state": "UP",
+                "uptime": "00:02:19"
+              },
+              "2": {
+                "attribute": "D",
+                "entry_count": 1,
+                "peer_nbma_address": "2001:DB8:1202::123",
+                "peer_tunnel_address": "192.3.1.123",
+                "state": "UP",
+                "uptime": "00:02:08"
+              }
+            },
+            "type": "Hub"
+          }
+        }
+      }
+    }
+  ]
+}

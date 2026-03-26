@@ -1,0 +1,157 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show boot",
+  "schema": {
+    "name": "ShowBootResult",
+    "fields": {
+      "switches": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "BootEntry",
+            "fields": {
+              "boot_path_list": {
+                "type": "str",
+                "required": false
+              },
+              "config_file": {
+                "type": "str",
+                "required": false
+              },
+              "private_config_file": {
+                "type": "str",
+                "required": false
+              },
+              "enable_break": {
+                "type": "bool",
+                "required": false
+              },
+              "manual_boot": {
+                "type": "bool",
+                "required": false
+              },
+              "allow_dev_key": {
+                "type": "bool",
+                "required": false
+              },
+              "helper_path_list": {
+                "type": "str",
+                "required": false
+              },
+              "auto_upgrade": {
+                "type": "bool",
+                "required": false
+              },
+              "auto_upgrade_path": {
+                "type": "str",
+                "required": false
+              },
+              "boot_optimization": {
+                "type": "bool",
+                "required": false
+              },
+              "nvram_buffer_size": {
+                "type": "int",
+                "required": false
+              },
+              "config_download_timeout": {
+                "type": "int",
+                "required": false
+              },
+              "config_download_via_dhcp": {
+                "type": "str",
+                "required": false
+              },
+              "boot_mode": {
+                "type": "str",
+                "required": false
+              },
+              "ipxe_timeout": {
+                "type": "int",
+                "required": false
+              },
+              "baud": {
+                "type": "int",
+                "required": false
+              },
+              "configuration_register": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Cat 9k variable format with single switch",
+      "input": "starfleet-1#show boot\nBOOT variable = bootflash:cat9k_iosxe.BLD_V173_THROTTLE_LATEST_20200421_032634.SSA.bin;\nConfiguration Register is 0x102\nMANUAL_BOOT variable = no\nBAUD variable = 9600\nENABLE_BREAK variable does not exist\nBOOTMODE variable does not exist\nIPXE_TIMEOUT variable does not exist\nCONFIG_FILE variable =\n",
+      "expected": {
+        "switches": {
+          "active": {
+            "baud": 9600,
+            "boot_path_list": "bootflash:cat9k_iosxe.BLD_V173_THROTTLE_LATEST_20200421_032634.SSA.bin",
+            "configuration_register": "0x102",
+            "manual_boot": false
+          }
+        }
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": "BOOT variable does not exist\nCONFIG_FILE variable does not exist\nBOOTLDR variable does not exist\nConfiguration register is 0x2102\n",
+      "expected": {
+        "switches": {
+          "active": {
+            "configuration_register": "0x2102"
+          }
+        }
+      }
+    },
+    {
+      "name": "Path-list format with boot optimization and DHCP config",
+      "input": "BOOT path-list      : flash:/c3560cx-universalk9-mz.152-7.E4/c3560cx-universalk9-mz.152-7.E4.bin\nConfig file         : flash:/config.text\nPrivate Config file : flash:/private-config.text\nEnable Break        : yes\nManual Boot         : no\nAllow Dev Key         : yes\nHELPER path-list    :\nAuto upgrade        : yes\nAuto upgrade path   :\nBoot optimization   : disabled\nNVRAM/Config file\n      buffer size:   524288\nTimeout for Config\n          Download:    0 seconds\nConfig Download\n       via DHCP:       disabled (next boot: disabled)\n",
+      "expected": {
+        "switches": {
+          "active": {
+            "allow_dev_key": true,
+            "auto_upgrade": true,
+            "boot_optimization": false,
+            "boot_path_list": "flash:/c3560cx-universalk9-mz.152-7.E4/c3560cx-universalk9-mz.152-7.E4.bin",
+            "config_download_timeout": 0,
+            "config_download_via_dhcp": "disabled (next boot: disabled)",
+            "config_file": "flash:/config.text",
+            "enable_break": true,
+            "manual_boot": false,
+            "nvram_buffer_size": 524288,
+            "private_config_file": "flash:/private-config.text"
+          }
+        }
+      }
+    },
+    {
+      "name": "Dual supervisor with active and standby boot variables",
+      "input": "PI-9500-svl-102#show boot\nBOOT variable = bootflash:packages.conf;\nMANUAL_BOOT variable = no\nBAUD variable = 9600\nENABLE_BREAK variable = yes\nBOOTMODE variable does not exist\nIPXE_TIMEOUT variable does not exist\nCONFIG_FILE variable =\n\nStandby BOOT variable = bootflash:packages.conf;\nStandby MANUAL_BOOT variable = no\nStandby BAUD variable = 9600\nStandby ENABLE_BREAK variable = yes\nStandby BOOTMODE variable does not exist\nStandby IPXE_TIMEOUT variable does not exist\nStandby CONFIG_FILE variable =\n",
+      "expected": {
+        "switches": {
+          "active": {
+            "baud": 9600,
+            "boot_path_list": "bootflash:packages.conf",
+            "enable_break": true,
+            "manual_boot": false
+          },
+          "standby": {
+            "baud": 9600,
+            "boot_path_list": "bootflash:packages.conf",
+            "enable_break": true,
+            "manual_boot": false
+          }
+        }
+      }
+    }
+  ]
+}

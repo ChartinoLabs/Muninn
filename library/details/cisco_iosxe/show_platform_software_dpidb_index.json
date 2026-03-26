@@ -1,0 +1,196 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show platform software dpidb index",
+  "schema": {
+    "name": "ShowPlatformSoftwareDpidbIndexResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "DpidbEntry",
+            "fields": {
+              "index": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "DPIDB index output with multiple interface types (Vlan, GigabitEthernet, HundredGigE, FourHundredGigE, AppGigabitEthernet)",
+      "input": " Index 1157 -- swidb Vl1\n Index 1028 -- swidb Gi0/0\n Index 1030 -- swidb Hu1/0/1\n Index 1031 -- swidb Hu1/0/2\n Index 1032 -- swidb Hu1/0/3\n Index 1033 -- swidb Hu1/0/4\n Index 1034 -- swidb Hu1/0/5\n Index 1035 -- swidb Hu1/0/6\n Index 1036 -- swidb Hu1/0/7\n Index 1037 -- swidb Hu1/0/8\n Index 1038 -- swidb Hu1/0/9\n Index 1039 -- swidb Hu1/0/10\n Index 1040 -- swidb Hu1/0/11\n Index 1041 -- swidb Hu1/0/12\n Index 1042 -- swidb Hu1/0/13\n Index 1043 -- swidb Hu1/0/14\n Index 1044 -- swidb Fou1/0/15\n Index 1045 -- swidb Fou1/0/16\n Index 1046 -- swidb Fou1/0/17\n Index 1047 -- swidb Fou1/0/18\n Index 1048 -- swidb Fou1/0/19\n Index 1049 -- swidb Fou1/0/20\n Index 1050 -- swidb Fou1/0/21\n Index 1051 -- swidb Fou1/0/22\n Index 1052 -- swidb Hu1/0/23\n Index 1053 -- swidb Hu1/0/24\n Index 1054 -- swidb Hu1/0/25\n Index 1055 -- swidb Hu1/0/26\n Index 1056 -- swidb Hu1/0/27\n Index 1057 -- swidb Hu1/0/28\n Index 1058 -- swidb Hu1/0/29\n Index 1059 -- swidb Hu1/0/30\n Index 1060 -- swidb Hu1/0/31\n Index 1061 -- swidb Hu1/0/32\n Index 1062 -- swidb Hu1/0/33\n Index 1063 -- swidb Hu1/0/34\n Index 1064 -- swidb Hu1/0/35\n Index 1065 -- swidb Hu1/0/36\n Index 1066 -- swidb Ap1/0/1\n Index 1067 -- swidb Ap1/0/2\n",
+      "expected": {
+        "interfaces": {
+          "AppGigabitEthernet1/0/1": {
+            "index": 1066
+          },
+          "AppGigabitEthernet1/0/2": {
+            "index": 1067
+          },
+          "FourHundredGigabitEthernet1/0/15": {
+            "index": 1044
+          },
+          "FourHundredGigabitEthernet1/0/16": {
+            "index": 1045
+          },
+          "FourHundredGigabitEthernet1/0/17": {
+            "index": 1046
+          },
+          "FourHundredGigabitEthernet1/0/18": {
+            "index": 1047
+          },
+          "FourHundredGigabitEthernet1/0/19": {
+            "index": 1048
+          },
+          "FourHundredGigabitEthernet1/0/20": {
+            "index": 1049
+          },
+          "FourHundredGigabitEthernet1/0/21": {
+            "index": 1050
+          },
+          "FourHundredGigabitEthernet1/0/22": {
+            "index": 1051
+          },
+          "GigabitEthernet0/0": {
+            "index": 1028
+          },
+          "HundredGigabitEthernet1/0/1": {
+            "index": 1030
+          },
+          "HundredGigabitEthernet1/0/10": {
+            "index": 1039
+          },
+          "HundredGigabitEthernet1/0/11": {
+            "index": 1040
+          },
+          "HundredGigabitEthernet1/0/12": {
+            "index": 1041
+          },
+          "HundredGigabitEthernet1/0/13": {
+            "index": 1042
+          },
+          "HundredGigabitEthernet1/0/14": {
+            "index": 1043
+          },
+          "HundredGigabitEthernet1/0/2": {
+            "index": 1031
+          },
+          "HundredGigabitEthernet1/0/23": {
+            "index": 1052
+          },
+          "HundredGigabitEthernet1/0/24": {
+            "index": 1053
+          },
+          "HundredGigabitEthernet1/0/25": {
+            "index": 1054
+          },
+          "HundredGigabitEthernet1/0/26": {
+            "index": 1055
+          },
+          "HundredGigabitEthernet1/0/27": {
+            "index": 1056
+          },
+          "HundredGigabitEthernet1/0/28": {
+            "index": 1057
+          },
+          "HundredGigabitEthernet1/0/29": {
+            "index": 1058
+          },
+          "HundredGigabitEthernet1/0/3": {
+            "index": 1032
+          },
+          "HundredGigabitEthernet1/0/30": {
+            "index": 1059
+          },
+          "HundredGigabitEthernet1/0/31": {
+            "index": 1060
+          },
+          "HundredGigabitEthernet1/0/32": {
+            "index": 1061
+          },
+          "HundredGigabitEthernet1/0/33": {
+            "index": 1062
+          },
+          "HundredGigabitEthernet1/0/34": {
+            "index": 1063
+          },
+          "HundredGigabitEthernet1/0/35": {
+            "index": 1064
+          },
+          "HundredGigabitEthernet1/0/36": {
+            "index": 1065
+          },
+          "HundredGigabitEthernet1/0/4": {
+            "index": 1033
+          },
+          "HundredGigabitEthernet1/0/5": {
+            "index": 1034
+          },
+          "HundredGigabitEthernet1/0/6": {
+            "index": 1035
+          },
+          "HundredGigabitEthernet1/0/7": {
+            "index": 1036
+          },
+          "HundredGigabitEthernet1/0/8": {
+            "index": 1037
+          },
+          "HundredGigabitEthernet1/0/9": {
+            "index": 1038
+          },
+          "VLAN1": {
+            "index": 1157
+          }
+        }
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": " Index 5 -- swidb Gi1\n Index 6 -- swidb Gi2\n Index 13 -- swidb Gi2.10\n Index 14 -- swidb Gi2.20\n Index 7 -- swidb Gi3\n Index 15 -- swidb Gi3.10\n Index 16 -- swidb Gi3.20\n Index 8 -- swidb Gi4\n Index 11 -- swidb Lo0\n Index 12 -- swidb Lo10\n Index 10 -- swidb Lo20\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1": {
+            "index": 5
+          },
+          "GigabitEthernet2": {
+            "index": 6
+          },
+          "GigabitEthernet2.10": {
+            "index": 13
+          },
+          "GigabitEthernet2.20": {
+            "index": 14
+          },
+          "GigabitEthernet3": {
+            "index": 7
+          },
+          "GigabitEthernet3.10": {
+            "index": 15
+          },
+          "GigabitEthernet3.20": {
+            "index": 16
+          },
+          "GigabitEthernet4": {
+            "index": 8
+          },
+          "Loopback0": {
+            "index": 11
+          },
+          "Loopback10": {
+            "index": 12
+          },
+          "Loopback20": {
+            "index": 10
+          }
+        }
+      }
+    }
+  ]
+}

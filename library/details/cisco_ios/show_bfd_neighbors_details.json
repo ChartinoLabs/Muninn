@@ -1,0 +1,169 @@
+{
+  "os": "cisco_ios",
+  "command": "show bfd neighbors details",
+  "schema": {
+    "name": "ShowBfdNeighborsDetailsResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "BfdSessionEntry",
+              "fields": {
+                "local_address": {
+                  "type": "str",
+                  "required": true
+                },
+                "neighbor_address": {
+                  "type": "str",
+                  "required": true
+                },
+                "interface": {
+                  "type": "str",
+                  "required": true
+                },
+                "state": {
+                  "type": "str",
+                  "required": true
+                },
+                "session_type": {
+                  "type": "str",
+                  "required": false
+                },
+                "ld_rd": {
+                  "type": "str",
+                  "required": false
+                },
+                "rh_rs": {
+                  "type": "str",
+                  "required": false
+                },
+                "holddown_ms": {
+                  "type": "int",
+                  "required": false
+                },
+                "timers": {
+                  "type": {
+                    "name": "BfdTimers",
+                    "fields": {
+                      "tx_interval_ms": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "rx_interval_ms": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "multiplier": {
+                        "type": "int",
+                        "required": true
+                      }
+                    }
+                  },
+                  "required": false
+                },
+                "registered_protocols": {
+                  "type": {
+                    "type": "list",
+                    "items": "str"
+                  },
+                  "required": false
+                },
+                "uptime": {
+                  "type": "str",
+                  "required": false
+                },
+                "last_packet_received_ms": {
+                  "type": "int",
+                  "required": false
+                },
+                "rx_count": {
+                  "type": "int",
+                  "required": false
+                },
+                "tx_count": {
+                  "type": "int",
+                  "required": false
+                },
+                "round_trip_timer_ms": {
+                  "type": "int",
+                  "required": false
+                },
+                "echo_tx_interval_ms": {
+                  "type": "int",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic BFD neighbor details with two sessions",
+      "input": "\nNeighAddr                         LD/RD    RH/RS     State     Int\n10.1.1.2                        4097/4097  Up        Up        Gi0/0/1\nSession state is UP and using echo function with 50 ms interval.\nSession Host: Software\nOurAddr: 10.1.1.1\nHandle: 1\nLocal Diag: 0, Demand mode: 0, Poll bit: 0\nMinTxInt: 50000, MinRxInt: 50000, Multiplier: 3\nReceived MinRxInt: 50000, Received Multiplier: 3\nHolddown (hits): 150(0), Hello (hits): 50(0)\nRx Count: 1234, Rx Interval (ms) min/max/avg: 4/56/49 last: 12 ms ago\nTx Count: 1230, Tx Interval (ms) min/max/avg: 40/60/49\nRound trip timer: 2\nRegistered protocols: OSPF, BGP\nUptime: 01:23:45\nLast packet received: 12 ms ago\n\n10.2.2.2                        4098/4098  Up        Up        Gi0/0/2\nSession state is UP and using echo function with 100 ms interval.\nSession Host: Software\nOurAddr: 10.2.2.1\nHandle: 2\nLocal Diag: 0, Demand mode: 0, Poll bit: 0\nMinTxInt: 100000, MinRxInt: 100000, Multiplier: 5\nReceived MinRxInt: 100000, Received Multiplier: 5\nHolddown (hits): 500(0), Hello (hits): 100(0)\nRx Count: 5678, Rx Interval (ms) min/max/avg: 8/112/99 last: 45 ms ago\nTx Count: 5670, Tx Interval (ms) min/max/avg: 80/120/99\nRound trip timer: 5\nRegistered protocols: EIGRP\nUptime: 02:34:56\nLast packet received: 45 ms ago\n",
+      "expected": {
+        "neighbors": {
+          "10.1.1.2": {
+            "GigabitEthernet0/0/1": {
+              "local_address": "10.1.1.1",
+              "neighbor_address": "10.1.1.2",
+              "interface": "GigabitEthernet0/0/1",
+              "state": "UP",
+              "ld_rd": "4097/4097",
+              "rh_rs": "Up",
+              "echo_tx_interval_ms": 50,
+              "timers": {
+                "tx_interval_ms": 50000,
+                "rx_interval_ms": 50000,
+                "multiplier": 3
+              },
+              "holddown_ms": 150,
+              "rx_count": 1234,
+              "tx_count": 1230,
+              "round_trip_timer_ms": 2,
+              "registered_protocols": [
+                "OSPF",
+                "BGP"
+              ],
+              "uptime": "01:23:45",
+              "last_packet_received_ms": 12
+            }
+          },
+          "10.2.2.2": {
+            "GigabitEthernet0/0/2": {
+              "local_address": "10.2.2.1",
+              "neighbor_address": "10.2.2.2",
+              "interface": "GigabitEthernet0/0/2",
+              "state": "UP",
+              "ld_rd": "4098/4098",
+              "rh_rs": "Up",
+              "echo_tx_interval_ms": 100,
+              "timers": {
+                "tx_interval_ms": 100000,
+                "rx_interval_ms": 100000,
+                "multiplier": 5
+              },
+              "holddown_ms": 500,
+              "rx_count": 5678,
+              "tx_count": 5670,
+              "round_trip_timer_ms": 5,
+              "registered_protocols": [
+                "EIGRP"
+              ],
+              "uptime": "02:34:56",
+              "last_packet_received_ms": 45
+            }
+          }
+        }
+      }
+    }
+  ]
+}

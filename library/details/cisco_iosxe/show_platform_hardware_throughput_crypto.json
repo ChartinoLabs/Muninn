@@ -1,0 +1,52 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show platform hardware throughput crypto",
+  "schema": {
+    "name": "ShowPlatformHardwareThroughputCryptoResult",
+    "fields": {
+      "current_configured_crypto_throughput_level": {
+        "type": "str",
+        "required": true
+      },
+      "level_saved": {
+        "type": "bool",
+        "required": true
+      },
+      "reboot_required": {
+        "type": "bool",
+        "required": true
+      },
+      "current_enforced_crypto_throughput_level": {
+        "type": "str",
+        "required": true
+      },
+      "crypto_throughput_throttled": {
+        "type": "bool",
+        "required": true
+      },
+      "default_crypto_throughput_level": {
+        "type": "str",
+        "required": true
+      },
+      "current_boot_level": {
+        "type": "str",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with configured, enforced, and default throughput levels plus boot level",
+      "input": "Current configured crypto throughput level: T3\nLevel is saved, reboot is not required\nCurrent enforced crypto throughput level: 10G\nCrypto Throughput is not throttled\nDefault Crypto throughput level: 2.5G\nCurrent boot level is network-premier\n",
+      "expected": {
+        "crypto_throughput_throttled": false,
+        "current_boot_level": "network-premier",
+        "current_configured_crypto_throughput_level": "T3",
+        "current_enforced_crypto_throughput_level": "10G",
+        "default_crypto_throughput_level": "2.5G",
+        "level_saved": true,
+        "reboot_required": false
+      }
+    }
+  ]
+}

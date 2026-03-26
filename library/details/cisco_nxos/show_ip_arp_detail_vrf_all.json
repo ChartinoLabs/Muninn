@@ -1,0 +1,135 @@
+{
+  "os": "cisco_nxos",
+  "command": "show ip arp detail vrf all",
+  "schema": {
+    "name": "ShowIpArpDetailVrfAllResult",
+    "fields": {
+      "arp_entries": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ArpDetailEntry",
+            "fields": {
+              "interface": {
+                "type": "str",
+                "required": true
+              },
+              "physical_interface": {
+                "type": "str",
+                "required": false
+              },
+              "age": {
+                "type": "str",
+                "required": false
+              },
+              "mac_address": {
+                "type": "str",
+                "required": false
+              },
+              "flags": {
+                "type": "str",
+                "required": false
+              },
+              "vrf": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple VRFs with flags and various interface types",
+      "input": "LEAF_6# show ip arp detail vrf all\n\nFlags: * - Adjacencies learnt on non-active FHRP router\n       + - Adjacencies synced via CFSoE\n       # - Adjacencies Throttled for Glean\n       CP - Added via L2RIB, Control plane Adjacencies\n       PS - Added via L2RIB, Peer Sync\n       RO - Re-Originated Peer Sync Entry\n\nIP ARP Table for all contexts\nTotal number of entries: 7\nAddress         Age       MAC Address     Interface        Physical Interface  Flags    VRF Name\n10.48.3.254     00:00:05  0000.5e00.0101  mgmt0            mgmt0                        management\n172.20.12.16    00:03:13  10b3.d6dc.0293  Ethernet1/54     Ethernet1/54                 default\n172.20.12.18    00:01:53  7c21.0e12.3627  Vlan3622         port-channel1000             default\n172.24.8.85     00:16:58  7c21.0e12.3627  port-channel1100.3623 port-channel1100.3623         VRFTEST\n172.24.8.89     00:17:00  7c21.0e12.3627  port-channel1100.3624 port-channel1100.3624         VRFBORDER\n192.168.240.59  00:02:40  0cc4.7aee.9c2e  Vlan240          port-channel1000    +        VRFTEST\n192.168.240.62  00:12:56  a2b6.9300.0003  Vlan240          Ethernet163/1/47             VRFTEST\n",
+      "expected": {
+        "arp_entries": {
+          "10.48.3.254": {
+            "age": "00:00:05",
+            "interface": "mgmt0",
+            "mac_address": "0000.5e00.0101",
+            "physical_interface": "mgmt0",
+            "vrf": "management"
+          },
+          "172.20.12.16": {
+            "age": "00:03:13",
+            "interface": "Ethernet1/54",
+            "mac_address": "10b3.d6dc.0293",
+            "physical_interface": "Ethernet1/54",
+            "vrf": "default"
+          },
+          "172.20.12.18": {
+            "age": "00:01:53",
+            "interface": "Vlan3622",
+            "mac_address": "7c21.0e12.3627",
+            "physical_interface": "Port-channel1000",
+            "vrf": "default"
+          },
+          "172.24.8.85": {
+            "age": "00:16:58",
+            "interface": "Port-channel1100.3623",
+            "mac_address": "7c21.0e12.3627",
+            "physical_interface": "Port-channel1100.3623",
+            "vrf": "VRFTEST"
+          },
+          "172.24.8.89": {
+            "age": "00:17:00",
+            "interface": "Port-channel1100.3624",
+            "mac_address": "7c21.0e12.3627",
+            "physical_interface": "Port-channel1100.3624",
+            "vrf": "VRFBORDER"
+          },
+          "192.168.240.59": {
+            "age": "00:02:40",
+            "flags": "+",
+            "interface": "Vlan240",
+            "mac_address": "0cc4.7aee.9c2e",
+            "physical_interface": "Port-channel1000",
+            "vrf": "VRFTEST"
+          },
+          "192.168.240.62": {
+            "age": "00:12:56",
+            "interface": "Vlan240",
+            "mac_address": "a2b6.9300.0003",
+            "physical_interface": "Ethernet163/1/47",
+            "vrf": "VRFTEST"
+          }
+        }
+      }
+    },
+    {
+      "name": "Entries with INCOMPLETE MAC and static ARP entries",
+      "input": "show ip arp detail vrf all\n\n\nFlags: * - Adjacencies learnt on non-active FHRP router\n\t   + - Adjacencies synced via CFSoE\n\t   # - Adjacencies Throttled for Glean\n\t   CP - Added via L2RIB, Control plane Adjacencies\n\t   PS - Added via L2RIB, Peer Sync\n\t   RO - Re-Originated Peer Sync Entry\n\nIP ARP Table for all contexts\nTotal number of entries: 4\nAddress         Age       MAC Address     Interface        Physical Interface  Flags\n172.16.8.178    00:00:04  INCOMPLETE      Vlan392          Vlan392\n172.16.8.183    00:13:47  0050.56ff.ece6  Vlan392          port-channel105\n172.16.8.185    00:08:55  0050.56ff.c11c  Vlan392          port-channel110     +\n172.16.10.1        -      0000.0cff.9129  Vlan393          -\n",
+      "expected": {
+        "arp_entries": {
+          "172.16.8.178": {
+            "age": "00:00:04",
+            "interface": "Vlan392",
+            "physical_interface": "Vlan392"
+          },
+          "172.16.8.183": {
+            "age": "00:13:47",
+            "interface": "Vlan392",
+            "mac_address": "0050.56ff.ece6",
+            "physical_interface": "Port-channel105"
+          },
+          "172.16.8.185": {
+            "age": "00:08:55",
+            "flags": "+",
+            "interface": "Vlan392",
+            "mac_address": "0050.56ff.c11c",
+            "physical_interface": "Port-channel110"
+          },
+          "172.16.10.1": {
+            "interface": "Vlan393",
+            "mac_address": "0000.0cff.9129"
+          }
+        }
+      }
+    }
+  ]
+}

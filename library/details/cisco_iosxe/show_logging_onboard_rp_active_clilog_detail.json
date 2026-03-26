@@ -1,0 +1,125 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show logging onboard rp active clilog detail",
+  "schema": {
+    "name": "ShowLoggingOnboardRpActiveClilogDetailResult",
+    "fields": {
+      "summary": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SummaryEntry",
+            "fields": {
+              "count": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "continuous": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ContinuousEntry",
+            "fields": {
+              "timestamp": {
+                "type": "str",
+                "required": true
+              },
+              "command": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show logging onboard rp active clilog detail output with summary and continuous sections",
+      "input": "--------------------------------------------------------------------------------\nCLI LOGGING SUMMARY INFORMATION\n--------------------------------------------------------------------------------\nCOUNT COMMAND\n--------------------------------------------------------------------------------\n 1    show logging onboard RP active clilog detail\n 1    show logging onboard RP active counter detail\n 1    show logging onboard RP active environment detail\n 1    show logging onboard RP active message detail\n 1    show logging onboard RP active temperature detail\n 1    show logging onboard RP active uptime detail\n 1    show logging onboard RP active voltage detail\n 1    show logging onboard RP standby message detail\n 1    show logging onboard RP active counter detail\n 1    show logging onboard RP active counter detail\n 1    show logging onboard RP active counter detail\n--------------------------------------------------------------------------------\n--------------------------------------------------------------------------------\nCLI LOGGING CONTINUOUS INFORMATION\n--------------------------------------------------------------------------------\nMM/DD/YYYY HH:MM:SS COMMAND\n--------------------------------------------------------------------------------\n 03/30/2023 02:41:08 show logging onboard RP active clilog detail\n 03/30/2023 02:41:43 show logging onboard RP active counter detail\n 03/30/2023 02:42:29 show logging onboard RP active environment detail\n 03/30/2023 02:43:32 show logging onboard RP active message detail\n 03/30/2023 02:44:21 show logging onboard RP active temperature detail\n 03/30/2023 02:45:25 show logging onboard RP active uptime detail\n 03/30/2023 02:46:31 show logging onboard RP active voltage detail\n 04/13/2023 09:22:40 show logging onboard RP standby message detail\n 04/20/2023 03:20:33 show logging onboard RP active counter detail\n 04/20/2023 07:40:41 show logging onboard RP active counter detail\n 04/20/2023 09:41:11 show logging onboard RP active counter detail\n--------------------------------------------------------------------------------\n",
+      "expected": {
+        "summary": {
+          "show logging onboard RP active clilog detail": {
+            "count": 1
+          },
+          "show logging onboard RP active counter detail": {
+            "count": 4
+          },
+          "show logging onboard RP active environment detail": {
+            "count": 1
+          },
+          "show logging onboard RP active message detail": {
+            "count": 1
+          },
+          "show logging onboard RP active temperature detail": {
+            "count": 1
+          },
+          "show logging onboard RP active uptime detail": {
+            "count": 1
+          },
+          "show logging onboard RP active voltage detail": {
+            "count": 1
+          },
+          "show logging onboard RP standby message detail": {
+            "count": 1
+          }
+        },
+        "continuous": {
+          "1": {
+            "timestamp": "03/30/2023 02:41:08",
+            "command": "show logging onboard RP active clilog detail"
+          },
+          "2": {
+            "timestamp": "03/30/2023 02:41:43",
+            "command": "show logging onboard RP active counter detail"
+          },
+          "3": {
+            "timestamp": "03/30/2023 02:42:29",
+            "command": "show logging onboard RP active environment detail"
+          },
+          "4": {
+            "timestamp": "03/30/2023 02:43:32",
+            "command": "show logging onboard RP active message detail"
+          },
+          "5": {
+            "timestamp": "03/30/2023 02:44:21",
+            "command": "show logging onboard RP active temperature detail"
+          },
+          "6": {
+            "timestamp": "03/30/2023 02:45:25",
+            "command": "show logging onboard RP active uptime detail"
+          },
+          "7": {
+            "timestamp": "03/30/2023 02:46:31",
+            "command": "show logging onboard RP active voltage detail"
+          },
+          "8": {
+            "timestamp": "04/13/2023 09:22:40",
+            "command": "show logging onboard RP standby message detail"
+          },
+          "9": {
+            "timestamp": "04/20/2023 03:20:33",
+            "command": "show logging onboard RP active counter detail"
+          },
+          "10": {
+            "timestamp": "04/20/2023 07:40:41",
+            "command": "show logging onboard RP active counter detail"
+          },
+          "11": {
+            "timestamp": "04/20/2023 09:41:11",
+            "command": "show logging onboard RP active counter detail"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show platform software audit summary",
+  "schema": {
+    "name": "ShowPlatformSoftwareAuditSummaryResult",
+    "fields": {
+      "chassis": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ChassisEntry",
+            "fields": {
+              "route_processors": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "RouteProcessorEntry",
+                    "fields": {
+                      "avc_denial_count": {
+                        "type": "int",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "roles": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RoleEntry",
+            "fields": {
+              "avc_denial_count": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple chassis with route-processor audit logs",
+      "input": "===================================\nAUDIT LOG ON chassis 1 route-processor 0\n-----------------------------------\nAVC Denial count: 82\n===================================\nAUDIT LOG ON chassis 2 route-processor 0\n-----------------------------------\nAVC Denial count: 40\n===================================\nAUDIT LOG ON chassis 3 route-processor 0\n-----------------------------------\nAVC Denial count: 24\n",
+      "expected": {
+        "chassis": {
+          "1": {
+            "route_processors": {
+              "0": {
+                "avc_denial_count": 82
+              }
+            }
+          },
+          "2": {
+            "route_processors": {
+              "0": {
+                "avc_denial_count": 40
+              }
+            }
+          },
+          "3": {
+            "route_processors": {
+              "0": {
+                "avc_denial_count": 24
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": "===================================\nAUDIT LOG ON ACTIVE\n-----------------------------------\nAVC Denial count: 0\n",
+      "expected": {
+        "roles": {
+          "active": {
+            "avc_denial_count": 0
+          }
+        }
+      }
+    },
+    {
+      "name": "Single chassis with zero AVC denial count",
+      "input": "===================================\nAUDIT LOG ON chassis 1 route-processor 0\n-----------------------------------\nAVC Denial count: 0\n",
+      "expected": {
+        "chassis": {
+          "1": {
+            "route_processors": {
+              "0": {
+                "avc_denial_count": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Active and standby role-based audit logs",
+      "input": "===================================\nAUDIT LOG ON ACTIVE\n-----------------------------------\nAVC Denial count: 189\n===================================\nAUDIT LOG ON STANDBY\n-----------------------------------\nAVC Denial count: 21\n",
+      "expected": {
+        "roles": {
+          "active": {
+            "avc_denial_count": 189
+          },
+          "standby": {
+            "avc_denial_count": 21
+          }
+        }
+      }
+    }
+  ]
+}

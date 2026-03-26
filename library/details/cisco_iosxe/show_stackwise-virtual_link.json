@@ -1,0 +1,81 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show stackwise-virtual link",
+  "schema": {
+    "name": "ShowStackwiseVirtualLinkResult",
+    "fields": {
+      "switches": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SVLLinkSwitchEntry",
+            "fields": {
+              "svl": {
+                "type": "str",
+                "required": true
+              },
+              "ports": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "SVLLinkPortStatus",
+                    "fields": {
+                      "link_status": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "protocol_status": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "SVL link status with bundled protocol on two switches",
+      "input": "Stackwise Virtual Link(SVL) Information:\n----------------------------------------\nFlags:\n------\nLink Status\n-----------\nU-Up D-Down\nProtocol Status\n---------------\ns-Suspended P-Bundled E-Error D-Down R-RLayer3 I-Indiv\n-------------------------------------------------------\nSwitch  SVL     Ports                           Link-Status     Protocol-Status\n------  ---     -----                           -----------     ---------------\n1       1       HundredGigE1/0/1                U               P\n                HundredGigE1/0/6                U               P\n2       1       HundredGigE2/0/1                U               P\n                HundredGigE2/0/6                U               P\n",
+      "expected": {
+        "switches": {
+          "1": {
+            "svl": "1",
+            "ports": {
+              "HundredGigabitEthernet1/0/1": {
+                "link_status": "U",
+                "protocol_status": "P"
+              },
+              "HundredGigabitEthernet1/0/6": {
+                "link_status": "U",
+                "protocol_status": "P"
+              }
+            }
+          },
+          "2": {
+            "svl": "1",
+            "ports": {
+              "HundredGigabitEthernet2/0/1": {
+                "link_status": "U",
+                "protocol_status": "P"
+              },
+              "HundredGigabitEthernet2/0/6": {
+                "link_status": "U",
+                "protocol_status": "P"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

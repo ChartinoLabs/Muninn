@@ -1,0 +1,404 @@
+{
+  "os": "cisco_nxos",
+  "command": "show cdp neighbors detail",
+  "schema": {
+    "name": "ShowCdpNeighborsDetailResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "type": "dict",
+              "key": "str",
+              "value": {
+                "name": "CdpNeighborDetailEntry",
+                "fields": {
+                  "device_id": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "platform": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "capabilities": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "port_id": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "hold_time": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "version": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "advertisement_version": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "system_name": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "interface_addresses": {
+                    "type": {
+                      "type": "list",
+                      "items": "str"
+                    },
+                    "required": false
+                  },
+                  "mgmt_addresses": {
+                    "type": {
+                      "type": "list",
+                      "items": "str"
+                    },
+                    "required": false
+                  },
+                  "native_vlan": {
+                    "type": "int",
+                    "required": false
+                  },
+                  "duplex": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "mtu": {
+                    "type": "int",
+                    "required": false
+                  },
+                  "physical_location": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "vtp_management_domain": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "local_interface_mac": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "remote_interface_mac": {
+                    "type": "str",
+                    "required": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "CDP neighbors detail with mixed IOS and NX-OS platforms",
+      "input": "----------------------------------------\nDevice ID:PERIMETER\nVTP Management Domain Name: null\n\nInterface address(es):\n    IPv4 Address: 10.1.100.1\nPlatform: cisco WS-C3750-48TS, Capabilities: Router Switch IGMP Filtering\nInterface: mgmt0, Port ID (outgoing port): FastEthernet1/0/32\nHoldtime: 134 sec\n\nVersion:\nCisco IOS Software, C3750 Software (C3750-IPBASEK9-M), Version 12.2(44)SE2, RELEASE SOFTWARE (fc2)\nCopyright (c) 1986-2008 by Cisco Systems, Inc.\nCompiled Thu 01-May-08 15:42 by antonino\n\nAdvertisement Version: 2\n\nNative VLAN: 100\nDuplex: full\nMgmt address(es):\n    IPv4 Address: 10.1.100.1\n----------------------------------------\nDevice ID:dc-lf03(SAL19069XXX)\nSystem Name: dc-lf03\n\nInterface address(es):\n    IPv4 Address: 10.1.100.226\nPlatform: N9K-C9372TX, Capabilities: Router Switch IGMP Filtering Supports-STP-Dispute\nInterface: Ethernet1/1, Port ID (outgoing port): Ethernet1/1\nHoldtime: 157 sec\n\nVersion:\nCisco Nexus Operating System (NX-OS) Software, Version 7.0(3)I5(1)\n\nAdvertisement Version: 2\n\nNative VLAN: 1\nDuplex: full\n\nMTU: 1500\nPhysical Location: snmplocation\nMgmt address(es):\n    IPv4 Address: 10.1.100.226\n----------------------------------------\nDevice ID:dc-lf03(SAL1906XXXX)\nSystem Name: dc-lf03\n\nInterface address(es):\n    IPv4 Address: 10.1.100.226\nPlatform: N9K-C9372TX, Capabilities: Router Switch IGMP Filtering Supports-STP-Dispute\nInterface: Ethernet1/3, Port ID (outgoing port): Ethernet1/3\nHoldtime: 157 sec\n\nVersion:\nCisco Nexus Operating System (NX-OS) Software, Version 7.0(3)I5(1)\n\nAdvertisement Version: 2\n\nNative VLAN: 1\nDuplex: full\n\nMTU: 1500\nPhysical Location: snmplocation\nMgmt address(es):\n    IPv4 Address: 10.1.100.226\n----------------------------------------\nDevice ID:dc-sp01(SAL19069XXX)\nSystem Name: dc-sp01\n\nInterface address(es):\n    IPv4 Address: 10.1.1.1\nPlatform: N9K-C9372TX, Capabilities: Router Switch IGMP Filtering Supports-STP-Dispute\nInterface: Ethernet1/49, Port ID (outgoing port): Ethernet1/52\nHoldtime: 166 sec\n\nVersion:\nCisco Nexus Operating System (NX-OS) Software, Version 7.0(3)I2(2d)\n\nAdvertisement Version: 2\n\nNative VLAN: 1\nDuplex: full\n\nMTU: 1500\nPhysical Location: NY-DC\nMgmt address(es):\n    IPv4 Address: 10.1.100.222\n----------------------------------------\nDevice ID:dc-sp02(SAL19069XXX)\nSystem Name: dc-sp02\n\nInterface address(es):\n    IPv4 Address: 10.1.1.9\nPlatform: N9K-C9372TX, Capabilities: Router Switch IGMP Filtering Supports-STP-Dispute\nInterface: Ethernet1/50, Port ID (outgoing port): Ethernet1/52\nHoldtime: 166 sec\n\nVersion:\nCisco Nexus Operating System (NX-OS) Software, Version 7.0(3)I2(2d)\n\nAdvertisement Version: 2\n\nNative VLAN: 1\nDuplex: full\n\nMTU: 1500\nPhysical Location: NY-DC\nMgmt address(es):\n    IPv4 Address: 10.1.100.223\n",
+      "expected": {
+        "neighbors": {
+          "mgmt0": {
+            "PERIMETER": {
+              "FastEthernet1/0/32": {
+                "device_id": "PERIMETER",
+                "platform": "cisco WS-C3750-48TS",
+                "capabilities": "Router Switch IGMP Filtering",
+                "port_id": "FastEthernet1/0/32",
+                "hold_time": 134,
+                "version": "Cisco IOS Software, C3750 Software (C3750-IPBASEK9-M), Version 12.2(44)SE2, RELEASE SOFTWARE (fc2)\nCopyright (c) 1986-2008 by Cisco Systems, Inc.\nCompiled Thu 01-May-08 15:42 by antonino",
+                "advertisement_version": 2,
+                "duplex": "full",
+                "vtp_management_domain": "null",
+                "native_vlan": 100,
+                "interface_addresses": [
+                  "10.1.100.1"
+                ],
+                "mgmt_addresses": [
+                  "10.1.100.1"
+                ]
+              }
+            }
+          },
+          "Ethernet1/1": {
+            "dc-lf03(SAL19069XXX)": {
+              "Ethernet1/1": {
+                "device_id": "dc-lf03(SAL19069XXX)",
+                "platform": "N9K-C9372TX",
+                "capabilities": "Router Switch IGMP Filtering Supports-STP-Dispute",
+                "port_id": "Ethernet1/1",
+                "hold_time": 157,
+                "version": "Cisco Nexus Operating System (NX-OS) Software, Version 7.0(3)I5(1)",
+                "advertisement_version": 2,
+                "system_name": "dc-lf03",
+                "duplex": "full",
+                "physical_location": "snmplocation",
+                "native_vlan": 1,
+                "mtu": 1500,
+                "interface_addresses": [
+                  "10.1.100.226"
+                ],
+                "mgmt_addresses": [
+                  "10.1.100.226"
+                ]
+              }
+            }
+          },
+          "Ethernet1/3": {
+            "dc-lf03(SAL1906XXXX)": {
+              "Ethernet1/3": {
+                "device_id": "dc-lf03(SAL1906XXXX)",
+                "platform": "N9K-C9372TX",
+                "capabilities": "Router Switch IGMP Filtering Supports-STP-Dispute",
+                "port_id": "Ethernet1/3",
+                "hold_time": 157,
+                "version": "Cisco Nexus Operating System (NX-OS) Software, Version 7.0(3)I5(1)",
+                "advertisement_version": 2,
+                "system_name": "dc-lf03",
+                "duplex": "full",
+                "physical_location": "snmplocation",
+                "native_vlan": 1,
+                "mtu": 1500,
+                "interface_addresses": [
+                  "10.1.100.226"
+                ],
+                "mgmt_addresses": [
+                  "10.1.100.226"
+                ]
+              }
+            }
+          },
+          "Ethernet1/49": {
+            "dc-sp01(SAL19069XXX)": {
+              "Ethernet1/52": {
+                "device_id": "dc-sp01(SAL19069XXX)",
+                "platform": "N9K-C9372TX",
+                "capabilities": "Router Switch IGMP Filtering Supports-STP-Dispute",
+                "port_id": "Ethernet1/52",
+                "hold_time": 166,
+                "version": "Cisco Nexus Operating System (NX-OS) Software, Version 7.0(3)I2(2d)",
+                "advertisement_version": 2,
+                "system_name": "dc-sp01",
+                "duplex": "full",
+                "physical_location": "NY-DC",
+                "native_vlan": 1,
+                "mtu": 1500,
+                "interface_addresses": [
+                  "10.1.1.1"
+                ],
+                "mgmt_addresses": [
+                  "10.1.100.222"
+                ]
+              }
+            }
+          },
+          "Ethernet1/50": {
+            "dc-sp02(SAL19069XXX)": {
+              "Ethernet1/52": {
+                "device_id": "dc-sp02(SAL19069XXX)",
+                "platform": "N9K-C9372TX",
+                "capabilities": "Router Switch IGMP Filtering Supports-STP-Dispute",
+                "port_id": "Ethernet1/52",
+                "hold_time": 166,
+                "version": "Cisco Nexus Operating System (NX-OS) Software, Version 7.0(3)I2(2d)",
+                "advertisement_version": 2,
+                "system_name": "dc-sp02",
+                "duplex": "full",
+                "physical_location": "NY-DC",
+                "native_vlan": 1,
+                "mtu": 1500,
+                "interface_addresses": [
+                  "10.1.1.9"
+                ],
+                "mgmt_addresses": [
+                  "10.1.100.223"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "CDP neighbors detail with Nexus 5K and IOS platforms",
+      "input": "----------------------------------------\nDevice ID:DC3P01SW01.test.co.nz\nVTP Management Domain Name:\n\nInterface address(es):\n    IPv4 Address: 10.115.143.251\nPlatform: WS-C3560X-24, Capabilities: Switch IGMP Filtering\nInterface: mgmt0, Port ID (outgoing port): GigabitEthernet0/20\nHoldtime: 134 sec\n\nVersion:\nCisco IOS Software, C3560E Software (C3560E-UNIVERSALK9-M), Version 12.2(55)SE5, RELEASE SOFTWARE (fc1)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2012 by Cisco Systems, Inc.\nCompiled Thu 09-Feb-12 18:32 by prod_rel_team\n\nAdvertisement Version: 2\n\nNative VLAN: 143\nDuplex: full\nMgmt address(es):\n    IPv4 Address: 10.115.143.251\n----------------------------------------\nDevice ID:DC3TESTW01-55.test.co.nz(SSI3707070J)\nSystem Name: DC3TESTW01-55\n\nInterface address(es):\n    IPv4 Address: 10.115.17.253\nPlatform: N5K-C5548UP, Capabilities: Router Switch IGMP Filtering Supports-STP-Dispute\nInterface: Ethernet1/1, Port ID (outgoing port): Ethernet1/31\nHoldtime: 157 sec\n\nVersion:\nCisco Nexus Operating System (NX-OS) Software, Version 5.2(1)N1(4)\n\nAdvertisement Version: 2\n\nNative VLAN: 1\nDuplex: full\nPhysical Location: DC3, Sydney DC Rack P1, RU36\nMgmt address(es):\n    IPv4 Address: 10.115.143.120\n----------------------------------------\nDevice ID:DC3TESTW02.test.co.nz(SSI11111D2M)\nSystem Name: DC3TESTW02\n\nInterface address(es):\n    IPv4 Address: 10.115.143.21\nPlatform: N5K-C5020P-BF, Capabilities: Switch IGMP Filtering Supports-STP-Dispute\nInterface: Ethernet1/21, Port ID (outgoing port): Ethernet1/21\nHoldtime: 157 sec\n\nVersion:\nCisco Nexus Operating System (NX-OS) Software, Version 5.2(1)N1(4)\n\nAdvertisement Version: 2\n\nNative VLAN: 1\nDuplex: full\nPhysical Location: DC3 , Melbourne\nMgmt address(es):\n    IPv4 Address: 10.115.143.21\n----------------------------------------\nDevice ID:DC3TESTW02.test.co.nz(SSI44444D2M)\nSystem Name: DC3TESTW02\n\nInterface address(es):\n    IPv4 Address: 10.115.143.21\nPlatform: N5K-C5020P-BF, Capabilities: Switch IGMP Filtering Supports-STP-Dispute\nInterface: Ethernet1/22, Port ID (outgoing port): Ethernet1/22\nHoldtime: 157 sec\n\nVersion:\nCisco Nexus Operating System (NX-OS) Software, Version 5.2(1)N1(4)\n\nAdvertisement Version: 2\n\nNative VLAN: 1\nDuplex: full\nPhysical Location: DC3 , Melbourne\nMgmt address(es):\n    IPv4 Address: 10.115.143.21\n",
+      "expected": {
+        "neighbors": {
+          "mgmt0": {
+            "DC3P01SW01.test.co.nz": {
+              "GigabitEthernet0/20": {
+                "device_id": "DC3P01SW01.test.co.nz",
+                "platform": "WS-C3560X-24",
+                "capabilities": "Switch IGMP Filtering",
+                "port_id": "GigabitEthernet0/20",
+                "hold_time": 134,
+                "version": "Cisco IOS Software, C3560E Software (C3560E-UNIVERSALK9-M), Version 12.2(55)SE5, RELEASE SOFTWARE (fc1)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2012 by Cisco Systems, Inc.\nCompiled Thu 09-Feb-12 18:32 by prod_rel_team",
+                "advertisement_version": 2,
+                "duplex": "full",
+                "native_vlan": 143,
+                "interface_addresses": [
+                  "10.115.143.251"
+                ],
+                "mgmt_addresses": [
+                  "10.115.143.251"
+                ]
+              }
+            }
+          },
+          "Ethernet1/1": {
+            "DC3TESTW01-55.test.co.nz(SSI3707070J)": {
+              "Ethernet1/31": {
+                "device_id": "DC3TESTW01-55.test.co.nz(SSI3707070J)",
+                "platform": "N5K-C5548UP",
+                "capabilities": "Router Switch IGMP Filtering Supports-STP-Dispute",
+                "port_id": "Ethernet1/31",
+                "hold_time": 157,
+                "version": "Cisco Nexus Operating System (NX-OS) Software, Version 5.2(1)N1(4)",
+                "advertisement_version": 2,
+                "system_name": "DC3TESTW01-55",
+                "duplex": "full",
+                "physical_location": "DC3, Sydney DC Rack P1, RU36",
+                "native_vlan": 1,
+                "interface_addresses": [
+                  "10.115.17.253"
+                ],
+                "mgmt_addresses": [
+                  "10.115.143.120"
+                ]
+              }
+            }
+          },
+          "Ethernet1/21": {
+            "DC3TESTW02.test.co.nz(SSI11111D2M)": {
+              "Ethernet1/21": {
+                "device_id": "DC3TESTW02.test.co.nz(SSI11111D2M)",
+                "platform": "N5K-C5020P-BF",
+                "capabilities": "Switch IGMP Filtering Supports-STP-Dispute",
+                "port_id": "Ethernet1/21",
+                "hold_time": 157,
+                "version": "Cisco Nexus Operating System (NX-OS) Software, Version 5.2(1)N1(4)",
+                "advertisement_version": 2,
+                "system_name": "DC3TESTW02",
+                "duplex": "full",
+                "physical_location": "DC3 , Melbourne",
+                "native_vlan": 1,
+                "interface_addresses": [
+                  "10.115.143.21"
+                ],
+                "mgmt_addresses": [
+                  "10.115.143.21"
+                ]
+              }
+            }
+          },
+          "Ethernet1/22": {
+            "DC3TESTW02.test.co.nz(SSI44444D2M)": {
+              "Ethernet1/22": {
+                "device_id": "DC3TESTW02.test.co.nz(SSI44444D2M)",
+                "platform": "N5K-C5020P-BF",
+                "capabilities": "Switch IGMP Filtering Supports-STP-Dispute",
+                "port_id": "Ethernet1/22",
+                "hold_time": 157,
+                "version": "Cisco Nexus Operating System (NX-OS) Software, Version 5.2(1)N1(4)",
+                "advertisement_version": 2,
+                "system_name": "DC3TESTW02",
+                "duplex": "full",
+                "physical_location": "DC3 , Melbourne",
+                "native_vlan": 1,
+                "interface_addresses": [
+                  "10.115.143.21"
+                ],
+                "mgmt_addresses": [
+                  "10.115.143.21"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "CDP neighbors detail with MikroTik device and interface MACs",
+      "input": "----------------------------------------\nDevice ID:MKT1\n\nInterface address(es): 0\nPlatform: MikroTik, Capabilities: Router\nInterface: Ethernet1/1, Port ID (outgoing port): ether1\nHoldtime: 61 sec\n\nVersion:\n6.47.10 (long-term)\n\nAdvertisement Version: 1\nLocal Interface MAC: b1:81:d1:d1:a1:11\nRemote Interface MAC: 00:00:00:00:00:00\n",
+      "expected": {
+        "neighbors": {
+          "Ethernet1/1": {
+            "MKT1": {
+              "ether1": {
+                "device_id": "MKT1",
+                "platform": "MikroTik",
+                "capabilities": "Router",
+                "port_id": "ether1",
+                "hold_time": 61,
+                "version": "6.47.10 (long-term)",
+                "advertisement_version": 1,
+                "local_interface_mac": "b1:81:d1:d1:a1:11",
+                "remote_interface_mac": "00:00:00:00:00:00"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "CDP neighbors detail without separator lines between records",
+      "input": "Device ID:redacted.test.com\nVTP Management Domain Name: brwn\n\nInterface address(es):\n    IPv4 Address: 10.0.0.1\nPlatform: C9300-48UXM, Capabilities: Switch IGMP Filtering\nInterface: Ethernet7/14, Port ID (outgoing port): TenGigabitEthernet1/1/7\nHoldtime: 133 sec\n\nVersion:\nCisco IOS Software [Everest], Catalyst L3 Switch Software (CAT9K_IOSXE), Version 16.6.6, RELEASE SOFTWARE (fc1)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2019 by Cisco Systems, Inc.\nCompiled Thu 11-Apr-19 03:51 by mcpre\n\nAdvertisement Version: 2\n\nNative VLAN: 1000\nDuplex: full\nMgmt address(es):\n    IPv4 Address: 10.0.0.1\nDevice ID:redacted.test.com\nVTP Management Domain Name: brwn\n\nInterface address(es):\n    IPv4 Address: 10.0.0.3\nPlatform: C9300-48UXM, Capabilities: Switch IGMP Filtering\nInterface: Ethernet7/15, Port ID (outgoing port): TenGigabitEthernet1/1/8\nHoldtime: 136 sec\n\nVersion:\nCisco IOS Software [Everest], Catalyst L3 Switch Software (CAT9K_IOSXE), Version 16.6.6, RELEASE SOFTWARE (fc1)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2019 by Cisco Systems, Inc.\nCompiled Thu 11-Apr-19 03:51 by mcpre\n\nAdvertisement Version: 2\n\nNative VLAN: 1000\nDuplex: full\nMgmt address(es):\n    IPv4 Address: 10.0.0.4\n",
+      "expected": {
+        "neighbors": {
+          "Ethernet7/14": {
+            "redacted.test.com": {
+              "TenGigabitEthernet1/1/7": {
+                "device_id": "redacted.test.com",
+                "platform": "C9300-48UXM",
+                "capabilities": "Switch IGMP Filtering",
+                "port_id": "TenGigabitEthernet1/1/7",
+                "hold_time": 133,
+                "version": "Cisco IOS Software [Everest], Catalyst L3 Switch Software (CAT9K_IOSXE), Version 16.6.6, RELEASE SOFTWARE (fc1)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2019 by Cisco Systems, Inc.\nCompiled Thu 11-Apr-19 03:51 by mcpre",
+                "advertisement_version": 2,
+                "duplex": "full",
+                "vtp_management_domain": "brwn",
+                "native_vlan": 1000,
+                "interface_addresses": [
+                  "10.0.0.1"
+                ],
+                "mgmt_addresses": [
+                  "10.0.0.1"
+                ]
+              }
+            }
+          },
+          "Ethernet7/15": {
+            "redacted.test.com": {
+              "TenGigabitEthernet1/1/8": {
+                "device_id": "redacted.test.com",
+                "platform": "C9300-48UXM",
+                "capabilities": "Switch IGMP Filtering",
+                "port_id": "TenGigabitEthernet1/1/8",
+                "hold_time": 136,
+                "version": "Cisco IOS Software [Everest], Catalyst L3 Switch Software (CAT9K_IOSXE), Version 16.6.6, RELEASE SOFTWARE (fc1)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2019 by Cisco Systems, Inc.\nCompiled Thu 11-Apr-19 03:51 by mcpre",
+                "advertisement_version": 2,
+                "duplex": "full",
+                "vtp_management_domain": "brwn",
+                "native_vlan": 1000,
+                "interface_addresses": [
+                  "10.0.0.3"
+                ],
+                "mgmt_addresses": [
+                  "10.0.0.4"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

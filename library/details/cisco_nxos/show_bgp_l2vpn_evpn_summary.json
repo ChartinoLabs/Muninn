@@ -1,0 +1,266 @@
+{
+  "os": "cisco_nxos",
+  "command": "show bgp l2vpn evpn summary",
+  "schema": {
+    "name": "ShowIpBgpSummaryResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfEntry",
+            "fields": {
+              "address_families": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "AddressFamilyEntry",
+                    "fields": {
+                      "router_id": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "local_as": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "table_version": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "config_peers": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "capable_peers": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "memory": {
+                        "type": {
+                          "name": "MemoryInfo",
+                          "fields": {
+                            "network_entries": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "paths": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "bytes_used": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "attribute_entries": {
+                              "type": {
+                                "name": "BracketEntries",
+                                "fields": {
+                                  "count": {
+                                    "type": "int",
+                                    "required": true
+                                  },
+                                  "bytes": {
+                                    "type": "int",
+                                    "required": true
+                                  }
+                                }
+                              },
+                              "required": true
+                            },
+                            "as_path_entries": {
+                              "type": {
+                                "type": "ref",
+                                "name": "BracketEntries"
+                              },
+                              "required": true
+                            },
+                            "community_entries": {
+                              "type": {
+                                "type": "ref",
+                                "name": "BracketEntries"
+                              },
+                              "required": true
+                            },
+                            "clusterlist_entries": {
+                              "type": {
+                                "type": "ref",
+                                "name": "BracketEntries"
+                              },
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": true
+                      },
+                      "dampening": {
+                        "type": {
+                          "name": "DampeningInfo",
+                          "fields": {
+                            "history_paths": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "dampened_paths": {
+                              "type": "int",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "received_paths": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "neighbors": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "NeighborEntry",
+                            "fields": {
+                              "version": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "remote_as": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "msg_rcvd": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "msg_sent": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "tbl_ver": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "in_queue": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "out_queue": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "up_down": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "state_pfxrcd": {
+                                "type": "str",
+                                "required": true
+                              }
+                            }
+                          }
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Standard L2VPN EVPN BGP summary with multiple neighbors and mixed states",
+      "input": "BGP summary information for VRF default, address family L2VPN EVPN\nBGP router identifier 10.1.0.1, local AS number 65000\nBGP table version is 128456, L2VPN EVPN config peers 4, capable peers 3\n52 network entries and 104 paths using 18512 bytes of memory\nBGP attribute entries [48/7680], BGP AS path entries [3/26]\nBGP community entries [2/64], BGP clusterlist entries [0/0]\nNeighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd\n10.1.0.2        4 65000  524176  523842   128456    0    0 5w2d     26\n10.1.0.3        4 65000  524089  523790   128456    0    0 5w2d     26\n10.1.0.4        4 65001  312456  298712   128456    0    0 3w1d     52\n10.1.0.5        4 65002       0       0        0    0    0 2d10h    Idle\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "address_families": {
+              "L2VPN EVPN": {
+                "capable_peers": 3,
+                "config_peers": 4,
+                "local_as": "65000",
+                "memory": {
+                  "as_path_entries": {
+                    "bytes": 26,
+                    "count": 3
+                  },
+                  "attribute_entries": {
+                    "bytes": 7680,
+                    "count": 48
+                  },
+                  "bytes_used": 18512,
+                  "clusterlist_entries": {
+                    "bytes": 0,
+                    "count": 0
+                  },
+                  "community_entries": {
+                    "bytes": 64,
+                    "count": 2
+                  },
+                  "network_entries": 52,
+                  "paths": 104
+                },
+                "neighbors": {
+                  "10.1.0.2": {
+                    "in_queue": 0,
+                    "msg_rcvd": 524176,
+                    "msg_sent": 523842,
+                    "out_queue": 0,
+                    "remote_as": "65000",
+                    "state_pfxrcd": "26",
+                    "tbl_ver": 128456,
+                    "up_down": "5w2d",
+                    "version": 4
+                  },
+                  "10.1.0.3": {
+                    "in_queue": 0,
+                    "msg_rcvd": 524089,
+                    "msg_sent": 523790,
+                    "out_queue": 0,
+                    "remote_as": "65000",
+                    "state_pfxrcd": "26",
+                    "tbl_ver": 128456,
+                    "up_down": "5w2d",
+                    "version": 4
+                  },
+                  "10.1.0.4": {
+                    "in_queue": 0,
+                    "msg_rcvd": 312456,
+                    "msg_sent": 298712,
+                    "out_queue": 0,
+                    "remote_as": "65001",
+                    "state_pfxrcd": "52",
+                    "tbl_ver": 128456,
+                    "up_down": "3w1d",
+                    "version": 4
+                  },
+                  "10.1.0.5": {
+                    "in_queue": 0,
+                    "msg_rcvd": 0,
+                    "msg_sent": 0,
+                    "out_queue": 0,
+                    "remote_as": "65002",
+                    "state_pfxrcd": "Idle",
+                    "tbl_ver": 0,
+                    "up_down": "2d10h",
+                    "version": 4
+                  }
+                },
+                "router_id": "10.1.0.1",
+                "table_version": 128456
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

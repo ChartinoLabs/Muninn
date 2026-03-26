@@ -1,0 +1,81 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show table-map",
+  "schema": {
+    "name": "ShowTableMapResult",
+    "fields": {
+      "table_maps": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "TableMapEntry",
+            "fields": {
+              "default": {
+                "type": "str",
+                "required": false
+              },
+              "mappings": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "MappingEntry",
+                    "fields": {
+                      "from_value": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "to_value": {
+                        "type": "int",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple table-maps with from/to mappings and default actions",
+      "input": " Table Map DSd-sds\n from 0 to 34\n from 3 to 44\n default copy\n\n Table Map Esd_Sdd\n from 22 to 24\n from 32 to 44\n default 8\n",
+      "expected": {
+        "table_maps": {
+          "DSd-sds": {
+            "mappings": {
+              "0": {
+                "from_value": 0,
+                "to_value": 34
+              },
+              "3": {
+                "from_value": 3,
+                "to_value": 44
+              }
+            },
+            "default": "copy"
+          },
+          "Esd_Sdd": {
+            "mappings": {
+              "22": {
+                "from_value": 22,
+                "to_value": 24
+              },
+              "32": {
+                "from_value": 32,
+                "to_value": 44
+              }
+            },
+            "default": "8"
+          }
+        }
+      }
+    }
+  ]
+}

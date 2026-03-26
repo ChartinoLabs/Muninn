@@ -1,0 +1,111 @@
+{
+  "os": "cisco_ios",
+  "command": "show mpls interfaces",
+  "schema": {
+    "name": "ShowMplsInterfacesResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "MplsInterfaceEntry",
+            "fields": {
+              "ip_enabled": {
+                "type": "bool",
+                "required": true
+              },
+              "ip_protocol": {
+                "type": "str",
+                "required": false
+              },
+              "tunnel": {
+                "type": "bool",
+                "required": true
+              },
+              "bgp": {
+                "type": "bool",
+                "required": true
+              },
+              "static": {
+                "type": "bool",
+                "required": true
+              },
+              "operational": {
+                "type": "bool",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic MPLS interfaces with LDP enabled on physical and VLAN interfaces",
+      "input": "Interface              IP            Tunnel   BGP Static Operational\nTenGigabitEthernet1/1  Yes (ldp)     No       No  No     Yes\nTenGigabitEthernet1/5  Yes (ldp)     No       No  No     Yes\nTenGigabitEthernet1/9  Yes (ldp)     No       No  No     Yes\nTenGigabitEthernet1/11 Yes (ldp)     No       No  No     Yes\nTenGigabitEthernet1/13 Yes (ldp)     No       No  No     Yes\nTenGigabitEthernet1/15 Yes (ldp)     No       No  No     Yes\nVlan101                Yes (ldp)     No       No  No     Yes\n",
+      "expected": {
+        "interfaces": {
+          "TenGigabitEthernet1/1": {
+            "ip_enabled": true,
+            "tunnel": false,
+            "bgp": false,
+            "static": false,
+            "operational": true,
+            "ip_protocol": "ldp"
+          },
+          "TenGigabitEthernet1/5": {
+            "ip_enabled": true,
+            "tunnel": false,
+            "bgp": false,
+            "static": false,
+            "operational": true,
+            "ip_protocol": "ldp"
+          },
+          "TenGigabitEthernet1/9": {
+            "ip_enabled": true,
+            "tunnel": false,
+            "bgp": false,
+            "static": false,
+            "operational": true,
+            "ip_protocol": "ldp"
+          },
+          "TenGigabitEthernet1/11": {
+            "ip_enabled": true,
+            "tunnel": false,
+            "bgp": false,
+            "static": false,
+            "operational": true,
+            "ip_protocol": "ldp"
+          },
+          "TenGigabitEthernet1/13": {
+            "ip_enabled": true,
+            "tunnel": false,
+            "bgp": false,
+            "static": false,
+            "operational": true,
+            "ip_protocol": "ldp"
+          },
+          "TenGigabitEthernet1/15": {
+            "ip_enabled": true,
+            "tunnel": false,
+            "bgp": false,
+            "static": false,
+            "operational": true,
+            "ip_protocol": "ldp"
+          },
+          "Vlan101": {
+            "ip_enabled": true,
+            "tunnel": false,
+            "bgp": false,
+            "static": false,
+            "operational": true,
+            "ip_protocol": "ldp"
+          }
+        }
+      }
+    }
+  ]
+}

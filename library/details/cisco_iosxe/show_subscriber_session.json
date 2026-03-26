@@ -1,0 +1,82 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show subscriber session",
+  "schema": {
+    "name": "ShowSubscriberSessionResult",
+    "fields": {
+      "total_sessions": {
+        "type": "int",
+        "required": true
+      },
+      "sessions": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SubscriberSessionEntry",
+            "fields": {
+              "uniq_id": {
+                "type": "str",
+                "required": true
+              },
+              "interface": {
+                "type": "str",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "service": {
+                "type": "str",
+                "required": true
+              },
+              "uptime": {
+                "type": "str",
+                "required": true
+              },
+              "tc_ct": {
+                "type": "str",
+                "required": true
+              },
+              "identifier": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "Codes: Lterm - Local Term, Fwd - forwarded, unauth - unathenticated, authen -\nauthenticated, TC Ct. - Number of Traffic Classes on the main session\n\nCurrent Subscriber Information: Total sessions 1\nUniq ID Interface    State    Service     Up-time  TC Ct. Identifier\n3601    Vi2.1        authen   Lterm       00:00:04 0      user1@airtel.com\n3602    Vi2.1        authen   Lterm       00:00:04 0      user1@airtel.com\n",
+      "expected": {
+        "total_sessions": 1,
+        "sessions": {
+          "3601": {
+            "uniq_id": "3601",
+            "interface": "Virtual-Access2.1",
+            "state": "authen",
+            "service": "Lterm",
+            "uptime": "00:00:04",
+            "tc_ct": "0",
+            "identifier": "user1@airtel.com"
+          },
+          "3602": {
+            "uniq_id": "3602",
+            "interface": "Virtual-Access2.1",
+            "state": "authen",
+            "service": "Lterm",
+            "uptime": "00:00:04",
+            "tc_ct": "0",
+            "identifier": "user1@airtel.com"
+          }
+        }
+      }
+    }
+  ]
+}

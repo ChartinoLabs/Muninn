@@ -1,0 +1,367 @@
+{
+  "os": "cisco_ios",
+  "command": "show crypto session detail",
+  "schema": {
+    "name": "ShowCryptoSessionDetailResult",
+    "fields": {
+      "sessions": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "CryptoSessionEntry",
+            "fields": {
+              "peer_address": {
+                "type": "str",
+                "required": true
+              },
+              "peer_port": {
+                "type": "int",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "interface": {
+                "type": "str",
+                "required": false
+              },
+              "uptime": {
+                "type": "str",
+                "required": false
+              },
+              "session_status": {
+                "type": "str",
+                "required": false
+              },
+              "fvrf": {
+                "type": "str",
+                "required": false
+              },
+              "phase1_id": {
+                "type": "str",
+                "required": false
+              },
+              "desc": {
+                "type": "str",
+                "required": false
+              },
+              "username": {
+                "type": "str",
+                "required": false
+              },
+              "profile": {
+                "type": "str",
+                "required": false
+              },
+              "ivrf": {
+                "type": "str",
+                "required": false
+              },
+              "ike_sa": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "type": "dict",
+                      "key": "str",
+                      "value": {
+                        "type": "dict",
+                        "key": "str",
+                        "value": {
+                          "name": "IkeSaEntry",
+                          "fields": {
+                            "local_address": {
+                              "type": "str",
+                              "required": true
+                            },
+                            "local_port": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "remote_address": {
+                              "type": "str",
+                              "required": true
+                            },
+                            "remote_port": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "sa_status": {
+                              "type": "str",
+                              "required": true
+                            },
+                            "capabilities": {
+                              "type": "str",
+                              "required": false
+                            },
+                            "connid": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "lifetime": {
+                              "type": "str",
+                              "required": false
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "ipsec_flow": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "IpsecFlowEntry",
+                    "fields": {
+                      "active_sas": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "origin": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "pkts_encaps": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "pkts_encrypt": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "pkts_digest": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "pkts_decaps": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "pkts_decrypt": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "pkts_verify": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "local_crypto_endpt": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "remote_crypto_endpt": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "path_mtu": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "ip_mtu": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "current_outbound_spi": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "inbound_esp_sas": {
+                        "type": {
+                          "type": "list",
+                          "items": {
+                            "name": "IpsecSaEntry",
+                            "fields": {
+                              "spi": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "transform": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "in_use_settings": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "conn_id": {
+                                "type": "int",
+                                "required": false
+                              },
+                              "flow_id": {
+                                "type": "str",
+                                "required": false
+                              }
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "outbound_esp_sas": {
+                        "type": {
+                          "type": "list",
+                          "items": {
+                            "type": "ref",
+                            "name": "IpsecSaEntry"
+                          }
+                        },
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic crypto session detail with two IPsec peers and ESP SAs",
+      "input": "Crypto session current status\n\nInterface: Tunnel0\nUptime: 01:23:45\nSession status: UP-ACTIVE\nPeer: 10.1.1.1 port 500\n  Session status: UP-ACTIVE\n  FVRF: none\n  Phase1_id: 10.1.1.1\n  Desc: VPN to Branch1\n  IKE SA: local 10.0.0.1/500 remote 10.1.1.1/500 Active\n        Capabilities:D connid:1001 lifetime:23:55:10\n  IPSEC FLOW: permit ip 192.168.1.0/255.255.255.0 192.168.2.0/255.255.255.0\n    Active SAs: 2, origin: crypto map\n    Inbound:  #pkts dec'ed 14526 drop 0 life (KB/Sec) 4467197/3415\n    Outbound: #pkts enc'ed 14527 drop 0 life (KB/Sec) 4467197/3415\n    #pkts encaps: 14527, #pkts encrypt: 14527, #pkts digest: 14527\n    #pkts decaps: 14526, #pkts decrypt: 14526, #pkts verify: 14526\n    #pkts compressed: 0, #pkts decompressed: 0\n    #pkts not compressed: 0, #pkts compr. failed: 0\n    #pkts not decompressed: 0, #pkts decompress failed: 0\n    #send errors: 0, #recv errors: 0\n    local crypto endpt.: 10.0.0.1, remote crypto endpt.: 10.1.1.1\n    path mtu 1500, ip mtu 1500, ip mtu idb Tunnel0\n    current outbound spi: 0xA1B2C3D4\n    inbound esp sas:\n      spi: 0xD4C3B2A1(3569849121)\n       transform: esp-256-aes esp-sha-hmac\n       in use settings ={Tunnel, }\n       conn id: 2001, flow_id: SW:1, sibling_flags 80000046\n       sa timing: remaining key lifetime (k/sec): (4467197/3415)\n       replay detection support: Y\n    outbound esp sas:\n      spi: 0xA1B2C3D4(2712847316)\n       transform: esp-256-aes esp-sha-hmac\n       in use settings ={Tunnel, }\n       conn id: 2002, flow_id: SW:2, sibling_flags 80000046\n       sa timing: remaining key lifetime (k/sec): (4467197/3415)\n       replay detection support: Y\n    inbound ah sas:\n    outbound ah sas:\n    inbound pcp sas:\n    outbound pcp sas:\n\nInterface: Tunnel1\nUptime: 00:45:30\nSession status: UP-ACTIVE\nPeer: 10.2.2.2 port 500\n  Session status: UP-ACTIVE\n  FVRF: none\n  Phase1_id: 10.2.2.2\n  IKE SA: local 10.0.0.1/500 remote 10.2.2.2/500 Active\n        Capabilities:D connid:1002 lifetime:23:14:30\n  IPSEC FLOW: permit ip 192.168.1.0/255.255.255.0 172.16.0.0/255.255.0.0\n    Active SAs: 2, origin: crypto map\n    #pkts encaps: 8200, #pkts encrypt: 8200, #pkts digest: 8200\n    #pkts decaps: 7845, #pkts decrypt: 7845, #pkts verify: 7845\n    #send errors: 0, #recv errors: 0\n    local crypto endpt.: 10.0.0.1, remote crypto endpt.: 10.2.2.2\n    path mtu 1500, ip mtu 1500, ip mtu idb Tunnel1\n    current outbound spi: 0xE5F6A7B8\n    inbound esp sas:\n      spi: 0xB8A7F6E5(3098478309)\n       transform: esp-256-aes esp-sha-hmac\n       in use settings ={Tunnel, }\n       conn id: 2003, flow_id: SW:3, sibling_flags 80000046\n    outbound esp sas:\n      spi: 0xE5F6A7B8(3858909112)\n       transform: esp-256-aes esp-sha-hmac\n       in use settings ={Tunnel, }\n       conn id: 2004, flow_id: SW:4, sibling_flags 80000046\n    inbound ah sas:\n    outbound ah sas:\n    inbound pcp sas:\n    outbound pcp sas:\n",
+      "expected": {
+        "sessions": {
+          "10.1.1.1": {
+            "peer_address": "10.1.1.1",
+            "peer_port": 500,
+            "status": "UP-ACTIVE",
+            "interface": "Tunnel0",
+            "uptime": "01:23:45",
+            "session_status": "UP-ACTIVE",
+            "fvrf": "none",
+            "phase1_id": "10.1.1.1",
+            "desc": "VPN to Branch1",
+            "ike_sa": {
+              "10.0.0.1": {
+                "500": {
+                  "10.1.1.1": {
+                    "500": {
+                      "local_address": "10.0.0.1",
+                      "local_port": 500,
+                      "remote_address": "10.1.1.1",
+                      "remote_port": 500,
+                      "sa_status": "Active",
+                      "capabilities": "D",
+                      "connid": 1001,
+                      "lifetime": "23:55:10"
+                    }
+                  }
+                }
+              }
+            },
+            "ipsec_flow": {
+              "permit ip 192.168.1.0/255.255.255.0 192.168.2.0/255.255.255.0": {
+                "active_sas": 2,
+                "origin": "crypto map",
+                "pkts_encaps": 14527,
+                "pkts_encrypt": 14527,
+                "pkts_digest": 14527,
+                "pkts_decaps": 14526,
+                "pkts_decrypt": 14526,
+                "pkts_verify": 14526,
+                "local_crypto_endpt": "10.0.0.1",
+                "remote_crypto_endpt": "10.1.1.1",
+                "path_mtu": 1500,
+                "ip_mtu": 1500,
+                "current_outbound_spi": "0xA1B2C3D4",
+                "inbound_esp_sas": [
+                  {
+                    "spi": "0xD4C3B2A1",
+                    "transform": "esp-256-aes esp-sha-hmac",
+                    "in_use_settings": "Tunnel",
+                    "conn_id": 2001,
+                    "flow_id": "SW:1"
+                  }
+                ],
+                "outbound_esp_sas": [
+                  {
+                    "spi": "0xA1B2C3D4",
+                    "transform": "esp-256-aes esp-sha-hmac",
+                    "in_use_settings": "Tunnel",
+                    "conn_id": 2002,
+                    "flow_id": "SW:2"
+                  }
+                ]
+              }
+            }
+          },
+          "10.2.2.2": {
+            "peer_address": "10.2.2.2",
+            "peer_port": 500,
+            "status": "UP-ACTIVE",
+            "interface": "Tunnel1",
+            "uptime": "00:45:30",
+            "session_status": "UP-ACTIVE",
+            "fvrf": "none",
+            "phase1_id": "10.2.2.2",
+            "ike_sa": {
+              "10.0.0.1": {
+                "500": {
+                  "10.2.2.2": {
+                    "500": {
+                      "local_address": "10.0.0.1",
+                      "local_port": 500,
+                      "remote_address": "10.2.2.2",
+                      "remote_port": 500,
+                      "sa_status": "Active",
+                      "capabilities": "D",
+                      "connid": 1002,
+                      "lifetime": "23:14:30"
+                    }
+                  }
+                }
+              }
+            },
+            "ipsec_flow": {
+              "permit ip 192.168.1.0/255.255.255.0 172.16.0.0/255.255.0.0": {
+                "active_sas": 2,
+                "origin": "crypto map",
+                "pkts_encaps": 8200,
+                "pkts_encrypt": 8200,
+                "pkts_digest": 8200,
+                "pkts_decaps": 7845,
+                "pkts_decrypt": 7845,
+                "pkts_verify": 7845,
+                "local_crypto_endpt": "10.0.0.1",
+                "remote_crypto_endpt": "10.2.2.2",
+                "path_mtu": 1500,
+                "ip_mtu": 1500,
+                "current_outbound_spi": "0xE5F6A7B8",
+                "inbound_esp_sas": [
+                  {
+                    "spi": "0xB8A7F6E5",
+                    "transform": "esp-256-aes esp-sha-hmac",
+                    "in_use_settings": "Tunnel",
+                    "conn_id": 2003,
+                    "flow_id": "SW:3"
+                  }
+                ],
+                "outbound_esp_sas": [
+                  {
+                    "spi": "0xE5F6A7B8",
+                    "transform": "esp-256-aes esp-sha-hmac",
+                    "in_use_settings": "Tunnel",
+                    "conn_id": 2004,
+                    "flow_id": "SW:4"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

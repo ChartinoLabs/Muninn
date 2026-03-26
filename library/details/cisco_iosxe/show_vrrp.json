@@ -1,0 +1,250 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show vrrp",
+  "schema": {
+    "name": "ShowVrrpResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrrpInterfaceEntry",
+            "fields": {
+              "groups": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "VrrpGroupContainer",
+                    "fields": {
+                      "address_families": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "VrrpGroupEntry",
+                            "fields": {
+                              "state": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "virtual_ip_address": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "virtual_mac_address": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "advertisement_interval_secs": {
+                                "type": "float",
+                                "required": true
+                              },
+                              "preemption": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "priority": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "configured_priority": {
+                                "type": "int",
+                                "required": false
+                              },
+                              "master_router_ip": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "master_router_is_local": {
+                                "type": "bool",
+                                "required": false
+                              },
+                              "master_router_priority": {
+                                "type": "int",
+                                "required": false
+                              },
+                              "master_advertisement_interval_secs": {
+                                "type": "float",
+                                "required": false
+                              },
+                              "master_down_interval_secs": {
+                                "type": "float",
+                                "required": false
+                              },
+                              "master_down_expires_secs": {
+                                "type": "float",
+                                "required": false
+                              },
+                              "master_advertisement_expires_msec": {
+                                "type": "int",
+                                "required": false
+                              },
+                              "track_objects": {
+                                "type": {
+                                  "type": "dict",
+                                  "key": "str",
+                                  "value": {
+                                    "name": "TrackObjectEntry",
+                                    "fields": {
+                                      "state": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "decrement": {
+                                        "type": "int",
+                                        "required": true
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": false
+                              },
+                              "address_family": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "description": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "flags": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "authentication": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "state_duration_secs": {
+                                "type": "float",
+                                "required": false
+                              },
+                              "vrrs_group_name": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "state_change_reason": {
+                                "type": "str",
+                                "required": false
+                              }
+                            }
+                          }
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic VRRP output with single group, tracking, and authentication",
+      "input": "GigabitEthernet3.420 - Group 10\n  State is Master\n  Virtual IP address is 10.13.120.254\n  Virtual MAC address is 0000.5eff.010a\n  Advertisement interval is 1.000 sec\n  Preemption enabled\n  Priority is 100\n    Track object 1 state Up decrement 15\n  Master Router is 10.13.120.1 (local), priority is 100\n  Master Advertisement interval is 1.000 sec\n  Master Down interval is 3.609 sec\n  FLAGS: 1/1\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet3.420": {
+            "groups": {
+              "10": {
+                "address_families": {
+                  "IPv4": {
+                    "address_family": "IPv4",
+                    "advertisement_interval_secs": 1.0,
+                    "flags": "1/1",
+                    "master_advertisement_interval_secs": 1.0,
+                    "master_down_interval_secs": 3.609,
+                    "master_router_ip": "10.13.120.1",
+                    "master_router_is_local": true,
+                    "master_router_priority": 100,
+                    "preemption": "enabled",
+                    "priority": 100,
+                    "state": "Master",
+                    "track_objects": {
+                      "1": {
+                        "decrement": 15,
+                        "state": "Up"
+                      }
+                    },
+                    "virtual_ip_address": "10.13.120.254",
+                    "virtual_mac_address": "0000.5eff.010a"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Multiple VRRP groups with IPv4 and IPv6 address families on same interface",
+      "input": "Vlan33 - Group 10 - Address-Family IPv4\n  Description is \"WORKING-VRRP\"\n  State is MASTER\n  State duration 8 mins 40.214 secs\n  Virtual IP address is 17.0.0.154\n  Virtual MAC address is 0000.5E00.010A\n  Advertisement interval is 1000 msec\n  Preemption enabled\n  Priority is 150\n    Track object 1 state UP decrement 70\n  Master Router is 17.0.0.1 (local), priority is 150\n  Master Advertisement interval is 1000 msec (expires in 46 msec)\n  Master Down interval is unknown\n  FLAGS: 1/1\n\nVlan33 - Group 10 - Address-Family IPv6\n  Description is \"WORKING-VRRP\"\n  State is MASTER\n  State duration 8 mins 40.213 secs\n  Virtual IP address is FE80::1\n  Virtual secondary IP addresses:\n    17::154/64\n  Virtual MAC address is 0000.5E00.020A\n  Advertisement interval is 1000 msec\n  Preemption enabled\n  Priority is 150\n    Track object 1 state UP decrement 70\n  Master Router is FE80::2A3:D1FF:FE45:BEC5 (local), priority is 150\n  Master Advertisement interval is 1000 msec (expires in 441 msec)\n  Master Down interval is unknown\n  FLAGS: 1/1\n",
+      "expected": {
+        "interfaces": {
+          "Vlan33": {
+            "groups": {
+              "10": {
+                "address_families": {
+                  "IPv4": {
+                    "address_family": "IPv4",
+                    "advertisement_interval_secs": 1.0,
+                    "description": "WORKING-VRRP",
+                    "flags": "1/1",
+                    "master_advertisement_expires_msec": 46,
+                    "master_advertisement_interval_secs": 1.0,
+                    "master_router_ip": "17.0.0.1",
+                    "master_router_is_local": true,
+                    "master_router_priority": 150,
+                    "preemption": "enabled",
+                    "priority": 150,
+                    "state": "MASTER",
+                    "state_duration_secs": 520.214,
+                    "track_objects": {
+                      "1": {
+                        "decrement": 70,
+                        "state": "UP"
+                      }
+                    },
+                    "virtual_ip_address": "17.0.0.154",
+                    "virtual_mac_address": "0000.5E00.010A"
+                  },
+                  "IPv6": {
+                    "address_family": "IPv6",
+                    "advertisement_interval_secs": 1.0,
+                    "description": "WORKING-VRRP",
+                    "flags": "1/1",
+                    "master_advertisement_expires_msec": 441,
+                    "master_advertisement_interval_secs": 1.0,
+                    "master_router_ip": "FE80::2A3:D1FF:FE45:BEC5",
+                    "master_router_is_local": true,
+                    "master_router_priority": 150,
+                    "preemption": "enabled",
+                    "priority": 150,
+                    "state": "MASTER",
+                    "state_duration_secs": 520.213,
+                    "track_objects": {
+                      "1": {
+                        "decrement": 70,
+                        "state": "UP"
+                      }
+                    },
+                    "virtual_ip_address": "FE80::1",
+                    "virtual_mac_address": "0000.5E00.020A"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

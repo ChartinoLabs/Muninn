@@ -1,0 +1,118 @@
+{
+  "os": "cisco_ios",
+  "command": "show power available",
+  "schema": {
+    "name": "ShowPowerAvailableResult",
+    "fields": {
+      "system_power": {
+        "type": {
+          "name": "PowerSummaryEntry",
+          "fields": {
+            "used": {
+              "type": "int",
+              "required": true
+            },
+            "available": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "inline_power": {
+        "type": {
+          "type": "ref",
+          "name": "PowerSummaryEntry"
+        },
+        "required": true
+      },
+      "backplane_power": {
+        "type": {
+          "type": "ref",
+          "name": "PowerSummaryEntry"
+        },
+        "required": true
+      },
+      "total_used": {
+        "type": "int",
+        "required": true
+      },
+      "total_maximum_available": {
+        "type": "int",
+        "required": true
+      },
+      "measurements": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PowerMeasurementEntry",
+            "fields": {
+              "watts": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "measurement_total": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Full output with power summary and measurement sections",
+      "input": "Power Summary                      Maximum\n (in Watts)              Used     Available\n----------------------   ----     ---------\nSystem Power (12V)        971        1360\nInline Power (-50V)       683        3189\nBackplane Power (3.3V)     40          40\n----------------------   ----     ---------\nTotal                    1694 (not to exceed Total Maximum Available = 4200)\n\nPower Measurement    Inline Power (-50V)\n(in Watts)             (+/- 50Watts)\n------------------   -------------------\nPS1                         250\nPS2                         100\n------------------   -------------------\nTotal                       350\n",
+      "expected": {
+        "backplane_power": {
+          "available": 40,
+          "used": 40
+        },
+        "inline_power": {
+          "available": 3189,
+          "used": 683
+        },
+        "measurement_total": 350,
+        "measurements": {
+          "PS1": {
+            "watts": 250
+          },
+          "PS2": {
+            "watts": 100
+          }
+        },
+        "system_power": {
+          "available": 1360,
+          "used": 971
+        },
+        "total_maximum_available": 4200,
+        "total_used": 1694
+      }
+    },
+    {
+      "name": "Power summary only without measurement section",
+      "input": "Power Summary                      Maximum\n (in Watts)              Used     Available\n----------------------   ----     ---------\nSystem Power (12V)        575         750\nInline Power (-50V)         0           0\nBackplane Power (3.3V)      0           0\n----------------------   ----     ---------\nTotal                     575         750\n",
+      "expected": {
+        "backplane_power": {
+          "available": 0,
+          "used": 0
+        },
+        "inline_power": {
+          "available": 0,
+          "used": 0
+        },
+        "system_power": {
+          "available": 750,
+          "used": 575
+        },
+        "total_maximum_available": 750,
+        "total_used": 575
+      }
+    }
+  ]
+}

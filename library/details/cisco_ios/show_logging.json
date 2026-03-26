@@ -1,0 +1,913 @@
+{
+  "os": "cisco_ios",
+  "command": "show logging",
+  "schema": {
+    "name": "ShowLoggingResult",
+    "fields": {
+      "syslog": {
+        "type": {
+          "name": "SyslogEntry",
+          "fields": {
+            "enabled": {
+              "type": "bool",
+              "required": true
+            },
+            "messages_dropped": {
+              "type": "int",
+              "required": true
+            },
+            "messages_rate_limited": {
+              "type": "int",
+              "required": true
+            },
+            "flushes": {
+              "type": "int",
+              "required": true
+            },
+            "overruns": {
+              "type": "int",
+              "required": true
+            },
+            "xml_disabled": {
+              "type": "bool",
+              "required": true
+            },
+            "filtering_disabled": {
+              "type": "bool",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "console_logging": {
+        "type": {
+          "name": "LoggingSectionEntry",
+          "fields": {
+            "enabled": {
+              "type": "bool",
+              "required": false
+            },
+            "level": {
+              "type": "str",
+              "required": false
+            },
+            "messages_logged": {
+              "type": "int",
+              "required": false
+            },
+            "xml_disabled": {
+              "type": "bool",
+              "required": false
+            },
+            "filtering_disabled": {
+              "type": "bool",
+              "required": false
+            }
+          }
+        },
+        "required": true
+      },
+      "monitor_logging": {
+        "type": {
+          "type": "ref",
+          "name": "LoggingSectionEntry"
+        },
+        "required": true
+      },
+      "buffer_logging": {
+        "type": {
+          "type": "ref",
+          "name": "LoggingSectionEntry"
+        },
+        "required": true
+      },
+      "exception_logging": {
+        "type": {
+          "name": "ExceptionLoggingEntry",
+          "fields": {
+            "size_bytes": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": false
+      },
+      "count_and_timestamp_logging": {
+        "type": "bool",
+        "required": true
+      },
+      "file_logging": {
+        "type": {
+          "type": "ref",
+          "name": "LoggingSectionEntry"
+        },
+        "required": false
+      },
+      "persistent_logging": {
+        "type": {
+          "name": "PersistentLoggingEntry",
+          "fields": {
+            "enabled": {
+              "type": "bool",
+              "required": true
+            },
+            "url": {
+              "type": "str",
+              "required": false
+            },
+            "disk_space_bytes": {
+              "type": "int",
+              "required": false
+            },
+            "file_size_bytes": {
+              "type": "int",
+              "required": false
+            },
+            "batch_size_bytes": {
+              "type": "int",
+              "required": false
+            },
+            "threshold_capacity": {
+              "type": "int",
+              "required": false
+            },
+            "immediate": {
+              "type": "bool",
+              "required": false
+            },
+            "protected": {
+              "type": "bool",
+              "required": false
+            },
+            "notify": {
+              "type": "bool",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "trap_logging": {
+        "type": {
+          "name": "TrapLoggingEntry",
+          "fields": {
+            "level": {
+              "type": "str",
+              "required": true
+            },
+            "message_lines_logged": {
+              "type": "int",
+              "required": true
+            },
+            "hosts": {
+              "type": {
+                "type": "dict",
+                "key": "str",
+                "value": {
+                  "name": "TrapHostEntry",
+                  "fields": {
+                    "protocol": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "port": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "audit_disabled": {
+                      "type": "bool",
+                      "required": true
+                    },
+                    "link_status": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "message_lines_logged": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "message_lines_rate_limited": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "message_lines_dropped_by_md": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "xml_disabled": {
+                      "type": "bool",
+                      "required": true
+                    },
+                    "sequence_number_disabled": {
+                      "type": "bool",
+                      "required": true
+                    },
+                    "filtering_disabled": {
+                      "type": "bool",
+                      "required": true
+                    }
+                  }
+                }
+              },
+              "required": false
+            }
+          }
+        },
+        "required": true
+      },
+      "source_interfaces": {
+        "type": {
+          "type": "list",
+          "items": {
+            "name": "SourceInterfaceEntry",
+            "fields": {
+              "interface": {
+                "type": "str",
+                "required": true
+              },
+              "vrf": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "log_buffer_size_bytes": {
+        "type": "int",
+        "required": true
+      },
+      "logs": {
+        "type": {
+          "type": "list",
+          "items": {
+            "name": "LogMessageEntry",
+            "fields": {
+              "sequence_number": {
+                "type": "int",
+                "required": false
+              },
+              "timestamp": {
+                "type": "str",
+                "required": true
+              },
+              "timezone": {
+                "type": "str",
+                "required": false
+              },
+              "facility": {
+                "type": "str",
+                "required": false
+              },
+              "severity": {
+                "type": "int",
+                "required": false
+              },
+              "mnemonic": {
+                "type": "str",
+                "required": false
+              },
+              "message": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic logging output with console disabled, persistent disabled, no trap hosts",
+      "input": "\nSyslog logging: enabled (0 messages dropped, 149 messages rate-limited, 0 flushes, 0 overruns, xml disabled, filtering disabled)\n\nNo Active Message Discriminator.\n\nNo Inactive Message Discriminator.\n\n    Console logging: disabled\n    Monitor logging: level debugging, 0 messages logged, xml disabled,\n                     filtering disabled\n    Buffer logging:  level debugging, 481 messages logged, xml disabled,\n                    filtering disabled\n    Exception Logging: size (4096 bytes)\n    Count and timestamp logging messages: disabled\n    Persistent logging: disabled\n\nNo active filter modules.\n\n    Trap logging: level informational, 478 message lines logged\n        Logging Source-Interface:       VRF Name:\n\nLog Buffer (4096 bytes):\nJun  5 05:09:30.838 EST: %IP-4-DUPADDR: Duplicate address 172.16.1.216 on GigabitEthernet1, sourced by 5e00.80ff.0606\nJun  5 05:10:36.839 EST: %IP-4-DUPADDR: Duplicate address 172.16.1.216 on GigabitEthernet1, sourced by 5e00.80ff.0606\nJun  5 05:10:59.519 EST: %SYS-5-CONFIG_I: Configured from console by cisco on console\nJun  5 05:11:04.626 EST: Rollback:Acquired Configuration lock.\nJun  5 05:11:04.626 EST: %SYS-5-CONFIG_R: Config Replace is Done\nJun  5 05:11:14.115 EST: Rollback:Acquired Configuration lock.\nJun  5 05:11:14.115 EST: %SYS-5-CONFIG_R: Config Replace is Done\n",
+      "expected": {
+        "syslog": {
+          "enabled": true,
+          "messages_dropped": 0,
+          "messages_rate_limited": 149,
+          "flushes": 0,
+          "overruns": 0,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "console_logging": {
+          "enabled": false
+        },
+        "monitor_logging": {
+          "level": "debugging",
+          "messages_logged": 0,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "buffer_logging": {
+          "level": "debugging",
+          "messages_logged": 481,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "count_and_timestamp_logging": false,
+        "trap_logging": {
+          "level": "informational",
+          "message_lines_logged": 478
+        },
+        "log_buffer_size_bytes": 4096,
+        "logs": [
+          {
+            "timestamp": "Jun  5 05:09:30.838",
+            "message": "%IP-4-DUPADDR: Duplicate address 172.16.1.216 on GigabitEthernet1, sourced by 5e00.80ff.0606",
+            "timezone": "EST",
+            "facility": "IP",
+            "severity": 4,
+            "mnemonic": "DUPADDR"
+          },
+          {
+            "timestamp": "Jun  5 05:10:36.839",
+            "message": "%IP-4-DUPADDR: Duplicate address 172.16.1.216 on GigabitEthernet1, sourced by 5e00.80ff.0606",
+            "timezone": "EST",
+            "facility": "IP",
+            "severity": 4,
+            "mnemonic": "DUPADDR"
+          },
+          {
+            "timestamp": "Jun  5 05:10:59.519",
+            "message": "%SYS-5-CONFIG_I: Configured from console by cisco on console",
+            "timezone": "EST",
+            "facility": "SYS",
+            "severity": 5,
+            "mnemonic": "CONFIG_I"
+          },
+          {
+            "timestamp": "Jun  5 05:11:04.626",
+            "message": "Rollback:Acquired Configuration lock.",
+            "timezone": "EST"
+          },
+          {
+            "timestamp": "Jun  5 05:11:04.626",
+            "message": "%SYS-5-CONFIG_R: Config Replace is Done",
+            "timezone": "EST",
+            "facility": "SYS",
+            "severity": 5,
+            "mnemonic": "CONFIG_R"
+          },
+          {
+            "timestamp": "Jun  5 05:11:14.115",
+            "message": "Rollback:Acquired Configuration lock.",
+            "timezone": "EST"
+          },
+          {
+            "timestamp": "Jun  5 05:11:14.115",
+            "message": "%SYS-5-CONFIG_R: Config Replace is Done",
+            "timezone": "EST",
+            "facility": "SYS",
+            "severity": 5,
+            "mnemonic": "CONFIG_R"
+          }
+        ],
+        "exception_logging": {
+          "size_bytes": 4096
+        },
+        "persistent_logging": {
+          "enabled": false
+        }
+      }
+    },
+    {
+      "name": "Logging output with trap hosts (TCP and UDP), source interface, file logging disabled",
+      "input": "\nSyslog logging: enabled (0 messages dropped, 0 messages rate-limited, 0 flushes, 0 overruns, xml disabled, filtering disabled)\n\nNo Active Message Discriminator.\n\n\n\nNo Inactive Message Discriminator.\n\n\n    Console logging: disabled\n    Monitor logging: level debugging, 13 messages logged, xml disabled,\n                     filtering disabled\n    Buffer logging:  level debugging, 1566 messages logged, xml disabled,\n                    filtering disabled\n    Exception Logging: size (4096 bytes)\n    Count and timestamp logging messages: disabled\n    File logging: disabled\n    Persistent logging: disabled\n\nNo active filter modules.\n\n    Trap logging: level informational, 1570 message lines logged\n        Logging to 192.168.1.3  (tcp port 1514, audit disabled,\n              link down),\n              787 message lines logged,\n              0 message lines rate-limited,\n              0 message lines dropped-by-MD,\n              xml disabled, sequence number disabled\n              filtering disabled\n        Logging to 10.19.33.4  (udp port 888, audit disabled,\n              link down),\n              0 message lines logged,\n              0 message lines rate-limited,\n              0 message lines dropped-by-MD,\n              xml disabled, sequence number disabled\n              filtering disabled\n        Logging Source-Interface:       VRF Name:\n        Vlan200\n\nLog Buffer (32000 bytes):\n",
+      "expected": {
+        "syslog": {
+          "enabled": true,
+          "messages_dropped": 0,
+          "messages_rate_limited": 0,
+          "flushes": 0,
+          "overruns": 0,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "console_logging": {
+          "enabled": false
+        },
+        "monitor_logging": {
+          "level": "debugging",
+          "messages_logged": 13,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "buffer_logging": {
+          "level": "debugging",
+          "messages_logged": 1566,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "count_and_timestamp_logging": false,
+        "trap_logging": {
+          "level": "informational",
+          "message_lines_logged": 1570,
+          "hosts": {
+            "192.168.1.3": {
+              "protocol": "tcp",
+              "port": 1514,
+              "audit_disabled": true,
+              "link_status": "down",
+              "message_lines_logged": 787,
+              "message_lines_rate_limited": 0,
+              "message_lines_dropped_by_md": 0,
+              "xml_disabled": true,
+              "sequence_number_disabled": true,
+              "filtering_disabled": true
+            },
+            "10.19.33.4": {
+              "protocol": "udp",
+              "port": 888,
+              "audit_disabled": true,
+              "link_status": "down",
+              "message_lines_logged": 0,
+              "message_lines_rate_limited": 0,
+              "message_lines_dropped_by_md": 0,
+              "xml_disabled": true,
+              "sequence_number_disabled": true,
+              "filtering_disabled": true
+            }
+          }
+        },
+        "log_buffer_size_bytes": 32000,
+        "logs": [],
+        "exception_logging": {
+          "size_bytes": 4096
+        },
+        "file_logging": {
+          "enabled": false
+        },
+        "persistent_logging": {
+          "enabled": false
+        },
+        "source_interfaces": [
+          {
+            "interface": "Vlan200"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Log buffer contains only non-syslog formatted entry (REST API auth message), no parsed log entries",
+      "input": "Syslog logging: enabled (0 messages dropped, 2 messages rate-limited, 0 flushes, 0 overruns, xml disabled, filtering disabled)\n\nNo Active Message Discriminator.\n\n\n\nNo Inactive Message Discriminator.\n\n\n    Console logging: disabled\n    Monitor logging: level debugging, 0 messages logged, xml disabled,\n                     filtering disabled\n    Buffer logging:  level debugging, 2213 messages logged, xml disabled,\n                    filtering disabled\n    Exception Logging: size (4096 bytes)\n    Count and timestamp logging messages: disabled\n    Persistent logging: disabled\n\nNo active filter modules.\n\n    Trap logging: level informational, 2207 message lines logged\n        Logging Source-Interface:       VRF Name:\n\nLog Buffer (4096 bytes):\n User 'developer' authenticated successfully from 172.16.196.146:0 and was authorized for rest over http. External groups: PRIV15\n",
+      "expected": {
+        "syslog": {
+          "enabled": true,
+          "messages_dropped": 0,
+          "messages_rate_limited": 2,
+          "flushes": 0,
+          "overruns": 0,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "console_logging": {
+          "enabled": false
+        },
+        "monitor_logging": {
+          "level": "debugging",
+          "messages_logged": 0,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "buffer_logging": {
+          "level": "debugging",
+          "messages_logged": 2213,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "count_and_timestamp_logging": false,
+        "trap_logging": {
+          "level": "informational",
+          "message_lines_logged": 2207
+        },
+        "log_buffer_size_bytes": 4096,
+        "logs": [],
+        "exception_logging": {
+          "size_bytes": 4096
+        },
+        "persistent_logging": {
+          "enabled": false
+        }
+      }
+    },
+    {
+      "name": "Five source interfaces with VRF mappings, exception size 8192 bytes, asterisk-prefixed timestamp, no filter modules line",
+      "input": "Syslog logging: enabled (0 messages dropped, 1 messages rate-limited, 0 flushes, 0 overruns, xml disabled, filtering disabled)\n\nNo Active Message Discriminator.\n\n\n\nNo Inactive Message Discriminator.\n\n\n    Console logging: disabled\n    Monitor logging: level debugging, 0 messages logged, xml disabled,\n                     filtering disabled\n    Buffer logging:  level debugging, 59 messages logged, xml disabled,\n                    filtering disabled\n    Exception Logging: size (8192 bytes)\n    Count and timestamp logging messages: disabled\n    Persistent logging: disabled\n    Trap logging: level informational, 62 message lines logged\n        Logging Source-Interface:       VRF Name:\n        Loopback246\n        GigabitEthernet1                Mgmt-intf\n        Loopback1                       000000\n        Loopback2                       default\n        Loopback3                       global\n\nLog Buffer (8192 bytes):\n*Aug 19 15:23:24.798: %SYS-5-CONFIG_I: Configured from console by cisco on vty1 (10.10.20.50)\n",
+      "expected": {
+        "syslog": {
+          "enabled": true,
+          "messages_dropped": 0,
+          "messages_rate_limited": 1,
+          "flushes": 0,
+          "overruns": 0,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "console_logging": {
+          "enabled": false
+        },
+        "monitor_logging": {
+          "level": "debugging",
+          "messages_logged": 0,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "buffer_logging": {
+          "level": "debugging",
+          "messages_logged": 59,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "count_and_timestamp_logging": false,
+        "trap_logging": {
+          "level": "informational",
+          "message_lines_logged": 62
+        },
+        "log_buffer_size_bytes": 8192,
+        "logs": [
+          {
+            "timestamp": "*Aug 19 15:23:24.798",
+            "message": "%SYS-5-CONFIG_I: Configured from console by cisco on vty1 (10.10.20.50)",
+            "facility": "SYS",
+            "severity": 5,
+            "mnemonic": "CONFIG_I"
+          }
+        ],
+        "exception_logging": {
+          "size_bytes": 8192
+        },
+        "persistent_logging": {
+          "enabled": false
+        },
+        "source_interfaces": [
+          {
+            "interface": "Loopback246"
+          },
+          {
+            "interface": "GigabitEthernet1",
+            "vrf": "Mgmt-intf"
+          },
+          {
+            "interface": "Loopback1",
+            "vrf": "000000"
+          },
+          {
+            "interface": "Loopback2",
+            "vrf": "default"
+          },
+          {
+            "interface": "Loopback3",
+            "vrf": "global"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Persistent logging enabled with all flags (threshold, immediate, protected, notify), multiple source interfaces with VRFs",
+      "input": "Syslog logging: enabled (0 messages dropped, 1 messages rate-limited, 0 flushes, 0 overruns, xml disabled, filtering disabled)\n\nNo Active Message Discriminator.\n\n\n\nNo Inactive Message Discriminator.\n\n\n    Console logging: disabled\n    Monitor logging: level debugging, 0 messages logged, xml disabled,\n                     filtering disabled\n    Buffer logging:  level debugging, 62 messages logged, xml disabled,\n                    filtering disabled\n    Exception Logging: size (8192 bytes)\n    Count and timestamp logging messages: disabled\n    Persistent logging: enabled, url flash:/, disk space 214271590 bytes, file size 262144 bytes, batch size 4096 bytes, threshold capacity 5  , immediate , protected , notify\n    Trap logging: level informational, 65 message lines logged\n        Logging Source-Interface:       VRF Name:\n        Loopback246\n        GigabitEthernet1                Mgmt-intf\n        Loopback1                       000000\n        Loopback2                       default\n        Loopback3                       global\n\nLog Buffer (8192 bytes):\n*Aug 19 15:23:24.798: %SYS-5-CONFIG_I: Configured from console by cisco on vty1 (10.10.20.50)\n",
+      "expected": {
+        "syslog": {
+          "enabled": true,
+          "messages_dropped": 0,
+          "messages_rate_limited": 1,
+          "flushes": 0,
+          "overruns": 0,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "console_logging": {
+          "enabled": false
+        },
+        "monitor_logging": {
+          "level": "debugging",
+          "messages_logged": 0,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "buffer_logging": {
+          "level": "debugging",
+          "messages_logged": 62,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "count_and_timestamp_logging": false,
+        "trap_logging": {
+          "level": "informational",
+          "message_lines_logged": 65
+        },
+        "log_buffer_size_bytes": 8192,
+        "logs": [
+          {
+            "timestamp": "*Aug 19 15:23:24.798",
+            "message": "%SYS-5-CONFIG_I: Configured from console by cisco on vty1 (10.10.20.50)",
+            "facility": "SYS",
+            "severity": 5,
+            "mnemonic": "CONFIG_I"
+          }
+        ],
+        "exception_logging": {
+          "size_bytes": 8192
+        },
+        "persistent_logging": {
+          "enabled": true,
+          "url": "flash:/,",
+          "threshold_capacity": 5,
+          "immediate": true,
+          "protected": true,
+          "notify": true
+        },
+        "source_interfaces": [
+          {
+            "interface": "Loopback246"
+          },
+          {
+            "interface": "GigabitEthernet1",
+            "vrf": "Mgmt-intf"
+          },
+          {
+            "interface": "Loopback1",
+            "vrf": "000000"
+          },
+          {
+            "interface": "Loopback2",
+            "vrf": "default"
+          },
+          {
+            "interface": "Loopback3",
+            "vrf": "global"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Console logging at alerts level, ESM messages dropped line present, ILPOWER log entries for PoE detection",
+      "input": "Syslog logging: enabled (0 messages dropped, 4 messages rate-limited, 0 flushes, 0 overruns, xml disabled, filtering disabled)\n\nNo Active Message Discriminator.\n\n\n\nNo Inactive Message Discriminator.\n\n\n    Console logging: level alerts, 0 messages logged, xml disabled,\n                     filtering disabled\n    Monitor logging: level debugging, 0 messages logged, xml disabled,\n                     filtering disabled\n    Buffer logging:  level debugging, 91442 messages logged, xml disabled,\n                    filtering disabled\n    Exception Logging: size (4096 bytes)\n    Count and timestamp logging messages: disabled\n    Persistent logging: disabled\n\nNo active filter modules.\n\nESM: 0 messages dropped\n\n    Trap logging: level informational, 142 message lines logged\n        Logging to 10.5.2.1  (udp port 514, audit disabled,\n              link up),\n              142 message lines logged,\n              0 message lines rate-limited,\n              0 message lines dropped-by-MD,\n              xml disabled, sequence number disabled\n              filtering disabled\n        Logging Source-Interface:       VRF Name:\n\nLog Buffer (16384 bytes):\nJan 30 14:11:11.354: %ILPOWER-7-DETECT: Interface Gi4/3: Power Device detected: IEEE PD\nJan 30 14:11:55.762: %SYS-5-CONFIG_I: Configured from console by cisco on vty0 (172.16.5.22)\nJan 30 14:11:32.142: %ILPOWER-7-DETECT: Interface Ten1/1: Power Device detected: IEEE PD\n",
+      "expected": {
+        "syslog": {
+          "enabled": true,
+          "messages_dropped": 0,
+          "messages_rate_limited": 4,
+          "flushes": 0,
+          "overruns": 0,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "console_logging": {
+          "level": "alerts",
+          "messages_logged": 0,
+          "xml_disabled": true
+        },
+        "monitor_logging": {
+          "level": "debugging",
+          "messages_logged": 0,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "buffer_logging": {
+          "level": "debugging",
+          "messages_logged": 91442,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "count_and_timestamp_logging": false,
+        "trap_logging": {
+          "level": "informational",
+          "message_lines_logged": 142,
+          "hosts": {
+            "10.5.2.1": {
+              "protocol": "udp",
+              "port": 514,
+              "audit_disabled": true,
+              "link_status": "up",
+              "message_lines_logged": 142,
+              "message_lines_rate_limited": 0,
+              "message_lines_dropped_by_md": 0,
+              "xml_disabled": true,
+              "sequence_number_disabled": true,
+              "filtering_disabled": true
+            }
+          }
+        },
+        "log_buffer_size_bytes": 16384,
+        "logs": [
+          {
+            "timestamp": "Jan 30 14:11:11.354",
+            "message": "%ILPOWER-7-DETECT: Interface Gi4/3: Power Device detected: IEEE PD",
+            "facility": "ILPOWER",
+            "severity": 7,
+            "mnemonic": "DETECT"
+          },
+          {
+            "timestamp": "Jan 30 14:11:55.762",
+            "message": "%SYS-5-CONFIG_I: Configured from console by cisco on vty0 (172.16.5.22)",
+            "facility": "SYS",
+            "severity": 5,
+            "mnemonic": "CONFIG_I"
+          },
+          {
+            "timestamp": "Jan 30 14:11:32.142",
+            "message": "%ILPOWER-7-DETECT: Interface Ten1/1: Power Device detected: IEEE PD",
+            "facility": "ILPOWER",
+            "severity": 7,
+            "mnemonic": "DETECT"
+          }
+        ],
+        "exception_logging": {
+          "size_bytes": 4096
+        },
+        "persistent_logging": {
+          "enabled": false
+        }
+      }
+    },
+    {
+      "name": "Sequence-numbered log entries with EST timezone, trap level debugging, high message counts, two trap hosts",
+      "input": "Syslog logging: enabled (0 messages dropped, 2 messages rate-limited, 0 flushes, 0 overruns, xml disabled, filtering disabled)\n\nNo Active Message Discriminator.\n\n\n\nNo Inactive Message Discriminator.\n\n\n    Console logging: disabled\n    Monitor logging: level debugging, 0 messages logged, xml disabled,\n                     filtering disabled\n    Buffer logging:  level debugging, 552121 messages logged, xml disabled,\n                    filtering disabled\n    Exception Logging: size (4096 bytes)\n    Count and timestamp logging messages: disabled\n    Persistent logging: disabled\n\nNo active filter modules.\n\n    Trap logging: level debugging, 25907 message lines logged\n        Logging to 8.2.1.2  (udp port 514, audit disabled,\n              link up),\n              552124 message lines logged,\n              0 message lines rate-limited,\n              0 message lines dropped-by-MD,\n              xml disabled, sequence number disabled\n              filtering disabled\n        Logging to 9.8.8.7   (udp port 514, audit disabled,\n              link up),\n              552124 message lines logged,\n              0 message lines rate-limited,\n              0 message lines dropped-by-MD,\n              xml disabled, sequence number disabled\n              filtering disabled\n        Logging Source-Interface:       VRF Name:\n\nLog Buffer (10000000 bytes):\n\n065478: Dec  4 11:01:38.694 EST: %MAB-5-SUCCESS: Authentication successful for client (aaaa.bbbb.dddd) on Interface Gi8/39\n065480: Dec  4 11:01:38.702 EST: %AUTHMGR-5-FAIL: Authorization failed for client (aaaa.bbbb.dddd) on Interface Gi8/39\n065483: Dec  4 11:01:52.755 EST: %AUTHMGR-5-START: Starting 'dot1x' for client (aaaa.bbbb.dddd) on Interface Gi8/39\n",
+      "expected": {
+        "syslog": {
+          "enabled": true,
+          "messages_dropped": 0,
+          "messages_rate_limited": 2,
+          "flushes": 0,
+          "overruns": 0,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "console_logging": {
+          "enabled": false
+        },
+        "monitor_logging": {
+          "level": "debugging",
+          "messages_logged": 0,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "buffer_logging": {
+          "level": "debugging",
+          "messages_logged": 552121,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "count_and_timestamp_logging": false,
+        "trap_logging": {
+          "level": "debugging",
+          "message_lines_logged": 25907,
+          "hosts": {
+            "8.2.1.2": {
+              "protocol": "udp",
+              "port": 514,
+              "audit_disabled": true,
+              "link_status": "up",
+              "message_lines_logged": 552124,
+              "message_lines_rate_limited": 0,
+              "message_lines_dropped_by_md": 0,
+              "xml_disabled": true,
+              "sequence_number_disabled": true,
+              "filtering_disabled": true
+            },
+            "9.8.8.7": {
+              "protocol": "udp",
+              "port": 514,
+              "audit_disabled": true,
+              "link_status": "up",
+              "message_lines_logged": 552124,
+              "message_lines_rate_limited": 0,
+              "message_lines_dropped_by_md": 0,
+              "xml_disabled": true,
+              "sequence_number_disabled": true,
+              "filtering_disabled": true
+            }
+          }
+        },
+        "log_buffer_size_bytes": 10000000,
+        "logs": [
+          {
+            "timestamp": "Dec  4 11:01:38.694",
+            "message": "%MAB-5-SUCCESS: Authentication successful for client (aaaa.bbbb.dddd) on Interface Gi8/39",
+            "sequence_number": 65478,
+            "timezone": "EST",
+            "facility": "MAB",
+            "severity": 5,
+            "mnemonic": "SUCCESS"
+          },
+          {
+            "timestamp": "Dec  4 11:01:38.702",
+            "message": "%AUTHMGR-5-FAIL: Authorization failed for client (aaaa.bbbb.dddd) on Interface Gi8/39",
+            "sequence_number": 65480,
+            "timezone": "EST",
+            "facility": "AUTHMGR",
+            "severity": 5,
+            "mnemonic": "FAIL"
+          },
+          {
+            "timestamp": "Dec  4 11:01:52.755",
+            "message": "%AUTHMGR-5-START: Starting 'dot1x' for client (aaaa.bbbb.dddd) on Interface Gi8/39",
+            "sequence_number": 65483,
+            "timezone": "EST",
+            "facility": "AUTHMGR",
+            "severity": 5,
+            "mnemonic": "START"
+          }
+        ],
+        "exception_logging": {
+          "size_bytes": 4096
+        },
+        "persistent_logging": {
+          "enabled": false
+        }
+      }
+    },
+    {
+      "name": "Console enabled at debugging, buffer at informational level, trap at debugging level, asterisk timestamps, PPP interface logs",
+      "input": "Syslog logging: enabled (0 messages dropped, 21 messages rate-limited, 0 flushes, 0 overruns, xml disabled, filtering disabled)\n\nNo Active Message Discriminator.\n\n\n\nNo Inactive Message Discriminator.\n\n\n    Console logging: level debugging, 10027 messages logged, xml disabled,\n                     filtering disabled\n    Monitor logging: level debugging, 0 messages logged, xml disabled,\n                     filtering disabled\n    Buffer logging:  level informational, 10048 messages logged, xml disabled,\n                    filtering disabled\n    Exception Logging: size (8192 bytes)\n    Count and timestamp logging messages: disabled\n    Persistent logging: disabled\n\nNo active filter modules.\n\n    Trap logging: level debugging, 10180 message lines logged\n        Logging to 81.95.32.138  (udp port 514, audit disabled,\n              link up),\n              10179 message lines logged,\n              0 message lines rate-limited,\n              0 message lines dropped-by-MD,\n              xml disabled, sequence number disabled\n              filtering disabled\n        Logging to 192.168.214.143  (udp port 514, audit disabled,\n              link up),\n              10180 message lines logged,\n              0 message lines rate-limited,\n              0 message lines dropped-by-MD,\n              xml disabled, sequence number disabled\n              filtering disabled\n        Logging Source-Interface:       VRF Name:\n\nLog Buffer (100000 bytes):\n*Sep 14 05:59:54.113: %LINEPROTO-5-UPDOWN: Line protocol on Interface Virtual-PPP2, changed state to up\n*Sep 14 06:07:26.245: %LINEPROTO-5-UPDOWN: Line protocol on Interface Virtual-PPP2, changed state to down\n",
+      "expected": {
+        "syslog": {
+          "enabled": true,
+          "messages_dropped": 0,
+          "messages_rate_limited": 21,
+          "flushes": 0,
+          "overruns": 0,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "console_logging": {
+          "level": "debugging",
+          "messages_logged": 10027,
+          "xml_disabled": true
+        },
+        "monitor_logging": {
+          "level": "debugging",
+          "messages_logged": 0,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "buffer_logging": {
+          "level": "informational",
+          "messages_logged": 10048,
+          "xml_disabled": true,
+          "filtering_disabled": true
+        },
+        "count_and_timestamp_logging": false,
+        "trap_logging": {
+          "level": "debugging",
+          "message_lines_logged": 10180,
+          "hosts": {
+            "81.95.32.138": {
+              "protocol": "udp",
+              "port": 514,
+              "audit_disabled": true,
+              "link_status": "up",
+              "message_lines_logged": 10179,
+              "message_lines_rate_limited": 0,
+              "message_lines_dropped_by_md": 0,
+              "xml_disabled": true,
+              "sequence_number_disabled": true,
+              "filtering_disabled": true
+            },
+            "192.168.214.143": {
+              "protocol": "udp",
+              "port": 514,
+              "audit_disabled": true,
+              "link_status": "up",
+              "message_lines_logged": 10180,
+              "message_lines_rate_limited": 0,
+              "message_lines_dropped_by_md": 0,
+              "xml_disabled": true,
+              "sequence_number_disabled": true,
+              "filtering_disabled": true
+            }
+          }
+        },
+        "log_buffer_size_bytes": 100000,
+        "logs": [
+          {
+            "timestamp": "*Sep 14 05:59:54.113",
+            "message": "%LINEPROTO-5-UPDOWN: Line protocol on Interface Virtual-PPP2, changed state to up",
+            "facility": "LINEPROTO",
+            "severity": 5,
+            "mnemonic": "UPDOWN"
+          },
+          {
+            "timestamp": "*Sep 14 06:07:26.245",
+            "message": "%LINEPROTO-5-UPDOWN: Line protocol on Interface Virtual-PPP2, changed state to down",
+            "facility": "LINEPROTO",
+            "severity": 5,
+            "mnemonic": "UPDOWN"
+          }
+        ],
+        "exception_logging": {
+          "size_bytes": 8192
+        },
+        "persistent_logging": {
+          "enabled": false
+        }
+      }
+    }
+  ]
+}

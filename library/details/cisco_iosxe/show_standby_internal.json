@@ -1,0 +1,193 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show standby internal",
+  "schema": {
+    "name": "ShowStandbyInternalResult",
+    "fields": {
+      "hsrp_common_process_state": {
+        "type": "str",
+        "required": true
+      },
+      "msgq_size": {
+        "type": "int",
+        "required": true
+      },
+      "msgq_max_size": {
+        "type": "int",
+        "required": true
+      },
+      "hsrp_ipv4_process_state": {
+        "type": "str",
+        "required": true
+      },
+      "hsrp_ipv6_process_state": {
+        "type": "str",
+        "required": true
+      },
+      "hsrp_timer_wheel_state": {
+        "type": "str",
+        "required": true
+      },
+      "hsrp_ha_state": {
+        "type": "str",
+        "required": true
+      },
+      "v3_to_v4_transform": {
+        "type": "str",
+        "required": true
+      },
+      "virtual_ip_hash_table": {
+        "type": {
+          "name": "VirtualIpHashTable",
+          "fields": {
+            "ipv4": {
+              "type": {
+                "type": "dict",
+                "key": "str",
+                "value": {
+                  "name": "VirtualIpEntry",
+                  "fields": {
+                    "ip": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "interface": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "group": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                }
+              },
+              "required": false
+            },
+            "ipv6": {
+              "type": {
+                "type": "dict",
+                "key": "str",
+                "value": {
+                  "type": "ref",
+                  "name": "VirtualIpEntry"
+                }
+              },
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "mac_address_table": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "MacAddressEntry",
+            "fields": {
+              "interface": {
+                "type": "str",
+                "required": true
+              },
+              "mac_address": {
+                "type": "str",
+                "required": true
+              },
+              "group": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Full output with IPv4/IPv6 virtual IP tables and MAC address table",
+      "input": "\nHSRP common process not running\n  MsgQ size 0, max 0\nHSRP IPv4 process not running\nHSRP IPv6 process not running\nHSRP Timer wheel running\nHSRP HA capable, v3 to v4 transform disabled\n\nHSRP virtual IP Hash Table (global)\n103 192.168.1.254                    Gi1/0/1    Grp 0\n106 192.168.2.254                    Gi1/0/2    Grp 10\n\nHSRP virtual IPv6 Hash Table (global)\n78  2001:DB8:10:1:1::254             Gi1        Grp 20\n\nHSRP MAC Address Table\n169 Gi1/0/1 0000.0cff.b30c\n    Gi1/0/1 Grp 5\n166 Gi2/0/3 0000.0cff.b311\n    Gi2/0/3 Grp 10\n172 Gi2/0/3 0000.0cff.b307\n    Gi2/0/3 Grp 0\n173 Gi2/0/3 0000.0cff.b308\n    Gi2/0/3 Grp 1\n",
+      "expected": {
+        "hsrp_common_process_state": "not running",
+        "hsrp_ha_state": "capable",
+        "hsrp_ipv4_process_state": "not running",
+        "hsrp_ipv6_process_state": "not running",
+        "hsrp_timer_wheel_state": "running",
+        "mac_address_table": {
+          "166": {
+            "group": 10,
+            "interface": "GigabitEthernet2/0/3",
+            "mac_address": "0000.0cff.b311"
+          },
+          "169": {
+            "group": 5,
+            "interface": "GigabitEthernet1/0/1",
+            "mac_address": "0000.0cff.b30c"
+          },
+          "172": {
+            "group": 0,
+            "interface": "GigabitEthernet2/0/3",
+            "mac_address": "0000.0cff.b307"
+          },
+          "173": {
+            "group": 1,
+            "interface": "GigabitEthernet2/0/3",
+            "mac_address": "0000.0cff.b308"
+          }
+        },
+        "msgq_max_size": 0,
+        "msgq_size": 0,
+        "v3_to_v4_transform": "disabled",
+        "virtual_ip_hash_table": {
+          "ipv4": {
+            "103": {
+              "group": 0,
+              "interface": "GigabitEthernet1/0/1",
+              "ip": "192.168.1.254"
+            },
+            "106": {
+              "group": 10,
+              "interface": "GigabitEthernet1/0/2",
+              "ip": "192.168.2.254"
+            }
+          },
+          "ipv6": {
+            "78": {
+              "group": 20,
+              "interface": "GigabitEthernet1",
+              "ip": "2001:DB8:10:1:1::254"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": "HSRP common process not running\nHSRP IPv4 process not running\nHSRP IPv6 process not running\nHSRP Timer wheel running\nHSRP HA capable, v3 to v4 transform disabled\n\nGlobal           Confg: 0000\n\nHSRP MAC Address Table\n",
+      "expected": {
+        "hsrp_common_process_state": "not running",
+        "hsrp_ipv4_process_state": "not running",
+        "hsrp_ipv6_process_state": "not running",
+        "hsrp_timer_wheel_state": "running",
+        "hsrp_ha_state": "capable",
+        "v3_to_v4_transform": "disabled"
+      }
+    },
+    {
+      "name": "Minimal output with only process status lines and no tables",
+      "input": "HSRP common process running\n  MsgQ size 5, max 128\nHSRP IPv4 process running\nHSRP IPv6 process running\nHSRP Timer wheel running\nHSRP HA capable, v3 to v4 transform enabled\n",
+      "expected": {
+        "hsrp_common_process_state": "running",
+        "hsrp_ha_state": "capable",
+        "hsrp_ipv4_process_state": "running",
+        "hsrp_ipv6_process_state": "running",
+        "hsrp_timer_wheel_state": "running",
+        "msgq_max_size": 128,
+        "msgq_size": 5,
+        "v3_to_v4_transform": "enabled"
+      }
+    }
+  ]
+}

@@ -1,0 +1,305 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show cloud-mgmt connect",
+  "schema": {
+    "name": "ShowCloudMgmtConnectResult",
+    "fields": {
+      "service_enabled": {
+        "type": "bool",
+        "required": true
+      },
+      "tunnel_config": {
+        "type": {
+          "name": "TunnelConfigResult",
+          "fields": {
+            "fetch_state": {
+              "type": "str",
+              "required": true
+            },
+            "last_fetch_utc": {
+              "type": "str",
+              "required": false
+            },
+            "next_fetch_utc": {
+              "type": "str",
+              "required": false
+            },
+            "config_server": {
+              "type": "str",
+              "required": false
+            },
+            "primary": {
+              "type": "str",
+              "required": false
+            },
+            "secondary": {
+              "type": "str",
+              "required": false
+            },
+            "client_ipv6_addr": {
+              "type": "str",
+              "required": false
+            },
+            "network_name": {
+              "type": "str",
+              "required": false
+            },
+            "fetch_fail": {
+              "type": "str",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "tunnel_state": {
+        "type": {
+          "name": "TunnelStateResult",
+          "fields": {
+            "primary": {
+              "type": "str",
+              "required": true
+            },
+            "secondary": {
+              "type": "str",
+              "required": true
+            },
+            "primary_last_change_utc": {
+              "type": "str",
+              "required": false
+            },
+            "secondary_last_change_utc": {
+              "type": "str",
+              "required": false
+            },
+            "client_last_restart_utc": {
+              "type": "str",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "tunnel_interface": {
+        "type": {
+          "name": "TunnelInterfaceResult",
+          "fields": {
+            "status": {
+              "type": "str",
+              "required": true
+            },
+            "rx_packets": {
+              "type": "int",
+              "required": true
+            },
+            "tx_packets": {
+              "type": "int",
+              "required": true
+            },
+            "rx_errors": {
+              "type": "int",
+              "required": true
+            },
+            "tx_errors": {
+              "type": "int",
+              "required": true
+            },
+            "rx_drop_packets": {
+              "type": "int",
+              "required": true
+            },
+            "tx_drop_packets": {
+              "type": "int",
+              "required": true
+            },
+            "vrf": {
+              "type": "str",
+              "required": false
+            },
+            "rx_packets_last_5s": {
+              "type": "int",
+              "required": false
+            },
+            "tx_packets_last_5s": {
+              "type": "int",
+              "required": false
+            },
+            "rx_errors_last_5s": {
+              "type": "int",
+              "required": false
+            },
+            "tx_errors_last_5s": {
+              "type": "int",
+              "required": false
+            },
+            "rx_drop_packets_last_5s": {
+              "type": "int",
+              "required": false
+            },
+            "tx_drop_packets_last_5s": {
+              "type": "int",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "device_registration": {
+        "type": {
+          "name": "DeviceRegistrationResult",
+          "fields": {
+            "url": {
+              "type": "str",
+              "required": true
+            },
+            "devices": {
+              "type": {
+                "type": "dict",
+                "key": "str",
+                "value": {
+                  "name": "DeviceEntry",
+                  "fields": {
+                    "pid": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "serial_number": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "mac_address": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "status": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "timestamp_utc": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "cloud_id": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "meraki_id": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "error": {
+                      "type": "str",
+                      "required": false
+                    }
+                  }
+                }
+              },
+              "required": false
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic cloud-mgmt connect with all sections and single device",
+      "input": "Service cloud-mgmt connect: enable\n\nCloud-Mgmt Tunnel Config\n------------------------------------\n  Fetch State:                Config fetch succeeded\n  Fetch Fail:\n  Last Fetch(UTC):            2025-03-21 09:13:31\n  Next Fetch(UTC):            2025-03-21 10:24:03\n  Config Server:              cs1-2037.meraki.com\n  Primary:                    usw.nt.meraki.com\n  Secondary:                  use.nt.meraki.com\n  Client IPv6 Addr:           FD0A:9B09:1F7:1:D67F:35FF:FEFF:D880\n  Network Name:               meraki admin network - wireless\n\nCloud-Mgmt Tunnel State\n------------------------------------\n  Primary:                    Up\n  Secondary:                  Up\n  Primary Last Change(UTC):   2025-03-21 09:13:37\n  Secondary Last Change(UTC): 2025-03-21 09:13:37\n  Client Last Restart(UTC):   2025-03-21 09:13:31\n\nCloud-Mgmt Tunnel Interface\n------------------------------------\n  Status:                     Enable\n  Rx Packets:                 53\n  Tx Packets:                 63\n  Rx Errors:                  0\n  Tx Errors:                  0\n  Rx Drop Packets:            0\n  Tx Drop Packets:            0\n\nCloud-Mgmt Device Registration\n------------------------------------\n  url:                        https://catalyst.meraki.com/nodes/register\n  Device Number:              1\n  PID:                        C9350-48U\n  Serial Number:              FOC2829Y10T\n  Cloud ID:                   Q5CF-TM95-4VEL\n  Mac Address:                D4:7F:35:FF:D8:80\n  Status:                     Registered\n  Timestamp(UTC):             2025-03-21 09:12:19\n",
+      "expected": {
+        "service_enabled": true,
+        "tunnel_config": {
+          "fetch_state": "Config fetch succeeded",
+          "last_fetch_utc": "2025-03-21 09:13:31",
+          "next_fetch_utc": "2025-03-21 10:24:03",
+          "config_server": "cs1-2037.meraki.com",
+          "primary": "usw.nt.meraki.com",
+          "secondary": "use.nt.meraki.com",
+          "client_ipv6_addr": "FD0A:9B09:1F7:1:D67F:35FF:FEFF:D880",
+          "network_name": "meraki admin network - wireless"
+        },
+        "tunnel_state": {
+          "primary": "Up",
+          "secondary": "Up",
+          "primary_last_change_utc": "2025-03-21 09:13:37",
+          "secondary_last_change_utc": "2025-03-21 09:13:37",
+          "client_last_restart_utc": "2025-03-21 09:13:31"
+        },
+        "tunnel_interface": {
+          "status": "Enable",
+          "rx_packets": 53,
+          "tx_packets": 63,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drop_packets": 0,
+          "tx_drop_packets": 0
+        },
+        "device_registration": {
+          "url": "https://catalyst.meraki.com/nodes/register",
+          "devices": {
+            "1": {
+              "pid": "C9350-48U",
+              "serial_number": "FOC2829Y10T",
+              "cloud_id": "Q5CF-TM95-4VEL",
+              "mac_address": "D4:7F:35:FF:D8:80",
+              "status": "Registered",
+              "timestamp_utc": "2025-03-21 09:12:19"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Cloud-mgmt connect with VRF field and last-5s interface counters",
+      "input": "Service cloud-mgmt connect: enable\n\nCloud-Mgmt Tunnel Config\n------------------------------------\n  Fetch State:                Config fetch succeeded\n  Fetch Fail:\n  Last Fetch(UTC):            2025-03-21 09:13:31\n  Next Fetch(UTC):            2025-03-21 10:24:03\n  Config Server:              cs1-2037.meraki.com\n  Primary:                    usw.nt.meraki.com\n  Secondary:                  use.nt.meraki.com\n  Client IPv6 Addr:           FD0A:9B09:1F7:1:D67F:35FF:FEFF:D880\n  Network Name:               meraki admin network - wireless\n\nCloud-Mgmt Tunnel State\n------------------------------------\n  Primary:                    Up\n  Secondary:                  Up\n  Primary Last Change(UTC):   2025-03-21 09:13:37\n  Secondary Last Change(UTC): 2025-03-21 09:13:37\n  Client Last Restart(UTC):   2025-03-21 09:13:31\n\nCloud-Mgmt Tunnel Interface\n------------------------------------\n  VRF:\n  Status:                     Enable\n  Rx Packets:                 53\n  Tx Packets:                 63\n  Rx Errors:                  0\n  Tx Errors:                  0\n  Rx Drop Packets:            0\n  Tx Drop Packets:            0\n  Rx Packets (Last 5s):       5\n  Tx Packets (Last 5s):       3\n  Rx Errors (Last 5s):        0\n  Tx Errors (Last 5s):        0\n  Rx Drop Packets (Last 5s):  0\n  Tx Drop Packets (Last 5s):  0\n\nCloud-Mgmt Device Registration\n------------------------------------\n  url:                        https://catalyst.meraki.com/nodes/register\n  Device Number:              1\n  PID:                        C9350-48U\n  Serial Number:              FOC2829Y10T\n  Cloud ID:                   Q5CF-TM95-4VEL\n  Mac Address:                D4:7F:35:FF:D8:80\n  Status:                     Registered\n  Timestamp(UTC):             2025-03-21 09:12:19\n",
+      "expected": {
+        "service_enabled": true,
+        "tunnel_config": {
+          "fetch_state": "Config fetch succeeded",
+          "last_fetch_utc": "2025-03-21 09:13:31",
+          "next_fetch_utc": "2025-03-21 10:24:03",
+          "config_server": "cs1-2037.meraki.com",
+          "primary": "usw.nt.meraki.com",
+          "secondary": "use.nt.meraki.com",
+          "client_ipv6_addr": "FD0A:9B09:1F7:1:D67F:35FF:FEFF:D880",
+          "network_name": "meraki admin network - wireless"
+        },
+        "tunnel_state": {
+          "primary": "Up",
+          "secondary": "Up",
+          "primary_last_change_utc": "2025-03-21 09:13:37",
+          "secondary_last_change_utc": "2025-03-21 09:13:37",
+          "client_last_restart_utc": "2025-03-21 09:13:31"
+        },
+        "tunnel_interface": {
+          "status": "Enable",
+          "rx_packets": 53,
+          "tx_packets": 63,
+          "rx_errors": 0,
+          "tx_errors": 0,
+          "rx_drop_packets": 0,
+          "tx_drop_packets": 0,
+          "rx_packets_last_5s": 5,
+          "tx_packets_last_5s": 3,
+          "rx_errors_last_5s": 0,
+          "tx_errors_last_5s": 0,
+          "rx_drop_packets_last_5s": 0,
+          "tx_drop_packets_last_5s": 0
+        },
+        "device_registration": {
+          "url": "https://catalyst.meraki.com/nodes/register",
+          "devices": {
+            "1": {
+              "pid": "C9350-48U",
+              "serial_number": "FOC2829Y10T",
+              "cloud_id": "Q5CF-TM95-4VEL",
+              "mac_address": "D4:7F:35:FF:D8:80",
+              "status": "Registered",
+              "timestamp_utc": "2025-03-21 09:12:19"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

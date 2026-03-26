@@ -1,0 +1,4020 @@
+{
+  "os": "cisco_ios",
+  "command": "show processes memory",
+  "schema": {
+    "name": "ShowProcessesMemoryResult",
+    "fields": {
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "list",
+            "items": {
+              "name": "ProcessEntry",
+              "fields": {
+                "tty": {
+                  "type": "int",
+                  "required": true
+                },
+                "allocated": {
+                  "type": "int",
+                  "required": true
+                },
+                "freed": {
+                  "type": "int",
+                  "required": true
+                },
+                "holding": {
+                  "type": "int",
+                  "required": true
+                },
+                "getbufs": {
+                  "type": "int",
+                  "required": true
+                },
+                "retbufs": {
+                  "type": "int",
+                  "required": true
+                },
+                "name": {
+                  "type": "str",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show processes memory with Processor and I/O pools and full process table",
+      "input": "show processes memory\nProcessor Pool Total:  563180224 Used:   71304104 Free:  491876120\n      I/O Pool Total:  114294784 Used:   96209944 Free:   18084840\n\n PID TTY  Allocated      Freed    Holding    Getbufs    Retbufs Process\n   0   0  230525016   71495656  152989632          0          0 *Init*\n   0   0      24408 2986106016      24408          0          0 *Sched*\n   0   0  546920816  473592600     258736    2619623          0 *Dead*\n   0   0          0          0     394768          0          0 *MallocLite*\n   1   0      30864       3088      40872          0          0 Chunk Manager\n   2   0        232        232       7096          0          0 Load Meter\n   3   0  460065600  459342968     705128          0          0 Exec\n   4   0       3336        232      16248          0          0 Check heaps\n   5   0 1489388792 1489394664     106080 1378634186 1378638862 Pool Manager\n   6   0          0          0      13096          0          0 DiscardQ Backgro\n   7   0        232        232      13096          0          0 Timers\n   8   0          0          0       7096          0          0 WATCH_AFS\n   9   0          0          0      13096          0          0 IOSv out console\n  10   0          0          0      13096          0          0 IOSv in console\n  11   0          0          0      33096          0          0 Crash writer\n  12   0        344          0      13440          0          0 Exception contro\n  13   0          0          0      13096          0          0 IFS Agent Manage\n  14   0  253404536  253351248      66384          0          0 ARP Input\n  15   0   17314456   17314456      13096          0          0 ARP Background\n  16   0          0          0      13096          0          0 CEF MIB API\n  17   0          0          0      13096          0          0 AAA_SERVER_DEADT\n  18   0          0          0      25096          0          0 Policy Manager\n  19   0        232        232      13096          0          0 DDR Timers\n  20   0        232        232      25096          0          0 Dialer event\n  21   0          0          0      13096          0          0 Entity MIB API\n  22   0          0          0      13096          0          0 IPC Event Notifi\n  23   0          0          0      13096          0          0 IPC Mcast Pendin\n  24   0          0          0      13096          0          0 IPC Dynamic Cach\n  25   0          0          0      13096          0          0 IPC Session Serv\n  26   0          0          0      13096          0          0 IPC Zone Manager\n  27   0          0          0      13096          0          0 IPC Periodic Tim\n  28   0          0          0      13096          0          0 IPC Deferred Por\n  29   0          0          0      13096          0          0 IPC Process leve\n  30   0       2096          0      15192          0          0 IPC Seat Manager\n  31   0          0          0      13096          0          0 IPC Check Queue\n  32   0          0          0      13096          0          0 IPC Seat RX Cont\n  33   0          0          0      13096          0          0 IPC Seat TX Cont\n  34   0          0          0      13096          0          0 IPC Keep Alive M\n  35   0          0          0      13096          0          0 IPC Loadometer\n  36   0          0          0      13096          0          0 IPC Session Deta\n  37   0        232        232      13096          0          0 PrstVbl\n  38   0        232        232      13096          0          0 Serial Backgroun\n  39   0          0          0      13096          0          0 ARP Snoop\n  40   0          0          0      13096          0          0 Dynamic ARP Insp\n  41   0          0       6016      13096          0          0 crypto sw pk pro\n  42   0        232        232      13096          0          0 GraphIt\n  43   0          0          0      13096          0          0 SERIAL A'detect\n  44   0          0          0       7096          0          0 Inode Table Dest\n  45   0          0          0       7096          0          0 dev_device_inser\n  46   0          0          0       7096          0          0 dev_device_remov\n  47   0       1832          0      14840          0          0 MSDP Open\n  48   0   30114472   30105920       7328          0          0 Async write proc\n  49   0        232          0       7328          0          0 Async write proc\n  50   0        232          0       7328          0          0 Async write proc\n  51   0     249600     245440      11256          0          0 DFS flush period\n  52   0          0          0      13096          0          0 Critical Bkgnd\n  53   0    3901232     272008      47528          0          0 Net Background\n  54   0      78304      78304      25096          0          0 IDB Work\n  55   0        232        232      25128          0          0 Logger\n  56   0     203040        232      13456          0          0 TTY Background\n  57   0        776          0      25872          0          0 CTS CORE\n  58   0        792      43160      25656          0          0 SXP CORE\n  59   0       2640         72      15664          0          0 IF-MGR control p\n  60   0          0          0      13096          0          0 IF-MGR event pro\n  61   0          0          0      13096          0          0 AggMgr Process\n  62   0          0        176      13096          0          0 Transport Port A\n  63   0          0          0      13096          0          0 HC Counter Timer\n  64   0          0          0      13096          0          0 IOSv e1000\n  65   0        216          0      13312          0          0 Src Fltr backgro\n  66   0        232        232      13096          0          0 Unix address lea\n  67   0     542992       6768     553128          0          0 EEM ED Identity\n  68   0      11344       4968      23472          0          0 EEM ED MAT\n  69   0      48360  983037000      60088          0          0 EEM ED ND\n  70   0          0          0      13096          0          0 Net Input\n  71   0        232        232      13096          0          0 Compute load avg\n  72   0       1224       4632      14320          0          0 Per-minute Jobs\n  73   0          0          0      17096          0          0 Per-Second Jobs\n  74   0          0          0      13096          0          0 Rate limit load\n  75   0        232        232      25096          0          0 Ethernet CFM\n  76   0        232        232      25096          0          0 Ethernet Timer C\n  77   0        232        232      25096          0          0 Ethernet Msec Ti\n  78   0        232        232      25096          0          0 Ethernet CFM IOU\n  79   0        232        232      13112          0          0 Dot1x Mgr Proces\n  80   0          0          0      13096          0          0 EAP Framework\n  81   0          0          0      13096          0          0 EAP Test\n  82   0        232        232      13096          0          0 AAA Server\n  83   0          0          0      13096          0          0 AAA ACCT Proc\n  84   0      49368          0      62464          0          0 ACCT Periodic Pr\n  85   0        232        232      13096          0          0 EFP Errd\n  86   0        232        232      25136          0          0 Ethernet LMI\n  87   0       1872          0      14968          0          0 FHRP Main thread\n  88   0       1688          0      14784          0          0 VRRP Main thread\n  89   0      18552          0      31648          0          0 VRRS Main thread\n  90   0       1832          0      14848          0          0 MSDP Open\n  91   0     370024     206488     151536          0          0 mDNS\n  92   0          0          0      25096          0          0 SSS Manager\n  93   0          0          0      13096          0          0 SSS Feature Mana\n  94   0          0          0      13096          0          0 SSS Feature Time\n  95   0        232        232      17096          0          0 Ethernet OAM Pro\n  96   0          0          0      13096          0          0 AC Switch\n  97   0        232        232      25096          0          0 SSM connection m\n  98   0        232        232      13096          0          0 OCE punted Pkts\n  99   0          0          0      13096          0          0 LSP Tunnel FRR\n 100   0       3048          0      20144          0          0 MPLS Auto-Tunnel\n 101   0          0          0      13096          0          0 O-UNI Client Msg\n 102   0       5048          0      18144          0          0 DHCP Snooping\n 103   0          0          0      13096          0          0 DHCP Snooping db\n 104   0          0       1008      13096          0          0 802.1x switch\n 105   0       1136        280      13952          0          0 DTP Protocol\n 106   0        232        232      13096          0          0 PI MATM Aging Pr\n 107   0        216          0      13312          0          0 Port-Security\n 108   0        232        232      17096          0          0 IP Host Track Pr\n 109   0        232        232      13096          0          0 Ethchnl\n 110   0        536        232      13400          0          0 UDLD\n 111   0          0          0      13096          0          0 UNIX IP Source g\n 112   0        232        232      13096          0          0 process unix_l2_\n 113   0        232        232      13096          0          0 process unix_l2_\n 114   0       5048      21032      18144          0          0 VMATM Callback\n 115   0      20992        680      33408          0          0 MKA\n 116   0        216          0      25312          0          0 CEF switching ba\n 117   0        216          0       7312          0          0 ADJ NSF process\n 118   0     131712     219520      33096          0          0 SpanTree Helper\n 119   0 1581054096  600101864     160816          0          0 CDP Protocol\n 121   0        232        232      13096          0          0 AAA Dictionary R\n 122   0       1688          0      14784          0          0 TRACK Main threa\n 123   0       1688          0      14784          0          0 TRACK Client thr\n 124   0        232        232      25096          0          0 ATM OAM Input\n 125   0        232        232      25096          0          0 ATM OAM TIMER\n 126   0          0          0      17096          0          0 HQF TARGET DYNAM\n 127   0     794784     783792      38328          0          0 IP ARP Adjacency\n 128   0     208456     175424      46128          0          0 IP ARP Retry Age\n 129   0   30348360   26262864      90680          0          0 IP Input\n 130   0          0          0      13096          0          0 ICMP event handl\n 131   0        232        232      17096          0          0 IP ARP Track\n 132   0   22768752   22186168      93608          0          0 PIM register asy\n 134   0          0          0      13096          0          0 RIB LM VALIDATE\n 135   0     323696        232      13328          0          0 Spanning Tree\n 136   0        232        232      13096          0          0 SpanTree Msg\n 137   0          0          0      13096          0          0 Webauth client\n 138   0        896          0      13992          0          0 Auth-proxy HTTP\n 139   0          0          0      13096          0          0 IP Admin SM Proc\n 140   0          0          0      13096          0          0 IPv6 ping proces\n 141   0        232        232      25096          0          0 KRB5 AAA\n 142   0          0          0      13096          0          0 FRR Background P\n 143   0        392       1408      25312          0          0 CEF background p\n 144   0        216          0      25336          0          0 fib_fib_bfd_sb e\n 145   0          0          0      17096          0          0 IP IRDP\n 146   0        216          0      17312          0          0 Tunnel FIB\n 147   0        232        232      25096          0          0 Auth Manager\n 148   0          0          0      17096          0          0 EPM MAIN PROCESS\n 149   0          0          0      13128          0          0 Critical Auth\n 150   0          0          0      13096          0          0 SVM UT Process\n 151   0          0          0      13096          0          0 CMD HANDLER\n 152   0        464        232      13328          0          0 Dot1x Supplicant\n 153   0        464        232      13328          0          0 Dot1x Supplicant\n 154   0        464        232      13328          0          0 Dot1x Supplicant\n 155   0          0          0      13096          0          0 DCT Bkgd Process\n 156   0          0          0      13096          0          0 MAB Framework\n 157   0          0          0      13096          0          0 PPP IP Add Route\n 158   0        248          0      13344          0          0 Service Routing\n 159   0          0          0      13096          0          0 AAA System Acct\n 160   0          0          0      13096          0          0 HQF Output Shape\n 161   0          0          0      13096          0          0 HQF Input Shaper\n 162   0          0          0      25096          0          0 Routing Topology\n 163   0   43241616   42826064     294848          0          0 IP RIB Update\n 164   0       5736       5184      17648          0          0 IP Background\n 165   0      651098       6048     111016          0          0 IP Connected Rou\n 166   0        232        360      13096          0          0 Flow Exporter Ti\n 167   0          0          0      13096          0          0 XC RIB MGR\n 168   0        232      23720      13096          0          0 Inter Chassis Pr\n 169   0        232        232      25096          0          0 Tunnel\n 170   0       1040        232      17904          0          0 MVPN Mgr Process\n 171   0        464        232      17328          0          0 Multicast Offloa\n 172   0       2696        376      15416          0          0 LFDp Input Proc\n 173   0    1168776    1559000      25096          0          0 TCP Timer\n 174   0          0      75112      25096          0          0 TCP Protocols\n 175   0          0          0      13096          0          0 Socket Timers\n 176   0       7288       6128      18080          0          0 HTTP CORE\n 177   0      20648        232      16544          0          0 L2TRACE SERVER\n 178   0        464        232      17328          0          0 AUTO LAG Protoco\n 179   0     133344    2164760      16840          0          0 IGMPSN L2MCM\n 180   0          0          0      13096          0          0 IGMPSN MRD\n 181   0          0          0      13096          0          0 IGMPSN\n 183   0     106248      86528      44552          0          0 CEF: IPv4 proces\n 184   0        216     703752      25312          0          0 ADJ background\n 185   0     372256     374440      25312          0          0 Collection proce\n 186   0      15816      15600      25312          0          0 ADJ resolve proc\n 187   0      14472       4992      22576          0          0 SR CapMan Proces\n 188   0        648       1224      25312          0          0 MFIB Master back\n 189   0      49432      17144      59056          0          0 CEF: IPv6 proces\n 190   0      77792          0      18440          0          0 MFIB_init\n 191   0        232        232      13096          0          0 ATIP_UDP_TSK\n 192   0          0          0      33096          0          0 COPS\n 193   0          0          0      13096          0          0 Probe Input\n 194   0          0          0      13096          0          0 RARP Input\n 195   0        232       6352      17096          0          0 static\n 196   0        232        232      17096          0          0 App Route Proces\n 197   0          0          0      17096          0          0 IPv6 RIB Cleanup\n 198   0     120872      88712      61792          0          0 IPv6 RIB Event H\n 199   0          0          0      13096          0          0 PAD InCall\n 200   0        232        232      25096          0          0 X.25 Background\n 201   0          0          0      13096          0          0 X.25 Encaps Mana\n 202   0   46093360   46093360      17096          0          0 QoS stats proces\n 203   0          0          0      13096          0          0 SNMP Timers\n 204   0          0          0      13096          0          0 EPM Downlad Mana\n 205   0          0          0      13096          0          0 Timer Handler Pr\n 206   0        896          0      25992          0          0 HTTP EPM Redirec\n 207   0          0          0      25096          0          0 EPM ACL PLUG-IN\n 208   0        232          0       7200          0          0 Async write proc\n 209   0          0          0      17096          0          0 IPv6 Static Hand\n 210   0        232        232      13120          0          0 AAA Cached Serve\n 211   0        232        232      13096          0          0 LINE AAA\n 212   0      51176          0      64272          0          0 MMA DB TIMER\n 213   0       1592          0      14688          0          0 MMA MSG MCOL\n 214   0        792        232      25656          0          0 TPLUS\n 215   0        232        232      13096          0          0 ENABLE AAA\n 216   0        232        232      25096          0          0 LOCAL AAA\n 217   0          0          0      13096          0          0 MPLS Auto Mesh P\n 218   0      49600        232      62464          0          0 Timer Library\n 219   0       5280        232      18144          0          0 Crypto Support\n 220   0          0          0      13096          0          0 IPSECv6 PS Proc\n 221   0   39959752   39958376      14472          0          0 NIST rng proc\n 222   0        792        232      25656          0          0 LDAP process\n 223   0          0          0      25096          0          0 Opaque Database\n 224   0          0          0      13096          0          0 Key chain liveke\n 226   0       5240          0      18336          0          0 MMA DP TIMER\n 227   0        464        232      25328          0          0 MMON PROCESS\n 228   0        464        232      25328          0          0 MMON MENG\n 229   0     151336        144     176288          0          0 Crypto IKEv2\n 230   0          0          0      13096          0          0 IKEv2 AAA handle\n 231   0     212936     212112      13920          0          0 crypto engine pr\n 232   0          0          0      25096          0          0 encrypt proc\n 233   0        232        512      13096          0          0 CRYPTO MAP FREE\n 234   0          0          0      25096          0          0 Crypto INT\n 235   0        232        232      25096          0          0 Crypto IKE Dispa\n 236   0      40560        232      65424          0          0 Crypto IKMP\n 237   0          0          0      17096          0          0 IPSEC manual key\n 238   0     203072       4800      25640          0          0 IPSEC key engine\n 239   0          0          0      33096          0          0 Crypto ACL\n 240   0          0          0      13096          0          0 Crypto PAS Proc\n 241   0          0          0      25096          0          0 IPSec background\n 242   0          0          0      25096          0          0 RSA background p\n 243   0     323136     263168      85136          0          0 Crypto CA\n 244   0        232        232      25096          0          0 Crypto PKI-CRL\n 245   0       5048          0      30144          0          0 Crypto PKI-Rev-P\n 246   0        896          0      25992          0          0 PKI OCSP\n 247   0      10048          0      35144          0          0 PKI Revocation\n 248   0        232        232      13096          0          0 DHCP Security He\n 249   0          0          0      13096          0          0 vlmap logger\n 250   0      64840        936      37872          0          0 pm scp dummy pro\n 251   0     292080     643344      13096          0          0 PM Callback\n 252   0        232          0       7200          0          0 Async write proc\n 253   0        232        232      13096          0          0 dhcp snooping sw\n 254   0       5280       2640      18144          0          0 AAA SEND STOP EV\n 255   0          0          0      25096          0          0 Test AAA Client\n 256   0          0          0      13096          0          0 Syslog Traps\n 257   0 1240482128 1240481912      13184          0          0 Config Probe\n 258   0     281072       4968     293200     100548          0 EEM ED Syslog\n 259   0      11600       5064      23568          0          0 EEM ED Routing\n 260   0     207384       4968     219512      67468          0 EEM ED Generic\n 261   0          0          0      25096          0          0 QoS TAM Request\n 262   0      16752        464      16080          0          0 CTS credentials\n 263   0      11824        464      36456          0          0 RBM CORE\n 264   0   52044680   52044680      25096          0          0 Syslog\n 265   0       1328          0      16968          0          0 BGP Scheduler\n 266   0    1338168      18584    1336680          0          0 EEM Server\n 267   0      31384       1176      34208          0          0 EEM Policy Direc\n 268   0      70584      36408      59312          0          0 MLD\n 269   0      11344       4968      23472          0          0 EEM ED CLI\n 270   0      11688       5128      23816          0          0 EEM ED Counter\n 271   0      11808       4968      23936          0          0 EEM ED Interface\n 272   0      11344       4968      23472          0          0 EEM ED IOSWD\n 273   0      11344       4968      23472          0          0 EEM ED None\n 274   0      11344       4968      23472          0          0 EEM ED OIR\n 275   0  303766504  303119112     310872          0          0 PIM IPv6\n 276   0      11408       4968      23536          0          0 EEM ED SNMP\n 277   0      11496       4968      23624          0          0 EEM ED Timer\n 278   0      11344       4968      23472          0          0 EEM ED SNMP Obje\n 279   0      11784       5128      23912          0          0 EEM ED SNMP Noti\n 280   0      11344       4968      23472          0          0 EEM ED Ipsla\n 281   0      16488       4968      28616          0          0 EEM ED Nf\n 282   0      11344       4968      23472          0          0 EEM ED Test\n 283   0      16392       4968      28520          0          0 EEM ED Config\n 284   0      11344       4968      23472          0          0 EEM ED Env\n 285   0      16640       4968      28768          0          0 EEM ED DS\n 286   0      16640       4968      28768          0          0 EEM ED CRASH\n 287   0        232        232      17112          0          0 MFIB_rate\n 288   0      11408       4968      23536          0          0 EEM ED RPC\n 289   0      14424       6408      32456          0          0 VLAN Manager\n 290   0 2764448880 2764448744      25232          0          0 mdns Timer Proce\n 291   0     116872        232     141736          0          0 MRIB Process\n 292   0      12112        464      24744          0          0 EEM Helper Threa\n 293   0          0          0      16968          0          0 Connection Mgr\n 294   0      71200        232      86056          0          0 MFIB_cable\n 295   0        984        232      17864          0          0 MFIB_mrib_write\n 296   0      54312    1134768     288232          0          0 MFIB_mrib_read\n 297   0      70632          0      83728          0          0 mcast_rw_process\n 298   0     117104       8640      83944          0          0 LLDP Protocol\n 299   0      10392        512      26976          0          0 IGMP Input\n 300   0 1724271056 1723569704      83856          0          0 PIM Process\n 301   0          0          0      17096          0          0 Mwheel Process\n 302   0    1433808     287080      43144          0          0 MRIB Trans\n 303   0      30448       2184      33104          0          0 IPv6 IDB\n 304   0          0          0      17096          0          0 IPv6 background\n 305   0          0          0      13096          0          0 IPv6 Address\n 306   0     952672     124416      36032          0          0 IPv6 Input\n 307   0     149472      55256     147872          0          0 IPv6 ND\n 308   0       2248        376      15536          0          0 IPv6 RIP\n 309   0      58992      47696      35888          0          0 DHCP Client\n 310   0        232          0       7200          0          0 Async write proc\n 311   0     482768    6155096      31384          0          0 LDP\n 312   0        672          0      13768          0          0 TDP Hello\n 313   0        216          0      25312          0          0 LSD Main Proc\n 314   0    8668568    5996328      95160          0          0 Tag Control\n 315   0        216          0      17312          0          0 IP MPLS Service\n 316   0     394384     364640      27152          0          0 IPRM\n 317   0          0          0      13096          0          0 MFI LFD Stats Pr\n 318   0          0          0      25096          0          0 MFI LFD Timer Pr\n 319   0       5264          0      18360          0          0 MFI LFD Main Pro\n 320   0       1856        320      14632          0          0 LSP Verification\n 321   0          0          0      13096          0          0 MPLS HC Counter\n 322   0        216          0      13312          0          0 LDP Background\n 323   0      16816        232      33680          0          0 CLNS Input\n 324   0        232        232      17096          0          0 ES-IS Routing\n 325   0     748040     327448      21960          0          0 LACP Protocol\n 326   0      73624       8040      82552          0          0 BGP I/O\n 327   0    2445112    2398568      54152          0          0 EIGRP-IPv6\n 328   0    2479440    2417544      67264          0          0 EIGRP-IPv6\n 329   0          0          0      13128          0          0 EIGRP-IPv6 Hello\n 330   0          0          0      13128          0          0 EIGRP-IPv6 Hello\n 331   0 1370756416 1370659592      41464          0          0 ISIS Adj test\n 332   0   93422208   93274632     283592          0          0 ISIS Upd test\n 333   0     163984       5560     181080          0          0 BGP Task\n 334   0          0          0      13096          0          0 TCP Listener\n 335   0 3061424448  153760032      25096          0          0 MSDP Process\n 336   0 2388486416 2388298768      74968          0          0 IP SLAs XOS Even\n 337   0          0          0      13096          0          0 IPv6 Access Cont\n 338   0 1240733680 1240733448      13200          0          0 Config Probe\n 339   0        232          0       7200          0          0 Async write proc\n 340   0          0          0       6968          0          0 DFS flush period\n 341   0          0     230984      12968          0          0 Tagcon Addr\n 342   0      16360      18848      25200          0          0 IPRM Collection\n 343   0          0          0      16968          0          0 BGP Scanner\n 344   0    2014496    1970064      52072          0          0 EIGRP-IPv4\n 345   0    2025552    2001712      31536          0          0 EIGRP-IPv4\n 346   0     393008      13720     267056          0          0 OSPF-2 Router\n 347   0     249928       9800     128728          0          0 OSPF-1 Router\n 348   0     197472      30552      26352          0          0 RIP Router\n 349   0    4329784     358192     444200          0          0 BGP Router\n 350   0          0          0      12968          0          0 EIGRP-IPv4 Hello\n 351   0      65872          0      78840          0          0 EIGRP-IPv4 Hello\n 352   0     136352     232776      12968          0          0 OSPF-2 Hello\n 353   0     127008     230336      13136          0          0 OSPF-1 Hello\n 354   0       2872  299266112      12968          0          0 RIP Send\n 355   0  299251720     128456      12968          0          0 RIP Timers\n 356   0          0          0      16968          0          0 BGP Consistency\n 357   0          0          0      16968          0          0 BGP Event\n 358   0          0          0      12968          0          0 BGP VA\n",
+      "expected": {
+        "processor_pool": {
+          "total": 563180224,
+          "used": 71304104,
+          "free": 491876120
+        },
+        "io_pool": {
+          "total": 114294784,
+          "used": 96209944,
+          "free": 18084840
+        },
+        "processes": {
+          "0": [
+            {
+              "tty": 0,
+              "allocated": 230525016,
+              "freed": 71495656,
+              "holding": 152989632,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "*Init*"
+            },
+            {
+              "tty": 0,
+              "allocated": 24408,
+              "freed": 2986106016,
+              "holding": 24408,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "*Sched*"
+            },
+            {
+              "tty": 0,
+              "allocated": 546920816,
+              "freed": 473592600,
+              "holding": 258736,
+              "getbufs": 2619623,
+              "retbufs": 0,
+              "name": "*Dead*"
+            },
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 394768,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "*MallocLite*"
+            }
+          ],
+          "1": [
+            {
+              "tty": 0,
+              "allocated": 30864,
+              "freed": 3088,
+              "holding": 40872,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Chunk Manager"
+            }
+          ],
+          "2": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 7096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Load Meter"
+            }
+          ],
+          "3": [
+            {
+              "tty": 0,
+              "allocated": 460065600,
+              "freed": 459342968,
+              "holding": 705128,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Exec"
+            }
+          ],
+          "4": [
+            {
+              "tty": 0,
+              "allocated": 3336,
+              "freed": 232,
+              "holding": 16248,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Check heaps"
+            }
+          ],
+          "5": [
+            {
+              "tty": 0,
+              "allocated": 1489388792,
+              "freed": 1489394664,
+              "holding": 106080,
+              "getbufs": 1378634186,
+              "retbufs": 1378638862,
+              "name": "Pool Manager"
+            }
+          ],
+          "6": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "DiscardQ Backgro"
+            }
+          ],
+          "7": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Timers"
+            }
+          ],
+          "8": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 7096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "WATCH_AFS"
+            }
+          ],
+          "9": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IOSv out console"
+            }
+          ],
+          "10": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IOSv in console"
+            }
+          ],
+          "11": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 33096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Crash writer"
+            }
+          ],
+          "12": [
+            {
+              "tty": 0,
+              "allocated": 344,
+              "freed": 0,
+              "holding": 13440,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Exception contro"
+            }
+          ],
+          "13": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IFS Agent Manage"
+            }
+          ],
+          "14": [
+            {
+              "tty": 0,
+              "allocated": 253404536,
+              "freed": 253351248,
+              "holding": 66384,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "ARP Input"
+            }
+          ],
+          "15": [
+            {
+              "tty": 0,
+              "allocated": 17314456,
+              "freed": 17314456,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "ARP Background"
+            }
+          ],
+          "16": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "CEF MIB API"
+            }
+          ],
+          "17": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "AAA_SERVER_DEADT"
+            }
+          ],
+          "18": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Policy Manager"
+            }
+          ],
+          "19": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "DDR Timers"
+            }
+          ],
+          "20": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Dialer event"
+            }
+          ],
+          "21": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Entity MIB API"
+            }
+          ],
+          "22": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPC Event Notifi"
+            }
+          ],
+          "23": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPC Mcast Pendin"
+            }
+          ],
+          "24": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPC Dynamic Cach"
+            }
+          ],
+          "25": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPC Session Serv"
+            }
+          ],
+          "26": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPC Zone Manager"
+            }
+          ],
+          "27": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPC Periodic Tim"
+            }
+          ],
+          "28": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPC Deferred Por"
+            }
+          ],
+          "29": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPC Process leve"
+            }
+          ],
+          "30": [
+            {
+              "tty": 0,
+              "allocated": 2096,
+              "freed": 0,
+              "holding": 15192,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPC Seat Manager"
+            }
+          ],
+          "31": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPC Check Queue"
+            }
+          ],
+          "32": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPC Seat RX Cont"
+            }
+          ],
+          "33": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPC Seat TX Cont"
+            }
+          ],
+          "34": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPC Keep Alive M"
+            }
+          ],
+          "35": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPC Loadometer"
+            }
+          ],
+          "36": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPC Session Deta"
+            }
+          ],
+          "37": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "PrstVbl"
+            }
+          ],
+          "38": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Serial Backgroun"
+            }
+          ],
+          "39": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "ARP Snoop"
+            }
+          ],
+          "40": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Dynamic ARP Insp"
+            }
+          ],
+          "41": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 6016,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "crypto sw pk pro"
+            }
+          ],
+          "42": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "GraphIt"
+            }
+          ],
+          "43": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "SERIAL A'detect"
+            }
+          ],
+          "44": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 7096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Inode Table Dest"
+            }
+          ],
+          "45": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 7096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "dev_device_inser"
+            }
+          ],
+          "46": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 7096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "dev_device_remov"
+            }
+          ],
+          "47": [
+            {
+              "tty": 0,
+              "allocated": 1832,
+              "freed": 0,
+              "holding": 14840,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MSDP Open"
+            }
+          ],
+          "48": [
+            {
+              "tty": 0,
+              "allocated": 30114472,
+              "freed": 30105920,
+              "holding": 7328,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Async write proc"
+            }
+          ],
+          "49": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 0,
+              "holding": 7328,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Async write proc"
+            }
+          ],
+          "50": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 0,
+              "holding": 7328,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Async write proc"
+            }
+          ],
+          "51": [
+            {
+              "tty": 0,
+              "allocated": 249600,
+              "freed": 245440,
+              "holding": 11256,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "DFS flush period"
+            }
+          ],
+          "52": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Critical Bkgnd"
+            }
+          ],
+          "53": [
+            {
+              "tty": 0,
+              "allocated": 3901232,
+              "freed": 272008,
+              "holding": 47528,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Net Background"
+            }
+          ],
+          "54": [
+            {
+              "tty": 0,
+              "allocated": 78304,
+              "freed": 78304,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IDB Work"
+            }
+          ],
+          "55": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 25128,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Logger"
+            }
+          ],
+          "56": [
+            {
+              "tty": 0,
+              "allocated": 203040,
+              "freed": 232,
+              "holding": 13456,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "TTY Background"
+            }
+          ],
+          "57": [
+            {
+              "tty": 0,
+              "allocated": 776,
+              "freed": 0,
+              "holding": 25872,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "CTS CORE"
+            }
+          ],
+          "58": [
+            {
+              "tty": 0,
+              "allocated": 792,
+              "freed": 43160,
+              "holding": 25656,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "SXP CORE"
+            }
+          ],
+          "59": [
+            {
+              "tty": 0,
+              "allocated": 2640,
+              "freed": 72,
+              "holding": 15664,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IF-MGR control p"
+            }
+          ],
+          "60": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IF-MGR event pro"
+            }
+          ],
+          "61": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "AggMgr Process"
+            }
+          ],
+          "62": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 176,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Transport Port A"
+            }
+          ],
+          "63": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "HC Counter Timer"
+            }
+          ],
+          "64": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IOSv e1000"
+            }
+          ],
+          "65": [
+            {
+              "tty": 0,
+              "allocated": 216,
+              "freed": 0,
+              "holding": 13312,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Src Fltr backgro"
+            }
+          ],
+          "66": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Unix address lea"
+            }
+          ],
+          "67": [
+            {
+              "tty": 0,
+              "allocated": 542992,
+              "freed": 6768,
+              "holding": 553128,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM ED Identity"
+            }
+          ],
+          "68": [
+            {
+              "tty": 0,
+              "allocated": 11344,
+              "freed": 4968,
+              "holding": 23472,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM ED MAT"
+            }
+          ],
+          "69": [
+            {
+              "tty": 0,
+              "allocated": 48360,
+              "freed": 983037000,
+              "holding": 60088,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM ED ND"
+            }
+          ],
+          "70": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Net Input"
+            }
+          ],
+          "71": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Compute load avg"
+            }
+          ],
+          "72": [
+            {
+              "tty": 0,
+              "allocated": 1224,
+              "freed": 4632,
+              "holding": 14320,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Per-minute Jobs"
+            }
+          ],
+          "73": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 17096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Per-Second Jobs"
+            }
+          ],
+          "74": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Rate limit load"
+            }
+          ],
+          "75": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Ethernet CFM"
+            }
+          ],
+          "76": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Ethernet Timer C"
+            }
+          ],
+          "77": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Ethernet Msec Ti"
+            }
+          ],
+          "78": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Ethernet CFM IOU"
+            }
+          ],
+          "79": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13112,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Dot1x Mgr Proces"
+            }
+          ],
+          "80": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EAP Framework"
+            }
+          ],
+          "81": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EAP Test"
+            }
+          ],
+          "82": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "AAA Server"
+            }
+          ],
+          "83": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "AAA ACCT Proc"
+            }
+          ],
+          "84": [
+            {
+              "tty": 0,
+              "allocated": 49368,
+              "freed": 0,
+              "holding": 62464,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "ACCT Periodic Pr"
+            }
+          ],
+          "85": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EFP Errd"
+            }
+          ],
+          "86": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 25136,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Ethernet LMI"
+            }
+          ],
+          "87": [
+            {
+              "tty": 0,
+              "allocated": 1872,
+              "freed": 0,
+              "holding": 14968,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "FHRP Main thread"
+            }
+          ],
+          "88": [
+            {
+              "tty": 0,
+              "allocated": 1688,
+              "freed": 0,
+              "holding": 14784,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "VRRP Main thread"
+            }
+          ],
+          "89": [
+            {
+              "tty": 0,
+              "allocated": 18552,
+              "freed": 0,
+              "holding": 31648,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "VRRS Main thread"
+            }
+          ],
+          "90": [
+            {
+              "tty": 0,
+              "allocated": 1832,
+              "freed": 0,
+              "holding": 14848,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MSDP Open"
+            }
+          ],
+          "91": [
+            {
+              "tty": 0,
+              "allocated": 370024,
+              "freed": 206488,
+              "holding": 151536,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "mDNS"
+            }
+          ],
+          "92": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "SSS Manager"
+            }
+          ],
+          "93": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "SSS Feature Mana"
+            }
+          ],
+          "94": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "SSS Feature Time"
+            }
+          ],
+          "95": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 17096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Ethernet OAM Pro"
+            }
+          ],
+          "96": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "AC Switch"
+            }
+          ],
+          "97": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "SSM connection m"
+            }
+          ],
+          "98": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "OCE punted Pkts"
+            }
+          ],
+          "99": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "LSP Tunnel FRR"
+            }
+          ],
+          "100": [
+            {
+              "tty": 0,
+              "allocated": 3048,
+              "freed": 0,
+              "holding": 20144,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MPLS Auto-Tunnel"
+            }
+          ],
+          "101": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "O-UNI Client Msg"
+            }
+          ],
+          "102": [
+            {
+              "tty": 0,
+              "allocated": 5048,
+              "freed": 0,
+              "holding": 18144,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "DHCP Snooping"
+            }
+          ],
+          "103": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "DHCP Snooping db"
+            }
+          ],
+          "104": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 1008,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "802.1x switch"
+            }
+          ],
+          "105": [
+            {
+              "tty": 0,
+              "allocated": 1136,
+              "freed": 280,
+              "holding": 13952,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "DTP Protocol"
+            }
+          ],
+          "106": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "PI MATM Aging Pr"
+            }
+          ],
+          "107": [
+            {
+              "tty": 0,
+              "allocated": 216,
+              "freed": 0,
+              "holding": 13312,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Port-Security"
+            }
+          ],
+          "108": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 17096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IP Host Track Pr"
+            }
+          ],
+          "109": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Ethchnl"
+            }
+          ],
+          "110": [
+            {
+              "tty": 0,
+              "allocated": 536,
+              "freed": 232,
+              "holding": 13400,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "UDLD"
+            }
+          ],
+          "111": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "UNIX IP Source g"
+            }
+          ],
+          "112": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "process unix_l2_"
+            }
+          ],
+          "113": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "process unix_l2_"
+            }
+          ],
+          "114": [
+            {
+              "tty": 0,
+              "allocated": 5048,
+              "freed": 21032,
+              "holding": 18144,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "VMATM Callback"
+            }
+          ],
+          "115": [
+            {
+              "tty": 0,
+              "allocated": 20992,
+              "freed": 680,
+              "holding": 33408,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MKA"
+            }
+          ],
+          "116": [
+            {
+              "tty": 0,
+              "allocated": 216,
+              "freed": 0,
+              "holding": 25312,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "CEF switching ba"
+            }
+          ],
+          "117": [
+            {
+              "tty": 0,
+              "allocated": 216,
+              "freed": 0,
+              "holding": 7312,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "ADJ NSF process"
+            }
+          ],
+          "118": [
+            {
+              "tty": 0,
+              "allocated": 131712,
+              "freed": 219520,
+              "holding": 33096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "SpanTree Helper"
+            }
+          ],
+          "119": [
+            {
+              "tty": 0,
+              "allocated": 1581054096,
+              "freed": 600101864,
+              "holding": 160816,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "CDP Protocol"
+            }
+          ],
+          "121": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "AAA Dictionary R"
+            }
+          ],
+          "122": [
+            {
+              "tty": 0,
+              "allocated": 1688,
+              "freed": 0,
+              "holding": 14784,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "TRACK Main threa"
+            }
+          ],
+          "123": [
+            {
+              "tty": 0,
+              "allocated": 1688,
+              "freed": 0,
+              "holding": 14784,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "TRACK Client thr"
+            }
+          ],
+          "124": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "ATM OAM Input"
+            }
+          ],
+          "125": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "ATM OAM TIMER"
+            }
+          ],
+          "126": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 17096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "HQF TARGET DYNAM"
+            }
+          ],
+          "127": [
+            {
+              "tty": 0,
+              "allocated": 794784,
+              "freed": 783792,
+              "holding": 38328,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IP ARP Adjacency"
+            }
+          ],
+          "128": [
+            {
+              "tty": 0,
+              "allocated": 208456,
+              "freed": 175424,
+              "holding": 46128,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IP ARP Retry Age"
+            }
+          ],
+          "129": [
+            {
+              "tty": 0,
+              "allocated": 30348360,
+              "freed": 26262864,
+              "holding": 90680,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IP Input"
+            }
+          ],
+          "130": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "ICMP event handl"
+            }
+          ],
+          "131": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 17096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IP ARP Track"
+            }
+          ],
+          "132": [
+            {
+              "tty": 0,
+              "allocated": 22768752,
+              "freed": 22186168,
+              "holding": 93608,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "PIM register asy"
+            }
+          ],
+          "134": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "RIB LM VALIDATE"
+            }
+          ],
+          "135": [
+            {
+              "tty": 0,
+              "allocated": 323696,
+              "freed": 232,
+              "holding": 13328,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Spanning Tree"
+            }
+          ],
+          "136": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "SpanTree Msg"
+            }
+          ],
+          "137": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Webauth client"
+            }
+          ],
+          "138": [
+            {
+              "tty": 0,
+              "allocated": 896,
+              "freed": 0,
+              "holding": 13992,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Auth-proxy HTTP"
+            }
+          ],
+          "139": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IP Admin SM Proc"
+            }
+          ],
+          "140": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPv6 ping proces"
+            }
+          ],
+          "141": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "KRB5 AAA"
+            }
+          ],
+          "142": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "FRR Background P"
+            }
+          ],
+          "143": [
+            {
+              "tty": 0,
+              "allocated": 392,
+              "freed": 1408,
+              "holding": 25312,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "CEF background p"
+            }
+          ],
+          "144": [
+            {
+              "tty": 0,
+              "allocated": 216,
+              "freed": 0,
+              "holding": 25336,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "fib_fib_bfd_sb e"
+            }
+          ],
+          "145": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 17096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IP IRDP"
+            }
+          ],
+          "146": [
+            {
+              "tty": 0,
+              "allocated": 216,
+              "freed": 0,
+              "holding": 17312,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Tunnel FIB"
+            }
+          ],
+          "147": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Auth Manager"
+            }
+          ],
+          "148": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 17096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EPM MAIN PROCESS"
+            }
+          ],
+          "149": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13128,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Critical Auth"
+            }
+          ],
+          "150": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "SVM UT Process"
+            }
+          ],
+          "151": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "CMD HANDLER"
+            }
+          ],
+          "152": [
+            {
+              "tty": 0,
+              "allocated": 464,
+              "freed": 232,
+              "holding": 13328,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Dot1x Supplicant"
+            }
+          ],
+          "153": [
+            {
+              "tty": 0,
+              "allocated": 464,
+              "freed": 232,
+              "holding": 13328,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Dot1x Supplicant"
+            }
+          ],
+          "154": [
+            {
+              "tty": 0,
+              "allocated": 464,
+              "freed": 232,
+              "holding": 13328,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Dot1x Supplicant"
+            }
+          ],
+          "155": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "DCT Bkgd Process"
+            }
+          ],
+          "156": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MAB Framework"
+            }
+          ],
+          "157": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "PPP IP Add Route"
+            }
+          ],
+          "158": [
+            {
+              "tty": 0,
+              "allocated": 248,
+              "freed": 0,
+              "holding": 13344,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Service Routing"
+            }
+          ],
+          "159": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "AAA System Acct"
+            }
+          ],
+          "160": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "HQF Output Shape"
+            }
+          ],
+          "161": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "HQF Input Shaper"
+            }
+          ],
+          "162": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Routing Topology"
+            }
+          ],
+          "163": [
+            {
+              "tty": 0,
+              "allocated": 43241616,
+              "freed": 42826064,
+              "holding": 294848,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IP RIB Update"
+            }
+          ],
+          "164": [
+            {
+              "tty": 0,
+              "allocated": 5736,
+              "freed": 5184,
+              "holding": 17648,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IP Background"
+            }
+          ],
+          "165": [
+            {
+              "tty": 0,
+              "allocated": 651098,
+              "freed": 6048,
+              "holding": 111016,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IP Connected Rou"
+            }
+          ],
+          "166": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 360,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Flow Exporter Ti"
+            }
+          ],
+          "167": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "XC RIB MGR"
+            }
+          ],
+          "168": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 23720,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Inter Chassis Pr"
+            }
+          ],
+          "169": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Tunnel"
+            }
+          ],
+          "170": [
+            {
+              "tty": 0,
+              "allocated": 1040,
+              "freed": 232,
+              "holding": 17904,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MVPN Mgr Process"
+            }
+          ],
+          "171": [
+            {
+              "tty": 0,
+              "allocated": 464,
+              "freed": 232,
+              "holding": 17328,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Multicast Offloa"
+            }
+          ],
+          "172": [
+            {
+              "tty": 0,
+              "allocated": 2696,
+              "freed": 376,
+              "holding": 15416,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "LFDp Input Proc"
+            }
+          ],
+          "173": [
+            {
+              "tty": 0,
+              "allocated": 1168776,
+              "freed": 1559000,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "TCP Timer"
+            }
+          ],
+          "174": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 75112,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "TCP Protocols"
+            }
+          ],
+          "175": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Socket Timers"
+            }
+          ],
+          "176": [
+            {
+              "tty": 0,
+              "allocated": 7288,
+              "freed": 6128,
+              "holding": 18080,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "HTTP CORE"
+            }
+          ],
+          "177": [
+            {
+              "tty": 0,
+              "allocated": 20648,
+              "freed": 232,
+              "holding": 16544,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "L2TRACE SERVER"
+            }
+          ],
+          "178": [
+            {
+              "tty": 0,
+              "allocated": 464,
+              "freed": 232,
+              "holding": 17328,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "AUTO LAG Protoco"
+            }
+          ],
+          "179": [
+            {
+              "tty": 0,
+              "allocated": 133344,
+              "freed": 2164760,
+              "holding": 16840,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IGMPSN L2MCM"
+            }
+          ],
+          "180": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IGMPSN MRD"
+            }
+          ],
+          "181": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IGMPSN"
+            }
+          ],
+          "183": [
+            {
+              "tty": 0,
+              "allocated": 106248,
+              "freed": 86528,
+              "holding": 44552,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "CEF: IPv4 proces"
+            }
+          ],
+          "184": [
+            {
+              "tty": 0,
+              "allocated": 216,
+              "freed": 703752,
+              "holding": 25312,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "ADJ background"
+            }
+          ],
+          "185": [
+            {
+              "tty": 0,
+              "allocated": 372256,
+              "freed": 374440,
+              "holding": 25312,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Collection proce"
+            }
+          ],
+          "186": [
+            {
+              "tty": 0,
+              "allocated": 15816,
+              "freed": 15600,
+              "holding": 25312,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "ADJ resolve proc"
+            }
+          ],
+          "187": [
+            {
+              "tty": 0,
+              "allocated": 14472,
+              "freed": 4992,
+              "holding": 22576,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "SR CapMan Proces"
+            }
+          ],
+          "188": [
+            {
+              "tty": 0,
+              "allocated": 648,
+              "freed": 1224,
+              "holding": 25312,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MFIB Master back"
+            }
+          ],
+          "189": [
+            {
+              "tty": 0,
+              "allocated": 49432,
+              "freed": 17144,
+              "holding": 59056,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "CEF: IPv6 proces"
+            }
+          ],
+          "190": [
+            {
+              "tty": 0,
+              "allocated": 77792,
+              "freed": 0,
+              "holding": 18440,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MFIB_init"
+            }
+          ],
+          "191": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "ATIP_UDP_TSK"
+            }
+          ],
+          "192": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 33096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "COPS"
+            }
+          ],
+          "193": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Probe Input"
+            }
+          ],
+          "194": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "RARP Input"
+            }
+          ],
+          "195": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 6352,
+              "holding": 17096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "static"
+            }
+          ],
+          "196": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 17096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "App Route Proces"
+            }
+          ],
+          "197": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 17096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPv6 RIB Cleanup"
+            }
+          ],
+          "198": [
+            {
+              "tty": 0,
+              "allocated": 120872,
+              "freed": 88712,
+              "holding": 61792,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPv6 RIB Event H"
+            }
+          ],
+          "199": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "PAD InCall"
+            }
+          ],
+          "200": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "X.25 Background"
+            }
+          ],
+          "201": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "X.25 Encaps Mana"
+            }
+          ],
+          "202": [
+            {
+              "tty": 0,
+              "allocated": 46093360,
+              "freed": 46093360,
+              "holding": 17096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "QoS stats proces"
+            }
+          ],
+          "203": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "SNMP Timers"
+            }
+          ],
+          "204": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EPM Downlad Mana"
+            }
+          ],
+          "205": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Timer Handler Pr"
+            }
+          ],
+          "206": [
+            {
+              "tty": 0,
+              "allocated": 896,
+              "freed": 0,
+              "holding": 25992,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "HTTP EPM Redirec"
+            }
+          ],
+          "207": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EPM ACL PLUG-IN"
+            }
+          ],
+          "208": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 0,
+              "holding": 7200,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Async write proc"
+            }
+          ],
+          "209": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 17096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPv6 Static Hand"
+            }
+          ],
+          "210": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13120,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "AAA Cached Serve"
+            }
+          ],
+          "211": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "LINE AAA"
+            }
+          ],
+          "212": [
+            {
+              "tty": 0,
+              "allocated": 51176,
+              "freed": 0,
+              "holding": 64272,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MMA DB TIMER"
+            }
+          ],
+          "213": [
+            {
+              "tty": 0,
+              "allocated": 1592,
+              "freed": 0,
+              "holding": 14688,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MMA MSG MCOL"
+            }
+          ],
+          "214": [
+            {
+              "tty": 0,
+              "allocated": 792,
+              "freed": 232,
+              "holding": 25656,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "TPLUS"
+            }
+          ],
+          "215": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "ENABLE AAA"
+            }
+          ],
+          "216": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "LOCAL AAA"
+            }
+          ],
+          "217": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MPLS Auto Mesh P"
+            }
+          ],
+          "218": [
+            {
+              "tty": 0,
+              "allocated": 49600,
+              "freed": 232,
+              "holding": 62464,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Timer Library"
+            }
+          ],
+          "219": [
+            {
+              "tty": 0,
+              "allocated": 5280,
+              "freed": 232,
+              "holding": 18144,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Crypto Support"
+            }
+          ],
+          "220": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPSECv6 PS Proc"
+            }
+          ],
+          "221": [
+            {
+              "tty": 0,
+              "allocated": 39959752,
+              "freed": 39958376,
+              "holding": 14472,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "NIST rng proc"
+            }
+          ],
+          "222": [
+            {
+              "tty": 0,
+              "allocated": 792,
+              "freed": 232,
+              "holding": 25656,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "LDAP process"
+            }
+          ],
+          "223": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Opaque Database"
+            }
+          ],
+          "224": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Key chain liveke"
+            }
+          ],
+          "226": [
+            {
+              "tty": 0,
+              "allocated": 5240,
+              "freed": 0,
+              "holding": 18336,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MMA DP TIMER"
+            }
+          ],
+          "227": [
+            {
+              "tty": 0,
+              "allocated": 464,
+              "freed": 232,
+              "holding": 25328,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MMON PROCESS"
+            }
+          ],
+          "228": [
+            {
+              "tty": 0,
+              "allocated": 464,
+              "freed": 232,
+              "holding": 25328,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MMON MENG"
+            }
+          ],
+          "229": [
+            {
+              "tty": 0,
+              "allocated": 151336,
+              "freed": 144,
+              "holding": 176288,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Crypto IKEv2"
+            }
+          ],
+          "230": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IKEv2 AAA handle"
+            }
+          ],
+          "231": [
+            {
+              "tty": 0,
+              "allocated": 212936,
+              "freed": 212112,
+              "holding": 13920,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "crypto engine pr"
+            }
+          ],
+          "232": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "encrypt proc"
+            }
+          ],
+          "233": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 512,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "CRYPTO MAP FREE"
+            }
+          ],
+          "234": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Crypto INT"
+            }
+          ],
+          "235": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Crypto IKE Dispa"
+            }
+          ],
+          "236": [
+            {
+              "tty": 0,
+              "allocated": 40560,
+              "freed": 232,
+              "holding": 65424,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Crypto IKMP"
+            }
+          ],
+          "237": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 17096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPSEC manual key"
+            }
+          ],
+          "238": [
+            {
+              "tty": 0,
+              "allocated": 203072,
+              "freed": 4800,
+              "holding": 25640,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPSEC key engine"
+            }
+          ],
+          "239": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 33096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Crypto ACL"
+            }
+          ],
+          "240": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Crypto PAS Proc"
+            }
+          ],
+          "241": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPSec background"
+            }
+          ],
+          "242": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "RSA background p"
+            }
+          ],
+          "243": [
+            {
+              "tty": 0,
+              "allocated": 323136,
+              "freed": 263168,
+              "holding": 85136,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Crypto CA"
+            }
+          ],
+          "244": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Crypto PKI-CRL"
+            }
+          ],
+          "245": [
+            {
+              "tty": 0,
+              "allocated": 5048,
+              "freed": 0,
+              "holding": 30144,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Crypto PKI-Rev-P"
+            }
+          ],
+          "246": [
+            {
+              "tty": 0,
+              "allocated": 896,
+              "freed": 0,
+              "holding": 25992,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "PKI OCSP"
+            }
+          ],
+          "247": [
+            {
+              "tty": 0,
+              "allocated": 10048,
+              "freed": 0,
+              "holding": 35144,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "PKI Revocation"
+            }
+          ],
+          "248": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "DHCP Security He"
+            }
+          ],
+          "249": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "vlmap logger"
+            }
+          ],
+          "250": [
+            {
+              "tty": 0,
+              "allocated": 64840,
+              "freed": 936,
+              "holding": 37872,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "pm scp dummy pro"
+            }
+          ],
+          "251": [
+            {
+              "tty": 0,
+              "allocated": 292080,
+              "freed": 643344,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "PM Callback"
+            }
+          ],
+          "252": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 0,
+              "holding": 7200,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Async write proc"
+            }
+          ],
+          "253": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "dhcp snooping sw"
+            }
+          ],
+          "254": [
+            {
+              "tty": 0,
+              "allocated": 5280,
+              "freed": 2640,
+              "holding": 18144,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "AAA SEND STOP EV"
+            }
+          ],
+          "255": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Test AAA Client"
+            }
+          ],
+          "256": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Syslog Traps"
+            }
+          ],
+          "257": [
+            {
+              "tty": 0,
+              "allocated": 1240482128,
+              "freed": 1240481912,
+              "holding": 13184,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Config Probe"
+            }
+          ],
+          "258": [
+            {
+              "tty": 0,
+              "allocated": 281072,
+              "freed": 4968,
+              "holding": 293200,
+              "getbufs": 100548,
+              "retbufs": 0,
+              "name": "EEM ED Syslog"
+            }
+          ],
+          "259": [
+            {
+              "tty": 0,
+              "allocated": 11600,
+              "freed": 5064,
+              "holding": 23568,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM ED Routing"
+            }
+          ],
+          "260": [
+            {
+              "tty": 0,
+              "allocated": 207384,
+              "freed": 4968,
+              "holding": 219512,
+              "getbufs": 67468,
+              "retbufs": 0,
+              "name": "EEM ED Generic"
+            }
+          ],
+          "261": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "QoS TAM Request"
+            }
+          ],
+          "262": [
+            {
+              "tty": 0,
+              "allocated": 16752,
+              "freed": 464,
+              "holding": 16080,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "CTS credentials"
+            }
+          ],
+          "263": [
+            {
+              "tty": 0,
+              "allocated": 11824,
+              "freed": 464,
+              "holding": 36456,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "RBM CORE"
+            }
+          ],
+          "264": [
+            {
+              "tty": 0,
+              "allocated": 52044680,
+              "freed": 52044680,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Syslog"
+            }
+          ],
+          "265": [
+            {
+              "tty": 0,
+              "allocated": 1328,
+              "freed": 0,
+              "holding": 16968,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "BGP Scheduler"
+            }
+          ],
+          "266": [
+            {
+              "tty": 0,
+              "allocated": 1338168,
+              "freed": 18584,
+              "holding": 1336680,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM Server"
+            }
+          ],
+          "267": [
+            {
+              "tty": 0,
+              "allocated": 31384,
+              "freed": 1176,
+              "holding": 34208,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM Policy Direc"
+            }
+          ],
+          "268": [
+            {
+              "tty": 0,
+              "allocated": 70584,
+              "freed": 36408,
+              "holding": 59312,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MLD"
+            }
+          ],
+          "269": [
+            {
+              "tty": 0,
+              "allocated": 11344,
+              "freed": 4968,
+              "holding": 23472,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM ED CLI"
+            }
+          ],
+          "270": [
+            {
+              "tty": 0,
+              "allocated": 11688,
+              "freed": 5128,
+              "holding": 23816,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM ED Counter"
+            }
+          ],
+          "271": [
+            {
+              "tty": 0,
+              "allocated": 11808,
+              "freed": 4968,
+              "holding": 23936,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM ED Interface"
+            }
+          ],
+          "272": [
+            {
+              "tty": 0,
+              "allocated": 11344,
+              "freed": 4968,
+              "holding": 23472,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM ED IOSWD"
+            }
+          ],
+          "273": [
+            {
+              "tty": 0,
+              "allocated": 11344,
+              "freed": 4968,
+              "holding": 23472,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM ED None"
+            }
+          ],
+          "274": [
+            {
+              "tty": 0,
+              "allocated": 11344,
+              "freed": 4968,
+              "holding": 23472,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM ED OIR"
+            }
+          ],
+          "275": [
+            {
+              "tty": 0,
+              "allocated": 303766504,
+              "freed": 303119112,
+              "holding": 310872,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "PIM IPv6"
+            }
+          ],
+          "276": [
+            {
+              "tty": 0,
+              "allocated": 11408,
+              "freed": 4968,
+              "holding": 23536,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM ED SNMP"
+            }
+          ],
+          "277": [
+            {
+              "tty": 0,
+              "allocated": 11496,
+              "freed": 4968,
+              "holding": 23624,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM ED Timer"
+            }
+          ],
+          "278": [
+            {
+              "tty": 0,
+              "allocated": 11344,
+              "freed": 4968,
+              "holding": 23472,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM ED SNMP Obje"
+            }
+          ],
+          "279": [
+            {
+              "tty": 0,
+              "allocated": 11784,
+              "freed": 5128,
+              "holding": 23912,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM ED SNMP Noti"
+            }
+          ],
+          "280": [
+            {
+              "tty": 0,
+              "allocated": 11344,
+              "freed": 4968,
+              "holding": 23472,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM ED Ipsla"
+            }
+          ],
+          "281": [
+            {
+              "tty": 0,
+              "allocated": 16488,
+              "freed": 4968,
+              "holding": 28616,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM ED Nf"
+            }
+          ],
+          "282": [
+            {
+              "tty": 0,
+              "allocated": 11344,
+              "freed": 4968,
+              "holding": 23472,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM ED Test"
+            }
+          ],
+          "283": [
+            {
+              "tty": 0,
+              "allocated": 16392,
+              "freed": 4968,
+              "holding": 28520,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM ED Config"
+            }
+          ],
+          "284": [
+            {
+              "tty": 0,
+              "allocated": 11344,
+              "freed": 4968,
+              "holding": 23472,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM ED Env"
+            }
+          ],
+          "285": [
+            {
+              "tty": 0,
+              "allocated": 16640,
+              "freed": 4968,
+              "holding": 28768,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM ED DS"
+            }
+          ],
+          "286": [
+            {
+              "tty": 0,
+              "allocated": 16640,
+              "freed": 4968,
+              "holding": 28768,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM ED CRASH"
+            }
+          ],
+          "287": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 17112,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MFIB_rate"
+            }
+          ],
+          "288": [
+            {
+              "tty": 0,
+              "allocated": 11408,
+              "freed": 4968,
+              "holding": 23536,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM ED RPC"
+            }
+          ],
+          "289": [
+            {
+              "tty": 0,
+              "allocated": 14424,
+              "freed": 6408,
+              "holding": 32456,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "VLAN Manager"
+            }
+          ],
+          "290": [
+            {
+              "tty": 0,
+              "allocated": 2764448880,
+              "freed": 2764448744,
+              "holding": 25232,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "mdns Timer Proce"
+            }
+          ],
+          "291": [
+            {
+              "tty": 0,
+              "allocated": 116872,
+              "freed": 232,
+              "holding": 141736,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MRIB Process"
+            }
+          ],
+          "292": [
+            {
+              "tty": 0,
+              "allocated": 12112,
+              "freed": 464,
+              "holding": 24744,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM Helper Threa"
+            }
+          ],
+          "293": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 16968,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Connection Mgr"
+            }
+          ],
+          "294": [
+            {
+              "tty": 0,
+              "allocated": 71200,
+              "freed": 232,
+              "holding": 86056,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MFIB_cable"
+            }
+          ],
+          "295": [
+            {
+              "tty": 0,
+              "allocated": 984,
+              "freed": 232,
+              "holding": 17864,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MFIB_mrib_write"
+            }
+          ],
+          "296": [
+            {
+              "tty": 0,
+              "allocated": 54312,
+              "freed": 1134768,
+              "holding": 288232,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MFIB_mrib_read"
+            }
+          ],
+          "297": [
+            {
+              "tty": 0,
+              "allocated": 70632,
+              "freed": 0,
+              "holding": 83728,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "mcast_rw_process"
+            }
+          ],
+          "298": [
+            {
+              "tty": 0,
+              "allocated": 117104,
+              "freed": 8640,
+              "holding": 83944,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "LLDP Protocol"
+            }
+          ],
+          "299": [
+            {
+              "tty": 0,
+              "allocated": 10392,
+              "freed": 512,
+              "holding": 26976,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IGMP Input"
+            }
+          ],
+          "300": [
+            {
+              "tty": 0,
+              "allocated": 1724271056,
+              "freed": 1723569704,
+              "holding": 83856,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "PIM Process"
+            }
+          ],
+          "301": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 17096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Mwheel Process"
+            }
+          ],
+          "302": [
+            {
+              "tty": 0,
+              "allocated": 1433808,
+              "freed": 287080,
+              "holding": 43144,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MRIB Trans"
+            }
+          ],
+          "303": [
+            {
+              "tty": 0,
+              "allocated": 30448,
+              "freed": 2184,
+              "holding": 33104,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPv6 IDB"
+            }
+          ],
+          "304": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 17096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPv6 background"
+            }
+          ],
+          "305": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPv6 Address"
+            }
+          ],
+          "306": [
+            {
+              "tty": 0,
+              "allocated": 952672,
+              "freed": 124416,
+              "holding": 36032,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPv6 Input"
+            }
+          ],
+          "307": [
+            {
+              "tty": 0,
+              "allocated": 149472,
+              "freed": 55256,
+              "holding": 147872,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPv6 ND"
+            }
+          ],
+          "308": [
+            {
+              "tty": 0,
+              "allocated": 2248,
+              "freed": 376,
+              "holding": 15536,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPv6 RIP"
+            }
+          ],
+          "309": [
+            {
+              "tty": 0,
+              "allocated": 58992,
+              "freed": 47696,
+              "holding": 35888,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "DHCP Client"
+            }
+          ],
+          "310": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 0,
+              "holding": 7200,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Async write proc"
+            }
+          ],
+          "311": [
+            {
+              "tty": 0,
+              "allocated": 482768,
+              "freed": 6155096,
+              "holding": 31384,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "LDP"
+            }
+          ],
+          "312": [
+            {
+              "tty": 0,
+              "allocated": 672,
+              "freed": 0,
+              "holding": 13768,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "TDP Hello"
+            }
+          ],
+          "313": [
+            {
+              "tty": 0,
+              "allocated": 216,
+              "freed": 0,
+              "holding": 25312,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "LSD Main Proc"
+            }
+          ],
+          "314": [
+            {
+              "tty": 0,
+              "allocated": 8668568,
+              "freed": 5996328,
+              "holding": 95160,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Tag Control"
+            }
+          ],
+          "315": [
+            {
+              "tty": 0,
+              "allocated": 216,
+              "freed": 0,
+              "holding": 17312,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IP MPLS Service"
+            }
+          ],
+          "316": [
+            {
+              "tty": 0,
+              "allocated": 394384,
+              "freed": 364640,
+              "holding": 27152,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPRM"
+            }
+          ],
+          "317": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MFI LFD Stats Pr"
+            }
+          ],
+          "318": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MFI LFD Timer Pr"
+            }
+          ],
+          "319": [
+            {
+              "tty": 0,
+              "allocated": 5264,
+              "freed": 0,
+              "holding": 18360,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MFI LFD Main Pro"
+            }
+          ],
+          "320": [
+            {
+              "tty": 0,
+              "allocated": 1856,
+              "freed": 320,
+              "holding": 14632,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "LSP Verification"
+            }
+          ],
+          "321": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MPLS HC Counter"
+            }
+          ],
+          "322": [
+            {
+              "tty": 0,
+              "allocated": 216,
+              "freed": 0,
+              "holding": 13312,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "LDP Background"
+            }
+          ],
+          "323": [
+            {
+              "tty": 0,
+              "allocated": 16816,
+              "freed": 232,
+              "holding": 33680,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "CLNS Input"
+            }
+          ],
+          "324": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 17096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "ES-IS Routing"
+            }
+          ],
+          "325": [
+            {
+              "tty": 0,
+              "allocated": 748040,
+              "freed": 327448,
+              "holding": 21960,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "LACP Protocol"
+            }
+          ],
+          "326": [
+            {
+              "tty": 0,
+              "allocated": 73624,
+              "freed": 8040,
+              "holding": 82552,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "BGP I/O"
+            }
+          ],
+          "327": [
+            {
+              "tty": 0,
+              "allocated": 2445112,
+              "freed": 2398568,
+              "holding": 54152,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EIGRP-IPv6"
+            }
+          ],
+          "328": [
+            {
+              "tty": 0,
+              "allocated": 2479440,
+              "freed": 2417544,
+              "holding": 67264,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EIGRP-IPv6"
+            }
+          ],
+          "329": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13128,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EIGRP-IPv6 Hello"
+            }
+          ],
+          "330": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13128,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EIGRP-IPv6 Hello"
+            }
+          ],
+          "331": [
+            {
+              "tty": 0,
+              "allocated": 1370756416,
+              "freed": 1370659592,
+              "holding": 41464,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "ISIS Adj test"
+            }
+          ],
+          "332": [
+            {
+              "tty": 0,
+              "allocated": 93422208,
+              "freed": 93274632,
+              "holding": 283592,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "ISIS Upd test"
+            }
+          ],
+          "333": [
+            {
+              "tty": 0,
+              "allocated": 163984,
+              "freed": 5560,
+              "holding": 181080,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "BGP Task"
+            }
+          ],
+          "334": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "TCP Listener"
+            }
+          ],
+          "335": [
+            {
+              "tty": 0,
+              "allocated": 3061424448,
+              "freed": 153760032,
+              "holding": 25096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MSDP Process"
+            }
+          ],
+          "336": [
+            {
+              "tty": 0,
+              "allocated": 2388486416,
+              "freed": 2388298768,
+              "holding": 74968,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IP SLAs XOS Even"
+            }
+          ],
+          "337": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 13096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPv6 Access Cont"
+            }
+          ],
+          "338": [
+            {
+              "tty": 0,
+              "allocated": 1240733680,
+              "freed": 1240733448,
+              "holding": 13200,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Config Probe"
+            }
+          ],
+          "339": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 0,
+              "holding": 7200,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Async write proc"
+            }
+          ],
+          "340": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 6968,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "DFS flush period"
+            }
+          ],
+          "341": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 230984,
+              "holding": 12968,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Tagcon Addr"
+            }
+          ],
+          "342": [
+            {
+              "tty": 0,
+              "allocated": 16360,
+              "freed": 18848,
+              "holding": 25200,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IPRM Collection"
+            }
+          ],
+          "343": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 16968,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "BGP Scanner"
+            }
+          ],
+          "344": [
+            {
+              "tty": 0,
+              "allocated": 2014496,
+              "freed": 1970064,
+              "holding": 52072,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EIGRP-IPv4"
+            }
+          ],
+          "345": [
+            {
+              "tty": 0,
+              "allocated": 2025552,
+              "freed": 2001712,
+              "holding": 31536,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EIGRP-IPv4"
+            }
+          ],
+          "346": [
+            {
+              "tty": 0,
+              "allocated": 393008,
+              "freed": 13720,
+              "holding": 267056,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "OSPF-2 Router"
+            }
+          ],
+          "347": [
+            {
+              "tty": 0,
+              "allocated": 249928,
+              "freed": 9800,
+              "holding": 128728,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "OSPF-1 Router"
+            }
+          ],
+          "348": [
+            {
+              "tty": 0,
+              "allocated": 197472,
+              "freed": 30552,
+              "holding": 26352,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "RIP Router"
+            }
+          ],
+          "349": [
+            {
+              "tty": 0,
+              "allocated": 4329784,
+              "freed": 358192,
+              "holding": 444200,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "BGP Router"
+            }
+          ],
+          "350": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 12968,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EIGRP-IPv4 Hello"
+            }
+          ],
+          "351": [
+            {
+              "tty": 0,
+              "allocated": 65872,
+              "freed": 0,
+              "holding": 78840,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EIGRP-IPv4 Hello"
+            }
+          ],
+          "352": [
+            {
+              "tty": 0,
+              "allocated": 136352,
+              "freed": 232776,
+              "holding": 12968,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "OSPF-2 Hello"
+            }
+          ],
+          "353": [
+            {
+              "tty": 0,
+              "allocated": 127008,
+              "freed": 230336,
+              "holding": 13136,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "OSPF-1 Hello"
+            }
+          ],
+          "354": [
+            {
+              "tty": 0,
+              "allocated": 2872,
+              "freed": 299266112,
+              "holding": 12968,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "RIP Send"
+            }
+          ],
+          "355": [
+            {
+              "tty": 0,
+              "allocated": 299251720,
+              "freed": 128456,
+              "holding": 12968,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "RIP Timers"
+            }
+          ],
+          "356": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 16968,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "BGP Consistency"
+            }
+          ],
+          "357": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 16968,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "BGP Event"
+            }
+          ],
+          "358": [
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 12968,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "BGP VA"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Pool summaries only with Processor and I/O pools, no process table",
+      "input": "Processor Pool Total:  563180224 Used:   71304104 Free:  491876120\n      I/O Pool Total:  114294784 Used:   96209944 Free:   18084840\n",
+      "expected": {
+        "processor_pool": {
+          "total": 563180224,
+          "used": 71304104,
+          "free": 491876120
+        },
+        "io_pool": {
+          "total": 114294784,
+          "used": 96209944,
+          "free": 18084840
+        }
+      }
+    }
+  ]
+}

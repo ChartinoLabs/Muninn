@@ -1,0 +1,75 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show power inline priority",
+  "schema": {
+    "name": "ShowPowerInlinePriorityResult",
+    "fields": {
+      "power_inline_auto_shutdown": {
+        "type": "str",
+        "required": false
+      },
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PowerInlinePriorityEntry",
+            "fields": {
+              "admin_state": {
+                "type": "str",
+                "required": true
+              },
+              "oper_state": {
+                "type": "str",
+                "required": true
+              },
+              "admin_priority": {
+                "type": "str",
+                "required": false
+              },
+              "oper_priority": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with two interfaces and no oper priority column",
+      "input": "Interface  Admin  Oper       Admin\n           State  State      Priority\n---------- ------ ---------- ----------\n\nGi1/0/1    auto   off        low\nGi1/0/11    auto   off        low\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1/0/1": {
+            "admin_priority": "low",
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/11": {
+            "admin_priority": "low",
+            "admin_state": "auto",
+            "oper_state": "off"
+          }
+        }
+      }
+    },
+    {
+      "name": "Output with oper priority column and auto shutdown status",
+      "input": "Power inline auto shutdown: Disabled\n\nInterface  Admin  Oper       Admin      Oper\n           State  State      Priority   Priority\n---------- ------ ---------- ---------- --------\n\nTe2/0/1    auto   off        n/a        1\n",
+      "expected": {
+        "interfaces": {
+          "TenGigabitEthernet2/0/1": {
+            "admin_state": "auto",
+            "oper_priority": "1",
+            "oper_state": "off"
+          }
+        },
+        "power_inline_auto_shutdown": "Disabled"
+      }
+    }
+  ]
+}

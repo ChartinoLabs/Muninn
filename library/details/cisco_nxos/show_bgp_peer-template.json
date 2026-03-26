@@ -1,0 +1,136 @@
+{
+  "os": "cisco_nxos",
+  "command": "show bgp peer-template",
+  "schema": {
+    "name": "ShowBgpPeerTemplateResult",
+    "fields": {
+      "peer_templates": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PeerTemplateEntry",
+            "fields": {
+              "remote_as": {
+                "type": "int",
+                "required": false
+              },
+              "inherit_template": {
+                "type": "str",
+                "required": false
+              },
+              "description": {
+                "type": "str",
+                "required": false
+              },
+              "update_source": {
+                "type": "str",
+                "required": false
+              },
+              "disable_connected_check": {
+                "type": "bool",
+                "required": false
+              },
+              "bfd_live_detection": {
+                "type": "bool",
+                "required": false
+              },
+              "ebgp_multihop": {
+                "type": "int",
+                "required": false
+              },
+              "tcp_md5_auth": {
+                "type": "str",
+                "required": false
+              },
+              "passive_only": {
+                "type": "bool",
+                "required": false
+              },
+              "remove_private_as": {
+                "type": "bool",
+                "required": false
+              },
+              "holdtime": {
+                "type": "int",
+                "required": false
+              },
+              "keepalive_interval": {
+                "type": "int",
+                "required": false
+              },
+              "local_as_inactive": {
+                "type": "bool",
+                "required": false
+              },
+              "members": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic peer-template with session-level settings",
+      "input": "BGP peer-template is PEER\nRemote AS 500\nInherits session configuration from session-template PEER-SESSION\nDescription: DESC\nUsing loopback1 as update source for this peer\nConnected check is disabled\nBFD live-detection is configured\nExternal BGP peer might be upto 255 hops away\nTCP MD5 authentication is enabled\nOnly passive connection setup allowed\nNeighbor local-as command not active\nPrivate AS numbers removed from updates sent to this neighbor\nHold time = 26, keepalive interval is 13 seconds\n\nMembers of peer-template PEER:\n",
+      "expected": {
+        "peer_templates": {
+          "PEER": {
+            "bfd_live_detection": true,
+            "description": "DESC",
+            "disable_connected_check": true,
+            "ebgp_multihop": 255,
+            "holdtime": 26,
+            "inherit_template": "PEER-SESSION",
+            "keepalive_interval": 13,
+            "local_as_inactive": true,
+            "passive_only": true,
+            "remote_as": 500,
+            "remove_private_as": true,
+            "tcp_md5_auth": "enabled",
+            "update_source": "Loopback1"
+          }
+        }
+      }
+    },
+    {
+      "name": "Peer-template with member peers listed",
+      "input": "BGP peer-template is SPINE-PEERS\nRemote AS 65001\nDescription: Spine layer peers\nUsing loopback0 as update source for this peer\nExternal BGP peer might be upto 2 hops away\nHold time = 30, keepalive interval is 10 seconds\n\nMembers of peer-template SPINE-PEERS:\ndefault: 10.1.1.1\ndefault: 10.1.1.2\ndefault: 10.1.1.3\n\nBGP peer-template is LEAF-PEERS\nRemote AS 65002\nConnected check is disabled\nTCP MD5 authentication is disabled\nHold time = 90, keepalive interval is 30 seconds\n\nMembers of peer-template LEAF-PEERS:\ndefault: 10.2.1.1\n",
+      "expected": {
+        "peer_templates": {
+          "LEAF-PEERS": {
+            "disable_connected_check": true,
+            "holdtime": 90,
+            "keepalive_interval": 30,
+            "members": [
+              "10.2.1.1"
+            ],
+            "remote_as": 65002,
+            "tcp_md5_auth": "disabled"
+          },
+          "SPINE-PEERS": {
+            "description": "Spine layer peers",
+            "ebgp_multihop": 2,
+            "holdtime": 30,
+            "keepalive_interval": 10,
+            "members": [
+              "10.1.1.1",
+              "10.1.1.2",
+              "10.1.1.3"
+            ],
+            "remote_as": 65001,
+            "update_source": "Loopback0"
+          }
+        }
+      }
+    }
+  ]
+}

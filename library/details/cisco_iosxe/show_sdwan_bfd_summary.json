@@ -1,0 +1,53 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show sdwan bfd summary",
+  "schema": {
+    "name": "ShowSdwanBfdSummaryResult",
+    "fields": {
+      "sessions_total": {
+        "type": "int",
+        "required": true
+      },
+      "sessions_up": {
+        "type": "int",
+        "required": true
+      },
+      "sessions_max": {
+        "type": "int",
+        "required": true
+      },
+      "sessions_flap": {
+        "type": "int",
+        "required": true
+      },
+      "poll_interval": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic BFD summary with four sessions",
+      "input": "\n# show bfd summary\nsessions-total         4\nsessions-up            4\nsessions-max           4\nsessions-flap          4\npoll-interval          600000\n",
+      "expected": {
+        "poll_interval": 600000,
+        "sessions_flap": 4,
+        "sessions_max": 4,
+        "sessions_total": 4,
+        "sessions_up": 4
+      }
+    },
+    {
+      "name": "BFD summary with high session counts and some sessions down",
+      "input": "sessions-total         128\nsessions-up            96\nsessions-max           256\nsessions-flap          12\npoll-interval          300000\n",
+      "expected": {
+        "poll_interval": 300000,
+        "sessions_flap": 12,
+        "sessions_max": 256,
+        "sessions_total": 128,
+        "sessions_up": 96
+      }
+    }
+  ]
+}

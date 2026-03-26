@@ -1,0 +1,117 @@
+{
+  "os": "cisco_ios",
+  "command": "show module submodule",
+  "schema": {
+    "name": "ShowModuleSubmoduleResult",
+    "fields": {
+      "submodules": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "SubmoduleDetails",
+              "fields": {
+                "model": {
+                  "type": "str",
+                  "required": true
+                },
+                "serial": {
+                  "type": "str",
+                  "required": true
+                },
+                "hw_ver": {
+                  "type": "str",
+                  "required": true
+                },
+                "status": {
+                  "type": "str",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple sub-modules across several module slots",
+      "input": "Mod Sub-Module                  Model           Serial           Hw     Status\n--- --------------------------- --------------- --------------- ------- -------\n  1 Policy Feature Card 2       WS-F6K-PFC2     SAD062802AV      3.2    Ok\n  1 Cat6k MSFC 2 daughterboard  WS-F6K-MSFC2    SAD062803TX      2.5    Ok\n  3 Distributed Forwarding Card WS-F6K-DFC      SAL06121A19      2.1    Ok\n  4 Distributed Forwarding Card WS-F6K-DFC      SAL06121A46      2.1    Ok\n  6 Distributed Forwarding Card WS-F6K-DFC      SAL06261R0A      2.3    Ok\n  6 10GBASE-LR Serial 1310nm lo WS-G6488        SAD062201BN      1.1    Ok\n",
+      "expected": {
+        "submodules": {
+          "1": {
+            "Policy Feature Card 2": {
+              "hw_ver": "3.2",
+              "model": "WS-F6K-PFC2",
+              "serial": "SAD062802AV",
+              "status": "Ok"
+            },
+            "Cat6k MSFC 2 daughterboard": {
+              "hw_ver": "2.5",
+              "model": "WS-F6K-MSFC2",
+              "serial": "SAD062803TX",
+              "status": "Ok"
+            }
+          },
+          "3": {
+            "Distributed Forwarding Card": {
+              "hw_ver": "2.1",
+              "model": "WS-F6K-DFC",
+              "serial": "SAL06121A19",
+              "status": "Ok"
+            }
+          },
+          "4": {
+            "Distributed Forwarding Card": {
+              "hw_ver": "2.1",
+              "model": "WS-F6K-DFC",
+              "serial": "SAL06121A46",
+              "status": "Ok"
+            }
+          },
+          "6": {
+            "Distributed Forwarding Card": {
+              "hw_ver": "2.3",
+              "model": "WS-F6K-DFC",
+              "serial": "SAL06261R0A",
+              "status": "Ok"
+            },
+            "10GBASE-LR Serial 1310nm lo": {
+              "hw_ver": "1.1",
+              "model": "WS-G6488",
+              "serial": "SAD062201BN",
+              "status": "Ok"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Single module slot with PFC and MSFC sub-modules",
+      "input": "Mod  Sub-Module                  Model              Serial       Hw     Status\n---- --------------------------- ------------------ ----------- ------- -------\n5  Policy Feature Card 3       WS-F6K-PFC3B          SAL1011G1VS  2.1    Ok\n5  Cat6k MSFC 2A daughterboard WS-F6K-MSFC2A        SAL1011G0BT  3.0    Ok\n",
+      "expected": {
+        "submodules": {
+          "5": {
+            "Policy Feature Card 3": {
+              "hw_ver": "2.1",
+              "model": "WS-F6K-PFC3B",
+              "serial": "SAL1011G1VS",
+              "status": "Ok"
+            },
+            "Cat6k MSFC 2A daughterboard": {
+              "hw_ver": "3.0",
+              "model": "WS-F6K-MSFC2A",
+              "serial": "SAL1011G0BT",
+              "status": "Ok"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

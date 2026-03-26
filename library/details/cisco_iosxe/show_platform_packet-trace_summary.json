@@ -1,0 +1,124 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show platform packet-trace summary",
+  "schema": {
+    "name": "ShowPlatformPacketTraceSummaryResult",
+    "fields": {
+      "packets": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PacketTraceEntry",
+            "fields": {
+              "input": {
+                "type": "str",
+                "required": true
+              },
+              "output": {
+                "type": "str",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "reason": {
+                "type": {
+                  "name": "ReasonEntry",
+                  "fields": {
+                    "code": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "text": {
+                      "type": "str",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic packet-trace summary with FWD state",
+      "input": " Pkt   Input            Output           State  Reason\n 0     Gi0/0/1          Gi0/0/0          FWD\n 1     Gi0/0/1          Gi0/0/0          FWD\n 2     Gi0/0/1          Gi0/0/0          FWD\n 3     Gi0/0/1          Gi0/0/0          FWD\n 4     Gi0/0/1          Gi0/0/0          FWD\n",
+      "expected": {
+        "packets": {
+          "0": {
+            "input": "GigabitEthernet0/0/1",
+            "output": "GigabitEthernet0/0/0",
+            "state": "FWD"
+          },
+          "1": {
+            "input": "GigabitEthernet0/0/1",
+            "output": "GigabitEthernet0/0/0",
+            "state": "FWD"
+          },
+          "2": {
+            "input": "GigabitEthernet0/0/1",
+            "output": "GigabitEthernet0/0/0",
+            "state": "FWD"
+          },
+          "3": {
+            "input": "GigabitEthernet0/0/1",
+            "output": "GigabitEthernet0/0/0",
+            "state": "FWD"
+          },
+          "4": {
+            "input": "GigabitEthernet0/0/1",
+            "output": "GigabitEthernet0/0/0",
+            "state": "FWD"
+          }
+        }
+      }
+    },
+    {
+      "name": "Packet-trace summary with PUNT state and reason codes",
+      "input": "0     Vl120                     internal0/0/rp:0          PUNT   130 (wls CAPWAP Packets to LFTS)\n1     Vl120                     internal0/0/rp:0          PUNT   97  (Packets to LFTS)\n2     Vl120                     internal0/0/rp:0          PUNT   129 (wls 802.11 Packets to LFTS)\n3     Gi0/0/1                   Gi0/0/0                   FWD\n",
+      "expected": {
+        "packets": {
+          "0": {
+            "input": "VLAN120",
+            "output": "internal0/0/rp:0",
+            "state": "PUNT",
+            "reason": {
+              "code": 130,
+              "text": "(wls CAPWAP Packets to LFTS)"
+            }
+          },
+          "1": {
+            "input": "VLAN120",
+            "output": "internal0/0/rp:0",
+            "state": "PUNT",
+            "reason": {
+              "code": 97,
+              "text": "(Packets to LFTS)"
+            }
+          },
+          "2": {
+            "input": "VLAN120",
+            "output": "internal0/0/rp:0",
+            "state": "PUNT",
+            "reason": {
+              "code": 129,
+              "text": "(wls 802.11 Packets to LFTS)"
+            }
+          },
+          "3": {
+            "input": "GigabitEthernet0/0/1",
+            "output": "GigabitEthernet0/0/0",
+            "state": "FWD"
+          }
+        }
+      }
+    }
+  ]
+}

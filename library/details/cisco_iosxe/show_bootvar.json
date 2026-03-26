@@ -1,0 +1,67 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show bootvar",
+  "schema": {
+    "name": "ShowBootvarResult",
+    "fields": {
+      "switches": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "BootvarEntry",
+            "fields": {
+              "boot_variable": {
+                "type": "str",
+                "required": false
+              },
+              "config_file": {
+                "type": "str",
+                "required": false
+              },
+              "bootldr": {
+                "type": "str",
+                "required": false
+              },
+              "configuration_register": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show bootvar with active and standby supervisor",
+      "input": "Router#show bootvar\nBOOT variable = bootflash:packages.conf,12;\nCONFIG_FILE variable = nvram:\nBOOTLDR variable does not exist\nConfiguration register is 0x2102\n\nStandby BOOT variable = bootflash:packages.conf,12;\nStandby CONFIG_FILE variable does not exist\nStandby BOOTLDR variable does not exist\nStandby Configuration register is 0x2102\n",
+      "expected": {
+        "switches": {
+          "active": {
+            "boot_variable": "bootflash:packages.conf,12",
+            "config_file": "nvram:",
+            "configuration_register": "0x2102"
+          },
+          "standby": {
+            "boot_variable": "bootflash:packages.conf,12",
+            "configuration_register": "0x2102"
+          }
+        }
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": "BOOT variable does not exist\nCONFIG_FILE variable does not exist\nBOOTLDR variable does not exist\nConfiguration register is 0x2102\n",
+      "expected": {
+        "switches": {
+          "active": {
+            "configuration_register": "0x2102"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,715 @@
+{
+  "os": "cisco_ios",
+  "command": "show power inline",
+  "schema": {
+    "name": "ShowPowerInlineResult",
+    "fields": {
+      "watts_available": {
+        "type": "float",
+        "required": false
+      },
+      "watts_used": {
+        "type": "float",
+        "required": false
+      },
+      "watts_remaining": {
+        "type": "float",
+        "required": false
+      },
+      "modules": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ModuleEntry",
+            "fields": {
+              "available": {
+                "type": "float",
+                "required": true
+              },
+              "used": {
+                "type": "float",
+                "required": true
+              },
+              "remaining": {
+                "type": "float",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceEntry",
+            "fields": {
+              "admin": {
+                "type": "str",
+                "required": true
+              },
+              "oper": {
+                "type": "str",
+                "required": true
+              },
+              "power": {
+                "type": "float",
+                "required": true
+              },
+              "device": {
+                "type": "str",
+                "required": false
+              },
+              "class_": {
+                "type": "str",
+                "required": false
+              },
+              "max": {
+                "type": "float",
+                "required": false
+              },
+              "module": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Module-based format with 5 modules, mixed powered and unpowered interfaces",
+      "input": "Module   Available     Used     Remaining\n          (Watts)     (Watts)    (Watts)\n------   ---------   --------   ---------\n1          1550.0      147.0      1403.0\nInterface Admin  Oper       Power   Device              Class Max\n                            (Watts)\n--------- ------ ---------- ------- ------------------- ----- ----\nGi1/0/1   auto   off        0.0     n/a                 n/a   30.0\nGi1/0/2   auto   off        0.0     n/a                 n/a   30.0\nGi1/0/3   auto   off        0.0     n/a                 n/a   30.0\n\nModule   Available     Used     Remaining\n          (Watts)     (Watts)    (Watts)\n------   ---------   --------   ---------\n2          1550.0      424.7      1125.3\nInterface Admin  Oper       Power   Device              Class Max\n                            (Watts)\n--------- ------ ---------- ------- ------------------- ----- ----\nGi2/0/1   auto   on         7.1     IP Phone 8845       2     30.0\nGi2/0/2   auto   off        0.0     n/a                 n/a   30.0\nGi2/0/3   auto   on         26.1    AIR-AP2802I-E-K9    4     30.0\n\nModule   Available     Used     Remaining\n          (Watts)     (Watts)    (Watts)\n------   ---------   --------   ---------\n3          1550.0      397.4      1152.6\nInterface Admin  Oper       Power   Device              Class Max\n                            (Watts)\n--------- ------ ---------- ------- ------------------- ----- ----\nGi3/0/1   auto   on         26.1    AIR-AP2802I-E-K9    4     30.0\nGi3/0/2   auto   on         26.1    AIR-AP2802I-E-K9    4     30.0\n\nModule   Available     Used     Remaining\nInterface Admin  Oper       Power   Device              Class Max\n                            (Watts)\n--------- ------ ---------- ------- ------------------- ----- ----\n          (Watts)     (Watts)    (Watts)\n------   ---------   --------   ---------\n4          1550.0      267.0      1283.0\nInterface Admin  Oper       Power   Device              Class Max\n                            (Watts)\n--------- ------ ---------- ------- ------------------- ----- ----\nGi4/0/1   auto   off        0.0     n/a                 n/a   30.0\nGi4/0/2   auto   off        0.0     n/a                 n/a   30.0\nGi4/0/3   auto   off        0.0     n/a                 n/a   30.0\nGi4/0/4   auto   on         14.8    IP Phone 8865       4     30.0\n\nModule   Available     Used     Remaining\n          (Watts)     (Watts)    (Watts)\n------   ---------   --------   ---------\n5          1550.0       80.6      1469.4\nInterface Admin  Oper       Power   Device              Class Max\n                            (Watts)\n--------- ------ ---------- ------- ------------------- ----- ----\nGi5/0/1   auto   off        0.0     n/a                 n/a   30.0\nGi5/0/2   auto   off        0.0     n/a                 n/a   30.0\nGi5/0/3   auto   off        0.0     n/a                 n/a   30.0\nGi5/0/4   auto   off        0.0     n/a                 n/a   30.0\nGi5/0/5   auto   off        0.0     n/a                 n/a   30.0\nGi5/0/6   auto   off        0.0     n/a                 n/a   30.0\nInterface Admin  Oper       Power   Device              Class Max\n                            (Watts)\n--------- ------ ---------- ------- ------------------- ----- ----\nGi5/0/7   auto   off        0.0     n/a                 n/a   30.0\nGi5/0/8   auto   off        0.0     n/a                 n/a   30.0\nGi5/0/9   auto   off        0.0     n/a                 n/a   30.0\nGi5/0/10  auto   off        0.0     n/a                 n/a   30.0\nGi5/0/11  auto   off        0.0     n/a                 n/a   30.0\nGi5/0/12  auto   off        0.0     n/a                 n/a   30.0\nGi5/0/13  auto   on         15.2    IP Phone 8865       4     30.0\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1/0/1": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 1
+          },
+          "GigabitEthernet1/0/2": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 1
+          },
+          "GigabitEthernet1/0/3": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 1
+          },
+          "GigabitEthernet2/0/1": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 7.1,
+            "device": "IP Phone 8845",
+            "class_": "2",
+            "max": 30.0,
+            "module": 2
+          },
+          "GigabitEthernet2/0/2": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 2
+          },
+          "GigabitEthernet2/0/3": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 26.1,
+            "device": "AIR-AP2802I-E-K9",
+            "class_": "4",
+            "max": 30.0,
+            "module": 2
+          },
+          "GigabitEthernet3/0/1": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 26.1,
+            "device": "AIR-AP2802I-E-K9",
+            "class_": "4",
+            "max": 30.0,
+            "module": 3
+          },
+          "GigabitEthernet3/0/2": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 26.1,
+            "device": "AIR-AP2802I-E-K9",
+            "class_": "4",
+            "max": 30.0,
+            "module": 3
+          },
+          "GigabitEthernet4/0/1": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 4
+          },
+          "GigabitEthernet4/0/2": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 4
+          },
+          "GigabitEthernet4/0/3": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 4
+          },
+          "GigabitEthernet4/0/4": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 14.8,
+            "device": "IP Phone 8865",
+            "class_": "4",
+            "max": 30.0,
+            "module": 4
+          },
+          "GigabitEthernet5/0/1": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 5
+          },
+          "GigabitEthernet5/0/2": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 5
+          },
+          "GigabitEthernet5/0/3": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 5
+          },
+          "GigabitEthernet5/0/4": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 5
+          },
+          "GigabitEthernet5/0/5": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 5
+          },
+          "GigabitEthernet5/0/6": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 5
+          },
+          "GigabitEthernet5/0/7": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 5
+          },
+          "GigabitEthernet5/0/8": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 5
+          },
+          "GigabitEthernet5/0/9": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 5
+          },
+          "GigabitEthernet5/0/10": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 5
+          },
+          "GigabitEthernet5/0/11": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 5
+          },
+          "GigabitEthernet5/0/12": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 5
+          },
+          "GigabitEthernet5/0/13": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 15.2,
+            "device": "IP Phone 8865",
+            "class_": "4",
+            "max": 30.0,
+            "module": 5
+          }
+        },
+        "modules": {
+          "1": {
+            "available": 1550.0,
+            "used": 147.0,
+            "remaining": 1403.0
+          },
+          "2": {
+            "available": 1550.0,
+            "used": 424.7,
+            "remaining": 1125.3
+          },
+          "3": {
+            "available": 1550.0,
+            "used": 397.4,
+            "remaining": 1152.6
+          },
+          "4": {
+            "available": 1550.0,
+            "used": 267.0,
+            "remaining": 1283.0
+          },
+          "5": {
+            "available": 1550.0,
+            "used": 80.6,
+            "remaining": 1469.4
+          }
+        }
+      }
+    },
+    {
+      "name": "Single-line totals format with Available/Used/Remaining summary and basic interfaces",
+      "input": "Available:1170.0(w)  Used:212.2(w)  Remaining:957.8(w)\n\nInterface Admin  Oper       Power   Device              Class Max\n                            (Watts)\n--------- ------ ---------- ------- ------------------- ----- ----\nGi0/1     auto   off        0.0     n/a                 n/a   30.0\nGi0/2     auto   on         6.4     IP Phone 8945       2     30.0\nGi0/3     auto   on         6.4     IP Phone 8845       2     30.0\nGi0/4     auto   off        0.0     n/a                 n/a   30.0\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet0/1": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0
+          },
+          "GigabitEthernet0/2": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 6.4,
+            "device": "IP Phone 8945",
+            "class_": "2",
+            "max": 30.0
+          },
+          "GigabitEthernet0/3": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 6.4,
+            "device": "IP Phone 8845",
+            "class_": "2",
+            "max": 30.0
+          },
+          "GigabitEthernet0/4": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0
+          }
+        },
+        "watts_available": 1170.0,
+        "watts_used": 212.2,
+        "watts_remaining": 957.8
+      }
+    },
+    {
+      "name": "Single module with faulty port and Ieee PD device types",
+      "input": "Module   Available     Used     Remaining\n          (Watts)     (Watts)    (Watts)\n------   ---------   --------   ---------\n2          1440.0       75.8      1364.2\nInterface Admin  Oper       Power   Device              Class Max\n                            (Watts)\n--------- ------ ---------- ------- ------------------- ----- ----\nGi2/0/21  auto   on         3.8     Ieee PD             1     30.0\nGi2/0/35  auto   on         6.0     Ieee PD             2     30.0\nGi2/0/36  auto   off        0.0     n/a                 n/a   30.0\nGi2/0/37  auto   off        0.0     n/a                 n/a   30.0\nGi2/0/38  auto   faulty     0.0     n/a                 n/a   30.0\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet2/0/21": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 3.8,
+            "device": "Ieee PD",
+            "class_": "1",
+            "max": 30.0,
+            "module": 2
+          },
+          "GigabitEthernet2/0/35": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 6.0,
+            "device": "Ieee PD",
+            "class_": "2",
+            "max": 30.0,
+            "module": 2
+          },
+          "GigabitEthernet2/0/36": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 2
+          },
+          "GigabitEthernet2/0/37": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 2
+          },
+          "GigabitEthernet2/0/38": {
+            "admin": "auto",
+            "oper": "faulty",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 2
+          }
+        },
+        "modules": {
+          "2": {
+            "available": 1440.0,
+            "used": 75.8,
+            "remaining": 1364.2
+          }
+        }
+      }
+    },
+    {
+      "name": "IOS 12 with FastEthernet interfaces and 15.4W max power",
+      "input": "Available:370.0(w)  Used:55.6(w)  Remaining:314.4(w)\n\nInterface Admin  Oper       Power   Device              Class Max\n                            (Watts)\n--------- ------ ---------- ------- ------------------- ----- ----\nFa0/1     auto   off        0.0     n/a                 n/a   15.4\nFa0/2     auto   on         6.3     IP Phone 7962       2     15.4\nFa0/4     auto   on         6.3     Ieee PD             2     15.4\nFa0/5     auto   off        0.0     n/a                 n/a   15.4\nFa0/21    auto   on         15.4    C9115AXI-B          4     15.4\nFa0/22    auto   on         15.4    Ieee PD             4     15.4\nFa0/23    auto   off        0.0     n/a                 n/a   15.4\n",
+      "expected": {
+        "interfaces": {
+          "FastEthernet0/1": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 15.4
+          },
+          "FastEthernet0/2": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 6.3,
+            "device": "IP Phone 7962",
+            "class_": "2",
+            "max": 15.4
+          },
+          "FastEthernet0/4": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 6.3,
+            "device": "Ieee PD",
+            "class_": "2",
+            "max": 15.4
+          },
+          "FastEthernet0/5": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 15.4
+          },
+          "FastEthernet0/21": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 15.4,
+            "device": "C9115AXI-B",
+            "class_": "4",
+            "max": 15.4
+          },
+          "FastEthernet0/22": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 15.4,
+            "device": "Ieee PD",
+            "class_": "4",
+            "max": 15.4
+          },
+          "FastEthernet0/23": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 15.4
+          }
+        },
+        "watts_available": 370.0,
+        "watts_used": 55.6,
+        "watts_remaining": 314.4
+      }
+    },
+    {
+      "name": "FiveGigabitEthernet and TenGigabitEthernet interfaces across five modules with class 6 devices and 90W max",
+      "input": "Module   Available     Used     Remaining\n          (Watts)     (Watts)    (Watts)\n------   ---------   --------   ---------\n1          1827.0      526.6      1300.4\nInterface Admin  Oper       Power   Device              Class Max\n                            (Watts)\n--------- ------ ---------- ------- ------------------- ----- ----\nFi1/0/1   auto   off        0.0     n/a                 n/a   90.0\nFi1/0/2   auto   on         6.3     IP Phone 8841       2     90.0\nFi1/0/32  auto   on         6.3     IP Phone 7940       n/a   90.0\nFi1/0/33  auto   off        0.0     n/a                 n/a   90.0\nFi1/0/34  auto   on         30.0    CW9166I-B           6     90.0\nFi1/0/35  auto   on         15.4    Ieee PD             0     90.0\nTe1/0/48  auto   on         30.0    C9130AXE-B          6     90.0\n\n\nModule   Available     Used     Remaining\n          (Watts)     (Watts)    (Watts)\n------   ---------   --------   ---------\n2          1779.0      462.2      1316.8\nInterface Admin  Oper       Power   Device              Class Max\n                            (Watts)\n--------- ------ ---------- ------- ------------------- ----- ----\nFi2/0/1   auto   off        0.0     n/a                 n/a   90.0\nTe2/0/48  auto   on         39.5    C9124AXI-B          6     90.0\n\n\nModule   Available     Used     Remaining\n          (Watts)     (Watts)    (Watts)\n------   ---------   --------   ---------\n3          1734.0      386.6      1347.4\nInterface Admin  Oper       Power   Device              Class Max\n                            (Watts)\n--------- ------ ---------- ------- ------------------- ----- ----\nFi3/0/1   auto   off        0.0     n/a                 n/a   90.0\nTe3/0/48  auto   on         23.2    C9120AXE-B          4     90.0\n\n\nModule   Available     Used     Remaining\n          (Watts)     (Watts)    (Watts)\n------   ---------   --------   ---------\n4          1648.0      374.4      1273.6\nInterface Admin  Oper       Power   Device              Class Max\n                            (Watts)\n--------- ------ ---------- ------- ------------------- ----- ----\nFi4/0/1   auto   on         6.3     IP Phone 8841       2     90.0\nTe4/0/48  auto   on         30.0    CW9166I-B           6     90.0\n\n\nModule   Available     Used     Remaining\n          (Watts)     (Watts)    (Watts)\n------   ---------   --------   ---------\n5          1902.0      685.5      1216.5\nInterface Admin  Oper       Power   Device              Class Max\n                            (Watts)\n--------- ------ ---------- ------- ------------------- ----- ----\nFi5/0/1   auto   on         15.4    Ieee PD             0     90.0\nTe5/0/48  auto   on         23.2    C9120AXE-B          4     90.0\n",
+      "expected": {
+        "interfaces": {
+          "FiftyGigabitEthernet1/0/1": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 90.0,
+            "module": 1
+          },
+          "FiftyGigabitEthernet1/0/2": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 6.3,
+            "device": "IP Phone 8841",
+            "class_": "2",
+            "max": 90.0,
+            "module": 1
+          },
+          "FiftyGigabitEthernet1/0/32": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 6.3,
+            "device": "IP Phone 7940",
+            "max": 90.0,
+            "module": 1
+          },
+          "FiftyGigabitEthernet1/0/33": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 90.0,
+            "module": 1
+          },
+          "FiftyGigabitEthernet1/0/34": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 30.0,
+            "device": "CW9166I-B",
+            "class_": "6",
+            "max": 90.0,
+            "module": 1
+          },
+          "FiftyGigabitEthernet1/0/35": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 15.4,
+            "device": "Ieee PD",
+            "class_": "0",
+            "max": 90.0,
+            "module": 1
+          },
+          "TenGigabitEthernet1/0/48": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 30.0,
+            "device": "C9130AXE-B",
+            "class_": "6",
+            "max": 90.0,
+            "module": 1
+          },
+          "FiftyGigabitEthernet2/0/1": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 90.0,
+            "module": 2
+          },
+          "TenGigabitEthernet2/0/48": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 39.5,
+            "device": "C9124AXI-B",
+            "class_": "6",
+            "max": 90.0,
+            "module": 2
+          },
+          "FiftyGigabitEthernet3/0/1": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 90.0,
+            "module": 3
+          },
+          "TenGigabitEthernet3/0/48": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 23.2,
+            "device": "C9120AXE-B",
+            "class_": "4",
+            "max": 90.0,
+            "module": 3
+          },
+          "FiftyGigabitEthernet4/0/1": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 6.3,
+            "device": "IP Phone 8841",
+            "class_": "2",
+            "max": 90.0,
+            "module": 4
+          },
+          "TenGigabitEthernet4/0/48": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 30.0,
+            "device": "CW9166I-B",
+            "class_": "6",
+            "max": 90.0,
+            "module": 4
+          },
+          "FiftyGigabitEthernet5/0/1": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 15.4,
+            "device": "Ieee PD",
+            "class_": "0",
+            "max": 90.0,
+            "module": 5
+          },
+          "TenGigabitEthernet5/0/48": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 23.2,
+            "device": "C9120AXE-B",
+            "class_": "4",
+            "max": 90.0,
+            "module": 5
+          }
+        },
+        "modules": {
+          "1": {
+            "available": 1827.0,
+            "used": 526.6,
+            "remaining": 1300.4
+          },
+          "2": {
+            "available": 1779.0,
+            "used": 462.2,
+            "remaining": 1316.8
+          },
+          "3": {
+            "available": 1734.0,
+            "used": 386.6,
+            "remaining": 1347.4
+          },
+          "4": {
+            "available": 1648.0,
+            "used": 374.4,
+            "remaining": 1273.6
+          },
+          "5": {
+            "available": 1902.0,
+            "used": 685.5,
+            "remaining": 1216.5
+          }
+        }
+      }
+    },
+    {
+      "name": "Single module with truncated interface line missing device/class/max fields and faulty port",
+      "input": "Module   Available     Used     Remaining\n          (Watts)     (Watts)    (Watts)\n------   ---------   --------   ---------\n1           740.0      330.0       410.0\nInterface Admin  Oper       Power   Device              Class Max\n                            (Watts)\n--------- ------ ---------- ------- ------------------- ----- ----\nGi1/0/1   auto   on         30.0    AIR-AP1562I-E-K9    4     30.0\nGi1/0/2   auto   on         30.0    AIR-AP1562I-E-K9    4     30.0\nGi1/0/3   auto   on         30.0    AIR-AP1562I-E-K9    4     30.0\nGi1/0/4   auto   off        0.0\nGi1/0/5   auto   faulty     0.0     n/a                 n/a   30.0\nGi1/0/10  auto   on         23.2    C9120AXE-E          4     30.0\nGi1/0/11  auto   on         30.0    AIR-AP1562I-E-K9    4     30.0\nGi1/0/12  auto   off        0.0     n/a                 n/a   30.0\nGi1/0/13  auto   off        0.0     n/a                 n/a   30.0\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1/0/1": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 30.0,
+            "device": "AIR-AP1562I-E-K9",
+            "class_": "4",
+            "max": 30.0,
+            "module": 1
+          },
+          "GigabitEthernet1/0/2": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 30.0,
+            "device": "AIR-AP1562I-E-K9",
+            "class_": "4",
+            "max": 30.0,
+            "module": 1
+          },
+          "GigabitEthernet1/0/3": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 30.0,
+            "device": "AIR-AP1562I-E-K9",
+            "class_": "4",
+            "max": 30.0,
+            "module": 1
+          },
+          "GigabitEthernet1/0/5": {
+            "admin": "auto",
+            "oper": "faulty",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 1
+          },
+          "GigabitEthernet1/0/10": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 23.2,
+            "device": "C9120AXE-E",
+            "class_": "4",
+            "max": 30.0,
+            "module": 1
+          },
+          "GigabitEthernet1/0/11": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 30.0,
+            "device": "AIR-AP1562I-E-K9",
+            "class_": "4",
+            "max": 30.0,
+            "module": 1
+          },
+          "GigabitEthernet1/0/12": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 1
+          },
+          "GigabitEthernet1/0/13": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0,
+            "module": 1
+          }
+        },
+        "modules": {
+          "1": {
+            "available": 740.0,
+            "used": 330.0,
+            "remaining": 410.0
+          }
+        }
+      }
+    },
+    {
+      "name": "Zero power budget with header but no interface entries",
+      "input": "Available:0.0(w)  Used:0.0(w)  Remaining:0.0(w)\n\nInterface Admin  Oper       Power   Device              Class Max\n                            (Watts)\n--------- ------ ---------- ------- ------------------- ----- ----\n",
+      "expected": {
+        "interfaces": {},
+        "watts_available": 0.0,
+        "watts_used": 0.0,
+        "watts_remaining": 0.0
+      }
+    }
+  ]
+}

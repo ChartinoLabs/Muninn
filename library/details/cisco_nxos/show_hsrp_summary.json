@@ -1,0 +1,160 @@
+{
+  "os": "cisco_nxos",
+  "command": "show hsrp summary",
+  "schema": {
+    "name": "ShowHsrpSummaryResult",
+    "fields": {
+      "nsf": {
+        "type": "str",
+        "required": true
+      },
+      "nsf_time": {
+        "type": "int",
+        "required": false
+      },
+      "global_hsrp_bfd": {
+        "type": "str",
+        "required": true
+      },
+      "stats": {
+        "type": {
+          "name": "GroupStats",
+          "fields": {
+            "total_groups": {
+              "type": "int",
+              "required": true
+            },
+            "v1_ipv4": {
+              "type": "int",
+              "required": true
+            },
+            "v2_ipv4": {
+              "type": "int",
+              "required": true
+            },
+            "v2_ipv6": {
+              "type": "int",
+              "required": true
+            },
+            "active": {
+              "type": "int",
+              "required": true
+            },
+            "standby": {
+              "type": "int",
+              "required": true
+            },
+            "listen": {
+              "type": "int",
+              "required": true
+            },
+            "v6_active": {
+              "type": "int",
+              "required": true
+            },
+            "v6_standby": {
+              "type": "int",
+              "required": true
+            },
+            "v6_listen": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "intf_total": {
+        "type": "int",
+        "required": true
+      },
+      "total_packets": {
+        "type": {
+          "name": "PacketStats",
+          "fields": {
+            "tx_pass": {
+              "type": "int",
+              "required": true
+            },
+            "tx_fail": {
+              "type": "int",
+              "required": true
+            },
+            "rx_good": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "pkt_unknown_groups": {
+        "type": "int",
+        "required": true
+      },
+      "total_mts_rx": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic HSRP summary with NSF enabled and multiple groups",
+      "input": "\nHSRP Summary:\n\nExtended-hold (NSF) enabled, 10 seconds\nGlobal HSRP-BFD enabled\n\nTotal Groups: 3\n     Version::    V1-IPV4: 0       V2-IPV4: 3      V2-IPV6: 0\n       State::     Active: 0       Standby: 0       Listen: 0\n       State::  V6-Active: 0    V6-Standby: 0    V6-Listen: 0\n\nTotal HSRP Enabled interfaces: 1\n\nTotal Packets:\n\t     Tx - Pass: 0       Fail: 0\n\t     Rx - Good: 0\n\nPacket for unknown groups: 0\n\nTotal MTS: Rx: 85\n",
+      "expected": {
+        "global_hsrp_bfd": "enabled",
+        "intf_total": 1,
+        "nsf": "enabled",
+        "nsf_time": 10,
+        "pkt_unknown_groups": 0,
+        "stats": {
+          "active": 0,
+          "listen": 0,
+          "standby": 0,
+          "total_groups": 3,
+          "v1_ipv4": 0,
+          "v2_ipv4": 3,
+          "v2_ipv6": 0,
+          "v6_active": 0,
+          "v6_listen": 0,
+          "v6_standby": 0
+        },
+        "total_mts_rx": 85,
+        "total_packets": {
+          "rx_good": 0,
+          "tx_fail": 0,
+          "tx_pass": 0
+        }
+      }
+    },
+    {
+      "name": "HSRP summary with NSF disabled and active groups",
+      "input": "\nHSRP Summary:\n\nExtended-hold (NSF) disabled\nGlobal HSRP-BFD disabled\n\nTotal Groups: 12\n     Version::    V1-IPV4: 4       V2-IPV4: 6      V2-IPV6: 2\n       State::     Active: 5       Standby: 4       Listen: 3\n       State::  V6-Active: 1    V6-Standby: 1    V6-Listen: 0\n\nTotal HSRP Enabled interfaces: 8\n\nTotal Packets:\n\t     Tx - Pass: 12345       Fail: 3\n\t     Rx - Good: 67890\n\nPacket for unknown groups: 42\n\nTotal MTS: Rx: 5021\n",
+      "expected": {
+        "global_hsrp_bfd": "disabled",
+        "intf_total": 8,
+        "nsf": "disabled",
+        "pkt_unknown_groups": 42,
+        "stats": {
+          "active": 5,
+          "listen": 3,
+          "standby": 4,
+          "total_groups": 12,
+          "v1_ipv4": 4,
+          "v2_ipv4": 6,
+          "v2_ipv6": 2,
+          "v6_active": 1,
+          "v6_listen": 0,
+          "v6_standby": 1
+        },
+        "total_mts_rx": 5021,
+        "total_packets": {
+          "rx_good": 67890,
+          "tx_fail": 3,
+          "tx_pass": 12345
+        }
+      }
+    }
+  ]
+}

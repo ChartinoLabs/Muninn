@@ -1,0 +1,22 @@
+{
+  "os": "cisco_nxos",
+  "command": "show mac address-table aging-time",
+  "schema": {
+    "name": "ShowMacAddressTableAgingTimeResult",
+    "fields": {
+      "mac_aging_time": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Show mac address-table aging-time output with numeric value",
+      "input": "N95_1# show mac address-table aging-time\nAging Time\n----------\n    120\n",
+      "expected": {
+        "mac_aging_time": 120
+      }
+    }
+  ]
+}

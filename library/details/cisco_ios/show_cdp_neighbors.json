@@ -1,0 +1,343 @@
+{
+  "os": "cisco_ios",
+  "command": "show cdp neighbors",
+  "schema": {
+    "name": "ShowCdpNeighborsResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "CdpNeighborEntry",
+              "fields": {
+                "hold_time": {
+                  "type": "int",
+                  "required": true
+                },
+                "port_id": {
+                  "type": "str",
+                  "required": true
+                },
+                "capabilities": {
+                  "type": "str",
+                  "required": false
+                },
+                "platform": {
+                  "type": "str",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_entries": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Standard CDP entries with mixed capabilities, empty platform, and truncated platform names",
+      "input": "Capability Codes: R - Router, T - Trans Bridge, B - Source Route Bridge\n                S - Switch, H - Host, I - IGMP, r - Repeater\n\nDevice ID        Local Interfce     Holdtme    Capability  Platform  Port ID\n\nR5.cisco.com     Gig 0/0           125              R B              Gig 0/0\nRX-SWV.cisco.com Fas 0/1            167         T S       WS-C3524-X Fas 0/13\nC2950-1          Fas 0/0            148         S I       WS-C2950T- Fas 0/15\nSEP08000F8BA7FD  Gig 1/0/7         179              H P   Mitel 532 Port 1\n\nTotal cdp entries displayed : 4\n",
+      "expected": {
+        "neighbors": {
+          "GigabitEthernet0/0": {
+            "R5.cisco.com": {
+              "hold_time": 125,
+              "port_id": "GigabitEthernet0/0",
+              "capabilities": "R B"
+            }
+          },
+          "FastEthernet0/1": {
+            "RX-SWV.cisco.com": {
+              "hold_time": 167,
+              "port_id": "FastEthernet0/13",
+              "capabilities": "T S",
+              "platform": "WS-C3524-X"
+            }
+          },
+          "FastEthernet0/0": {
+            "C2950-1": {
+              "hold_time": 148,
+              "port_id": "FastEthernet0/15",
+              "capabilities": "S I",
+              "platform": "WS-C2950T-"
+            }
+          },
+          "GigabitEthernet1/0/7": {
+            "SEP08000F8BA7FD": {
+              "hold_time": 179,
+              "port_id": "Port1",
+              "capabilities": "H P",
+              "platform": "Mitel 532"
+            }
+          }
+        },
+        "total_entries": 4
+      }
+    },
+    {
+      "name": "CDP entries with one device missing capability field",
+      "input": "Capability Codes: R - Router, T - Trans Bridge, B - Source Route Bridge\n                S - Switch, H - Host, I - IGMP, r - Repeater\n\nDevice ID        Local Interfce     Holdtme    Capability  Platform  Port ID\n\ndevice2      Eth 0          152      R           AS5200    Eth 0\ndevice3      Eth 0          144      R           3640      Eth0/0\ndevice4      Eth 0          141                  RP1      Eth 0/0\n\nTotal cdp entries displayed : 3\n",
+      "expected": {
+        "neighbors": {
+          "Ethernet0": {
+            "device2": {
+              "hold_time": 152,
+              "port_id": "Ethernet0",
+              "capabilities": "R",
+              "platform": "AS5200"
+            },
+            "device3": {
+              "hold_time": 144,
+              "port_id": "Ethernet0/0",
+              "capabilities": "R",
+              "platform": "3640"
+            },
+            "device4": {
+              "hold_time": 141,
+              "port_id": "Ethernet0/0",
+              "platform": "RP1"
+            }
+          }
+        },
+        "total_entries": 3
+      }
+    },
+    {
+      "name": "Long device names wrapped to separate lines",
+      "input": "Capability Codes: R - Router, T - Trans Bridge, B - Source Route Bridge\n              S - Switch, H - Host, I - IGMP, r - Repeater, P - Phone,\n              D - Remote, C - CVTA, M - Two-port Mac Relay\n\nDevice ID        Local Intrfce     Holdtme    Capability  Platform  Port ID\nDevice_With_A_Particularly_Long_Name\n                 Gig 1             134             R S C  N9K-9000v Eth 0/0\nanother_device_with_a_long_name\n                 Twe 1/0/3         141              S I   WS-C3850- Ten 1/1/4\n\nTotal cdp entries displayed : 2\n",
+      "expected": {
+        "neighbors": {
+          "GigabitEthernet1": {
+            "Device_With_A_Particularly_Long_Name": {
+              "hold_time": 134,
+              "port_id": "Ethernet0/0",
+              "capabilities": "R S C",
+              "platform": "N9K-9000v"
+            }
+          },
+          "TwentyFiveGigE1/0/3": {
+            "another_device_with_a_long_name": {
+              "hold_time": 141,
+              "port_id": "TenGigabitEthernet1/1/4",
+              "capabilities": "S I",
+              "platform": "WS-C3850-"
+            }
+          }
+        },
+        "total_entries": 2
+      }
+    },
+    {
+      "name": "Entries with no device ID, wrapped entries, and orphan device ID at end",
+      "input": "Capability Codes: R - Router, T - Trans Bridge, B - Source Route Bridge\n                  S - Switch, H - Host, I - IGMP, r - Repeater, P - Phone,\n                  D - Remote, C - CVTA, M - Two-port Mac Relay\n\nDevice ID        Local Intrfce     Holdtme    Capability  Platform  Port ID\n                 Fas 0/5           104             H P M  420HD_GBE esw0\n                 Fas 0/1           94              H P M  420HD_GBE esw0\nxxx012         Fas 0/2           141             T B I  AIR-CAP27 Gig 0.1\nxxx006.xx.xxx.xxx\n                 Fas 0/3           159             T B I  AIR-CAP27 Gig 0.1\nxxx001.xx.xxx.xxx\n                 Gig 0/1           125              S I   WS-C2960X Gig 1/0/41\nxxx010\n\nTotal cdp entries displayed : 4\n",
+      "expected": {
+        "neighbors": {
+          "FastEthernet0/5": {
+            "": {
+              "hold_time": 104,
+              "port_id": "esw0",
+              "capabilities": "H P M",
+              "platform": "420HD_GBE"
+            }
+          },
+          "FastEthernet0/1": {
+            "": {
+              "hold_time": 94,
+              "port_id": "esw0",
+              "capabilities": "H P M",
+              "platform": "420HD_GBE"
+            }
+          },
+          "FastEthernet0/2": {
+            "xxx012": {
+              "hold_time": 141,
+              "port_id": "GigabitEthernet0.1",
+              "capabilities": "T B I",
+              "platform": "AIR-CAP27"
+            }
+          },
+          "FastEthernet0/3": {
+            "xxx006.xx.xxx.xxx": {
+              "hold_time": 159,
+              "port_id": "GigabitEthernet0.1",
+              "capabilities": "T B I",
+              "platform": "AIR-CAP27"
+            }
+          },
+          "GigabitEthernet0/1": {
+            "xxx001.xx.xxx.xxx": {
+              "hold_time": 125,
+              "port_id": "GigabitEthernet1/0/41",
+              "capabilities": "S I",
+              "platform": "WS-C2960X"
+            }
+          }
+        },
+        "total_entries": 4
+      }
+    },
+    {
+      "name": "Mixed device types (routers, WAP, IP phones) with no total_entries line",
+      "input": "Capability Codes: R - Router, T - Trans Bridge, B- Source Route Bridge\n\t       S - Switch, H - Host, I - IGMP, r - Repeater, P - Phone\n\nDevice ID         Local Intrfce Holdtme    Capability   Platform   Port ID\nR1-PBX            Gig 1/0/10    144          R S I      2811       Fas 0/0\nTS-1              Gig 1/0/39    122          R          2611       Eth 0/1\nCisco-WAP-N       Gig 1/0/1     120          T I        AIR-AP125  Gig 0\nSEP04FE7F689D33   Gig 1/0/2     125          H P        IP Phone   Port 1\nSEP000DBC50FCD1   Gig 1/0/4     147          H P        IP Phone   Port 1\nSEP00124362C4D2   Gig 1/0/42    147          H P        IP Phone   Port 1\n",
+      "expected": {
+        "neighbors": {
+          "GigabitEthernet1/0/10": {
+            "R1-PBX": {
+              "hold_time": 144,
+              "port_id": "FastEthernet0/0",
+              "capabilities": "R S I",
+              "platform": "2811"
+            }
+          },
+          "GigabitEthernet1/0/39": {
+            "TS-1": {
+              "hold_time": 122,
+              "port_id": "Ethernet0/1",
+              "capabilities": "R",
+              "platform": "2611"
+            }
+          },
+          "GigabitEthernet1/0/1": {
+            "Cisco-WAP-N": {
+              "hold_time": 120,
+              "port_id": "GigabitEthernet0",
+              "capabilities": "T I",
+              "platform": "AIR-AP125"
+            }
+          },
+          "GigabitEthernet1/0/2": {
+            "SEP04FE7F689D33": {
+              "hold_time": 125,
+              "port_id": "Port1",
+              "capabilities": "H P",
+              "platform": "IP Phone"
+            }
+          },
+          "GigabitEthernet1/0/4": {
+            "SEP000DBC50FCD1": {
+              "hold_time": 147,
+              "port_id": "Port1",
+              "capabilities": "H P",
+              "platform": "IP Phone"
+            }
+          },
+          "GigabitEthernet1/0/42": {
+            "SEP00124362C4D2": {
+              "hold_time": 147,
+              "port_id": "Port1",
+              "capabilities": "H P",
+              "platform": "IP Phone"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "TenGig interfaces, FQDN device IDs (wrapped), Virtual port IDs, WAAS appliances, and duplicate device_id entries on same interface",
+      "input": "Capability Codes: R - Router, T - Trans Bridge, B - Source Route Bridge\n                  S - Switch, H - Host, I - IGMP, r - Repeater, P - Phone,\n                  D - Remote, C - CVTA, M - Two-port Mac Relay\n\nDevice ID        Local Intrfce     Holdtme    Capability  Platform  Port ID\nasr1002-2.some.example.com\n                 Ten 1/1/3         173              R I   ASR1002-H Ten 0/1/0\nvWAAS3b          Ten 1/0/6         140               H    OE-VWAAS  Virtual 2/0\nvWAAS3b          Ten 1/0/6         140               H    OE-VWAAS  Virtual 1/0\nvWAAS4b          Ten 1/0/7         162               H    OE-VWAAS  Virtual 2/0\nvWAAS4b          Ten 1/0/7         162               H    OE-VWAAS  Virtual 1/0\nNEXTGENLABSWT01.some.example.com\n                 Gig 0/0           130              S I   WS-C3560X Gig 0/23\nrouter01.some.example.com\n                 Ten 1/0/4         172            R B S I CISCO2911 Gig 0/0\n9300mgig-1.some.example.com\n                 Ten 1/1/6         155             R S I  C9300-24U Ten 1/1/7\n9300mgig-1.some.example.com\n                 Ten 1/1/7         140             R S I  C9300-24U Ten 1/1/6\n9500-1.some.example.com\n                 Ten 1/1/8         170             R S I  C9500-40X Ten 2/0/36\n9300mgig-2.some.example.com\n                 Ten 1/1/1         148             R S I  C9300-24U Ten 1/1/2\n\nTotal cdp entries displayed : 11\n",
+      "expected": {
+        "neighbors": {
+          "TenGigabitEthernet1/1/3": {
+            "asr1002-2.some.example.com": {
+              "hold_time": 173,
+              "port_id": "TenGigabitEthernet0/1/0",
+              "capabilities": "R I",
+              "platform": "ASR1002-H"
+            }
+          },
+          "TenGigabitEthernet1/0/6": {
+            "vWAAS3b": {
+              "hold_time": 140,
+              "port_id": "Virtual1/0",
+              "capabilities": "H",
+              "platform": "OE-VWAAS"
+            }
+          },
+          "TenGigabitEthernet1/0/7": {
+            "vWAAS4b": {
+              "hold_time": 162,
+              "port_id": "Virtual1/0",
+              "capabilities": "H",
+              "platform": "OE-VWAAS"
+            }
+          },
+          "GigabitEthernet0/0": {
+            "NEXTGENLABSWT01.some.example.com": {
+              "hold_time": 130,
+              "port_id": "GigabitEthernet0/23",
+              "capabilities": "S I",
+              "platform": "WS-C3560X"
+            }
+          },
+          "TenGigabitEthernet1/0/4": {
+            "router01.some.example.com": {
+              "hold_time": 172,
+              "port_id": "GigabitEthernet0/0",
+              "capabilities": "R B S I",
+              "platform": "CISCO2911"
+            }
+          },
+          "TenGigabitEthernet1/1/6": {
+            "9300mgig-1.some.example.com": {
+              "hold_time": 155,
+              "port_id": "TenGigabitEthernet1/1/7",
+              "capabilities": "R S I",
+              "platform": "C9300-24U"
+            }
+          },
+          "TenGigabitEthernet1/1/7": {
+            "9300mgig-1.some.example.com": {
+              "hold_time": 140,
+              "port_id": "TenGigabitEthernet1/1/6",
+              "capabilities": "R S I",
+              "platform": "C9300-24U"
+            }
+          },
+          "TenGigabitEthernet1/1/8": {
+            "9500-1.some.example.com": {
+              "hold_time": 170,
+              "port_id": "TenGigabitEthernet2/0/36",
+              "capabilities": "R S I",
+              "platform": "C9500-40X"
+            }
+          },
+          "TenGigabitEthernet1/1/1": {
+            "9300mgig-2.some.example.com": {
+              "hold_time": 148,
+              "port_id": "TenGigabitEthernet1/1/2",
+              "capabilities": "R S I",
+              "platform": "C9300-24U"
+            }
+          }
+        },
+        "total_entries": 11
+      }
+    },
+    {
+      "name": "Single neighbor entry with wrapped device ID and numeric (non-interface) port ID",
+      "input": "Capability Codes: R - Router, T - Trans Bridge, B - Source Route Bridge\n                  S - Switch, H - Host, I - IGMP, r - Repeater, P - Phone,\n                  D - Remote, C - CVTA, M - Two-port Mac Relay\n\nDevice ID        Local Intrfce     Holdtme    Capability  Platform  Port ID\nacc-sw101\n                 Ten 3/7           175               R    AS5610-52 0/47\n\nTotal cdp entries displayed : 1\n",
+      "expected": {
+        "neighbors": {
+          "TenGigabitEthernet3/7": {
+            "acc-sw101": {
+              "hold_time": 175,
+              "port_id": "0/47",
+              "capabilities": "R",
+              "platform": "AS5610-52"
+            }
+          }
+        },
+        "total_entries": 1
+      }
+    }
+  ]
+}

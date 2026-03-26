@@ -1,0 +1,94 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show sdwan software",
+  "schema": {
+    "name": "ShowSdwanSoftwareResult",
+    "fields": {
+      "images": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SdwanSoftwareRow",
+            "fields": {
+              "version": {
+                "type": "str",
+                "required": true
+              },
+              "active": {
+                "type": "bool",
+                "required": true
+              },
+              "default": {
+                "type": "bool",
+                "required": true
+              },
+              "previous": {
+                "type": "bool",
+                "required": true
+              },
+              "confirmed": {
+                "type": "str",
+                "required": true
+              },
+              "timestamp": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_space_mb": {
+        "type": "int",
+        "required": false
+      },
+      "used_space_mb": {
+        "type": "int",
+        "required": false
+      },
+      "available_space_mb": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "\nvEdge# show sdwan software\nVERSION         ACTIVE  DEFAULT  PREVIOUS  CONFIRMED  TIMESTAMP\n---------------------------------------------------------------------------------\n10.106.1.0.12    false   false    true      user       2020-03-30T02:15:00-00:00\n10.106.1.0.32    true    false    false     user       2020-04-11T09:43:37-00:00\n10.106.2.0.1857  false   true     false     auto       2020-03-30T02:13:24-00:00\n\nTotal Space:387M Used Space:141M Available Space:241M\n",
+      "expected": {
+        "images": {
+          "10.106.1.0.12": {
+            "version": "10.106.1.0.12",
+            "active": false,
+            "default": false,
+            "previous": true,
+            "confirmed": "user",
+            "timestamp": "2020-03-30T02:15:00-00:00"
+          },
+          "10.106.1.0.32": {
+            "version": "10.106.1.0.32",
+            "active": true,
+            "default": false,
+            "previous": false,
+            "confirmed": "user",
+            "timestamp": "2020-04-11T09:43:37-00:00"
+          },
+          "10.106.2.0.1857": {
+            "version": "10.106.2.0.1857",
+            "active": false,
+            "default": true,
+            "previous": false,
+            "confirmed": "auto",
+            "timestamp": "2020-03-30T02:13:24-00:00"
+          }
+        },
+        "total_space_mb": 387,
+        "used_space_mb": 141,
+        "available_space_mb": 241
+      }
+    }
+  ]
+}

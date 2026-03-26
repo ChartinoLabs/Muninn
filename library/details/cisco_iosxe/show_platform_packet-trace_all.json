@@ -1,0 +1,125 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show platform packet-trace all",
+  "schema": {
+    "name": "ShowPlatformPacketTraceAllResult",
+    "fields": {
+      "packets": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PacketTraceEntry",
+            "fields": {
+              "cbug_id": {
+                "type": "int",
+                "required": true
+              },
+              "input": {
+                "type": "str",
+                "required": true
+              },
+              "output": {
+                "type": "str",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "timestamp": {
+                "type": {
+                  "name": "TimestampEntry",
+                  "fields": {
+                    "start_ns": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "start_utc": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "stop_ns": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "stop_utc": {
+                      "type": "str",
+                      "required": true
+                    }
+                  }
+                },
+                "required": true
+              },
+              "punt_cause": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple packet traces with FWD, PUNT, and CONS states including IOSd path flow sections",
+      "input": "Packet: 0           CBUG ID: 104\nSummary\n  Input     : INJ.2\n  Output    : GigabitEthernet1\n  State     : FWD\n  Timestamp\n    Start   : 19591545483878568 ns (07/27/2021 09:34:27.497712 UTC)\n    Stop    : 19591545483897048 ns (07/27/2021 09:34:27.497731 UTC)\nPath Trace\n  Feature: IPV4(Output)\n    Input       : internal0/0/rp:0\n    Output      : GigabitEthernet1\n    Source      : 172.20.2.54\n    Destination : 172.20.2.55\n    Protocol    : 6 (TCP)\n      SrcPort   : 22\n      DstPort   : 43520\n  Feature: CFT\n    API                   : cft_handle_pkt\n    packet capabilities   : 0x000000af\nPacket: 1           CBUG ID: 105\nSummary\n  Input     : GigabitEthernet1\n  Output    : internal0/0/rp:0\n  State     : PUNT 11  (For-us data)\n  Timestamp\n    Start   : 19591545484115512 ns (07/27/2021 09:34:27.497949 UTC)\n    Stop    : 19591545484138496 ns (07/27/2021 09:34:27.497972 UTC)\nPath Trace\n  Feature: IPV4(Input)\n    Input       : GigabitEthernet1\n    Output      : <unknown>\n    Source      : 172.20.2.55\n    Destination : 172.20.2.54\n    Protocol    : 6 (TCP)\n      SrcPort   : 43520\n      DstPort   : 22\n  Feature: QOS\n    Direction   : Ingress\n    Action      : SET\n    Fields      : DSCP\n\nIOSd Path Flow: Packet: 1    CBUG ID: 105\n  Feature: INFRA\n    Pkt Direction: IN\n    Packet Rcvd From DATAPLANE\n\n  Feature: IP\n    Pkt Direction: IN\n    Packet Enqueued in IP layer\n    Source      : 172.20.2.55\n    Destination : 172.20.2.54\n    Interface   : GigabitEthernet1\n\n  Feature: TCP\n    Pkt Direction: IN\n    tcp0: I NoTCB 172.20.2.55:43520 172.20.2.54:22 seq 1565917635 ACK 140302929  WIN 63840\n\nPacket: 2           CBUG ID: 106\nSummary\n  Input     : GigabitEthernet1\n  Output    : internal0/0/rp:0\n  State     : PUNT 3   (Layer2 control and legacy)\n  Timestamp\n    Start   : 19591545665723976 ns (07/27/2021 09:34:27.679557 UTC)\n    Stop    : 19591545665748044 ns (07/27/2021 09:34:27.679582 UTC)\nPath Trace\n  Feature: QOS\n    Direction   : Ingress\n    Action      : SET\n    Fields      : DSCP\n\nIOSd Path Flow: Packet: 2    CBUG ID: 106\n  Feature: INFRA\n    Pkt Direction: IN\n    Packet Rcvd From DATAPLANE\nPacket: 3           CBUG ID: 107\nSummary\n  Input     : GigabitEthernet1\n  Output    : GigabitEthernet1\n  State     : CONS Packet Consumed\n  Timestamp\n    Start   : 19591545845287552 ns (07/27/2021 09:34:27.859121 UTC)\n    Stop    : 19591545845364724 ns (07/27/2021 09:34:27.859198 UTC)\nPath Trace\n  Feature: IPV4(Input)\n    Input       : GigabitEthernet1\n    Output      : <unknown>\n    Source      : 172.20.2.68\n    Destination : 172.20.2.54\n    Protocol    : 1 (ICMP)\n",
+      "expected": {
+        "packets": {
+          "0": {
+            "cbug_id": 104,
+            "input": "INJ.2",
+            "output": "GigabitEthernet1",
+            "state": "FWD",
+            "timestamp": {
+              "start_ns": 19591545483878568,
+              "start_utc": "07/27/2021 09:34:27.497712 UTC",
+              "stop_ns": 19591545483897048,
+              "stop_utc": "07/27/2021 09:34:27.497731 UTC"
+            }
+          },
+          "1": {
+            "cbug_id": 105,
+            "input": "GigabitEthernet1",
+            "output": "internal0/0/rp:0",
+            "state": "PUNT",
+            "timestamp": {
+              "start_ns": 19591545484115512,
+              "start_utc": "07/27/2021 09:34:27.497949 UTC",
+              "stop_ns": 19591545484138496,
+              "stop_utc": "07/27/2021 09:34:27.497972 UTC"
+            },
+            "punt_cause": "For-us data"
+          },
+          "2": {
+            "cbug_id": 106,
+            "input": "GigabitEthernet1",
+            "output": "internal0/0/rp:0",
+            "state": "PUNT",
+            "timestamp": {
+              "start_ns": 19591545665723976,
+              "start_utc": "07/27/2021 09:34:27.679557 UTC",
+              "stop_ns": 19591545665748044,
+              "stop_utc": "07/27/2021 09:34:27.679582 UTC"
+            },
+            "punt_cause": "Layer2 control and legacy"
+          },
+          "3": {
+            "cbug_id": 107,
+            "input": "GigabitEthernet1",
+            "output": "GigabitEthernet1",
+            "state": "CONS",
+            "timestamp": {
+              "start_ns": 19591545845287552,
+              "start_utc": "07/27/2021 09:34:27.859121 UTC",
+              "stop_ns": 19591545845364724,
+              "stop_utc": "07/27/2021 09:34:27.859198 UTC"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

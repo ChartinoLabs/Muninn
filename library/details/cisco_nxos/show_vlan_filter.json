@@ -1,0 +1,41 @@
+{
+  "os": "cisco_nxos",
+  "command": "show vlan filter",
+  "schema": {
+    "name": "ShowVlanFilterResult",
+    "fields": {
+      "vlan_id": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VlanFilterEntry",
+            "fields": {
+              "access_map_tag": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Show vlan filter output with access map tag and VLAN list",
+      "input": "vlan map ed:\nConfigured on VLANs:    3,402\n",
+      "expected": {
+        "vlan_id": {
+          "3": {
+            "access_map_tag": "ed"
+          },
+          "402": {
+            "access_map_tag": "ed"
+          }
+        }
+      }
+    }
+  ]
+}

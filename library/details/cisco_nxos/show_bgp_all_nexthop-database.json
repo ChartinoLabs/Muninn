@@ -1,0 +1,219 @@
+{
+  "os": "cisco_nxos",
+  "command": "show bgp all nexthop-database",
+  "schema": {
+    "name": "ShowBgpAllNexthopDatabaseResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfEntry",
+            "fields": {
+              "address_families": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "AddressFamilyEntry",
+                    "fields": {
+                      "trigger_delay_critical_ms": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "trigger_delay_non_critical_ms": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "nexthops": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "NexthopEntry",
+                            "fields": {
+                              "flags": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "refcount": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "igp_cost": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "igp_route_type": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "igp_preference": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "attached": {
+                                "type": "bool",
+                                "required": true
+                              },
+                              "local": {
+                                "type": "bool",
+                                "required": true
+                              },
+                              "reachable": {
+                                "type": "bool",
+                                "required": true
+                              },
+                              "labeled": {
+                                "type": "bool",
+                                "required": true
+                              },
+                              "resolve_time": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "rib_route": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "metric_next_advertise": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "rnh_epoch": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "attached_nexthops": {
+                                "type": {
+                                  "type": "dict",
+                                  "key": "str",
+                                  "value": {
+                                    "name": "AttachedNexthopEntry",
+                                    "fields": {
+                                      "interface": {
+                                        "type": "str",
+                                        "required": true
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": false
+                              }
+                            }
+                          }
+                        },
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple VRFs and address families with IPv4 and IPv6 nexthops",
+      "input": "\nNext Hop table for VRF default, address family IPv4 Unicast:\nNext-hop trigger-delay(miliseconds)\n  Critical: 3000 Non-critical: 10000\nIPv4 Next-hop table\n\nIPv4 Unicast Next-hops:\n\nNexthop: 192.168.154.1, Flags: 0x41, Refcount: 1, IGP cost: 3\nIGP Route type: 0, IGP preference: 110\nAttached nexthop: 192.168.66.2, Interface: port-channel2.107\nAttached nexthop: 192.168.196.2, Interface: port-channel2.100\nNexthop is not-attached not-local reachable labeled\nNexthop last resolved: 18:37:36, using 192.168.154.1/32\nMetric next advertise: Never\nRNH epoch: 1\nIPv6 Next-hop table\n\nIPv6 Unicast Next-hops:\n\nNext Hop table for VRF default, address family IPv6 Unicast:\nNext-hop trigger-delay(miliseconds)\n  Critical: 3000 Non-critical: 10000\nIPv4 Next-hop table\n\nIPv4 Unicast Next-hops:\nIPv6 Next-hop table\n\nIPv6 Unicast Next-hops:\n\nNexthop: 2001:db8:400::3:1, Flags: 0x1, Refcount: 1, IGP cost: 2\nIGP Route type: 0, IGP preference: 110\nAttached nexthop: fe80::6e9c:edff:fe4d:ff41, Interface: port-channel2.100\nNexthop is not-attached not-local reachable not-labeled\nNexthop last resolved: 18:37:36, using 2001:db8:400::3:1/128\nMetric next advertise: Never\nRNH epoch: 1\n\nNext Hop table for VRF default, address family VPNv4 Unicast:\nNext-hop trigger-delay(miliseconds)\n  Critical: 3000 Non-critical: 10000\nIPv4 Next-hop table\n\nIPv4 Unicast Next-hops:\nIPv6 Next-hop table\n\nIPv6 Unicast Next-hops:\n\nNext Hop table for VRF default, address family VPNv6 Unicast:\nNext-hop trigger-delay(miliseconds)\n  Critical: 3000 Non-critical: 10000\nIPv4 Next-hop table\n\nIPv4 Unicast Next-hops:\nIPv6 Next-hop table\n\nIPv6 Unicast Next-hops:\n\nNext Hop table for VRF default, address family IPv4 MDT:\nNext-hop trigger-delay(miliseconds)\n  Critical: 3000 Non-critical: 10000\nIPv4 Next-hop table\n\nIPv4 Unicast Next-hops:\n\nNexthop: 0.0.0.0, Flags: 0x2, Refcount: 1, IGP cost: 0\nIGP Route type: 0, IGP preference: 0\nNexthop is not-attached local unreachable not-labeled\nNexthop last resolved: never, using 0.0.0.0/0\nMetric next advertise: Never\nRNH epoch: 0\nIPv6 Next-hop table\n\nIPv6 Unicast Next-hops:\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "address_families": {
+              "ipv4 mdt": {
+                "nexthops": {
+                  "0.0.0.0": {
+                    "attached": false,
+                    "flags": "0x2",
+                    "igp_cost": 0,
+                    "igp_preference": 0,
+                    "igp_route_type": 0,
+                    "labeled": false,
+                    "local": true,
+                    "metric_next_advertise": "never",
+                    "reachable": false,
+                    "refcount": 1,
+                    "resolve_time": "never",
+                    "rib_route": "0.0.0.0/0",
+                    "rnh_epoch": 0
+                  }
+                },
+                "trigger_delay_critical_ms": 3000,
+                "trigger_delay_non_critical_ms": 10000
+              },
+              "ipv4 unicast": {
+                "nexthops": {
+                  "192.168.154.1": {
+                    "attached": false,
+                    "attached_nexthops": {
+                      "192.168.196.2": {
+                        "interface": "Port-channel2.100"
+                      },
+                      "192.168.66.2": {
+                        "interface": "Port-channel2.107"
+                      }
+                    },
+                    "flags": "0x41",
+                    "igp_cost": 3,
+                    "igp_preference": 110,
+                    "igp_route_type": 0,
+                    "labeled": true,
+                    "local": false,
+                    "metric_next_advertise": "never",
+                    "reachable": true,
+                    "refcount": 1,
+                    "resolve_time": "18:37:36",
+                    "rib_route": "192.168.154.1/32",
+                    "rnh_epoch": 1
+                  }
+                },
+                "trigger_delay_critical_ms": 3000,
+                "trigger_delay_non_critical_ms": 10000
+              },
+              "ipv6 unicast": {
+                "nexthops": {
+                  "2001:db8:400::3:1": {
+                    "attached": false,
+                    "attached_nexthops": {
+                      "fe80::6e9c:edff:fe4d:ff41": {
+                        "interface": "Port-channel2.100"
+                      }
+                    },
+                    "flags": "0x1",
+                    "igp_cost": 2,
+                    "igp_preference": 110,
+                    "igp_route_type": 0,
+                    "labeled": false,
+                    "local": false,
+                    "metric_next_advertise": "never",
+                    "reachable": true,
+                    "refcount": 1,
+                    "resolve_time": "18:37:36",
+                    "rib_route": "2001:db8:400::3:1/128",
+                    "rnh_epoch": 1
+                  }
+                },
+                "trigger_delay_critical_ms": 3000,
+                "trigger_delay_non_critical_ms": 10000
+              },
+              "vpnv4 unicast": {
+                "trigger_delay_critical_ms": 3000,
+                "trigger_delay_non_critical_ms": 10000
+              },
+              "vpnv6 unicast": {
+                "trigger_delay_critical_ms": 3000,
+                "trigger_delay_non_critical_ms": 10000
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

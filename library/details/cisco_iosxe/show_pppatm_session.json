@@ -1,0 +1,92 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show pppatm session",
+  "schema": {
+    "name": "ShowPppAtmSessionResult",
+    "fields": {
+      "summary_lines": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": true
+      },
+      "sessions_in_state": {
+        "type": "str | None",
+        "required": true
+      },
+      "sessions_total": {
+        "type": "int | None",
+        "required": true
+      },
+      "sessions": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PppAtmSessionRow",
+            "fields": {
+              "atm_intf": {
+                "type": "str",
+                "required": true
+              },
+              "uniq_id": {
+                "type": "str",
+                "required": false
+              },
+              "vpi_vci": {
+                "type": "str",
+                "required": false
+              },
+              "encap": {
+                "type": "str",
+                "required": false
+              },
+              "vt": {
+                "type": "str",
+                "required": false
+              },
+              "va": {
+                "type": "str",
+                "required": false
+              },
+              "va_st": {
+                "type": "str",
+                "required": false
+              },
+              "state": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "show pppatm session\n1 session  in VACCESS_ATTACHED (VA_AT) State\n1 session  total\n\nUniq ID  ATM-Intf         VPI/VCI   Encap      VT  VA         VA-st  State\nN/A      AT0/2/0.20        10/100   SNAP      Di1  Vi2        UP     VA_AT\n",
+      "expected": {
+        "summary_lines": [
+          "show pppatm session"
+        ],
+        "sessions_in_state": "VACCESS_ATTACHED (VA_AT)",
+        "sessions_total": 1,
+        "sessions": {
+          "ATM0/2/0.20": {
+            "atm_intf": "ATM0/2/0.20",
+            "vpi_vci": "10/100",
+            "encap": "SNAP",
+            "vt": "Dialer1",
+            "va": "Virtual-Access2",
+            "va_st": "UP",
+            "state": "VA_AT"
+          }
+        }
+      }
+    }
+  ]
+}

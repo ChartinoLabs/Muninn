@@ -1,0 +1,115 @@
+{
+  "os": "cisco_ios",
+  "command": "show ipv6 neighbors",
+  "schema": {
+    "name": "ShowIpv6NeighborsResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "Ipv6NeighborEntry",
+              "fields": {
+                "age": {
+                  "type": "int",
+                  "required": false
+                },
+                "link_layer_address": {
+                  "type": "str",
+                  "required": false
+                },
+                "state": {
+                  "type": "str",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show ipv6 neighbors with multiple states and interfaces",
+      "input": "IPv6 Address                              Age Link-layer Addr State Interface\n2402:1234:106:100:793A:F08D:5B3A:EF89      33 54e1.addb.200f  STALE Vl6\n2402:1234:106:100:A193:9153:7CAF:9802       1 54e1.addb.200f  STALE Vl6\n2402:1234:106:100:B419:F5DF:B315:F3C5     144 0800.2729.8bc1  STALE Vl6\n2402:1234:106:100:B8F1:D9D3:A5F1:C1C9       4 507b.9dcd.c2ae  STALE Vl6\n2402:1234:106:100:CC71:364E:A3E7:62B8      36 507b.9dcd.c2ae  STALE Vl6\nFE80::5AAC:78FF:FEF8:CCCC                  23 58ac.78f8.cccc  STALE Vl6\nFE80::7A0C:F0FF:FE8E:2FF4                 103 780c.f08e.2ff4  STALE Vl6\nFE80::7EAD:74FF:FE85:B86                   22 7cad.7485.0c16  STALE Vl6\nFE80::208:E3FF:FEFF:FC28                    0 0008.e3ff.fc28  REACH Vl687\nFE80::9277:EEFF:FE9B:4E00                   - -               REACH Di0\n",
+      "expected": {
+        "neighbors": {
+          "2402:1234:106:100:793A:F08D:5B3A:EF89": {
+            "VLAN6": {
+              "state": "STALE",
+              "age": 33,
+              "link_layer_address": "54e1.addb.200f"
+            }
+          },
+          "2402:1234:106:100:A193:9153:7CAF:9802": {
+            "VLAN6": {
+              "state": "STALE",
+              "age": 1,
+              "link_layer_address": "54e1.addb.200f"
+            }
+          },
+          "2402:1234:106:100:B419:F5DF:B315:F3C5": {
+            "VLAN6": {
+              "state": "STALE",
+              "age": 144,
+              "link_layer_address": "0800.2729.8bc1"
+            }
+          },
+          "2402:1234:106:100:B8F1:D9D3:A5F1:C1C9": {
+            "VLAN6": {
+              "state": "STALE",
+              "age": 4,
+              "link_layer_address": "507b.9dcd.c2ae"
+            }
+          },
+          "2402:1234:106:100:CC71:364E:A3E7:62B8": {
+            "VLAN6": {
+              "state": "STALE",
+              "age": 36,
+              "link_layer_address": "507b.9dcd.c2ae"
+            }
+          },
+          "FE80::5AAC:78FF:FEF8:CCCC": {
+            "VLAN6": {
+              "state": "STALE",
+              "age": 23,
+              "link_layer_address": "58ac.78f8.cccc"
+            }
+          },
+          "FE80::7A0C:F0FF:FE8E:2FF4": {
+            "VLAN6": {
+              "state": "STALE",
+              "age": 103,
+              "link_layer_address": "780c.f08e.2ff4"
+            }
+          },
+          "FE80::7EAD:74FF:FE85:B86": {
+            "VLAN6": {
+              "state": "STALE",
+              "age": 22,
+              "link_layer_address": "7cad.7485.0c16"
+            }
+          },
+          "FE80::208:E3FF:FEFF:FC28": {
+            "VLAN687": {
+              "state": "REACH",
+              "age": 0,
+              "link_layer_address": "0008.e3ff.fc28"
+            }
+          },
+          "FE80::9277:EEFF:FE9B:4E00": {
+            "Dialer0": {
+              "state": "REACH"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

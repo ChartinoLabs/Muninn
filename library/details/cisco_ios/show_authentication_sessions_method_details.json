@@ -1,0 +1,160 @@
+{
+  "os": "cisco_ios",
+  "command": "show authentication sessions method details",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Single session with session timeout, timeout action, and interface template",
+      "input": "            Interface:  GigabitEthernet1/0/31\n               IIF-ID:  0x18438F31\n          MAC Address:  cc96.abcd.1234\n         IPv6 Address:  Unknown\n         IPv4 Address:  10.10.10.190\n            User-Name:  CC-96-AA-BB-CC-DD\n          Device-type:  Microsoft-Workstation\n          Device-name:  MOED-9212345\n               Status:  Authorized\n               Domain:  DATA\n       Oper host mode:  multi-auth\n     Oper control dir:  both\n      Session timeout:  43200s (server), Remaining: 3574s\n       Timeout action:  Reauthenticate\n  Acct update timeout:  172800s (local), Remaining: 89824s\n    Common Session ID:  0A4014AC0000002F555FD224\n      Acct Session ID:  0x00000027\n               Handle:  0xe0000025\n       Current Policy:  PMAP_DefaultWiredDot1xClosedAuth_1X\n\nLocal Policies:\n\nServer Policies:\n             VN Value:  WALKUPED_VN\n      Session-Timeout: 43200 sec\n           Vlan Group:  Vlan: 1011\n   Interface Template:  PXE-ClosedMode-Template\n            SGT Value:  40\n\nMethod status list:\n       Method           State\n        dot1x           Stopped\n          mab           Authc Success\n",
+      "expected": {
+        "GigabitEthernet1/0/31": {
+          "0A4014AC0000002F555FD224": {
+            "interface": "GigabitEthernet1/0/31",
+            "iif_id": "0x18438F31",
+            "mac_address": "cc96.abcd.1234",
+            "ipv4_address": "10.10.10.190",
+            "user_name": "CC-96-AA-BB-CC-DD",
+            "device_type": "Microsoft-Workstation",
+            "device_name": "MOED-9212345",
+            "status": "Authorized",
+            "domain": "DATA",
+            "oper_host_mode": "multi-auth",
+            "oper_control_dir": "both",
+            "session_timeout": 43200,
+            "session_timeout_remaining": 3574,
+            "timeout_action": "Reauthenticate",
+            "acct_update_timeout": 172800,
+            "acct_update_remaining": 89824,
+            "common_session_id": "0A4014AC0000002F555FD224",
+            "acct_session_id": "0x00000027",
+            "handle": "0xe0000025",
+            "current_policy": "PMAP_DefaultWiredDot1xClosedAuth_1X",
+            "server_policy_vn": "WALKUPED_VN",
+            "server_policy_session_timeout": 43200,
+            "server_policy_vlan": 1011,
+            "server_policy_template": "PXE-ClosedMode-Template",
+            "server_policy_sgt": 40,
+            "methods": {
+              "dot1x": {
+                "method": "dot1x",
+                "state": "Stopped"
+              },
+              "mab": {
+                "method": "mab",
+                "state": "Authc Success"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Multiple sessions with varying interfaces, IPv6 addresses, and resultant policies",
+      "input": "\n            Interface:  TenGigabitEthernet2/0/39\n               IIF-ID:  0x16191B90\n          MAC Address:  0060.aaaa.bbbb\n         IPv6 Address:  Unknown\n         IPv4 Address:  10.11.11.117\n            User-Name:  00-60-AA-AA-BB-BB\n          Device-type:  IP-Phone\n          Device-name:  Unknown Device\n               Status:  Authorized\n               Domain:  VOICE\n       Oper host mode:  multi-auth\n     Oper control dir:  both\n      Session timeout:  N/A\n  Acct update timeout:  172800s (local), Remaining: 77097s\n    Common Session ID:  123414AC000066635A83835D\n      Acct Session ID:  0x00002dfd\n               Handle:  0xb100018c\n       Current Policy:  PMAP_DefaultWDot1xClosedAuth_1X\n\nLocal Policies:\n\nServer Policies:\n             VN Value:  STAFF_VN\n           Vlan Group:  Vlan: 1133\n            SGT Value:  20\n            SGT Value:  20\n\nResultant Policies:\n             VN Value:  STAFF_VN\n           Vlan Group:  Vlan: 1133\n            SGT Value:  20\n            SGT Value:  20\n\nMethod status list:\n       Method           State\n        dot1x           Authc Success\n          mab           Stopped\n\n----------------------------------------\n\n            Interface:  GigabitEthernet1/0/21\n               IIF-ID:  0x1239EA14\n          MAC Address:  707d.b9aa.bbcc\n         IPv6 Address:  fe80::727d:abcd:abcd:abcd\n         IPv4 Address:  172.22.5.2\n            User-Name:  70-7D-B9-AA-BB-CC\n          Device-type:  Cisco-AIR-LAP\n          Device-name:  cisco AIR-AP2802I-Z-K9\n               Status:  Authorized\n               Domain:  DATA\n       Oper host mode:  multi-auth\n     Oper control dir:  both\n      Session timeout:  N/A\n  Acct update timeout:  172800s (local), Remaining: 145579s\n    Common Session ID:  118214AC11110C6A86D02356\n      Acct Session ID:  0x00001da4\n               Handle:  0x5c000c60\n       Current Policy:  PMAP_DefaultWiredDot1xClosedAuth_1X\n\n\nLocal Policies:\n\nServer Policies:\n             VN Value:  INFRA_VN\n           Vlan Group:  Vlan: 1000\n            SGT Value:  35\n            SGT Value:  35\n\n\nMethod status list:\n       Method           State\n        dot1x           Stopped\n          mab           Authc Success\n\n----------------------------------------\n\n            Interface:  GigabitEthernet2/0/1\n               IIF-ID:  0x12776C48\n          MAC Address:  3814.28aa.bbcc\n         IPv6 Address:  fe80::75e2:aaaa:bbbb:cccc\n         IPv4 Address:  10.11.12.83\n            User-Name:  DOMAIN\\koli\n          Device-type:  Microsoft-Workstation\n          Device-name:  IDC-2AE53D34\n               Status:  Authorized\n               Domain:  DATA\n       Oper host mode:  multi-auth\n     Oper control dir:  both\n      Session timeout:  N/A\n  Acct update timeout:  172800s (local), Remaining: 169278s\n    Common Session ID:  118214AC000017C56C52F101\n      Acct Session ID:  0x00003a04\n               Handle:  0x0e0007c3\n       Current Policy:  PMAP_DefaultWiredDot1xClosedAuth_1X\n\n\nLocal Policies:\n\nServer Policies:\n             VN Value:  STAFF_VN\n           Vlan Group:  Vlan: 1133\n            SGT Value:  20\n            SGT Value:  20\n\n\nMethod status list:\n       Method           State\n        dot1x           Authc Success\n",
+      "expected": {
+        "TenGigabitEthernet2/0/39": {
+          "123414AC000066635A83835D": {
+            "interface": "TenGigabitEthernet2/0/39",
+            "iif_id": "0x16191B90",
+            "mac_address": "0060.aaaa.bbbb",
+            "ipv4_address": "10.11.11.117",
+            "user_name": "00-60-AA-AA-BB-BB",
+            "device_type": "IP-Phone",
+            "status": "Authorized",
+            "domain": "VOICE",
+            "oper_host_mode": "multi-auth",
+            "oper_control_dir": "both",
+            "acct_update_timeout": 172800,
+            "acct_update_remaining": 77097,
+            "common_session_id": "123414AC000066635A83835D",
+            "acct_session_id": "0x00002dfd",
+            "handle": "0xb100018c",
+            "current_policy": "PMAP_DefaultWDot1xClosedAuth_1X",
+            "server_policy_vn": "STAFF_VN",
+            "server_policy_vlan": 1133,
+            "server_policy_sgt": 20,
+            "resultant_policy_vn": "STAFF_VN",
+            "resultant_policy_vlan": 1133,
+            "resultant_policy_sgt": 20,
+            "methods": {
+              "dot1x": {
+                "method": "dot1x",
+                "state": "Authc Success"
+              },
+              "mab": {
+                "method": "mab",
+                "state": "Stopped"
+              }
+            }
+          }
+        },
+        "GigabitEthernet1/0/21": {
+          "118214AC11110C6A86D02356": {
+            "interface": "GigabitEthernet1/0/21",
+            "iif_id": "0x1239EA14",
+            "mac_address": "707d.b9aa.bbcc",
+            "ipv6_address": "fe80::727d:abcd:abcd:abcd",
+            "ipv4_address": "172.22.5.2",
+            "user_name": "70-7D-B9-AA-BB-CC",
+            "device_type": "Cisco-AIR-LAP",
+            "device_name": "cisco AIR-AP2802I-Z-K9",
+            "status": "Authorized",
+            "domain": "DATA",
+            "oper_host_mode": "multi-auth",
+            "oper_control_dir": "both",
+            "acct_update_timeout": 172800,
+            "acct_update_remaining": 145579,
+            "common_session_id": "118214AC11110C6A86D02356",
+            "acct_session_id": "0x00001da4",
+            "handle": "0x5c000c60",
+            "current_policy": "PMAP_DefaultWiredDot1xClosedAuth_1X",
+            "server_policy_vn": "INFRA_VN",
+            "server_policy_vlan": 1000,
+            "server_policy_sgt": 35,
+            "methods": {
+              "dot1x": {
+                "method": "dot1x",
+                "state": "Stopped"
+              },
+              "mab": {
+                "method": "mab",
+                "state": "Authc Success"
+              }
+            }
+          }
+        },
+        "GigabitEthernet2/0/1": {
+          "118214AC000017C56C52F101": {
+            "interface": "GigabitEthernet2/0/1",
+            "iif_id": "0x12776C48",
+            "mac_address": "3814.28aa.bbcc",
+            "ipv6_address": "fe80::75e2:aaaa:bbbb:cccc",
+            "ipv4_address": "10.11.12.83",
+            "user_name": "DOMAIN\\koli",
+            "device_type": "Microsoft-Workstation",
+            "device_name": "IDC-2AE53D34",
+            "status": "Authorized",
+            "domain": "DATA",
+            "oper_host_mode": "multi-auth",
+            "oper_control_dir": "both",
+            "acct_update_timeout": 172800,
+            "acct_update_remaining": 169278,
+            "common_session_id": "118214AC000017C56C52F101",
+            "acct_session_id": "0x00003a04",
+            "handle": "0x0e0007c3",
+            "current_policy": "PMAP_DefaultWiredDot1xClosedAuth_1X",
+            "server_policy_vn": "STAFF_VN",
+            "server_policy_vlan": 1133,
+            "server_policy_sgt": 20,
+            "methods": {
+              "dot1x": {
+                "method": "dot1x",
+                "state": "Authc Success"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

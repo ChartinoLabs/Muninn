@@ -1,0 +1,27 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show meraki migration",
+  "schema": {
+    "name": "ShowMerakiMigrationResult",
+    "fields": {
+      "current_booted_mode": {
+        "type": "str",
+        "required": true
+      },
+      "migration_in_progress": {
+        "type": "str",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "Meraki Mode Migration Status\n-------------------------------------------\n  Current Booted Mode:              C9K-M\n  Migration in Progress:            NO\n",
+      "expected": {
+        "current_booted_mode": "C9K-M",
+        "migration_in_progress": "NO"
+      }
+    }
+  ]
+}

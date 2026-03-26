@@ -1,0 +1,198 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip eigrp timers",
+  "schema": {
+    "name": "ShowIpEigrpTimersResult",
+    "fields": {
+      "instances": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "EigrpInstanceTimers",
+            "fields": {
+              "processes": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "EigrpProcessTimers",
+                    "fields": {
+                      "timers": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": "muninn.parsers.iosxe.show_ip_eigrp_timers.InterfaceTimers | muninn.parsers.iosxe.show_ip_eigrp_timers.TimerEntries"
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple hello peers with update and SIA timers",
+      "input": "show ip eigrp timers\nEIGRP-IPv4 Timers for AS(100)\n  Hello Process\n    Expiration    Type\n|           1.724  (parent)\n  |           1.724  Hello (Te0/0/6.20)\n  |           2.294  Hello (Te0/0/4)\n  |           2.923  Hello (Te0/0/10)\n\n  Update Process\n    Expiration    Type\n|           4.780  (parent)\n  |           4.780  (parent)\n    |           4.780  (parent)\n      |           4.780  Peer transmission\n  |          10.457  (parent)\n    |          10.457  Peer holding\n  |          11.220  (parent)\n    |          11.220  Peer holding\n  |          12.303  (parent)\n    |          12.303  Peer holding\n\n  SIA Process\n    Expiration    Type\n|           0.000  (parent)\n",
+      "expected": {
+        "instances": {
+          "100": {
+            "processes": {
+              "hello": {
+                "timers": {
+                  "hello": {
+                    "interfaces": {
+                      "TenGigabitEthernet0/0/10": {
+                        "expiration": 2.923
+                      },
+                      "TenGigabitEthernet0/0/4": {
+                        "expiration": 2.294
+                      },
+                      "TenGigabitEthernet0/0/6.20": {
+                        "expiration": 1.724
+                      }
+                    }
+                  },
+                  "parent": {
+                    "entries": [
+                      {
+                        "expiration": 1.724
+                      }
+                    ]
+                  }
+                }
+              },
+              "sia": {
+                "timers": {
+                  "parent": {
+                    "entries": [
+                      {
+                        "expiration": 0.0
+                      }
+                    ]
+                  }
+                }
+              },
+              "update": {
+                "timers": {
+                  "parent": {
+                    "entries": [
+                      {
+                        "expiration": 4.78
+                      },
+                      {
+                        "expiration": 4.78
+                      },
+                      {
+                        "expiration": 4.78
+                      },
+                      {
+                        "expiration": 10.457
+                      },
+                      {
+                        "expiration": 11.22
+                      },
+                      {
+                        "expiration": 12.303
+                      }
+                    ]
+                  },
+                  "peer_holding": {
+                    "entries": [
+                      {
+                        "expiration": 10.457
+                      },
+                      {
+                        "expiration": 11.22
+                      },
+                      {
+                        "expiration": 12.303
+                      }
+                    ]
+                  },
+                  "peer_transmission": {
+                    "entries": [
+                      {
+                        "expiration": 4.78
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Single hello peer with minimal update and SIA timers",
+      "input": "show ip eigrp timers\nEIGRP-IPv4 Timers for AS(100)\n  Hello Process\n    Expiration    Type\n|           2.985  (parent)\n  |           2.985  Hello (Te0/0/4)\n\n  Update Process\n    Expiration    Type\n|          13.190  (parent)\n  |          13.190  (parent)\n    |          13.190  Peer holding\n\n  SIA Process\n    Expiration    Type\n|           0.000  (parent)\n",
+      "expected": {
+        "instances": {
+          "100": {
+            "processes": {
+              "hello": {
+                "timers": {
+                  "hello": {
+                    "interfaces": {
+                      "TenGigabitEthernet0/0/4": {
+                        "expiration": 2.985
+                      }
+                    }
+                  },
+                  "parent": {
+                    "entries": [
+                      {
+                        "expiration": 2.985
+                      }
+                    ]
+                  }
+                }
+              },
+              "sia": {
+                "timers": {
+                  "parent": {
+                    "entries": [
+                      {
+                        "expiration": 0.0
+                      }
+                    ]
+                  }
+                }
+              },
+              "update": {
+                "timers": {
+                  "parent": {
+                    "entries": [
+                      {
+                        "expiration": 13.19
+                      },
+                      {
+                        "expiration": 13.19
+                      }
+                    ]
+                  },
+                  "peer_holding": {
+                    "entries": [
+                      {
+                        "expiration": 13.19
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

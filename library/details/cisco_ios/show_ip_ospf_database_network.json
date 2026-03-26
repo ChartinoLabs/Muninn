@@ -1,0 +1,168 @@
+{
+  "os": "cisco_ios",
+  "command": "show ip ospf database network",
+  "schema": {
+    "name": "ShowIpOspfDatabaseNetworkResult",
+    "fields": {
+      "router_id": {
+        "type": "str",
+        "required": true
+      },
+      "process_id": {
+        "type": "int",
+        "required": true
+      },
+      "areas": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "AreaEntry",
+            "fields": {
+              "lsas": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "name": "NetworkLsaEntry",
+                      "fields": {
+                        "ls_age": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "options": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "ls_type": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "link_state_id": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "advertising_router": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "ls_seq_number": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "checksum": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "length": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "network_mask": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "attached_routers": {
+                          "type": {
+                            "type": "dict",
+                            "key": "str",
+                            "value": {
+                              "type": "dict",
+                              "key": "str",
+                              "value": "<class 'object'>"
+                            }
+                          },
+                          "required": true
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Standard OSPF network LSA database with multiple entries across two areas",
+      "input": "\n            OSPF Router with ID (192.168.239.66) (Process ID 300)\n\n                Displaying Net Link States (Area 0.0.0.0)\n\n  LS age: 1367\n  Options: (No TOS-capability)\n  LS Type: Network Links\n  Link State ID: 172.16.1.3 (address of Designated Router)\n  Advertising Router: 192.168.239.66\n  LS Seq Number: 800000E7\n  Checksum: 0x1229\n  Length: 52\n  Network Mask: 255.255.255.0\n        Attached Router: 192.168.239.66\n        Attached Router: 172.16.241.5\n        Attached Router: 172.16.1.1\n        Attached Router: 172.16.54.5\n        Attached Router: 172.16.1.5\n\n  LS age: 948\n  Options: (No TOS-capability)\n  LS Type: Network Links\n  Link State ID: 10.1.2.1 (address of Designated Router)\n  Advertising Router: 10.1.2.1\n  LS Seq Number: 80000048\n  Checksum: 0xE9B0\n  Length: 32\n  Network Mask: 255.255.255.0\n        Attached Router: 10.1.2.1\n        Attached Router: 10.16.2.2\n\n                Displaying Net Link States (Area 0.0.0.1)\n\n  LS age: 234\n  Options: (No TOS-capability, DC)\n  LS Type: Network Links\n  Link State ID: 10.186.5.1 (address of Designated Router)\n  Advertising Router: 10.229.11.11\n  LS Seq Number: 80000015\n  Checksum: 0x3E6C\n  Length: 36\n  Network Mask: 255.255.255.0\n        Attached Router: 10.229.11.11\n        Attached Router: 10.115.55.55\n        Attached Router: 10.84.66.66\n",
+      "expected": {
+        "areas": {
+          "0.0.0.0": {
+            "lsas": {
+              "10.1.2.1": {
+                "10.1.2.1": {
+                  "advertising_router": "10.1.2.1",
+                  "attached_routers": {
+                    "10.1.2.1": {},
+                    "10.16.2.2": {}
+                  },
+                  "checksum": "0xE9B0",
+                  "length": 32,
+                  "link_state_id": "10.1.2.1",
+                  "ls_age": 948,
+                  "ls_seq_number": "80000048",
+                  "ls_type": "Network Links",
+                  "network_mask": "255.255.255.0",
+                  "options": "No TOS-capability"
+                }
+              },
+              "172.16.1.3": {
+                "192.168.239.66": {
+                  "advertising_router": "192.168.239.66",
+                  "attached_routers": {
+                    "172.16.1.1": {},
+                    "172.16.1.5": {},
+                    "172.16.241.5": {},
+                    "172.16.54.5": {},
+                    "192.168.239.66": {}
+                  },
+                  "checksum": "0x1229",
+                  "length": 52,
+                  "link_state_id": "172.16.1.3",
+                  "ls_age": 1367,
+                  "ls_seq_number": "800000E7",
+                  "ls_type": "Network Links",
+                  "network_mask": "255.255.255.0",
+                  "options": "No TOS-capability"
+                }
+              }
+            }
+          },
+          "0.0.0.1": {
+            "lsas": {
+              "10.186.5.1": {
+                "10.229.11.11": {
+                  "advertising_router": "10.229.11.11",
+                  "attached_routers": {
+                    "10.115.55.55": {},
+                    "10.229.11.11": {},
+                    "10.84.66.66": {}
+                  },
+                  "checksum": "0x3E6C",
+                  "length": 36,
+                  "link_state_id": "10.186.5.1",
+                  "ls_age": 234,
+                  "ls_seq_number": "80000015",
+                  "ls_type": "Network Links",
+                  "network_mask": "255.255.255.0",
+                  "options": "No TOS-capability, DC"
+                }
+              }
+            }
+          }
+        },
+        "process_id": 300,
+        "router_id": "192.168.239.66"
+      }
+    }
+  ]
+}

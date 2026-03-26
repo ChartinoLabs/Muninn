@@ -1,0 +1,80 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show platform software dns-umbrella statistics",
+  "schema": {
+    "name": "ShowPlatformSoftwareDnsUmbrellaStatisticsResult",
+    "fields": {
+      "umbrella_statistics": {
+        "type": {
+          "name": "UmbrellaStatistics",
+          "fields": {
+            "total_packets": {
+              "type": "int",
+              "required": true
+            },
+            "dnscrypt_queries": {
+              "type": "int",
+              "required": true
+            },
+            "dnscrypt_responses": {
+              "type": "int",
+              "required": true
+            },
+            "dns_queries": {
+              "type": "int",
+              "required": true
+            },
+            "dns_bypassed_queries_regex": {
+              "type": "int",
+              "required": true
+            },
+            "dns_responses_umbrella": {
+              "type": "int",
+              "required": true
+            },
+            "dns_responses_other": {
+              "type": "int",
+              "required": true
+            },
+            "aged_queries": {
+              "type": "int",
+              "required": true
+            },
+            "dropped_packets": {
+              "type": "int",
+              "required": true
+            },
+            "dns_bypass_fqdn": {
+              "type": "int",
+              "required": false
+            },
+            "dns_bypass_ip": {
+              "type": "int",
+              "required": false
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show platform software dns-umbrella statistics output",
+      "input": "Router#show platform software dns-umbrella statistics\n========================================\n          Umbrella Statistics\n========================================\n Total Packets               : 57057\n DNSCrypt queries            : 0\n DNSCrypt responses          : 0\n DNS queries                 : 32321\n DNS bypassed queries(Regex) : 0\n DNS responses(Umbrella)     : 24693\n DNS responses(Other)        : 37\n Aged queries                : 7628\n Dropped pkts                : 0\n",
+      "expected": {
+        "umbrella_statistics": {
+          "total_packets": 57057,
+          "dnscrypt_queries": 0,
+          "dnscrypt_responses": 0,
+          "dns_queries": 32321,
+          "dns_bypassed_queries_regex": 0,
+          "dns_responses_umbrella": 24693,
+          "dns_responses_other": 37,
+          "aged_queries": 7628,
+          "dropped_packets": 0
+        }
+      }
+    }
+  ]
+}

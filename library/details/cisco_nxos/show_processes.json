@@ -1,0 +1,121 @@
+{
+  "os": "cisco_nxos",
+  "command": "show processes",
+  "schema": {
+    "name": "ShowProcessesResult",
+    "fields": {
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ProcessEntry",
+            "fields": {
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "type": {
+                "type": "str",
+                "required": true
+              },
+              "start_cnt": {
+                "type": "int",
+                "required": true
+              },
+              "pid": {
+                "type": "int",
+                "required": false
+              },
+              "pc": {
+                "type": "str",
+                "required": false
+              },
+              "tty": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Standard output with multiple running processes and one not-running process",
+      "input": "\nN95_1# show processes\n\nPID    State  PC        Start_cnt    TTY   Type  Process\n-----  -----  --------  -----------  ----  ----  -------------\n    1      S  b8dffed3            1     -     O  init\n    4      S         0            1     -     O  kworker/0:0\n   10      S         0            1     -     O  ksoftirqd/1\n26668      S  cbdcd9b3            1     -     O  rsyslogd\n26675      S  9c608843            1     -     O  dbus-daemon\n26687      S  e4385a40            1     0     O  agetty\n    -     NR         -            0     -     X  ldap\n\nState: R(runnable), S(sleeping), Z(defunct)\n\nType:  U(unknown), O(non sysmgr)\n       VL(vdc-local), VG(vdc-global), VU(vdc-unaware)\n       NR(not running), ER(terminated etc)\n",
+      "expected": {
+        "processes": {
+          "agetty": {
+            "pc": "e4385a40",
+            "pid": 26687,
+            "start_cnt": 1,
+            "state": "S",
+            "tty": 0,
+            "type": "O"
+          },
+          "dbus-daemon": {
+            "pc": "9c608843",
+            "pid": 26675,
+            "start_cnt": 1,
+            "state": "S",
+            "type": "O"
+          },
+          "init": {
+            "pc": "b8dffed3",
+            "pid": 1,
+            "start_cnt": 1,
+            "state": "S",
+            "type": "O"
+          },
+          "ksoftirqd/1": {
+            "pc": "0",
+            "pid": 10,
+            "start_cnt": 1,
+            "state": "S",
+            "type": "O"
+          },
+          "kworker/0:0": {
+            "pc": "0",
+            "pid": 4,
+            "start_cnt": 1,
+            "state": "S",
+            "type": "O"
+          },
+          "ldap": {
+            "start_cnt": 0,
+            "state": "NR",
+            "type": "X"
+          },
+          "rsyslogd": {
+            "pc": "cbdcd9b3",
+            "pid": 26668,
+            "start_cnt": 1,
+            "state": "S",
+            "type": "O"
+          }
+        }
+      }
+    },
+    {
+      "name": "Output with only not-running processes",
+      "input": "PID    State  PC        Start_cnt    TTY   Type  Process\n-----  -----  --------  -----------  ----  ----  -------------\n    -     NR         -            0     -     X  ldap\n    -     NR         -            0     -     X  radius\n",
+      "expected": {
+        "processes": {
+          "ldap": {
+            "start_cnt": 0,
+            "state": "NR",
+            "type": "X"
+          },
+          "radius": {
+            "start_cnt": 0,
+            "state": "NR",
+            "type": "X"
+          }
+        }
+      }
+    }
+  ]
+}

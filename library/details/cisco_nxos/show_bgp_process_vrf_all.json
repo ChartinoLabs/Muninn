@@ -1,0 +1,462 @@
+{
+  "os": "cisco_nxos",
+  "command": "show bgp process vrf all",
+  "schema": {
+    "name": "ShowBgpProcessVrfAllResult",
+    "fields": {
+      "process": {
+        "type": {
+          "name": "ProcessInfo",
+          "fields": {
+            "process_id": {
+              "type": "int",
+              "required": true
+            },
+            "protocol_started_reason": {
+              "type": "str",
+              "required": true
+            },
+            "protocol_tag": {
+              "type": "int",
+              "required": true
+            },
+            "protocol_state": {
+              "type": "str",
+              "required": true
+            },
+            "isolate_mode": {
+              "type": "bool",
+              "required": true
+            },
+            "mmode": {
+              "type": "str",
+              "required": true
+            },
+            "memory_state": {
+              "type": "str",
+              "required": true
+            },
+            "as_format": {
+              "type": "str",
+              "required": true
+            },
+            "performance_mode": {
+              "type": "bool",
+              "required": true
+            },
+            "segment_routing_global_block": {
+              "type": "str",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "attributes": {
+        "type": {
+          "name": "AttributesInfo",
+          "fields": {
+            "num_attribute_entries": {
+              "type": "int",
+              "required": true
+            },
+            "hwm_attribute_entries": {
+              "type": "int",
+              "required": true
+            },
+            "bytes_used": {
+              "type": "int",
+              "required": true
+            },
+            "entries_pending_delete": {
+              "type": "int",
+              "required": true
+            },
+            "hwm_entries_pending_delete": {
+              "type": "int",
+              "required": true
+            },
+            "paths_per_attribute_hwm": {
+              "type": "int",
+              "required": true
+            },
+            "as_path_entries": {
+              "type": "int",
+              "required": true
+            },
+            "bytes_used_by_as_path_entries": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfEntry",
+            "fields": {
+              "vrf_id": {
+                "type": "int",
+                "required": true
+              },
+              "vrf_state": {
+                "type": "str",
+                "required": true
+              },
+              "router_id": {
+                "type": "str",
+                "required": true
+              },
+              "configured_router_id": {
+                "type": "str",
+                "required": true
+              },
+              "confed_id": {
+                "type": "int",
+                "required": true
+              },
+              "cluster_id": {
+                "type": "str",
+                "required": true
+              },
+              "configured_peers": {
+                "type": "int",
+                "required": true
+              },
+              "pending_config_peers": {
+                "type": "int",
+                "required": true
+              },
+              "established_peers": {
+                "type": "int",
+                "required": true
+              },
+              "vrf_rd": {
+                "type": "str",
+                "required": true
+              },
+              "vrf_evpn_rd": {
+                "type": "str",
+                "required": true
+              },
+              "address_families": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "AddressFamilyEntry",
+                    "fields": {
+                      "table_id": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "table_state": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "counters": {
+                        "type": {
+                          "name": "AddressFamilyCounters",
+                          "fields": {
+                            "peers": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "active_peers": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "routes": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "paths": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "networks": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "aggregates": {
+                              "type": "int",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": true
+                      },
+                      "redistribution": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": true
+                      },
+                      "export_rt_list": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": true
+                      },
+                      "import_rt_list": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": true
+                      },
+                      "evpn_export_rt_list": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": true
+                      },
+                      "evpn_import_rt_list": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": true
+                      },
+                      "label_mode": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "aggregate_label": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "is_route_reflector": {
+                        "type": "bool",
+                        "required": true
+                      },
+                      "retain_rt": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "import_default_limit": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "import_default_prefix_count": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "import_default_map": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "export_default_limit": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "export_default_prefix_count": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "export_default_map": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "import_route_map": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "export_route_map": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "advertise_to_evpn": {
+                        "type": "bool",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple VRFs with various address families, redistribution, and RT lists",
+      "input": "\nBGP Process Information\nBGP Process ID                 : 29474\nBGP Protocol Started, reason:  : configuration\nBGP Protocol Tag               : 100\nBGP Performance Mode:          : No\nBGP Protocol State             : Running\nBGP Isolate Mode               : No\nBGP MMODE                      : Initialized\nBGP Memory State               : OK\nBGP asformat                   : asplain\nSegment Routing Global Block   : 10000-25000\n\nBGP attributes information\nNumber of attribute entries    : 4\nHWM of attribute entries       : 5\nBytes used by entries          : 368\nEntries pending delete         : 0\nHWM of entries pending delete  : 0\nBGP paths per attribute HWM    : 1\nBGP AS path entries            : 0\nBytes used by AS path entries  : 0\n\nConfcheck capabilities in use:\n  1. CAP_FEATURE_BGP_5_2_1 (refcount = 7)\n\nInformation regarding configured VRFs:\n\nBGP Information for VRF VRF1\nVRF Id                         : 3\nVRF state                      : UP\nRouter-ID                      : 10.229.11.11\nConfigured Router-ID           : 0.0.0.0\nConfed-ID                      : 0\nCluster-ID                     : 0.0.0.0\nNo. of configured peers        : 1\nNo. of pending config peers    : 0\nNo. of established peers       : 0\nVRF RD                         : 100:100\n\n    Information for address family IPv4 Unicast in VRF VRF1\n    Table Id                   : 10\n    Table state                : UP\n    Peers      Active-peers    Routes     Paths      Networks   Aggregates\n    1          0               5          5          1          2\n\n    Redistribution\n\tdirect, route-map genie_redistribution\n\tstatic, route-map genie_redistribution\n\teigrp, route-map test-map\n\n    Export RT list: 100:100\n    Import RT list: 100:100\n    Label mode: per-prefix\n    Aggregate label: 492287\n\n    Information for address family IPv6 Unicast in VRF VRF1\n    Table Id                   : 0x80000010\n    Table state                : UP\n    Peers      Active-peers    Routes     Paths      Networks   Aggregates\n    0          0               4          4          1          1\n\n    Redistribution\n\tdirect, route-map genie_redistribution\n\tstatic, route-map genie_redistribution\n\n    Export RT list: 100:100\n    Import RT list: 100:100\n    Label mode: per-prefix\n    Aggregate label: 492288\n\n    Nexthop trigger-delay\n\tcritical 3000 ms\n\tnon-critical 10000 ms\n\nBGP Information for VRF default\nVRF Id                         : 1\nVRF state                      : UP\nRouter-ID                      : 10.4.1.1\nConfigured Router-ID           : 10.4.1.1\nConfed-ID                      : 0\nCluster-ID                     : 0.0.0.0\nNo. of configured peers        : 3\nNo. of pending config peers    : 0\nNo. of established peers       : 1\nVRF RD                         : Not configured\n\n    Information for address family IPv4 Unicast in VRF default\n    Table Id                   : 1\n    Table state                : UP\n    Peers      Active-peers    Routes     Paths      Networks   Aggregates\n    1          0               0          0          0          0\n\n    Redistribution\n\tNone\n\n\n    Information for address family IPv6 Unicast in VRF default\n    Table Id                   : 80000001\n    Table state                : UP\n    Peers      Active-peers    Routes     Paths      Networks   Aggregates\n    0          0               0          0          0          0\n\n    Redistribution\n\tNone\n\n\n    Information for address family VPNv4 Unicast in VRF default\n    Table Id                   : 1\n    Table state                : UP\n    Peers      Active-peers    Routes     Paths      Networks   Aggregates\n    1          1               5          5          0          0\n\n    Redistribution\n\tNone\n\n    Retain RT: enabled all\n\n    Information for address family VPNv6 Unicast in VRF default\n    Table Id                   : 80000001\n    Table state                : UP\n    Peers      Active-peers    Routes     Paths      Networks   Aggregates\n    1          1               4          4          0          0\n\n    Redistribution\n\tNone\n\n\n    Information for address family IPv6 Label Unicast in VRF default\n    Table Id                   : 80000001\n    Table state                : UP\n    Peers      Active-peers    Routes     Paths      Networks   Aggregates\n    0          0               0          0          0          0\n\n    Redistribution\n\tNone\n",
+      "expected": {
+        "attributes": {
+          "as_path_entries": 0,
+          "bytes_used": 368,
+          "bytes_used_by_as_path_entries": 0,
+          "entries_pending_delete": 0,
+          "hwm_attribute_entries": 5,
+          "hwm_entries_pending_delete": 0,
+          "num_attribute_entries": 4,
+          "paths_per_attribute_hwm": 1
+        },
+        "process": {
+          "as_format": "asplain",
+          "isolate_mode": false,
+          "memory_state": "OK",
+          "mmode": "Initialized",
+          "performance_mode": false,
+          "process_id": 29474,
+          "protocol_started_reason": "configuration",
+          "protocol_state": "Running",
+          "protocol_tag": 100,
+          "segment_routing_global_block": "10000-25000"
+        },
+        "vrfs": {
+          "VRF1": {
+            "address_families": {
+              "IPv4 Unicast": {
+                "aggregate_label": 492287,
+                "counters": {
+                  "active_peers": 0,
+                  "aggregates": 2,
+                  "networks": 1,
+                  "paths": 5,
+                  "peers": 1,
+                  "routes": 5
+                },
+                "export_rt_list": [
+                  "100:100"
+                ],
+                "import_rt_list": [
+                  "100:100"
+                ],
+                "label_mode": "per-prefix",
+                "redistribution": [
+                  "direct, route-map genie_redistribution",
+                  "static, route-map genie_redistribution",
+                  "eigrp, route-map test-map"
+                ],
+                "table_id": "10",
+                "table_state": "UP"
+              },
+              "IPv6 Unicast": {
+                "aggregate_label": 492288,
+                "counters": {
+                  "active_peers": 0,
+                  "aggregates": 1,
+                  "networks": 1,
+                  "paths": 4,
+                  "peers": 0,
+                  "routes": 4
+                },
+                "export_rt_list": [
+                  "100:100"
+                ],
+                "import_rt_list": [
+                  "100:100"
+                ],
+                "label_mode": "per-prefix",
+                "redistribution": [
+                  "direct, route-map genie_redistribution",
+                  "static, route-map genie_redistribution"
+                ],
+                "table_id": "0x80000010",
+                "table_state": "UP"
+              }
+            },
+            "cluster_id": "0.0.0.0",
+            "confed_id": 0,
+            "configured_peers": 1,
+            "configured_router_id": "0.0.0.0",
+            "established_peers": 0,
+            "pending_config_peers": 0,
+            "router_id": "10.229.11.11",
+            "vrf_id": 3,
+            "vrf_rd": "100:100",
+            "vrf_state": "UP"
+          },
+          "default": {
+            "address_families": {
+              "IPv4 Unicast": {
+                "counters": {
+                  "active_peers": 0,
+                  "aggregates": 0,
+                  "networks": 0,
+                  "paths": 0,
+                  "peers": 1,
+                  "routes": 0
+                },
+                "table_id": "1",
+                "table_state": "UP"
+              },
+              "IPv6 Label Unicast": {
+                "counters": {
+                  "active_peers": 0,
+                  "aggregates": 0,
+                  "networks": 0,
+                  "paths": 0,
+                  "peers": 0,
+                  "routes": 0
+                },
+                "table_id": "80000001",
+                "table_state": "UP"
+              },
+              "IPv6 Unicast": {
+                "counters": {
+                  "active_peers": 0,
+                  "aggregates": 0,
+                  "networks": 0,
+                  "paths": 0,
+                  "peers": 0,
+                  "routes": 0
+                },
+                "table_id": "80000001",
+                "table_state": "UP"
+              },
+              "VPNv4 Unicast": {
+                "counters": {
+                  "active_peers": 1,
+                  "aggregates": 0,
+                  "networks": 0,
+                  "paths": 5,
+                  "peers": 1,
+                  "routes": 5
+                },
+                "retain_rt": "enabled all",
+                "table_id": "1",
+                "table_state": "UP"
+              },
+              "VPNv6 Unicast": {
+                "counters": {
+                  "active_peers": 1,
+                  "aggregates": 0,
+                  "networks": 0,
+                  "paths": 4,
+                  "peers": 1,
+                  "routes": 4
+                },
+                "table_id": "80000001",
+                "table_state": "UP"
+              }
+            },
+            "cluster_id": "0.0.0.0",
+            "confed_id": 0,
+            "configured_peers": 3,
+            "configured_router_id": "10.4.1.1",
+            "established_peers": 1,
+            "pending_config_peers": 0,
+            "router_id": "10.4.1.1",
+            "vrf_id": 1,
+            "vrf_rd": "Not configured",
+            "vrf_state": "UP"
+          }
+        }
+      }
+    }
+  ]
+}

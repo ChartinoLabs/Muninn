@@ -1,0 +1,1929 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip route",
+  "schema": {
+    "name": "ShowIpRouteResult",
+    "fields": {
+      "vrf": {
+        "type": "str",
+        "required": true
+      },
+      "gateway_of_last_resort": {
+        "type": {
+          "name": "GatewayOfLastResortEntry",
+          "fields": {
+            "next_hop": {
+              "type": "str",
+              "required": true
+            },
+            "destination": {
+              "type": "str",
+              "required": true
+            }
+          }
+        },
+        "required": false
+      },
+      "routes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RouteEntry",
+            "fields": {
+              "network": {
+                "type": "str",
+                "required": true
+              },
+              "mask": {
+                "type": "str",
+                "required": true
+              },
+              "protocol": {
+                "type": "str",
+                "required": true
+              },
+              "protocol_code": {
+                "type": "str",
+                "required": true
+              },
+              "type": {
+                "type": "str",
+                "required": false
+              },
+              "type_code": {
+                "type": "str",
+                "required": false
+              },
+              "candidate_default": {
+                "type": "bool",
+                "required": false
+              },
+              "replicated": {
+                "type": "bool",
+                "required": false
+              },
+              "next_hop_override": {
+                "type": "bool",
+                "required": false
+              },
+              "pfr_override": {
+                "type": "bool",
+                "required": false
+              },
+              "replicated_local_override": {
+                "type": "bool",
+                "required": false
+              },
+              "next_hops": {
+                "type": {
+                  "type": "list",
+                  "items": {
+                    "name": "NextHopEntry",
+                    "fields": {
+                      "outgoing_interface": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "next_hop": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "admin_distance": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "metric": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "age": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "vrf_leak": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Live device output",
+      "input": "Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP\n       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area\n       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2\n       E1 - OSPF external type 1, E2 - OSPF external type 2, m - OMP\n       n - NAT, Ni - NAT inside, No - NAT outside, Nd - NAT DIA\n       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2\n       ia - IS-IS inter area, * - candidate default, U - per-user static route\n       H - NHRP, G - NHRP registered, g - NHRP registration summary\n       o - ODR, P - periodic downloaded static route, l - LISP\n       a - application route\n       + - replicated route, % - next hop override, p - overrides from PfR\n       & - replicated local route overrides by connected\n\nGateway of last resort is not set\n\n      10.0.0.0/8 is variably subnetted, 6 subnets, 2 masks\nO        10.12.0.0/30 [110/2] via 10.24.0.1, 1w4d, GigabitEthernet3\nO        10.13.0.0/30 [110/2] via 10.34.0.1, 1w4d, GigabitEthernet2\nC        10.24.0.0/30 is directly connected, GigabitEthernet3\nL        10.24.0.2/32 is directly connected, GigabitEthernet3\nC        10.34.0.0/30 is directly connected, GigabitEthernet2\nL        10.34.0.2/32 is directly connected, GigabitEthernet2\n      192.0.2.0/32 is subnetted, 4 subnets\nO        192.0.2.1 [110/3] via 10.34.0.1, 1w4d, GigabitEthernet2\n                   [110/3] via 10.24.0.1, 1w4d, GigabitEthernet3\nO        192.0.2.2 [110/2] via 10.24.0.1, 1w4d, GigabitEthernet3\nO        192.0.2.3 [110/2] via 10.34.0.1, 1w4d, GigabitEthernet2\nC        192.0.2.4 is directly connected, Loopback0\n",
+      "expected": {
+        "vrf": "default",
+        "routes": {
+          "10.12.0.0/30": {
+            "network": "10.12.0.0",
+            "mask": "30",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+              {
+                "admin_distance": 110,
+                "metric": 2,
+                "next_hop": "10.24.0.1",
+                "age": "1w4d",
+                "outgoing_interface": "GigabitEthernet3"
+              }
+            ]
+          },
+          "10.13.0.0/30": {
+            "network": "10.13.0.0",
+            "mask": "30",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+              {
+                "admin_distance": 110,
+                "metric": 2,
+                "next_hop": "10.34.0.1",
+                "age": "1w4d",
+                "outgoing_interface": "GigabitEthernet2"
+              }
+            ]
+          },
+          "10.24.0.0/30": {
+            "network": "10.24.0.0",
+            "mask": "30",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet3"
+              }
+            ]
+          },
+          "10.24.0.2/32": {
+            "network": "10.24.0.2",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet3"
+              }
+            ]
+          },
+          "10.34.0.0/30": {
+            "network": "10.34.0.0",
+            "mask": "30",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet2"
+              }
+            ]
+          },
+          "10.34.0.2/32": {
+            "network": "10.34.0.2",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet2"
+              }
+            ]
+          },
+          "192.0.2.1/32": {
+            "network": "192.0.2.1",
+            "mask": "32",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+              {
+                "admin_distance": 110,
+                "metric": 3,
+                "next_hop": "10.34.0.1",
+                "age": "1w4d",
+                "outgoing_interface": "GigabitEthernet2"
+              },
+              {
+                "admin_distance": 110,
+                "metric": 3,
+                "next_hop": "10.24.0.1",
+                "age": "1w4d",
+                "outgoing_interface": "GigabitEthernet3"
+              }
+            ]
+          },
+          "192.0.2.2/32": {
+            "network": "192.0.2.2",
+            "mask": "32",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+              {
+                "admin_distance": 110,
+                "metric": 2,
+                "next_hop": "10.24.0.1",
+                "age": "1w4d",
+                "outgoing_interface": "GigabitEthernet3"
+              }
+            ]
+          },
+          "192.0.2.3/32": {
+            "network": "192.0.2.3",
+            "mask": "32",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+              {
+                "admin_distance": 110,
+                "metric": 2,
+                "next_hop": "10.34.0.1",
+                "age": "1w4d",
+                "outgoing_interface": "GigabitEthernet2"
+              }
+            ]
+          },
+          "192.0.2.4/32": {
+            "network": "192.0.2.4",
+            "mask": "32",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "Loopback0"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "VRF routing table with BGP routes, VRF leaking, ECMP, Null0 routes, and directly connected BGP redistributed routes",
+      "input": "Routing Table: TRI\nCodes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP\n       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area\n       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2\n       E1 - OSPF external type 1, E2 - OSPF external type 2\n       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2\n       ia - IS-IS inter area, * - candidate default, U - per-user static route\n       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP\n       a - application route\n       + - replicated route, % - next hop override, p - overrides from PfR\n\nGateway of last resort is 10.10.254.3 to network 0.0.0.0\n\nB*    0.0.0.0/0 [200/0] via 10.10.254.3, 1d05h\n      10.0.0.0/8 is variably subnetted, 22 subnets, 8 masks\nB        10.0.0.0/8 [200/0] via 10.10.254.3, 1d05h\nB        10.10.0.0/18 [200/0], 3w4d, Null0\nB        10.10.5.0/24 is directly connected, 3w4d, Vlan5\nL        10.10.5.1/32 is directly connected, Vlan5\nB        10.10.10.0/24 is directly connected, 3w4d, Vlan10\nL        10.10.10.1/32 is directly connected, Vlan10\nB        10.10.20.0/24 is directly connected, 3w4d, Vlan20\nL        10.10.20.1/32 is directly connected, Vlan20\nB        10.10.64.0/19 [200/0], 3w4d, Null0\nB        10.10.64.0/24 is directly connected, 01:04:17, Vlan64\nL        10.10.64.1/32 is directly connected, Vlan64\nB        10.10.96.0/19 [200/0], 3w4d, Null0\nB        10.10.96.0/24 is directly connected, 3w4d, Vlan96\nL        10.10.96.1/32 is directly connected, Vlan96\nB        10.10.128.0/20 [200/0], 3w4d, Null0\nB        10.10.128.0/24 is directly connected, 3w4d, Vlan128\nL        10.10.128.1/32 is directly connected, Vlan128\nC        10.10.254.0/29 is directly connected, Vlan3101\nL        10.10.254.1/32 is directly connected, Vlan3101\nB        10.10.255.11/32 is directly connected, 3w4d, Loopback11\nB        10.10.255.12/32 is directly connected, 3w4d, Loopback12\nB        10.20.0.0/16 [200/0] via 10.10.254.10 (AMB), 3w4d\nB        10.30.0.0/16 [200/0] via 10.10.254.2 (BLU), 3w4d\nB        10.40.0.0/16 [200/0] via 10.10.254.2 (GRN), 3w4d\nB     172.16.0.0/12 [200/0] via 10.10.254.3, 1d05h\nB     192.168.0.0/16 [200/0] via 10.10.254.3, 1d05h\n      50.0.0.0/32 is subnetted, 1 subnets\nC        50.1.1.1 is directly connected, Loopback50\nB        10.12.1.0/27 [200/1000] via 192.168.12.5, 1w1d\n                      [200/1000] via 192.168.12.1, 1w1d\nB        10.12.242.64/28 [200/1000] via 192.168.12.5, 1w1d\n                         [200/1000] via 192.168.12.1, 1w1d\n      172.16.0.0/24 is subnetted, 2 subnets\nB        172.16.10.0 [200/0] via 10.80.10.2, 04:42:57\nB        172.16.20.0 [200/0] via 10.80.10.2, 04:42:52\n",
+      "expected": {
+        "vrf": "TRI",
+        "routes": {
+          "0.0.0.0/0": {
+            "network": "0.0.0.0",
+            "mask": "0",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 0,
+                "next_hop": "10.10.254.3",
+                "age": "1d05h"
+              }
+            ],
+            "candidate_default": true
+          },
+          "10.0.0.0/8": {
+            "network": "10.0.0.0",
+            "mask": "8",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 0,
+                "next_hop": "10.10.254.3",
+                "age": "1d05h"
+              }
+            ]
+          },
+          "10.10.0.0/18": {
+            "network": "10.10.0.0",
+            "mask": "18",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 0,
+                "age": "3w4d",
+                "outgoing_interface": "Null0"
+              }
+            ]
+          },
+          "10.10.5.0/24": {
+            "network": "10.10.5.0",
+            "mask": "24",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "outgoing_interface": "Vlan5",
+                "age": "3w4d"
+              }
+            ]
+          },
+          "10.10.5.1/32": {
+            "network": "10.10.5.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "Vlan5"
+              }
+            ]
+          },
+          "10.10.10.0/24": {
+            "network": "10.10.10.0",
+            "mask": "24",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "outgoing_interface": "Vlan10",
+                "age": "3w4d"
+              }
+            ]
+          },
+          "10.10.10.1/32": {
+            "network": "10.10.10.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "Vlan10"
+              }
+            ]
+          },
+          "10.10.20.0/24": {
+            "network": "10.10.20.0",
+            "mask": "24",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "outgoing_interface": "Vlan20",
+                "age": "3w4d"
+              }
+            ]
+          },
+          "10.10.20.1/32": {
+            "network": "10.10.20.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "Vlan20"
+              }
+            ]
+          },
+          "10.10.64.0/19": {
+            "network": "10.10.64.0",
+            "mask": "19",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 0,
+                "age": "3w4d",
+                "outgoing_interface": "Null0"
+              }
+            ]
+          },
+          "10.10.64.0/24": {
+            "network": "10.10.64.0",
+            "mask": "24",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "outgoing_interface": "Vlan64",
+                "age": "01:04:17"
+              }
+            ]
+          },
+          "10.10.64.1/32": {
+            "network": "10.10.64.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "Vlan64"
+              }
+            ]
+          },
+          "10.10.96.0/19": {
+            "network": "10.10.96.0",
+            "mask": "19",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 0,
+                "age": "3w4d",
+                "outgoing_interface": "Null0"
+              }
+            ]
+          },
+          "10.10.96.0/24": {
+            "network": "10.10.96.0",
+            "mask": "24",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "outgoing_interface": "Vlan96",
+                "age": "3w4d"
+              }
+            ]
+          },
+          "10.10.96.1/32": {
+            "network": "10.10.96.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "Vlan96"
+              }
+            ]
+          },
+          "10.10.128.0/20": {
+            "network": "10.10.128.0",
+            "mask": "20",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 0,
+                "age": "3w4d",
+                "outgoing_interface": "Null0"
+              }
+            ]
+          },
+          "10.10.128.0/24": {
+            "network": "10.10.128.0",
+            "mask": "24",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "outgoing_interface": "Vlan128",
+                "age": "3w4d"
+              }
+            ]
+          },
+          "10.10.128.1/32": {
+            "network": "10.10.128.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "Vlan128"
+              }
+            ]
+          },
+          "10.10.254.0/29": {
+            "network": "10.10.254.0",
+            "mask": "29",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "Vlan3101"
+              }
+            ]
+          },
+          "10.10.254.1/32": {
+            "network": "10.10.254.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "Vlan3101"
+              }
+            ]
+          },
+          "10.10.255.11/32": {
+            "network": "10.10.255.11",
+            "mask": "32",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "outgoing_interface": "Loopback11",
+                "age": "3w4d"
+              }
+            ]
+          },
+          "10.10.255.12/32": {
+            "network": "10.10.255.12",
+            "mask": "32",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "outgoing_interface": "Loopback12",
+                "age": "3w4d"
+              }
+            ]
+          },
+          "10.20.0.0/16": {
+            "network": "10.20.0.0",
+            "mask": "16",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 0,
+                "next_hop": "10.10.254.10",
+                "vrf_leak": "AMB",
+                "age": "3w4d"
+              }
+            ]
+          },
+          "10.30.0.0/16": {
+            "network": "10.30.0.0",
+            "mask": "16",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 0,
+                "next_hop": "10.10.254.2",
+                "vrf_leak": "BLU",
+                "age": "3w4d"
+              }
+            ]
+          },
+          "10.40.0.0/16": {
+            "network": "10.40.0.0",
+            "mask": "16",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 0,
+                "next_hop": "10.10.254.2",
+                "vrf_leak": "GRN",
+                "age": "3w4d"
+              }
+            ]
+          },
+          "172.16.0.0/12": {
+            "network": "172.16.0.0",
+            "mask": "12",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 0,
+                "next_hop": "10.10.254.3",
+                "age": "1d05h"
+              }
+            ]
+          },
+          "192.168.0.0/16": {
+            "network": "192.168.0.0",
+            "mask": "16",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 0,
+                "next_hop": "10.10.254.3",
+                "age": "1d05h"
+              }
+            ]
+          },
+          "50.1.1.1/32": {
+            "network": "50.1.1.1",
+            "mask": "32",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "Loopback50"
+              }
+            ]
+          },
+          "10.12.1.0/27": {
+            "network": "10.12.1.0",
+            "mask": "27",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 1000,
+                "next_hop": "192.168.12.5",
+                "age": "1w1d"
+              },
+              {
+                "admin_distance": 200,
+                "metric": 1000,
+                "next_hop": "192.168.12.1",
+                "age": "1w1d"
+              }
+            ]
+          },
+          "10.12.242.64/28": {
+            "network": "10.12.242.64",
+            "mask": "28",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 1000,
+                "next_hop": "192.168.12.5",
+                "age": "1w1d"
+              },
+              {
+                "admin_distance": 200,
+                "metric": 1000,
+                "next_hop": "192.168.12.1",
+                "age": "1w1d"
+              }
+            ]
+          },
+          "172.16.10.0/24": {
+            "network": "172.16.10.0",
+            "mask": "24",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 0,
+                "next_hop": "10.80.10.2",
+                "age": "04:42:57"
+              }
+            ]
+          },
+          "172.16.20.0/24": {
+            "network": "172.16.20.0",
+            "mask": "24",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 0,
+                "next_hop": "10.80.10.2",
+                "age": "04:42:52"
+              }
+            ]
+          }
+        },
+        "gateway_of_last_resort": {
+          "next_hop": "10.10.254.3",
+          "destination": "0.0.0.0"
+        }
+      }
+    },
+    {
+      "name": "Global routing table with EIGRP, OSPF, IS-IS L1, RIP protocols and ECMP next-hops for EIGRP and RIP routes",
+      "input": "Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP\n    D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area\n    N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2\n    E1 - OSPF external type 1, E2 - OSPF external type 2\n    i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2\n    ia - IS-IS inter area, * - candidate default, U - per-user static route\n    o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP\n    a - application route\n    + - replicated route, % - next hop override, p - overrides from PfR\nGateway of last resort is not set\n    10.1.0.0/32 is subnetted, 1 subnets\nC        10.4.1.1 is directly connected, Loopback0\n    10.4.0.0/32 is subnetted, 1 subnets\nD        10.16.2.2 [90/10752] via 10.12.90.2, 4d19h, GigabitEthernet2.90\n    10.9.0.0/32 is subnetted, 1 subnets\nD        10.36.3.3 [90/2570240] via 10.13.90.3, 4d19h, GigabitEthernet3.90\n    10.0.0.0/8 is variably subnetted, 20 subnets, 2 masks\nC        10.12.90.0/24 is directly connected, GigabitEthernet2.90\nL        10.12.90.1/32 is directly connected, GigabitEthernet2.90\nC        10.12.110.0/24 is directly connected, GigabitEthernet2.110\nL        10.12.110.1/32 is directly connected, GigabitEthernet2.110\nC        10.12.115.0/24 is directly connected, GigabitEthernet2.115\nL        10.12.115.1/32 is directly connected, GigabitEthernet2.115\nC        10.12.120.0/24 is directly connected, GigabitEthernet2.120\nL        10.12.120.1/32 is directly connected, GigabitEthernet2.120\nC        10.13.90.0/24 is directly connected, GigabitEthernet3.90\nL        10.13.90.1/32 is directly connected, GigabitEthernet3.90\nC        10.13.110.0/24 is directly connected, GigabitEthernet3.110\nL        10.13.110.1/32 is directly connected, GigabitEthernet3.110\nC        10.13.115.0/24 is directly connected, GigabitEthernet3.115\nL        10.13.115.1/32 is directly connected, GigabitEthernet3.115\nC        10.13.120.0/24 is directly connected, GigabitEthernet3.120\nL        10.13.120.1/32 is directly connected, GigabitEthernet3.120\nD        10.23.90.0/24 [90/15360] via 10.13.90.3, 4d19h, GigabitEthernet3.90\n                    [90/15360] via 10.12.90.2, 4d19h, GigabitEthernet2.90\nO        10.23.110.0/24 [110/2] via 10.12.110.2, 4d19h, GigabitEthernet2.110\ni L1     10.23.115.0/24 [115/20] via 10.12.115.2, 4d19h, GigabitEthernet2.115\nR        10.23.120.0/24\n        [120/1] via 10.13.120.3, 00:00:08, GigabitEthernet3.120\n        [120/1] via 10.12.120.2, 00:00:02, GigabitEthernet2.120\n",
+      "expected": {
+        "vrf": "default",
+        "routes": {
+          "10.4.1.1/32": {
+            "network": "10.4.1.1",
+            "mask": "32",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "Loopback0"
+              }
+            ]
+          },
+          "10.16.2.2/32": {
+            "network": "10.16.2.2",
+            "mask": "32",
+            "protocol": "eigrp",
+            "protocol_code": "D",
+            "next_hops": [
+              {
+                "admin_distance": 90,
+                "metric": 10752,
+                "next_hop": "10.12.90.2",
+                "age": "4d19h",
+                "outgoing_interface": "GigabitEthernet2.90"
+              }
+            ]
+          },
+          "10.36.3.3/32": {
+            "network": "10.36.3.3",
+            "mask": "32",
+            "protocol": "eigrp",
+            "protocol_code": "D",
+            "next_hops": [
+              {
+                "admin_distance": 90,
+                "metric": 2570240,
+                "next_hop": "10.13.90.3",
+                "age": "4d19h",
+                "outgoing_interface": "GigabitEthernet3.90"
+              }
+            ]
+          },
+          "10.12.90.0/24": {
+            "network": "10.12.90.0",
+            "mask": "24",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet2.90"
+              }
+            ]
+          },
+          "10.12.90.1/32": {
+            "network": "10.12.90.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet2.90"
+              }
+            ]
+          },
+          "10.12.110.0/24": {
+            "network": "10.12.110.0",
+            "mask": "24",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet2.110"
+              }
+            ]
+          },
+          "10.12.110.1/32": {
+            "network": "10.12.110.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet2.110"
+              }
+            ]
+          },
+          "10.12.115.0/24": {
+            "network": "10.12.115.0",
+            "mask": "24",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet2.115"
+              }
+            ]
+          },
+          "10.12.115.1/32": {
+            "network": "10.12.115.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet2.115"
+              }
+            ]
+          },
+          "10.12.120.0/24": {
+            "network": "10.12.120.0",
+            "mask": "24",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet2.120"
+              }
+            ]
+          },
+          "10.12.120.1/32": {
+            "network": "10.12.120.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet2.120"
+              }
+            ]
+          },
+          "10.13.90.0/24": {
+            "network": "10.13.90.0",
+            "mask": "24",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet3.90"
+              }
+            ]
+          },
+          "10.13.90.1/32": {
+            "network": "10.13.90.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet3.90"
+              }
+            ]
+          },
+          "10.13.110.0/24": {
+            "network": "10.13.110.0",
+            "mask": "24",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet3.110"
+              }
+            ]
+          },
+          "10.13.110.1/32": {
+            "network": "10.13.110.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet3.110"
+              }
+            ]
+          },
+          "10.13.115.0/24": {
+            "network": "10.13.115.0",
+            "mask": "24",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet3.115"
+              }
+            ]
+          },
+          "10.13.115.1/32": {
+            "network": "10.13.115.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet3.115"
+              }
+            ]
+          },
+          "10.13.120.0/24": {
+            "network": "10.13.120.0",
+            "mask": "24",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet3.120"
+              }
+            ]
+          },
+          "10.13.120.1/32": {
+            "network": "10.13.120.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet3.120"
+              }
+            ]
+          },
+          "10.23.90.0/24": {
+            "network": "10.23.90.0",
+            "mask": "24",
+            "protocol": "eigrp",
+            "protocol_code": "D",
+            "next_hops": [
+              {
+                "admin_distance": 90,
+                "metric": 15360,
+                "next_hop": "10.13.90.3",
+                "age": "4d19h",
+                "outgoing_interface": "GigabitEthernet3.90"
+              },
+              {
+                "admin_distance": 90,
+                "metric": 15360,
+                "next_hop": "10.12.90.2",
+                "age": "4d19h",
+                "outgoing_interface": "GigabitEthernet2.90"
+              }
+            ]
+          },
+          "10.23.110.0/24": {
+            "network": "10.23.110.0",
+            "mask": "24",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+              {
+                "admin_distance": 110,
+                "metric": 2,
+                "next_hop": "10.12.110.2",
+                "age": "4d19h",
+                "outgoing_interface": "GigabitEthernet2.110"
+              }
+            ]
+          },
+          "10.23.115.0/24": {
+            "network": "10.23.115.0",
+            "mask": "24",
+            "protocol": "isis",
+            "protocol_code": "i",
+            "next_hops": [
+              {
+                "admin_distance": 115,
+                "metric": 20,
+                "next_hop": "10.12.115.2",
+                "age": "4d19h",
+                "outgoing_interface": "GigabitEthernet2.115"
+              }
+            ],
+            "type_code": "L1",
+            "type": "level-1"
+          },
+          "10.23.120.0/24": {
+            "network": "10.23.120.0",
+            "mask": "24",
+            "protocol": "rip",
+            "protocol_code": "R",
+            "next_hops": [
+              {
+                "admin_distance": 120,
+                "metric": 1,
+                "next_hop": "10.13.120.3",
+                "age": "00:00:08",
+                "outgoing_interface": "GigabitEthernet3.120"
+              },
+              {
+                "admin_distance": 120,
+                "metric": 1,
+                "next_hop": "10.12.120.2",
+                "age": "00:00:02",
+                "outgoing_interface": "GigabitEthernet2.120"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "VRF1 routing table with EIGRP, OSPF, IS-IS L1, and RIP protocols including ECMP paths",
+      "input": "Routing Table: VRF1\nCodes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP\n    D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area\n    N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2\n    E1 - OSPF external type 1, E2 - OSPF external type 2\n    i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2\n    ia - IS-IS inter area, * - candidate default, U - per-user static route\n    o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP\n    a - application route\n    + - replicated route, % - next hop override, p - overrides from PfR\nGateway of last resort is not set\n    10.1.0.0/32 is subnetted, 1 subnets\nC        10.4.1.1 is directly connected, Loopback300\n    10.4.0.0/32 is subnetted, 1 subnets\nD        10.16.2.2 [90/10752] via 10.12.90.2, 4d19h, GigabitEthernet2.390\n    10.9.0.0/32 is subnetted, 1 subnets\nD        10.36.3.3 [90/2570240] via 10.13.90.3, 4d19h, GigabitEthernet3.390\n    10.0.0.0/8 is variably subnetted, 20 subnets, 2 masks\nC        10.12.90.0/24 is directly connected, GigabitEthernet2.390\nL        10.12.90.1/32 is directly connected, GigabitEthernet2.390\nC        10.12.110.0/24 is directly connected, GigabitEthernet2.410\nL        10.12.110.1/32 is directly connected, GigabitEthernet2.410\nC        10.12.115.0/24 is directly connected, GigabitEthernet2.415\nL        10.12.115.1/32 is directly connected, GigabitEthernet2.415\nC        10.12.120.0/24 is directly connected, GigabitEthernet2.420\nL        10.12.120.1/32 is directly connected, GigabitEthernet2.420\nC        10.13.90.0/24 is directly connected, GigabitEthernet3.390\nL        10.13.90.1/32 is directly connected, GigabitEthernet3.390\nC        10.13.110.0/24 is directly connected, GigabitEthernet3.410\nL        10.13.110.1/32 is directly connected, GigabitEthernet3.410\nC        10.13.115.0/24 is directly connected, GigabitEthernet3.415\nL        10.13.115.1/32 is directly connected, GigabitEthernet3.415\nC        10.13.120.0/24 is directly connected, GigabitEthernet3.420\nL        10.13.120.1/32 is directly connected, GigabitEthernet3.420\nD        10.23.90.0/24 [90/15360] via 10.13.90.3, 4d19h, GigabitEthernet3.390\n                    [90/15360] via 10.12.90.2, 4d19h, GigabitEthernet2.390\nO        10.23.110.0/24 [110/2] via 10.12.110.2, 4d19h, GigabitEthernet2.410\ni L1     10.23.115.0/24 [115/50] via 10.13.115.3, 4d19h, GigabitEthernet3.415\nR        10.23.120.0/24\n        [120/1] via 10.13.120.3, 00:00:20, GigabitEthernet3.420\n        [120/1] via 10.12.120.2, 00:00:17, GigabitEthernet2.420\n",
+      "expected": {
+        "vrf": "VRF1",
+        "routes": {
+          "10.4.1.1/32": {
+            "network": "10.4.1.1",
+            "mask": "32",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "Loopback300"
+              }
+            ]
+          },
+          "10.16.2.2/32": {
+            "network": "10.16.2.2",
+            "mask": "32",
+            "protocol": "eigrp",
+            "protocol_code": "D",
+            "next_hops": [
+              {
+                "admin_distance": 90,
+                "metric": 10752,
+                "next_hop": "10.12.90.2",
+                "age": "4d19h",
+                "outgoing_interface": "GigabitEthernet2.390"
+              }
+            ]
+          },
+          "10.36.3.3/32": {
+            "network": "10.36.3.3",
+            "mask": "32",
+            "protocol": "eigrp",
+            "protocol_code": "D",
+            "next_hops": [
+              {
+                "admin_distance": 90,
+                "metric": 2570240,
+                "next_hop": "10.13.90.3",
+                "age": "4d19h",
+                "outgoing_interface": "GigabitEthernet3.390"
+              }
+            ]
+          },
+          "10.12.90.0/24": {
+            "network": "10.12.90.0",
+            "mask": "24",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet2.390"
+              }
+            ]
+          },
+          "10.12.90.1/32": {
+            "network": "10.12.90.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet2.390"
+              }
+            ]
+          },
+          "10.12.110.0/24": {
+            "network": "10.12.110.0",
+            "mask": "24",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet2.410"
+              }
+            ]
+          },
+          "10.12.110.1/32": {
+            "network": "10.12.110.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet2.410"
+              }
+            ]
+          },
+          "10.12.115.0/24": {
+            "network": "10.12.115.0",
+            "mask": "24",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet2.415"
+              }
+            ]
+          },
+          "10.12.115.1/32": {
+            "network": "10.12.115.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet2.415"
+              }
+            ]
+          },
+          "10.12.120.0/24": {
+            "network": "10.12.120.0",
+            "mask": "24",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet2.420"
+              }
+            ]
+          },
+          "10.12.120.1/32": {
+            "network": "10.12.120.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet2.420"
+              }
+            ]
+          },
+          "10.13.90.0/24": {
+            "network": "10.13.90.0",
+            "mask": "24",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet3.390"
+              }
+            ]
+          },
+          "10.13.90.1/32": {
+            "network": "10.13.90.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet3.390"
+              }
+            ]
+          },
+          "10.13.110.0/24": {
+            "network": "10.13.110.0",
+            "mask": "24",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet3.410"
+              }
+            ]
+          },
+          "10.13.110.1/32": {
+            "network": "10.13.110.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet3.410"
+              }
+            ]
+          },
+          "10.13.115.0/24": {
+            "network": "10.13.115.0",
+            "mask": "24",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet3.415"
+              }
+            ]
+          },
+          "10.13.115.1/32": {
+            "network": "10.13.115.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet3.415"
+              }
+            ]
+          },
+          "10.13.120.0/24": {
+            "network": "10.13.120.0",
+            "mask": "24",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet3.420"
+              }
+            ]
+          },
+          "10.13.120.1/32": {
+            "network": "10.13.120.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "GigabitEthernet3.420"
+              }
+            ]
+          },
+          "10.23.90.0/24": {
+            "network": "10.23.90.0",
+            "mask": "24",
+            "protocol": "eigrp",
+            "protocol_code": "D",
+            "next_hops": [
+              {
+                "admin_distance": 90,
+                "metric": 15360,
+                "next_hop": "10.13.90.3",
+                "age": "4d19h",
+                "outgoing_interface": "GigabitEthernet3.390"
+              },
+              {
+                "admin_distance": 90,
+                "metric": 15360,
+                "next_hop": "10.12.90.2",
+                "age": "4d19h",
+                "outgoing_interface": "GigabitEthernet2.390"
+              }
+            ]
+          },
+          "10.23.110.0/24": {
+            "network": "10.23.110.0",
+            "mask": "24",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+              {
+                "admin_distance": 110,
+                "metric": 2,
+                "next_hop": "10.12.110.2",
+                "age": "4d19h",
+                "outgoing_interface": "GigabitEthernet2.410"
+              }
+            ]
+          },
+          "10.23.115.0/24": {
+            "network": "10.23.115.0",
+            "mask": "24",
+            "protocol": "isis",
+            "protocol_code": "i",
+            "next_hops": [
+              {
+                "admin_distance": 115,
+                "metric": 50,
+                "next_hop": "10.13.115.3",
+                "age": "4d19h",
+                "outgoing_interface": "GigabitEthernet3.415"
+              }
+            ],
+            "type_code": "L1",
+            "type": "level-1"
+          },
+          "10.23.120.0/24": {
+            "network": "10.23.120.0",
+            "mask": "24",
+            "protocol": "rip",
+            "protocol_code": "R",
+            "next_hops": [
+              {
+                "admin_distance": 120,
+                "metric": 1,
+                "next_hop": "10.13.120.3",
+                "age": "00:00:20",
+                "outgoing_interface": "GigabitEthernet3.420"
+              },
+              {
+                "admin_distance": 120,
+                "metric": 1,
+                "next_hop": "10.12.120.2",
+                "age": "00:00:17",
+                "outgoing_interface": "GigabitEthernet2.420"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "Route flags (next-hop override, PfR override, replicated, replicated local override) with VRF leak and static routes",
+      "input": "Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP\n       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area\n       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2\n       E1 - OSPF external type 1, E2 - OSPF external type 2, m - OMP\n       n - NAT, Ni - NAT inside, No - NAT outside, Nd - NAT DIA\n       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2\n       ia - IS-IS inter area, * - candidate default, U - per-user static route\n       H - NHRP, G - NHRP registered, g - NHRP registration summary\n       o - ODR, P - periodic downloaded static route, l - LISP\n       a - application route\n       + - replicated route, % - next hop override, p - overrides from PfR\n       & - replicated local route overrides by connected\n\nGateway of last resort is not set\n\n      10.34.0.0/32 is subnetted, 2 subnets\nS   %    10.34.0.1 [1/0] via 192.168.16.1\nC   p    10.34.0.2 is directly connected, Loopback0\n      10.69.0.0/16 is subnetted, 1 subnets\nS   &    10.69.0.0 [1/0] via 10.34.0.1\n      10.25.0.0/24 is subnetted, 1 subnets\nS   +    10.186.1.0 [1/0] via 10.144.0.1 (red)\n      192.168.16.0/24 is variably subnetted, 2 subnets, 2 masks\nC        192.168.16.0/24 is directly connected, Ethernet0/1\nL        192.168.16.2/32 is directly connected, Ethernet0/1\n      10.55.0.0/24 is subnetted, 1 subnets\nB   +    10.55.0.0 [20/0] via 10.144.0.1 (red), 00:00:09\n",
+      "expected": {
+        "vrf": "default",
+        "routes": {
+          "10.34.0.1/32": {
+            "network": "10.34.0.1",
+            "mask": "32",
+            "protocol": "static",
+            "protocol_code": "S",
+            "next_hops": [
+              {
+                "admin_distance": 1,
+                "metric": 0,
+                "next_hop": "192.168.16.1"
+              }
+            ],
+            "next_hop_override": true
+          },
+          "10.34.0.2/32": {
+            "network": "10.34.0.2",
+            "mask": "32",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "Loopback0"
+              }
+            ],
+            "pfr_override": true
+          },
+          "10.69.0.0/16": {
+            "network": "10.69.0.0",
+            "mask": "16",
+            "protocol": "static",
+            "protocol_code": "S",
+            "next_hops": [
+              {
+                "admin_distance": 1,
+                "metric": 0,
+                "next_hop": "10.34.0.1"
+              }
+            ],
+            "replicated_local_override": true
+          },
+          "10.186.1.0/24": {
+            "network": "10.186.1.0",
+            "mask": "24",
+            "protocol": "static",
+            "protocol_code": "S",
+            "next_hops": [
+              {
+                "admin_distance": 1,
+                "metric": 0,
+                "next_hop": "10.144.0.1",
+                "vrf_leak": "red"
+              }
+            ],
+            "replicated": true
+          },
+          "192.168.16.0/24": {
+            "network": "192.168.16.0",
+            "mask": "24",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "Ethernet0/1"
+              }
+            ]
+          },
+          "192.168.16.2/32": {
+            "network": "192.168.16.2",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "Ethernet0/1"
+              }
+            ]
+          },
+          "10.55.0.0/24": {
+            "network": "10.55.0.0",
+            "mask": "24",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "admin_distance": 20,
+                "metric": 0,
+                "next_hop": "10.144.0.1",
+                "vrf_leak": "red",
+                "age": "00:00:09"
+              }
+            ],
+            "replicated": true
+          }
+        }
+      }
+    },
+    {
+      "name": "Large routing table with OSPF E2/IA, EIGRP EX, BGP, IS-IS L2, static ECMP, summary route, Null0 routes, candidate default, and multi-line continuations",
+      "input": "Codes: C - connected, S - static, R - RIP, M - mobile, B - BGP\n       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area\n       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2\n       E1 - OSPF external type 1, E2 - OSPF external type 2\n       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2\n       ia - IS-IS inter area, * - candidate default, U - per-user static route\n       o - ODR, P - periodic downloaded static route\n\nGateway of last resort is 194.0.0.2 to network 0.0.0.0\n\n     1.0.0.0/32 is subnetted, 1 subnets\nS       1.1.1.1 [1/0] via 212.0.0.1\n                [1/0] via 192.168.0.1\n     2.0.0.0/24 is subnetted, 1 subnets\nS       2.2.2.0 is directly connected, FastEthernet0/0.100\n     4.0.0.0/16 is subnetted, 1 subnets\nO E2    4.4.0.0 [110/20] via 194.0.0.2, 1d18h, FastEthernet0/0.100\n     5.0.0.0/24 is subnetted, 1 subnets\nD EX    5.5.5.0 [170/2297856] via 10.0.1.2, 00:12:01, Serial0/0\n     6.0.0.0/16 is subnetted, 1 subnets\nB       6.6.0.0 [200/0] via 195.0.0.1, 00:00:04\n     172.16.0.0/26 is subnetted, 1 subnets\ni L2    172.16.1.0 [115/10] via 10.0.1.2, Serial0/0\n     172.20.0.0/32 is subnetted, 3 subnets\nO       172.20.1.1 [110/11] via 194.0.0.2, 00:05:45, FastEthernet0/0.100\nO       172.20.3.1 [110/11] via 194.0.0.2, 00:05:45, FastEthernet0/0.100\nO       172.20.2.1 [110/11] via 194.0.0.2, 00:05:45, FastEthernet0/0.100\n     10.0.0.0/8 is variably subnetted, 5 subnets, 3 masks\nC       10.0.1.0/24 is directly connected, Serial0/0\nD       10.0.5.0/26 [90/2297856] via 10.0.1.2, 00:12:03, Serial0/0\nD       10.0.5.64/26 [90/2297856] via 10.0.1.2, 00:12:03, Serial0/0\nD       10.0.5.128/26 [90/2297856] via 10.0.1.2, 00:12:03, Serial0/0\nD       10.0.5.192/27 [90/2297856] via 10.0.1.2, 00:12:03, Serial0/0\nB        11.1.0.0/17 [200/0], 2w0d, Null0\nS        12.0.0.0/16 is directly connected, Null0\nO        13.14.128.0/17 is a summary, 7w0d, Null0\n     192.168.0.0/32 is subnetted, 1 subnets\nD       192.168.0.1 [90/2297856] via 10.0.1.2, 00:12:03, Serial0/0\n     192.168.10.0/29 is subnetted, 1 subnets\nO E2    192.168.10.168\n           [110/20] via 7.7.7.170, 12:54:35, TenGigabitEthernet7/4\nO E2    10.63.184.0/23\n           [110/20] via 10.62.4.29, 12:55:19, TenGigabitEthernet1/15\n           [110/20] via 10.62.3.29, 12:55:19, TenGigabitEthernet1/16\nO E2    192.168.12.0/27 [110/20] via 10.64.3.13, 12:54:36, Port-channel202\n                        [110/20] via 10.64.1.9, 12:54:36, Port-channel201\nC       10.64.4.88/30 is directly connected, Serial0/0/0:0\nO E2    10.6.234.0/24 [110/20] via 10.64.4.90, 12:54:53, Serial0/0/0:0\nC       7.7.7.168/30 is directly connected, TenGigabitEthernet7/4\nC       10.64.3.12/30 is directly connected, Port-channel202\nC       10.64.1.8/30 is directly connected, Port-channel201\nC       10.62.4.28/30 is directly connected, TenGigabitEthernet1/15\nC       10.62.3.28/30 is directly connected, TenGigabitEthernet1/16\nO IA 195.0.0.0/24 [110/11] via 194.0.0.2, 00:05:45, FastEthernet0/0.100\nO*E2 0.0.0.0/0 [110/1] via 194.0.0.2, 00:05:35, FastEthernet0/0.100\nO E2 212.0.0.0/8 [110/20] via 194.0.0.2, 00:05:35, FastEthernet0/0.100\nC    194.0.0.0/16 is directly connected, FastEthernet0/0.100\n",
+      "expected": {
+        "vrf": "default",
+        "routes": {
+          "1.1.1.1/32": {
+            "network": "1.1.1.1",
+            "mask": "32",
+            "protocol": "static",
+            "protocol_code": "S",
+            "next_hops": [
+              {
+                "admin_distance": 1,
+                "metric": 0,
+                "next_hop": "212.0.0.1"
+              },
+              {
+                "admin_distance": 1,
+                "metric": 0,
+                "next_hop": "192.168.0.1"
+              }
+            ]
+          },
+          "2.2.2.0/24": {
+            "network": "2.2.2.0",
+            "mask": "24",
+            "protocol": "static",
+            "protocol_code": "S",
+            "next_hops": [
+              {
+                "outgoing_interface": "FastEthernet0/0.100"
+              }
+            ]
+          },
+          "4.4.0.0/16": {
+            "network": "4.4.0.0",
+            "mask": "16",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+              {
+                "admin_distance": 110,
+                "metric": 20,
+                "next_hop": "194.0.0.2",
+                "age": "1d18h",
+                "outgoing_interface": "FastEthernet0/0.100"
+              }
+            ],
+            "type_code": "E2",
+            "type": "external-type-2"
+          },
+          "5.5.5.0/24": {
+            "network": "5.5.5.0",
+            "mask": "24",
+            "protocol": "eigrp",
+            "protocol_code": "D",
+            "next_hops": [
+              {
+                "admin_distance": 170,
+                "metric": 2297856,
+                "next_hop": "10.0.1.2",
+                "age": "00:12:01",
+                "outgoing_interface": "Serial0/0"
+              }
+            ],
+            "type_code": "EX",
+            "type": "external"
+          },
+          "6.6.0.0/16": {
+            "network": "6.6.0.0",
+            "mask": "16",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 0,
+                "next_hop": "195.0.0.1",
+                "age": "00:00:04"
+              }
+            ]
+          },
+          "172.16.1.0/26": {
+            "network": "172.16.1.0",
+            "mask": "26",
+            "protocol": "isis",
+            "protocol_code": "i",
+            "next_hops": [
+              {
+                "admin_distance": 115,
+                "metric": 10,
+                "next_hop": "10.0.1.2",
+                "outgoing_interface": "Serial0/0"
+              }
+            ],
+            "type_code": "L2",
+            "type": "level-2"
+          },
+          "172.20.1.1/32": {
+            "network": "172.20.1.1",
+            "mask": "32",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+              {
+                "admin_distance": 110,
+                "metric": 11,
+                "next_hop": "194.0.0.2",
+                "age": "00:05:45",
+                "outgoing_interface": "FastEthernet0/0.100"
+              }
+            ]
+          },
+          "172.20.3.1/32": {
+            "network": "172.20.3.1",
+            "mask": "32",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+              {
+                "admin_distance": 110,
+                "metric": 11,
+                "next_hop": "194.0.0.2",
+                "age": "00:05:45",
+                "outgoing_interface": "FastEthernet0/0.100"
+              }
+            ]
+          },
+          "172.20.2.1/32": {
+            "network": "172.20.2.1",
+            "mask": "32",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+              {
+                "admin_distance": 110,
+                "metric": 11,
+                "next_hop": "194.0.0.2",
+                "age": "00:05:45",
+                "outgoing_interface": "FastEthernet0/0.100"
+              }
+            ]
+          },
+          "10.0.1.0/24": {
+            "network": "10.0.1.0",
+            "mask": "24",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "Serial0/0"
+              }
+            ]
+          },
+          "10.0.5.0/26": {
+            "network": "10.0.5.0",
+            "mask": "26",
+            "protocol": "eigrp",
+            "protocol_code": "D",
+            "next_hops": [
+              {
+                "admin_distance": 90,
+                "metric": 2297856,
+                "next_hop": "10.0.1.2",
+                "age": "00:12:03",
+                "outgoing_interface": "Serial0/0"
+              }
+            ]
+          },
+          "10.0.5.64/26": {
+            "network": "10.0.5.64",
+            "mask": "26",
+            "protocol": "eigrp",
+            "protocol_code": "D",
+            "next_hops": [
+              {
+                "admin_distance": 90,
+                "metric": 2297856,
+                "next_hop": "10.0.1.2",
+                "age": "00:12:03",
+                "outgoing_interface": "Serial0/0"
+              }
+            ]
+          },
+          "10.0.5.128/26": {
+            "network": "10.0.5.128",
+            "mask": "26",
+            "protocol": "eigrp",
+            "protocol_code": "D",
+            "next_hops": [
+              {
+                "admin_distance": 90,
+                "metric": 2297856,
+                "next_hop": "10.0.1.2",
+                "age": "00:12:03",
+                "outgoing_interface": "Serial0/0"
+              }
+            ]
+          },
+          "10.0.5.192/27": {
+            "network": "10.0.5.192",
+            "mask": "27",
+            "protocol": "eigrp",
+            "protocol_code": "D",
+            "next_hops": [
+              {
+                "admin_distance": 90,
+                "metric": 2297856,
+                "next_hop": "10.0.1.2",
+                "age": "00:12:03",
+                "outgoing_interface": "Serial0/0"
+              }
+            ]
+          },
+          "11.1.0.0/17": {
+            "network": "11.1.0.0",
+            "mask": "17",
+            "protocol": "bgp",
+            "protocol_code": "B",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 0,
+                "age": "2w0d",
+                "outgoing_interface": "Null0"
+              }
+            ]
+          },
+          "12.0.0.0/16": {
+            "network": "12.0.0.0",
+            "mask": "16",
+            "protocol": "static",
+            "protocol_code": "S",
+            "next_hops": [
+              {
+                "outgoing_interface": "Null0"
+              }
+            ]
+          },
+          "13.14.128.0/17": {
+            "network": "13.14.128.0",
+            "mask": "17",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+              {
+                "age": "7w0d",
+                "outgoing_interface": "Null0"
+              }
+            ],
+            "type": "summary"
+          },
+          "192.168.0.1/32": {
+            "network": "192.168.0.1",
+            "mask": "32",
+            "protocol": "eigrp",
+            "protocol_code": "D",
+            "next_hops": [
+              {
+                "admin_distance": 90,
+                "metric": 2297856,
+                "next_hop": "10.0.1.2",
+                "age": "00:12:03",
+                "outgoing_interface": "Serial0/0"
+              }
+            ]
+          },
+          "192.168.10.168/29": {
+            "network": "192.168.10.168",
+            "mask": "29",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+              {
+                "admin_distance": 110,
+                "metric": 20,
+                "next_hop": "7.7.7.170",
+                "age": "12:54:35",
+                "outgoing_interface": "TenGigabitEthernet7/4"
+              }
+            ],
+            "type_code": "E2",
+            "type": "external-type-2"
+          },
+          "10.63.184.0/23": {
+            "network": "10.63.184.0",
+            "mask": "23",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+              {
+                "admin_distance": 110,
+                "metric": 20,
+                "next_hop": "10.62.4.29",
+                "age": "12:55:19",
+                "outgoing_interface": "TenGigabitEthernet1/15"
+              },
+              {
+                "admin_distance": 110,
+                "metric": 20,
+                "next_hop": "10.62.3.29",
+                "age": "12:55:19",
+                "outgoing_interface": "TenGigabitEthernet1/16"
+              }
+            ],
+            "type_code": "E2",
+            "type": "external-type-2"
+          },
+          "192.168.12.0/27": {
+            "network": "192.168.12.0",
+            "mask": "27",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+              {
+                "admin_distance": 110,
+                "metric": 20,
+                "next_hop": "10.64.3.13",
+                "age": "12:54:36",
+                "outgoing_interface": "Port-channel202"
+              },
+              {
+                "admin_distance": 110,
+                "metric": 20,
+                "next_hop": "10.64.1.9",
+                "age": "12:54:36",
+                "outgoing_interface": "Port-channel201"
+              }
+            ],
+            "type_code": "E2",
+            "type": "external-type-2"
+          },
+          "10.64.4.88/30": {
+            "network": "10.64.4.88",
+            "mask": "30",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "Serial0/0/0:0"
+              }
+            ]
+          },
+          "10.6.234.0/24": {
+            "network": "10.6.234.0",
+            "mask": "24",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+              {
+                "admin_distance": 110,
+                "metric": 20,
+                "next_hop": "10.64.4.90",
+                "age": "12:54:53",
+                "outgoing_interface": "Serial0/0/0:0"
+              }
+            ],
+            "type_code": "E2",
+            "type": "external-type-2"
+          },
+          "7.7.7.168/30": {
+            "network": "7.7.7.168",
+            "mask": "30",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "TenGigabitEthernet7/4"
+              }
+            ]
+          },
+          "10.64.3.12/30": {
+            "network": "10.64.3.12",
+            "mask": "30",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "Port-channel202"
+              }
+            ]
+          },
+          "10.64.1.8/30": {
+            "network": "10.64.1.8",
+            "mask": "30",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "Port-channel201"
+              }
+            ]
+          },
+          "10.62.4.28/30": {
+            "network": "10.62.4.28",
+            "mask": "30",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "TenGigabitEthernet1/15"
+              }
+            ]
+          },
+          "10.62.3.28/30": {
+            "network": "10.62.3.28",
+            "mask": "30",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "TenGigabitEthernet1/16"
+              }
+            ]
+          },
+          "195.0.0.0/24": {
+            "network": "195.0.0.0",
+            "mask": "24",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+              {
+                "admin_distance": 110,
+                "metric": 11,
+                "next_hop": "194.0.0.2",
+                "age": "00:05:45",
+                "outgoing_interface": "FastEthernet0/0.100"
+              }
+            ],
+            "type_code": "IA",
+            "type": "inter-area"
+          },
+          "0.0.0.0/0": {
+            "network": "0.0.0.0",
+            "mask": "0",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+              {
+                "admin_distance": 110,
+                "metric": 1,
+                "next_hop": "194.0.0.2",
+                "age": "00:05:35",
+                "outgoing_interface": "FastEthernet0/0.100"
+              }
+            ],
+            "type_code": "E2",
+            "type": "external-type-2",
+            "candidate_default": true
+          },
+          "212.0.0.0/8": {
+            "network": "212.0.0.0",
+            "mask": "8",
+            "protocol": "ospf",
+            "protocol_code": "O",
+            "next_hops": [
+              {
+                "admin_distance": 110,
+                "metric": 20,
+                "next_hop": "194.0.0.2",
+                "age": "00:05:35",
+                "outgoing_interface": "FastEthernet0/0.100"
+              }
+            ],
+            "type_code": "E2",
+            "type": "external-type-2"
+          },
+          "194.0.0.0/16": {
+            "network": "194.0.0.0",
+            "mask": "16",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "FastEthernet0/0.100"
+              }
+            ]
+          }
+        },
+        "gateway_of_last_resort": {
+          "next_hop": "194.0.0.2",
+          "destination": "0.0.0.0"
+        }
+      }
+    },
+    {
+      "name": "Minimal routing table with timestamp header, gateway of last resort set, and only connected/local routes on a VASI interface",
+      "input": "Tue May 22 22:32:30.765 UTC\n\nCodes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP\n       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area\n       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2\n       E1 - OSPF external type 1, E2 - OSPF external type 2\n       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2\n       ia - IS-IS inter area, * - candidate default, U - per-user static route\n       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP\n       a - application route\n       + - replicated route, % - next hop override, p - overrides from PfR\n\nGateway of last resort is 192.168.1.2 to network 0.0.0.0\n\n      192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks\nC        192.168.1.0/24 is directly connected, vasileft1\nL        192.168.1.1/32 is directly connected, vasileft1\n",
+      "expected": {
+        "vrf": "default",
+        "routes": {
+          "192.168.1.0/24": {
+            "network": "192.168.1.0",
+            "mask": "24",
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "vasileft1"
+              }
+            ]
+          },
+          "192.168.1.1/32": {
+            "network": "192.168.1.1",
+            "mask": "32",
+            "protocol": "local",
+            "protocol_code": "L",
+            "next_hops": [
+              {
+                "outgoing_interface": "vasileft1"
+              }
+            ]
+          }
+        },
+        "gateway_of_last_resort": {
+          "next_hop": "192.168.1.2",
+          "destination": "0.0.0.0"
+        }
+      }
+    }
+  ]
+}

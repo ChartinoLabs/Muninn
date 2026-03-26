@@ -1,0 +1,450 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show version",
+  "schema": {
+    "name": "ShowVersionResult",
+    "fields": {
+      "hostname": {
+        "type": "str",
+        "required": true
+      },
+      "version": {
+        "type": "str",
+        "required": true
+      },
+      "system_image": {
+        "type": "str",
+        "required": true
+      },
+      "config_register": {
+        "type": "str",
+        "required": true
+      },
+      "platform": {
+        "type": "str",
+        "required": true
+      },
+      "serial_number": {
+        "type": "str",
+        "required": true
+      },
+      "compiled": {
+        "type": "str",
+        "required": true
+      },
+      "uptime": {
+        "type": "str",
+        "required": true
+      },
+      "memory": {
+        "type": {
+          "name": "MemoryEntry",
+          "fields": {
+            "total_bytes": {
+              "type": "int",
+              "required": true
+            },
+            "io_bytes": {
+              "type": "int",
+              "required": false
+            }
+          }
+        },
+        "required": true
+      },
+      "image_type": {
+        "type": "str",
+        "required": false
+      },
+      "rom_version": {
+        "type": "str",
+        "required": false
+      },
+      "bootldr_version": {
+        "type": "str",
+        "required": false
+      },
+      "restarted_at": {
+        "type": "str",
+        "required": false
+      },
+      "last_reload_reason": {
+        "type": "str",
+        "required": false
+      },
+      "system_returned_to_rom_by": {
+        "type": "str",
+        "required": false
+      },
+      "nvram_bytes": {
+        "type": "int",
+        "required": false
+      },
+      "license": {
+        "type": {
+          "name": "LicenseEntry",
+          "fields": {
+            "level": {
+              "type": "str",
+              "required": true
+            },
+            "type": {
+              "type": "str",
+              "required": false
+            },
+            "next_reload_level": {
+              "type": "str",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "mac_address": {
+        "type": "str",
+        "required": false
+      },
+      "model_number": {
+        "type": "str",
+        "required": false
+      },
+      "motherboard_serial": {
+        "type": "str",
+        "required": false
+      },
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": "int"
+        },
+        "required": false
+      },
+      "switch_stack": {
+        "type": {
+          "type": "list",
+          "items": {
+            "name": "SwitchStackEntry",
+            "fields": {
+              "switch_number": {
+                "type": "int",
+                "required": true
+              },
+              "ports": {
+                "type": "int",
+                "required": true
+              },
+              "model": {
+                "type": "str",
+                "required": true
+              },
+              "sw_version": {
+                "type": "str",
+                "required": true
+              },
+              "sw_image": {
+                "type": "str",
+                "required": true
+              },
+              "active": {
+                "type": "bool",
+                "required": true
+              },
+              "mode": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "config_register_next": {
+        "type": "str",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Catalyst 3850 IOS-XE with 5-member switch stack, technology package license table, per-switch hardware details",
+      "input": "Cisco IOS Software [Everest], Catalyst L3 Switch Software (CAT3K_CAA-UNIVERSALK9-M), Experimental Version 16.4.20170410:165034 [v164_throttle-BLD-BLD_V164_THROTTLE_LATEST_20170410_174845 105]\nCopyright (c) 1986-2017 by Cisco Systems, Inc.\nCompiled Mon 10-Apr-17 13:02 by mcpre\n\n\nCisco IOS-XE software, Copyright (c) 2005-2017 by cisco Systems, Inc.\nAll rights reserved.  Certain components of Cisco IOS-XE software are\nlicensed under the GNU General Public License (\"GPL\") Version 2.0.  The\nsoftware code licensed under GPL Version 2.0 is free software that comes\nwith ABSOLUTELY NO WARRANTY.  You can redistribute and/or modify such\nGPL code under the terms of GPL Version 2.0.  For more details, see the\ndocumentation or \"License Notice\" file accompanying the IOS-XE software,\nor the applicable URL provided on the flyer accompanying the IOS-XE\nsoftware.\n\n\nROM: IOS-XE ROMMON\nBOOTLDR: CAT3K_CAA Boot Loader (CAT3K_CAA-HBOOT-M) Version 4.318, engineering software (D)\n\nR1 uptime is 1 hour, 24 minutes\nUptime for this control processor is 1 hour, 27 minutes\nSystem returned to ROM by reload at 17:05:27 UTC Mon Apr 10 2017\nSystem restarted at 17:23:53 UTC Mon Apr 10 2017\nSystem image file is \"tftp://10.1.6.241//auto/tftp-ssr/Edison/cat3k_caa-universalk9.BLD_V164_THROTTLE_LATEST_20170410_174845.SSA.bin\"\nLast reload reason: Admin reload CLI\n\n\n\nThis product contains cryptographic features and is subject to United\nStates and local country laws governing import, export, transfer and\nuse. Delivery of Cisco cryptographic products does not imply\nthird-party authority to import, export, distribute or use encryption.\nImporters, exporters, distributors and users are responsible for\ncompliance with U.S. and local country laws. By using this product you\nagree to comply with applicable laws and regulations. If you are unable\nto comply with U.S. and local laws, return this product immediately.\n\nA summary of U.S. laws governing Cisco cryptographic products may be found at:\nhttp://www.cisco.com/wwl/export/crypto/tool/stqrg.html\n\nIf you require further assistance please contact us by sending email to\nexport@cisco.com.\n\n\nTechnology Package License Information:\n\n-----------------------------------------------------------------\nTechnology-package                   Technology-package\nCurrent             Type             Next reboot\n------------------------------------------------------------------\nipservicesk9        Permanent        ipservicesk9\n\ncisco WS-C3850-24P (MIPS) processor (revision U0) with 862498K/6147K bytes of memory.\nProcessor board ID FCW1932D0LB\n13 Virtual Ethernet interfaces\n140 Gigabit Ethernet interfaces\n20 Ten Gigabit Ethernet interfaces\n2048K bytes of non-volatile configuration memory.\n4194304K bytes of physical memory.\n262143K bytes of Crash Files at crashinfo:.\n250456K bytes of Crash Files at crashinfo-2:.\n250456K bytes of Crash Files at crashinfo-3:.\n250456K bytes of Crash Files at crashinfo-4:.\n250456K bytes of Crash Files at crashinfo-5:.\n1586119K bytes of Flash at flash:.\n1609272K bytes of Flash at flash-2:.\n1609272K bytes of Flash at flash-3:.\n1609272K bytes of Flash at flash-4:.\n1609272K bytes of Flash at flash-5:.\n0K bytes of  at webui:.\n\nBase Ethernet MAC Address          : 38:20:56:ff:ef:f2\nMotherboard Assembly Number        : 73-15805-04\nMotherboard Serial Number          : FOC19315RWV\nModel Revision Number              : U0\nMotherboard Revision Number        : A0\nModel Number                       : WS-C3850-24P\nSystem Serial Number               : FCW1932D0LB\n\n\nSwitch Ports Model              SW Version        SW Image              Mode\n------ ----- -----              ----------        ----------            ----\n*    1 32    WS-C3850-24P       16.4.2            CAT3K_CAA-UNIVERSALK9 BUNDLE\n     2 32    WS-C3850-24P       16.4.2            CAT3K_CAA-UNIVERSALK9 BUNDLE\n     3 32    WS-C3850-24P       16.4.2            CAT3K_CAA-UNIVERSALK9 BUNDLE\n     4 32    WS-C3850-24P       16.4.2            CAT3K_CAA-UNIVERSALK9 BUNDLE\n     5 32    WS-C3850-24P       16.4.2            CAT3K_CAA-UNIVERSALK9 BUNDLE\n\n\nSwitch 02\n---------\nSwitch uptime                      : 1 hour, 27 minutes\n\nBase Ethernet MAC Address          : 38:20:56:ff:a4:29\nMotherboard Assembly Number        : 73-15805-04\nMotherboard Serial Number          : FOC19315SCE\nModel Revision Number              : U0\nMotherboard Revision Number        : A0\nModel Number                       : WS-C3850-24P\nSystem Serial Number               : FOC1932X0K1\n\nSwitch 03\n---------\nSwitch uptime                      : 1 hour, 27 minutes\n\nBase Ethernet MAC Address          : 38:20:56:ff:1b:72\nMotherboard Assembly Number        : 73-15805-04\nMotherboard Serial Number          : FOC193182KD\nModel Revision Number              : U0\nMotherboard Revision Number        : A0\nModel Number                       : WS-C3850-24P\nSystem Serial Number               : FCW1932C0MA\n\nSwitch 04\n---------\nSwitch uptime                      : 1 hour, 27 minutes\n\nBase Ethernet MAC Address          : 38:20:56:ff:c0:29\nMotherboard Assembly Number        : 73-15805-04\nMotherboard Serial Number          : FOC193182KG\nModel Revision Number              : U0\nMotherboard Revision Number        : A0\nModel Number                       : WS-C3850-24P\nSystem Serial Number               : FCW1932D0L0\n\nSwitch 05\n---------\nSwitch uptime                      : 1 hour, 27 minutes\n\nBase Ethernet MAC Address          : 38:20:56:ff:72:29\nMotherboard Assembly Number        : 73-15805-04\nMotherboard Serial Number          : FOC193182KB\nModel Revision Number              : U0\nMotherboard Revision Number        : A0\nModel Number                       : WS-C3850-24P\nSystem Serial Number               : FOC1932X0F9\n\nConfiguration register is 0x102\n",
+      "expected": {
+        "version": "16.4.20170410:165034",
+        "image_type": "CAT3K_CAA-UNIVERSALK9-M",
+        "compiled": "Mon 10-Apr-17 13:02 by mcpre",
+        "rom_version": "IOS-XE ROMMON",
+        "bootldr_version": "CAT3K_CAA Boot Loader (CAT3K_CAA-HBOOT-M) Version 4.318, engineering software (D)",
+        "hostname": "R1",
+        "uptime": "1 hour, 24 minutes",
+        "system_returned_to_rom_by": "reload at 17:05:27 UTC Mon Apr 10 2017",
+        "restarted_at": "17:23:53 UTC Mon Apr 10 2017",
+        "system_image": "tftp://10.1.6.241//auto/tftp-ssr/Edison/cat3k_caa-universalk9.BLD_V164_THROTTLE_LATEST_20170410_174845.SSA.bin",
+        "last_reload_reason": "Admin reload CLI",
+        "license": {
+          "level": "ipservicesk9",
+          "type": "Permanent",
+          "next_reload_level": "ipservicesk9"
+        },
+        "platform": "WS-C3850-24P",
+        "memory": {
+          "total_bytes": 883197952,
+          "io_bytes": 6294528
+        },
+        "serial_number": "FCW1932D0LB",
+        "interfaces": {
+          "virtual_ethernet": 13,
+          "gigabit_ethernet": 140,
+          "ten_gigabit_ethernet": 20
+        },
+        "nvram_bytes": 2097152,
+        "mac_address": "38:20:56:ff:ef:f2",
+        "motherboard_serial": "FOC19315RWV",
+        "model_number": "WS-C3850-24P",
+        "config_register": "0x102",
+        "switch_stack": [
+          {
+            "switch_number": 1,
+            "ports": 32,
+            "model": "WS-C3850-24P",
+            "sw_version": "16.4.2",
+            "sw_image": "CAT3K_CAA-UNIVERSALK9",
+            "active": true,
+            "mode": "BUNDLE"
+          },
+          {
+            "switch_number": 2,
+            "ports": 32,
+            "model": "WS-C3850-24P",
+            "sw_version": "16.4.2",
+            "sw_image": "CAT3K_CAA-UNIVERSALK9",
+            "active": false,
+            "mode": "BUNDLE"
+          },
+          {
+            "switch_number": 3,
+            "ports": 32,
+            "model": "WS-C3850-24P",
+            "sw_version": "16.4.2",
+            "sw_image": "CAT3K_CAA-UNIVERSALK9",
+            "active": false,
+            "mode": "BUNDLE"
+          },
+          {
+            "switch_number": 4,
+            "ports": 32,
+            "model": "WS-C3850-24P",
+            "sw_version": "16.4.2",
+            "sw_image": "CAT3K_CAA-UNIVERSALK9",
+            "active": false,
+            "mode": "BUNDLE"
+          },
+          {
+            "switch_number": 5,
+            "ports": 32,
+            "model": "WS-C3850-24P",
+            "sw_version": "16.4.2",
+            "sw_image": "CAT3K_CAA-UNIVERSALK9",
+            "active": false,
+            "mode": "BUNDLE"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": "Cisco IOS XE Software, Version 17.16.01a\nCisco IOS Software [IOSXE], Virtual XE Software (X86_64_LINUX_IOSD-UNIVERSALK9-M), Version 17.16.1a, RELEASE SOFTWARE (fc1)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2024 by Cisco Systems, Inc.\nCompiled Thu 19-Dec-24 18:08 by mcpre\n\n\nCisco IOS-XE software, Copyright (c) 2005-2024 by cisco Systems, Inc.\nAll rights reserved.  Certain components of Cisco IOS-XE software are\nlicensed under the GNU General Public License (\"GPL\") Version 2.0.  The\nsoftware code licensed under GPL Version 2.0 is free software that comes\nwith ABSOLUTELY NO WARRANTY.  You can redistribute and/or modify such\nGPL code under the terms of GPL Version 2.0.  For more details, see the\ndocumentation or \"License Notice\" file accompanying the IOS-XE software,\nor the applicable URL provided on the flyer accompanying the IOS-XE\nsoftware.\n\n\nROM: IOS-XE ROMMON\n\nR4 uptime is 1 week, 4 days, 4 hours, 49 minutes\nUptime for this control processor is 1 week, 4 days, 4 hours, 52 minutes\nSystem returned to ROM by reload\nSystem image file is \"bootflash:packages.conf\"\nLast reload reason: reload\n\n\n\nThis product contains cryptographic features and is subject to United\nStates and local country laws governing import, export, transfer and\nuse. Delivery of Cisco cryptographic products does not imply\nthird-party authority to import, export, distribute or use encryption.\nImporters, exporters, distributors and users are responsible for\ncompliance with U.S. and local country laws. By using this product you\nagree to comply with applicable laws and regulations. If you are unable\nto comply with U.S. and local laws, return this product immediately.\n\nA summary of U.S. laws governing Cisco cryptographic products may be found at:\nhttp://www.cisco.com/wwl/export/crypto/tool/stqrg.html\n\nIf you require further assistance please contact us by sending email to\nexport@cisco.com.\n\nLicense Level:\nLicense Type: Perpetual\nNext reload license Level:\n\nAddon License Level:\nAddon License Type: Subscription\nNext reload addon license Level:\n\nThe current throughput level is 20000 kbps\n\n\nSmart Licensing Status: Smart Licensing Using Policy\n\ncisco C8000V (VXE) processor (revision VXE) with 1655426K/3075K bytes of memory.\nProcessor board ID 91P1DTBIC6N\nRouter operating mode: Autonomous\n4 Gigabit Ethernet interfaces\n32768K bytes of non-volatile configuration memory.\n3960372K bytes of physical memory.\n5234688K bytes of virtual hard disk at bootflash:.\n\nConfiguration register is 0x2102\n",
+      "expected": {
+        "version": "17.16.01a",
+        "image_type": "X86_64_LINUX_IOSD-UNIVERSALK9-M",
+        "compiled": "Thu 19-Dec-24 18:08 by mcpre",
+        "rom_version": "IOS-XE ROMMON",
+        "hostname": "R4",
+        "uptime": "1 week, 4 days, 4 hours, 49 minutes",
+        "system_returned_to_rom_by": "reload",
+        "system_image": "bootflash:packages.conf",
+        "last_reload_reason": "reload",
+        "license": {
+          "type": "Perpetual"
+        },
+        "platform": "C8000V",
+        "memory": {
+          "total_bytes": 1695156224,
+          "io_bytes": 3148800
+        },
+        "serial_number": "91P1DTBIC6N",
+        "interfaces": {
+          "gigabit_ethernet": 4
+        },
+        "nvram_bytes": 33554432,
+        "config_register": "0x2102"
+      }
+    },
+    {
+      "name": "ASR1006 router with RightToUse license, config_register_next for pending reload change",
+      "input": "Cisco IOS XE Software, Version BLD_V163_MR_THROTTLE_LATEST_20170410_093453_V16_3_3_24\nCisco IOS Software [Denali], ASR1000 Software (X86_64_LINUX_IOSD-UNIVERSALK9-M), Experimental Version 16.3.20170410:103306 [v163_mr_throttle-BLD-BLD_V163_MR_THROTTLE_LATEST_20170410_093453 118]\nCopyright (c) 1986-2017 by Cisco Systems, Inc.\nCompiled Mon 10-Apr-17 04:35 by mcpre\n\n\nCisco IOS-XE software, Copyright (c) 2005-2017 by cisco Systems, Inc.\nAll rights reserved.  Certain components of Cisco IOS-XE software are\nlicensed under the GNU General Public License (\"GPL\") Version 2.0.  The\nsoftware code licensed under GPL Version 2.0 is free software that comes\nwith ABSOLUTELY NO WARRANTY.  You can redistribute and/or modify such\nGPL code under the terms of GPL Version 2.0.  For more details, see the\ndocumentation or \"License Notice\" file accompanying the IOS-XE software,\nor the applicable URL provided on the flyer accompanying the IOS-XE\nsoftware.\n\n\nROM: IOS-XE ROMMON\n\nPE1 uptime is 32 minutes\nUptime for this control processor is 34 minutes\nSystem returned to ROM by reload at 02:14:51 PDT Mon Apr 10 2017\nSystem restarted at 09:08:57 PDT Mon Apr 10 2017\nSystem image file is \"harddisk:test-image-PE1-13113029\"\nLast reload reason: Reload Command\n\n\n\nThis product contains cryptographic features and is subject to United\nStates and local country laws governing import, export, transfer and\nuse. Delivery of Cisco cryptographic products does not imply\nthird-party authority to import, export, distribute or use encryption.\nImporters, exporters, distributors and users are responsible for\ncompliance with U.S. and local country laws. By using this product you\nagree to comply with applicable laws and regulations. If you are unable\nto comply with U.S. and local laws, return this product immediately.\n\nA summary of U.S. laws governing Cisco cryptographic products may be found at:\nhttp://www.cisco.com/wwl/export/crypto/tool/stqrg.html\n\nIf you require further assistance please contact us by sending email to\nexport@cisco.com.\n\nLicense Type: RightToUse\nLicense Level: advipservices\nNext reload license Level: advipservices\n\ncisco ASR1006 (RP2) processor (revision RP2) with 4138965K/6147K bytes of memory.\nProcessor board ID FOX1444GPXU\n5 Gigabit Ethernet interfaces\n32768K bytes of non-volatile configuration memory.\n8388608K bytes of physical memory.\n1925119K bytes of eUSB flash at bootflash:.\n78085207K bytes of SATA hard disk at harddisk:.\n0K bytes of  at webui:.\n\nConfiguration register is 0x2000 (will be 0x2002 at next reload)\n",
+      "expected": {
+        "version": "BLD_V163_MR_THROTTLE_LATEST_20170410_093453_V16_3_3_24",
+        "image_type": "X86_64_LINUX_IOSD-UNIVERSALK9-M",
+        "compiled": "Mon 10-Apr-17 04:35 by mcpre",
+        "rom_version": "IOS-XE ROMMON",
+        "hostname": "PE1",
+        "uptime": "32 minutes",
+        "system_returned_to_rom_by": "reload at 02:14:51 PDT Mon Apr 10 2017",
+        "restarted_at": "09:08:57 PDT Mon Apr 10 2017",
+        "system_image": "harddisk:test-image-PE1-13113029",
+        "last_reload_reason": "Reload Command",
+        "license": {
+          "type": "RightToUse",
+          "level": "advipservices",
+          "next_reload_level": "advipservices"
+        },
+        "platform": "ASR1006",
+        "memory": {
+          "total_bytes": 4238300160,
+          "io_bytes": 6294528
+        },
+        "serial_number": "FOX1444GPXU",
+        "interfaces": {
+          "gigabit_ethernet": 5
+        },
+        "nvram_bytes": 33554432,
+        "config_register": "0x2000",
+        "config_register_next": "0x2002"
+      }
+    },
+    {
+      "name": "Catalyst 9300 switch with TwentyFive and Forty GigabitEthernet interfaces, BOOTLDR, switch stack table with BUNDLE mode",
+      "input": "Cisco IOS XE Software, Version BLD_POLARIS_DEV_LATEST_20210302_012043\nCisco IOS Software [Bengaluru], Catalyst L3 Switch Software (CAT9K_IOSXE), Experimental Version 17.6.20210302:012459 [S2C-build-polaris_dev-132831-/nobackup/mcpre/BLD-BLD_POLARIS_DEV_LATEST_20210302_012043 149]\nCopyright (c) 1986-2021 by Cisco Systems, Inc.\nCompiled Tue 02-Mar-21 00:07 by mcpre\n\n\nCisco IOS-XE software, Copyright (c) 2005-2021 by cisco Systems, Inc.\nAll rights reserved.  Certain components of Cisco IOS-XE software are\nlicensed under the GNU General Public License (\"GPL\") Version 2.0.  The\nsoftware code licensed under GPL Version 2.0 is free software that comes\nwith ABSOLUTELY NO WARRANTY.  You can redistribute and/or modify such\nGPL code under the terms of GPL Version 2.0.  For more details, see the\ndocumentation or \"License Notice\" file accompanying the IOS-XE software,\nor the applicable URL provided on the flyer accompanying the IOS-XE\nsoftware.\n\n\nROM: IOS-XE ROMMON\nBOOTLDR: System Bootstrap, Version 17.5.2r, RELEASE SOFTWARE (P)\n\nssr-cat9300 uptime is 19 minutes\nUptime for this control processor is 20 minutes\nSystem returned to ROM by Reload Command\nSystem image file is \"flash:cat9k_iosxe.BLD_POLARIS_DEV_LATEST_20210302_012043.SSA.bin\"\nLast reload reason: Reload Command\n\n\n\nThis product contains cryptographic features and is subject to United\nStates and local country laws governing import, export, transfer and\nuse. Delivery of Cisco cryptographic products does not imply\nthird-party authority to import, export, distribute or use encryption.\nImporters, exporters, distributors and users are responsible for\ncompliance with U.S. and local country laws. By using this product you\nagree to comply with applicable laws and regulations. If you are unable\nto comply with U.S. and local laws, return this product immediately.\n\nA summary of U.S. laws governing Cisco cryptographic products may be found at:\nhttp://www.cisco.com/wwl/export/crypto/tool/stqrg.html\n\nIf you require further assistance please contact us by sending email to\nexport@cisco.com.\n\n\nTechnology Package License Information:\n\n------------------------------------------------------------------------------\nTechnology-package                                     Technology-package\nCurrent                        Type                       Next reboot\n------------------------------------------------------------------------------\nnetwork-advantage   \tSmart License                 \t network-advantage\ndna-advantage       \tSubscription Smart License    \t dna-advantage\nAIR License Level: AIR DNA Advantage\nNext reload AIR license Level: AIR DNA Advantage\n\n\nSmart Licensing Status: Registration Not Applicable/Not Applicable\n\ncisco C9300-24P (X86) processor with 1333273K/6147K bytes of memory.\nProcessor board ID FCW2223G0B9\n1 Virtual Ethernet interface\n28 Gigabit Ethernet interfaces\n8 Ten Gigabit Ethernet interfaces\n2 TwentyFive Gigabit Ethernet interfaces\n2 Forty Gigabit Ethernet interfaces\n2048K bytes of non-volatile configuration memory.\n8388608K bytes of physical memory.\n1638400K bytes of Crash Files at crashinfo:.\n11264000K bytes of Flash at flash:.\n\nBase Ethernet MAC Address          : 00:b6:70:ff:06:5e\nMotherboard Assembly Number        : 73-18271-03\nMotherboard Serial Number          : FOC22221AD2\nModel Revision Number              : A0\nMotherboard Revision Number        : A0\nModel Number                       : C9300-24P\nSystem Serial Number               : FCW2223G0B9\nCLEI Code Number                   :\n\n\nSwitch Ports Model              SW Version        SW Image              Mode\n------ ----- -----              ----------        ----------            ----\n*    1 41    C9300-24P          17.06.01          CAT9K_IOSXE           BUNDLE\n\n\nConfiguration register is 0x102\n",
+      "expected": {
+        "version": "BLD_POLARIS_DEV_LATEST_20210302_012043",
+        "compiled": "Tue 02-Mar-21 00:07 by mcpre",
+        "rom_version": "IOS-XE ROMMON",
+        "bootldr_version": "System Bootstrap, Version 17.5.2r, RELEASE SOFTWARE (P)",
+        "hostname": "ssr-cat9300",
+        "uptime": "19 minutes",
+        "system_returned_to_rom_by": "Reload Command",
+        "system_image": "flash:cat9k_iosxe.BLD_POLARIS_DEV_LATEST_20210302_012043.SSA.bin",
+        "last_reload_reason": "Reload Command",
+        "platform": "C9300-24P",
+        "memory": {
+          "total_bytes": 1365271552,
+          "io_bytes": 6294528
+        },
+        "serial_number": "FCW2223G0B9",
+        "interfaces": {
+          "virtual_ethernet": 1,
+          "gigabit_ethernet": 28,
+          "ten_gigabit_ethernet": 8,
+          "twentyfive_gigabit_ethernet": 2,
+          "forty_gigabit_ethernet": 2
+        },
+        "nvram_bytes": 2097152,
+        "mac_address": "00:b6:70:ff:06:5e",
+        "motherboard_serial": "FOC22221AD2",
+        "model_number": "C9300-24P",
+        "config_register": "0x102",
+        "switch_stack": [
+          {
+            "switch_number": 1,
+            "ports": 41,
+            "model": "C9300-24P",
+            "sw_version": "17.06.01",
+            "sw_image": "CAT9K_IOSXE",
+            "active": true,
+            "mode": "BUNDLE"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ISR 4451-X router with suite license information, technology package table, release software version",
+      "input": "Cisco IOS XE Software, Version 16.06.05\nCisco IOS Software [Everest], ISR Software (X86_64_LINUX_IOSD-UNIVERSALK9-M), Version 16.6.5, RELEASE SOFTWARE (fc3)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2018 by Cisco Systems, Inc.\nCompiled Mon 10-Dec-18 13:10 by mcpre\n\n\nCisco IOS-XE software, Copyright (c) 2005-2018 by cisco Systems, Inc.\nAll rights reserved.  Certain components of Cisco IOS-XE software are\nlicensed under the GNU General Public License (\"GPL\") Version 2.0.  The\nsoftware code licensed under GPL Version 2.0 is free software that comes\nwith ABSOLUTELY NO WARRANTY.  You can redistribute and/or modify such\nGPL code under the terms of GPL Version 2.0.  For more details, see the\ndocumentation or \"License Notice\" file accompanying the IOS-XE software,\nor the applicable URL provided on the flyer accompanying the IOS-XE\nsoftware.\n\n\nROM: IOS-XE ROMMON\n\nisr4k uptime is 2 days, 3 hours, 18 minutes\nUptime for this control processor is 2 days, 3 hours, 19 minutes\nSystem returned to ROM by Reload Command at 07:15:43 UTC Fri Feb 1 2019\nSystem restarted at 07:19:15 UTC Fri Feb 1 2019\nSystem image file is \"bootflash:isr4400-universalk10.115.6.5.SPA.bin\"\nLast reload reason: Reload Command\n\n\n\nThis product contains cryptographic features and is subject to United\nStates and local country laws governing import, export, transfer and\nuse. Delivery of Cisco cryptographic products does not imply\nthird-party authority to import, export, distribute or use encryption.\nImporters, exporters, distributors and users are responsible for\ncompliance with U.S. and local country laws. By using this product you\nagree to comply with applicable laws and regulations. If you are unable\nto comply with U.S. and local laws, return this product immediately.\n\nA summary of U.S. laws governing Cisco cryptographic products may be found at:\nhttp://www.cisco.com/wwl/export/crypto/tool/stqrg.html\n\nIf you require further assistance please contact us by sending email to\nexport@cisco.com.\n\n\n\nSuite License Information for Module:'esg'\n\n--------------------------------------------------------------------------------\nSuite                 Suite Current         Type           Suite Next reboot\n--------------------------------------------------------------------------------\nFoundationSuiteK9     None                  None           None\nsecurityk9\nappxk9\n\nAdvUCSuiteK9          None                  None           None\nuck9\ncme-srst\ncube\n\n\nTechnology Package License Information:\n\n-----------------------------------------------------------------\nTechnology    Technology-package           Technology-package\n              Current       Type           Next reboot\n------------------------------------------------------------------\nappxk9           appxk9           RightToUse       appxk9\nuck9             None             None             None\nsecurityk9       securityk9       RightToUse       securityk9\nipbase           ipbasek9         Permanent        ipbasek9\n\ncisco ISR4451-X/K9 (2RU) processor with 1795979K/6147K bytes of memory.\nProcessor board ID FGL273610NK\n1 Virtual Ethernet interface\n4 Gigabit Ethernet interfaces\n32768K bytes of non-volatile configuration memory.\n4194304K bytes of physical memory.\n7341807K bytes of flash memory at bootflash:.\n0K bytes of WebUI ODM Files at webui:.\n\nConfiguration register is 0x2102\n",
+      "expected": {
+        "version": "16.06.05",
+        "image_type": "X86_64_LINUX_IOSD-UNIVERSALK9-M",
+        "compiled": "Mon 10-Dec-18 13:10 by mcpre",
+        "rom_version": "IOS-XE ROMMON",
+        "hostname": "isr4k",
+        "uptime": "2 days, 3 hours, 18 minutes",
+        "system_returned_to_rom_by": "Reload Command at 07:15:43 UTC Fri Feb 1 2019",
+        "restarted_at": "07:19:15 UTC Fri Feb 1 2019",
+        "system_image": "bootflash:isr4400-universalk10.115.6.5.SPA.bin",
+        "last_reload_reason": "Reload Command",
+        "platform": "ISR4451-X/K9",
+        "memory": {
+          "total_bytes": 1839082496,
+          "io_bytes": 6294528
+        },
+        "serial_number": "FGL273610NK",
+        "interfaces": {
+          "virtual_ethernet": 1,
+          "gigabit_ethernet": 4
+        },
+        "nvram_bytes": 33554432,
+        "config_register": "0x2102"
+      }
+    },
+    {
+      "name": "C8000V virtual router with zero uptime edge case, Perpetual license type with empty level, minimal interfaces",
+      "input": "Cisco IOS XE Software, Version BLD_POLARIS_DEV_LATEST_20240326_003112\nCisco IOS Software [IOSXE], Virtual XE Software (X86_64_LINUX_IOSD-UNIVERSALK9-M), Experimental Version 17.15.20240326:010319 [BLD_POLARIS_DEV_LATEST_20240326_003112:/nobackup/mcpre/s2c-build-ws 101]\nCopyright (c) 1986-2024 by Cisco Systems, Inc.\nCompiled Mon 25-Mar-24 18:03 by mcpre\n\n\nCisco IOS-XE software, Copyright (c) 2005-2024 by cisco Systems, Inc.\nAll rights reserved.  Certain components of Cisco IOS-XE software are\nlicensed under the GNU General Public License (\"GPL\") Version 2.0.  The\nsoftware code licensed under GPL Version 2.0 is free software that comes\nwith ABSOLUTELY NO WARRANTY.  You can redistribute and/or modify such\nGPL code under the terms of GPL Version 2.0.  For more details, see the\ndocumentation or \"License Notice\" file accompanying the IOS-XE software,\nor the applicable URL provided on the flyer accompanying the IOS-XE\nsoftware.\n\n\nROM: IOS-XE ROMMON\n\nott-mdt-vm7 uptime is 0 minutes\nUptime for this control processor is 1 minute\nSystem returned to ROM by reload\nSystem image file is \"bootflash:packages.conf\"\nLast reload reason: reload\n\n\n\nThis product contains cryptographic features and is subject to United\nStates and local country laws governing import, export, transfer and\nuse. Delivery of Cisco cryptographic products does not imply\nthird-party authority to import, export, distribute or use encryption.\nImporters, exporters, distributors and users are responsible for\ncompliance with U.S. and local country laws. By using this product you\nagree to comply with applicable laws and regulations. If you are unable\nto comply with U.S. and local laws, return this product immediately.\n\nA summary of U.S. laws governing Cisco cryptographic products may be found at:\nhttp://www.cisco.com/wwl/export/crypto/tool/stqrg.html\n\nIf you require further assistance please contact us by sending email to\nexport@cisco.com.\n\nLicense Level:\nLicense Type: Perpetual\nNext reload license Level:\n\nAddon License Level:\nAddon License Type: Subscription\nNext reload addon license Level:\n\nThe current throughput level is 2000 kbps\n\n\nSmart Licensing Status: Smart Licensing Using Policy\n\ncisco C8000V (VXE) processor (revision VXE) with 1900130K/3075K bytes of memory.\nProcessor board ID 9E42BIFKVLR\nRouter operating mode: Autonomous\n3 Gigabit Ethernet interfaces\n32768K bytes of non-volatile configuration memory.\n8082280K bytes of physical memory.\n14589951K bytes of virtual hard disk at bootflash:.\n\nConfiguration register is 0x2102\n",
+      "expected": {
+        "version": "BLD_POLARIS_DEV_LATEST_20240326_003112",
+        "image_type": "X86_64_LINUX_IOSD-UNIVERSALK9-M",
+        "compiled": "Mon 25-Mar-24 18:03 by mcpre",
+        "rom_version": "IOS-XE ROMMON",
+        "hostname": "ott-mdt-vm7",
+        "uptime": "0 minutes",
+        "system_returned_to_rom_by": "reload",
+        "system_image": "bootflash:packages.conf",
+        "last_reload_reason": "reload",
+        "license": {
+          "type": "Perpetual"
+        },
+        "platform": "C8000V",
+        "memory": {
+          "total_bytes": 1945733120,
+          "io_bytes": 3148800
+        },
+        "serial_number": "9E42BIFKVLR",
+        "interfaces": {
+          "gigabit_ethernet": 3
+        },
+        "nvram_bytes": 33554432,
+        "config_register": "0x2102"
+      }
+    },
+    {
+      "name": "Catalyst 4507R+E with IOS-XE, config_register_next, no system_image field, long uptime with years, indented license format",
+      "input": "Cisco IOS Software, IOS-XE Software, Catalyst 4500 L3 Switch Software (cat4500e-UNIVERSALK9-M), Version 03.03.02.SG RELEASE SOFTWARE (fc1)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2012 by Cisco Systems, Inc.\nCompiled Tue 23-Oct-12 23:51 by prod_rel_team\n\nROM: 15.0(1r)SG5\nswitchname uptime is 6 years, 2 weeks, 13 hours, 31 minutes\nUptime for this control processor is 6 years, 2 weeks, 13 hours, 33 minutes\nSystem returned to ROM by reload\nSystem restarted at 09:57:20 GMT Tue Oct 15 2013\nRunning default software\nJawa Revision 7, Snowtrooper Revision 0x0.0x1C\n\nLast reload reason: Reload command\n\n\n\nThis product contains cryptographic features and is subject to United\nStates and local country laws governing import, export, transfer and\nuse. Delivery of Cisco cryptographic products does not imply\nthird-party authority to import, export, distribute or use encryption.\nImporters, exporters, distributors and users are responsible for\ncompliance with U.S. and local country laws. By using this product you\nagree to comply with applicable laws and regulations. If you are unable\nto comply with U.S. and local laws, return this product immediately.\n\nA summary of U.S. laws governing Cisco cryptographic products may be found at:\nhttp://www.cisco.com/wwl/export/crypto/tool/stqrg.html\n\nIf you require further assistance please contact us by sending email to\nexport@cisco.com.\n\n\nLicense Information for 'WS-X45-SUP7-E'\n    License Level: entservices   Type: Permanent\n    Next reboot license Level: entservices\n\ncisco WS-C4507R+E (MPC8572) processor (revision 10) with 2097152K/20480K bytes of memory.\nProcessor board ID FXS1729E2TD\nMPC8572 CPU at 1.5GHz, Supervisor 7\nLast reset from Reload\n9 Virtual Ethernet interfaces\n240 Gigabit Ethernet interfaces\n4 Ten Gigabit Ethernet interfaces\n511K bytes of non-volatile configuration memory.\n\nConfiguration register is 0x2101 (will be 0x2102 at next reload)\n",
+      "expected": {
+        "version": "03.03.02.SG",
+        "image_type": "cat4500e-UNIVERSALK9-M",
+        "compiled": "Tue 23-Oct-12 23:51 by prod_rel_team",
+        "rom_version": "15.0(1r)SG5",
+        "hostname": "switchname",
+        "uptime": "6 years, 2 weeks, 13 hours, 31 minutes",
+        "system_returned_to_rom_by": "reload",
+        "restarted_at": "09:57:20 GMT Tue Oct 15 2013",
+        "last_reload_reason": "Reload command",
+        "license": {
+          "level": "entservices   Type: Permanent"
+        },
+        "platform": "WS-C4507R+E",
+        "memory": {
+          "total_bytes": 2147483648,
+          "io_bytes": 20971520
+        },
+        "serial_number": "FXS1729E2TD",
+        "interfaces": {
+          "virtual_ethernet": 9,
+          "gigabit_ethernet": 240,
+          "ten_gigabit_ethernet": 4
+        },
+        "nvram_bytes": 523264,
+        "config_register": "0x2101",
+        "config_register_next": "0x2102"
+      }
+    }
+  ]
+}

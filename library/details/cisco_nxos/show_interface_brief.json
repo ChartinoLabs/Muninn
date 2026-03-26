@@ -1,0 +1,116 @@
+{
+  "os": "cisco_nxos",
+  "command": "show interface brief",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Multiple interface types with various statuses",
+      "input": "\n--------------------------------------------------------------------------------\nPort   VRF          Status IP Address                              Speed    MTU\n--------------------------------------------------------------------------------\nmgmt0  --           up     192.168.10.37                           1000     1500\n\n--------------------------------------------------------------------------------\nEthernet      VLAN    Type Mode   Status  Reason                   Speed     Port\nInterface                                                                    Ch #\n--------------------------------------------------------------------------------\nEth1/1        1      eth  trunk  up      none                       10G(D)  4000\nEth1/2        1      eth  trunk  up      none                       10G(D)  4000\nEth1/3        --     eth  routed down    SFP not inserted           1000(D) --\nEth1/4        10     eth  access up      none                       1000(D) --\nEth1/5        1      eth  f-path down    SFP not inserted           10G(D)  --\nEth1/6        1      eth  fabric down    Link not connected         10G(D)  --\n\n--------------------------------------------------------------------------------\nPort-channel VLAN    Type Mode   Status  Reason                    Speed   Protocol\nInterface\n--------------------------------------------------------------------------------\nPo10         1      eth  trunk  up      none                       a-10G(D)  lacp\nPo4000       1      eth  trunk  up      none                       a-10G(D)  lacp\nPo20         --     eth  routed down    No operational members     auto(D)   lacp\n\n-------------------------------------------------------------------------------\nInterface                  Status    Description\n-------------------------------------------------------------------------------\nLo0                        up        Router ID loopback\nLo1                        up        --\nLo100                      down      VTEP source\n\n-------------------------------------------------------------------------------\nInterface     Secondary VLAN(Type)                    Status Reason\n-------------------------------------------------------------------------------\nVlan1         --                                      down   Administratively down\nVlan10        --                                      up     --\nVlan200       100(community)                          up     --\n",
+      "expected": {
+        "mgmt0": {
+          "status": "up",
+          "speed": 1000,
+          "mtu": 1500,
+          "ip_address": "192.168.10.37"
+        },
+        "Ethernet1/1": {
+          "type": "eth",
+          "mode": "trunk",
+          "status": "up",
+          "reason": "none",
+          "speed": "10G",
+          "vlan": "1",
+          "port_channel": "4000"
+        },
+        "Ethernet1/2": {
+          "type": "eth",
+          "mode": "trunk",
+          "status": "up",
+          "reason": "none",
+          "speed": "10G",
+          "vlan": "1",
+          "port_channel": "4000"
+        },
+        "Ethernet1/3": {
+          "type": "eth",
+          "mode": "routed",
+          "status": "down",
+          "reason": "SFP not inserted",
+          "speed": "1000"
+        },
+        "Ethernet1/4": {
+          "type": "eth",
+          "mode": "access",
+          "status": "up",
+          "reason": "none",
+          "speed": "1000",
+          "vlan": "10"
+        },
+        "Ethernet1/5": {
+          "type": "eth",
+          "mode": "f-path",
+          "status": "down",
+          "reason": "SFP not inserted",
+          "speed": "10G",
+          "vlan": "1"
+        },
+        "Ethernet1/6": {
+          "type": "eth",
+          "mode": "fabric",
+          "status": "down",
+          "reason": "Link not connected",
+          "speed": "10G",
+          "vlan": "1"
+        },
+        "Port-channel10": {
+          "type": "eth",
+          "mode": "trunk",
+          "status": "up",
+          "reason": "none",
+          "speed": "a-10G",
+          "protocol": "lacp",
+          "vlan": "1"
+        },
+        "Port-channel4000": {
+          "type": "eth",
+          "mode": "trunk",
+          "status": "up",
+          "reason": "none",
+          "speed": "a-10G",
+          "protocol": "lacp",
+          "vlan": "1"
+        },
+        "Port-channel20": {
+          "type": "eth",
+          "mode": "routed",
+          "status": "down",
+          "reason": "No operational members",
+          "speed": "auto",
+          "protocol": "lacp"
+        },
+        "Loopback0": {
+          "status": "up",
+          "description": "Router ID loopback"
+        },
+        "Loopback1": {
+          "status": "up"
+        },
+        "Loopback100": {
+          "status": "down",
+          "description": "VTEP source"
+        },
+        "Vlan1": {
+          "status": "down",
+          "reason": "Administratively down"
+        },
+        "Vlan10": {
+          "status": "up"
+        },
+        "Vlan200": {
+          "status": "up",
+          "secondary_vlan": "100(community)"
+        }
+      }
+    }
+  ]
+}

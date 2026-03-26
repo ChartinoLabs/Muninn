@@ -1,0 +1,209 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show sdwan omp peers",
+  "schema": {
+    "name": "ShowSdwanOmpPeersResult",
+    "fields": {
+      "peers": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "OmpPeerEntry",
+            "fields": {
+              "type": {
+                "type": "str",
+                "required": true
+              },
+              "domain_id": {
+                "type": "int",
+                "required": true
+              },
+              "overlay_id": {
+                "type": "int",
+                "required": true
+              },
+              "site_id": {
+                "type": "int",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "uptime": {
+                "type": "str",
+                "required": true
+              },
+              "routes": {
+                "type": {
+                  "name": "RouteStats",
+                  "fields": {
+                    "received": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "installed": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "sent": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": true
+              },
+              "tenant_id": {
+                "type": "int",
+                "required": false
+              },
+              "region_id": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with multiple peers of different types",
+      "input": "\n    R -> routes received\n    I -> routes installed\n    S -> routes sent\n\n    DOMAIN OVERLAY SITE\n    PEER TYPE ID ID ID STATE UPTIME R/I/S\n    ------------------------------------------------------------------------------------------\n    10.4.1.4 vsmart 1 1 4294945506up 6:13:57:28 4/0/4\n    10.115.55.5 vedge 1 1 55 up 0:01:24:29 1/0/1\n    10.240.105.6 vedge 1 1 6 up 6:13:58:46 1/0/1\n    172.16.106.170 vedge 1 1 170 up 6:13:58:47 0/0/2\n    192.168.254.100 vedge 1 1 100 up 0:09:28:48 0/0/0\n    192.168.254.101 vedge 1 1 101 up 0:09:27:33 0/0/0\n    192.168.254.102 vedge 1 1 102 up 0:09:29:00 0/0/0\n    192.168.255.2 vedge 1 1 200 up 0:04:14:12 2/0/0\n",
+      "expected": {
+        "peers": {
+          "10.115.55.5": {
+            "domain_id": 1,
+            "overlay_id": 1,
+            "routes": {
+              "installed": 0,
+              "received": 1,
+              "sent": 1
+            },
+            "site_id": 55,
+            "state": "up",
+            "type": "vedge",
+            "uptime": "0:01:24:29"
+          },
+          "10.240.105.6": {
+            "domain_id": 1,
+            "overlay_id": 1,
+            "routes": {
+              "installed": 0,
+              "received": 1,
+              "sent": 1
+            },
+            "site_id": 6,
+            "state": "up",
+            "type": "vedge",
+            "uptime": "6:13:58:46"
+          },
+          "10.4.1.4": {
+            "domain_id": 1,
+            "overlay_id": 1,
+            "routes": {
+              "installed": 0,
+              "received": 4,
+              "sent": 4
+            },
+            "site_id": 4294945506,
+            "state": "up",
+            "type": "vsmart",
+            "uptime": "6:13:57:28"
+          },
+          "172.16.106.170": {
+            "domain_id": 1,
+            "overlay_id": 1,
+            "routes": {
+              "installed": 0,
+              "received": 0,
+              "sent": 2
+            },
+            "site_id": 170,
+            "state": "up",
+            "type": "vedge",
+            "uptime": "6:13:58:47"
+          },
+          "192.168.254.100": {
+            "domain_id": 1,
+            "overlay_id": 1,
+            "routes": {
+              "installed": 0,
+              "received": 0,
+              "sent": 0
+            },
+            "site_id": 100,
+            "state": "up",
+            "type": "vedge",
+            "uptime": "0:09:28:48"
+          },
+          "192.168.254.101": {
+            "domain_id": 1,
+            "overlay_id": 1,
+            "routes": {
+              "installed": 0,
+              "received": 0,
+              "sent": 0
+            },
+            "site_id": 101,
+            "state": "up",
+            "type": "vedge",
+            "uptime": "0:09:27:33"
+          },
+          "192.168.254.102": {
+            "domain_id": 1,
+            "overlay_id": 1,
+            "routes": {
+              "installed": 0,
+              "received": 0,
+              "sent": 0
+            },
+            "site_id": 102,
+            "state": "up",
+            "type": "vedge",
+            "uptime": "0:09:29:00"
+          },
+          "192.168.255.2": {
+            "domain_id": 1,
+            "overlay_id": 1,
+            "routes": {
+              "installed": 0,
+              "received": 2,
+              "sent": 0
+            },
+            "site_id": 200,
+            "state": "up",
+            "type": "vedge",
+            "uptime": "0:04:14:12"
+          }
+        }
+      }
+    },
+    {
+      "name": "Output with tenant ID and region ID columns",
+      "input": "show sdwan omp peers\nR -> routes received\nI -> routes installed\nS -> routes sent\n\nTENANT                             DOMAIN    OVERLAY   SITE      REGION\nID        PEER             TYPE    ID        ID        ID        ID        STATE    UPTIME           R/I/S\n-----------------------------------------------------------------------------------------------------------------\n0         10.8.1.82        vsmart  1         1         1001      None      up       90:21:24:08      61/37/24\n",
+      "expected": {
+        "peers": {
+          "10.8.1.82": {
+            "domain_id": 1,
+            "overlay_id": 1,
+            "routes": {
+              "installed": 37,
+              "received": 61,
+              "sent": 24
+            },
+            "site_id": 1001,
+            "state": "up",
+            "tenant_id": 0,
+            "type": "vsmart",
+            "uptime": "90:21:24:08"
+          }
+        }
+      }
+    }
+  ]
+}

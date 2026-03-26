@@ -1,0 +1,228 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show esmc detail",
+  "schema": {
+    "name": "ShowEsmcDetailResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "EsmcInterfaceDetail",
+            "fields": {
+              "name": {
+                "type": "str",
+                "required": true
+              },
+              "administrative_configurations": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": "str"
+                },
+                "required": true
+              },
+              "operational_status": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": "str"
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "Interface: GigabitEthernet0/0/2\n  Administrative configurations:\n    Mode: Synchronous\n    ESMC TX: Enable\n    ESMC RX: Enable\n    QL TX: -\n    QL RX: -\n  Operational status:\n    Port status: UP\n    QL Receive: QL-SEC\n    QL Transmit: QL-DNU\n    QL rx overrided: -\n    ESMC Information rate: 1 packet/second\n    ESMC Expiry: 5 second\n    ESMC Tx Timer: Running\n    ESMC Rx Timer: Running\n    ESMC Tx interval count: 1\n    ESMC INFO pkts in: 588702\n    ESMC INFO pkts out: 588855\n    ESMC EVENT pkts in: 0\n    ESMC EVENT pkts out: 14\n\nInterface: GigabitEthernet0/0/6\n  Administrative configurations:\n    Mode: Synchronous\n    ESMC TX: Enable\n    ESMC RX: Enable\n    QL TX: -\n    QL RX: -\n  Operational status:\n    Port status: UP\n    QL Receive: QL-SEC\n    QL Transmit: QL-SEC\n    QL rx overrided: -\n    ESMC Information rate: 1 packet/second\n    ESMC Expiry: 5 second\n    ESMC Tx Timer: Running\n    ESMC Rx Timer: Running\n    ESMC Tx interval count: 1\n    ESMC INFO pkts in: 429540\n    ESMC INFO pkts out: 429700\n    ESMC EVENT pkts in: 0\n    ESMC EVENT pkts out: 5\n\nInterface: TenGigabitEthernet0/0/8\n  Administrative configurations:\n    Mode: Synchronous\n    ESMC TX: Enable\n    ESMC RX: Enable\n    QL TX: -\n    QL RX: -\n  Operational status:\n    Port status: DOWN\n    QL Receive: QL-SEC\n    QL Transmit: QL-SEC\n    QL rx overrided: QL-FAILED\n    ESMC Information rate: 1 packet/second\n    ESMC Expiry: 5 second\n    ESMC Tx Timer: Running\n    ESMC Rx Timer: Stopped\n    ESMC Tx interval count: 0\n    ESMC INFO pkts in: 97\n    ESMC INFO pkts out: 108\n    ESMC EVENT pkts in: 0\n    ESMC EVENT pkts out: 0\n\nInterface: TenGigabitEthernet0/0/10\n  Administrative configurations:\n    Mode: Synchronous\n    ESMC TX: Enable\n    ESMC RX: Enable\n    QL TX: -\n    QL RX: -\n  Operational status:\n    Port status: UP\n    QL Receive: QL-SEC\n    QL Transmit: QL-SEC\n    QL rx overrided: -\n    ESMC Information rate: 1 packet/second\n    ESMC Expiry: 5 second\n    ESMC Tx Timer: Running\n    ESMC Rx Timer: Running\n    ESMC Tx interval count: 1\n    ESMC INFO pkts in: 417007\n    ESMC INFO pkts out: 417020\n    ESMC EVENT pkts in: 0\n    ESMC EVENT pkts out: 2\n\nInterface: TenGigabitEthernet0/0/14\n  Administrative configurations:\n    Mode: Synchronous\n    ESMC TX: Enable\n    ESMC RX: Enable\n    QL TX: -\n    QL RX: -\n  Operational status:\n    Port status: UP\n    QL Receive: QL-SEC\n    QL Transmit: QL-SEC\n    QL rx overrided: -\n    ESMC Information rate: 1 packet/second\n    ESMC Expiry: 5 second\n    ESMC Tx Timer: Running\n    ESMC Rx Timer: Running\n    ESMC Tx interval count: 1\n    ESMC INFO pkts in: 420949\n    ESMC INFO pkts out: 420950\n    ESMC EVENT pkts in: 0\n    ESMC EVENT pkts out: 0\n\nInterface: TwentyFiveGigE0/0/16\n  Administrative configurations:\n    Mode: Synchronous\n    ESMC TX: Enable\n    ESMC RX: Enable\n    QL TX: -\n    QL RX: -\n  Operational status:\n    Port status: UP\n    QL Receive: QL-SEC\n    QL Transmit: QL-SEC\n    QL rx overrided: -\n    ESMC Information rate: 1 packet/second\n    ESMC Expiry: 5 second\n    ESMC Tx Timer: Running\n    ESMC Rx Timer: Running\n    ESMC Tx interval count: 1\n    ESMC INFO pkts in: 421443\n    ESMC INFO pkts out: 421456\n    ESMC EVENT pkts in: 0\n    ESMC EVENT pkts out: 0\n\nInterface: TwentyFiveGigE0/0/17\n  Administrative configurations:\n    Mode: Synchronous\n    ESMC TX: Enable\n    ESMC RX: Enable\n    QL TX: -\n    QL RX: -\n  Operational status:\n    Port status: UP\n    QL Receive: QL-SEC\n    QL Transmit: QL-SEC\n    QL rx overrided: -\n    ESMC Information rate: 1 packet/second\n    ESMC Expiry: 5 second\n    ESMC Tx Timer: Running\n    ESMC Rx Timer: Running\n    ESMC Tx interval count: 1\n    ESMC INFO pkts in: 416643\n    ESMC INFO pkts out: 416643\n    ESMC EVENT pkts in: 0\n    ESMC EVENT pkts out: 0\n\nInterface: TwentyFiveGigE0/0/18\n  Administrative configurations:\n    Mode: Synchronous\n    ESMC TX: Enable\n    ESMC RX: Enable\n    QL TX: -\n    QL RX: -\n  Operational status:\n    Port status: UP\n    QL Receive: QL-SEC\n    QL Transmit: QL-SEC\n    QL rx overrided: -\n    ESMC Information rate: 1 packet/second\n    ESMC Expiry: 5 second\n    ESMC Tx Timer: Running\n    ESMC Rx Timer: Running\n    ESMC Tx interval count: 1\n    ESMC INFO pkts in: 411278\n    ESMC INFO pkts out: 411406\n    ESMC EVENT pkts in: 0\n    ESMC EVENT pkts out: 2\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet0/0/2": {
+            "name": "GigabitEthernet0/0/2",
+            "administrative_configurations": {
+              "Mode": "Synchronous",
+              "ESMC TX": "Enable",
+              "ESMC RX": "Enable"
+            },
+            "operational_status": {
+              "Port status": "UP",
+              "QL Receive": "QL-SEC",
+              "QL Transmit": "QL-DNU",
+              "ESMC Information rate": "1 packet/second",
+              "ESMC Expiry": "5 second",
+              "ESMC Tx Timer": "Running",
+              "ESMC Rx Timer": "Running",
+              "ESMC Tx interval count": "1",
+              "ESMC INFO pkts in": "588702",
+              "ESMC INFO pkts out": "588855",
+              "ESMC EVENT pkts in": "0",
+              "ESMC EVENT pkts out": "14"
+            }
+          },
+          "GigabitEthernet0/0/6": {
+            "name": "GigabitEthernet0/0/6",
+            "administrative_configurations": {
+              "Mode": "Synchronous",
+              "ESMC TX": "Enable",
+              "ESMC RX": "Enable"
+            },
+            "operational_status": {
+              "Port status": "UP",
+              "QL Receive": "QL-SEC",
+              "QL Transmit": "QL-SEC",
+              "ESMC Information rate": "1 packet/second",
+              "ESMC Expiry": "5 second",
+              "ESMC Tx Timer": "Running",
+              "ESMC Rx Timer": "Running",
+              "ESMC Tx interval count": "1",
+              "ESMC INFO pkts in": "429540",
+              "ESMC INFO pkts out": "429700",
+              "ESMC EVENT pkts in": "0",
+              "ESMC EVENT pkts out": "5"
+            }
+          },
+          "TenGigabitEthernet0/0/8": {
+            "name": "TenGigabitEthernet0/0/8",
+            "administrative_configurations": {
+              "Mode": "Synchronous",
+              "ESMC TX": "Enable",
+              "ESMC RX": "Enable"
+            },
+            "operational_status": {
+              "Port status": "DOWN",
+              "QL Receive": "QL-SEC",
+              "QL Transmit": "QL-SEC",
+              "QL rx overrided": "QL-FAILED",
+              "ESMC Information rate": "1 packet/second",
+              "ESMC Expiry": "5 second",
+              "ESMC Tx Timer": "Running",
+              "ESMC Rx Timer": "Stopped",
+              "ESMC Tx interval count": "0",
+              "ESMC INFO pkts in": "97",
+              "ESMC INFO pkts out": "108",
+              "ESMC EVENT pkts in": "0",
+              "ESMC EVENT pkts out": "0"
+            }
+          },
+          "TenGigabitEthernet0/0/10": {
+            "name": "TenGigabitEthernet0/0/10",
+            "administrative_configurations": {
+              "Mode": "Synchronous",
+              "ESMC TX": "Enable",
+              "ESMC RX": "Enable"
+            },
+            "operational_status": {
+              "Port status": "UP",
+              "QL Receive": "QL-SEC",
+              "QL Transmit": "QL-SEC",
+              "ESMC Information rate": "1 packet/second",
+              "ESMC Expiry": "5 second",
+              "ESMC Tx Timer": "Running",
+              "ESMC Rx Timer": "Running",
+              "ESMC Tx interval count": "1",
+              "ESMC INFO pkts in": "417007",
+              "ESMC INFO pkts out": "417020",
+              "ESMC EVENT pkts in": "0",
+              "ESMC EVENT pkts out": "2"
+            }
+          },
+          "TenGigabitEthernet0/0/14": {
+            "name": "TenGigabitEthernet0/0/14",
+            "administrative_configurations": {
+              "Mode": "Synchronous",
+              "ESMC TX": "Enable",
+              "ESMC RX": "Enable"
+            },
+            "operational_status": {
+              "Port status": "UP",
+              "QL Receive": "QL-SEC",
+              "QL Transmit": "QL-SEC",
+              "ESMC Information rate": "1 packet/second",
+              "ESMC Expiry": "5 second",
+              "ESMC Tx Timer": "Running",
+              "ESMC Rx Timer": "Running",
+              "ESMC Tx interval count": "1",
+              "ESMC INFO pkts in": "420949",
+              "ESMC INFO pkts out": "420950",
+              "ESMC EVENT pkts in": "0",
+              "ESMC EVENT pkts out": "0"
+            }
+          },
+          "TwentyFiveGigE0/0/16": {
+            "name": "TwentyFiveGigE0/0/16",
+            "administrative_configurations": {
+              "Mode": "Synchronous",
+              "ESMC TX": "Enable",
+              "ESMC RX": "Enable"
+            },
+            "operational_status": {
+              "Port status": "UP",
+              "QL Receive": "QL-SEC",
+              "QL Transmit": "QL-SEC",
+              "ESMC Information rate": "1 packet/second",
+              "ESMC Expiry": "5 second",
+              "ESMC Tx Timer": "Running",
+              "ESMC Rx Timer": "Running",
+              "ESMC Tx interval count": "1",
+              "ESMC INFO pkts in": "421443",
+              "ESMC INFO pkts out": "421456",
+              "ESMC EVENT pkts in": "0",
+              "ESMC EVENT pkts out": "0"
+            }
+          },
+          "TwentyFiveGigE0/0/17": {
+            "name": "TwentyFiveGigE0/0/17",
+            "administrative_configurations": {
+              "Mode": "Synchronous",
+              "ESMC TX": "Enable",
+              "ESMC RX": "Enable"
+            },
+            "operational_status": {
+              "Port status": "UP",
+              "QL Receive": "QL-SEC",
+              "QL Transmit": "QL-SEC",
+              "ESMC Information rate": "1 packet/second",
+              "ESMC Expiry": "5 second",
+              "ESMC Tx Timer": "Running",
+              "ESMC Rx Timer": "Running",
+              "ESMC Tx interval count": "1",
+              "ESMC INFO pkts in": "416643",
+              "ESMC INFO pkts out": "416643",
+              "ESMC EVENT pkts in": "0",
+              "ESMC EVENT pkts out": "0"
+            }
+          },
+          "TwentyFiveGigE0/0/18": {
+            "name": "TwentyFiveGigE0/0/18",
+            "administrative_configurations": {
+              "Mode": "Synchronous",
+              "ESMC TX": "Enable",
+              "ESMC RX": "Enable"
+            },
+            "operational_status": {
+              "Port status": "UP",
+              "QL Receive": "QL-SEC",
+              "QL Transmit": "QL-SEC",
+              "ESMC Information rate": "1 packet/second",
+              "ESMC Expiry": "5 second",
+              "ESMC Tx Timer": "Running",
+              "ESMC Rx Timer": "Running",
+              "ESMC Tx interval count": "1",
+              "ESMC INFO pkts in": "411278",
+              "ESMC INFO pkts out": "411406",
+              "ESMC EVENT pkts in": "0",
+              "ESMC EVENT pkts out": "2"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

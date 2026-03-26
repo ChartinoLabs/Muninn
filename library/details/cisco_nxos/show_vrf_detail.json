@@ -1,0 +1,160 @@
+{
+  "os": "cisco_nxos",
+  "command": "show vrf detail",
+  "schema": {
+    "name": "ShowVrfDetailResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfDetailEntry",
+            "fields": {
+              "vrf_id": {
+                "type": "int",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "vpn_id": {
+                "type": "str",
+                "required": false
+              },
+              "rd": {
+                "type": "str",
+                "required": false
+              },
+              "max_routes": {
+                "type": "int",
+                "required": true
+              },
+              "mid_threshold": {
+                "type": "int",
+                "required": true
+              },
+              "address_families": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "AddressFamilyEntry",
+                    "fields": {
+                      "table_id": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "fwd_id": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "state": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple VRFs with VPNID, RD, and address families",
+      "input": "VRF-Name: HUB, VRF-ID: 9, State: Up\n    VPNID: 123:456\n    RD: 172.21.111.112:197\n    Max Routes: 0  Mid-Threshold: 0\n    Table-ID: 0x80000009, AF: IPv6, Fwd-ID: 0x80000009, State: Up\n    Table-ID: 0x00000009, AF: IPv4, Fwd-ID: 0x00000009, State: Up\n\nVRF-Name: INSTRUMENTS, VRF-ID: 10, State: Up\n    VPNID: 3211:65\n    RD: 172.21.111.112:108\n    Max Routes: 0  Mid-Threshold: 0\n    Table-ID: 0x8000000a, AF: IPv6, Fwd-ID: 0x8000000a, State: Up\n    Table-ID: 0x0000000a, AF: IPv4, Fwd-ID: 0x0000000a, State: Up\n\nVRF-Name: LAB, VRF-ID: 11, State: Up\n    VPNID: 890:765\n    RD: 172.21.123.111:107\n    Max Routes: 0  Mid-Threshold: 0\n    Table-ID: 0x8000000b, AF: IPv6, Fwd-ID: 0x8000000b, State: Up\n    Table-ID: 0x0000000b, AF: IPv4, Fwd-ID: 0x0000000b, State: Up\n",
+      "expected": {
+        "vrfs": {
+          "HUB": {
+            "address_families": {
+              "IPv4": {
+                "fwd_id": "0x00000009",
+                "state": "Up",
+                "table_id": "0x00000009"
+              },
+              "IPv6": {
+                "fwd_id": "0x80000009",
+                "state": "Up",
+                "table_id": "0x80000009"
+              }
+            },
+            "max_routes": 0,
+            "mid_threshold": 0,
+            "rd": "172.21.111.112:197",
+            "state": "Up",
+            "vpn_id": "123:456",
+            "vrf_id": 9
+          },
+          "INSTRUMENTS": {
+            "address_families": {
+              "IPv4": {
+                "fwd_id": "0x0000000a",
+                "state": "Up",
+                "table_id": "0x0000000a"
+              },
+              "IPv6": {
+                "fwd_id": "0x8000000a",
+                "state": "Up",
+                "table_id": "0x8000000a"
+              }
+            },
+            "max_routes": 0,
+            "mid_threshold": 0,
+            "rd": "172.21.111.112:108",
+            "state": "Up",
+            "vpn_id": "3211:65",
+            "vrf_id": 10
+          },
+          "LAB": {
+            "address_families": {
+              "IPv4": {
+                "fwd_id": "0x0000000b",
+                "state": "Up",
+                "table_id": "0x0000000b"
+              },
+              "IPv6": {
+                "fwd_id": "0x8000000b",
+                "state": "Up",
+                "table_id": "0x8000000b"
+              }
+            },
+            "max_routes": 0,
+            "mid_threshold": 0,
+            "rd": "172.21.123.111:107",
+            "state": "Up",
+            "vpn_id": "890:765",
+            "vrf_id": 11
+          }
+        }
+      }
+    },
+    {
+      "name": "Single VRF without VPNID and with only IPv4 address family",
+      "input": "VRF-Name: default, VRF-ID: 1, State: Up\n    RD: --\n    Max Routes: 0  Mid-Threshold: 0\n    Table-ID: 0x00000001, AF: IPv4, Fwd-ID: 0x00000001, State: Up\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "address_families": {
+              "IPv4": {
+                "fwd_id": "0x00000001",
+                "state": "Up",
+                "table_id": "0x00000001"
+              }
+            },
+            "max_routes": 0,
+            "mid_threshold": 0,
+            "state": "Up",
+            "vrf_id": 1
+          }
+        }
+      }
+    }
+  ]
+}

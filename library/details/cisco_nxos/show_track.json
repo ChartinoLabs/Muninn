@@ -1,0 +1,106 @@
+{
+  "os": "cisco_nxos",
+  "command": "show track",
+  "schema": {
+    "name": "ShowTrackResult",
+    "fields": {
+      "track": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "TrackEntry",
+            "fields": {
+              "type": {
+                "type": "str",
+                "required": true
+              },
+              "instance": {
+                "type": "str",
+                "required": true
+              },
+              "subtrack": {
+                "type": "str",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "change_count": {
+                "type": "int",
+                "required": true
+              },
+              "last_change": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Show track output with IPv6 route reachability",
+      "input": "Track 1\n  IPv6 Route 10:1::1:2/32 Reachability\n  Reachability is DOWN\n  1 changes, last change 1w2d\n",
+      "expected": {
+        "track": {
+          "1": {
+            "type": "IPv6 Route",
+            "instance": "10:1::1:2/32",
+            "subtrack": "Reachability",
+            "state": "DOWN",
+            "change_count": 1,
+            "last_change": "1w2d"
+          }
+        }
+      }
+    },
+    {
+      "name": "Imported from Genie ShowTrack (equal)",
+      "input": "Track 3\n  Interface Ethernet1/3 Line Protocol\n  Line Protocol is DOWN\n  1 changes, last change 3w5d\n\nTrack 4\n  IP Route 10.1.1.1/32 Reachability\n  Reachability is DOWN\n  1 changes, last change 3w4d\n",
+      "expected": {
+        "track": {
+          "3": {
+            "change_count": 1,
+            "last_change": "3w5d"
+          },
+          "4": {
+            "type": "IP Route",
+            "instance": "10.1.1.1/32",
+            "subtrack": "Reachability",
+            "state": "DOWN",
+            "change_count": 1,
+            "last_change": "3w4d"
+          }
+        }
+      }
+    },
+    {
+      "name": "Imported from Genie ShowTrack (equal)",
+      "input": "Track 1\n  Interface Ethernet1/4 IP Routing\n  IP Routing is DOWN\n  1 changes, last change 3w5d\n  Tracked by:\n    HSRP Vlan2 2\n    HSRP Ethernet1/1 1\n    VRRPV3 Vlan2 2\n    Track List  10\n    Track List  11\n    Track List  12\n    Route Map Configuration\n  Delay up 20 secs\n\nTrack 12\n  List  Threshold weight\n  Threshold weight is DOWN\n  1 changes, last change 3w3d\n  Threshold weight up 20 down 10\n  Track List Members:\n  object 10 weight 10 UP\n  object 1 weight 100 DOWN\n\nTrack 13\n  Interface loopback1 Line Protocol\n  Line Protocol is DOWN\n  2 changes, last change 3w3d\n  Delay up 23 secs, down 24 secs\n",
+      "expected": {
+        "track": {
+          "1": {
+            "change_count": 1,
+            "last_change": "3w5d"
+          },
+          "12": {
+            "type": "List",
+            "instance": "Threshold",
+            "subtrack": "weight",
+            "change_count": 1,
+            "last_change": "3w3d"
+          },
+          "13": {
+            "change_count": 2,
+            "last_change": "3w3d"
+          }
+        }
+      }
+    }
+  ]
+}

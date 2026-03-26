@@ -1,0 +1,442 @@
+{
+  "os": "cisco_ios",
+  "command": "show ipv6 interface brief",
+  "schema": {
+    "name": "ShowIpv6InterfaceBriefResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "Ipv6InterfaceBriefEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "protocol": {
+                "type": "str",
+                "required": true
+              },
+              "ipv6_addresses": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "IPv6 interface brief with multiple interface types, various statuses, and multiple addresses per interface",
+      "input": "TenGigabitEthernet1/1  [up/up]\n    FE80::333:3333:3333:3333\n    2A01:3333:3333::5\nTenGigabitEthernet2/1  [up/up]\n    FE80::333:3333:3333:3333\n    2A01:3333:3333::9\nTenGigabitEthernet2/2  [up/up]\n    unassigned\nTenGigabitEthernet2/3  [up/up]\n    unassigned\nTenGigabitEthernet2/4  [up/up]\n    unassigned\nTenGigabitEthernet2/5  [up/up]\n    unassigned\nTenGigabitEthernet2/6  [up/down]\n    unassigned\nTenGigabitEthernet3/9  [up/up]\n    unassigned\nTenGigabitEthernet3/10 [administratively down/down]\n    unassigned\nTenGigabitEthernet3/11 [administratively down/down]\n    unassigned\nTenGigabitEthernet3/12 [down/down]\n    unassigned\nTenGigabitEthernet3/13 [administratively down/down]\n    unassigned\nTenGigabitEthernet3/14 [administratively down/down]\n    unassigned\nTenGigabitEthernet3/15 [administratively down/down]\n    unassigned\nTenGigabitEthernet3/16 [up/up]\n    unassigned\nTenGigabitEthernet4/1  [up/down]\n    unassigned\nTenGigabitEthernet4/2  [up/up]\n    unassigned\nTenGigabitEthernet4/3  [up/up]\n    unassigned\nTenGigabitEthernet4/4  [down/down]\n    unassigned\nTenGigabitEthernet4/5  [administratively down/down]\n    unassigned\nTenGigabitEthernet4/6  [administratively down/down]\n    unassigned\nTenGigabitEthernet4/7  [up/up]\n    unassigned\nTenGigabitEthernet4/8  [up/up]\n    unassigned\nTenGigabitEthernet4/9  [up/up]\n    unassigned\nTenGigabitEthernet4/10 [up/up]\n    unassigned\nTenGigabitEthernet4/11 [administratively down/down]\n    unassigned\nTenGigabitEthernet4/12 [administratively down/down]\n    unassigned\nTenGigabitEthernet4/13 [administratively down/down]\n    unassigned\nTenGigabitEthernet4/14 [administratively down/down]\n    unassigned\nTenGigabitEthernet4/15 [administratively down/down]\n    unassigned\nTenGigabitEthernet4/16 [up/up]\n    unassigned\nGigabitEthernet5/1     [administratively down/down]\n    unassigned\nGigabitEthernet5/2     [administratively down/down]\n    unassigned\nGigabitEthernet5/3     [administratively down/down]\n    unassigned\nTenGigabitEthernet5/4  [administratively down/down]\n    unassigned\nTenGigabitEthernet5/5  [administratively down/down]\n    unassigned\nGigabitEthernet6/1     [administratively down/down]\n    unassigned\nGigabitEthernet6/2     [administratively down/down]\n    unassigned\nGigabitEthernet6/3     [administratively down/down]\n    unassigned\nTenGigabitEthernet6/4  [administratively down/down]\n    unassigned\nTenGigabitEthernet6/5  [administratively down/down]\n    unassigned\nGigabitEthernet1/1     [up/up]\n    unassigned\nGigabitEthernet1/16    [up/up]\n    FE80::333:3333:3333:3333\n    2A01:3333:3333::9A\nGigabitEthernet1/17    [up/up]\n    FE80::333:3333:3333:3333\n    2A01:3333:3333::9E\nGigabitEthernet1/18    [up/up]\n    FE80::333:3333:3333:3333\n    2A01:3333:3333::A2\nGigabitEthernet1/48    [administratively down/down]\n    unassigned\nLoopback0              [up/up]\n    FE80::333:3333:3333:3333\n    2A01:5A20:1FFF::13\nPort-channel1          [up/up]\n    unassigned\nPort-channel2          [up/up]\n    unassigned\nPort-channel3          [up/up]\n    unassigned\nPort-channel4          [up/up]\n    unassigned\nPort-channel5          [up/up]\n    unassigned\nPort-channel6          [up/up]\n    unassigned\nPort-channel7          [up/up]\n    unassigned\nPort-channel8          [up/up]\n    unassigned\nPort-channel9          [up/up]\n    unassigned\nPort-channel10         [up/up]\n    unassigned\nPort-channel11         [up/up]\n    unassigned\nVlan1                  [administratively down/down]\n    unassigned\nVlan76                 [up/up]\n    FE80::333:3333:3333:3333\n    2A01:3333:3333:33::1\n    2A01:3333:3333:33::2\nVlan77                 [up/up]\n    unassigned\nVlan100                [up/up]\n    FE80::333:3333:3333:3333\n    2A01:3333:3336:100::1\n    2A01:3333:3336:100::2\nVlan762                [up/up]\n    FE80::333:3333:3333:3333\n    2A01:3333:3336:101::1\n    2A01:3333:3336:101::2\nVlan763                [up/up]\n    FE80::333:3333:3333:3333\n    2A01:3333:3336:102::1\n    2A01:3333:3336:102::2\nVlan764                [up/up]\n    FE80::333:3333:3333:3333\n    2A01:3333:3336:103::1\n    2A01:3333:3336:103::2\nVlan765                [up/up]\n    FE80::333:3333:3333:3333\n    2A01:3333:3336:104::1\n    2A01:3333:3336:104::2\nVlan767                [up/up]\n    FE80::333:3333:3333:3333\n    2A01:3333:3336:110::1\n    2A01:3333:3336:110::2\nVlan768                [up/up]\n    FE80::333:3333:3333:3333\n    2A01:3333:3336:111::1\n    2A01:3333:3336:111::2\nVlan769                [up/up]\n    FE80::333:3333:3333:3333\n    2A01:3333:3336:112::1\n    2A01:3333:3336:112::2\nVlan770                [up/up]\n    FE80::333:3333:3333:3333\n    2A01:3333:3336:113::1\n    2A01:3333:3336:113::2\nVlan771                [up/up]\n    unassigned\nVlan772                [up/up]\n    unassigned\nVlan773                [administratively down/down]\n    unassigned\nVlan774                [administratively down/down]\n    unassigned\nVlan775                [up/up]\n    FE80::333:3333:3333:3333\n    2A01:3333:3336:220::1\n    2A01:3333:3336:220::2\nVlan776                [up/up]\n    unassigned\nVlan777                [up/up]\n    FE80::333:3333:3333:3333\n    2A01:3333:3336:225::1\n    2A01:3333:3336:225::2\nVlan2300               [administratively down/down]\n    unassigned\n",
+      "expected": {
+        "interfaces": {
+          "TenGigabitEthernet1/1": {
+            "status": "up",
+            "protocol": "up",
+            "ipv6_addresses": [
+              "FE80::333:3333:3333:3333",
+              "2A01:3333:3333::5"
+            ]
+          },
+          "TenGigabitEthernet2/1": {
+            "status": "up",
+            "protocol": "up",
+            "ipv6_addresses": [
+              "FE80::333:3333:3333:3333",
+              "2A01:3333:3333::9"
+            ]
+          },
+          "TenGigabitEthernet2/2": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "TenGigabitEthernet2/3": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "TenGigabitEthernet2/4": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "TenGigabitEthernet2/5": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "TenGigabitEthernet2/6": {
+            "status": "up",
+            "protocol": "down"
+          },
+          "TenGigabitEthernet3/9": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "TenGigabitEthernet3/10": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "TenGigabitEthernet3/11": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "TenGigabitEthernet3/12": {
+            "status": "down",
+            "protocol": "down"
+          },
+          "TenGigabitEthernet3/13": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "TenGigabitEthernet3/14": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "TenGigabitEthernet3/15": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "TenGigabitEthernet3/16": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "TenGigabitEthernet4/1": {
+            "status": "up",
+            "protocol": "down"
+          },
+          "TenGigabitEthernet4/2": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "TenGigabitEthernet4/3": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "TenGigabitEthernet4/4": {
+            "status": "down",
+            "protocol": "down"
+          },
+          "TenGigabitEthernet4/5": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "TenGigabitEthernet4/6": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "TenGigabitEthernet4/7": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "TenGigabitEthernet4/8": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "TenGigabitEthernet4/9": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "TenGigabitEthernet4/10": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "TenGigabitEthernet4/11": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "TenGigabitEthernet4/12": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "TenGigabitEthernet4/13": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "TenGigabitEthernet4/14": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "TenGigabitEthernet4/15": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "TenGigabitEthernet4/16": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "GigabitEthernet5/1": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "GigabitEthernet5/2": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "GigabitEthernet5/3": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "TenGigabitEthernet5/4": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "TenGigabitEthernet5/5": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "GigabitEthernet6/1": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "GigabitEthernet6/2": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "GigabitEthernet6/3": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "TenGigabitEthernet6/4": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "TenGigabitEthernet6/5": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "GigabitEthernet1/1": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "GigabitEthernet1/16": {
+            "status": "up",
+            "protocol": "up",
+            "ipv6_addresses": [
+              "FE80::333:3333:3333:3333",
+              "2A01:3333:3333::9A"
+            ]
+          },
+          "GigabitEthernet1/17": {
+            "status": "up",
+            "protocol": "up",
+            "ipv6_addresses": [
+              "FE80::333:3333:3333:3333",
+              "2A01:3333:3333::9E"
+            ]
+          },
+          "GigabitEthernet1/18": {
+            "status": "up",
+            "protocol": "up",
+            "ipv6_addresses": [
+              "FE80::333:3333:3333:3333",
+              "2A01:3333:3333::A2"
+            ]
+          },
+          "GigabitEthernet1/48": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "Loopback0": {
+            "status": "up",
+            "protocol": "up",
+            "ipv6_addresses": [
+              "FE80::333:3333:3333:3333",
+              "2A01:5A20:1FFF::13"
+            ]
+          },
+          "Port-channel1": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel2": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel4": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel5": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel6": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel7": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel8": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel9": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel10": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel11": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "Vlan1": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "Vlan76": {
+            "status": "up",
+            "protocol": "up",
+            "ipv6_addresses": [
+              "FE80::333:3333:3333:3333",
+              "2A01:3333:3333:33::1",
+              "2A01:3333:3333:33::2"
+            ]
+          },
+          "Vlan77": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "Vlan100": {
+            "status": "up",
+            "protocol": "up",
+            "ipv6_addresses": [
+              "FE80::333:3333:3333:3333",
+              "2A01:3333:3336:100::1",
+              "2A01:3333:3336:100::2"
+            ]
+          },
+          "Vlan762": {
+            "status": "up",
+            "protocol": "up",
+            "ipv6_addresses": [
+              "FE80::333:3333:3333:3333",
+              "2A01:3333:3336:101::1",
+              "2A01:3333:3336:101::2"
+            ]
+          },
+          "Vlan763": {
+            "status": "up",
+            "protocol": "up",
+            "ipv6_addresses": [
+              "FE80::333:3333:3333:3333",
+              "2A01:3333:3336:102::1",
+              "2A01:3333:3336:102::2"
+            ]
+          },
+          "Vlan764": {
+            "status": "up",
+            "protocol": "up",
+            "ipv6_addresses": [
+              "FE80::333:3333:3333:3333",
+              "2A01:3333:3336:103::1",
+              "2A01:3333:3336:103::2"
+            ]
+          },
+          "Vlan765": {
+            "status": "up",
+            "protocol": "up",
+            "ipv6_addresses": [
+              "FE80::333:3333:3333:3333",
+              "2A01:3333:3336:104::1",
+              "2A01:3333:3336:104::2"
+            ]
+          },
+          "Vlan767": {
+            "status": "up",
+            "protocol": "up",
+            "ipv6_addresses": [
+              "FE80::333:3333:3333:3333",
+              "2A01:3333:3336:110::1",
+              "2A01:3333:3336:110::2"
+            ]
+          },
+          "Vlan768": {
+            "status": "up",
+            "protocol": "up",
+            "ipv6_addresses": [
+              "FE80::333:3333:3333:3333",
+              "2A01:3333:3336:111::1",
+              "2A01:3333:3336:111::2"
+            ]
+          },
+          "Vlan769": {
+            "status": "up",
+            "protocol": "up",
+            "ipv6_addresses": [
+              "FE80::333:3333:3333:3333",
+              "2A01:3333:3336:112::1",
+              "2A01:3333:3336:112::2"
+            ]
+          },
+          "Vlan770": {
+            "status": "up",
+            "protocol": "up",
+            "ipv6_addresses": [
+              "FE80::333:3333:3333:3333",
+              "2A01:3333:3336:113::1",
+              "2A01:3333:3336:113::2"
+            ]
+          },
+          "Vlan771": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "Vlan772": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "Vlan773": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "Vlan774": {
+            "status": "administratively down",
+            "protocol": "down"
+          },
+          "Vlan775": {
+            "status": "up",
+            "protocol": "up",
+            "ipv6_addresses": [
+              "FE80::333:3333:3333:3333",
+              "2A01:3333:3336:220::1",
+              "2A01:3333:3336:220::2"
+            ]
+          },
+          "Vlan776": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "Vlan777": {
+            "status": "up",
+            "protocol": "up",
+            "ipv6_addresses": [
+              "FE80::333:3333:3333:3333",
+              "2A01:3333:3336:225::1",
+              "2A01:3333:3336:225::2"
+            ]
+          },
+          "Vlan2300": {
+            "status": "administratively down",
+            "protocol": "down"
+          }
+        }
+      }
+    }
+  ]
+}

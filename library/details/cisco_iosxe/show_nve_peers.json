@@ -1,0 +1,144 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show nve peers",
+  "schema": {
+    "name": "ShowNvePeersResult",
+    "fields": {
+      "peers": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "type": "dict",
+              "key": "str",
+              "value": {
+                "name": "NvePeerVniEntry",
+                "fields": {
+                  "type": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "rmac_num_rt": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "evni": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "state": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "flags": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "uptime": {
+                    "type": "str",
+                    "required": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple NVE peers with L3CP type across multiple VNIs",
+      "input": "Interface  VNI      Type Peer-IP          RMAC/Num_RTs   eVNI     state flags UP time\nnve1       1033 L3CP 192.168.111.81   0200.c0a8.433c 1033   UP   A/M 6d22h\nnve1       1033 L3CP 192.168.111.48   cc7f.76a5.3c56 1033   UP   A/M 6d22h\nnve1       1031 L3CP 192.168.111.81   0200.c0a8.433c 1031   UP   A/M 6d22h\nnve1       1031 L3CP 192.168.111.48   cc7f.76a5.3c56 1031   UP   A/M 6d22h\nnve1       1032 L3CP 192.168.111.48   cc7f.76a5.3c56 1032   UP   A/M 6d22h\nnve1       1036 L3CP 192.168.111.48   cc7f.76a5.3c56 1036   UP   A/M 6d22h\n",
+      "expected": {
+        "peers": {
+          "nve1": {
+            "192.168.111.48": {
+              "1031": {
+                "evni": 1031,
+                "flags": "A/M",
+                "rmac_num_rt": "cc7f.76a5.3c56",
+                "state": "UP",
+                "type": "L3CP",
+                "uptime": "6d22h"
+              },
+              "1032": {
+                "evni": 1032,
+                "flags": "A/M",
+                "rmac_num_rt": "cc7f.76a5.3c56",
+                "state": "UP",
+                "type": "L3CP",
+                "uptime": "6d22h"
+              },
+              "1033": {
+                "evni": 1033,
+                "flags": "A/M",
+                "rmac_num_rt": "cc7f.76a5.3c56",
+                "state": "UP",
+                "type": "L3CP",
+                "uptime": "6d22h"
+              },
+              "1036": {
+                "evni": 1036,
+                "flags": "A/M",
+                "rmac_num_rt": "cc7f.76a5.3c56",
+                "state": "UP",
+                "type": "L3CP",
+                "uptime": "6d22h"
+              }
+            },
+            "192.168.111.81": {
+              "1031": {
+                "evni": 1031,
+                "flags": "A/M",
+                "rmac_num_rt": "0200.c0a8.433c",
+                "state": "UP",
+                "type": "L3CP",
+                "uptime": "6d22h"
+              },
+              "1033": {
+                "evni": 1033,
+                "flags": "A/M",
+                "rmac_num_rt": "0200.c0a8.433c",
+                "state": "UP",
+                "type": "L3CP",
+                "uptime": "6d22h"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Mixed L2CP and L3CP peers with N/A flags omitted",
+      "input": "Interface  VNI      Type Peer-IP          RMAC/Num_RTs   eVNI     state flags UP time\nnve1       3000101  L3CP 20.0.101.2       5c71.0dfe.fb60 3000101    UP  A/M/4 4d21h\nnve1       200051   L2CP 20.0.101.2       3              200051     UP   N/A  4d17h\n",
+      "expected": {
+        "peers": {
+          "nve1": {
+            "20.0.101.2": {
+              "200051": {
+                "evni": 200051,
+                "rmac_num_rt": "3",
+                "state": "UP",
+                "type": "L2CP",
+                "uptime": "4d17h"
+              },
+              "3000101": {
+                "evni": 3000101,
+                "flags": "A/M/4",
+                "rmac_num_rt": "5c71.0dfe.fb60",
+                "state": "UP",
+                "type": "L3CP",
+                "uptime": "4d21h"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

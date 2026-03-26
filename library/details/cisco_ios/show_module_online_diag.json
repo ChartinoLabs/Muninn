@@ -1,0 +1,58 @@
+{
+  "os": "cisco_ios",
+  "command": "show module online diag",
+  "schema": {
+    "name": "ShowModuleOnlineDiagResult",
+    "fields": {
+      "modules": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "OnlineDiagEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple modules with Pass status from Catalyst 7600",
+      "input": "Mod  Online Diag Status\n---- -------------------\n1  Pass\n2  Pass\n5  Pass\n6  Pass\n",
+      "expected": {
+        "modules": {
+          "1": {
+            "status": "Pass"
+          },
+          "2": {
+            "status": "Pass"
+          },
+          "5": {
+            "status": "Pass"
+          },
+          "6": {
+            "status": "Pass"
+          }
+        }
+      }
+    },
+    {
+      "name": "Single module with Fail status",
+      "input": "Mod  Online Diag Status\n---- -------------------\n3  Fail\n",
+      "expected": {
+        "modules": {
+          "3": {
+            "status": "Fail"
+          }
+        }
+      }
+    }
+  ]
+}

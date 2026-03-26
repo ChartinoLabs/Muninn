@@ -1,0 +1,270 @@
+{
+  "os": "cisco_ios",
+  "command": "show ip ospf database router",
+  "schema": {
+    "name": "ShowIpOspfDatabaseRouterResult",
+    "fields": {
+      "router_id": {
+        "type": "str",
+        "required": true
+      },
+      "process_id": {
+        "type": "int",
+        "required": true
+      },
+      "areas": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "AreaEntry",
+            "fields": {
+              "routers": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "RouterLsaEntry",
+                    "fields": {
+                      "ls_age": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "options": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "ls_type": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "link_state_id": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "advertising_router": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "ls_seq_number": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "checksum": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "length": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "num_links": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "area_border_router": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "as_boundary_router": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "links": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "LinkEntry",
+                            "fields": {
+                              "type": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "link_id": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "link_data": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "tos_metrics": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "metric": {
+                                "type": "int",
+                                "required": true
+                              }
+                            }
+                          }
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple router LSAs with transit, stub, and point-to-point links",
+      "input": "\n            OSPF Router with ID (1.1.1.1) (Process ID 1)\n\n\t\tRouter Link States (Area 0)\n\n  LS age: 1208\n  Options: (No TOS-capability, DC)\n  LS Type: Router Links\n  Link State ID: 1.1.1.1\n  Advertising Router: 1.1.1.1\n  LS Seq Number: 80000004\n  Checksum: 0x3EDA\n  Length: 84\n  Number of Links: 5\n\n    Link connected to: a Transit Network\n     (Link ID) Designated Router address: 10.0.123.1\n     (Link Data) Router Interface address: 10.0.123.1\n      Number of TOS metrics: 0\n       TOS 0 Metrics: 10\n\n    Link connected to: another Router (point-to-point)\n     (Link ID) Neighboring Router ID: 5.5.5.5\n     (Link Data) Router Interface address: 10.0.15.1\n      Number of TOS metrics: 0\n       TOS 0 Metrics: 12\n\n    Link connected to: a Stub Network\n     (Link ID) Network/subnet number: 10.0.15.0\n     (Link Data) Network Mask: 255.255.255.0\n      Number of TOS metrics: 0\n       TOS 0 Metrics: 12\n\n    Link connected to: another Router (point-to-point)\n     (Link ID) Neighboring Router ID: 2.2.2.2\n     (Link Data) Router Interface address: 10.0.12.1\n      Number of TOS metrics: 0\n       TOS 0 Metrics: 20\n\n    Link connected to: a Stub Network\n     (Link ID) Network/subnet number: 10.0.12.0\n     (Link Data) Network Mask: 255.255.255.0\n      Number of TOS metrics: 0\n       TOS 0 Metrics: 20\n\n  LS age: 535\n  Options: (No TOS-capability, DC)\n  LS Type: Router Links\n  Link State ID: 2.2.2.2\n  Advertising Router: 2.2.2.2\n  LS Seq Number: 80000007\n  Checksum: 0xD9C2\n  Length: 72\n  Number of Links: 4\n\n    Link connected to: a Transit Network\n     (Link ID) Designated Router address: 10.0.123.1\n     (Link Data) Router Interface address: 10.0.123.2\n      Number of TOS metrics: 0\n       TOS 0 Metrics: 20\n\n    Link connected to: another Router (point-to-point)\n     (Link ID) Neighboring Router ID: 1.1.1.1\n     (Link Data) Router Interface address: 10.0.12.2\n      Number of TOS metrics: 0\n       TOS 0 Metrics: 10\n\n    Link connected to: a Stub Network\n     (Link ID) Network/subnet number: 10.0.12.0\n     (Link Data) Network Mask: 255.255.255.0\n      Number of TOS metrics: 0\n       TOS 0 Metrics: 10\n\n    Link connected to: a Stub Network\n     (Link ID) Network/subnet number: 10.0.2.0\n     (Link Data) Network Mask: 255.255.255.0\n      Number of TOS metrics: 0\n       TOS 0 Metrics: 222\n\n  LS age: 907\n  Options: (No TOS-capability, DC)\n  LS Type: Router Links\n  Link State ID: 5.5.5.5\n  Advertising Router: 5.5.5.5\n  LS Seq Number: 80000005\n  Checksum: 0xD8D9\n  Length: 84\n  Number of Links: 5\n\n    Link connected to: another Router (point-to-point)\n     (Link ID) Neighboring Router ID: 3.3.3.3\n     (Link Data) Router Interface address: 10.0.35.5\n      Number of TOS metrics: 0\n       TOS 0 Metrics: 17\n\n    Link connected to: a Stub Network\n     (Link ID) Network/subnet number: 10.0.35.0\n     (Link Data) Network Mask: 255.255.255.0\n      Number of TOS metrics: 0\n       TOS 0 Metrics: 17\n\n    Link connected to: another Router (point-to-point)\n     (Link ID) Neighboring Router ID: 1.1.1.1\n     (Link Data) Router Interface address: 10.0.15.5\n      Number of TOS metrics: 0\n       TOS 0 Metrics: 17\n\n    Link connected to: a Stub Network\n     (Link ID) Network/subnet number: 10.0.15.0\n     (Link Data) Network Mask: 255.255.255.0\n      Number of TOS metrics: 0\n       TOS 0 Metrics: 17\n\n    Link connected to: a Stub Network\n     (Link ID) Network/subnet number: 10.0.5.0\n     (Link Data) Network Mask: 255.255.255.0\n      Number of TOS metrics: 0\n       TOS 0 Metrics: 30\n",
+      "expected": {
+        "areas": {
+          "0.0.0.0": {
+            "routers": {
+              "1.1.1.1": {
+                "advertising_router": "1.1.1.1",
+                "checksum": "0x3EDA",
+                "length": 84,
+                "link_state_id": "1.1.1.1",
+                "links": {
+                  "10.0.12.0": {
+                    "link_data": "255.255.255.0",
+                    "link_id": "10.0.12.0",
+                    "metric": 20,
+                    "tos_metrics": 0,
+                    "type": "stub"
+                  },
+                  "10.0.123.1": {
+                    "link_data": "10.0.123.1",
+                    "link_id": "10.0.123.1",
+                    "metric": 10,
+                    "tos_metrics": 0,
+                    "type": "transit"
+                  },
+                  "10.0.15.0": {
+                    "link_data": "255.255.255.0",
+                    "link_id": "10.0.15.0",
+                    "metric": 12,
+                    "tos_metrics": 0,
+                    "type": "stub"
+                  },
+                  "2.2.2.2": {
+                    "link_data": "10.0.12.1",
+                    "link_id": "2.2.2.2",
+                    "metric": 20,
+                    "tos_metrics": 0,
+                    "type": "point-to-point"
+                  },
+                  "5.5.5.5": {
+                    "link_data": "10.0.15.1",
+                    "link_id": "5.5.5.5",
+                    "metric": 12,
+                    "tos_metrics": 0,
+                    "type": "point-to-point"
+                  }
+                },
+                "ls_age": 1208,
+                "ls_seq_number": "80000004",
+                "ls_type": "Router Links",
+                "num_links": 5,
+                "options": "No TOS-capability, DC"
+              },
+              "2.2.2.2": {
+                "advertising_router": "2.2.2.2",
+                "checksum": "0xD9C2",
+                "length": 72,
+                "link_state_id": "2.2.2.2",
+                "links": {
+                  "1.1.1.1": {
+                    "link_data": "10.0.12.2",
+                    "link_id": "1.1.1.1",
+                    "metric": 10,
+                    "tos_metrics": 0,
+                    "type": "point-to-point"
+                  },
+                  "10.0.12.0": {
+                    "link_data": "255.255.255.0",
+                    "link_id": "10.0.12.0",
+                    "metric": 10,
+                    "tos_metrics": 0,
+                    "type": "stub"
+                  },
+                  "10.0.123.1": {
+                    "link_data": "10.0.123.2",
+                    "link_id": "10.0.123.1",
+                    "metric": 20,
+                    "tos_metrics": 0,
+                    "type": "transit"
+                  },
+                  "10.0.2.0": {
+                    "link_data": "255.255.255.0",
+                    "link_id": "10.0.2.0",
+                    "metric": 222,
+                    "tos_metrics": 0,
+                    "type": "stub"
+                  }
+                },
+                "ls_age": 535,
+                "ls_seq_number": "80000007",
+                "ls_type": "Router Links",
+                "num_links": 4,
+                "options": "No TOS-capability, DC"
+              },
+              "5.5.5.5": {
+                "advertising_router": "5.5.5.5",
+                "checksum": "0xD8D9",
+                "length": 84,
+                "link_state_id": "5.5.5.5",
+                "links": {
+                  "1.1.1.1": {
+                    "link_data": "10.0.15.5",
+                    "link_id": "1.1.1.1",
+                    "metric": 17,
+                    "tos_metrics": 0,
+                    "type": "point-to-point"
+                  },
+                  "10.0.15.0": {
+                    "link_data": "255.255.255.0",
+                    "link_id": "10.0.15.0",
+                    "metric": 17,
+                    "tos_metrics": 0,
+                    "type": "stub"
+                  },
+                  "10.0.35.0": {
+                    "link_data": "255.255.255.0",
+                    "link_id": "10.0.35.0",
+                    "metric": 17,
+                    "tos_metrics": 0,
+                    "type": "stub"
+                  },
+                  "10.0.5.0": {
+                    "link_data": "255.255.255.0",
+                    "link_id": "10.0.5.0",
+                    "metric": 30,
+                    "tos_metrics": 0,
+                    "type": "stub"
+                  },
+                  "3.3.3.3": {
+                    "link_data": "10.0.35.5",
+                    "link_id": "3.3.3.3",
+                    "metric": 17,
+                    "tos_metrics": 0,
+                    "type": "point-to-point"
+                  }
+                },
+                "ls_age": 907,
+                "ls_seq_number": "80000005",
+                "ls_type": "Router Links",
+                "num_links": 5,
+                "options": "No TOS-capability, DC"
+              }
+            }
+          }
+        },
+        "process_id": 1,
+        "router_id": "1.1.1.1"
+      }
+    }
+  ]
+}

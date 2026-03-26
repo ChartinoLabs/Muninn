@@ -1,0 +1,159 @@
+{
+  "os": "cisco_nxos",
+  "command": "show environment temperature",
+  "schema": {
+    "name": "ShowEnvironmentTemperatureResult",
+    "fields": {
+      "temperatures": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "TemperatureSensorEntry",
+              "fields": {
+                "major_threshold_celsius": {
+                  "type": "int",
+                  "required": true
+                },
+                "minor_threshold_celsius": {
+                  "type": "int",
+                  "required": true
+                },
+                "current_temp_celsius": {
+                  "type": "int",
+                  "required": true
+                },
+                "status": {
+                  "type": "str",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic temperature output with single module and four sensors",
+      "input": "\n\nTemperature\n-------------------------------------------------------------------------\nModule  Sensor             MajorThresh   MinorThres   CurTemp     Status\n                            (Celsius)     (Celsius)   (Celsius)\n-------------------------------------------------------------------------\n1       ASIC                101           95           52          ok\n1       Front-Middle(D1)    62            56           38          ok\n1       Front-Left  (D2)    52            44           33          ok\n1       Back        (D3)    48            42           28          ok\n",
+      "expected": {
+        "temperatures": {
+          "1": {
+            "ASIC": {
+              "current_temp_celsius": 52,
+              "major_threshold_celsius": 101,
+              "minor_threshold_celsius": 95,
+              "status": "ok"
+            },
+            "Back (D3)": {
+              "current_temp_celsius": 28,
+              "major_threshold_celsius": 48,
+              "minor_threshold_celsius": 42,
+              "status": "ok"
+            },
+            "Front-Left (D2)": {
+              "current_temp_celsius": 33,
+              "major_threshold_celsius": 52,
+              "minor_threshold_celsius": 44,
+              "status": "ok"
+            },
+            "Front-Middle(D1)": {
+              "current_temp_celsius": 38,
+              "major_threshold_celsius": 62,
+              "minor_threshold_celsius": 56,
+              "status": "ok"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Temperature output with multiple modules and varied sensors",
+      "input": "Temperature:\n--------------------------------------------------------------------\nModule   Sensor        MajorThresh   MinorThres   CurTemp     Status\n                       (Celsius)     (Celsius)    (Celsius)\n--------------------------------------------------------------------\n1        CPU             100             98          57         Ok\n1        Sone-1          110             100         38         Ok\n1        Sone-2          110             100         44         Ok\n1        Sone-3          110             100         45         Ok\n19       Sone-1          110             100         35         Ok\n19       Sone-2          110             100         37         Ok\n23       Sone-1          110             100         36         Ok\n23       Sone-2          110             100         38         Ok\n27       OUTLET          85              80          27         Ok\n27       INLET           45              42          25         Ok\n27       CPU             97              93          37         Ok\n",
+      "expected": {
+        "temperatures": {
+          "1": {
+            "CPU": {
+              "current_temp_celsius": 57,
+              "major_threshold_celsius": 100,
+              "minor_threshold_celsius": 98,
+              "status": "Ok"
+            },
+            "Sone-1": {
+              "current_temp_celsius": 38,
+              "major_threshold_celsius": 110,
+              "minor_threshold_celsius": 100,
+              "status": "Ok"
+            },
+            "Sone-2": {
+              "current_temp_celsius": 44,
+              "major_threshold_celsius": 110,
+              "minor_threshold_celsius": 100,
+              "status": "Ok"
+            },
+            "Sone-3": {
+              "current_temp_celsius": 45,
+              "major_threshold_celsius": 110,
+              "minor_threshold_celsius": 100,
+              "status": "Ok"
+            }
+          },
+          "19": {
+            "Sone-1": {
+              "current_temp_celsius": 35,
+              "major_threshold_celsius": 110,
+              "minor_threshold_celsius": 100,
+              "status": "Ok"
+            },
+            "Sone-2": {
+              "current_temp_celsius": 37,
+              "major_threshold_celsius": 110,
+              "minor_threshold_celsius": 100,
+              "status": "Ok"
+            }
+          },
+          "23": {
+            "Sone-1": {
+              "current_temp_celsius": 36,
+              "major_threshold_celsius": 110,
+              "minor_threshold_celsius": 100,
+              "status": "Ok"
+            },
+            "Sone-2": {
+              "current_temp_celsius": 38,
+              "major_threshold_celsius": 110,
+              "minor_threshold_celsius": 100,
+              "status": "Ok"
+            }
+          },
+          "27": {
+            "CPU": {
+              "current_temp_celsius": 37,
+              "major_threshold_celsius": 97,
+              "minor_threshold_celsius": 93,
+              "status": "Ok"
+            },
+            "INLET": {
+              "current_temp_celsius": 25,
+              "major_threshold_celsius": 45,
+              "minor_threshold_celsius": 42,
+              "status": "Ok"
+            },
+            "OUTLET": {
+              "current_temp_celsius": 27,
+              "major_threshold_celsius": 85,
+              "minor_threshold_celsius": 80,
+              "status": "Ok"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

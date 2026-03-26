@@ -1,0 +1,99 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show power inline consumption",
+  "schema": {
+    "name": "ShowPowerInlineConsumptionResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PowerInlineConsumptionEntry",
+            "fields": {
+              "consumption_configured": {
+                "type": "str",
+                "required": true
+              },
+              "admin_consumption_watts": {
+                "type": "float",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple interfaces with no consumption configured",
+      "input": "Interface  Consumption      Admin\n           Configured    Consumption (Watts)\n---------- -----------  -------------------\n\nGi1/3          NO                 0.0\nGi1/4          NO                 0.0\nGi1/5          NO                 0.0\nGi1/6          NO                 0.0\nGi1/7          NO                 0.0\nGi1/8          NO                 0.0\nGi1/9          NO                 0.0\nGi1/10         NO                 0.0\nTw2/1          NO                 0.0\nTw2/2          NO                 0.0\nTw2/3          NO                 0.0\nTw2/4          NO                 0.0\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1/10": {
+            "admin_consumption_watts": 0.0,
+            "consumption_configured": "NO"
+          },
+          "GigabitEthernet1/3": {
+            "admin_consumption_watts": 0.0,
+            "consumption_configured": "NO"
+          },
+          "GigabitEthernet1/4": {
+            "admin_consumption_watts": 0.0,
+            "consumption_configured": "NO"
+          },
+          "GigabitEthernet1/5": {
+            "admin_consumption_watts": 0.0,
+            "consumption_configured": "NO"
+          },
+          "GigabitEthernet1/6": {
+            "admin_consumption_watts": 0.0,
+            "consumption_configured": "NO"
+          },
+          "GigabitEthernet1/7": {
+            "admin_consumption_watts": 0.0,
+            "consumption_configured": "NO"
+          },
+          "GigabitEthernet1/8": {
+            "admin_consumption_watts": 0.0,
+            "consumption_configured": "NO"
+          },
+          "GigabitEthernet1/9": {
+            "admin_consumption_watts": 0.0,
+            "consumption_configured": "NO"
+          },
+          "TwoGigabitEthernet2/1": {
+            "admin_consumption_watts": 0.0,
+            "consumption_configured": "NO"
+          },
+          "TwoGigabitEthernet2/2": {
+            "admin_consumption_watts": 0.0,
+            "consumption_configured": "NO"
+          },
+          "TwoGigabitEthernet2/3": {
+            "admin_consumption_watts": 0.0,
+            "consumption_configured": "NO"
+          },
+          "TwoGigabitEthernet2/4": {
+            "admin_consumption_watts": 0.0,
+            "consumption_configured": "NO"
+          }
+        }
+      }
+    },
+    {
+      "name": "Single interface entry",
+      "input": "Interface  Consumption      Admin\n           Configured    Consumption (Watts)\n---------- -----------  -------------------\n\nGi1/4          NO                 0.0\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1/4": {
+            "admin_consumption_watts": 0.0,
+            "consumption_configured": "NO"
+          }
+        }
+      }
+    }
+  ]
+}

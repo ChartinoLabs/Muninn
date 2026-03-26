@@ -1,0 +1,276 @@
+{
+  "os": "cisco_nxos",
+  "command": "show inventory",
+  "schema": {
+    "name": "ShowInventoryResult",
+    "fields": {
+      "inventory": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InventoryItem",
+            "fields": {
+              "name": {
+                "type": "str",
+                "required": true
+              },
+              "description": {
+                "type": "str",
+                "required": true
+              },
+              "pid": {
+                "type": "str",
+                "required": false
+              },
+              "vid": {
+                "type": "str",
+                "required": false
+              },
+              "serial_number": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Nexus 9396PX chassis with expansion module",
+      "input": "NAME: \"Chassis\",  DESCR: \"Nexus9000 C9396PX Chassis\"\nPID: N9K-C9396PX         ,  VID: V02 ,  SN: SAL1819S6LU\n\nNAME: \"Slot 1\",  DESCR: \"1/10G SFP+ Ethernet Module\"\nPID: N9K-C9396PX         ,  VID: V02 ,  SN: SAL1819S6LU\n\nNAME: \"Slot 2\",  DESCR: \"40G Ethernet Expansion Module\"\nPID: N9K-M12PQ           ,  VID: V01 ,  SN: SAL1815QCJE\n\nNAME: \"Power Supply 1\",  DESCR: \"Nexus9000 C9396PX Chassis Power Supply\"\nPID: N9K-PAC-650W        ,  VID: V01 ,  SN: DCB1809X07E\n\nNAME: \"Power Supply 2\",  DESCR: \"Nexus9000 C9396PX Chassis Power Supply\"\nPID: N9K-PAC-650W        ,  VID: V01 ,  SN: DCB1809X07H\n",
+      "expected": {
+        "inventory": {
+          "Chassis": {
+            "name": "Chassis",
+            "description": "Nexus9000 C9396PX Chassis",
+            "pid": "N9K-C9396PX",
+            "vid": "V02",
+            "serial_number": "SAL1819S6LU"
+          },
+          "Slot 1": {
+            "name": "Slot 1",
+            "description": "1/10G SFP+ Ethernet Module",
+            "pid": "N9K-C9396PX",
+            "vid": "V02",
+            "serial_number": "SAL1819S6LU"
+          },
+          "Slot 2": {
+            "name": "Slot 2",
+            "description": "40G Ethernet Expansion Module",
+            "pid": "N9K-M12PQ",
+            "vid": "V01",
+            "serial_number": "SAL1815QCJE"
+          },
+          "Power Supply 1": {
+            "name": "Power Supply 1",
+            "description": "Nexus9000 C9396PX Chassis Power Supply",
+            "pid": "N9K-PAC-650W",
+            "vid": "V01",
+            "serial_number": "DCB1809X07E"
+          },
+          "Power Supply 2": {
+            "name": "Power Supply 2",
+            "description": "Nexus9000 C9396PX Chassis Power Supply",
+            "pid": "N9K-PAC-650W",
+            "vid": "V01",
+            "serial_number": "DCB1809X07H"
+          }
+        }
+      }
+    },
+    {
+      "name": "Inventory with fan modules showing N/A serial numbers",
+      "input": "NAME: \"Chassis\",  DESCR: \"Nexus9000 C9396PX Chassis\"\nPID: N9K-C9396PX         ,  VID: V02 ,  SN: SAL1819S6LU\n\nNAME: \"Fan 1\",  DESCR: \"Nexus9000 C9396PX Chassis Fan Module\"\nPID: N9K-C9300-FAN2      ,  VID: V01 ,  SN: N/A\n\nNAME: \"Fan 2\",  DESCR: \"Nexus9000 C9396PX Chassis Fan Module\"\nPID: N9K-C9300-FAN2      ,  VID: V01 ,  SN: N/A\n\nNAME: \"Fan 3\",  DESCR: \"Nexus9000 C9396PX Chassis Fan Module\"\nPID: N9K-C9300-FAN2      ,  VID: V01 ,  SN: N/A\n",
+      "expected": {
+        "inventory": {
+          "Chassis": {
+            "name": "Chassis",
+            "description": "Nexus9000 C9396PX Chassis",
+            "pid": "N9K-C9396PX",
+            "vid": "V02",
+            "serial_number": "SAL1819S6LU"
+          },
+          "Fan 1": {
+            "name": "Fan 1",
+            "description": "Nexus9000 C9396PX Chassis Fan Module",
+            "pid": "N9K-C9300-FAN2",
+            "vid": "V01"
+          },
+          "Fan 2": {
+            "name": "Fan 2",
+            "description": "Nexus9000 C9396PX Chassis Fan Module",
+            "pid": "N9K-C9300-FAN2",
+            "vid": "V01"
+          },
+          "Fan 3": {
+            "name": "Fan 3",
+            "description": "Nexus9000 C9396PX Chassis Fan Module",
+            "pid": "N9K-C9300-FAN2",
+            "vid": "V01"
+          }
+        }
+      }
+    },
+    {
+      "name": "Nexus 7000 chassis with dual supervisors and line cards",
+      "input": "NAME: \"Chassis\",  DESCR: \"Nexus7000 C7009 (9 Slot) Chassis \"\nPID: N7K-C7009           ,  VID: V01 ,  SN: JAF1704ARQG\n\nNAME: \"Slot 1\",  DESCR: \"Supervisor Module-2\"\nPID: N7K-SUP2            ,  VID: V01 ,  SN: JAF1708AGTH\n\nNAME: \"Slot 2\",  DESCR: \"Supervisor Module-2\"\nPID: N7K-SUP2            ,  VID: V01 ,  SN: JAF1708AGQH\n\nNAME: \"Slot 3\",  DESCR: \"1/10 Gbps Ethernet Module\"\nPID: N7K-F248XP-25E      ,  VID: V01 ,  SN: JAF1717AAND\n\nNAME: \"Slot 4\",  DESCR: \"10/40 Gbps Ethernet Module\"\nPID: N7K-F312FQ-25       ,  VID: V01 ,  SN: JAE18120FLU\n\nNAME: \"Slot 33\",  DESCR: \"Nexus7000 C7009 (9 Slot) Chassis Power Supply\"\nPID: N7K-AC-6.0KW        ,  VID: V03 ,  SN: DTM171300QB\n\nNAME: \"Slot 35\",  DESCR: \"Nexus7000 C7009 (9 Slot) Chassis Fan Module\"\nPID: N7K-C7009-FAN       ,  VID: V01 ,  SN: JAF1702AEBE\n",
+      "expected": {
+        "inventory": {
+          "Chassis": {
+            "name": "Chassis",
+            "description": "Nexus7000 C7009 (9 Slot) Chassis ",
+            "pid": "N7K-C7009",
+            "vid": "V01",
+            "serial_number": "JAF1704ARQG"
+          },
+          "Slot 1": {
+            "name": "Slot 1",
+            "description": "Supervisor Module-2",
+            "pid": "N7K-SUP2",
+            "vid": "V01",
+            "serial_number": "JAF1708AGTH"
+          },
+          "Slot 2": {
+            "name": "Slot 2",
+            "description": "Supervisor Module-2",
+            "pid": "N7K-SUP2",
+            "vid": "V01",
+            "serial_number": "JAF1708AGQH"
+          },
+          "Slot 3": {
+            "name": "Slot 3",
+            "description": "1/10 Gbps Ethernet Module",
+            "pid": "N7K-F248XP-25E",
+            "vid": "V01",
+            "serial_number": "JAF1717AAND"
+          },
+          "Slot 4": {
+            "name": "Slot 4",
+            "description": "10/40 Gbps Ethernet Module",
+            "pid": "N7K-F312FQ-25",
+            "vid": "V01",
+            "serial_number": "JAE18120FLU"
+          },
+          "Slot 33": {
+            "name": "Slot 33",
+            "description": "Nexus7000 C7009 (9 Slot) Chassis Power Supply",
+            "pid": "N7K-AC-6.0KW",
+            "vid": "V03",
+            "serial_number": "DTM171300QB"
+          },
+          "Slot 35": {
+            "name": "Slot 35",
+            "description": "Nexus7000 C7009 (9 Slot) Chassis Fan Module",
+            "pid": "N7K-C7009-FAN",
+            "vid": "V01",
+            "serial_number": "JAF1702AEBE"
+          }
+        }
+      }
+    },
+    {
+      "name": "Nexus 7700 with FEX fabric extenders and N/A VID/SN fields",
+      "input": "NAME: \"Slot 38\",  DESCR: \"Nexus7700 C7706 (6 Slot) Chassis Fan Module\"\nPID: N77-C7706-FAN       ,  VID: V01 ,  SN: DCH212300ZQ\n\nNAME: \"Slot 39\",  DESCR: \"Nexus7700 C7706 (6 Slot) Chassis Fan Module\"\nPID: N77-C7706-FAN       ,  VID: V01 ,  SN: DCH212300ZR\n\nNAME: \"FEX 106 CHASSIS\",  DESCR: \"N2K-C2248TP-E-1GE  CHASSIS\"\nPID: N2K-C2248TP-E-1GE   ,  VID: V03 ,  SN: FOX2129PR28\n\nNAME: \"FEX 106 Module 1\",  DESCR: \"Fabric Extender Module: 48x1GE, 4x10GE Supervisor\"\nPID: N2K-C2248TP-E-1GE   ,  VID: V03 ,  SN: FOC21306SY6\n\nNAME: \"FEX 106 Fan 1\",  DESCR: \"Fabric Extender Fan module\"\nPID: N2K-C2248-FAN       ,  VID: N/A ,  SN: N/A\n\nNAME: \"FEX 106 Power Supply 1\",  DESCR: \"Fabric Extender AC power supply\"\nPID: N2200-PAC-400W      ,  VID: V06 ,  SN: DCA21265683\n\nNAME: \"FEX 106 Power Supply 2\",  DESCR: \"Fabric Extender AC power supply\"\nPID: N2200-PAC-400W      ,  VID: V06 ,  SN: DCA21265681\n\nNAME: \"FEX 108 CHASSIS\",  DESCR: \"N2K-C2248TP-E-1GE  CHASSIS\"\nPID: N2K-C2248TP-E-1GE   ,  VID: V03 ,  SN: FOX2131P982\n\nNAME: \"FEX 108 Module 1\",  DESCR: \"Fabric Extender Module: 48x1GE, 4x10GE Supervisor\"\nPID: N2K-C2248TP-E-1GE   ,  VID: V03 ,  SN: FOC21306TAS\n\nNAME: \"FEX 108 Fan 1\",  DESCR: \"Fabric Extender Fan module\"\nPID: N2K-C2248-FAN       ,  VID: N/A ,  SN: N/A\n",
+      "expected": {
+        "inventory": {
+          "Slot 38": {
+            "name": "Slot 38",
+            "description": "Nexus7700 C7706 (6 Slot) Chassis Fan Module",
+            "pid": "N77-C7706-FAN",
+            "vid": "V01",
+            "serial_number": "DCH212300ZQ"
+          },
+          "Slot 39": {
+            "name": "Slot 39",
+            "description": "Nexus7700 C7706 (6 Slot) Chassis Fan Module",
+            "pid": "N77-C7706-FAN",
+            "vid": "V01",
+            "serial_number": "DCH212300ZR"
+          },
+          "FEX 106 CHASSIS": {
+            "name": "FEX 106 CHASSIS",
+            "description": "N2K-C2248TP-E-1GE  CHASSIS",
+            "pid": "N2K-C2248TP-E-1GE",
+            "vid": "V03",
+            "serial_number": "FOX2129PR28"
+          },
+          "FEX 106 Module 1": {
+            "name": "FEX 106 Module 1",
+            "description": "Fabric Extender Module: 48x1GE, 4x10GE Supervisor",
+            "pid": "N2K-C2248TP-E-1GE",
+            "vid": "V03",
+            "serial_number": "FOC21306SY6"
+          },
+          "FEX 106 Fan 1": {
+            "name": "FEX 106 Fan 1",
+            "description": "Fabric Extender Fan module",
+            "pid": "N2K-C2248-FAN"
+          },
+          "FEX 106 Power Supply 1": {
+            "name": "FEX 106 Power Supply 1",
+            "description": "Fabric Extender AC power supply",
+            "pid": "N2200-PAC-400W",
+            "vid": "V06",
+            "serial_number": "DCA21265683"
+          },
+          "FEX 106 Power Supply 2": {
+            "name": "FEX 106 Power Supply 2",
+            "description": "Fabric Extender AC power supply",
+            "pid": "N2200-PAC-400W",
+            "vid": "V06",
+            "serial_number": "DCA21265681"
+          },
+          "FEX 108 CHASSIS": {
+            "name": "FEX 108 CHASSIS",
+            "description": "N2K-C2248TP-E-1GE  CHASSIS",
+            "pid": "N2K-C2248TP-E-1GE",
+            "vid": "V03",
+            "serial_number": "FOX2131P982"
+          },
+          "FEX 108 Module 1": {
+            "name": "FEX 108 Module 1",
+            "description": "Fabric Extender Module: 48x1GE, 4x10GE Supervisor",
+            "pid": "N2K-C2248TP-E-1GE",
+            "vid": "V03",
+            "serial_number": "FOC21306TAS"
+          },
+          "FEX 108 Fan 1": {
+            "name": "FEX 108 Fan 1",
+            "description": "Fabric Extender Fan module",
+            "pid": "N2K-C2248-FAN"
+          }
+        }
+      }
+    },
+    {
+      "name": "Virtual Nexus 9300v with empty VID fields and no blank line separators",
+      "input": "NAME: \"Chassis\",  DESCR: \"Nexus9000 C9300v Chassis\"\nPID: N9K-C9300v          ,  VID:     ,  SN: 9UGOPLT5M69\nNAME: \"Slot 1\",  DESCR: \"Nexus 9000v 64 port Ethernet Module\"\nPID: N9K-X9364v          ,  VID:     ,  SN: 91IXIL2AGTF\nNAME: \"Slot 27\",  DESCR: \"Supervisor Module\"\nPID: N9K-vSUP            ,  VID:     ,  SN: 986DSNYNRXN\n",
+      "expected": {
+        "inventory": {
+          "Chassis": {
+            "name": "Chassis",
+            "description": "Nexus9000 C9300v Chassis",
+            "pid": "N9K-C9300v",
+            "serial_number": "9UGOPLT5M69"
+          },
+          "Slot 1": {
+            "name": "Slot 1",
+            "description": "Nexus 9000v 64 port Ethernet Module",
+            "pid": "N9K-X9364v",
+            "serial_number": "91IXIL2AGTF"
+          },
+          "Slot 27": {
+            "name": "Slot 27",
+            "description": "Supervisor Module",
+            "pid": "N9K-vSUP",
+            "serial_number": "986DSNYNRXN"
+          }
+        }
+      }
+    }
+  ]
+}

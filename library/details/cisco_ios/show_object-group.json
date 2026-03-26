@@ -1,0 +1,224 @@
+{
+  "os": "cisco_ios",
+  "command": "show object-group",
+  "schema": {
+    "name": "ShowObjectGroupResult",
+    "fields": {
+      "object_groups": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ObjectGroup",
+            "fields": {
+              "group_type": {
+                "type": "str",
+                "required": false
+              },
+              "description": {
+                "type": "str",
+                "required": false
+              },
+              "any": {
+                "type": "bool",
+                "required": false
+              },
+              "hosts": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": "<class 'dict'>"
+                },
+                "required": false
+              },
+              "ranges": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "RangeEnd",
+                    "fields": {
+                      "end": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "nested_groups": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": "<class 'dict'>"
+                },
+                "required": false
+              },
+              "ipv4_networks": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": "<class 'dict'>"
+                },
+                "required": false
+              },
+              "ipv6_prefixes": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": "<class 'dict'>"
+                },
+                "required": false
+              },
+              "protocols": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": "<class 'object'>"
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Mixed network and service object-groups with various entry types",
+      "input": "Network object group NNNN\nService object group SSSS\nService object group TEST-SVC-OGR\n Description ! Test Service Group !\n icmp echo-reply\n tcp eq smtp\n udp eq tacacs\n udp range tacacs 50\n tcp range 79 www\n tcp eq www\n tcp eq 81\n udp lt 999\n udp gt 97\n tcp-udp range 12200 12700\n icmp\n tcp\n udp\n tcp-udp range 0 65535\n group-object SSSS\n ip\n ipinip\n 99\nNetwork object group TEST_NET_OGR\n Description ###TEST NETWORK OGR###\n any\n host 1.1.1.1\n range 2.2.2.2 3.3.3.3\n group-object NNNN\n 1.1.1.0 255.255.255.0\nNetwork object group XXXX\nNetwork object group YYYY\n",
+      "expected": {
+        "object_groups": {
+          "NNNN": {
+            "group_type": "Network"
+          },
+          "SSSS": {
+            "group_type": "Service"
+          },
+          "TEST-SVC-OGR": {
+            "group_type": "Service",
+            "description": "! Test Service Group !",
+            "nested_groups": {
+              "SSSS": {}
+            },
+            "protocols": {
+              "icmp": {
+                "all": {},
+                "types": {
+                  "echo-reply": {}
+                }
+              },
+              "ip": {
+                "all": {}
+              },
+              "ipinip": {
+                "all": {}
+              },
+              "99": {
+                "all": {}
+              },
+              "tcp": {
+                "all": {},
+                "eq": {
+                  "81": {},
+                  "smtp": {},
+                  "www": {}
+                },
+                "range": {
+                  "79": {
+                    "end": "www"
+                  }
+                }
+              },
+              "tcp-udp": {
+                "range": {
+                  "0": {
+                    "end": "65535"
+                  },
+                  "12200": {
+                    "end": "12700"
+                  }
+                }
+              },
+              "udp": {
+                "all": {},
+                "eq": {
+                  "tacacs": {}
+                },
+                "gt": {
+                  "97": {}
+                },
+                "lt": {
+                  "999": {}
+                },
+                "range": {
+                  "tacacs": {
+                    "end": "50"
+                  }
+                }
+              }
+            }
+          },
+          "TEST_NET_OGR": {
+            "group_type": "Network",
+            "any": true,
+            "description": "###TEST NETWORK OGR###",
+            "hosts": {
+              "1.1.1.1": {}
+            },
+            "ipv4_networks": {
+              "1.1.1.0/24": {}
+            },
+            "nested_groups": {
+              "NNNN": {}
+            },
+            "ranges": {
+              "2.2.2.2": {
+                "end": "3.3.3.3"
+              }
+            }
+          },
+          "XXXX": {
+            "group_type": "Network"
+          },
+          "YYYY": {
+            "group_type": "Network"
+          }
+        }
+      }
+    },
+    {
+      "name": "IPv6 network and service object-groups",
+      "input": "V6-Network object group TEST-v6-obj\n host 2001:db8::1:1111\n host 2001:db8::2:2222\n 2001:db8:111:1::/48\n 2001:db8:222:2::/48\nV6-Service object group TEST-v6-icmp\n icmp echo-request\n icmp echo-reply\n",
+      "expected": {
+        "object_groups": {
+          "TEST-v6-obj": {
+            "group_type": "V6-Network",
+            "hosts": {
+              "2001:db8::1:1111": {},
+              "2001:db8::2:2222": {}
+            },
+            "ipv6_prefixes": {
+              "2001:db8:111::/48": {},
+              "2001:db8:222::/48": {}
+            }
+          },
+          "TEST-v6-icmp": {
+            "group_type": "V6-Service",
+            "protocols": {
+              "icmp": {
+                "types": {
+                  "echo-reply": {},
+                  "echo-request": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

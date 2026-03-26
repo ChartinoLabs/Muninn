@@ -1,0 +1,134 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show route-map all",
+  "schema": {
+    "name": "ShowRouteMapAllResult",
+    "fields": {
+      "route_maps": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "RouteMapClauseEntry",
+              "fields": {
+                "action": {
+                  "type": "str",
+                  "required": true
+                },
+                "sequence": {
+                  "type": "int",
+                  "required": true
+                },
+                "match_clauses": {
+                  "type": {
+                    "type": "list",
+                    "items": "str"
+                  },
+                  "required": false
+                },
+                "set_clauses": {
+                  "type": {
+                    "type": "list",
+                    "items": "str"
+                  },
+                  "required": false
+                },
+                "policy_routing_packets": {
+                  "type": "int",
+                  "required": false
+                },
+                "policy_routing_bytes": {
+                  "type": "int",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with two route-maps each having a single sequence",
+      "input": "route-map RM_BGP_IN, permit, sequence 10\n  Match clauses:\n    ip address (access-lists): AL_BGP_IN\n  Set clauses:\n    local-preference 200\n  Policy routing matches: 0 packets, 0 bytes\nroute-map RM_BGP_OUT, deny, sequence 10\n  Match clauses:\n    ip address prefix-lists: PL_DEFAULT\n  Set clauses:\n  Policy routing matches: 0 packets, 0 bytes\n",
+      "expected": {
+        "route_maps": {
+          "RM_BGP_IN": {
+            "10": {
+              "action": "permit",
+              "match_clauses": [
+                "ip address (access-lists): AL_BGP_IN"
+              ],
+              "policy_routing_bytes": 0,
+              "policy_routing_packets": 0,
+              "sequence": 10,
+              "set_clauses": [
+                "local-preference 200"
+              ]
+            }
+          },
+          "RM_BGP_OUT": {
+            "10": {
+              "action": "deny",
+              "match_clauses": [
+                "ip address prefix-lists: PL_DEFAULT"
+              ],
+              "policy_routing_bytes": 0,
+              "policy_routing_packets": 0,
+              "sequence": 10
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Route-map with multiple sequences and various match/set clauses",
+      "input": "route-map RM_OSPF_REDISTRIBUTE, permit, sequence 10\n  Match clauses:\n    ip address prefix-lists: PL_CONNECTED\n    route-type: external type 1\n  Set clauses:\n    metric 100\n    metric-type type-1\n    tag 65000\n  Policy routing matches: 1234 packets, 567890 bytes\nroute-map RM_OSPF_REDISTRIBUTE, permit, sequence 20\n  Match clauses:\n    ip address prefix-lists: PL_STATIC\n  Set clauses:\n    metric 200\n    metric-type type-2\n  Policy routing matches: 0 packets, 0 bytes\nroute-map RM_OSPF_REDISTRIBUTE, deny, sequence 30\n  Match clauses:\n  Set clauses:\n  Policy routing matches: 0 packets, 0 bytes\n",
+      "expected": {
+        "route_maps": {
+          "RM_OSPF_REDISTRIBUTE": {
+            "10": {
+              "action": "permit",
+              "match_clauses": [
+                "ip address prefix-lists: PL_CONNECTED",
+                "route-type: external type 1"
+              ],
+              "policy_routing_bytes": 567890,
+              "policy_routing_packets": 1234,
+              "sequence": 10,
+              "set_clauses": [
+                "metric 100",
+                "metric-type type-1",
+                "tag 65000"
+              ]
+            },
+            "20": {
+              "action": "permit",
+              "match_clauses": [
+                "ip address prefix-lists: PL_STATIC"
+              ],
+              "policy_routing_bytes": 0,
+              "policy_routing_packets": 0,
+              "sequence": 20,
+              "set_clauses": [
+                "metric 200",
+                "metric-type type-2"
+              ]
+            },
+            "30": {
+              "action": "deny",
+              "policy_routing_bytes": 0,
+              "policy_routing_packets": 0,
+              "sequence": 30
+            }
+          }
+        }
+      }
+    }
+  ]
+}

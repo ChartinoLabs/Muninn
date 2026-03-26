@@ -1,0 +1,181 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ipv6 dhcp interface",
+  "schema": {
+    "name": "ShowIpv6DhcpInterfaceResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": "muninn.parsers.iosxe.show_ipv6_dhcp_interface.ClientInterfaceEntry | muninn.parsers.iosxe.show_ipv6_dhcp_interface.ServerInterfaceEntry | muninn.parsers.iosxe.show_ipv6_dhcp_interface.RelayInterfaceEntry"
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Show ipv6 dhcp interface with client, server, and relay modes",
+      "input": "TenGigabitEthernet1/0/2.154 is in client mode\n  Prefix State is OPEN\n  Renew will be sent in 3d07h\n  Address State is OPEN\n  Renew for address will be sent in 07:32:51\n  List of known servers:\n    Reachable via address: FE80::20C:29FF:FE22:1DA5\n    DUID: 00030001001EE59BE700\n    Preference: 0\n    Configuration parameters:\n      IA PD: IA ID 0x00200001, T1 302400, T2 483840\n        Prefix: 8882:0:0:100::/56\n                preferred lifetime 604800, valid lifetime 2592000\n                expires at Aug 31 2023 05:56 PM (2575972 seconds)\n      IA NA: IA ID 0x00200001, T1 43200, T2 69120\n        Address: 7772::41EF:B5D6:B50:38B7/128\n                preferred lifetime 86400, valid lifetime 172800\n                expires at Aug 03 2023 05:56 PM (156772 seconds)\n      DNS server: 11::11\n      Domain name: cisco.com\n      Information refresh time: 0\n  Prefix name: TEST123\n    Reachable via address: FE80::20C:29FF:FEF7:D6A4\n    DUID: 00030001001EBD9A6800\n    Preference: 0\n    Configuration parameters:\n      IA PD: IA ID 0x00200001, T1 302400, T2 483840\n        Prefix: 8881:0:0:100::/56\n                preferred lifetime 604800, valid lifetime 2592000, expired\n      IA NA: IA ID 0x00200001, T1 43200, T2 69120\n        Address: 7771::399D:20AD:29FB:771B/128\n                preferred lifetime 86400, valid lifetime 172800, expired\n      DNS server: 11::11\n      Domain name: cisco.com\n      Information refresh time: 0\n  Prefix name: TEST123\n  Prefix Rapid-Commit: disabled\n  Address Rapid-Commit: disabled\nTenGigabitEthernet1/0/8.2 is in client mode\n  Prefix State is IDLE (0)\n  Information refresh timer expires in 23:19:26\n  Address State is OPEN\n  Renew for address will be sent in 11:19:28\n  List of known servers:\n    Reachable via address: FE80::6A3B:78FF:FE48:379F\n    DUID: 00030001683B78483700\n    Preference: 0\n    Configuration parameters:\n      IA NA: IA ID 0x00250001, T1 43200, T2 69120\n        Address: 4180::4:7EFF:E250/128\n                preferred lifetime 86400, valid lifetime 172800\n                expires at Aug 03 2023 09:43 PM (170368 seconds)\n      DNS server: 4180::4:0:2\n      Information refresh time: 0\n  Prefix Rapid-Commit: disabled\n  Address Rapid-Commit: disabled\nTenGigabitEthernet1/0/8.8 is in client mode\n  Prefix State is OPEN\n  Renew will be sent in 2d11h\n  Address State is IDLE\n  List of known servers:\n    Reachable via address: FE80::6A3B:78FF:FE48:379F\n    DUID: 00030001683B78483700\n    Preference: 0\n    Configuration parameters:\n      IA PD: IA ID 0x00270001, T1 302400, T2 483840\n        Prefix: 5180::2:0:0:0/80\n                preferred lifetime 604800, valid lifetime 2592000\n                expires at Aug 30 2023 09:43 PM (2503169 seconds)\n      DNS server: 4180::4:0:2\n      Information refresh time: 0\n  Prefix name: TEST\n  Prefix Rapid-Commit: disabled\n  Address Rapid-Commit: disabled\nTenGigabitEthernet1/0/8.9 is in client mode\n  Prefix State is OPEN\n  Renew will be sent in 2d11h\n  Address State is OPEN\n  Renew for address will be sent in 11:19:28\n  List of known servers:\n    Reachable via address: FE80::6A3B:78FF:FE48:379F\n    DUID: 00030001683B78483700\n    Preference: 0\n    Configuration parameters:\n      IA PD: IA ID 0x00280001, T1 302400, T2 483840\n        Prefix: 1234:0:0:100::/56\n                preferred lifetime 604800, valid lifetime 2592000\n                expires at Aug 30 2023 09:43 PM (2503169 seconds)\n      IA NA: IA ID 0x00280001, T1 43200, T2 69120\n        Address: 4321::7D30:EDCE:91EE:F270/128\n                preferred lifetime 86400, valid lifetime 172800\n                expires at Aug 03 2023 09:43 PM (170368 seconds)\n      Information refresh time: 0\n  Prefix name: NEWTEST\n  Prefix Rapid-Commit: disabled\n  Address Rapid-Commit: disabled\nTenGigabitEthernet1/0/8.10 is in client mode\n  Prefix State is SOLICIT (751)\n  Retransmission timer expires in 00:00:41\n  Address State is IDLE\n  Prefix Rapid-Commit: disabled\n  Address Rapid-Commit: disabled\nTenGigabitEthernet1/0/8.11 is in server mode\n  Using pool: A\n  Preference value: 0\n  Hint from client: ignored\n  Rapid-Commit: disabled\nTenGigabitEthernet1/0/8.12 is in relay mode\n  Relay destinations:\n    1::2\n",
+      "expected": {
+        "interfaces": {
+          "TenGigabitEthernet1/0/2.154": {
+            "mode": "client",
+            "prefix_state": "OPEN",
+            "address_state": "OPEN",
+            "prefix_name": "TEST123",
+            "prefix_rapid_commit": "disabled",
+            "address_rapid_commit": "disabled",
+            "known_servers": {
+              "FE80::20C:29FF:FE22:1DA5": {
+                "duid": "00030001001EE59BE700",
+                "preference": 0,
+                "ia_pd": {
+                  "iaid": "0x00200001",
+                  "t1": 302400,
+                  "t2": 483840,
+                  "prefix": "8882:0:0:100::/56",
+                  "preferred_lifetime": 604800,
+                  "valid_lifetime": 2592000
+                },
+                "ia_na": {
+                  "iaid": "0x00200001",
+                  "t1": 43200,
+                  "t2": 69120,
+                  "address": "7772::41EF:B5D6:B50:38B7/128",
+                  "preferred_lifetime": 86400,
+                  "valid_lifetime": 172800
+                },
+                "dns_server": "11::11",
+                "domain_name": "cisco.com",
+                "information_refresh_time": 0
+              },
+              "FE80::20C:29FF:FEF7:D6A4": {
+                "duid": "00030001001EBD9A6800",
+                "preference": 0,
+                "ia_pd": {
+                  "iaid": "0x00200001",
+                  "t1": 302400,
+                  "t2": 483840,
+                  "prefix": "8881:0:0:100::/56",
+                  "preferred_lifetime": 604800,
+                  "valid_lifetime": 2592000
+                },
+                "ia_na": {
+                  "iaid": "0x00200001",
+                  "t1": 43200,
+                  "t2": 69120,
+                  "address": "7771::399D:20AD:29FB:771B/128",
+                  "preferred_lifetime": 86400,
+                  "valid_lifetime": 172800
+                },
+                "dns_server": "11::11",
+                "domain_name": "cisco.com",
+                "information_refresh_time": 0
+              }
+            }
+          },
+          "TenGigabitEthernet1/0/8.2": {
+            "mode": "client",
+            "prefix_state": "IDLE",
+            "address_state": "OPEN",
+            "prefix_rapid_commit": "disabled",
+            "address_rapid_commit": "disabled",
+            "known_servers": {
+              "FE80::6A3B:78FF:FE48:379F": {
+                "duid": "00030001683B78483700",
+                "preference": 0,
+                "ia_na": {
+                  "iaid": "0x00250001",
+                  "t1": 43200,
+                  "t2": 69120,
+                  "address": "4180::4:7EFF:E250/128",
+                  "preferred_lifetime": 86400,
+                  "valid_lifetime": 172800
+                },
+                "dns_server": "4180::4:0:2",
+                "information_refresh_time": 0
+              }
+            }
+          },
+          "TenGigabitEthernet1/0/8.8": {
+            "mode": "client",
+            "prefix_state": "OPEN",
+            "address_state": "IDLE",
+            "prefix_name": "TEST",
+            "prefix_rapid_commit": "disabled",
+            "address_rapid_commit": "disabled",
+            "known_servers": {
+              "FE80::6A3B:78FF:FE48:379F": {
+                "duid": "00030001683B78483700",
+                "preference": 0,
+                "ia_pd": {
+                  "iaid": "0x00270001",
+                  "t1": 302400,
+                  "t2": 483840,
+                  "prefix": "5180::2:0:0:0/80",
+                  "preferred_lifetime": 604800,
+                  "valid_lifetime": 2592000
+                },
+                "dns_server": "4180::4:0:2",
+                "information_refresh_time": 0
+              }
+            }
+          },
+          "TenGigabitEthernet1/0/8.9": {
+            "mode": "client",
+            "prefix_state": "OPEN",
+            "address_state": "OPEN",
+            "prefix_name": "NEWTEST",
+            "prefix_rapid_commit": "disabled",
+            "address_rapid_commit": "disabled",
+            "known_servers": {
+              "FE80::6A3B:78FF:FE48:379F": {
+                "duid": "00030001683B78483700",
+                "preference": 0,
+                "ia_pd": {
+                  "iaid": "0x00280001",
+                  "t1": 302400,
+                  "t2": 483840,
+                  "prefix": "1234:0:0:100::/56",
+                  "preferred_lifetime": 604800,
+                  "valid_lifetime": 2592000
+                },
+                "ia_na": {
+                  "iaid": "0x00280001",
+                  "t1": 43200,
+                  "t2": 69120,
+                  "address": "4321::7D30:EDCE:91EE:F270/128",
+                  "preferred_lifetime": 86400,
+                  "valid_lifetime": 172800
+                },
+                "information_refresh_time": 0
+              }
+            }
+          },
+          "TenGigabitEthernet1/0/8.10": {
+            "mode": "client",
+            "prefix_state": "SOLICIT",
+            "address_state": "IDLE",
+            "prefix_rapid_commit": "disabled",
+            "address_rapid_commit": "disabled"
+          },
+          "TenGigabitEthernet1/0/8.11": {
+            "mode": "server",
+            "pool_name": "A",
+            "preference_value": 0,
+            "hint_from_client": "ignored",
+            "rapid_commit": "disabled"
+          },
+          "TenGigabitEthernet1/0/8.12": {
+            "mode": "relay",
+            "relay_destinations": [
+              "1::2"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

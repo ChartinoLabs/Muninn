@@ -1,0 +1,204 @@
+{
+  "os": "cisco_ios",
+  "command": "show ip mroute",
+  "schema": {
+    "name": "ShowIpMrouteResult",
+    "fields": {
+      "groups": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "GroupEntry",
+            "fields": {
+              "sources": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "SourceEntry",
+                    "fields": {
+                      "uptime": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "expires": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "flags": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "rpf_neighbor": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "incoming_interface": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "rpf_info": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "rp": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "outgoing_interfaces": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "OutgoingInterfaceEntry",
+                            "fields": {
+                              "state_mode": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "uptime": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "expires": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "vcd": {
+                                "type": "int",
+                                "required": false
+                              }
+                            }
+                          }
+                        },
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multicast routing table with shared-tree, source-specific, and null OIF entries",
+      "input": "IP Multicast Routing Table\nFlags: D - Dense, S - Sparse, B - Bidir Group, s - SSM Group, C - Connected,\n       L - Local, P - Pruned, R - RP-bit set, F - Register flag,\n       T - SPT-bit set, J - Join SPT, M - MSDP created entry,\n       X - Proxy Join Timer Running, A - Candidate for MSDP Advertisement,\n       U - URD, I - Received Source Specific Host Report,\n       Z - Multicast Tunnel, z - MDT-data group sender,\n       Y - Joined MDT-data group, y - Sending to MDT-data group\n       V - RD & Vector, v - Vector\nOutgoing interface flags: H - Hardware switched, A - Assert winner\n Timers: Uptime/Expires\n Interface state: Interface, Next-Hop or VCD, State/Mode\n(*, 239.0.0.1), 00:00:58/00:02:02, RP 172.16.2.1, flags: SJC\n  Incoming interface: FastEthernet0/1, RPF nbr 172.16.2.1\n  Outgoing interface list:\n    Vlan1, Forward/Sparse, 00:00:58/00:02:02\n(*, 239.0.0.2), 00:01:02/00:01:57, RP 172.16.2.1, flags: SJC\n  Incoming interface: FastEthernet0/1, RPF nbr 172.16.2.1\n  Outgoing interface list:\n    Vlan1, Forward/Sparse, 00:01:03/00:01:57\n(*, 239.0.0.3), 00:00:58/00:02:57, RP 172.16.2.1, flags: SJC\n  Incoming interface: FastEthernet0/1, RPF nbr 172.16.2.1\n  Outgoing interface list:\n    Vlan1, Forward/Sparse, 00:00:58/00:02:57\n    Vlan2, Forward/Sparse, 00:00:58/00:02:57\n(*, 239.0.0.4), 00:00:04/stopped, RP 172.16.2.1, flags: SPF\n  Incoming interface: FastEthernet0/1, RPF nbr 172.16.2.1\n  Outgoing interface list: Null\n(192.168.2.44, 239.0.0.5), 00:00:07/00:02:58, flags: FT\n  Incoming interface: Vlan1, RPF nbr 0.0.0.0, Registering\n  Outgoing interface list:\n    FastEthernet0/1, Forward/Dense, 00:00:07/00:00:00\n(*, 239.0.0.6), 3d14h/00:02:25, RP 172.16.2.1, flags: SJPCL\n  Incoming interface: FastEthernet0/1, RPF nbr 172.16.2.1\n  Outgoing interface list: Null\n",
+      "expected": {
+        "groups": {
+          "239.0.0.1": {
+            "sources": {
+              "*": {
+                "uptime": "00:00:58",
+                "expires": "00:02:02",
+                "flags": "SJC",
+                "rp": "172.16.2.1",
+                "incoming_interface": "FastEthernet0/1",
+                "rpf_neighbor": "172.16.2.1",
+                "outgoing_interfaces": {
+                  "Vlan1": {
+                    "state_mode": "Forward/Sparse",
+                    "uptime": "00:00:58",
+                    "expires": "00:02:02"
+                  }
+                }
+              }
+            }
+          },
+          "239.0.0.2": {
+            "sources": {
+              "*": {
+                "uptime": "00:01:02",
+                "expires": "00:01:57",
+                "flags": "SJC",
+                "rp": "172.16.2.1",
+                "incoming_interface": "FastEthernet0/1",
+                "rpf_neighbor": "172.16.2.1",
+                "outgoing_interfaces": {
+                  "Vlan1": {
+                    "state_mode": "Forward/Sparse",
+                    "uptime": "00:01:03",
+                    "expires": "00:01:57"
+                  }
+                }
+              }
+            }
+          },
+          "239.0.0.3": {
+            "sources": {
+              "*": {
+                "uptime": "00:00:58",
+                "expires": "00:02:57",
+                "flags": "SJC",
+                "rp": "172.16.2.1",
+                "incoming_interface": "FastEthernet0/1",
+                "rpf_neighbor": "172.16.2.1",
+                "outgoing_interfaces": {
+                  "Vlan1": {
+                    "state_mode": "Forward/Sparse",
+                    "uptime": "00:00:58",
+                    "expires": "00:02:57"
+                  },
+                  "Vlan2": {
+                    "state_mode": "Forward/Sparse",
+                    "uptime": "00:00:58",
+                    "expires": "00:02:57"
+                  }
+                }
+              }
+            }
+          },
+          "239.0.0.4": {
+            "sources": {
+              "*": {
+                "uptime": "00:00:04",
+                "expires": "stopped",
+                "flags": "SPF",
+                "rp": "172.16.2.1",
+                "incoming_interface": "FastEthernet0/1",
+                "rpf_neighbor": "172.16.2.1"
+              }
+            }
+          },
+          "239.0.0.5": {
+            "sources": {
+              "192.168.2.44": {
+                "uptime": "00:00:07",
+                "expires": "00:02:58",
+                "flags": "FT",
+                "incoming_interface": "Vlan1",
+                "rpf_neighbor": "0.0.0.0",
+                "rpf_info": "Registering",
+                "outgoing_interfaces": {
+                  "FastEthernet0/1": {
+                    "state_mode": "Forward/Dense",
+                    "uptime": "00:00:07",
+                    "expires": "00:00:00"
+                  }
+                }
+              }
+            }
+          },
+          "239.0.0.6": {
+            "sources": {
+              "*": {
+                "uptime": "3d14h",
+                "expires": "00:02:25",
+                "flags": "SJPCL",
+                "rp": "172.16.2.1",
+                "incoming_interface": "FastEthernet0/1",
+                "rpf_neighbor": "172.16.2.1"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

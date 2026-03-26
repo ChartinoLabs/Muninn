@@ -1,0 +1,433 @@
+{
+  "os": "cisco_ios",
+  "command": "show environment",
+  "schema": {
+    "name": "ShowEnvironmentResult",
+    "fields": {
+      "critical_alarms": {
+        "type": "int",
+        "required": true
+      },
+      "major_alarms": {
+        "type": "int",
+        "required": true
+      },
+      "minor_alarms": {
+        "type": "int",
+        "required": true
+      },
+      "sensors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "SensorEntry",
+              "fields": {
+                "state": {
+                  "type": "str",
+                  "required": true
+                },
+                "reading": {
+                  "type": "int",
+                  "required": true
+                },
+                "unit": {
+                  "type": "str",
+                  "required": true
+                },
+                "thresholds": {
+                  "type": {
+                    "name": "ThresholdEntry",
+                    "fields": {
+                      "minor": {
+                        "type": "int | None",
+                        "required": true
+                      },
+                      "major": {
+                        "type": "int | None",
+                        "required": true
+                      },
+                      "critical": {
+                        "type": "int | None",
+                        "required": true
+                      },
+                      "shutdown": {
+                        "type": "int | None",
+                        "required": true
+                      }
+                    }
+                  },
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Sensor table without thresholds across multiple slot types (F0, P0, P6, R0, 0)",
+      "input": "Number of Critical alarms:  0\nNumber of Major alarms:     0\nNumber of Minor alarms:     0\n\nSlot    Sensor       Current State       Reading\n----    ------       -------------       -------\n F0    V1: VMA          Normal           1796 mV\n F0    V1: VMB          Normal           1196 mV\n F0    V1: 12v          Normal           11821 mV\n F0    Temp: Inlet      Normal           30 Celsius\n F0    Temp: Pop Die    Normal           43 Celsius\n F0    Temp: MCH Die    Normal           53 Celsius\n P0    Vin              Normal           101 V AC\n P0    Iout             Normal           15 A\n P0    Temp1            Normal           26 Celsius\n P6    Temp1            Normal           38 Celsius\n P6    Temp: FC PWM1    Fan Speed 60%    26 Celsius\n R0    V1: VMA          Normal           1201 mV\n R0    V1: 12v          Normal           11835 mV\n R0    Temp: Outlet     Normal           30 Celsius\n R0    Temp: CPU AIR    Normal           32 Celsius\n R0    Temp: MCH DIE    Normal           54 Celsius\n 0     V1: VMA          Normal           1098 mV\n 0     V1: 12v          Normal           11894 mV\n 0     Temp: Left       Normal           30 Celsius\n 0     Temp: Asic1      Normal           50 Celsius\n",
+      "expected": {
+        "critical_alarms": 0,
+        "major_alarms": 0,
+        "minor_alarms": 0,
+        "sensors": {
+          "F0": {
+            "V1: VMA": {
+              "state": "Normal",
+              "reading": 1796,
+              "unit": "mV"
+            },
+            "V1: VMB": {
+              "state": "Normal",
+              "reading": 1196,
+              "unit": "mV"
+            },
+            "V1: 12v": {
+              "state": "Normal",
+              "reading": 11821,
+              "unit": "mV"
+            },
+            "Temp: Inlet": {
+              "state": "Normal",
+              "reading": 30,
+              "unit": "Celsius"
+            },
+            "Temp: Pop Die": {
+              "state": "Normal",
+              "reading": 43,
+              "unit": "Celsius"
+            },
+            "Temp: MCH Die": {
+              "state": "Normal",
+              "reading": 53,
+              "unit": "Celsius"
+            }
+          },
+          "P0": {
+            "Vin": {
+              "state": "Normal",
+              "reading": 101,
+              "unit": "V AC"
+            },
+            "Iout": {
+              "state": "Normal",
+              "reading": 15,
+              "unit": "A"
+            },
+            "Temp1": {
+              "state": "Normal",
+              "reading": 26,
+              "unit": "Celsius"
+            }
+          },
+          "P6": {
+            "Temp1": {
+              "state": "Normal",
+              "reading": 38,
+              "unit": "Celsius"
+            },
+            "Temp: FC PWM1": {
+              "state": "Fan Speed 60%",
+              "reading": 26,
+              "unit": "Celsius"
+            }
+          },
+          "R0": {
+            "V1: VMA": {
+              "state": "Normal",
+              "reading": 1201,
+              "unit": "mV"
+            },
+            "V1: 12v": {
+              "state": "Normal",
+              "reading": 11835,
+              "unit": "mV"
+            },
+            "Temp: Outlet": {
+              "state": "Normal",
+              "reading": 30,
+              "unit": "Celsius"
+            },
+            "Temp: CPU AIR": {
+              "state": "Normal",
+              "reading": 32,
+              "unit": "Celsius"
+            },
+            "Temp: MCH DIE": {
+              "state": "Normal",
+              "reading": 54,
+              "unit": "Celsius"
+            }
+          },
+          "0": {
+            "V1: VMA": {
+              "state": "Normal",
+              "reading": 1098,
+              "unit": "mV"
+            },
+            "V1: 12v": {
+              "state": "Normal",
+              "reading": 11894,
+              "unit": "mV"
+            },
+            "Temp: Left": {
+              "state": "Normal",
+              "reading": 30,
+              "unit": "Celsius"
+            },
+            "Temp: Asic1": {
+              "state": "Normal",
+              "reading": 50,
+              "unit": "Celsius"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Sensor table with threshold column, mix of na and numeric thresholds",
+      "input": "Number of Critical alarms:  0\nNumber of Major alarms:     0\nNumber of Minor alarms:     0\n\n Slot        Sensor          Current State   Reading        Threshold(Minor,Major,Critical,Shutdown)\n ----------  --------------  --------------- ------------   ---------------------------------------\n R0          PSOC-MB_0: VOUT Normal          12058 mV     \tna\n R0          PSOC-MB_1: VOUT Normal          3292  mV     \tna\n R0          PSOC-MB_4: VOUT Normal          5000  mV     \tna\n R0          PSOC-MB_8: VOUT Normal          1800  mV     \tna\n R0          3570MB1 _0: VOU Normal          1001  mV     \tna\n R0          35215MB1_0: VOU Normal          840   mV     \tna\n R0          Temp: Outlet_A  Normal          30    Celsius\t(55 ,60 ,65 ,75 )(Celsius)\n R0          Temp: Outlet_B  Normal          26    Celsius\t(60 ,65 ,70 ,80 )(Celsius)\n R0          Temp: Inlet_A   Normal          30    Celsius\t(45 ,55 ,65 ,70 )(Celsius)\n R0          Temp: Inlet_B   Normal          26    Celsius\t(55 ,65 ,75 ,80 )(Celsius)\n R0          Temp: UADP_0_0  Normal          38    Celsius\t(105,110,120,124)(Celsius)\n R0          Temp: UADP_0_1  Normal          37    Celsius\t(105,110,120,124)(Celsius)\n R0          PSOC-DB_1: VOUT Normal          5001  mV     \tna\n R0          PSOC-DB_8: VOUT Normal          1299  mV     \tna\n R0          3570DB1 _0: VOU Normal          1790  mV     \tna\n R0          Temp: Coretemp  Normal          36    Celsius\t(107,117,123,125)(Celsius)\n R0          Temp: OutletDB  Normal          28    Celsius\t(65 ,70 ,75 ,85 )(Celsius)\n",
+      "expected": {
+        "critical_alarms": 0,
+        "major_alarms": 0,
+        "minor_alarms": 0,
+        "sensors": {
+          "R0": {
+            "PSOC-MB_0: VOUT": {
+              "state": "Normal",
+              "reading": 12058,
+              "unit": "mV"
+            },
+            "PSOC-MB_1: VOUT": {
+              "state": "Normal",
+              "reading": 3292,
+              "unit": "mV"
+            },
+            "PSOC-MB_4: VOUT": {
+              "state": "Normal",
+              "reading": 5000,
+              "unit": "mV"
+            },
+            "PSOC-MB_8: VOUT": {
+              "state": "Normal",
+              "reading": 1800,
+              "unit": "mV"
+            },
+            "3570MB1 _0: VOU": {
+              "state": "Normal",
+              "reading": 1001,
+              "unit": "mV"
+            },
+            "35215MB1_0: VOU": {
+              "state": "Normal",
+              "reading": 840,
+              "unit": "mV"
+            },
+            "Temp: Outlet_A": {
+              "state": "Normal",
+              "reading": 30,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 55,
+                "major": 60,
+                "critical": 65,
+                "shutdown": 75
+              }
+            },
+            "Temp: Outlet_B": {
+              "state": "Normal",
+              "reading": 26,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 60,
+                "major": 65,
+                "critical": 70,
+                "shutdown": 80
+              }
+            },
+            "Temp: Inlet_A": {
+              "state": "Normal",
+              "reading": 30,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 45,
+                "major": 55,
+                "critical": 65,
+                "shutdown": 70
+              }
+            },
+            "Temp: Inlet_B": {
+              "state": "Normal",
+              "reading": 26,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 55,
+                "major": 65,
+                "critical": 75,
+                "shutdown": 80
+              }
+            },
+            "Temp: UADP_0_0": {
+              "state": "Normal",
+              "reading": 38,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 105,
+                "major": 110,
+                "critical": 120,
+                "shutdown": 124
+              }
+            },
+            "Temp: UADP_0_1": {
+              "state": "Normal",
+              "reading": 37,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 105,
+                "major": 110,
+                "critical": 120,
+                "shutdown": 124
+              }
+            },
+            "PSOC-DB_1: VOUT": {
+              "state": "Normal",
+              "reading": 5001,
+              "unit": "mV"
+            },
+            "PSOC-DB_8: VOUT": {
+              "state": "Normal",
+              "reading": 1299,
+              "unit": "mV"
+            },
+            "3570DB1 _0: VOU": {
+              "state": "Normal",
+              "reading": 1790,
+              "unit": "mV"
+            },
+            "Temp: Coretemp": {
+              "state": "Normal",
+              "reading": 36,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 107,
+                "major": 117,
+                "critical": 123,
+                "shutdown": 125
+              }
+            },
+            "Temp: OutletDB": {
+              "state": "Normal",
+              "reading": 28,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 65,
+                "major": 70,
+                "critical": 75,
+                "shutdown": 85
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Sensors with Warning, Major, and Critical states plus threshold values",
+      "input": "Number of Critical alarms:  1\nNumber of Major alarms:     1\nNumber of Minor alarms:     2\n\n Slot        Sensor          Current State   Reading        Threshold(Minor,Major,Critical,Shutdown)\n ----------  --------------  --------------- ------------   ---------------------------------------\n R0          Temp: Outlet_A  Warning         58    Celsius\t(55 ,60 ,65 ,75 )(Celsius)\n R0          Temp: Inlet_A   Normal          30    Celsius\t(45 ,55 ,65 ,70 )(Celsius)\n R0          Temp: UADP_0_0  Critical        122   Celsius\t(105,110,120,124)(Celsius)\n R0          PSOC-MB_0: VOUT Normal          12058 mV     \tna\n R0          Temp: Coretemp  Warning         108   Celsius\t(107,117,123,125)(Celsius)\n R1          Temp: Outlet_A  Major           62    Celsius\t(55 ,60 ,65 ,75 )(Celsius)\n R1          Temp: Inlet_A   Normal          28    Celsius\t(45 ,55 ,65 ,70 )(Celsius)\n R1          PSOC-MB_0: VOUT Normal          12010 mV     \tna\n",
+      "expected": {
+        "critical_alarms": 1,
+        "major_alarms": 1,
+        "minor_alarms": 2,
+        "sensors": {
+          "R0": {
+            "Temp: Outlet_A": {
+              "state": "Warning",
+              "reading": 58,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 55,
+                "major": 60,
+                "critical": 65,
+                "shutdown": 75
+              }
+            },
+            "Temp: Inlet_A": {
+              "state": "Normal",
+              "reading": 30,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 45,
+                "major": 55,
+                "critical": 65,
+                "shutdown": 70
+              }
+            },
+            "Temp: UADP_0_0": {
+              "state": "Critical",
+              "reading": 122,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 105,
+                "major": 110,
+                "critical": 120,
+                "shutdown": 124
+              }
+            },
+            "PSOC-MB_0: VOUT": {
+              "state": "Normal",
+              "reading": 12058,
+              "unit": "mV"
+            },
+            "Temp: Coretemp": {
+              "state": "Warning",
+              "reading": 108,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 107,
+                "major": 117,
+                "critical": 123,
+                "shutdown": 125
+              }
+            }
+          },
+          "R1": {
+            "Temp: Outlet_A": {
+              "state": "Major",
+              "reading": 62,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 55,
+                "major": 60,
+                "critical": 65,
+                "shutdown": 75
+              }
+            },
+            "Temp: Inlet_A": {
+              "state": "Normal",
+              "reading": 28,
+              "unit": "Celsius",
+              "thresholds": {
+                "minor": 45,
+                "major": 55,
+                "critical": 65,
+                "shutdown": 70
+              }
+            },
+            "PSOC-MB_0: VOUT": {
+              "state": "Normal",
+              "reading": 12010,
+              "unit": "mV"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

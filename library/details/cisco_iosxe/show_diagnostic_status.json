@@ -1,0 +1,101 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show diagnostic status",
+  "schema": {
+    "name": "ShowDiagnosticStatusResult",
+    "fields": {
+      "cards": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "DiagnosticCardEntry",
+            "fields": {
+              "card": {
+                "type": "str",
+                "required": true
+              },
+              "description": {
+                "type": "str",
+                "required": true
+              },
+              "tests": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "DiagnosticTestEntry",
+                    "fields": {
+                      "name": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "run_by": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "show diagnostic status\n\n<BU> - Bootup Diagnostics, <HM> - Health Monitoring Diagnostics,\n<OD> - OnDemand Diagnostics, <SCH> - Scheduled Diagnostics\n\n====== ================================= =============================== ======\nCard   Description                       Current Running Test            Run by\n------ --------------------------------- ------------------------------- ------\n1      C9300-24UX                        DiagThermalTest                 <HM>\n                                         DiagFanTest                     <HM>\n                                         DiagScratchRegisterTest         <HM>\n                                         TestPortTxMonitoring            <HM>\n                                         TestConsistencyCheckL2          <HM>\n                                         TestConsistencyCheckL3          <HM>\n                                         TestConsistencyCheckMcast       <HM>\n                                         TestConsistencyCheckL2m         <HM>\n                                         TestConsistencyCheckL3m         <HM>\n\n====== ================================= =============================== ======\n",
+      "expected": {
+        "cards": {
+          "1": {
+            "card": "1",
+            "description": "C9300-24UX",
+            "tests": {
+              "DiagThermalTest": {
+                "name": "DiagThermalTest",
+                "run_by": "<HM>"
+              },
+              "DiagFanTest": {
+                "name": "DiagFanTest",
+                "run_by": "<HM>"
+              },
+              "DiagScratchRegisterTest": {
+                "name": "DiagScratchRegisterTest",
+                "run_by": "<HM>"
+              },
+              "TestPortTxMonitoring": {
+                "name": "TestPortTxMonitoring",
+                "run_by": "<HM>"
+              },
+              "TestConsistencyCheckL2": {
+                "name": "TestConsistencyCheckL2",
+                "run_by": "<HM>"
+              },
+              "TestConsistencyCheckL3": {
+                "name": "TestConsistencyCheckL3",
+                "run_by": "<HM>"
+              },
+              "TestConsistencyCheckMcast": {
+                "name": "TestConsistencyCheckMcast",
+                "run_by": "<HM>"
+              },
+              "TestConsistencyCheckL2m": {
+                "name": "TestConsistencyCheckL2m",
+                "run_by": "<HM>"
+              },
+              "TestConsistencyCheckL3m": {
+                "name": "TestConsistencyCheckL3m",
+                "run_by": "<HM>"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

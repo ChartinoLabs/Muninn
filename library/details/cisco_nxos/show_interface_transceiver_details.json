@@ -1,0 +1,320 @@
+{
+  "os": "cisco_nxos",
+  "command": "show interface transceiver details",
+  "schema": {
+    "name": "ShowInterfaceTransceiverDetailsResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "TransceiverDetailEntry",
+            "fields": {
+              "type": {
+                "type": "str",
+                "required": true
+              },
+              "name": {
+                "type": "str",
+                "required": true
+              },
+              "part_number": {
+                "type": "str",
+                "required": true
+              },
+              "revision": {
+                "type": "str",
+                "required": true
+              },
+              "serial_number": {
+                "type": "str",
+                "required": true
+              },
+              "nominal_bitrate_mbps": {
+                "type": "int",
+                "required": false
+              },
+              "link_lengths": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": "str"
+                },
+                "required": false
+              },
+              "cisco_id": {
+                "type": "str",
+                "required": false
+              },
+              "cisco_extended_id": {
+                "type": "str",
+                "required": false
+              },
+              "cisco_part_number": {
+                "type": "str",
+                "required": false
+              },
+              "cisco_product_id": {
+                "type": "str",
+                "required": false
+              },
+              "cisco_version_id": {
+                "type": "str",
+                "required": false
+              },
+              "calibration": {
+                "type": "str",
+                "required": false
+              },
+              "temperature": {
+                "type": {
+                  "name": "DiagnosticReading",
+                  "fields": {
+                    "current": {
+                      "type": "float",
+                      "required": true
+                    },
+                    "alarm_high": {
+                      "type": "float",
+                      "required": false
+                    },
+                    "alarm_low": {
+                      "type": "float",
+                      "required": false
+                    },
+                    "warning_high": {
+                      "type": "float",
+                      "required": false
+                    },
+                    "warning_low": {
+                      "type": "float",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "voltage": {
+                "type": {
+                  "type": "ref",
+                  "name": "DiagnosticReading"
+                },
+                "required": false
+              },
+              "current": {
+                "type": {
+                  "type": "ref",
+                  "name": "DiagnosticReading"
+                },
+                "required": false
+              },
+              "tx_power": {
+                "type": {
+                  "type": "ref",
+                  "name": "DiagnosticReading"
+                },
+                "required": false
+              },
+              "rx_power": {
+                "type": {
+                  "type": "ref",
+                  "name": "DiagnosticReading"
+                },
+                "required": false
+              },
+              "transmit_fault_count": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple interfaces with SFP and QSFP transceivers including DDM diagnostics",
+      "input": "Ethernet1/1\n    transceiver is present\n    type is QSFP-40G-SR-BD\n    name is CISCO-AVAGO\n    part number is AFBR-79EQDZ-CS1\n    revision is 01\n    serial number is AVE204600M7\n    nominal bitrate is 10300 MBits/sec\n    Link length supported for 50/125um OM3 fiber is 100 m(s)\n    Link length supported for 50/125um OM4 fiber is 150 m(s)\n    cisco id is 13\n    cisco extended id number is 204\n    cisco part number is 10-3198-01\n    cisco product id is QSFP-40G-SR-BD\n    cisco version id is V01\n\n    SFP Detail Diagnostics Information (internal calibration)\n    ----------------------------------------------------------------------------\n                  Current              Alarms                  Warnings\n                  Measurement     High        Low         High          Low\n    ----------------------------------------------------------------------------\n    Temperature   35.41 C        75.00 C     -5.00 C     70.00 C       0.00 C\n    Voltage        3.28 V         3.63 V      2.97 V      3.46 V       3.13 V\n    Current        6.84 mA       10.00 mA     0.50 mA     9.00 mA      1.00 mA\n    Tx Power      -2.48 dBm       1.99 dBm   -6.00 dBm   0.99 dBm    -5.00 dBm\n    Rx Power      -2.20 dBm       1.99 dBm  -20.00 dBm   0.99 dBm   -17.00 dBm\n    Transmit Fault Count = 0\n    ----------------------------------------------------------------------------\n    Note: ++ high-alarm; + high-warning; -- low-alarm; - low-warning\n\nEthernet1/2\n    transceiver is present\n    type is SFP-10G-SR\n    name is CISCO-FINISAR\n    part number is FTLX8574D3BCL-C2\n    revision is A\n    serial number is FNS17451GUE\n    nominal bitrate is 10300 MBits/sec\n    Link length supported for 50/125um OM3 fiber is 300 m(s)\n    cisco id is 3\n    cisco extended id number is 4\n    cisco part number is 10-2415-03\n    cisco product id is SFP-10G-SR\n    cisco version id is V03\n\n    SFP Detail Diagnostics Information (internal calibration)\n    ----------------------------------------------------------------------------\n                  Current              Alarms                  Warnings\n                  Measurement     High        Low         High          Low\n    ----------------------------------------------------------------------------\n    Temperature   28.12 C        75.00 C     -5.00 C     70.00 C       0.00 C\n    Voltage        3.30 V         3.63 V      2.97 V      3.46 V       3.13 V\n    Current        8.22 mA       12.00 mA     1.00 mA    11.00 mA      2.00 mA\n    Tx Power      -1.99 dBm       1.99 dBm   -6.00 dBm   0.99 dBm    -5.00 dBm\n    Rx Power      -1.45 dBm       1.99 dBm  -26.98 dBm   0.99 dBm   -25.22 dBm\n    Transmit Fault Count = 0\n    ----------------------------------------------------------------------------\n    Note: ++ high-alarm; + high-warning; -- low-alarm; - low-warning\n\nEthernet1/3\n    transceiver is not present\n\nEthernet1/4\n    transceiver is present\n    type is SFP-H10GB-CU3M\n    name is CISCO\n    part number is SFP-H10GB-CU3M\n    revision is V02\n    serial number is MDM172702GX\n    nominal bitrate is 10300 MBits/sec\n    cisco id is 3\n    cisco extended id number is 4\n    cisco part number is 37-0961-03\n    cisco product id is SFP-H10GB-CU3M\n    cisco version id is V02\n\nEthernet2/1\n    transceiver is present\n    type is GLC-BX40-D-I\n    name is CISCO-EDGE\n    part number is BIDI1GSFP41BDSCI\n    revision is A\n    serial number is EO12408230007\n    nominal bitrate is 1300 MBits/sec\n    Link length supported for 9/125um fiber is 40 km\n    cisco id is 3\n    cisco extended id number is 4\n    cisco part number is 10-2940-01\n    cisco product id is GLC-BX40-D-I\n    cisco version id is V01\n\n    SFP Detail Diagnostics Information (internal calibration)\n    ----------------------------------------------------------------------------\n                  Current              Alarms                  Warnings\n                  Measurement     High        Low         High          Low\n    ----------------------------------------------------------------------------\n    Temperature   34.41 C        90.00 C    -45.00 C     85.00 C     -40.00 C\n    Voltage        3.22 V         3.80 V      2.70 V      3.70 V       2.80 V\n    Current        9.89 mA      100.00 mA     0.00 mA    90.00 mA      0.10 mA\n    Tx Power      -1.29 dBm       0.99 dBm   -6.00 dBm   0.00 dBm    -5.00 dBm\n    Rx Power      -9.26 dBm       0.99 dBm  -26.98 dBm   0.00 dBm   -25.22 dBm\n    Transmit Fault Count = 0\n    ----------------------------------------------------------------------------\n    Note: ++ high-alarm; + high-warning; -- low-alarm; - low-warning\n",
+      "expected": {
+        "interfaces": {
+          "Ethernet1/1": {
+            "type": "QSFP-40G-SR-BD",
+            "name": "CISCO-AVAGO",
+            "part_number": "AFBR-79EQDZ-CS1",
+            "revision": "01",
+            "serial_number": "AVE204600M7",
+            "nominal_bitrate_mbps": 10300,
+            "link_lengths": {
+              "50/125um OM3 fiber": "100 m(s)",
+              "50/125um OM4 fiber": "150 m(s)"
+            },
+            "cisco_id": "13",
+            "cisco_extended_id": "204",
+            "cisco_part_number": "10-3198-01",
+            "cisco_product_id": "QSFP-40G-SR-BD",
+            "cisco_version_id": "V01",
+            "calibration": "internal calibration",
+            "temperature": {
+              "current": 35.41,
+              "alarm_high": 75.0,
+              "alarm_low": -5.0,
+              "warning_high": 70.0,
+              "warning_low": 0.0
+            },
+            "voltage": {
+              "current": 3.28,
+              "alarm_high": 3.63,
+              "alarm_low": 2.97,
+              "warning_high": 3.46,
+              "warning_low": 3.13
+            },
+            "current": {
+              "current": 6.84,
+              "alarm_high": 10.0,
+              "alarm_low": 0.5,
+              "warning_high": 9.0,
+              "warning_low": 1.0
+            },
+            "tx_power": {
+              "current": -2.48,
+              "alarm_high": 1.99,
+              "alarm_low": -6.0,
+              "warning_high": 0.99,
+              "warning_low": -5.0
+            },
+            "rx_power": {
+              "current": -2.2,
+              "alarm_high": 1.99,
+              "alarm_low": -20.0,
+              "warning_high": 0.99,
+              "warning_low": -17.0
+            },
+            "transmit_fault_count": 0
+          },
+          "Ethernet1/2": {
+            "type": "SFP-10G-SR",
+            "name": "CISCO-FINISAR",
+            "part_number": "FTLX8574D3BCL-C2",
+            "revision": "A",
+            "serial_number": "FNS17451GUE",
+            "nominal_bitrate_mbps": 10300,
+            "link_lengths": {
+              "50/125um OM3 fiber": "300 m(s)"
+            },
+            "cisco_id": "3",
+            "cisco_extended_id": "4",
+            "cisco_part_number": "10-2415-03",
+            "cisco_product_id": "SFP-10G-SR",
+            "cisco_version_id": "V03",
+            "calibration": "internal calibration",
+            "temperature": {
+              "current": 28.12,
+              "alarm_high": 75.0,
+              "alarm_low": -5.0,
+              "warning_high": 70.0,
+              "warning_low": 0.0
+            },
+            "voltage": {
+              "current": 3.3,
+              "alarm_high": 3.63,
+              "alarm_low": 2.97,
+              "warning_high": 3.46,
+              "warning_low": 3.13
+            },
+            "current": {
+              "current": 8.22,
+              "alarm_high": 12.0,
+              "alarm_low": 1.0,
+              "warning_high": 11.0,
+              "warning_low": 2.0
+            },
+            "tx_power": {
+              "current": -1.99,
+              "alarm_high": 1.99,
+              "alarm_low": -6.0,
+              "warning_high": 0.99,
+              "warning_low": -5.0
+            },
+            "rx_power": {
+              "current": -1.45,
+              "alarm_high": 1.99,
+              "alarm_low": -26.98,
+              "warning_high": 0.99,
+              "warning_low": -25.22
+            },
+            "transmit_fault_count": 0
+          },
+          "Ethernet1/4": {
+            "type": "SFP-H10GB-CU3M",
+            "name": "CISCO",
+            "part_number": "SFP-H10GB-CU3M",
+            "revision": "V02",
+            "serial_number": "MDM172702GX",
+            "nominal_bitrate_mbps": 10300,
+            "cisco_id": "3",
+            "cisco_extended_id": "4",
+            "cisco_part_number": "37-0961-03",
+            "cisco_product_id": "SFP-H10GB-CU3M",
+            "cisco_version_id": "V02"
+          },
+          "Ethernet2/1": {
+            "type": "GLC-BX40-D-I",
+            "name": "CISCO-EDGE",
+            "part_number": "BIDI1GSFP41BDSCI",
+            "revision": "A",
+            "serial_number": "EO12408230007",
+            "nominal_bitrate_mbps": 1300,
+            "link_lengths": {
+              "9/125um fiber": "40 km"
+            },
+            "cisco_id": "3",
+            "cisco_extended_id": "4",
+            "cisco_part_number": "10-2940-01",
+            "cisco_product_id": "GLC-BX40-D-I",
+            "cisco_version_id": "V01",
+            "calibration": "internal calibration",
+            "temperature": {
+              "current": 34.41,
+              "alarm_high": 90.0,
+              "alarm_low": -45.0,
+              "warning_high": 85.0,
+              "warning_low": -40.0
+            },
+            "voltage": {
+              "current": 3.22,
+              "alarm_high": 3.8,
+              "alarm_low": 2.7,
+              "warning_high": 3.7,
+              "warning_low": 2.8
+            },
+            "current": {
+              "current": 9.89,
+              "alarm_high": 100.0,
+              "alarm_low": 0.0,
+              "warning_high": 90.0,
+              "warning_low": 0.1
+            },
+            "tx_power": {
+              "current": -1.29,
+              "alarm_high": 0.99,
+              "alarm_low": -6.0,
+              "warning_high": 0.0,
+              "warning_low": -5.0
+            },
+            "rx_power": {
+              "current": -9.26,
+              "alarm_high": 0.99,
+              "alarm_low": -26.98,
+              "warning_high": 0.0,
+              "warning_low": -25.22
+            },
+            "transmit_fault_count": 0
+          }
+        }
+      }
+    }
+  ]
+}

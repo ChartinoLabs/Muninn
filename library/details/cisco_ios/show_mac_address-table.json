@@ -1,0 +1,1365 @@
+{
+  "os": "cisco_ios",
+  "command": "show mac address-table",
+  "schema": {
+    "name": "ShowMacAddressTableResult",
+    "fields": {
+      "mac_table": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "MacTableRow",
+              "fields": {
+                "kind": {
+                  "type": {
+                    "type": "literal",
+                    "values": [
+                      "unicast",
+                      "multicast"
+                    ]
+                  },
+                  "required": false
+                },
+                "type": {
+                  "type": "str",
+                  "required": false
+                },
+                "ports": {
+                  "type": {
+                    "type": "list",
+                    "items": "str"
+                  },
+                  "required": false
+                },
+                "primary": {
+                  "type": "bool",
+                  "required": false
+                },
+                "age": {
+                  "type": "int",
+                  "required": false
+                },
+                "learn": {
+                  "type": "bool",
+                  "required": false
+                },
+                "protocols": {
+                  "type": {
+                    "type": "list",
+                    "items": "str"
+                  },
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "total_mac_addresses": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Standard MAC address table with static, dynamic, primary, multi-port, and special VLAN entries",
+      "input": "         Mac Address Table\n-------------------------------------------\n\nVlan    Mac Address       Type        Ports\n----    -----------       --------    -----\n All    0100.0cff.9999    STATIC      CPU\n All    0100.0cff.999a    STATIC      CPU\n  20    aaaa.bbff.8888    STATIC      Drop\n 100    3820.56ff.6f75    DYNAMIC     Po12\n 100    58bf.eaff.e508    STATIC      Vl100\n 100    ecbd.1dff.5f92    DYNAMIC     Drop\n 101    3820.56ff.6f75    DYNAMIC     Po12\n 101    3820.56ff.6fb3    DYNAMIC     Po12\n 101    58bf.eaff.e5f7    STATIC      Vl101\n * 10    aaaa.bbff.8888    STATIC      Gi1/0/8 Gi1/0/9\n                                      Vl101\nTotal Mac Addresses for this criterion: 10\n",
+      "expected": {
+        "mac_table": {
+          "all": {
+            "0100.0cff.9999": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "0100.0cff.999a": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            }
+          },
+          "20": {
+            "aaaa.bbff.8888": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "Drop"
+              ]
+            }
+          },
+          "100": {
+            "3820.56ff.6f75": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel12"
+              ]
+            },
+            "58bf.eaff.e508": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "VLAN100"
+              ]
+            },
+            "ecbd.1dff.5f92": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Drop"
+              ]
+            }
+          },
+          "101": {
+            "3820.56ff.6f75": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel12"
+              ]
+            },
+            "3820.56ff.6fb3": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel12"
+              ]
+            },
+            "58bf.eaff.e5f7": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "VLAN101"
+              ]
+            }
+          },
+          "10": {
+            "aaaa.bbff.8888": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "GigabitEthernet1/0/8",
+                "GigabitEthernet1/0/9",
+                "VLAN101"
+              ],
+              "primary": true
+            }
+          }
+        },
+        "total_mac_addresses": 10
+      }
+    },
+    {
+      "name": "Extended format with learn, age, primary markers, continuation lines, and special VLAN values",
+      "input": "show mac address-table\nLegend: * - primary entry\n        age - seconds since last seen\n        n/a - not available\n\n  vlan   mac address     type    learn     age              ports\n------+----------------+--------+-----+----------+--------------------------\n*  100  11aa.22ff.ee88    static  No           -   Router\n*  101  44dd.eeff.55bb   dynamic  Yes         10   Gi1/40\n*  102  aa11.bbff.ee55    static  Yes          -   Gi1/2,Gi1/4,Gi1/5,Gi1/6\n                                                   Gi1/9,Gi1/10,Gi1/11,Gi1/12\n                                                   Router,Switch\n*  200  dd44.55ff.55ee    static  Yes          -   Te1/1,Te1/2,Te1/4,Te1/8\n300  11aa.22ff.ee88    static  No           -   Router\n301  11aa.22ff.ee88    static  No           -   Drop\n*  ---  0000.0000.0000    static  No           -   Router\n*  400  0000.0000.0000    static  No           -   Po10\n                                                  Router\n\n        Total Mac Addresses for this criterion: 8\n",
+      "expected": {
+        "mac_table": {
+          "100": {
+            "11aa.22ff.ee88": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "Router"
+              ],
+              "primary": true,
+              "learn": false
+            }
+          },
+          "101": {
+            "44dd.eeff.55bb": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet1/40"
+              ],
+              "primary": true,
+              "age": 10,
+              "learn": true
+            }
+          },
+          "102": {
+            "aa11.bbff.ee55": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "GigabitEthernet1/2",
+                "GigabitEthernet1/4",
+                "GigabitEthernet1/5",
+                "GigabitEthernet1/6",
+                "GigabitEthernet1/9",
+                "GigabitEthernet1/10",
+                "GigabitEthernet1/11",
+                "GigabitEthernet1/12",
+                "Router",
+                "Switch"
+              ],
+              "primary": true,
+              "learn": true
+            }
+          },
+          "200": {
+            "dd44.55ff.55ee": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "TenGigabitEthernet1/1",
+                "TenGigabitEthernet1/2",
+                "TenGigabitEthernet1/4",
+                "TenGigabitEthernet1/8"
+              ],
+              "primary": true,
+              "learn": true
+            }
+          },
+          "300": {
+            "11aa.22ff.ee88": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "Router"
+              ],
+              "learn": false
+            }
+          },
+          "301": {
+            "11aa.22ff.ee88": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "Drop"
+              ],
+              "learn": false
+            }
+          },
+          "none": {
+            "0000.0000.0000": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "Router"
+              ],
+              "primary": true,
+              "learn": false
+            }
+          },
+          "400": {
+            "0000.0000.0000": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "Port-channel10",
+                "Router"
+              ],
+              "primary": true,
+              "learn": false
+            }
+          }
+        },
+        "total_mac_addresses": 8
+      }
+    },
+    {
+      "name": "Extended format with varied age values (0, 180, 300, 600, 1200, 3600), mixed TenGig and Port-channel interfaces",
+      "input": "Legend: * - primary entry\n        age - seconds since last seen\n        n/a - not available\n\n  vlan   mac address     type    learn     age              ports\n------+----------------+--------+-----+----------+--------------------------\n   666  30a3.30a3.a1c3   dynamic  Yes       1200   Te1/30\n   666  30a3.30a3.5ab8   dynamic  Yes          0   Po3\n    60  30a3.30a3.4d54   dynamic  Yes       3600   Te1/21\n*  777  0000.30a3.0167    static  No           -   Router\n   664  30a3.30a3.58b5   dynamic  Yes        180   Po6\n   667  30a3.30a3.daf5   dynamic  Yes          0   Te3/20\n   668  30a3.30a3.e401   dynamic  Yes        600   Po6\n   669  30a3.30a3.5a22   dynamic  Yes        300   Te3/20\n  2000  30a3.30a3.5a22   dynamic  Yes        300   Te3/20\n",
+      "expected": {
+        "mac_table": {
+          "666": {
+            "30a3.30a3.a1c3": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/30"
+              ],
+              "age": 1200,
+              "learn": true
+            },
+            "30a3.30a3.5ab8": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel3"
+              ],
+              "age": 0,
+              "learn": true
+            }
+          },
+          "60": {
+            "30a3.30a3.4d54": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/21"
+              ],
+              "age": 3600,
+              "learn": true
+            }
+          },
+          "777": {
+            "0000.30a3.0167": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "Router"
+              ],
+              "primary": true,
+              "learn": false
+            }
+          },
+          "664": {
+            "30a3.30a3.58b5": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel6"
+              ],
+              "age": 180,
+              "learn": true
+            }
+          },
+          "667": {
+            "30a3.30a3.daf5": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet3/20"
+              ],
+              "age": 0,
+              "learn": true
+            }
+          },
+          "668": {
+            "30a3.30a3.e401": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel6"
+              ],
+              "age": 600,
+              "learn": true
+            }
+          },
+          "669": {
+            "30a3.30a3.5a22": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet3/20"
+              ],
+              "age": 300,
+              "learn": true
+            }
+          },
+          "2000": {
+            "30a3.30a3.5a22": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet3/20"
+              ],
+              "age": 300,
+              "learn": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Unicast format with ip, ipx, assigned, other protocol bindings across multiple VLANs",
+      "input": "Unicast Entries\n vlan     mac address     type        protocols               port\n---------+---------------+--------+---------------------+-------------------------\n   1      30a3.30a3.a1c3   dynamic ip,ipx,assigned,other Port-channel1\n  99      30a3.30a3.a1c4   dynamic ip,ipx,assigned,other Port-channel1\n  99      30a3.30a3.a1c5   dynamic ip,ipx,assigned,other Port-channel1\n  99      30a3.30a3.a1c6   dynamic ip,ipx,assigned,other Port-channel1\n  99      30a3.30a3.a1c7   dynamic ip,ipx,assigned,other Port-channel1\n  99      30a3.30a3.a1c8   dynamic ip,ipx,assigned,other Port-channel1\n  99      30a3.30a3.a1c9   dynamic ip,ipx,assigned,other Port-channel1\n  99      30a3.30a3.a1ca   dynamic ip,ipx,assigned,other Port-channel1\n2000      30a3.30a3.a1ca   dynamic ip,ipx,assigned,other Port-channel1\n",
+      "expected": {
+        "mac_table": {
+          "1": {
+            "30a3.30a3.a1c3": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel1"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            }
+          },
+          "99": {
+            "30a3.30a3.a1c4": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel1"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "30a3.30a3.a1c5": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel1"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "30a3.30a3.a1c6": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel1"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "30a3.30a3.a1c7": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel1"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "30a3.30a3.a1c8": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel1"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "30a3.30a3.a1c9": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel1"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "30a3.30a3.a1ca": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel1"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            }
+          },
+          "2000": {
+            "30a3.30a3.a1ca": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel1"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Extended format with DFC/linecard section headers, same MAC across multiple linecards with different ages",
+      "input": "Legend: * - primary entry\n        age - seconds since last seen\n        n/a - not available\n        S - secure entry\n        R - router's gateway mac address entry\n        D - Duplicate mac address entry\n\nDisplaying entries from DFC switch [1] linecard [1]:\n\n     vlan   mac address    type   learn    age                 ports\n----+----+---------------+-------+-----+----------+-----------------------------\n      420 009e.1ead.eadd  dynamic  Yes      160     Po140\n\n\nDisplaying entries from DFC switch [1] linecard [2]:\n\n     vlan   mac address    type   learn    age                 ports\n----+----+---------------+-------+-----+----------+-----------------------------\n*     420 009e.1ead.eadd  dynamic  Yes        5     Po140\n\n\nDisplaying entries from DFC switch [1] linecard [3]:\n\n     vlan   mac address    type   learn    age                 ports\n----+----+---------------+-------+-----+----------+-----------------------------\n      420 009e.1ead.eadd  dynamic  Yes       45     Po140\n\n\nDisplaying entries from DFC switch [1] linecard [4]:\n\n     vlan   mac address    type   learn    age                 ports\n----+----+---------------+-------+-----+----------+-----------------------------\n      420 009e.1ead.eadd  dynamic  Yes      175     Po140\n\n\nDisplaying entries from active supervisor:\n\n     vlan   mac address    type   learn    age                 ports\n----+----+---------------+-------+-----+----------+-----------------------------\n      420 009e.1ead.eadd  dynamic  Yes       65     Po140\n\n\nDisplaying entries from DFC switch [2] linecard [1]:\n\n     vlan   mac address    type   learn    age                 ports\n----+----+---------------+-------+-----+----------+-----------------------------\n      420 009e.1ead.eadd  dynamic  Yes      140     Po140\n\n\nDisplaying entries from DFC switch [2] linecard [2]:\n\n     vlan   mac address    type   learn    age                 ports\n----+----+---------------+-------+-----+----------+-----------------------------\n*     420 009e.1ead.eadd  dynamic  Yes        5     Po140\n\n\nDisplaying entries from DFC switch [2] linecard [3]:\n\n     vlan   mac address    type   learn    age                 ports\n----+----+---------------+-------+-----+----------+-----------------------------\n      420 009e.1ead.eadd  dynamic  Yes      120     Po140\n\n\nDisplaying entries from DFC switch [2] linecard [4]:\n\n     vlan   mac address    type   learn    age                 ports\n----+----+---------------+-------+-----+----------+-----------------------------\n      420 009e.1ead.eadd  dynamic  Yes      180     Po140\n\n\nDisplaying entries from standby supervisor:\n\n     vlan   mac address    type   learn    age                 ports\n----+----+---------------+-------+-----+----------+-----------------------------\n      420 009e.1ead.eadd  dynamic  Yes      115     Po140\n",
+      "expected": {
+        "mac_table": {
+          "420": {
+            "009e.1ead.eadd": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel140"
+              ],
+              "age": 115,
+              "learn": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Standard format with broadcast MAC (ffff.ffff.ffff), STP MACs on All VLANs, many dynamic GigabitEthernet entries",
+      "input": "          Mac Address Table\n-------------------------------------------\n\nVlan    Mac Address       Type        Ports\n----    -----------       --------    -----\n All    0180.c200.000f    STATIC      CPU\n All    0180.c200.0010    STATIC      CPU\n All    ffff.ffff.ffff    STATIC      CPU\n   2    c869.cd54.1f71    DYNAMIC     Gi1/0/7\n   2    d052.a826.5d8d    DYNAMIC     Gi1/0/3\n   2    e46f.13a9.08e5    DYNAMIC     Gi1/0/36\n   2    e8eb.1190.d0ff    DYNAMIC     Gi1/0/37\n   2    fca1.831b.8ba9    DYNAMIC     Gi1/0/41\n   2    fcec.da7a.c955    DYNAMIC     Gi1/0/1\n   2    fcec.da80.0a3e    DYNAMIC     Gi1/0/22\n   2    fcec.da80.0af9    DYNAMIC     Gi1/0/41\nTotal Mac Addresses for this criterion: 11\n",
+      "expected": {
+        "mac_table": {
+          "all": {
+            "0180.c200.000f": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "0180.c200.0010": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "ffff.ffff.ffff": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            }
+          },
+          "2": {
+            "c869.cd54.1f71": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet1/0/7"
+              ]
+            },
+            "d052.a826.5d8d": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet1/0/3"
+              ]
+            },
+            "e46f.13a9.08e5": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet1/0/36"
+              ]
+            },
+            "e8eb.1190.d0ff": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet1/0/37"
+              ]
+            },
+            "fca1.831b.8ba9": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet1/0/41"
+              ]
+            },
+            "fcec.da7a.c955": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet1/0/1"
+              ]
+            },
+            "fcec.da80.0a3e": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet1/0/22"
+              ]
+            },
+            "fcec.da80.0af9": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet1/0/41"
+              ]
+            }
+          }
+        },
+        "total_mac_addresses": 11
+      }
+    },
+    {
+      "name": "Unicast and multicast sections with continuation lines, empty multicast ports, static Switch entry",
+      "input": "Unicast Entries\n vlan     mac address     type        protocols               port\n---------+---------------+--------+---------------------+-------------------------\n  46      0000.0c07.ac04   dynamic ip,ipx,assigned,other TenGigabitEthernet5/1\n  46      000c.ab66.1c75   dynamic ip,ipx,assigned,other GigabitEthernet1/15\n  46      ac9b.0acc.ff55   dynamic ip,ipx,assigned,other GigabitEthernet7/13\n  48      002a.101e.e33e   dynamic ip,ipx,assigned,other TenGigabitEthernet7/1\n  48      002a.1060.51da   dynamic ip,ipx,assigned,other TenGigabitEthernet1/10\n  48      0081.c4ba.d07f    static ip,ipx,assigned,other Switch\n\nMulticast Entries\n vlan     mac address     type    ports\n---------+---------------+-------+--------------------------------------------\n   1      ffff.ffff.ffff   system\n  46      ffff.ffff.ffff   system Gi1/13,Gi1/14,Gi1/15,Gi1/48,Gi7/13,Gi7/14\n                                  Gi7/15,Te5/1\n  48      ffff.ffff.ffff   system Te1/1,Te1/2,Te1/3,Te1/4,Te1/5,Te1/6,Te1/7\n                                  Te1/8,Te1/9,Te1/10,Te7/1,Te7/2,Te7/3,Te7/4\n                                  Te7/5,Te7/6,Te7/7,Te7/8,Te5/1,Switch\n  50      ffff.ffff.ffff   system Gi7/16,Gi7/18,Te5/1\n  51      ffff.ffff.ffff   system Gi3/14,Gi3/37,Gi3/38,Te7/11,Te5/1\n",
+      "expected": {
+        "mac_table": {
+          "46": {
+            "0000.0c07.ac04": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet5/1"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "000c.ab66.1c75": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet1/15"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "ac9b.0acc.ff55": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet7/13"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "ffff.ffff.ffff": {
+              "kind": "multicast",
+              "type": "system",
+              "ports": [
+                "GigabitEthernet1/13",
+                "GigabitEthernet1/14",
+                "GigabitEthernet1/15",
+                "GigabitEthernet1/48",
+                "GigabitEthernet7/13",
+                "GigabitEthernet7/14"
+              ]
+            }
+          },
+          "48": {
+            "002a.101e.e33e": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet7/1"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "002a.1060.51da": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/10"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "0081.c4ba.d07f": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "Switch"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "ffff.ffff.ffff": {
+              "kind": "multicast",
+              "type": "system",
+              "ports": [
+                "TenGigabitEthernet1/1",
+                "TenGigabitEthernet1/2",
+                "TenGigabitEthernet1/3",
+                "TenGigabitEthernet1/4",
+                "TenGigabitEthernet1/5",
+                "TenGigabitEthernet1/6",
+                "TenGigabitEthernet1/7",
+                "GigabitEthernet7/15",
+                "TenGigabitEthernet5/1"
+              ]
+            }
+          },
+          "1": {
+            "ffff.ffff.ffff": {
+              "kind": "multicast",
+              "type": "system",
+              "ports": []
+            }
+          },
+          "50": {
+            "ffff.ffff.ffff": {
+              "kind": "multicast",
+              "type": "system",
+              "ports": [
+                "GigabitEthernet7/16",
+                "GigabitEthernet7/18",
+                "TenGigabitEthernet5/1",
+                "TenGigabitEthernet1/8",
+                "TenGigabitEthernet1/9",
+                "TenGigabitEthernet1/10",
+                "TenGigabitEthernet7/1",
+                "TenGigabitEthernet7/2",
+                "TenGigabitEthernet7/3",
+                "TenGigabitEthernet7/4",
+                "TenGigabitEthernet7/5",
+                "TenGigabitEthernet7/6",
+                "TenGigabitEthernet7/7",
+                "TenGigabitEthernet7/8",
+                "TenGigabitEthernet5/1",
+                "Switch"
+              ]
+            }
+          },
+          "51": {
+            "ffff.ffff.ffff": {
+              "kind": "multicast",
+              "type": "system",
+              "ports": [
+                "GigabitEthernet3/14",
+                "GigabitEthernet3/37",
+                "GigabitEthernet3/38",
+                "TenGigabitEthernet7/11",
+                "TenGigabitEthernet5/1"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Extended format with multiple Earl supervisor sections, R flag entries, many VLANs and TenGig interfaces",
+      "input": "Legend: * - primary entry\n        age - seconds since last seen\n        n/a - not available\n        S - secure entry\n        R - router's gateway mac address entry\n        D - Duplicate mac address entry\n\nDisplaying entries from active supervisor: Earl [1]:\n\n      vlan   mac address    type   learn    age                 ports\n-----+----+---------------+-------+-----+----------+-----------------------------\n         40 a099.9b05.ffaf  dynamic  Yes      280     Te1/8\n   R     51 006c.bc1c.a865   static   No       -      Router\n         65 701f.5385.b307  dynamic  Yes      280     Te1/4\n         53 0050.b68e.1efd  dynamic  Yes      280     Te1/2\n *       49 70cd.604c.523c  dynamic  Yes        0     Te1/29\n         65 701f.5385.b318  dynamic  Yes      280     Te1/4\n         40 e033.8ebe.f149  dynamic  Yes      280     Te1/8\n         64 701f.534c.5bbd  dynamic  Yes      280     Te1/3\n         53 f80d.609c.cf1c  dynamic  Yes      280     Te1/2\n         64 701f.534c.5ba0  dynamic  Yes      280     Te1/3\n         44 006c.bc1c.6aa7  dynamic  Yes      280     Po1\n\n\nDisplaying entries from active supervisor: Earl [2]:\n\n      vlan   mac address    type   learn    age                 ports\n-----+----+---------------+-------+-----+----------+-----------------------------\n *       40 a099.9b05.ffaf  dynamic  Yes        0     Te1/8\n * R     51 006c.bc1c.a865   static   No       -      Router\n *       65 701f.5385.b307  dynamic  Yes       10     Te1/4\n *       53 0050.b68e.1efd  dynamic  Yes        0     Te1/2\n         49 70cd.604c.523c  dynamic  Yes      280     Te1/29\n *       65 701f.5385.b318  dynamic  Yes        0     Te1/4\n *       40 e033.8ebe.f149  dynamic  Yes       20     Te1/8\n *       45 58b1.0f81.4b32  dynamic  Yes      130     Te1/8\n *       40 6c96.cfdd.d70f  dynamic  Yes        0     Te1/8\n *       64 701f.534c.5bd3  dynamic  Yes        0     Te1/3\n *       65 701f.5385.b32b  dynamic  Yes       25     Te1/3\n *       68 701f.534c.5b60  dynamic  Yes       15     Te1/6\n *       64 701f.534c.5bbd  dynamic  Yes       15     Te1/3\n *       53 f80d.609c.cf1c  dynamic  Yes        5     Te1/2\n *       64 701f.534c.5ba0  dynamic  Yes        5     Te1/3\n         44 006c.bc1c.6aa7  dynamic  Yes      280     Po1\n *       69 0072.78de.5b2f  dynamic  Yes       15     Te1/6\n *       63 701f.5385.b259  dynamic  Yes       10     Te1/2\n *       40 acbc.32be.0a99  dynamic  Yes        0     Te1/8\n *       57 3ce1.a146.fd6e  dynamic  Yes        0     Te1/5\n\n\nDisplaying entries from active supervisor: Earl [3]:\n\n      vlan   mac address    type   learn    age                 ports\n-----+----+---------------+-------+-----+----------+-----------------------------\n         40 a099.9b05.ffaf  dynamic  Yes      280     Te1/8\n   R     51 006c.bc1c.a865   static   No       -      Router\n         65 701f.5385.b307  dynamic  Yes      280     Te1/4\n         53 0050.b68e.1efd  dynamic  Yes      280     Te1/2\n         49 70cd.604c.523c  dynamic  Yes      280     Te1/29\n         65 701f.5385.b318  dynamic  Yes      280     Te1/4\n         63 701f.534c.5ec1  dynamic  Yes      280     Te1/2\n         64 701f.534c.5bb5  dynamic  Yes      280     Te1/3\n         68 701f.534c.5b60  dynamic  Yes      280     Te1/6\n         64 701f.534c.5bbd  dynamic  Yes      280     Te1/3\n         53 f80d.609c.cf1c  dynamic  Yes      280     Te1/2\n         64 701f.534c.5ba0  dynamic  Yes      280     Te1/3\n *       44 006c.bc1c.6aa7  dynamic  Yes        0     Po1\n         69 0072.78de.5b2f  dynamic  Yes      280     Te1/6\n         63 701f.5385.b259  dynamic  Yes      280     Te1/2\n         40 acbc.32be.0a99  dynamic  Yes      280     Te1/8\n         57 3ce1.a146.fd6e  dynamic  Yes      280     Te1/5\n         67 701f.534c.643e  dynamic  Yes      280     Te1/5\n",
+      "expected": {
+        "mac_table": {
+          "40": {
+            "a099.9b05.ffaf": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/8"
+              ],
+              "age": 280,
+              "learn": true
+            },
+            "e033.8ebe.f149": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/8"
+              ],
+              "primary": true,
+              "age": 20,
+              "learn": true
+            },
+            "6c96.cfdd.d70f": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/8"
+              ],
+              "primary": true,
+              "age": 0,
+              "learn": true
+            },
+            "acbc.32be.0a99": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/8"
+              ],
+              "age": 280,
+              "learn": true
+            }
+          },
+          "65": {
+            "701f.5385.b307": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/4"
+              ],
+              "age": 280,
+              "learn": true
+            },
+            "701f.5385.b318": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/4"
+              ],
+              "age": 280,
+              "learn": true
+            },
+            "701f.5385.b32b": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/3"
+              ],
+              "primary": true,
+              "age": 25,
+              "learn": true
+            }
+          },
+          "53": {
+            "0050.b68e.1efd": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/2"
+              ],
+              "age": 280,
+              "learn": true
+            },
+            "f80d.609c.cf1c": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/2"
+              ],
+              "age": 280,
+              "learn": true
+            }
+          },
+          "49": {
+            "70cd.604c.523c": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/29"
+              ],
+              "age": 280,
+              "learn": true
+            }
+          },
+          "64": {
+            "701f.534c.5bbd": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/3"
+              ],
+              "age": 280,
+              "learn": true
+            },
+            "701f.534c.5ba0": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/3"
+              ],
+              "age": 280,
+              "learn": true
+            },
+            "701f.534c.5bd3": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/3"
+              ],
+              "primary": true,
+              "age": 0,
+              "learn": true
+            },
+            "701f.534c.5bb5": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/3"
+              ],
+              "age": 280,
+              "learn": true
+            }
+          },
+          "44": {
+            "006c.bc1c.6aa7": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel1"
+              ],
+              "primary": true,
+              "age": 0,
+              "learn": true
+            }
+          },
+          "45": {
+            "58b1.0f81.4b32": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/8"
+              ],
+              "primary": true,
+              "age": 130,
+              "learn": true
+            }
+          },
+          "68": {
+            "701f.534c.5b60": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/6"
+              ],
+              "age": 280,
+              "learn": true
+            }
+          },
+          "69": {
+            "0072.78de.5b2f": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/6"
+              ],
+              "age": 280,
+              "learn": true
+            }
+          },
+          "63": {
+            "701f.5385.b259": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/2"
+              ],
+              "age": 280,
+              "learn": true
+            },
+            "701f.534c.5ec1": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/2"
+              ],
+              "age": 280,
+              "learn": true
+            }
+          },
+          "57": {
+            "3ce1.a146.fd6e": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/5"
+              ],
+              "age": 280,
+              "learn": true
+            }
+          },
+          "67": {
+            "701f.534c.643e": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "TenGigabitEthernet1/5"
+              ],
+              "age": 280,
+              "learn": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Unicast and multicast sections with static Switch entries, many Port-channel and GigabitEthernet interfaces, continuation lines in multicast",
+      "input": "Unicast Entries\n vlan     mac address     type        protocols               port\n---------+---------------+--------+---------------------+-------------------------\n  10      0002.d180.67fb   dynamic ip,ipx,assigned,other Port-channel15\n  10      0012.e160.12ad   dynamic ip,ipx,assigned,other Port-channel15\n  10      0012.b67e.1212   dynamic ip,ipx,assigned,other GigabitEthernet0/48\n  10      0012.12da.1212   dynamic ip,ipx,assigned,other GigabitEthernet0/44\n  10      1212.1263.1212   dynamic ip,ipx,assigned,other GigabitEthernet0/42\n  10      1313.1212.1234   dynamic ip,ipx,assigned,other GigabitEthernet0/37\n  10      1212.1281.1313   dynamic ip,ipx,assigned,other Port-channel82\n  10      1234.5678.abcd   dynamic ip,ipx,assigned,other Port-channel100\n  10      abcd.efab.8641   dynamic ip,ipx,assigned,other GigabitEthernet0/37\n  10      dcba.beef.1236   dynamic ip,ipx,assigned,other GigabitEthernet0/39\n  10      6789.feed.abc1   dynamic ip,ipx,assigned,other GigabitEthernet0/44\n2099      5421.1222.9988   dynamic ip,ipx,assigned,other GigabitEthernet0/48\n2099      deed.feed.fabd    static ip,ipx,assigned,other Switch\n\nMulticast Entries\n vlan     mac address     type    ports\n---------+---------------+-------+--------------------------------------------\n   1      0100.0ccc.ccce   system Po100,Po15,Po82\n   1      ffff.ffff.ffff   system Po100,Po15,Po82\n  10      ffff.ffff.ffff   system Gi0/2,Gi0/3,Gi0/5,Gi0/7,Gi0/8,Gi0/9,Gi0/12\n                                  Gi0/13,Gi0/14,Gi0/15,Gi0/16,Gi0/18,Gi9/23\n                                  Switch,Po100,Po15,Po82\n  15      ffff.ffff.ffff   system Gi1/2,Gi1/3,Gi1/5,Gi1/7,Gi1/8,Gi1/9,Gi1/12\n                                  Gi8/43,Switch,Po100,Po2,Po15,Po82\n 790      ffff.ffff.ffff   system Switch,Po100,Po15,Po82\nGi1/48    ffff.ffff.ffff   system Gi1/48,Switch\n2060      ffff.ffff.ffff   system Gi8/48,Switch,Po100,Po15,Po82\n2061      ffff.ffff.ffff   system Gi7/48,Switch,Po100,Po15,Po82\n2099      ffff.ffff.ffff   system Gi7/48,Switch,Po100,Po15,Po82\n",
+      "expected": {
+        "mac_table": {
+          "10": {
+            "0002.d180.67fb": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel15"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "0012.e160.12ad": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel15"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "0012.b67e.1212": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet0/48"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "0012.12da.1212": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet0/44"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "1212.1263.1212": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet0/42"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "1313.1212.1234": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet0/37"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "1212.1281.1313": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel82"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "1234.5678.abcd": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel100"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "abcd.efab.8641": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet0/37"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "dcba.beef.1236": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet0/39"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "6789.feed.abc1": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet0/44"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "ffff.ffff.ffff": {
+              "kind": "multicast",
+              "type": "system",
+              "ports": [
+                "GigabitEthernet0/2",
+                "GigabitEthernet0/3",
+                "GigabitEthernet0/5",
+                "GigabitEthernet0/7",
+                "GigabitEthernet0/8",
+                "GigabitEthernet0/9",
+                "GigabitEthernet0/12"
+              ]
+            }
+          },
+          "2099": {
+            "5421.1222.9988": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet0/48"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "deed.feed.fabd": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "Switch"
+              ],
+              "protocols": [
+                "ip",
+                "ipx",
+                "assigned",
+                "other"
+              ]
+            },
+            "ffff.ffff.ffff": {
+              "kind": "multicast",
+              "type": "system",
+              "ports": [
+                "GigabitEthernet7/48",
+                "Switch",
+                "Port-channel100",
+                "Port-channel15",
+                "Port-channel82"
+              ]
+            }
+          },
+          "1": {
+            "0100.0ccc.ccce": {
+              "kind": "multicast",
+              "type": "system",
+              "ports": [
+                "Port-channel100",
+                "Port-channel15",
+                "Port-channel82"
+              ]
+            },
+            "ffff.ffff.ffff": {
+              "kind": "multicast",
+              "type": "system",
+              "ports": [
+                "Port-channel100",
+                "Port-channel15",
+                "Port-channel82"
+              ]
+            }
+          },
+          "15": {
+            "ffff.ffff.ffff": {
+              "kind": "multicast",
+              "type": "system",
+              "ports": [
+                "GigabitEthernet1/2",
+                "GigabitEthernet1/3",
+                "GigabitEthernet1/5",
+                "GigabitEthernet1/7",
+                "GigabitEthernet1/8",
+                "GigabitEthernet1/9",
+                "GigabitEthernet1/12",
+                "GigabitEthernet0/13",
+                "GigabitEthernet0/14",
+                "GigabitEthernet0/15",
+                "GigabitEthernet0/16",
+                "GigabitEthernet0/18",
+                "GigabitEthernet9/23",
+                "Switch",
+                "Port-channel100",
+                "Port-channel15",
+                "Port-channel82"
+              ]
+            }
+          },
+          "790": {
+            "ffff.ffff.ffff": {
+              "kind": "multicast",
+              "type": "system",
+              "ports": [
+                "Switch",
+                "Port-channel100",
+                "Port-channel15",
+                "Port-channel82",
+                "GigabitEthernet8/43",
+                "Switch",
+                "Port-channel100",
+                "Port-channel2",
+                "Port-channel15",
+                "Port-channel82"
+              ]
+            }
+          },
+          "2060": {
+            "ffff.ffff.ffff": {
+              "kind": "multicast",
+              "type": "system",
+              "ports": [
+                "GigabitEthernet8/48",
+                "Switch",
+                "Port-channel100",
+                "Port-channel15",
+                "Port-channel82"
+              ]
+            }
+          },
+          "2061": {
+            "ffff.ffff.ffff": {
+              "kind": "multicast",
+              "type": "system",
+              "ports": [
+                "GigabitEthernet7/48",
+                "Switch",
+                "Port-channel100",
+                "Port-channel15",
+                "Port-channel82"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Standard format with VLAN SVI ports, broadcast MAC, small table with mixed static and dynamic",
+      "input": "          Mac Address Table\n-------------------------------------------\n\nVlan    Mac Address       Type        Ports\n----    -----------       --------    -----\n All    0100.0ccc.cccc    STATIC      CPU\n All    ffff.ffff.ffff    STATIC      CPU\n   1    28af.fd99.82c7    STATIC      Vl1\n 87    0019.ab11.1111    DYNAMIC     Gi1/1/1\n 87    12db.dbdb.1919    STATIC      Vl87\n 87    1818.1818.1818    DYNAMIC     Gi1/1/1\n\nTotal Mac Addresses for this criterion: 87\n",
+      "expected": {
+        "mac_table": {
+          "all": {
+            "0100.0ccc.cccc": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "ffff.ffff.ffff": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            }
+          },
+          "1": {
+            "28af.fd99.82c7": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "VLAN1"
+              ]
+            }
+          },
+          "87": {
+            "0019.ab11.1111": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet1/1/1"
+              ]
+            },
+            "12db.dbdb.1919": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "VLAN87"
+              ]
+            },
+            "1818.1818.1818": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet1/1/1"
+              ]
+            }
+          }
+        },
+        "total_mac_addresses": 87
+      }
+    }
+  ]
+}

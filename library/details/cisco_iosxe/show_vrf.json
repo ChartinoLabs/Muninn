@@ -1,0 +1,186 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show vrf",
+  "schema": {
+    "name": "ShowVrfResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfEntry",
+            "fields": {
+              "interfaces": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": true
+              },
+              "protocols": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              },
+              "default_rd": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple VRFs with continuation interfaces",
+      "input": "  Name                             Default RD          Protocols   Interfaces\n  gy3                              65201:13            ipv4        Vl13\n                                                                   Vl913\n                                                                   Vl953\n  gy31                             65201:31            ipv4        Vl31\n                                                                   Vl931\n                                                                   Vl971\n  vpn5                             65201:5             ipv4        Vl5\n                                                                   Vl905\n                                                                   Vl945\n  vpn6                             65201:6             ipv4        Lo6\n                                                                   Vl6\n                                                                   Vl906\n",
+      "expected": {
+        "vrfs": {
+          "gy3": {
+            "default_rd": "65201:13",
+            "interfaces": [
+              "VLAN13",
+              "VLAN913",
+              "VLAN953"
+            ],
+            "protocols": [
+              "ipv4"
+            ]
+          },
+          "gy31": {
+            "default_rd": "65201:31",
+            "interfaces": [
+              "VLAN31",
+              "VLAN931",
+              "VLAN971"
+            ],
+            "protocols": [
+              "ipv4"
+            ]
+          },
+          "vpn5": {
+            "default_rd": "65201:5",
+            "interfaces": [
+              "VLAN5",
+              "VLAN905",
+              "VLAN945"
+            ],
+            "protocols": [
+              "ipv4"
+            ]
+          },
+          "vpn6": {
+            "default_rd": "65201:6",
+            "interfaces": [
+              "Loopback6",
+              "VLAN6",
+              "VLAN906"
+            ],
+            "protocols": [
+              "ipv4"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": "  Name                             Default RD            Protocols   Interfaces\n  BLUE                             65000:200             ipv4        Lo20\n                                                                     Gi2.20\n                                                                     Gi3.20\n  RED                              65000:100             ipv4        Lo10\n                                                                     Gi2.10\n                                                                     Gi3.10\n  management                       <not set>             ipv4        Gi1\n",
+      "expected": {
+        "vrfs": {
+          "BLUE": {
+            "interfaces": [
+              "Loopback20",
+              "GigabitEthernet2.20",
+              "GigabitEthernet3.20"
+            ],
+            "default_rd": "65000:200",
+            "protocols": [
+              "ipv4"
+            ]
+          },
+          "RED": {
+            "interfaces": [
+              "Loopback10",
+              "GigabitEthernet2.10",
+              "GigabitEthernet3.10"
+            ],
+            "default_rd": "65000:100",
+            "protocols": [
+              "ipv4"
+            ]
+          },
+          "management": {
+            "interfaces": [
+              "GigabitEthernet1"
+            ],
+            "protocols": [
+              "ipv4"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "VRFs with no interfaces assigned and not-set RD",
+      "input": "Name                             Default RD            Protocols   Interfaces\n  BLDGMGMT                         172.22.111.32:104\n  MANAGEMENT                       172.22.111.32:117     ipv4        Lo0\n",
+      "expected": {
+        "vrfs": {
+          "BLDGMGMT": {
+            "default_rd": "172.22.111.32:104",
+            "interfaces": []
+          },
+          "MANAGEMENT": {
+            "default_rd": "172.22.111.32:117",
+            "interfaces": [
+              "Loopback0"
+            ],
+            "protocols": [
+              "ipv4"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "VRFs with mixed protocols including ipv4 and ipv6",
+      "input": "  Name                             Default RD            Protocols   Interfaces\n  OOB-MGMT                         <not set>             ipv4        Gi0/3\n  vpn21                            65201:21              ipv4,ipv6   Gi0/0.21\n                                                                     Gi0/1.21\n  vpn22                            65201:22              ipv4\n",
+      "expected": {
+        "vrfs": {
+          "OOB-MGMT": {
+            "interfaces": [
+              "GigabitEthernet0/3"
+            ],
+            "protocols": [
+              "ipv4"
+            ]
+          },
+          "vpn21": {
+            "default_rd": "65201:21",
+            "interfaces": [
+              "GigabitEthernet0/0.21",
+              "GigabitEthernet0/1.21"
+            ],
+            "protocols": [
+              "ipv4",
+              "ipv6"
+            ]
+          },
+          "vpn22": {
+            "default_rd": "65201:22",
+            "interfaces": [],
+            "protocols": [
+              "ipv4"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

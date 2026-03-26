@@ -1,0 +1,256 @@
+{
+  "os": "cisco_nxos",
+  "command": "show cdp neighbors",
+  "schema": {
+    "name": "ShowCdpNeighborsResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "CdpNeighborEntry",
+              "fields": {
+                "hold_time": {
+                  "type": "int",
+                  "required": true
+                },
+                "platform": {
+                  "type": "str",
+                  "required": true
+                },
+                "port_id": {
+                  "type": "str",
+                  "required": true
+                },
+                "capabilities": {
+                  "type": "str",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_entries": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic CDP neighbors with single-line entries",
+      "input": "Capability Codes: R - Router, T - Trans-Bridge, B - Source-Route-Bridge\n                  S - Switch, H - Host, I - IGMP, r - Repeater,\n                  V - VoIP-Phone, D - Remotely-Managed-Device,\n                  s - Supports-STP-Dispute\n\nDevice-ID          Local Intrfce  Hldtme Capability  Platform      Port ID\nPERIMETER           mgmt0          179    R S I     WS-C3750-48TS Fas1/0/9\nswor96(SSI13110AAQ) Eth1/17 165 S I s N5K-C5010P-BF Eth1/19\n\nTotal entries displayed: 2\n",
+      "expected": {
+        "neighbors": {
+          "mgmt0": {
+            "PERIMETER": {
+              "hold_time": 179,
+              "capabilities": "R S I",
+              "platform": "WS-C3750-48TS",
+              "port_id": "FastEthernet1/0/9"
+            }
+          },
+          "Ethernet1/17": {
+            "swor96(SSI13110AAQ)": {
+              "hold_time": 165,
+              "capabilities": "S I s",
+              "platform": "N5K-C5010P-BF",
+              "port_id": "Ethernet1/19"
+            }
+          }
+        },
+        "total_entries": 2
+      }
+    },
+    {
+      "name": "CDP neighbors with device ID wrapped to next line",
+      "input": "Capability Codes: R - Router, T - Trans-Bridge, B - Source-Route-Bridge\n                  S - Switch, H - Host, I - IGMP, r - Repeater,\n                  V - VoIP-Phone, D - Remotely-Managed-Device,\n                  s - Supports-STP-Dispute\n\nDevice-ID          Local Intrfce  Hldtme Capability  Platform      Port ID\nN9K2_TEST.lab.com(SAL1819S6BE)\n                    Eth1/1         133    R S s     N9K-C9396PX   Eth1/1\nN9K2_TEST.lab.com(SAL1819S6BE)\n                    Eth1/2         154    R S s     N9K-C9396PX   Eth1/2\n",
+      "expected": {
+        "neighbors": {
+          "Ethernet1/1": {
+            "N9K2_TEST.lab.com(SAL1819S6BE)": {
+              "hold_time": 133,
+              "capabilities": "R S s",
+              "platform": "N9K-C9396PX",
+              "port_id": "Ethernet1/1"
+            }
+          },
+          "Ethernet1/2": {
+            "N9K2_TEST.lab.com(SAL1819S6BE)": {
+              "hold_time": 154,
+              "capabilities": "R S s",
+              "platform": "N9K-C9396PX",
+              "port_id": "Ethernet1/2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Single-line entries with compact format and mixed capability codes",
+      "input": "Capability Codes:\n        R - Router, T - Trans-Bridge, B - Source-Route-Bridge\n        S - Switch, H - Host, I - IGMP, r - Repeater,\n        V - VoIP-Phone, D - Remotely-Managed-Device,\n        s - Supports-STP-Dispute\nDevice ID              Local Intrfce   Hldtme  Capability  Platform      Port ID\nSwitch mgmt0 163 S I WS-C2960-24TC Fas0/21\nswordfish-6k-2 Eth3/2 149 R S I WS-C6506-E Gig1/38\n",
+      "expected": {
+        "neighbors": {
+          "mgmt0": {
+            "Switch": {
+              "hold_time": 163,
+              "platform": "WS-C2960-24TC",
+              "port_id": "FastEthernet0/21",
+              "capabilities": "S I"
+            }
+          },
+          "Ethernet3/2": {
+            "swordfish-6k-2": {
+              "hold_time": 149,
+              "platform": "WS-C6506-E",
+              "port_id": "GigabitEthernet1/38",
+              "capabilities": "R S I"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "All wrapped device IDs including mgmt0 and Nexus 5K serial numbers",
+      "input": "Capability Codes: R - Router, T - Trans-Bridge, B - Source-Route-Bridge\n                  S - Switch, H - Host, I - IGMP, r - Repeater,\n                  V - VoIP-Phone, D - Remotely-Managed-Device,\n                  s - Supports-STP-Dispute\nDevice-ID           Local Intrfce    Hldtme Capability    Platform        Port ID\nMgmt-switch\n                    mgmt0             148    R S I         WS-C4948-10GE Gig1/37\nswitch88(FOX1518GRE6)\n                    Eth1/25           164    R S I s       N5K-C5596UP   Eth1/25\nswitch89(FOX1518GQJ2)\n                    Eth1/26           163    R S I s       N5K-C5596UP   Eth1/25\n",
+      "expected": {
+        "neighbors": {
+          "mgmt0": {
+            "Mgmt-switch": {
+              "hold_time": 148,
+              "platform": "WS-C4948-10GE",
+              "port_id": "GigabitEthernet1/37",
+              "capabilities": "R S I"
+            }
+          },
+          "Ethernet1/25": {
+            "switch88(FOX1518GRE6)": {
+              "hold_time": 164,
+              "platform": "N5K-C5596UP",
+              "port_id": "Ethernet1/25",
+              "capabilities": "R S I s"
+            }
+          },
+          "Ethernet1/26": {
+            "switch89(FOX1518GQJ2)": {
+              "hold_time": 163,
+              "platform": "N5K-C5596UP",
+              "port_id": "Ethernet1/25",
+              "capabilities": "R S I s"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Large output with mixed single-line and wrapped entries, non-interface port IDs, and Ethernet100/x/x slots",
+      "input": "Capability Codes: R - Router, T - Trans-Bridge, B - Source-Route-Bridge\n                  S - Switch, H - Host, I - IGMP, r - Repeater,\n                  V - VoIP-Phone, D - Remotely-Managed-Device,\n                  s - Supports-STP-Dispute\n\n\nDevice-ID             Local Intrfce Hldtme Capability  Platform      Port ID\nbkcmnasa3a2h.na.tech.cnb\n                    mgmt0          165    S I       WS-C2960X-48L Gig1/0/9\nbkcmnasa3a20.na.tech.cnb\n                    Eth1/1         138    R S I     WS-C4506-E    Ten1/1\nkanntp01-01         Eth1/3         168    H         FAS8020       e0c\nkanntp01-01         Eth1/4         168    H         FAS8020       e0d\nbkcmnwca0001.na.tech.cnb\n                    Eth1/11        139    R I       C9800-40-K9   Ten0/0/1\nbkcmnwca0001.na.tech.cnb\n                    Eth1/12        149    R I       C9800-40-K9   Ten0/0/0\nbkcmnasa3a2d(SSI173500V1)\n                    Eth1/31        122    R S I s   N5K-C5548UP   Eth1/31\nbkcmnasa3a2d(SSI173500V1)\n                    Eth1/32        122    R S I s   N5K-C5548UP   Eth1/32\nkanntp01-01         Eth100/1/1     168    H         FAS8020       e0e\nbkcmnwca3a2a        Eth100/1/3     125    H         AIR-CT5508-K9 Gig0/0/2\nbkcmnwca3a2a        Eth100/1/4     125    H         AIR-CT5508-K9 Gig0/0/3\nkanntp02-02         Eth100/1/10    127    H         FAS8200       e0M\n",
+      "expected": {
+        "neighbors": {
+          "mgmt0": {
+            "bkcmnasa3a2h.na.tech.cnb": {
+              "hold_time": 165,
+              "platform": "WS-C2960X-48L",
+              "port_id": "GigabitEthernet1/0/9",
+              "capabilities": "S I"
+            }
+          },
+          "Ethernet1/1": {
+            "bkcmnasa3a20.na.tech.cnb": {
+              "hold_time": 138,
+              "platform": "WS-C4506-E",
+              "port_id": "TenGigabitEthernet1/1",
+              "capabilities": "R S I"
+            }
+          },
+          "Ethernet1/3": {
+            "kanntp01-01": {
+              "hold_time": 168,
+              "platform": "FAS8020",
+              "port_id": "e0c",
+              "capabilities": "H"
+            }
+          },
+          "Ethernet1/4": {
+            "kanntp01-01": {
+              "hold_time": 168,
+              "platform": "FAS8020",
+              "port_id": "e0d",
+              "capabilities": "H"
+            }
+          },
+          "Ethernet1/11": {
+            "bkcmnwca0001.na.tech.cnb": {
+              "hold_time": 139,
+              "platform": "C9800-40-K9",
+              "port_id": "TenGigabitEthernet0/0/1",
+              "capabilities": "R I"
+            }
+          },
+          "Ethernet1/12": {
+            "bkcmnwca0001.na.tech.cnb": {
+              "hold_time": 149,
+              "platform": "C9800-40-K9",
+              "port_id": "TenGigabitEthernet0/0/0",
+              "capabilities": "R I"
+            }
+          },
+          "Ethernet1/31": {
+            "bkcmnasa3a2d(SSI173500V1)": {
+              "hold_time": 122,
+              "platform": "N5K-C5548UP",
+              "port_id": "Ethernet1/31",
+              "capabilities": "R S I s"
+            }
+          },
+          "Ethernet1/32": {
+            "bkcmnasa3a2d(SSI173500V1)": {
+              "hold_time": 122,
+              "platform": "N5K-C5548UP",
+              "port_id": "Ethernet1/32",
+              "capabilities": "R S I s"
+            }
+          },
+          "Ethernet100/1/1": {
+            "kanntp01-01": {
+              "hold_time": 168,
+              "platform": "FAS8020",
+              "port_id": "e0e",
+              "capabilities": "H"
+            }
+          },
+          "Ethernet100/1/3": {
+            "bkcmnwca3a2a": {
+              "hold_time": 125,
+              "platform": "AIR-CT5508-K9",
+              "port_id": "GigabitEthernet0/0/2",
+              "capabilities": "H"
+            }
+          },
+          "Ethernet100/1/4": {
+            "bkcmnwca3a2a": {
+              "hold_time": 125,
+              "platform": "AIR-CT5508-K9",
+              "port_id": "GigabitEthernet0/0/3",
+              "capabilities": "H"
+            }
+          },
+          "Ethernet100/1/10": {
+            "kanntp02-02": {
+              "hold_time": 127,
+              "platform": "FAS8200",
+              "port_id": "e0M",
+              "capabilities": "H"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

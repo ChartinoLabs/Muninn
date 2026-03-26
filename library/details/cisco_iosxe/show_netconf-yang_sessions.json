@@ -1,0 +1,58 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show netconf-yang sessions",
+  "schema": {
+    "name": "ShowNetconfYangSessionsResult",
+    "fields": {
+      "session_count": {
+        "type": "int",
+        "required": true
+      },
+      "sessions": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "NetconfYangSessionEntry",
+            "fields": {
+              "transport": {
+                "type": "str",
+                "required": true
+              },
+              "username": {
+                "type": "str",
+                "required": true
+              },
+              "source_host": {
+                "type": "str",
+                "required": true
+              },
+              "global_lock": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "NETCONF-YANG management sessions list (issue",
+      "input": "R: Global-lock on running datastore\nC: Global-lock on candidate datastore\nS: Global-lock on startup datastore\n\nNumber of sessions : 1\n\nsession-id  transport    username             source-host            global-lock\n--------------------------------------------------------------------------------\n24          netconf-ssh  admin                10.69.35.35             None\n",
+      "expected": {
+        "session_count": 1,
+        "sessions": {
+          "24": {
+            "transport": "netconf-ssh",
+            "username": "admin",
+            "source_host": "10.69.35.35",
+            "global_lock": "None"
+          }
+        }
+      }
+    }
+  ]
+}

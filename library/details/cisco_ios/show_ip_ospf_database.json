@@ -1,0 +1,312 @@
+{
+  "os": "cisco_ios",
+  "command": "show ip ospf database",
+  "schema": {
+    "name": "ShowIpOspfDatabaseResult",
+    "fields": {
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ProcessEntry",
+            "fields": {
+              "router_id": {
+                "type": "str",
+                "required": true
+              },
+              "sections": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "list",
+                    "items": {
+                      "name": "LsaTypeSection",
+                      "fields": {
+                        "area": {
+                          "type": "str",
+                          "required": false
+                        },
+                        "lsas": {
+                          "type": {
+                            "type": "dict",
+                            "key": "str",
+                            "value": {
+                              "type": "dict",
+                              "key": "str",
+                              "value": {
+                                "name": "LsaEntry",
+                                "fields": {
+                                  "adv_router": {
+                                    "type": "str",
+                                    "required": true
+                                  },
+                                  "age": {
+                                    "type": "int",
+                                    "required": true
+                                  },
+                                  "seq": {
+                                    "type": "str",
+                                    "required": true
+                                  },
+                                  "checksum": {
+                                    "type": "str",
+                                    "required": true
+                                  },
+                                  "link_count": {
+                                    "type": "int",
+                                    "required": false
+                                  },
+                                  "tag": {
+                                    "type": "int",
+                                    "required": false
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "required": true
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Single process with Router, Net, Summary Net, and External LSA types",
+      "input": "\n            OSPF Router with ID (10.4.1.1) (Process ID 1)\n\n                Router Link States (Area 0)\n\nLink ID         ADV Router      Age         Seq#       Checksum Link count\n10.4.1.1        10.4.1.1        742         0x80000039 0x0048E3 3\n10.16.2.2       10.16.2.2       1520        0x80000036 0x004CE0 5\n\n                Net Link States (Area 0)\n\nLink ID         ADV Router      Age         Seq#       Checksum\n10.1.2.1        10.4.1.1        742         0x80000034 0x000E91\n10.1.4.4        10.64.4.4       1486        0x80000037 0x003CC7\n\n                Summary Net Link States (Area 0)\n\nLink ID         ADV Router      Age         Seq#       Checksum\n10.186.5.0      10.4.1.1        273         0x80000031 0x0019DD\n10.229.11.11    10.4.1.1        273         0x80000030 0x00F005\n\n                Summary ASB Link States (Area 0)\n\nLink ID         ADV Router      Age         Seq#       Checksum\n10.229.11.11    10.4.1.1        273         0x80000030 0x00D91A\n\n                Type-5 AS External Link States\n\nLink ID         ADV Router      Age         Seq#       Checksum Tag\n20.1.0.0        10.229.11.11    243         0x80000001 0x003B3B 0\n44.44.44.44     10.64.4.4       1486        0x80000001 0x00D218 0\n",
+      "expected": {
+        "processes": {
+          "1": {
+            "router_id": "10.4.1.1",
+            "sections": {
+              "Net": [
+                {
+                  "area": "0",
+                  "lsas": {
+                    "10.1.2.1": {
+                      "10.4.1.1": {
+                        "adv_router": "10.4.1.1",
+                        "age": 742,
+                        "checksum": "0x000E91",
+                        "seq": "0x80000034"
+                      }
+                    },
+                    "10.1.4.4": {
+                      "10.64.4.4": {
+                        "adv_router": "10.64.4.4",
+                        "age": 1486,
+                        "checksum": "0x003CC7",
+                        "seq": "0x80000037"
+                      }
+                    }
+                  }
+                }
+              ],
+              "Router": [
+                {
+                  "area": "0",
+                  "lsas": {
+                    "10.16.2.2": {
+                      "10.16.2.2": {
+                        "adv_router": "10.16.2.2",
+                        "age": 1520,
+                        "checksum": "0x004CE0",
+                        "link_count": 5,
+                        "seq": "0x80000036"
+                      }
+                    },
+                    "10.4.1.1": {
+                      "10.4.1.1": {
+                        "adv_router": "10.4.1.1",
+                        "age": 742,
+                        "checksum": "0x0048E3",
+                        "link_count": 3,
+                        "seq": "0x80000039"
+                      }
+                    }
+                  }
+                }
+              ],
+              "Summary ASB": [
+                {
+                  "area": "0",
+                  "lsas": {
+                    "10.229.11.11": {
+                      "10.4.1.1": {
+                        "adv_router": "10.4.1.1",
+                        "age": 273,
+                        "checksum": "0x00D91A",
+                        "seq": "0x80000030"
+                      }
+                    }
+                  }
+                }
+              ],
+              "Summary Net": [
+                {
+                  "area": "0",
+                  "lsas": {
+                    "10.186.5.0": {
+                      "10.4.1.1": {
+                        "adv_router": "10.4.1.1",
+                        "age": 273,
+                        "checksum": "0x0019DD",
+                        "seq": "0x80000031"
+                      }
+                    },
+                    "10.229.11.11": {
+                      "10.4.1.1": {
+                        "adv_router": "10.4.1.1",
+                        "age": 273,
+                        "checksum": "0x00F005",
+                        "seq": "0x80000030"
+                      }
+                    }
+                  }
+                }
+              ],
+              "Type-5 AS External": [
+                {
+                  "lsas": {
+                    "20.1.0.0": {
+                      "10.229.11.11": {
+                        "adv_router": "10.229.11.11",
+                        "age": 243,
+                        "checksum": "0x003B3B",
+                        "seq": "0x80000001",
+                        "tag": 0
+                      }
+                    },
+                    "44.44.44.44": {
+                      "10.64.4.4": {
+                        "adv_router": "10.64.4.4",
+                        "age": 1486,
+                        "checksum": "0x00D218",
+                        "seq": "0x80000001",
+                        "tag": 0
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Multiple OSPF processes with different areas and LSA types",
+      "input": "\n            OSPF Router with ID (10.4.1.1) (Process ID 1)\n\n                Router Link States (Area 0)\n\nLink ID         ADV Router      Age         Seq#       Checksum Link count\n10.4.1.1        10.4.1.1        300         0x80000005 0x00A1B2 2\n\n                Router Link States (Area 1)\n\nLink ID         ADV Router      Age         Seq#       Checksum Link count\n10.4.1.1        10.4.1.1        150         0x80000003 0x00C3D4 1\n10.16.2.2       10.16.2.2       200         0x80000002 0x00E5F6 3\n\n                Net Link States (Area 1)\n\nLink ID         ADV Router      Age         Seq#       Checksum\n10.186.5.1      10.4.1.1        150         0x80000002 0x00A1B2\n\n            OSPF Router with ID (10.229.11.11) (Process ID 2)\n\n                Router Link States (Area 0)\n\nLink ID         ADV Router      Age         Seq#       Checksum Link count\n10.229.11.11    10.229.11.11    500         0x80000010 0x001234 4\n\n                Summary Net Link States (Area 0)\n\nLink ID         ADV Router      Age         Seq#       Checksum\n10.10.10.0      10.229.11.11    500         0x80000008 0x005678\n",
+      "expected": {
+        "processes": {
+          "1": {
+            "router_id": "10.4.1.1",
+            "sections": {
+              "Net": [
+                {
+                  "area": "1",
+                  "lsas": {
+                    "10.186.5.1": {
+                      "10.4.1.1": {
+                        "adv_router": "10.4.1.1",
+                        "age": 150,
+                        "checksum": "0x00A1B2",
+                        "seq": "0x80000002"
+                      }
+                    }
+                  }
+                }
+              ],
+              "Router": [
+                {
+                  "area": "0",
+                  "lsas": {
+                    "10.4.1.1": {
+                      "10.4.1.1": {
+                        "adv_router": "10.4.1.1",
+                        "age": 300,
+                        "checksum": "0x00A1B2",
+                        "link_count": 2,
+                        "seq": "0x80000005"
+                      }
+                    }
+                  }
+                },
+                {
+                  "area": "1",
+                  "lsas": {
+                    "10.16.2.2": {
+                      "10.16.2.2": {
+                        "adv_router": "10.16.2.2",
+                        "age": 200,
+                        "checksum": "0x00E5F6",
+                        "link_count": 3,
+                        "seq": "0x80000002"
+                      }
+                    },
+                    "10.4.1.1": {
+                      "10.4.1.1": {
+                        "adv_router": "10.4.1.1",
+                        "age": 150,
+                        "checksum": "0x00C3D4",
+                        "link_count": 1,
+                        "seq": "0x80000003"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "2": {
+            "router_id": "10.229.11.11",
+            "sections": {
+              "Router": [
+                {
+                  "area": "0",
+                  "lsas": {
+                    "10.229.11.11": {
+                      "10.229.11.11": {
+                        "adv_router": "10.229.11.11",
+                        "age": 500,
+                        "checksum": "0x001234",
+                        "link_count": 4,
+                        "seq": "0x80000010"
+                      }
+                    }
+                  }
+                }
+              ],
+              "Summary Net": [
+                {
+                  "area": "0",
+                  "lsas": {
+                    "10.10.10.0": {
+                      "10.229.11.11": {
+                        "adv_router": "10.229.11.11",
+                        "age": 500,
+                        "checksum": "0x005678",
+                        "seq": "0x80000008"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "os": "cisco_ios",
+  "command": "traceroute",
+  "schema": {
+    "name": "TracerouteResult",
+    "fields": {
+      "destination_address": {
+        "type": "str",
+        "required": true
+      },
+      "destination_host": {
+        "type": "str",
+        "required": false
+      },
+      "hops": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "HopEntry",
+            "fields": {
+              "probes": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "ProbeEntry",
+                    "fields": {
+                      "address": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "rtt": {
+                        "type": "float",
+                        "required": false
+                      },
+                      "mpls_label": {
+                        "type": {
+                          "name": "MplsLabel",
+                          "fields": {
+                            "label": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "exp": {
+                              "type": "int",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "timeout": {
+                        "type": "bool",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic traceroute with three hops including a timeout probe",
+      "input": "Type escape sequence to abort.\nTracing the route to 192.168.1.1 (192.168.1.1)\nVRF info: (vrf in name/id, vrf out name/id)\n  1 10.1.1.1 4 msec 4 msec 0 msec\n  2 10.2.2.2 20 msec 16 msec 16 msec\n  3 192.168.1.1 16 msec *  16 msec\n",
+      "expected": {
+        "destination_address": "192.168.1.1",
+        "hops": {
+          "1": {
+            "probes": {
+              "1": {
+                "address": "10.1.1.1",
+                "rtt": 4.0
+              },
+              "2": {
+                "address": "10.1.1.1",
+                "rtt": 4.0
+              },
+              "3": {
+                "address": "10.1.1.1",
+                "rtt": 0.0
+              }
+            }
+          },
+          "2": {
+            "probes": {
+              "1": {
+                "address": "10.2.2.2",
+                "rtt": 20.0
+              },
+              "2": {
+                "address": "10.2.2.2",
+                "rtt": 16.0
+              },
+              "3": {
+                "address": "10.2.2.2",
+                "rtt": 16.0
+              }
+            }
+          },
+          "3": {
+            "probes": {
+              "1": {
+                "address": "192.168.1.1",
+                "rtt": 16.0
+              },
+              "2": {
+                "timeout": true
+              },
+              "3": {
+                "address": "192.168.1.1",
+                "rtt": 16.0
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

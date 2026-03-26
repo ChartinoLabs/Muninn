@@ -1,0 +1,119 @@
+{
+  "os": "cisco_ios",
+  "command": "show ip ospf neighbor",
+  "schema": {
+    "name": "ShowIpOspfNeighborResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "OspfNeighborEntry",
+              "fields": {
+                "priority": {
+                  "type": "int",
+                  "required": true
+                },
+                "state": {
+                  "type": "str",
+                  "required": true
+                },
+                "dead_time": {
+                  "type": "str",
+                  "required": true
+                },
+                "address": {
+                  "type": "str",
+                  "required": true
+                },
+                "role": {
+                  "type": "str",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic OSPF neighbors with Port-channel and VLAN interfaces",
+      "input": "Neighbor ID     Pri   State           Dead Time   Address         Interface\n10.0.0.1          0   FULL/  -        00:00:32    10.0.1.1        Port-channel1\n10.0.0.2          0   FULL/  -        00:00:33    10.0.2.1        Port-channel2\n10.0.0.3          0   FULL/  -        00:00:39    10.0.3.1        Vlan1000\n",
+      "expected": {
+        "neighbors": {
+          "Port-channel1": {
+            "10.0.0.1": {
+              "priority": 0,
+              "state": "FULL",
+              "dead_time": "00:00:32",
+              "address": "10.0.1.1"
+            }
+          },
+          "Port-channel2": {
+            "10.0.0.2": {
+              "priority": 0,
+              "state": "FULL",
+              "dead_time": "00:00:33",
+              "address": "10.0.2.1"
+            }
+          },
+          "Vlan1000": {
+            "10.0.0.3": {
+              "priority": 0,
+              "state": "FULL",
+              "dead_time": "00:00:39",
+              "address": "10.0.3.1"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "OSPF neighbors with subinterfaces and mixed DR/BDR roles",
+      "input": "Neighbor ID     Pri   State           Dead Time   Address         Interface\n10.190.30.2        1   FULL/BDR        00:00:04    10.190.16.11     GigabitEthernet0/2.101\n10.190.30.3        1   FULL/DR         00:00:04    10.190.16.12     GigabitEthernet0/2.101\n10.190.30.2        1   FULL/BDR        00:00:04    10.190.16.3      GigabitEthernet0/2.100\n10.190.30.3        1   FULL/DR         00:00:04    10.190.16.4      GigabitEthernet0/2.100\n",
+      "expected": {
+        "neighbors": {
+          "GigabitEthernet0/2.101": {
+            "10.190.30.2": {
+              "priority": 1,
+              "state": "FULL",
+              "role": "BDR",
+              "dead_time": "00:00:04",
+              "address": "10.190.16.11"
+            },
+            "10.190.30.3": {
+              "priority": 1,
+              "state": "FULL",
+              "role": "DR",
+              "dead_time": "00:00:04",
+              "address": "10.190.16.12"
+            }
+          },
+          "GigabitEthernet0/2.100": {
+            "10.190.30.2": {
+              "priority": 1,
+              "state": "FULL",
+              "role": "BDR",
+              "dead_time": "00:00:04",
+              "address": "10.190.16.3"
+            },
+            "10.190.30.3": {
+              "priority": 1,
+              "state": "FULL",
+              "role": "DR",
+              "dead_time": "00:00:04",
+              "address": "10.190.16.4"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

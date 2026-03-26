@@ -1,0 +1,84 @@
+{
+  "os": "cisco_ios",
+  "command": "show endpoint-tracker",
+  "schema": {
+    "name": "ShowEndpointTrackerResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceTrackersEntry",
+            "fields": {
+              "trackers": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "EndpointTrackerEntry",
+                    "fields": {
+                      "status": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "rtt_msec": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "probe_id": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "next_hop": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Three endpoint trackers grouped under GigabitEthernet interfaces, including a Timeout entry",
+      "input": "Interface                    Record Name            Status          RTT in msecs    Probe ID        Next Hop\nGigabitEthernet1             trk_umbrella           Up              2               1               10.44.22.1\nGigabitEthernet1             trk_dns                Down            Timeout         5               10.44.22.2\nGigabitEthernet2             trk_goolge             Up              2               1               10.2.2.1\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1": {
+            "trackers": {
+              "trk_umbrella": {
+                "status": "UP",
+                "rtt_msec": 2,
+                "probe_id": 1,
+                "next_hop": "10.44.22.1"
+              },
+              "trk_dns": {
+                "status": "DOWN",
+                "probe_id": 5,
+                "next_hop": "10.44.22.2"
+              }
+            }
+          },
+          "GigabitEthernet2": {
+            "trackers": {
+              "trk_goolge": {
+                "status": "UP",
+                "rtt_msec": 2,
+                "probe_id": 1,
+                "next_hop": "10.2.2.1"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

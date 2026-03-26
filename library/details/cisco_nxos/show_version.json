@@ -1,0 +1,456 @@
+{
+  "os": "cisco_nxos",
+  "command": "show version",
+  "schema": {
+    "name": "ShowVersionResult",
+    "fields": {
+      "bios_version": {
+        "type": "str",
+        "required": true
+      },
+      "bios_compile_time": {
+        "type": "str",
+        "required": false
+      },
+      "nxos_version": {
+        "type": "str",
+        "required": false
+      },
+      "nxos_image_file": {
+        "type": "str",
+        "required": false
+      },
+      "nxos_compile_time": {
+        "type": "str",
+        "required": false
+      },
+      "host_nxos_version": {
+        "type": "str",
+        "required": false
+      },
+      "nxos_boot_mode": {
+        "type": "str",
+        "required": false
+      },
+      "kickstart_version": {
+        "type": "str",
+        "required": false
+      },
+      "kickstart_image_file": {
+        "type": "str",
+        "required": false
+      },
+      "kickstart_compile_time": {
+        "type": "str",
+        "required": false
+      },
+      "system_version": {
+        "type": "str",
+        "required": false
+      },
+      "system_image_file": {
+        "type": "str",
+        "required": false
+      },
+      "system_compile_time": {
+        "type": "str",
+        "required": false
+      },
+      "pe_version": {
+        "type": "str",
+        "required": false
+      },
+      "loader_version": {
+        "type": "str",
+        "required": false
+      },
+      "chassis": {
+        "type": "str",
+        "required": true
+      },
+      "cpu": {
+        "type": "str",
+        "required": true
+      },
+      "memory_kb": {
+        "type": "int",
+        "required": true
+      },
+      "processor_board_id": {
+        "type": "str",
+        "required": true
+      },
+      "device_name": {
+        "type": "str",
+        "required": true
+      },
+      "bootflash_kb": {
+        "type": "int",
+        "required": true
+      },
+      "uptime": {
+        "type": {
+          "name": "UptimeInfo",
+          "fields": {
+            "days": {
+              "type": "int",
+              "required": true
+            },
+            "hours": {
+              "type": "int",
+              "required": true
+            },
+            "minutes": {
+              "type": "int",
+              "required": true
+            },
+            "seconds": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "last_reset": {
+        "type": {
+          "name": "LastResetInfo",
+          "fields": {
+            "reason": {
+              "type": "str",
+              "required": true
+            },
+            "system_version": {
+              "type": "str",
+              "required": false
+            },
+            "service": {
+              "type": "str",
+              "required": false
+            },
+            "timestamp": {
+              "type": "str",
+              "required": false
+            }
+          }
+        },
+        "required": true
+      },
+      "plugins": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_modern_nxos",
+      "input": "Cisco Nexus Operating System (NX-OS) Software\nTAC support: http://www.cisco.com/tac\nCopyright (C) 2002-2020, Cisco and/or its affiliates.\nAll rights reserved.\nThe copyrights to certain works contained in this software are\nowned by other third parties and used and distributed under their own\nlicenses, such as open source.  This software is provided \"as is,\" and unless\notherwise stated, there is no warranty, express or implied, including but not\nlimited to warranties of merchantability and fitness for a particular purpose.\nCertain components of this software are licensed under\nthe GNU General Public License (GPL) version 2.0 or\nGNU General Public License (GPL) version 3.0  or the GNU\nLesser General Public License (LGPL) Version 2.1 or\nLesser General Public License (LGPL) Version 2.0.\nA copy of each such license is available at\nhttp://www.opensource.org/licenses/gpl-2.0.php and\nhttp://opensource.org/licenses/gpl-3.0.html and\nhttp://www.opensource.org/licenses/lgpl-2.1.php and\nhttp://www.gnu.org/licenses/old-licenses/library.txt.\nSoftware\n  BIOS: version 07.68\n NXOS: version 9.3(6uu)I9(1uu) [build 9.3(6)]\n  BIOS compile time:  05/26/2020\n  NXOS image file is: bootflash:///nxos.9.3.6.bin.upg\n  NXOS compile time:  12/25/2020 12:00:00 [11/10/2020 04:00:21]\nHardware\n  cisco Nexus9000 C9396PX Chassis\n  Intel(R) Core(TM) i3- CPU @ 2.50GHz with 16399572 kB of memory.\n  Processor Board ID SAL18432P5N\n  Device name: N9K-ACC-2\n  bootflash:   51496280 kB\nKernel uptime is 0 day(s), 0 hour(s), 1 minute(s), 33 second(s)\nLast reset at 550761 usecs after Thu Mar 18 16:34:13 2021\n  Reason: Reset due to non-disruptive upgrade\n  System version: 9.3(6)\n  Service: Installer\nplugin\n  Core Plugin, Ethernet Plugin\nActive Package(s):\n",
+      "expected": {
+        "bios_version": "07.68",
+        "bios_compile_time": "05/26/2020",
+        "nxos_version": "9.3(6uu)I9(1uu)",
+        "nxos_image_file": "bootflash:///nxos.9.3.6.bin.upg",
+        "nxos_compile_time": "12/25/2020 12:00:00 [11/10/2020 04:00:21]",
+        "chassis": "cisco Nexus9000 C9396PX Chassis",
+        "cpu": "Intel(R) Core(TM) i3- CPU @ 2.50GHz",
+        "memory_kb": 16399572,
+        "processor_board_id": "SAL18432P5N",
+        "device_name": "N9K-ACC-2",
+        "bootflash_kb": 51496280,
+        "uptime": {
+          "days": 0,
+          "hours": 0,
+          "minutes": 1,
+          "seconds": 33
+        },
+        "last_reset": {
+          "timestamp": "Thu Mar 18 16:34:13 2021",
+          "reason": "Reset due to non-disruptive upgrade",
+          "system_version": "9.3(6)",
+          "service": "Installer"
+        },
+        "plugins": [
+          "Core Plugin",
+          "Ethernet Plugin"
+        ]
+      }
+    },
+    {
+      "name": "002_lxc_boot_mode",
+      "input": "Cisco Nexus Operating System (NX-OS) Software\nTAC support: http://www.cisco.com/tac\nCopyright (C) 2002-2022, Cisco and/or its affiliates.\nAll rights reserved.\nThe copyrights to certain works contained in this software are\nowned by other third parties and used and distributed under their own\nlicenses, such as open source.  This software is provided \"as is,\" and unless\notherwise stated, there is no warranty, express or implied, including but not\nlimited to warranties of merchantability and fitness for a particular purpose.\n\nSoftware\n  BIOS: version 01.10\n  NXOS: version 10.2(3) [Feature Release]\n  Host NXOS: version 10.2(3)\n  BIOS compile time:  05/13/2022\n  NXOS image file is: bootflash:///nxos64-cs.10.2.3.F.bin\n  NXOS compile time:  4/24/2022 3:00:00 [04/24/2022 14:54:51]\n  NXOS boot mode: LXC\n\nHardware\n  cisco Nexus9000 C9332D-GX2B Chassis\n  Intel(R) Xeon(R) CPU D-1633N @ 2.50GHz with 32812668 kB of memory.\n  Processor Board ID FDO26380WD1\n  Device name: Spine-12\n  bootflash:  115805708 kB\n\nKernel uptime is 49 day(s), 10 hour(s), 45 minute(s), 34 second(s)\n\nLast reset at 916744 usecs after Mon Feb 19 13:45:02 2024\n  Reason: Module PowerCycled\n  System version:\n  Service: HW check by card-client\n\nplugin\n  Core Plugin, Ethernet Plugin\n",
+      "expected": {
+        "bios_version": "01.10",
+        "bios_compile_time": "05/13/2022",
+        "nxos_version": "10.2(3) [Feature Release]",
+        "nxos_image_file": "bootflash:///nxos64-cs.10.2.3.F.bin",
+        "nxos_compile_time": "4/24/2022 3:00:00 [04/24/2022 14:54:51]",
+        "host_nxos_version": "10.2(3)",
+        "nxos_boot_mode": "LXC",
+        "chassis": "cisco Nexus9000 C9332D-GX2B Chassis",
+        "cpu": "Intel(R) Xeon(R) CPU D-1633N @ 2.50GHz",
+        "memory_kb": 32812668,
+        "processor_board_id": "FDO26380WD1",
+        "device_name": "Spine-12",
+        "bootflash_kb": 115805708,
+        "uptime": {
+          "days": 49,
+          "hours": 10,
+          "minutes": 45,
+          "seconds": 34
+        },
+        "last_reset": {
+          "timestamp": "Mon Feb 19 13:45:02 2024",
+          "reason": "Module PowerCycled",
+          "service": "HW check by card-client"
+        },
+        "plugins": [
+          "Core Plugin",
+          "Ethernet Plugin"
+        ]
+      }
+    },
+    {
+      "name": "003_legacy_kickstart",
+      "input": "Cisco Nexus Operating System (NX-OS) Software\nTAC support: http://www.cisco.com/tac\nDocuments: http://www.cisco.com/en/US/products/ps9372/tsd_products_support_series_home.html\nCopyright (c) 2002-2017, Cisco Systems, Inc. All rights reserved.\nThe copyrights to certain works contained herein are owned by\nother third parties and are used and distributed under license.\nSome parts of this software are covered under the GNU Public\nLicense. A copy of the license is available at\nhttp://www.gnu.org/licenses/gpl.html.\n\nSoftware\n  BIOS:      version 1.4.0\n  loader:    version N/A\n  kickstart: version 6.0(2)U6(10)\n  system:    version 6.0(2)U6(10)\n  BIOS compile time:       12/09/2013\n  kickstart image file is: bootflash:///n3000-uk9-kickstart.6.0.2.U6.10.bin\n  kickstart compile time:  3/30/2017 9:00:00 [03/30/2017 19:37:34]\n  system image file is:    bootflash:///n3000-uk10.225.0.2.U6.10.bin\n  system compile time:     3/30/2017 9:00:00 [03/30/2017 20:04:06]\n\n\nHardware\n  cisco Nexus 3048 Chassis (\"48x1GE + 4x10G Supervisor\")\n  Intel(R) Celeron(R) CPU        P4505  @ 1.87GHz with 3665288 kB of memory.\n  Processor Board ID FOC19243WQN\n\n  Device name: n3k\n  bootflash:    2007040 kB\n\nKernel uptime is 796 day(s), 15 hour(s), 58 minute(s), 29 second(s)\n\nLast reset at 2131 usecs after  Thu Jan 18 21:17:51 2018\n\n  Reason: Disruptive upgrade\n  System version: 6.0(2)U6(5b)\n  Service:\n\nplugin\n  Core Plugin, Ethernet Plugin\n",
+      "expected": {
+        "bios_version": "1.4.0",
+        "bios_compile_time": "12/09/2013",
+        "kickstart_version": "6.0(2)U6(10)",
+        "kickstart_image_file": "bootflash:///n3000-uk9-kickstart.6.0.2.U6.10.bin",
+        "kickstart_compile_time": "3/30/2017 9:00:00 [03/30/2017 19:37:34]",
+        "system_version": "6.0(2)U6(10)",
+        "system_image_file": "bootflash:///n3000-uk10.225.0.2.U6.10.bin",
+        "system_compile_time": "3/30/2017 9:00:00 [03/30/2017 20:04:06]",
+        "chassis": "cisco Nexus 3048 Chassis (\"48x1GE + 4x10G Supervisor\")",
+        "cpu": "Intel(R) Celeron(R) CPU        P4505  @ 1.87GHz",
+        "memory_kb": 3665288,
+        "processor_board_id": "FOC19243WQN",
+        "device_name": "n3k",
+        "bootflash_kb": 2007040,
+        "uptime": {
+          "days": 796,
+          "hours": 15,
+          "minutes": 58,
+          "seconds": 29
+        },
+        "last_reset": {
+          "timestamp": "Thu Jan 18 21:17:51 2018",
+          "reason": "Disruptive upgrade",
+          "system_version": "6.0(2)U6(5b)"
+        },
+        "plugins": [
+          "Core Plugin",
+          "Ethernet Plugin"
+        ]
+      }
+    },
+    {
+      "name": "004_aci_device",
+      "input": "Cisco Nexus Operating System (NX-OS) Software\nTAC support: http://www.cisco.com/tac\nDocuments: http://www.cisco.com/en/US/products/ps9372/tsd_products_support_series_home.html\nCopyright (c) 2002-2014, Cisco Systems, Inc. All rights reserved.\nThe copyrights to certain works contained in this software are\nowned by other third parties and used and distributed under\nlicense. Certain components of this software are licensed under\nthe GNU General Public License (GPL) version 2.0 or the GNU\nLesser General Public License (LGPL) Version 2.1. A copy of each\nsuch license is available at\nhttp://www.opensource.org/licenses/gpl-2.0.php and\nhttp://www.opensource.org/licenses/lgpl-2.1.php\n\nSoftware\n  BIOS:      version 07.69\n  kickstart: version 15.3(2b) [build 15.3(2b)]\n  system:    version 15.3(2b) [build 15.3(2b)]\n  PE:        version 5.3(2b)\n  BIOS compile time:       04/07/2021\n  kickstart image file is: /bootflash/aci-n9000-dk9.15.3.2b.bin\n  kickstart compile time:  03/18/2024 22:00:16 [03/18/2024 22:00:16]\n  system image file is:    /bootflash/auto-s\n  system compile time:     03/18/2024 22:00:16 [03/18/2024 22:00:16]\n\n\nHardware\n  cisco N9K-C93180YC-EX (\"supervisor\")\n   Intel(R) Xeon(R) CPU  @ 1.80GHz with 24499200 kB of memory.\n  Processor Board ID FDO24210DKA\n\n  Device name: fl-wwops-corp-l3301f-aci\n  bootflash:    62522368 kB\n\nKernel uptime is 270 day(s), 14 hour(s), 05 minute(s), 29 second(s)\n\nLast reset at 512000 usecs after Wed Sep 11 22:05:08 2024 EDT\n  Reason: reset-by-installer\n  System version: 15.2(4d)\n  Service: Upgrade\n\nplugin\n  Core Plugin, Ethernet Plugin\n",
+      "expected": {
+        "bios_version": "07.69",
+        "bios_compile_time": "04/07/2021",
+        "kickstart_version": "15.3(2b)",
+        "kickstart_image_file": "/bootflash/aci-n9000-dk9.15.3.2b.bin",
+        "kickstart_compile_time": "03/18/2024 22:00:16 [03/18/2024 22:00:16]",
+        "system_version": "15.3(2b)",
+        "system_image_file": "/bootflash/auto-s",
+        "system_compile_time": "03/18/2024 22:00:16 [03/18/2024 22:00:16]",
+        "pe_version": "5.3(2b)",
+        "chassis": "cisco N9K-C93180YC-EX (\"supervisor\")",
+        "cpu": "Intel(R) Xeon(R) CPU  @ 1.80GHz",
+        "memory_kb": 24499200,
+        "processor_board_id": "FDO24210DKA",
+        "device_name": "fl-wwops-corp-l3301f-aci",
+        "bootflash_kb": 62522368,
+        "uptime": {
+          "days": 270,
+          "hours": 14,
+          "minutes": 5,
+          "seconds": 29
+        },
+        "last_reset": {
+          "timestamp": "Wed Sep 11 22:05:08 2024 EDT",
+          "reason": "reset-by-installer",
+          "system_version": "15.2(4d)",
+          "service": "Upgrade"
+        },
+        "plugins": [
+          "Core Plugin",
+          "Ethernet Plugin"
+        ]
+      }
+    },
+    {
+      "name": "005_nexus9k_no_reset_timestamp",
+      "input": "Cisco Nexus Operating System (NX-OS) Software\nTAC support: http://www.cisco.com/tac\nCopyright (C) 2002-2014, Cisco and/or its affiliates.\nAll rights reserved.\nThe copyrights to certain works contained in this software are\nowned by other third parties and used and distributed under their own\nlicenses, such as open source.  This software is provided \"as is,\" and unless\notherwise stated, there is no warranty, express or implied, including but not\nlimited to warranties of merchantability and fitness for a particular purpose.\nCertain components of this software are licensed under\nthe GNU General Public License (GPL) version 2.0 or\nGNU General Public License (GPL) version 3.0  or the GNU\nLesser General Public License (LGPL) Version 2.1 or\nLesser General Public License (LGPL) Version 2.0.\nA copy of each such license is available at\nhttp://www.opensource.org/licenses/gpl-2.0.php and\nhttp://opensource.org/licenses/gpl-3.0.html and\nhttp://www.opensource.org/licenses/lgpl-2.1.php and\nhttp://www.gnu.org/licenses/old-licenses/library.txt.\n\nSoftware\n  BIOS: version 07.15\n  NXOS: version 6.1(2)I3(1)\n  BIOS compile time:  06/29/2014\n  NXOS image file is: bootflash:///n9000-dk9.6.1.2.I3.1.bin\n  NXOS compile time:  9/27/2014 23:00:00 [09/28/2014 06:23:37]\n\n\nHardware\n  cisco Nexus9000 C9396PX Chassis\n  Intel(R) Core(TM) i3-3227U C with 16402544 kB of memory.\n  Processor Board ID SAL1819S6LU\n\n  Device name: N9K1\n  bootflash:   21693714 kB\nKernel uptime is 123 day(s), 5 hour(s), 15 minute(s), 19 second(s)\n\nLast reset\n  Reason: Unknown\n  System version: 6.1(2)I3(1)\n  Service:\n\nplugin\n  Core Plugin, Ethernet Plugin\n\nActive Packages:\n",
+      "expected": {
+        "chassis": "cisco Nexus9000 C9396PX Chassis",
+        "bios_version": "07.15",
+        "nxos_version": "6.1(2)I3(1)",
+        "bios_compile_time": "06/29/2014",
+        "nxos_image_file": "bootflash:///n9000-dk9.6.1.2.I3.1.bin",
+        "nxos_compile_time": "9/27/2014 23:00:00 [09/28/2014 06:23:37]",
+        "cpu": "Intel(R) Core(TM) i3-3227U C",
+        "memory_kb": 16402544,
+        "processor_board_id": "SAL1819S6LU",
+        "device_name": "N9K1",
+        "bootflash_kb": 21693714,
+        "uptime": {
+          "days": 123,
+          "hours": 5,
+          "minutes": 15,
+          "seconds": 19
+        },
+        "plugins": [
+          "Core Plugin",
+          "Ethernet Plugin"
+        ],
+        "last_reset": {
+          "reason": "Unknown",
+          "system_version": "6.1(2)I3(1)"
+        }
+      }
+    },
+    {
+      "name": "006_nexus5596_kickstart_fc_plugin",
+      "input": "Documents: http://www.cisco.com/en/US/products/ps9372/tsd_products_support_series_home.html\nCopyright (c) 2002-2016, Cisco Systems, Inc. All rights reserved.\nThe copyrights to certain works contained herein are owned by\nother third parties and are used and distributed under license.\nSome parts of this software are covered under the GNU Public\nLicense. A copy of the license is available at\nhttp://www.gnu.org/licenses/gpl.html.\n\nSoftware\n  BIOS:      version 3.6.0\n  Power Sequencer Firmware:\n             Module 1: v7.0\n             Module 1: v1.0\n             Module 2: v1.0\n             Module 3: v1.0\n  Microcontroller Firmware:        version v1.0.0.2\n  QSFP Microcontroller Firmware:\n             Module not detected\n  CXP Microcontroller Firmware:\n             Module not detected\n  kickstart: version 7.1(4)N1(1)\n  system:    version 7.1(4)N1(1)\n  BIOS compile time:       05/09/2012\n  kickstart image file is: bootflash:///n5000-uk9-kickstart.7.1.4.N1.1.bin\n  kickstart compile time:  9/2/2016 10:00:00 [09/02/2016 19:37:35]\n  system image file is:    bootflash:///n5000-uk9.7.1.4.N1.1.bin\n  system compile time:     9/2/2016 10:00:00 [09/02/2016 21:16:21]\n\n\nHardware\n  cisco Nexus 5596 Chassis (\"O2 48X10GE/Modular Supervisor\")\n  Intel(R) Xeon(R) CPU         with 8253848 kB of memory.\n  Processor Board ID FOC17153X08\n\n  Device name: IEDP02-N5K-SW01\n  bootflash:    2007040 kB\n\nKernel uptime is 749 day(s), 15 hour(s), 17 minute(s), 48 second(s)\n\nLast reset at 958444 usecs after  Wed Nov  1 21:20:35 2017\n\n  Reason: Disruptive upgrade\n  System version: 7.0(7)N1(1)\n  Service:\n\nplugin\n  Core Plugin, Ethernet Plugin, Fc Plugin\n",
+      "expected": {
+        "bios_version": "3.6.0",
+        "kickstart_version": "7.1(4)N1(1)",
+        "system_version": "7.1(4)N1(1)",
+        "bios_compile_time": "05/09/2012",
+        "kickstart_image_file": "bootflash:///n5000-uk9-kickstart.7.1.4.N1.1.bin",
+        "kickstart_compile_time": "9/2/2016 10:00:00 [09/02/2016 19:37:35]",
+        "system_image_file": "bootflash:///n5000-uk9.7.1.4.N1.1.bin",
+        "system_compile_time": "9/2/2016 10:00:00 [09/02/2016 21:16:21]",
+        "chassis": "cisco Nexus 5596 Chassis (\"O2 48X10GE/Modular Supervisor\")",
+        "cpu": "Intel(R) Xeon(R) CPU",
+        "memory_kb": 8253848,
+        "processor_board_id": "FOC17153X08",
+        "device_name": "IEDP02-N5K-SW01",
+        "bootflash_kb": 2007040,
+        "uptime": {
+          "days": 749,
+          "hours": 15,
+          "minutes": 17,
+          "seconds": 48
+        },
+        "plugins": [
+          "Core Plugin",
+          "Ethernet Plugin",
+          "Fc Plugin"
+        ],
+        "last_reset": {
+          "timestamp": "Wed Nov  1 21:20:35 2017",
+          "reason": "Disruptive upgrade",
+          "system_version": "7.0(7)N1(1)"
+        }
+      }
+    },
+    {
+      "name": "007_nexus5548_kickstart_loader",
+      "input": "Cisco Nexus Operating System (NX-OS) Software\nTAC support: http://www.cisco.com/tac\nDocuments: http://www.cisco.com/en/US/products/ps9372/tsd_products_support_series_home.html\nCopyright (c) 2002-2013, Cisco Systems, Inc. All rights reserved.\nThe copyrights to certain works contained herein are owned by\nother third parties and are used and distributed under license.\nSome parts of this software are covered under the GNU Public\nLicense. A copy of the license is available at\nhttp://www.gnu.org/licenses/gpl.html.\n\nSoftware\n  BIOS:      version 3.6.0\n  loader:    version N/A\n  kickstart: version 5.2(1)N1(4)\n  system:    version 5.2(1)N1(4)\n  power-seq: Module 1: version v1.0\n             Module 3: version v5.0\n  uC:        version v1.2.0.1\n  SFP uC:    Module 1: v1.0.0.0\n  BIOS compile time:       05/09/2012\n  kickstart image file is: bootflash:///n5000-uk9-kickstart.5.2.1.N1.4.bin\n  kickstart compile time:  3/19/2013 3:00:00 [03/19/2013 23:12:59]\n  system image file is:    bootflash:///n5000-uk9.5.2.1.N1.4.bin\n  system compile time:     3/19/2013 3:00:00 [03/20/2013 01:10:47]\n\n\nHardware\n  cisco Nexus5548 Chassis (\"O2 32X10GE/Modular Universal Platform Supervisor\")\n  Intel(R) Xeon(R) CPU         with 8263848 kB of memory.\n  Processor Board ID FOC171737PL\n\n  Device name: DC2TESTSW01-55\n  bootflash:    2007040 kB\n\nKernel uptime is 311 day(s), 0 hour(s), 27 minute(s), 35 second(s)\n\nLast reset at 629197 usecs after  Thu Dec  5 15:17:54 2019\n\n  Reason: Reset triggered due to HA policy of Reset\n  System version: 5.2(1)N1(4)\n  Service: __inst_001__eigrp hap reset\n\nplugin\n  Core Plugin, Ethernet Plugin\n",
+      "expected": {
+        "chassis": "cisco Nexus5548 Chassis (\"O2 32X10GE/Modular Universal Platform Supervisor\")",
+        "bios_version": "3.6.0",
+        "kickstart_version": "5.2(1)N1(4)",
+        "system_version": "5.2(1)N1(4)",
+        "bios_compile_time": "05/09/2012",
+        "kickstart_image_file": "bootflash:///n5000-uk9-kickstart.5.2.1.N1.4.bin",
+        "kickstart_compile_time": "3/19/2013 3:00:00 [03/19/2013 23:12:59]",
+        "system_image_file": "bootflash:///n5000-uk9.5.2.1.N1.4.bin",
+        "system_compile_time": "3/19/2013 3:00:00 [03/20/2013 01:10:47]",
+        "cpu": "Intel(R) Xeon(R) CPU",
+        "memory_kb": 8263848,
+        "processor_board_id": "FOC171737PL",
+        "device_name": "DC2TESTSW01-55",
+        "bootflash_kb": 2007040,
+        "uptime": {
+          "days": 311,
+          "hours": 0,
+          "minutes": 27,
+          "seconds": 35
+        },
+        "plugins": [
+          "Core Plugin",
+          "Ethernet Plugin"
+        ],
+        "last_reset": {
+          "timestamp": "Thu Dec  5 15:17:54 2019",
+          "reason": "Reset triggered due to HA policy of Reset",
+          "system_version": "5.2(1)N1(4)",
+          "service": "__inst_001__eigrp hap reset"
+        }
+      }
+    },
+    {
+      "name": "008_nexus9k_maintenance_release",
+      "input": "Cisco Nexus Operating System (NX-OS) Software\nTAC support: http://www.cisco.com/tac\nCopyright (C) 2002-2024, Cisco and/or its affiliates.\nAll rights reserved.\nThe copyrights to certain works contained in this software are\nowned by other third parties and used and distributed under their own\nlicenses, such as open source.  This software is provided \"as is,\" and unless\notherwise stated, there is no warranty, express or implied, including but not\nlimited to warranties of merchantability and fitness for a particular purpose.\nCertain components of this software are licensed under\nthe GNU General Public License (GPL) version 2.0 or\nGNU General Public License (GPL) version 3.0  or the GNU\nLesser General Public License (LGPL) Version 2.1 or\nLesser General Public License (LGPL) Version 2.0.\nA copy of each such license is available at\nhttp://www.opensource.org/licenses/gpl-2.0.php and\nhttp://opensource.org/licenses/gpl-3.0.html and\nhttp://www.opensource.org/licenses/lgpl-2.1.php and\nhttp://www.gnu.org/licenses/old-licenses/library.txt.\n\nSoftware\n  BIOS: version 07.71\n  NXOS: version 10.3(6) [Maintenance Release]\n  BIOS compile time:  11/10/2024\n  NXOS image file is: bootflash:///nxos64-cs.10.3.6.M.bin\n  NXOS compile time:  8/20/2024 12:00:00 [08/20/2024 06:31:13]\n\nHardware\n  cisco Nexus9000 C93108TC-EX chassis\n  Intel(R) Xeon(R) CPU  @ 1.80GHz with 24607580 kB of memory.\n  Processor Board ID FDO23490570\n  Device name: N9K-LAB-07\n  bootflash:   53298520 kB\n\nKernel uptime is 60 day(s), 17 hour(s), 29 minute(s), 10 second(s)\n\nLast reset at 310210 usecs after Wed May 28 16:35:54 2025\n  Reason: Reset Requested by CLI command reload\n  System version: 9.3(15)\n  Service:\n\nplugin\n  Core Plugin, Ethernet Plugin\n\nActive Package(s):\n",
+      "expected": {
+        "chassis": "cisco Nexus9000 C93108TC-EX chassis",
+        "bios_version": "07.71",
+        "nxos_version": "10.3(6) [Maintenance Release]",
+        "bios_compile_time": "11/10/2024",
+        "nxos_image_file": "bootflash:///nxos64-cs.10.3.6.M.bin",
+        "nxos_compile_time": "8/20/2024 12:00:00 [08/20/2024 06:31:13]",
+        "cpu": "Intel(R) Xeon(R) CPU  @ 1.80GHz",
+        "memory_kb": 24607580,
+        "processor_board_id": "FDO23490570",
+        "device_name": "N9K-LAB-07",
+        "bootflash_kb": 53298520,
+        "uptime": {
+          "days": 60,
+          "hours": 17,
+          "minutes": 29,
+          "seconds": 10
+        },
+        "plugins": [
+          "Core Plugin",
+          "Ethernet Plugin"
+        ],
+        "last_reset": {
+          "timestamp": "Wed May 28 16:35:54 2025",
+          "reason": "Reset Requested by CLI command reload",
+          "system_version": "9.3(15)"
+        }
+      }
+    },
+    {
+      "name": "009_nexus3k_modern_nxos",
+      "input": "Cisco Nexus Operating System (NX-OS) Software\nTAC support: http://www.cisco.com/tac\nCopyright (C) 2002-2025, Cisco and/or its affiliates.\nAll rights reserved.\nThe copyrights to certain works contained in this software are\nowned by other third parties and used and distributed under their own\nlicenses, such as open source.  This software is provided \"as is,\" and unless\notherwise stated, there is no warranty, express or implied, including but not\nlimited to warranties of merchantability and fitness for a particular purpose.\nCertain components of this software are licensed under\nthe GNU General Public License (GPL) version 2.0 or\nGNU General Public License (GPL) version 3.0  or the GNU\nLesser General Public License (LGPL) Version 2.1 or\nLesser General Public License (LGPL) Version 2.0.\nA copy of each such license is available at\nhttp://www.opensource.org/licenses/gpl-2.0.php and\nhttp://opensource.org/licenses/gpl-3.0.html and\nhttp://www.opensource.org/licenses/lgpl-2.1.php and\nhttp://www.gnu.org/licenses/old-licenses/library.txt.\n\nSoftware\n  BIOS: version 08.40\n NXOS: version 9.3(15)\n  BIOS compile time:  11/15/2024\n  NXOS image file is: bootflash:///nxos.9.3.15.bin\n  NXOS compile time:  4/10/2025 30:00:00 [03/19/2025 03:27:04]\n\n\nHardware\n  cisco Nexus3000 C3232C Chassis (Nexus 9000 Series)\n  Intel(R) Xeon(R) CPU E5-2403 v2 @ 1.80GHz with 8154104 kB of memory.\n  Processor Board ID FOC21261DQD\n\n  Device name: N3K-LAB-19\n  bootflash:   53298520 kB\nKernel uptime is 60 day(s), 17 hour(s), 8 minute(s), 18 second(s)\n\nLast reset at 237566 usecs after Wed May 28 16:56:48 2025\n  Reason: Reset Requested by CLI command reload\n  System version: 9.3(7a)\n  Service:\n\nplugin\n  Core Plugin, Ethernet Plugin\n\nActive Package(s):\n",
+      "expected": {
+        "chassis": "cisco Nexus3000 C3232C Chassis (Nexus 9000 Series)",
+        "bios_version": "08.40",
+        "nxos_version": "9.3(15)",
+        "bios_compile_time": "11/15/2024",
+        "nxos_image_file": "bootflash:///nxos.9.3.15.bin",
+        "nxos_compile_time": "4/10/2025 30:00:00 [03/19/2025 03:27:04]",
+        "cpu": "Intel(R) Xeon(R) CPU E5-2403 v2 @ 1.80GHz",
+        "memory_kb": 8154104,
+        "processor_board_id": "FOC21261DQD",
+        "device_name": "N3K-LAB-19",
+        "bootflash_kb": 53298520,
+        "uptime": {
+          "days": 60,
+          "hours": 17,
+          "minutes": 8,
+          "seconds": 18
+        },
+        "plugins": [
+          "Core Plugin",
+          "Ethernet Plugin"
+        ],
+        "last_reset": {
+          "timestamp": "Wed May 28 16:56:48 2025",
+          "reason": "Reset Requested by CLI command reload",
+          "system_version": "9.3(7a)"
+        }
+      }
+    }
+  ]
+}

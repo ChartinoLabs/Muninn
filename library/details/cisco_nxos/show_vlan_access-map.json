@@ -1,0 +1,60 @@
+{
+  "os": "cisco_nxos",
+  "command": "show vlan access-map",
+  "schema": {
+    "name": "ShowVlanAccessMapResult",
+    "fields": {
+      "access_map_id": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "type": "dict",
+              "key": "str",
+              "value": {
+                "name": "AccessMapMatch",
+                "fields": {
+                  "access_map_action_value": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "access_map_match_protocol": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "access_map_match_protocol_value": {
+                    "type": "str",
+                    "required": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Show vlan access-map output with single sequence",
+      "input": "Vlan access-map ed 10\nmatch ip: foo\naction: forward\n",
+      "expected": {
+        "access_map_id": {
+          "ed": {
+            "access_map_sequence": {
+              "10": {
+                "access_map_action_value": "forward",
+                "access_map_match_protocol": "ip",
+                "access_map_match_protocol_value": "foo"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

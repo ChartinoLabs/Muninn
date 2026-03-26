@@ -1,0 +1,217 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show vrrp brief",
+  "schema": {
+    "name": "ShowVrrpBriefResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrrpInterfaceEntry",
+            "fields": {
+              "groups": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "VrrpBriefEntry",
+                    "fields": {
+                      "group": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "priority": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "time": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "owner": {
+                        "type": "bool",
+                        "required": true
+                      },
+                      "preempt": {
+                        "type": "bool",
+                        "required": true
+                      },
+                      "state": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "master_address": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "group_address": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "address_family": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "VRRPv2 output with multiple groups in mixed states",
+      "input": "Interface          Grp Pri Time  Own Pre State   Master addr     Group addr\nFa0/1              1   110 3570       Y  Master  192.168.88.2    192.168.88.1\nFa0/1.2            2   110 3570       Y  Master  10.0.2.2        10.0.2.1\nFa0/1.3            3   110 3570       Y  Backup  10.0.3.3        10.0.3.1\nFa0/1.4            4   100 3609       Y  Init    10.0.4.3        10.0.4.1\nFa0/1.5            5   90  3570       Y  Backup  10.0.5.3        10.0.5.1\n",
+      "expected": {
+        "interfaces": {
+          "FastEthernet0/1": {
+            "groups": {
+              "1": {
+                "group": 1,
+                "group_address": "192.168.88.1",
+                "master_address": "192.168.88.2",
+                "owner": false,
+                "preempt": true,
+                "priority": 110,
+                "state": "master",
+                "time": 3570
+              }
+            }
+          },
+          "FastEthernet0/1.2": {
+            "groups": {
+              "2": {
+                "group": 2,
+                "group_address": "10.0.2.1",
+                "master_address": "10.0.2.2",
+                "owner": false,
+                "preempt": true,
+                "priority": 110,
+                "state": "master",
+                "time": 3570
+              }
+            }
+          },
+          "FastEthernet0/1.3": {
+            "groups": {
+              "3": {
+                "group": 3,
+                "group_address": "10.0.3.1",
+                "master_address": "10.0.3.3",
+                "owner": false,
+                "preempt": true,
+                "priority": 110,
+                "state": "backup",
+                "time": 3570
+              }
+            }
+          },
+          "FastEthernet0/1.4": {
+            "groups": {
+              "4": {
+                "group": 4,
+                "group_address": "10.0.4.1",
+                "master_address": "10.0.4.3",
+                "owner": false,
+                "preempt": true,
+                "priority": 100,
+                "state": "init",
+                "time": 3609
+              }
+            }
+          },
+          "FastEthernet0/1.5": {
+            "groups": {
+              "5": {
+                "group": 5,
+                "group_address": "10.0.5.1",
+                "master_address": "10.0.5.3",
+                "owner": false,
+                "preempt": true,
+                "priority": 90,
+                "state": "backup",
+                "time": 3570
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "VRRPv3 output with address family column and local suffix",
+      "input": " Interface          Grp  A-F Pri  Time Own Pre State   Master addr/Group addr\n  Vl10                 1 IPv4 150     0  N   Y  MASTER  10.1.0.1(local) 10.1.0.3\n  Vl11                 2 IPv4 150     0  N   Y  MASTER  10.1.1.1(local) 10.1.1.3\n  Vl12                 3 IPv4 100     0  Y   Y  BACKUP  10.1.2.5 10.1.2.3\n  Vl13                 4 IPv4 150     0  N   N  INIT    10.1.3.1(local) 10.1.3.3\n",
+      "expected": {
+        "interfaces": {
+          "VLAN10": {
+            "groups": {
+              "1": {
+                "address_family": "IPv4",
+                "group": 1,
+                "group_address": "10.1.0.3",
+                "master_address": "10.1.0.1",
+                "owner": false,
+                "preempt": true,
+                "priority": 150,
+                "state": "master",
+                "time": 0
+              }
+            }
+          },
+          "VLAN11": {
+            "groups": {
+              "2": {
+                "address_family": "IPv4",
+                "group": 2,
+                "group_address": "10.1.1.3",
+                "master_address": "10.1.1.1",
+                "owner": false,
+                "preempt": true,
+                "priority": 150,
+                "state": "master",
+                "time": 0
+              }
+            }
+          },
+          "VLAN12": {
+            "groups": {
+              "3": {
+                "address_family": "IPv4",
+                "group": 3,
+                "group_address": "10.1.2.3",
+                "master_address": "10.1.2.5",
+                "owner": true,
+                "preempt": true,
+                "priority": 100,
+                "state": "backup",
+                "time": 0
+              }
+            }
+          },
+          "VLAN13": {
+            "groups": {
+              "4": {
+                "address_family": "IPv4",
+                "group": 4,
+                "group_address": "10.1.3.3",
+                "master_address": "10.1.3.1",
+                "owner": false,
+                "preempt": false,
+                "priority": 150,
+                "state": "init",
+                "time": 0
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

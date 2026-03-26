@@ -1,0 +1,35 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show platform hardware throughput level",
+  "schema": {
+    "name": "ShowPlatformHardwareThroughputLevelResult",
+    "fields": {
+      "throughput_level": {
+        "type": "str",
+        "required": true
+      },
+      "throughput_kbps": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic throughput level output with throttled value in kb/s",
+      "input": "Router#show platform hardware throughput level\nThe current throughput level is 250000 kb/s\n",
+      "expected": {
+        "throughput_level": "250000 kb/s",
+        "throughput_kbps": 250000
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": "The current throughput level is 20000 kb/s\n",
+      "expected": {
+        "throughput_level": "20000 kb/s",
+        "throughput_kbps": 20000
+      }
+    }
+  ]
+}

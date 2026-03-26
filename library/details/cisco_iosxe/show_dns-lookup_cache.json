@@ -1,0 +1,184 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show dns-lookup cache",
+  "schema": {
+    "name": "ShowDnsLookupCacheResult",
+    "fields": {
+      "jobs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "DnsLookupJob",
+            "fields": {
+              "job_id": {
+                "type": "int",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "vrf_name": {
+                "type": "str",
+                "required": true
+              },
+              "host_name": {
+                "type": "str",
+                "required": true
+              },
+              "dns_server": {
+                "type": "str",
+                "required": true
+              },
+              "request_time": {
+                "type": "str",
+                "required": false
+              },
+              "completion_time": {
+                "type": "str",
+                "required": false
+              },
+              "error_code": {
+                "type": "str",
+                "required": true
+              },
+              "dns_class": {
+                "type": "str",
+                "required": false
+              },
+              "dns_type": {
+                "type": "str",
+                "required": false
+              },
+              "dns_rtt_ms": {
+                "type": "str",
+                "required": false
+              },
+              "payload_size": {
+                "type": "str",
+                "required": false
+              },
+              "ips": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "DnsLookupIpEntry",
+                    "fields": {
+                      "ip": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "ttl": {
+                        "type": "int",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_jobs": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "Job Id: 4\n Status: JOB_COMPLETED\n Request Info:\n  VRF Name: default\n  Host Name: yahoo.com\n  DNS Server: 72.163.128.140\n Request-time: *Sep 19 20:20:33.776 Completion-time: *Sep 19 20:20:33.785\n Error Code: No Error\n DNS Response:\n  Id: 0\n  Flags: qr-response opcode-query rd ra rcode-noerr\n  Qdcount: 1 Ancount: 6 Nscount: 0 Arcount: 1\n  Class: IN Type: IPv4 RTT: 9ms\n  Payload Size: 134\n  IP: 74.6.143.26                               TTL: 0\n  IP: 74.6.143.25                               TTL: 0\n  IP: 98.137.11.164                             TTL: 0\n  IP: 98.137.11.163                             TTL: 0\n  IP: 74.6.231.20                               TTL: 0\n  IP: 74.6.231.21                               TTL: 0\n\n\nJob Id: 5\n Status: JOB_COMPLETED\n Request Info:\n  VRF Name: Mgmt-intf\n  Host Name: yahoo.com\n  DNS Server: 72.163.128.140\n Request-time: *Sep 19 20:21:51.972 Completion-time: *Sep 19 20:21:51.982\n Error Code: No Error\n DNS Response:\n  Id: 0\n  Flags: qr-response opcode-query rd ra rcode-noerr\n  Qdcount: 1 Ancount: 6 Nscount: 0 Arcount: 1\n  Class: IN Type: IPv4 RTT: 11ms\n  Payload Size: 134\n  IP: 74.6.143.25                               TTL: 0\n  IP: 74.6.231.21                               TTL: 0\n  IP: 98.137.11.163                             TTL: 0\n  IP: 74.6.143.26                               TTL: 0\n  IP: 74.6.231.20                               TTL: 0\n  IP: 98.137.11.164                             TTL: 0\n\n  Total number of Jobs:2\n",
+      "expected": {
+        "jobs": {
+          "4": {
+            "job_id": 4,
+            "status": "JOB_COMPLETED",
+            "vrf_name": "default",
+            "host_name": "yahoo.com",
+            "dns_server": "72.163.128.140",
+            "error_code": "No Error",
+            "ips": {
+              "74.6.143.26": {
+                "ip": "74.6.143.26",
+                "ttl": 0
+              },
+              "74.6.143.25": {
+                "ip": "74.6.143.25",
+                "ttl": 0
+              },
+              "98.137.11.164": {
+                "ip": "98.137.11.164",
+                "ttl": 0
+              },
+              "98.137.11.163": {
+                "ip": "98.137.11.163",
+                "ttl": 0
+              },
+              "74.6.231.20": {
+                "ip": "74.6.231.20",
+                "ttl": 0
+              },
+              "74.6.231.21": {
+                "ip": "74.6.231.21",
+                "ttl": 0
+              }
+            },
+            "request_time": "*Sep 19 20:20:33.776",
+            "completion_time": "*Sep 19 20:20:33.785",
+            "dns_class": "IN",
+            "dns_type": "IPv4",
+            "dns_rtt_ms": "9ms",
+            "payload_size": "134"
+          },
+          "5": {
+            "job_id": 5,
+            "status": "JOB_COMPLETED",
+            "vrf_name": "Mgmt-intf",
+            "host_name": "yahoo.com",
+            "dns_server": "72.163.128.140",
+            "error_code": "No Error",
+            "ips": {
+              "74.6.143.25": {
+                "ip": "74.6.143.25",
+                "ttl": 0
+              },
+              "74.6.231.21": {
+                "ip": "74.6.231.21",
+                "ttl": 0
+              },
+              "98.137.11.163": {
+                "ip": "98.137.11.163",
+                "ttl": 0
+              },
+              "74.6.143.26": {
+                "ip": "74.6.143.26",
+                "ttl": 0
+              },
+              "74.6.231.20": {
+                "ip": "74.6.231.20",
+                "ttl": 0
+              },
+              "98.137.11.164": {
+                "ip": "98.137.11.164",
+                "ttl": 0
+              }
+            },
+            "request_time": "*Sep 19 20:21:51.972",
+            "completion_time": "*Sep 19 20:21:51.982",
+            "dns_class": "IN",
+            "dns_type": "IPv4",
+            "dns_rtt_ms": "11ms",
+            "payload_size": "134"
+          }
+        },
+        "total_jobs": 2
+      }
+    }
+  ]
+}

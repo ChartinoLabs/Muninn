@@ -1,0 +1,76 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show subscriber lite-session",
+  "schema": {
+    "name": "ShowSubscriberLiteSessionResult",
+    "fields": {
+      "total_lite_sessions_up": {
+        "type": "int",
+        "required": true
+      },
+      "sessions": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SubscriberLiteSessionEntry",
+            "fields": {
+              "src_ip": {
+                "type": "str",
+                "required": true
+              },
+              "vrf": {
+                "type": "str",
+                "required": true
+              },
+              "s_vrf": {
+                "type": "str",
+                "required": true
+              },
+              "uptime_sec": {
+                "type": "int",
+                "required": true
+              },
+              "interface": {
+                "type": "str",
+                "required": true
+              },
+              "pbhk": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "Total lite sessions up: 1\nSrc-IP       VRF      S-VRF   Up-time(sec) Interface    PBHK\n100.0.0.10   Default  Default  34          Te1/0/3.100  0.0.0.0:0\n100.0.0.11   Default  Default  34          Te1/0/3.200  0.0.0.0:0\n",
+      "expected": {
+        "total_lite_sessions_up": 1,
+        "sessions": {
+          "100.0.0.10": {
+            "src_ip": "100.0.0.10",
+            "vrf": "Default",
+            "s_vrf": "Default",
+            "uptime_sec": 34,
+            "interface": "TenGigabitEthernet1/0/3.100",
+            "pbhk": "0.0.0.0:0"
+          },
+          "100.0.0.11": {
+            "src_ip": "100.0.0.11",
+            "vrf": "Default",
+            "s_vrf": "Default",
+            "uptime_sec": 34,
+            "interface": "TenGigabitEthernet1/0/3.200",
+            "pbhk": "0.0.0.0:0"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show privilege",
+  "schema": {
+    "name": "ShowPrivilegeResult",
+    "fields": {
+      "current_privilege_level": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show privilege output with level 15",
+      "input": "Router#show privilege\nCurrent privilege level is 15\n",
+      "expected": {
+        "current_privilege_level": 15
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": "Current privilege level is 15\n",
+      "expected": {
+        "current_privilege_level": 15
+      }
+    },
+    {
+      "name": "Show privilege output with level 1 (unprivileged)",
+      "input": "Router>show privilege\nCurrent privilege level is 1\n",
+      "expected": {
+        "current_privilege_level": 1
+      }
+    }
+  ]
+}

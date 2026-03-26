@@ -1,0 +1,65 @@
+{
+  "os": "cisco_ios",
+  "command": "show switch virtual",
+  "schema": {
+    "name": "ShowSwitchVirtualResult",
+    "fields": {
+      "switches": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SwitchMemberEntry",
+            "fields": {
+              "switch_mode": {
+                "type": "str",
+                "required": true
+              },
+              "domain_number": {
+                "type": "int",
+                "required": true
+              },
+              "operational_role": {
+                "type": "str",
+                "required": true
+              },
+              "peer_number": {
+                "type": "int",
+                "required": false
+              },
+              "peer_operational_role": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Catalyst 4500-X VSS pair with active and standby members",
+      "input": "Executing the command on VSS member switch role = VSS Active, id = 1\n\nSwitch mode                  : Virtual Switch\nVirtual switch domain number : 100\nLocal switch number          : 1\nLocal switch operational role: Virtual Switch Active\nPeer switch number           : 2\nPeer switch operational role : Virtual Switch Standby\n\nExecuting the command on VSS member switch role = VSS Standby, id = 2\n\nSwitch mode                  : Virtual Switch\nVirtual switch domain number : 100\nLocal switch number          : 2\nLocal switch operational role: Virtual Switch Standby\nPeer switch number           : 1\nPeer switch operational role : Virtual Switch Active\n",
+      "expected": {
+        "switches": {
+          "1": {
+            "switch_mode": "Virtual Switch",
+            "domain_number": 100,
+            "operational_role": "Virtual Switch Active",
+            "peer_number": 2,
+            "peer_operational_role": "Virtual Switch Standby"
+          },
+          "2": {
+            "switch_mode": "Virtual Switch",
+            "domain_number": 100,
+            "operational_role": "Virtual Switch Standby",
+            "peer_number": 1,
+            "peer_operational_role": "Virtual Switch Active"
+          }
+        }
+      }
+    }
+  ]
+}

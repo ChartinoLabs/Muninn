@@ -1,0 +1,2484 @@
+{
+  "os": "cisco_ios",
+  "command": "show interfaces",
+  "schema": {
+    "name": "ShowInterfacesResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "line_protocol": {
+                "type": "str",
+                "required": true
+              },
+              "hardware": {
+                "type": "str",
+                "required": true
+              },
+              "mtu": {
+                "type": "int",
+                "required": true
+              },
+              "bandwidth_kbps": {
+                "type": "int",
+                "required": true
+              },
+              "delay_usec": {
+                "type": "int",
+                "required": true
+              },
+              "encapsulation": {
+                "type": "str",
+                "required": true
+              },
+              "line_protocol_reason": {
+                "type": "str",
+                "required": false
+              },
+              "description": {
+                "type": "str",
+                "required": false
+              },
+              "address": {
+                "type": "str",
+                "required": false
+              },
+              "bia": {
+                "type": "str",
+                "required": false
+              },
+              "ip_address": {
+                "type": "str",
+                "required": false
+              },
+              "ip_prefix_length": {
+                "type": "int",
+                "required": false
+              },
+              "unnumbered_interface": {
+                "type": "str",
+                "required": false
+              },
+              "reliability": {
+                "type": "str",
+                "required": false
+              },
+              "txload": {
+                "type": "str",
+                "required": false
+              },
+              "rxload": {
+                "type": "str",
+                "required": false
+              },
+              "loopback_set": {
+                "type": "bool",
+                "required": false
+              },
+              "keepalive": {
+                "type": "int",
+                "required": false
+              },
+              "duplex": {
+                "type": "str",
+                "required": false
+              },
+              "speed": {
+                "type": "str",
+                "required": false
+              },
+              "link_type": {
+                "type": "str",
+                "required": false
+              },
+              "media_type": {
+                "type": "str",
+                "required": false
+              },
+              "output_flow_control": {
+                "type": "str",
+                "required": false
+              },
+              "input_flow_control": {
+                "type": "str",
+                "required": false
+              },
+              "fec": {
+                "type": "str",
+                "required": false
+              },
+              "arp_type": {
+                "type": "str",
+                "required": false
+              },
+              "arp_timeout": {
+                "type": "str",
+                "required": false
+              },
+              "vlan_id": {
+                "type": "int",
+                "required": false
+              },
+              "outer_vlan_id": {
+                "type": "int",
+                "required": false
+              },
+              "inner_vlan_id": {
+                "type": "int",
+                "required": false
+              },
+              "autostate_enabled": {
+                "type": "bool",
+                "required": false
+              },
+              "last_input": {
+                "type": "str",
+                "required": false
+              },
+              "last_output": {
+                "type": "str",
+                "required": false
+              },
+              "output_hang": {
+                "type": "str",
+                "required": false
+              },
+              "last_clearing": {
+                "type": "str",
+                "required": false
+              },
+              "input_queue": {
+                "type": {
+                  "name": "InputQueueEntry",
+                  "fields": {
+                    "size": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "max": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "drops": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "flushes": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "output_queue": {
+                "type": {
+                  "name": "OutputQueueEntry",
+                  "fields": {
+                    "size": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "max": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "total_output_drops": {
+                "type": "int",
+                "required": false
+              },
+              "queueing_strategy": {
+                "type": "str",
+                "required": false
+              },
+              "rate_interval_seconds": {
+                "type": "int",
+                "required": false
+              },
+              "input_rate_bps": {
+                "type": "int",
+                "required": false
+              },
+              "input_rate_pps": {
+                "type": "int",
+                "required": false
+              },
+              "output_rate_bps": {
+                "type": "int",
+                "required": false
+              },
+              "output_rate_pps": {
+                "type": "int",
+                "required": false
+              },
+              "counters": {
+                "type": {
+                  "name": "CountersEntry",
+                  "fields": {
+                    "packets_input": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "bytes_input": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "no_buffer": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "broadcasts_received": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "ip_multicasts_received": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "runts": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "giants": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "throttles": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "input_errors": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "crc": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "frame": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "overrun": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "ignored": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "abort": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "watchdog": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "multicast": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "pause_input": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "dribble_condition": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "packets_output": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "bytes_output": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "underruns": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "output_broadcasts": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "output_ip_multicasts": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "output_errors": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "collisions": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "interface_resets": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "unknown_protocol_drops": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "babbles": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "late_collision": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "deferred": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "lost_carrier": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "no_carrier": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "pause_output": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "output_buffer_failures": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "output_buffers_swapped_out": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "carrier_transitions": {
+                      "type": "int",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "port_channel": {
+                "type": {
+                  "name": "PortChannelInfo",
+                  "fields": {
+                    "active_members": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "members": {
+                      "type": {
+                        "type": "dict",
+                        "key": "str",
+                        "value": {
+                          "name": "PortChannelMemberEntry",
+                          "fields": {
+                            "duplex": {
+                              "type": "str",
+                              "required": true
+                            },
+                            "speed": {
+                              "type": "str",
+                              "required": true
+                            }
+                          }
+                        }
+                      },
+                      "required": true
+                    },
+                    "pf_jumbo_members": {
+                      "type": "int",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "tunnel": {
+                "type": {
+                  "name": "TunnelInfo",
+                  "fields": {
+                    "source": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "source_interface": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "destination": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "protocol": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "ttl": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "transport_mtu": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "transmit_bandwidth_kbps": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "receive_bandwidth_kbps": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "linestate_evaluation": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "fast_tunneling": {
+                      "type": "bool",
+                      "required": false
+                    },
+                    "key_disabled": {
+                      "type": "bool",
+                      "required": false
+                    },
+                    "sequencing_disabled": {
+                      "type": "bool",
+                      "required": false
+                    },
+                    "checksumming_disabled": {
+                      "type": "bool",
+                      "required": false
+                    },
+                    "ipsec_profile": {
+                      "type": "str",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "serial_rts": {
+                "type": "str",
+                "required": false
+              },
+              "serial_cts": {
+                "type": "str",
+                "required": false
+              },
+              "serial_dtr": {
+                "type": "str",
+                "required": false
+              },
+              "serial_dcd": {
+                "type": "str",
+                "required": false
+              },
+              "serial_dsr": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple GigE interfaces with up/down/admin-down/reset states, descriptions, full counters, Vlan SVI, Loopback, Port-channel down",
+      "input": "GigabitEthernet0/0 is reset, line protocol is down (notconnect)\n  Hardware is iGbE, address is fa16.3e57.336f (bia fa16.3e57.336f)\n  MTU 1500 bytes, BW 1000000 Kbit/sec, DLY 10 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation ARPA, loopback not set\n  Keepalive set (10 sec)\n  Unknown, Unknown, link type is auto, media type is unknown media type\n  output flow-control is unsupported, input flow-control is unsupported\n  Auto-duplex, Auto-speed, link type is auto, media type is unknown\n  input flow-control is off, output flow-control is unsupported\n  ARP type: ARPA, ARP Timeout 04:00:00\n  Last input 1d21h, output 1d21h, output hang never\n  Last clearing of \"show interface\" counters never\n  Input queue: 0/75/0/0 (size/max/drops/flushes); Total output drops: 0\n  Queueing strategy: fifo\n  Output queue: 0/0 (size/max)\n  5 minute input rate 0 bits/sec, 0 packets/sec\n  5 minute output rate 0 bits/sec, 0 packets/sec\n     324 packets input, 48614 bytes, 0 no buffer\n     Received 0 broadcasts (0 multicasts)\n     0 runts, 0 giants, 0 throttles\n     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored\n     0 watchdog, 0 multicast, 0 pause input\n     703 packets output, 62737 bytes, 0 underruns\n     0 output errors, 0 collisions, 2 interface resets\n     0 unknown protocol drops\n     0 babbles, 0 late collision, 0 deferred\n     0 lost carrier, 0 no carrier, 0 pause output\n     0 output buffer failures, 0 output buffers swapped out\nGigabitEthernet0/1 is up, line protocol is up (connected)\n  Hardware is iGbE, address is fa16.3e4f.41cc (bia fa16.3e4f.41cc)\n  Description: to iosvl2-2\n  MTU 1500 bytes, BW 1000000 Kbit/sec, DLY 10 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation ARPA, loopback not set\n  Keepalive set (10 sec)\n  Auto Duplex, Auto Speed, link type is auto, media type is unknown media type\n  output flow-control is unsupported, input flow-control is unsupported\n  Auto-duplex, Auto-speed, link type is auto, media type is unknown\n  input flow-control is off, output flow-control is unsupported\n  ARP type: ARPA, ARP Timeout 04:00:00\n  Last input 1d21h, output 00:00:02, output hang never\n  Last clearing of \"show interface\" counters never\n  Input queue: 0/75/0/0 (size/max/drops/flushes); Total output drops: 0\n  Queueing strategy: fifo\n  Output queue: 0/0 (size/max)\n  5 minute input rate 0 bits/sec, 0 packets/sec\n  5 minute output rate 0 bits/sec, 0 packets/sec\n     83 packets input, 14855 bytes, 0 no buffer\n     Received 0 broadcasts (0 multicasts)\n     0 runts, 0 giants, 0 throttles\n     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored\n     0 watchdog, 0 multicast, 0 pause input\n     15513 packets output, 2510810 bytes, 0 underruns\n     0 output errors, 0 collisions, 3 interface resets\n     0 unknown protocol drops\n     0 babbles, 0 late collision, 0 deferred\n     0 lost carrier, 0 no carrier, 0 pause output\n     0 output buffer failures, 0 output buffers swapped out\nPort-channel1 is down, line protocol is down (notconnect)\n  Hardware is EtherChannel, address is fa16.3e4f.41cc (bia fa16.3e4f.41cc)\n  MTU 1500 bytes, BW 100000 Kbit/sec, DLY 100 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation ARPA, loopback not set\n  Keepalive set (10 sec)\n  Auto-duplex, Auto-speed, media type is unknown\n  input flow-control is off, output flow-control is unsupported\n  ARP type: ARPA, ARP Timeout 04:00:00\n  Last input 1d21h, output never, output hang never\n  Last clearing of \"show interface\" counters never\n  Input queue: 0/2000/0/0 (size/max/drops/flushes); Total output drops: 0\n  Queueing strategy: fifo\n  Output queue: 0/40 (size/max)\n  5 minute input rate 0 bits/sec, 0 packets/sec\n  5 minute output rate 0 bits/sec, 0 packets/sec\n     85 packets input, 7037 bytes, 0 no buffer\n     Received 0 broadcasts (0 multicasts)\n     0 runts, 0 giants, 0 throttles\n     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored\n     0 input packets with dribble condition detected\n     0 packets output, 0 bytes, 0 underruns\n     0 output errors, 0 collisions, 0 interface resets\n     0 unknown protocol drops\n     0 babbles, 0 late collision, 0 deferred\n     0 lost carrier, 0 no carrier\n     0 output buffer failures, 0 output buffers swapped out\nLoopback0 is up, line protocol is up\n  Hardware is Loopback\n  Description: Loopback\n  MTU 1514 bytes, BW 8000000 Kbit/sec, DLY 5000 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation LOOPBACK, loopback not set\n  Keepalive set (10 sec)\n  Last input never, output never, output hang never\n  Last clearing of \"show interface\" counters never\n  Input queue: 0/75/0/0 (size/max/drops/flushes); Total output drops: 0\n  Queueing strategy: fifo\n  Output queue: 0/0 (size/max)\n  5 minute input rate 0 bits/sec, 0 packets/sec\n  5 minute output rate 0 bits/sec, 0 packets/sec\n     0 packets input, 0 bytes, 0 no buffer\n     Received 0 broadcasts (0 IP multicasts)\n     0 runts, 0 giants, 0 throttles\n     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored, 0 abort\n     0 packets output, 0 bytes, 0 underruns\n     0 output errors, 0 collisions, 0 interface resets\n     0 unknown protocol drops\n     0 output buffer failures, 0 output buffers swapped out\nVlan1 is up, line protocol is up\n  Hardware is Ethernet SVI, address is fa16.3e57.8001 (bia fa16.3e57.8001)\n  Description: OOB Management\n  Internet address is 10.255.0.16/16\n  MTU 1500 bytes, BW 1000000 Kbit/sec, DLY 10 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation ARPA, loopback not set\n  Keepalive not supported\n  ARP type: ARPA, ARP Timeout 04:00:00\n  Last input never, output never, output hang never\n  Last clearing of \"show interface\" counters never\n  Input queue: 0/75/0/0 (size/max/drops/flushes); Total output drops: 0\n  Queueing strategy: fifo\n  Output queue: 0/40 (size/max)\n  5 minute input rate 0 bits/sec, 0 packets/sec\n  5 minute output rate 0 bits/sec, 0 packets/sec\n     0 packets input, 0 bytes, 0 no buffer\n     Received 0 broadcasts (0 IP multicasts)\n     0 runts, 0 giants, 0 throttles\n     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored\n     4 packets output, 240 bytes, 0 underruns\n     0 output errors, 0 interface resets\n     0 unknown protocol drops\n     0 output buffer failures, 0 output buffers swapped out\nGigabitEthernet0/2 is administratively down, line protocol is down\n  Hardware is ASR1001, address is 78da.6eaf.3b82 (bia 78da.6eaf.3b82)\n  Description: Port\n  MTU 1500 bytes, BW 1000000 Kbit/sec, DLY 10 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation ARPA, loopback not set\n  Keepalive not supported\n  Full Duplex, 1000Mbps, link type is auto, media type is unknown media type\n  output flow-control is unsupported, input flow-control is unsupported\n  ARP type: ARPA, ARP Timeout 04:00:00\n  Last input never, output never, output hang never\n  Last clearing of \"show interface\" counters never\n  Input queue: 0/375/0/0 (size/max/drops/flushes); Total output drops: 0\n  Queueing strategy: fifo\n  Output queue: 0/40 (size/max)\n  5 minute input rate 0 bits/sec, 0 packets/sec\n  5 minute output rate 0 bits/sec, 0 packets/sec\n     0 packets input, 0 bytes, 0 no buffer\n     Received 0 broadcasts (0 IP multicasts)\n     0 runts, 0 giants, 0 throttles\n     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored\n     0 watchdog, 0 multicast, 0 pause input\n     0 packets output, 0 bytes, 0 underruns\n     0 output errors, 0 collisions, 1 interface resets\n     0 unknown protocol drops\n     0 babbles, 0 late collision, 0 deferred\n     0 lost carrier, 0 no carrier, 0 pause output\n     0 output buffer failures, 0 output buffers swapped out\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet0/0": {
+            "status": "reset",
+            "line_protocol": "down",
+            "line_protocol_reason": "notconnect",
+            "hardware": "iGbE",
+            "address": "fa16.3e57.336f",
+            "bia": "fa16.3e57.336f",
+            "mtu": 1500,
+            "bandwidth_kbps": 1000000,
+            "delay_usec": 10,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "ARPA",
+            "loopback_set": false,
+            "keepalive": 10,
+            "link_type": "auto",
+            "media_type": "unknown",
+            "output_flow_control": "unsupported",
+            "input_flow_control": "off",
+            "duplex": "Auto-duplex",
+            "speed": "Auto-speed",
+            "arp_type": "ARPA",
+            "arp_timeout": "04:00:00",
+            "last_input": "1d21h",
+            "last_output": "1d21h",
+            "output_hang": "never",
+            "last_clearing": "never",
+            "input_queue": {
+              "size": 0,
+              "max": 75,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 0
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0,
+            "counters": {
+              "packets_input": 324,
+              "bytes_input": 48614,
+              "no_buffer": 0,
+              "broadcasts_received": 0,
+              "ip_multicasts_received": 0,
+              "runts": 0,
+              "giants": 0,
+              "throttles": 0,
+              "input_errors": 0,
+              "crc": 0,
+              "frame": 0,
+              "overrun": 0,
+              "ignored": 0,
+              "watchdog": 0,
+              "multicast": 0,
+              "pause_input": 0,
+              "packets_output": 703,
+              "bytes_output": 62737,
+              "underruns": 0,
+              "output_errors": 0,
+              "collisions": 0,
+              "interface_resets": 2,
+              "unknown_protocol_drops": 0,
+              "babbles": 0,
+              "late_collision": 0,
+              "deferred": 0,
+              "lost_carrier": 0,
+              "no_carrier": 0,
+              "pause_output": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0
+            }
+          },
+          "GigabitEthernet0/1": {
+            "status": "up",
+            "line_protocol": "up",
+            "line_protocol_reason": "connected",
+            "hardware": "iGbE",
+            "address": "fa16.3e4f.41cc",
+            "bia": "fa16.3e4f.41cc",
+            "description": "to iosvl2-2",
+            "mtu": 1500,
+            "bandwidth_kbps": 1000000,
+            "delay_usec": 10,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "ARPA",
+            "loopback_set": false,
+            "keepalive": 10,
+            "duplex": "Auto-duplex",
+            "speed": "Auto-speed",
+            "link_type": "auto",
+            "media_type": "unknown",
+            "output_flow_control": "unsupported",
+            "input_flow_control": "off",
+            "arp_type": "ARPA",
+            "arp_timeout": "04:00:00",
+            "last_input": "1d21h",
+            "last_output": "00:00:02",
+            "output_hang": "never",
+            "last_clearing": "never",
+            "input_queue": {
+              "size": 0,
+              "max": 75,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 0
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0,
+            "counters": {
+              "packets_input": 83,
+              "bytes_input": 14855,
+              "no_buffer": 0,
+              "broadcasts_received": 0,
+              "ip_multicasts_received": 0,
+              "runts": 0,
+              "giants": 0,
+              "throttles": 0,
+              "input_errors": 0,
+              "crc": 0,
+              "frame": 0,
+              "overrun": 0,
+              "ignored": 0,
+              "watchdog": 0,
+              "multicast": 0,
+              "pause_input": 0,
+              "packets_output": 15513,
+              "bytes_output": 2510810,
+              "underruns": 0,
+              "output_errors": 0,
+              "collisions": 0,
+              "interface_resets": 3,
+              "unknown_protocol_drops": 0,
+              "babbles": 0,
+              "late_collision": 0,
+              "deferred": 0,
+              "lost_carrier": 0,
+              "no_carrier": 0,
+              "pause_output": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0
+            }
+          },
+          "Port-channel1": {
+            "status": "down",
+            "line_protocol": "down",
+            "line_protocol_reason": "notconnect",
+            "hardware": "EtherChannel",
+            "address": "fa16.3e4f.41cc",
+            "bia": "fa16.3e4f.41cc",
+            "mtu": 1500,
+            "bandwidth_kbps": 100000,
+            "delay_usec": 100,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "ARPA",
+            "loopback_set": false,
+            "keepalive": 10,
+            "duplex": "Auto-duplex",
+            "speed": "Auto-speed",
+            "media_type": "unknown",
+            "input_flow_control": "off",
+            "output_flow_control": "unsupported",
+            "arp_type": "ARPA",
+            "arp_timeout": "04:00:00",
+            "last_input": "1d21h",
+            "last_output": "never",
+            "output_hang": "never",
+            "last_clearing": "never",
+            "input_queue": {
+              "size": 0,
+              "max": 2000,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 40
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0,
+            "counters": {
+              "packets_input": 85,
+              "bytes_input": 7037,
+              "no_buffer": 0,
+              "broadcasts_received": 0,
+              "ip_multicasts_received": 0,
+              "runts": 0,
+              "giants": 0,
+              "throttles": 0,
+              "input_errors": 0,
+              "crc": 0,
+              "frame": 0,
+              "overrun": 0,
+              "ignored": 0,
+              "dribble_condition": 0,
+              "packets_output": 0,
+              "bytes_output": 0,
+              "underruns": 0,
+              "output_errors": 0,
+              "collisions": 0,
+              "interface_resets": 0,
+              "unknown_protocol_drops": 0,
+              "babbles": 0,
+              "late_collision": 0,
+              "deferred": 0,
+              "lost_carrier": 0,
+              "no_carrier": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0
+            }
+          },
+          "Loopback0": {
+            "status": "up",
+            "line_protocol": "up",
+            "hardware": "Loopback",
+            "description": "Loopback",
+            "mtu": 1514,
+            "bandwidth_kbps": 8000000,
+            "delay_usec": 5000,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "LOOPBACK",
+            "loopback_set": false,
+            "keepalive": 10,
+            "last_input": "never",
+            "last_output": "never",
+            "output_hang": "never",
+            "last_clearing": "never",
+            "input_queue": {
+              "size": 0,
+              "max": 75,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 0
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0,
+            "counters": {
+              "packets_input": 0,
+              "bytes_input": 0,
+              "no_buffer": 0,
+              "broadcasts_received": 0,
+              "ip_multicasts_received": 0,
+              "runts": 0,
+              "giants": 0,
+              "throttles": 0,
+              "input_errors": 0,
+              "crc": 0,
+              "frame": 0,
+              "overrun": 0,
+              "ignored": 0,
+              "abort": 0,
+              "packets_output": 0,
+              "bytes_output": 0,
+              "underruns": 0,
+              "output_errors": 0,
+              "collisions": 0,
+              "interface_resets": 0,
+              "unknown_protocol_drops": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0
+            }
+          },
+          "Vlan1": {
+            "status": "up",
+            "line_protocol": "up",
+            "hardware": "Ethernet SVI",
+            "address": "fa16.3e57.8001",
+            "bia": "fa16.3e57.8001",
+            "description": "OOB Management",
+            "ip_address": "10.255.0.16",
+            "ip_prefix_length": 16,
+            "mtu": 1500,
+            "bandwidth_kbps": 1000000,
+            "delay_usec": 10,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "ARPA",
+            "loopback_set": false,
+            "arp_type": "ARPA",
+            "arp_timeout": "04:00:00",
+            "last_input": "never",
+            "last_output": "never",
+            "output_hang": "never",
+            "last_clearing": "never",
+            "input_queue": {
+              "size": 0,
+              "max": 75,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 40
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0,
+            "counters": {
+              "packets_input": 0,
+              "bytes_input": 0,
+              "no_buffer": 0,
+              "broadcasts_received": 0,
+              "ip_multicasts_received": 0,
+              "runts": 0,
+              "giants": 0,
+              "throttles": 0,
+              "input_errors": 0,
+              "crc": 0,
+              "frame": 0,
+              "overrun": 0,
+              "ignored": 0,
+              "packets_output": 4,
+              "bytes_output": 240,
+              "underruns": 0,
+              "output_errors": 0,
+              "interface_resets": 0,
+              "unknown_protocol_drops": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0
+            }
+          },
+          "GigabitEthernet0/2": {
+            "status": "administratively down",
+            "line_protocol": "down",
+            "hardware": "ASR1001",
+            "address": "78da.6eaf.3b82",
+            "bia": "78da.6eaf.3b82",
+            "description": "Port",
+            "mtu": 1500,
+            "bandwidth_kbps": 1000000,
+            "delay_usec": 10,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "ARPA",
+            "loopback_set": false,
+            "duplex": "Full Duplex",
+            "speed": "1000Mbps",
+            "link_type": "auto",
+            "media_type": "unknown media type",
+            "output_flow_control": "unsupported",
+            "input_flow_control": "unsupported",
+            "arp_type": "ARPA",
+            "arp_timeout": "04:00:00",
+            "last_input": "never",
+            "last_output": "never",
+            "output_hang": "never",
+            "last_clearing": "never",
+            "input_queue": {
+              "size": 0,
+              "max": 375,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 40
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0,
+            "counters": {
+              "packets_input": 0,
+              "bytes_input": 0,
+              "no_buffer": 0,
+              "broadcasts_received": 0,
+              "ip_multicasts_received": 0,
+              "runts": 0,
+              "giants": 0,
+              "throttles": 0,
+              "input_errors": 0,
+              "crc": 0,
+              "frame": 0,
+              "overrun": 0,
+              "ignored": 0,
+              "watchdog": 0,
+              "multicast": 0,
+              "pause_input": 0,
+              "packets_output": 0,
+              "bytes_output": 0,
+              "underruns": 0,
+              "output_errors": 0,
+              "collisions": 0,
+              "interface_resets": 1,
+              "unknown_protocol_drops": 0,
+              "babbles": 0,
+              "late_collision": 0,
+              "deferred": 0,
+              "lost_carrier": 0,
+              "no_carrier": 0,
+              "pause_output": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "802.1Q sub-interface with parent, Loopback, Tunnel with PIM/IPv4 and source tracking",
+      "input": "\nGigabitEthernet0/2 is up, line protocol is up\n  Hardware is iGbE, address is fa16.3eff.a049 (bia fa16.3eff.a049)\n  MTU 1500 bytes, BW 1000000 Kbit/sec, DLY 10 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation 802.1Q Virtual LAN, Vlan ID  1., loopback not set\n  Keepalive set (10 sec)\n  Auto Duplex, Auto Speed, link type is auto, media type is RJ45\n  output flow-control is unsupported, input flow-control is unsupported\n  ARP type: ARPA, ARP Timeout 04:00:00\n  Last input 00:00:11, output 00:00:03, output hang never\n  Last clearing of \"show interface\" counters never\n  Input queue: 0/75/0/0 (size/max/drops/flushes); Total output drops: 0\n  Queueing strategy: fifo\n  Output queue: 0/40 (size/max)\n  5 minute input rate 0 bits/sec, 0 packets/sec\n  5 minute output rate 5000 bits/sec, 1 packets/sec\n     9672 packets input, 1288965 bytes, 0 no buffer\n     Received 9672 broadcasts (0 IP multicasts)\n     0 runts, 0 giants, 0 throttles\n     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored\n     0 watchdog, 9672 multicast, 0 pause input\n     173574 packets output, 68354978 bytes, 0 underruns\n     0 output errors, 0 collisions, 2 interface resets\n     0 unknown protocol drops\n     0 babbles, 0 late collision, 0 deferred\n     1 lost carrier, 0 no carrier, 0 pause output\n     0 output buffer failures, 0 output buffers swapped out\nGigabitEthernet0/2.1 is up, line protocol is up\n  Hardware is iGbE, address is fa16.3eff.a049 (bia fa16.3eff.a049)\n  Internet address is 192.168.154.1/24\n  MTU 1500 bytes, BW 1000000 Kbit/sec, DLY 10 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation 802.1Q Virtual LAN, Vlan ID  300.\n  ARP type: ARPA, ARP Timeout 04:00:00\n  Keepalive set (10 sec)\n  Last clearing of \"show interface\" counters never\nLoopback1 is up, line protocol is up\n  Hardware is Loopback\n  Internet address is 10.81.1.1/24\n  MTU 1514 bytes, BW 8000000 Kbit/sec, DLY 5000 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation LOOPBACK, loopback not set\n  Keepalive set (10 sec)\n  Last input 03:03:52, output never, output hang never\n  Last clearing of \"show interface\" counters never\n  Input queue: 0/75/0/0 (size/max/drops/flushes); Total output drops: 0\n  Queueing strategy: fifo\n  Output queue: 0/0 (size/max)\n  5 minute input rate 0 bits/sec, 0 packets/sec\n  5 minute output rate 0 bits/sec, 0 packets/sec\n     0 packets input, 0 bytes, 0 no buffer\n     Received 0 broadcasts (0 IP multicasts)\n     0 runts, 0 giants, 0 throttles\n     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored, 0 abort\n     19 packets output, 1444 bytes, 0 underruns\n     0 output errors, 0 collisions, 0 interface resets\n     0 unknown protocol drops\n     0 output buffer failures, 0 output buffers swapped out\nTunnel0 is up, line protocol is up\n  Hardware is Tunnel\n  Description: Pim Register Tunnel (Encap) for RP 10.186.1.1\n  Interface is unnumbered. Using address of GigabitEthernet0/2.1 (192.168.154.1)\n  MTU 17912 bytes, BW 100 Kbit/sec, DLY 50000 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation TUNNEL, loopback not set\n  Keepalive not set\n  Tunnel linestate evaluation up\n  Tunnel source 192.168.154.1 (GigabitEthernet0/2.1), destination 10.186.1.1\n   Tunnel Subblocks:\n      src-track:\n         Tunnel0 source tracking subblock associated with GigabitEthernet0/2.1\n          Set of tunnels with source GigabitEthernet0/2.1, 2 members (includes iterators), on interface <OK>\n  Tunnel protocol/transport PIM/IPv4\n  Tunnel TTL 255\n  Tunnel transport MTU 1472 bytes\n  Tunnel is transmit only\n  Tunnel transmit bandwidth 8000 (kbps)\n  Tunnel receive bandwidth 8000 (kbps)\n  Last input never, output never, output hang never\n  Last clearing of \"show interface\" counters 1d19h\n  Input queue: 0/75/0/0 (size/max/drops/flushes); Total output drops: 0\n  Queueing strategy: fifo\n  Output queue: 0/0 (size/max)\n  5 minute input rate 0 bits/sec, 0 packets/sec\n  5 minute output rate 0 bits/sec, 0 packets/sec\n     0 packets input, 0 bytes, 0 no buffer\n     Received 0 broadcasts (0 IP multicasts)\n     0 runts, 0 giants, 0 throttles\n     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored, 0 abort\n     0 packets output, 0 bytes, 0 underruns\n     0 output errors, 0 collisions, 0 interface resets\n     0 unknown protocol drops\n     0 output buffer failures, 0 output buffers swapped out\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet0/2": {
+            "status": "up",
+            "line_protocol": "up",
+            "hardware": "iGbE",
+            "address": "fa16.3eff.a049",
+            "bia": "fa16.3eff.a049",
+            "mtu": 1500,
+            "bandwidth_kbps": 1000000,
+            "delay_usec": 10,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "802.1Q Virtual LAN",
+            "vlan_id": 1,
+            "loopback_set": false,
+            "keepalive": 10,
+            "duplex": "Auto Duplex",
+            "speed": "Auto Speed",
+            "link_type": "auto",
+            "media_type": "RJ45",
+            "output_flow_control": "unsupported",
+            "input_flow_control": "unsupported",
+            "arp_type": "ARPA",
+            "arp_timeout": "04:00:00",
+            "last_input": "00:00:11",
+            "last_output": "00:00:03",
+            "output_hang": "never",
+            "last_clearing": "never",
+            "input_queue": {
+              "size": 0,
+              "max": 75,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 40
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 5000,
+            "output_rate_pps": 1,
+            "counters": {
+              "packets_input": 9672,
+              "bytes_input": 1288965,
+              "no_buffer": 0,
+              "broadcasts_received": 9672,
+              "ip_multicasts_received": 0,
+              "runts": 0,
+              "giants": 0,
+              "throttles": 0,
+              "input_errors": 0,
+              "crc": 0,
+              "frame": 0,
+              "overrun": 0,
+              "ignored": 0,
+              "watchdog": 0,
+              "multicast": 9672,
+              "pause_input": 0,
+              "packets_output": 173574,
+              "bytes_output": 68354978,
+              "underruns": 0,
+              "output_errors": 0,
+              "collisions": 0,
+              "interface_resets": 2,
+              "unknown_protocol_drops": 0,
+              "babbles": 0,
+              "late_collision": 0,
+              "deferred": 0,
+              "lost_carrier": 1,
+              "no_carrier": 0,
+              "pause_output": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0
+            }
+          },
+          "GigabitEthernet0/2.1": {
+            "status": "up",
+            "line_protocol": "up",
+            "hardware": "iGbE",
+            "address": "fa16.3eff.a049",
+            "bia": "fa16.3eff.a049",
+            "ip_address": "192.168.154.1",
+            "ip_prefix_length": 24,
+            "mtu": 1500,
+            "bandwidth_kbps": 1000000,
+            "delay_usec": 10,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "802.1Q Virtual LAN",
+            "vlan_id": 300,
+            "arp_type": "ARPA",
+            "arp_timeout": "04:00:00",
+            "keepalive": 10,
+            "last_clearing": "never"
+          },
+          "Loopback1": {
+            "status": "up",
+            "line_protocol": "up",
+            "hardware": "Loopback",
+            "ip_address": "10.81.1.1",
+            "ip_prefix_length": 24,
+            "mtu": 1514,
+            "bandwidth_kbps": 8000000,
+            "delay_usec": 5000,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "LOOPBACK",
+            "loopback_set": false,
+            "keepalive": 10,
+            "last_input": "03:03:52",
+            "last_output": "never",
+            "output_hang": "never",
+            "last_clearing": "never",
+            "input_queue": {
+              "size": 0,
+              "max": 75,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 0
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0,
+            "counters": {
+              "packets_input": 0,
+              "bytes_input": 0,
+              "no_buffer": 0,
+              "broadcasts_received": 0,
+              "ip_multicasts_received": 0,
+              "runts": 0,
+              "giants": 0,
+              "throttles": 0,
+              "input_errors": 0,
+              "crc": 0,
+              "frame": 0,
+              "overrun": 0,
+              "ignored": 0,
+              "abort": 0,
+              "packets_output": 19,
+              "bytes_output": 1444,
+              "underruns": 0,
+              "output_errors": 0,
+              "collisions": 0,
+              "interface_resets": 0,
+              "unknown_protocol_drops": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0
+            }
+          },
+          "Tunnel0": {
+            "status": "up",
+            "line_protocol": "up",
+            "hardware": "Tunnel",
+            "description": "Pim Register Tunnel (Encap) for RP 10.186.1.1",
+            "unnumbered_interface": "GigabitEthernet0/2.1",
+            "ip_address": "192.168.154.1",
+            "mtu": 17912,
+            "bandwidth_kbps": 100,
+            "delay_usec": 50000,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "TUNNEL",
+            "loopback_set": false,
+            "last_input": "never",
+            "last_output": "never",
+            "output_hang": "never",
+            "last_clearing": "1d19h",
+            "input_queue": {
+              "size": 0,
+              "max": 75,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 0
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0,
+            "counters": {
+              "packets_input": 0,
+              "bytes_input": 0,
+              "no_buffer": 0,
+              "broadcasts_received": 0,
+              "ip_multicasts_received": 0,
+              "runts": 0,
+              "giants": 0,
+              "throttles": 0,
+              "input_errors": 0,
+              "crc": 0,
+              "frame": 0,
+              "overrun": 0,
+              "ignored": 0,
+              "abort": 0,
+              "packets_output": 0,
+              "bytes_output": 0,
+              "underruns": 0,
+              "output_errors": 0,
+              "collisions": 0,
+              "interface_resets": 0,
+              "unknown_protocol_drops": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0
+            },
+            "tunnel": {
+              "linestate_evaluation": "up",
+              "source": "192.168.154.1",
+              "source_interface": "GigabitEthernet0/2.1",
+              "destination": "10.186.1.1",
+              "protocol": "PIM/IPv4",
+              "ttl": 255,
+              "transport_mtu": 1472,
+              "transmit_bandwidth_kbps": 8000,
+              "receive_bandwidth_kbps": 8000
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Port-channel with active member list, QinQ sub-interface with outer/inner VLAN IDs",
+      "input": "Port-channel1 is up, line protocol is up\n  Hardware is 10GEChannel, address is dc8c.3700.0000 (bia dc8c.3700.0000)\n  Description: Interface\n  MTU 9216 bytes, BW 20000000 Kbit/sec, DLY 10 usec,\n     reliability 255/255, txload 22/255, rxload 22/255\n  Encapsulation 802.1Q Virtual LAN, Vlan ID  1., loopback not set\n  Keepalive set (10 sec)\n  ARP type: ARPA, ARP Timeout 04:00:00\n    No. of active members in this channel: 2\n        Member 0 : TenGigabitEthernet0/0/0 , Full-duplex, 10000Mb/s\n        Member 1 : TenGigabitEthernet0/0/1 , Full-duplex, 10000Mb/s\n    No. of PF_JUMBO supported members in this channel : 2\n  Last input 00:00:00, output 00:00:00, output hang never\n  Last clearing of \"show interface\" counters never\n  Input queue: 0/750/0/0 (size/max/drops/flushes); Total output drops: 0\n  Queueing strategy: fifo\n  Output queue: 0/80 (size/max)\n  5 minute input rate 1792809000 bits/sec, 172855 packets/sec\n  5 minute output rate 1798430000 bits/sec, 172826 packets/sec\n     301005604249 packets input, 389700154021690 bytes, 0 no buffer\n     Received 24269275 broadcasts (0 IP multicasts)\n     0 runts, 158509 giants, 0 throttles\n     179928 input errors, 21419 CRC, 87 frame, 0 overrun, 0 ignored\n     0 watchdog, 158541575 multicast, 0 pause input\n     300823114354 packets output, 389618573453967 bytes, 0 underruns\n     Output 0 broadcasts (0 IP multicasts)\n     0 output errors, 0 collisions, 0 interface resets\n     428714 unknown protocol drops\n     0 babbles, 0 late collision, 0 deferred\n     0 lost carrier, 0 no carrier, 0 pause output\n     0 output buffer failures, 0 output buffers swapped out\n     0 carrier transitions\nPort-channel1.13 is up, line protocol is up\n  Hardware is 10GEChannel, address is dc8c.3700.0000 (bia dc8c.3700.0000)\n  Description: SubInt\n  Internet address is 192.168.1.1/24\n  MTU 9216 bytes, BW 20000000 Kbit/sec, DLY 10 usec,\n     reliability 255/255, txload 22/255, rxload 22/255\n  Encapsulation QinQ Virtual LAN, outer ID  813, inner ID 13\n  ARP type: ARPA, ARP Timeout 04:00:00\n  Keepalive set (10 sec)\n  Last clearing of \"show interface\" counters never\n",
+      "expected": {
+        "interfaces": {
+          "Port-channel1": {
+            "status": "up",
+            "line_protocol": "up",
+            "hardware": "10GEChannel",
+            "address": "dc8c.3700.0000",
+            "bia": "dc8c.3700.0000",
+            "description": "Interface",
+            "mtu": 9216,
+            "bandwidth_kbps": 20000000,
+            "delay_usec": 10,
+            "reliability": "255/255",
+            "txload": "22/255",
+            "rxload": "22/255",
+            "encapsulation": "802.1Q Virtual LAN",
+            "vlan_id": 1,
+            "loopback_set": false,
+            "keepalive": 10,
+            "arp_type": "ARPA",
+            "arp_timeout": "04:00:00",
+            "last_input": "00:00:00",
+            "last_output": "00:00:00",
+            "output_hang": "never",
+            "last_clearing": "never",
+            "input_queue": {
+              "size": 0,
+              "max": 750,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 80
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 1792809000,
+            "input_rate_pps": 172855,
+            "output_rate_bps": 1798430000,
+            "output_rate_pps": 172826,
+            "counters": {
+              "packets_input": 301005604249,
+              "bytes_input": 389700154021690,
+              "no_buffer": 0,
+              "broadcasts_received": 24269275,
+              "ip_multicasts_received": 0,
+              "runts": 0,
+              "giants": 158509,
+              "throttles": 0,
+              "input_errors": 179928,
+              "crc": 21419,
+              "frame": 87,
+              "overrun": 0,
+              "ignored": 0,
+              "watchdog": 0,
+              "multicast": 158541575,
+              "pause_input": 0,
+              "packets_output": 300823114354,
+              "bytes_output": 389618573453967,
+              "underruns": 0,
+              "output_broadcasts": 0,
+              "output_ip_multicasts": 0,
+              "output_errors": 0,
+              "collisions": 0,
+              "interface_resets": 0,
+              "unknown_protocol_drops": 428714,
+              "babbles": 0,
+              "late_collision": 0,
+              "deferred": 0,
+              "lost_carrier": 0,
+              "no_carrier": 0,
+              "pause_output": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0,
+              "carrier_transitions": 0
+            },
+            "port_channel": {
+              "active_members": 2,
+              "members": {
+                "TenGigabitEthernet0/0/0": {
+                  "duplex": "Full-duplex",
+                  "speed": "10000Mb/s"
+                },
+                "TenGigabitEthernet0/0/1": {
+                  "duplex": "Full-duplex",
+                  "speed": "10000Mb/s"
+                }
+              },
+              "pf_jumbo_members": 2
+            }
+          },
+          "Port-channel1.13": {
+            "status": "up",
+            "line_protocol": "up",
+            "hardware": "10GEChannel",
+            "address": "dc8c.3700.0000",
+            "bia": "dc8c.3700.0000",
+            "description": "SubInt",
+            "ip_address": "192.168.1.1",
+            "ip_prefix_length": 24,
+            "mtu": 9216,
+            "bandwidth_kbps": 20000000,
+            "delay_usec": 10,
+            "reliability": "255/255",
+            "txload": "22/255",
+            "rxload": "22/255",
+            "encapsulation": "QinQ Virtual LAN",
+            "outer_vlan_id": 813,
+            "inner_vlan_id": 13,
+            "arp_type": "ARPA",
+            "arp_timeout": "04:00:00",
+            "keepalive": 10,
+            "last_clearing": "never"
+          }
+        }
+      }
+    },
+    {
+      "name": "TwentyFiveGigE interfaces with FEC, 30-second rate interval, dribble condition, output broadcasts",
+      "input": "TwentyFiveGigE2/0/32 is administratively down, line protocol is down (disabled)\n  Hardware is Twenty Five Gigabit Ethernet, address is ac3a.6738.c8ff (bia ac3a.6738.c8ff)\n  MTU 1500 bytes, BW 25000000 Kbit/sec, DLY 10 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation ARPA, loopback not set\n  Keepalive set (10 sec)\n  Full-duplex, 10Gb/s, link type is auto, media type is\n  Fec is auto\n  input flow-control is on, output flow-control is off\n  ARP type: ARPA, ARP Timeout 04:00:00\n  Last input never, output never, output hang never\n  Last clearing of \"show interface\" counters never\n  Input queue: 0/375/0/0 (size/max/drops/flushes); Total output drops: 0\n  Queueing strategy: fifo\n  Output queue: 0/40 (size/max)\n  30 second input rate 0 bits/sec, 0 packets/sec\n  30 second output rate 0 bits/sec, 0 packets/sec\n     0 packets input, 0 bytes, 0 no buffer\n     Received 0 broadcasts (0 IP multicasts)\n     0 runts, 0 giants, 0 throttles\n     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored\n     0 watchdog, 0 multicast, 0 pause input\n     0 input packets with dribble condition detected\n     0 packets output, 0 bytes, 0 underruns\n     Output 0 broadcasts (0 IP multicasts)\n     0 output errors, 0 collisions, 2 interface resets\n     0 unknown protocol drops\n     0 babbles, 0 late collision, 0 deferred\n     0 lost carrier, 0 no carrier, 0 pause output\n     0 output buffer failures, 0 output buffers swapped out\nTwentyFiveGigE2/0/33 is administratively down, line protocol is down (disabled)\n  Hardware is Twenty Five Gigabit Ethernet, address is ac3a.6738.c8ff (bia ac3a.6738.c8ff)\n  MTU 1500 bytes, BW 25000000 Kbit/sec, DLY 10 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation ARPA, loopback not set\n  Keepalive set (10 sec)\n  Full-duplex, 10Gb/s, link type is auto, media type is\n  Fec is auto\n  input flow-control is on, output flow-control is off\n  ARP type: ARPA, ARP Timeout 04:00:00\n  Last input never, output never, output hang never\n  Last clearing of \"show interface\" counters never\n  Input queue: 0/375/0/0 (size/max/drops/flushes); Total output drops: 0\n  Queueing strategy: fifo\n  Output queue: 0/40 (size/max)\n  30 second input rate 0 bits/sec, 0 packets/sec\n  30 second output rate 0 bits/sec, 0 packets/sec\n     0 packets input, 0 bytes, 0 no buffer\n     Received 0 broadcasts (0 IP multicasts)\n     0 runts, 0 giants, 0 throttles\n     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored\n     0 watchdog, 0 multicast, 0 pause input\n     0 input packets with dribble condition detected\n     0 packets output, 0 bytes, 0 underruns\n     Output 0 broadcasts (0 IP multicasts)\n     0 output errors, 0 collisions, 2 interface resets\n     0 unknown protocol drops\n     0 babbles, 0 late collision, 0 deferred\n     0 lost carrier, 0 no carrier, 0 pause output\n     0 output buffer failures, 0 output buffers swapped out\n",
+      "expected": {
+        "interfaces": {
+          "TwentyFiveGigE2/0/32": {
+            "status": "administratively down",
+            "line_protocol": "down",
+            "line_protocol_reason": "disabled",
+            "hardware": "Twenty Five Gigabit Ethernet",
+            "address": "ac3a.6738.c8ff",
+            "bia": "ac3a.6738.c8ff",
+            "mtu": 1500,
+            "bandwidth_kbps": 25000000,
+            "delay_usec": 10,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "ARPA",
+            "loopback_set": false,
+            "keepalive": 10,
+            "duplex": "Full-duplex",
+            "speed": "10Gb/s",
+            "link_type": "auto",
+            "fec": "auto",
+            "input_flow_control": "on",
+            "output_flow_control": "off",
+            "arp_type": "ARPA",
+            "arp_timeout": "04:00:00",
+            "last_input": "never",
+            "last_output": "never",
+            "output_hang": "never",
+            "last_clearing": "never",
+            "input_queue": {
+              "size": 0,
+              "max": 375,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 40
+            },
+            "rate_interval_seconds": 30,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0,
+            "counters": {
+              "packets_input": 0,
+              "bytes_input": 0,
+              "no_buffer": 0,
+              "broadcasts_received": 0,
+              "ip_multicasts_received": 0,
+              "runts": 0,
+              "giants": 0,
+              "throttles": 0,
+              "input_errors": 0,
+              "crc": 0,
+              "frame": 0,
+              "overrun": 0,
+              "ignored": 0,
+              "watchdog": 0,
+              "multicast": 0,
+              "pause_input": 0,
+              "dribble_condition": 0,
+              "packets_output": 0,
+              "bytes_output": 0,
+              "underruns": 0,
+              "output_broadcasts": 0,
+              "output_ip_multicasts": 0,
+              "output_errors": 0,
+              "collisions": 0,
+              "interface_resets": 2,
+              "unknown_protocol_drops": 0,
+              "babbles": 0,
+              "late_collision": 0,
+              "deferred": 0,
+              "lost_carrier": 0,
+              "no_carrier": 0,
+              "pause_output": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0
+            }
+          },
+          "TwentyFiveGigE2/0/33": {
+            "status": "administratively down",
+            "line_protocol": "down",
+            "line_protocol_reason": "disabled",
+            "hardware": "Twenty Five Gigabit Ethernet",
+            "address": "ac3a.6738.c8ff",
+            "bia": "ac3a.6738.c8ff",
+            "mtu": 1500,
+            "bandwidth_kbps": 25000000,
+            "delay_usec": 10,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "ARPA",
+            "loopback_set": false,
+            "keepalive": 10,
+            "duplex": "Full-duplex",
+            "speed": "10Gb/s",
+            "link_type": "auto",
+            "fec": "auto",
+            "input_flow_control": "on",
+            "output_flow_control": "off",
+            "arp_type": "ARPA",
+            "arp_timeout": "04:00:00",
+            "last_input": "never",
+            "last_output": "never",
+            "output_hang": "never",
+            "last_clearing": "never",
+            "input_queue": {
+              "size": 0,
+              "max": 375,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 40
+            },
+            "rate_interval_seconds": 30,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0,
+            "counters": {
+              "packets_input": 0,
+              "bytes_input": 0,
+              "no_buffer": 0,
+              "broadcasts_received": 0,
+              "ip_multicasts_received": 0,
+              "runts": 0,
+              "giants": 0,
+              "throttles": 0,
+              "input_errors": 0,
+              "crc": 0,
+              "frame": 0,
+              "overrun": 0,
+              "ignored": 0,
+              "watchdog": 0,
+              "multicast": 0,
+              "pause_input": 0,
+              "dribble_condition": 0,
+              "packets_output": 0,
+              "bytes_output": 0,
+              "underruns": 0,
+              "output_broadcasts": 0,
+              "output_ip_multicasts": 0,
+              "output_errors": 0,
+              "collisions": 0,
+              "interface_resets": 2,
+              "unknown_protocol_drops": 0,
+              "babbles": 0,
+              "late_collision": 0,
+              "deferred": 0,
+              "lost_carrier": 0,
+              "no_carrier": 0,
+              "pause_output": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Multiple tunnel types including AURP, GRE/IP with key/sequencing/checksumming, source tracking, UNKNOWN source",
+      "input": "show interfaces tunnel 10\nTunnel10 is up, line protocol is down\n  Hardware is Tunnel\n  Internet address is 1.1.1.3/24\n  MTU 9980 bytes, BW 100 Kbit/sec, DLY 50000 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation TUNNEL, loopback not set\n  Keepalive not set\n  Tunnel linestate evaluation down - no output interface\n  Tunnel source 1.1.10.10, destination 1.1.10.11\n  Tunnel protocol/transport AURP\n  Tunnel TTL 255\n  Tunnel transport MTU 1480 bytes\n  Tunnel transmit bandwidth 10000000 (kbps)\n  Tunnel receive bandwidth 1000000 (kbps)\n  Last input never, output never, output hang never\n  Last clearing of \"show interface\" counters 17:00:12\n  Input queue: 0/375/0/0 (size/max/drops/flushes); Total output drops: 0\n  Queueing strategy: fifo\n  Output queue: 0/0 (size/max)\n  5 minute input rate 0 bits/sec, 0 packets/sec\n  5 minute output rate 0 bits/sec, 0 packets/sec\n     0 packets input, 0 bytes, 0 no buffer\n     Received 0 broadcasts (0 IP multicasts)\n     0 runts, 0 giants, 0 throttles\n     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored, 0 abort\n     0 packets output, 0 bytes, 0 underruns\n     Output 0 broadcasts (0 IP multicasts)\n     0 output errors, 0 collisions, 0 interface resets\n     0 unknown protocol drops\n     0 output buffer failures, 0 output buffers swapped out\nTunnel4 is up, line protocol is down\n  Hardware is Tunnel\n  MTU 9976 bytes, BW 100 Kbit/sec, DLY 50000 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation TUNNEL, loopback not set\n  Keepalive not set\n  Tunnel linestate evaluation down - no IPv4 tunnel destination address\n  Tunnel source 192.168.1.100\n  Tunnel protocol/transport GRE/IP\n    Key disabled, sequencing disabled\n    Checksumming of packets disabled\n  Tunnel TTL 255, Fast tunneling enabled\n  Tunnel transport MTU 1476 bytes\n  Tunnel transmit bandwidth 8000 (kbps)\n  Tunnel receive bandwidth 8000 (kbps)\n  Last input never, output never, output hang never\n  Last clearing of \"show interface\" counters 00:02:56\n  Input queue: 0/375/0/0 (size/max/drops/flushes); Total output drops: 0\n  Queueing strategy: fifo\n  Output queue: 0/0 (size/max)\n  5 minute input rate 0 bits/sec, 0 packets/sec\n  5 minute output rate 0 bits/sec, 0 packets/sec\n     0 packets input, 0 bytes, 0 no buffer\n     Received 0 broadcasts (0 IP multicasts)\n     0 runts, 0 giants, 0 throttles\n     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored, 0 abort\n     0 packets output, 0 bytes, 0 underruns\n     Output 0 broadcasts (0 IP multicasts)\n     0 output errors, 0 collisions, 0 interface resets\n     0 unknown protocol drops\n     0 output buffer failures, 0 output buffers swapped out\nTunnel5 is up, line protocol is down\n  Hardware is Tunnel\n  MTU 9976 bytes, BW 100 Kbit/sec, DLY 50000 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation TUNNEL, loopback not set\n  Keepalive not set\n  Tunnel linestate evaluation down - no output interface\n  Tunnel source 7.7.7.7 (Loopback100), destination 7.7.7.8\n   Tunnel Subblocks:\n      src-track:\n         Tunnel5 source tracking subblock associated with Loopback100\n          Set of tunnels with source Loopback100, 1 member (includes iterators), on interface <OK>\n  Tunnel protocol/transport GRE/IP\n    Key disabled, sequencing disabled\n    Checksumming of packets disabled\n  Tunnel TTL 255, Fast tunneling enabled\n  Tunnel transport MTU 1476 bytes\n  Tunnel transmit bandwidth 8000 (kbps)\n  Tunnel receive bandwidth 8000 (kbps)\n  Last input never, output never, output hang never\n  Last clearing of \"show interface\" counters 00:01:30\n  Input queue: 0/375/0/0 (size/max/drops/flushes); Total output drops: 0\n  Queueing strategy: fifo\n  Output queue: 0/0 (size/max)\n  5 minute input rate 0 bits/sec, 0 packets/sec\n  5 minute output rate 0 bits/sec, 0 packets/sec\n     0 packets input, 0 bytes, 0 no buffer\n     Received 0 broadcasts (0 IP multicasts)\n     0 runts, 0 giants, 0 throttles\n     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored, 0 abort\n     0 packets output, 0 bytes, 0 underruns\n     Output 0 broadcasts (0 IP multicasts)\n     0 output errors, 0 collisions, 0 interface resets\n     0 unknown protocol drops\n     0 output buffer failures, 0 output buffers swapped out\nTunnel6 is up, line protocol is down\n  Hardware is Tunnel\n  MTU 9976 bytes, BW 100 Kbit/sec, DLY 50000 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation TUNNEL, loopback not set\n  Keepalive not set\n  Tunnel linestate evaluation down - no output interface\n  Tunnel source UNKNOWN, destination 1.2.3.4\n  Tunnel protocol/transport GRE/IP\n    Key disabled, sequencing disabled\n    Checksumming of packets disabled\n  Tunnel TTL 255, Fast tunneling enabled\n  Tunnel transport MTU 1476 bytes\n  Tunnel transmit bandwidth 8000 (kbps)\n  Tunnel receive bandwidth 8000 (kbps)\n  Last input never, output never, output hang never\n  Last clearing of \"show interface\" counters 00:00:38\n  Input queue: 0/375/0/0 (size/max/drops/flushes); Total output drops: 0\n  Queueing strategy: fifo\n  Output queue: 0/0 (size/max)\n  5 minute input rate 0 bits/sec, 0 packets/sec\n  5 minute output rate 0 bits/sec, 0 packets/sec\n     0 packets input, 0 bytes, 0 no buffer\n     Received 0 broadcasts (0 IP multicasts)\n     0 runts, 0 giants, 0 throttles\n     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored, 0 abort\n     0 packets output, 0 bytes, 0 underruns\n     Output 0 broadcasts (0 IP multicasts)\n     0 output errors, 0 collisions, 0 interface resets\n     0 unknown protocol drops\n     0 output buffer failures, 0 output buffers swapped out\nTunnel7 is up, line protocol is down\n  Hardware is Tunnel\n  MTU 9976 bytes, BW 100 Kbit/sec, DLY 50000 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation TUNNEL, loopback not set\n  Keepalive not set\n  Tunnel linestate evaluation down - no IPv4 tunnel destination address\n  Tunnel source 9.45.21.231 (GigabitEthernet2)\n   Tunnel Subblocks:\n      src-track:\n         Tunnel7 source tracking subblock associated with GigabitEthernet2\n          Set of tunnels with source GigabitEthernet2, 1 member (includes iterators), on interface <OK>\n  Tunnel protocol/transport GRE/IP\n    Key disabled, sequencing disabled\n    Checksumming of packets disabled\n  Tunnel TTL 255, Fast tunneling enabled\n  Tunnel transport MTU 1476 bytes\n  Tunnel transmit bandwidth 8000 (kbps)\n  Tunnel receive bandwidth 8000 (kbps)\n  Last input never, output never, output hang never\n  Last clearing of \"show interface\" counters 00:00:45\n  Input queue: 0/375/0/0 (size/max/drops/flushes); Total output drops: 0\n  Queueing strategy: fifo\n  Output queue: 0/0 (size/max)\n  5 minute input rate 0 bits/sec, 0 packets/sec\n  5 minute output rate 0 bits/sec, 0 packets/sec\n     0 packets input, 0 bytes, 0 no buffer\n     Received 0 broadcasts (0 IP multicasts)\n     0 runts, 0 giants, 0 throttles\n     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored, 0 abort\n     0 packets output, 0 bytes, 0 underruns\n     Output 0 broadcasts (0 IP multicasts)\n     0 output errors, 0 collisions, 0 interface resets\n     0 unknown protocol drops\n     0 output buffer failures, 0 output buffers swapped out\n",
+      "expected": {
+        "interfaces": {
+          "Tunnel10": {
+            "status": "up",
+            "line_protocol": "down",
+            "hardware": "Tunnel",
+            "ip_address": "1.1.1.3",
+            "ip_prefix_length": 24,
+            "mtu": 9980,
+            "bandwidth_kbps": 100,
+            "delay_usec": 50000,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "TUNNEL",
+            "loopback_set": false,
+            "last_input": "never",
+            "last_output": "never",
+            "output_hang": "never",
+            "last_clearing": "17:00:12",
+            "input_queue": {
+              "size": 0,
+              "max": 375,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 0
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0,
+            "counters": {
+              "packets_input": 0,
+              "bytes_input": 0,
+              "no_buffer": 0,
+              "broadcasts_received": 0,
+              "ip_multicasts_received": 0,
+              "runts": 0,
+              "giants": 0,
+              "throttles": 0,
+              "input_errors": 0,
+              "crc": 0,
+              "frame": 0,
+              "overrun": 0,
+              "ignored": 0,
+              "abort": 0,
+              "packets_output": 0,
+              "bytes_output": 0,
+              "underruns": 0,
+              "output_broadcasts": 0,
+              "output_ip_multicasts": 0,
+              "output_errors": 0,
+              "collisions": 0,
+              "interface_resets": 0,
+              "unknown_protocol_drops": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0
+            },
+            "tunnel": {
+              "linestate_evaluation": "down - no output interface",
+              "source": "1.1.10.10",
+              "destination": "1.1.10.11",
+              "protocol": "AURP",
+              "ttl": 255,
+              "transport_mtu": 1480,
+              "transmit_bandwidth_kbps": 10000000,
+              "receive_bandwidth_kbps": 1000000
+            }
+          },
+          "Tunnel4": {
+            "status": "up",
+            "line_protocol": "down",
+            "hardware": "Tunnel",
+            "mtu": 9976,
+            "bandwidth_kbps": 100,
+            "delay_usec": 50000,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "TUNNEL",
+            "loopback_set": false,
+            "last_input": "never",
+            "last_output": "never",
+            "output_hang": "never",
+            "last_clearing": "00:02:56",
+            "input_queue": {
+              "size": 0,
+              "max": 375,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 0
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0,
+            "counters": {
+              "packets_input": 0,
+              "bytes_input": 0,
+              "no_buffer": 0,
+              "broadcasts_received": 0,
+              "ip_multicasts_received": 0,
+              "runts": 0,
+              "giants": 0,
+              "throttles": 0,
+              "input_errors": 0,
+              "crc": 0,
+              "frame": 0,
+              "overrun": 0,
+              "ignored": 0,
+              "abort": 0,
+              "packets_output": 0,
+              "bytes_output": 0,
+              "underruns": 0,
+              "output_broadcasts": 0,
+              "output_ip_multicasts": 0,
+              "output_errors": 0,
+              "collisions": 0,
+              "interface_resets": 0,
+              "unknown_protocol_drops": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0
+            },
+            "tunnel": {
+              "linestate_evaluation": "down - no IPv4 tunnel destination address",
+              "source": "192.168.1.100",
+              "protocol": "GRE/IP",
+              "key_disabled": true,
+              "sequencing_disabled": true,
+              "checksumming_disabled": true,
+              "ttl": 255,
+              "fast_tunneling": true,
+              "transport_mtu": 1476,
+              "transmit_bandwidth_kbps": 8000,
+              "receive_bandwidth_kbps": 8000
+            }
+          },
+          "Tunnel5": {
+            "status": "up",
+            "line_protocol": "down",
+            "hardware": "Tunnel",
+            "mtu": 9976,
+            "bandwidth_kbps": 100,
+            "delay_usec": 50000,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "TUNNEL",
+            "loopback_set": false,
+            "last_input": "never",
+            "last_output": "never",
+            "output_hang": "never",
+            "last_clearing": "00:01:30",
+            "input_queue": {
+              "size": 0,
+              "max": 375,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 0
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0,
+            "counters": {
+              "packets_input": 0,
+              "bytes_input": 0,
+              "no_buffer": 0,
+              "broadcasts_received": 0,
+              "ip_multicasts_received": 0,
+              "runts": 0,
+              "giants": 0,
+              "throttles": 0,
+              "input_errors": 0,
+              "crc": 0,
+              "frame": 0,
+              "overrun": 0,
+              "ignored": 0,
+              "abort": 0,
+              "packets_output": 0,
+              "bytes_output": 0,
+              "underruns": 0,
+              "output_broadcasts": 0,
+              "output_ip_multicasts": 0,
+              "output_errors": 0,
+              "collisions": 0,
+              "interface_resets": 0,
+              "unknown_protocol_drops": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0
+            },
+            "tunnel": {
+              "linestate_evaluation": "down - no output interface",
+              "source": "7.7.7.7",
+              "source_interface": "Loopback100",
+              "destination": "7.7.7.8",
+              "protocol": "GRE/IP",
+              "key_disabled": true,
+              "sequencing_disabled": true,
+              "checksumming_disabled": true,
+              "ttl": 255,
+              "fast_tunneling": true,
+              "transport_mtu": 1476,
+              "transmit_bandwidth_kbps": 8000,
+              "receive_bandwidth_kbps": 8000
+            }
+          },
+          "Tunnel6": {
+            "status": "up",
+            "line_protocol": "down",
+            "hardware": "Tunnel",
+            "mtu": 9976,
+            "bandwidth_kbps": 100,
+            "delay_usec": 50000,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "TUNNEL",
+            "loopback_set": false,
+            "last_input": "never",
+            "last_output": "never",
+            "output_hang": "never",
+            "last_clearing": "00:00:38",
+            "input_queue": {
+              "size": 0,
+              "max": 375,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 0
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0,
+            "counters": {
+              "packets_input": 0,
+              "bytes_input": 0,
+              "no_buffer": 0,
+              "broadcasts_received": 0,
+              "ip_multicasts_received": 0,
+              "runts": 0,
+              "giants": 0,
+              "throttles": 0,
+              "input_errors": 0,
+              "crc": 0,
+              "frame": 0,
+              "overrun": 0,
+              "ignored": 0,
+              "abort": 0,
+              "packets_output": 0,
+              "bytes_output": 0,
+              "underruns": 0,
+              "output_broadcasts": 0,
+              "output_ip_multicasts": 0,
+              "output_errors": 0,
+              "collisions": 0,
+              "interface_resets": 0,
+              "unknown_protocol_drops": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0
+            },
+            "tunnel": {
+              "linestate_evaluation": "down - no output interface",
+              "source": "UNKNOWN",
+              "destination": "1.2.3.4",
+              "protocol": "GRE/IP",
+              "key_disabled": true,
+              "sequencing_disabled": true,
+              "checksumming_disabled": true,
+              "ttl": 255,
+              "fast_tunneling": true,
+              "transport_mtu": 1476,
+              "transmit_bandwidth_kbps": 8000,
+              "receive_bandwidth_kbps": 8000
+            }
+          },
+          "Tunnel7": {
+            "status": "up",
+            "line_protocol": "down",
+            "hardware": "Tunnel",
+            "mtu": 9976,
+            "bandwidth_kbps": 100,
+            "delay_usec": 50000,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "TUNNEL",
+            "loopback_set": false,
+            "last_input": "never",
+            "last_output": "never",
+            "output_hang": "never",
+            "last_clearing": "00:00:45",
+            "input_queue": {
+              "size": 0,
+              "max": 375,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 0
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0,
+            "counters": {
+              "packets_input": 0,
+              "bytes_input": 0,
+              "no_buffer": 0,
+              "broadcasts_received": 0,
+              "ip_multicasts_received": 0,
+              "runts": 0,
+              "giants": 0,
+              "throttles": 0,
+              "input_errors": 0,
+              "crc": 0,
+              "frame": 0,
+              "overrun": 0,
+              "ignored": 0,
+              "abort": 0,
+              "packets_output": 0,
+              "bytes_output": 0,
+              "underruns": 0,
+              "output_broadcasts": 0,
+              "output_ip_multicasts": 0,
+              "output_errors": 0,
+              "collisions": 0,
+              "interface_resets": 0,
+              "unknown_protocol_drops": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0
+            },
+            "tunnel": {
+              "linestate_evaluation": "down - no IPv4 tunnel destination address",
+              "source": "9.45.21.231",
+              "source_interface": "GigabitEthernet2",
+              "protocol": "GRE/IP",
+              "key_disabled": true,
+              "sequencing_disabled": true,
+              "checksumming_disabled": true,
+              "ttl": 255,
+              "fast_tunneling": true,
+              "transport_mtu": 1476,
+              "transmit_bandwidth_kbps": 8000,
+              "receive_bandwidth_kbps": 8000
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Serial interface with X.25/LAPB detail lines (skipped), RTS/CTS/DTR/DCD/DSR signal states, carrier transitions",
+      "input": "show interfaces Serial0/3/1\nSerial0/3/1 is up, line protocol is up\n  Hardware is NIM-4T\n  Internet address is 1.0.0.1/8\n  MTU 1500 bytes, BW 64 Kbit/sec, DLY 20000 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation X25, loopback not set\n  Keepalive set (10 sec)\n  X.25 DTE, version 1984, address 170091, state R1, modulo 8, timer 0\n      Defaults: idle VC timeout 0\n        cisco encapsulation\n        input/output window sizes 5/5, packet sizes 128/128\n      Timers: T20 180, T21 200, T22 180, T23 180\n      Channels: Incoming-only none, Two-way 1-1024, Outgoing-only none\n      RESTARTs 1/0 CALLs 0+0/0+0/0+0 DIAGs 0/0\n  LAPB DTE, state CONNECT, modulo 8, k 7, N1 12056, N2 20\n      T1 3000, T2 0, interface outage (partial T3) 0, T4 0\n      VS 1, VR 1, tx NR 1, Remote VR 1, Retransmissions 0\n      Queues: U/S frames 0, I frames 0, unack. 0, reTx 0\n      IFRAMEs 1/1 RNRs 0/0 REJs 0/0 SABM/Es 0/1 FRMRs 0/0 DISCs 0/0\n  Last input 00:00:11, output 00:00:11, output hang never\n  Last clearing of \"show interface\" counters 00:00:20\n  Input queue: 0/375/0/0 (size/max/drops/flushes); Total output drops: 0\n  Queueing strategy: fifo\n  Output queue: 0/40 (size/max)\n  5 minute input rate 0 bits/sec, 0 packets/sec\n  5 minute output rate 0 bits/sec, 0 packets/sec\n     4 packets input, 21 bytes, 0 no buffer\n     Received 0 broadcasts (0 IP multicasts)\n     0 runts, 0 giants, 0 throttles\n     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored, 0 abort\n     3 packets output, 17 bytes, 0 underruns\n     Output 0 broadcasts (0 IP multicasts)\n     0 output errors, 0 collisions, 0 interface resets\n     0 unknown protocol drops\n     0 output buffer failures, 0 output buffers swapped out\n     1 carrier transitions\n     RTS up, CTS up, DTR up, DCD up, DSR up\n",
+      "expected": {
+        "interfaces": {
+          "Serial0/3/1": {
+            "status": "up",
+            "line_protocol": "up",
+            "hardware": "NIM-4T",
+            "ip_address": "1.0.0.1",
+            "ip_prefix_length": 8,
+            "mtu": 1500,
+            "bandwidth_kbps": 64,
+            "delay_usec": 20000,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "X25",
+            "loopback_set": false,
+            "keepalive": 10,
+            "last_input": "00:00:11",
+            "last_output": "00:00:11",
+            "output_hang": "never",
+            "last_clearing": "00:00:20",
+            "input_queue": {
+              "size": 0,
+              "max": 375,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 40
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0,
+            "serial_rts": "up",
+            "serial_cts": "up",
+            "serial_dtr": "up",
+            "serial_dcd": "up",
+            "serial_dsr": "up",
+            "counters": {
+              "packets_input": 4,
+              "bytes_input": 21,
+              "no_buffer": 0,
+              "broadcasts_received": 0,
+              "ip_multicasts_received": 0,
+              "runts": 0,
+              "giants": 0,
+              "throttles": 0,
+              "input_errors": 0,
+              "crc": 0,
+              "frame": 0,
+              "overrun": 0,
+              "ignored": 0,
+              "abort": 0,
+              "packets_output": 3,
+              "bytes_output": 17,
+              "underruns": 0,
+              "output_broadcasts": 0,
+              "output_ip_multicasts": 0,
+              "output_errors": 0,
+              "collisions": 0,
+              "interface_resets": 0,
+              "unknown_protocol_drops": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0,
+              "carrier_transitions": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "TenGigabitEthernet and GigabitEthernet on ISR4461 with different address/BIA, output broadcasts counter, and Keepalive not supported",
+      "input": "TenGigabitEthernet0/1 is down, line protocol is down\n  Hardware is SFP-Plus management port, address is 74ad.abcd.dcba (bia 74ad.abcd.abcd)\n  MTU 1500 bytes, BW 10000000 Kbit/sec, DLY 10 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation ARPA, loopback not set\n  Keepalive set (10 sec)\n  Unknown, Unknown, link type is auto, media type is unknown media type\n  output flow-control is unsupported, input flow-control is unsupported\n  ARP type: ARPA, ARP Timeout 04:00:00\n  Last input never, output never, output hang never\n  Last clearing of \"show interface\" counters never\n  Input queue: 0/75/0/0 (size/max/drops/flushes); Total output drops: 0\n  Queueing strategy: fifo\n  Output queue: 0/40 (size/max)\n  5 minute input rate 0 bits/sec, 0 packets/sec\n  5 minute output rate 0 bits/sec, 0 packets/sec\n     0 packets input, 0 bytes, 0 no buffer\n     Received 0 broadcasts (0 IP multicasts)\n     0 runts, 0 giants, 0 throttles\n     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored\n     0 watchdog, 0 multicast, 0 pause input\n     0 packets output, 0 bytes, 0 underruns\n     Output 0 broadcasts (0 IP multicasts)\n     0 output errors, 0 collisions, 0 interface resets\n     0 unknown protocol drops\n     0 babbles, 0 late collision, 0 deferred\n     0 lost carrier, 0 no carrier, 0 pause output\n     0 output buffer failures, 0 output buffers swapped out\nGigabitEthernet0/0/0 is administratively down, line protocol is down\n  Hardware is ISR4461-4x1G-2xTG, address is c4f7.d514.6900 (bia c4f7.d514.6900)\n  Internet address is 111.222.0.37/30\n  MTU 1500 bytes, BW 1000000 Kbit/sec, DLY 10 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation ARPA, loopback not set\n  Keepalive not supported\n  Full Duplex, 1000Mbps, link type is auto, media type is Auto Select\n  output flow-control is on, input flow-control is on\n  ARP type: ARPA, ARP Timeout 04:00:00\n  Last input 3y16w, output 3y16w, output hang never\n  Last clearing of \"show interface\" counters never\n  Input queue: 0/375/0/0 (size/max/drops/flushes); Total output drops: 0\n  Queueing strategy: fifo\n  Output queue: 0/40 (size/max)\n  5 minute input rate 0 bits/sec, 0 packets/sec\n  5 minute output rate 0 bits/sec, 0 packets/sec\n     49132 packets input, 9286676 bytes, 0 no buffer\n     Received 7 broadcasts (0 IP multicasts)\n     0 runts, 0 giants, 0 throttles\n     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored\n     0 watchdog, 4669 multicast, 0 pause input\n     49347 packets output, 7905236 bytes, 0 underruns\n     0 output errors, 0 collisions, 4 interface resets\n     0 unknown protocol drops\n     0 babbles, 0 late collision, 0 deferred\n     4 lost carrier, 0 no carrier, 0 pause output\n     0 output buffer failures, 0 output buffers swapped out\nTenGigabitEthernet0/0/13 is down, line protocol is down\n  Hardware is 12xGE-2x10GE-FIXED, address is 4c77.abcd.1212 (bia 4c77.abcd.1212)\n  MTU 1500 bytes, BW 10000000 Kbit/sec, DLY 10 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation ARPA, loopback not set\n  Keepalive set (10 sec)\n  Full Duplex, 10000Mbps, link type is auto, media type is unknown media type\n  output flow-control is unsupported, input flow-control is on\n  ARP type: ARPA, ARP Timeout 04:00:00\n  Last input never, output never, output hang never\n  Last clearing of \"show interface\" counters never\n  Input queue: 0/375/0/0 (size/max/drops/flushes); Total output drops: 0\n  Queueing strategy: fifo\n  Output queue: 0/40 (size/max)\n  5 minute input rate 0 bits/sec, 0 packets/sec\n  5 minute output rate 0 bits/sec, 0 packets/sec\n     0 packets input, 0 bytes, 0 no buffer\n     Received 0 broadcasts (0 IP multicasts)\n     0 runts, 0 giants, 0 throttles\n     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored\n     0 watchdog, 0 multicast, 0 pause input\n     0 packets output, 0 bytes, 0 underruns\n     0 output errors, 0 collisions, 1 interface resets\n     0 unknown protocol drops\n     0 babbles, 0 late collision, 0 deferred\n     0 lost carrier, 0 no carrier, 0 pause output\n     0 output buffer failures, 0 output buffers swapped out\n",
+      "expected": {
+        "interfaces": {
+          "TenGigabitEthernet0/1": {
+            "status": "down",
+            "line_protocol": "down",
+            "hardware": "SFP-Plus management port",
+            "address": "74ad.abcd.dcba",
+            "bia": "74ad.abcd.abcd",
+            "mtu": 1500,
+            "bandwidth_kbps": 10000000,
+            "delay_usec": 10,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "ARPA",
+            "loopback_set": false,
+            "keepalive": 10,
+            "link_type": "auto",
+            "media_type": "unknown media type",
+            "output_flow_control": "unsupported",
+            "input_flow_control": "unsupported",
+            "arp_type": "ARPA",
+            "arp_timeout": "04:00:00",
+            "last_input": "never",
+            "last_output": "never",
+            "output_hang": "never",
+            "last_clearing": "never",
+            "input_queue": {
+              "size": 0,
+              "max": 75,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 40
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0,
+            "counters": {
+              "packets_input": 0,
+              "bytes_input": 0,
+              "no_buffer": 0,
+              "broadcasts_received": 0,
+              "ip_multicasts_received": 0,
+              "runts": 0,
+              "giants": 0,
+              "throttles": 0,
+              "input_errors": 0,
+              "crc": 0,
+              "frame": 0,
+              "overrun": 0,
+              "ignored": 0,
+              "watchdog": 0,
+              "multicast": 0,
+              "pause_input": 0,
+              "packets_output": 0,
+              "bytes_output": 0,
+              "underruns": 0,
+              "output_broadcasts": 0,
+              "output_ip_multicasts": 0,
+              "output_errors": 0,
+              "collisions": 0,
+              "interface_resets": 0,
+              "unknown_protocol_drops": 0,
+              "babbles": 0,
+              "late_collision": 0,
+              "deferred": 0,
+              "lost_carrier": 0,
+              "no_carrier": 0,
+              "pause_output": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0
+            }
+          },
+          "GigabitEthernet0/0/0": {
+            "status": "administratively down",
+            "line_protocol": "down",
+            "hardware": "ISR4461-4x1G-2xTG",
+            "address": "c4f7.d514.6900",
+            "bia": "c4f7.d514.6900",
+            "ip_address": "111.222.0.37",
+            "ip_prefix_length": 30,
+            "mtu": 1500,
+            "bandwidth_kbps": 1000000,
+            "delay_usec": 10,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "ARPA",
+            "loopback_set": false,
+            "duplex": "Full Duplex",
+            "speed": "1000Mbps",
+            "link_type": "auto",
+            "media_type": "Auto Select",
+            "output_flow_control": "on",
+            "input_flow_control": "on",
+            "arp_type": "ARPA",
+            "arp_timeout": "04:00:00",
+            "last_input": "3y16w",
+            "last_output": "3y16w",
+            "output_hang": "never",
+            "last_clearing": "never",
+            "input_queue": {
+              "size": 0,
+              "max": 375,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 40
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0,
+            "counters": {
+              "packets_input": 49132,
+              "bytes_input": 9286676,
+              "no_buffer": 0,
+              "broadcasts_received": 7,
+              "ip_multicasts_received": 0,
+              "runts": 0,
+              "giants": 0,
+              "throttles": 0,
+              "input_errors": 0,
+              "crc": 0,
+              "frame": 0,
+              "overrun": 0,
+              "ignored": 0,
+              "watchdog": 0,
+              "multicast": 4669,
+              "pause_input": 0,
+              "packets_output": 49347,
+              "bytes_output": 7905236,
+              "underruns": 0,
+              "output_errors": 0,
+              "collisions": 0,
+              "interface_resets": 4,
+              "unknown_protocol_drops": 0,
+              "babbles": 0,
+              "late_collision": 0,
+              "deferred": 0,
+              "lost_carrier": 4,
+              "no_carrier": 0,
+              "pause_output": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0
+            }
+          },
+          "TenGigabitEthernet0/0/13": {
+            "status": "down",
+            "line_protocol": "down",
+            "hardware": "12xGE-2x10GE-FIXED",
+            "address": "4c77.abcd.1212",
+            "bia": "4c77.abcd.1212",
+            "mtu": 1500,
+            "bandwidth_kbps": 10000000,
+            "delay_usec": 10,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "ARPA",
+            "loopback_set": false,
+            "keepalive": 10,
+            "duplex": "Full Duplex",
+            "speed": "10000Mbps",
+            "link_type": "auto",
+            "media_type": "unknown media type",
+            "output_flow_control": "unsupported",
+            "input_flow_control": "on",
+            "arp_type": "ARPA",
+            "arp_timeout": "04:00:00",
+            "last_input": "never",
+            "last_output": "never",
+            "output_hang": "never",
+            "last_clearing": "never",
+            "input_queue": {
+              "size": 0,
+              "max": 375,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 40
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0,
+            "counters": {
+              "packets_input": 0,
+              "bytes_input": 0,
+              "no_buffer": 0,
+              "broadcasts_received": 0,
+              "ip_multicasts_received": 0,
+              "runts": 0,
+              "giants": 0,
+              "throttles": 0,
+              "input_errors": 0,
+              "crc": 0,
+              "frame": 0,
+              "overrun": 0,
+              "ignored": 0,
+              "watchdog": 0,
+              "multicast": 0,
+              "pause_input": 0,
+              "packets_output": 0,
+              "bytes_output": 0,
+              "underruns": 0,
+              "output_errors": 0,
+              "collisions": 0,
+              "interface_resets": 1,
+              "unknown_protocol_drops": 0,
+              "babbles": 0,
+              "late_collision": 0,
+              "deferred": 0,
+              "lost_carrier": 0,
+              "no_carrier": 0,
+              "pause_output": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "FastEthernet with Half-duplex, dribble condition counter, and no no_buffer field; TenGigabitEthernet with Class-based queueing and large 64-bit counters",
+      "input": "FastEthernet1 is down, line protocol is down\n  Hardware is RP management port, address is 6c41.6aba.b47f (bia 6c41.6aba.b47f)\n  MTU 1500 bytes, BW 10000 Kbit/sec, DLY 1000 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation ARPA, loopback not set\n  Keepalive set (10 sec)\n  Half-duplex, 10Mb/s, 100BaseTX/FX\n  ARP type: ARPA, ARP Timeout 04:00:00\n  Last input never, output never, output hang never\n  Last clearing of \"show interface\" counters never\n  Input queue: 0/75/0/0 (size/max/drops/flushes); Total output drops: 0\n  Queueing strategy: fifo\n  Output queue: 0/0 (size/max)\n  5 minute input rate 0 bits/sec, 0 packets/sec\n  5 minute output rate 0 bits/sec, 0 packets/sec\n     0 packets input, 0 bytes\n     Received 0 broadcasts (0 IP multicasts)\n     0 runts, 0 giants, 0 throttles\n     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored\n     0 watchdog\n     0 input packets with dribble condition detected\n     0 packets output, 0 bytes, 0 underruns\n     0 output errors, 0 collisions, 0 interface resets\n     0 unknown protocol drops\n     0 babbles, 0 late collision, 0 deferred\n     0 lost carrier, 0 no carrier\n     0 output buffer failures, 0 output buffers swapped out\nTenGigabitEthernet1/1/1 is up, line protocol is up (connected)\n  Hardware is Ten Gigabit Ethernet Port, address is 6c41.6aba.b440 (bia 6c41.6aba.b440)\n  Description: vss\n  MTU 1500 bytes, BW 10000000 Kbit/sec, DLY 10 usec,\n     reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation ARPA, loopback not set\n  Keepalive set (10 sec)\n  Full-duplex, 10Gb/s, link type is auto, media type is QSFP-10G 1M\n  input flow-control is on, output flow-control is on\n  ARP type: ARPA, ARP Timeout 04:00:00\n  Last input never, output never, output hang never\n  Last clearing of \"show interface\" counters never\n  Input queue: 0/2000/0/0 (size/max/drops/flushes); Total output drops: 4\n  Queueing strategy: Class-based queueing\n  Output queue: 0/40 (size/max)\n  5 minute input rate 1180000 bits/sec, 131 packets/sec\n  5 minute output rate 38000 bits/sec, 33 packets/sec\n     4035758153 packets input, 2783400652228 bytes, 0 no buffer\n     Received 160702941 broadcasts (60693400 multicasts)\n     0 runts, 0 giants, 0 throttles\n     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored\n     0 input packets with dribble condition detected\n     956714742 packets output, 377708181830 bytes, 0 underruns\n     0 output errors, 0 collisions, 4 interface resets\n     0 unknown protocol drops\n     0 babbles, 0 late collision, 0 deferred\n     0 lost carrier, 0 no carrier\n     0 output buffer failures, 0 output buffers swapped out\n",
+      "expected": {
+        "interfaces": {
+          "FastEthernet1": {
+            "status": "down",
+            "line_protocol": "down",
+            "hardware": "RP management port",
+            "address": "6c41.6aba.b47f",
+            "bia": "6c41.6aba.b47f",
+            "mtu": 1500,
+            "bandwidth_kbps": 10000,
+            "delay_usec": 1000,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "ARPA",
+            "loopback_set": false,
+            "keepalive": 10,
+            "duplex": "Half-duplex",
+            "speed": "10Mb/s",
+            "arp_type": "ARPA",
+            "arp_timeout": "04:00:00",
+            "last_input": "never",
+            "last_output": "never",
+            "output_hang": "never",
+            "last_clearing": "never",
+            "input_queue": {
+              "size": 0,
+              "max": 75,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 0
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0,
+            "counters": {
+              "packets_input": 0,
+              "bytes_input": 0,
+              "broadcasts_received": 0,
+              "ip_multicasts_received": 0,
+              "runts": 0,
+              "giants": 0,
+              "throttles": 0,
+              "input_errors": 0,
+              "crc": 0,
+              "frame": 0,
+              "overrun": 0,
+              "ignored": 0,
+              "dribble_condition": 0,
+              "packets_output": 0,
+              "bytes_output": 0,
+              "underruns": 0,
+              "output_errors": 0,
+              "collisions": 0,
+              "interface_resets": 0,
+              "unknown_protocol_drops": 0,
+              "babbles": 0,
+              "late_collision": 0,
+              "deferred": 0,
+              "lost_carrier": 0,
+              "no_carrier": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0
+            }
+          },
+          "TenGigabitEthernet1/1/1": {
+            "status": "up",
+            "line_protocol": "up",
+            "line_protocol_reason": "connected",
+            "hardware": "Ten Gigabit Ethernet Port",
+            "address": "6c41.6aba.b440",
+            "bia": "6c41.6aba.b440",
+            "description": "vss",
+            "mtu": 1500,
+            "bandwidth_kbps": 10000000,
+            "delay_usec": 10,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "ARPA",
+            "loopback_set": false,
+            "keepalive": 10,
+            "duplex": "Full-duplex",
+            "speed": "10Gb/s",
+            "link_type": "auto",
+            "media_type": "QSFP-10G 1M",
+            "input_flow_control": "on",
+            "output_flow_control": "on",
+            "arp_type": "ARPA",
+            "arp_timeout": "04:00:00",
+            "last_input": "never",
+            "last_output": "never",
+            "output_hang": "never",
+            "last_clearing": "never",
+            "input_queue": {
+              "size": 0,
+              "max": 2000,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 4,
+            "queueing_strategy": "Class-based queueing",
+            "output_queue": {
+              "size": 0,
+              "max": 40
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 1180000,
+            "input_rate_pps": 131,
+            "output_rate_bps": 38000,
+            "output_rate_pps": 33,
+            "counters": {
+              "packets_input": 4035758153,
+              "bytes_input": 2783400652228,
+              "no_buffer": 0,
+              "broadcasts_received": 160702941,
+              "ip_multicasts_received": 60693400,
+              "runts": 0,
+              "giants": 0,
+              "throttles": 0,
+              "input_errors": 0,
+              "crc": 0,
+              "frame": 0,
+              "overrun": 0,
+              "ignored": 0,
+              "dribble_condition": 0,
+              "packets_output": 956714742,
+              "bytes_output": 377708181830,
+              "underruns": 0,
+              "output_errors": 0,
+              "collisions": 0,
+              "interface_resets": 4,
+              "unknown_protocol_drops": 0,
+              "babbles": 0,
+              "late_collision": 0,
+              "deferred": 0,
+              "lost_carrier": 0,
+              "no_carrier": 0,
+              "output_buffer_failures": 0,
+              "output_buffers_swapped_out": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Embedded-Service-Engine interface with no-indent output format (counters not parsed due to missing indentation), plus CN Gigabit Ethernet with IP address and active traffic counters",
+      "input": "Embedded-Service-Engine0/0 is administratively down, line protocol is down\nHardware is Embedded Service Engine, address is 0000.0000.0000 (bia 0000.0000.0000)\nMTU 1500 bytes, BW 10000 Kbit/sec, DLY 1000 usec,\nreliability 255/255, txload 1/255, rxload 1/255\nEncapsulation ARPA, loopback not set\nKeepalive set (10 sec)\nARP type: ARPA, ARP Timeout 04:00:00\nLast input never, output never, output hang never\nLast clearing of \"show interface\" counters never\nInput queue: 0/64/0/0 (size/max/drops/flushes); Total output drops: 0\nQueueing strategy: fifo\nOutput queue: 0/40 (size/max)\n5 minute input rate 0 bits/sec, 0 packets/sec\n5 minute output rate 0 bits/sec, 0 packets/sec\n0 packets input, 0 bytes, 0 no buffer\nReceived 0 broadcasts (0 IP multicasts)\n0 runts, 0 giants, 0 throttles\n0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored\n0 input packets with dribble condition detected\n0 packets output, 0 bytes, 0 underruns\n0 output errors, 0 collisions, 0 interface resets\n0 unknown protocol drops\n0 babbles, 0 late collision, 0 deferred\n0 lost carrier, 0 no carrier\n0 output buffer failures, 0 output buffers swapped out\nGigabitEthernet0/0 is up, line protocol is up\nHardware is CN Gigabit Ethernet, address is 10f3.11ff.5167 (bia 10f3.11ff.5167)\nDescription: ************\nInternet address is 192.168.151.3/24\nMTU 1500 bytes, BW 100000 Kbit/sec, DLY 100 usec,\nreliability 255/255, txload 1/255, rxload 1/255\nEncapsulation ARPA, loopback not set\nKeepalive set (10 sec)\nFull Duplex, 100Mbps, media type is RJ45\noutput flow-control is unsupported, input flow-control is unsupported\nARP type: ARPA, ARP Timeout 04:00:00\nLast input 00:00:00, output 00:00:01, output hang never\nLast clearing of \"show interface\" counters never\nInput queue: 0/75/0/0 (size/max/drops/flushes); Total output drops: 0\nQueueing strategy: fifo\nOutput queue: 0/40 (size/max)\n5 minute input rate 7000 bits/sec, 13 packets/sec\n5 minute output rate 0 bits/sec, 0 packets/sec\n38129643 packets input, 2700786656 bytes, 0 no buffer\nReceived 35509555 broadcasts (0 IP multicasts)\n0 runts, 0 giants, 0 throttles\n0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored\n0 watchdog, 1837369 multicast, 0 pause input\n3553802 packets output, 256973121 bytes, 0 underruns\n0 output errors, 0 collisions, 2 interface resets\n181716 unknown protocol drops\n0 babbles, 0 late collision, 0 deferred\n0 lost carrier, 0 no carrier, 0 pause output\n0 output buffer failures, 0 output buffers swapped out\nGigabitEthernet0/1 is administratively down, line protocol is down\nHardware is CN Gigabit Ethernet, address is 10f3.11ff.5168 (bia 10f3.11ff.5168)\nMTU 1500 bytes, BW 1000000 Kbit/sec, DLY 10 usec,\nreliability 255/255, txload 1/255, rxload 1/255\nEncapsulation ARPA, loopback not set\nKeepalive set (10 sec)\nAuto Duplex, Auto Speed, media type is RJ45\noutput flow-control is unsupported, input flow-control is unsupported\nARP type: ARPA, ARP Timeout 04:00:00\nLast input never, output never, output hang never\nLast clearing of \"show interface\" counters never\nInput queue: 0/75/0/0 (size/max/drops/flushes); Total output drops: 0\nQueueing strategy: fifo\nOutput queue: 0/40 (size/max)\n5 minute input rate 0 bits/sec, 0 packets/sec\n5 minute output rate 0 bits/sec, 0 packets/sec\n0 packets input, 0 bytes, 0 no buffer\nReceived 0 broadcasts (0 IP multicasts)\n0 runts, 0 giants, 0 throttles\n0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored\n0 watchdog, 0 multicast, 0 pause input\n0 packets output, 0 bytes, 0 underruns\n0 output errors, 0 collisions, 0 interface resets\n0 unknown protocol drops\n0 babbles, 0 late collision, 0 deferred\n0 lost carrier, 0 no carrier, 0 pause output\n0 output buffer failures, 0 output buffers swapped out\n",
+      "expected": {
+        "interfaces": {
+          "Embedded-Service-Engine0/0": {
+            "status": "administratively down",
+            "line_protocol": "down",
+            "hardware": "Embedded Service Engine",
+            "address": "0000.0000.0000",
+            "bia": "0000.0000.0000",
+            "mtu": 1500,
+            "bandwidth_kbps": 10000,
+            "delay_usec": 1000,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "ARPA",
+            "loopback_set": false,
+            "keepalive": 10,
+            "arp_type": "ARPA",
+            "arp_timeout": "04:00:00",
+            "last_input": "never",
+            "last_output": "never",
+            "output_hang": "never",
+            "last_clearing": "never",
+            "input_queue": {
+              "size": 0,
+              "max": 64,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 40
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0
+          },
+          "GigabitEthernet0/0": {
+            "status": "up",
+            "line_protocol": "up",
+            "hardware": "CN Gigabit Ethernet",
+            "address": "10f3.11ff.5167",
+            "bia": "10f3.11ff.5167",
+            "description": "************",
+            "ip_address": "192.168.151.3",
+            "ip_prefix_length": 24,
+            "mtu": 1500,
+            "bandwidth_kbps": 100000,
+            "delay_usec": 100,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "ARPA",
+            "loopback_set": false,
+            "keepalive": 10,
+            "duplex": "Full Duplex",
+            "speed": "100Mbps",
+            "media_type": "RJ45",
+            "output_flow_control": "unsupported",
+            "input_flow_control": "unsupported",
+            "arp_type": "ARPA",
+            "arp_timeout": "04:00:00",
+            "last_input": "00:00:00",
+            "last_output": "00:00:01",
+            "output_hang": "never",
+            "last_clearing": "never",
+            "input_queue": {
+              "size": 0,
+              "max": 75,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 40
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 7000,
+            "input_rate_pps": 13,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0
+          },
+          "GigabitEthernet0/1": {
+            "status": "administratively down",
+            "line_protocol": "down",
+            "hardware": "CN Gigabit Ethernet",
+            "address": "10f3.11ff.5168",
+            "bia": "10f3.11ff.5168",
+            "mtu": 1500,
+            "bandwidth_kbps": 1000000,
+            "delay_usec": 10,
+            "reliability": "255/255",
+            "txload": "1/255",
+            "rxload": "1/255",
+            "encapsulation": "ARPA",
+            "loopback_set": false,
+            "keepalive": 10,
+            "duplex": "Auto Duplex",
+            "speed": "Auto Speed",
+            "media_type": "RJ45",
+            "output_flow_control": "unsupported",
+            "input_flow_control": "unsupported",
+            "arp_type": "ARPA",
+            "arp_timeout": "04:00:00",
+            "last_input": "never",
+            "last_output": "never",
+            "output_hang": "never",
+            "last_clearing": "never",
+            "input_queue": {
+              "size": 0,
+              "max": 75,
+              "drops": 0,
+              "flushes": 0
+            },
+            "total_output_drops": 0,
+            "queueing_strategy": "fifo",
+            "output_queue": {
+              "size": 0,
+              "max": 40
+            },
+            "rate_interval_seconds": 300,
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0
+          }
+        }
+      }
+    }
+  ]
+}

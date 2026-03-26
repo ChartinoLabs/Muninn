@@ -1,0 +1,150 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show dhcp lease",
+  "schema": {
+    "name": "ShowDhcpLeaseResult",
+    "fields": {
+      "leases": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "DhcpLeaseEntry",
+            "fields": {
+              "ip_address": {
+                "type": "str",
+                "required": true
+              },
+              "subnet_mask": {
+                "type": "str",
+                "required": true
+              },
+              "server_id": {
+                "type": "str",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "transaction_id": {
+                "type": "str",
+                "required": true
+              },
+              "lease_seconds": {
+                "type": "int",
+                "required": false
+              },
+              "lease_infinite": {
+                "type": "bool",
+                "required": false
+              },
+              "renewal_seconds": {
+                "type": "int",
+                "required": false
+              },
+              "rebind_seconds": {
+                "type": "int",
+                "required": false
+              },
+              "default_gateway": {
+                "type": "str",
+                "required": false
+              },
+              "next_timer_fires_after": {
+                "type": "str",
+                "required": false
+              },
+              "retry_count": {
+                "type": "int",
+                "required": true
+              },
+              "client_id": {
+                "type": "str",
+                "required": true
+              },
+              "hostname": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Two DHCP leases, one with default gateway",
+      "input": "Temp IP addr: 40.182.4.1  for peer on Interface: HundredGigE1/1/0\nTemp  sub net mask: 255.255.255.252\n   DHCP Lease server: 40.182.4.2, state: 5 Bound\n   DHCP transaction id: 1663D15A\n   Lease: 3600 secs,  Renewal: 1800 secs,  Rebind: 3150 secs\n   Next timer fires after: 00:19:01\n   Retry count: 0   Client-ID: 00fd.22bc.b860\n   Client-ID hex dump: 00FD22BCB860\n   Hostname: SM-Hub2\nTemp IP addr: 40.187.4.1  for peer on Interface: TenGigabitEthernet1/0/6\nTemp  sub net mask: 255.255.255.252\n   DHCP Lease server: 40.187.4.2, state: 5 Bound\n   DHCP transaction id: 6AAAF114\n   Lease: 86400 secs,  Renewal: 43200 secs,  Rebind: 75600 secs\nTemp default-gateway addr: 40.187.4.2\n   Next timer fires after: 10:15:49\n   Retry count: 0   Client-ID: cisco-00fd.22bc.b846-Te1/0/6\n   Client-ID hex dump: 636973636F2D303066642E323262632E\n                       623834362D5465312F302F36\n   Hostname: SM-Hub2\n",
+      "expected": {
+        "leases": {
+          "HundredGigabitEthernet1/1/0": {
+            "client_id": "00fd.22bc.b860",
+            "hostname": "SM-Hub2",
+            "ip_address": "40.182.4.1",
+            "lease_seconds": 3600,
+            "next_timer_fires_after": "00:19:01",
+            "rebind_seconds": 3150,
+            "renewal_seconds": 1800,
+            "retry_count": 0,
+            "server_id": "40.182.4.2",
+            "state": "Bound",
+            "subnet_mask": "255.255.255.252",
+            "transaction_id": "1663D15A"
+          },
+          "TenGigabitEthernet1/0/6": {
+            "client_id": "cisco-00fd.22bc.b846-Te1/0/6",
+            "default_gateway": "40.187.4.2",
+            "hostname": "SM-Hub2",
+            "ip_address": "40.187.4.1",
+            "lease_seconds": 86400,
+            "next_timer_fires_after": "10:15:49",
+            "rebind_seconds": 75600,
+            "renewal_seconds": 43200,
+            "retry_count": 0,
+            "server_id": "40.187.4.2",
+            "state": "Bound",
+            "subnet_mask": "255.255.255.252",
+            "transaction_id": "6AAAF114"
+          }
+        }
+      }
+    },
+    {
+      "name": "Infinite lease with no timer and a second lease with finite time",
+      "input": "Temp IP addr: 110.1.1.11  for peer on Interface: GigabitEthernet1/0/47\nTemp  sub net mask: 255.255.255.0\n   DHCP Lease server: 110.1.1.1, state: 5 Bound\n   DHCP transaction id: D7AA0C96\n   Lease: Infinite\n   No timer running\n   Retry count: 0   Client-ID: cisco-5c5a.c777.b7d5-Gi1/0/47\n   Client-ID hex dump: 636973636F2D356335612E633737372E\n                       623764352D4769312F302F3437\n   Hostname: cmt-cat9k-3\nTemp IP addr: 112.1.1.11  for peer on Interface: GigabitEthernet1/1/2\nTemp  sub net mask: 255.255.255.0\n   DHCP Lease server: 111.1.1.1, state: 5 Bound\n   DHCP transaction id: D7AA0C97\n   Lease: 95580 secs,  Renewal: 47790 secs,  Rebind: 83629 secs\nTemp default-gateway addr: 112.1.1.1\n   Next timer fires after: 12:01:35\n   Retry count: 0   Client-ID: cisco-5c5a.c777.b7c8-Gi1/1/2\n   Client-ID hex dump: 636973636F2D356335612E633737372E\n                       623763382D4769312F312F32\n   Hostname: cmt-cat9k-3\n",
+      "expected": {
+        "leases": {
+          "GigabitEthernet1/0/47": {
+            "client_id": "cisco-5c5a.c777.b7d5-Gi1/0/47",
+            "hostname": "cmt-cat9k-3",
+            "ip_address": "110.1.1.11",
+            "lease_infinite": true,
+            "retry_count": 0,
+            "server_id": "110.1.1.1",
+            "state": "Bound",
+            "subnet_mask": "255.255.255.0",
+            "transaction_id": "D7AA0C96"
+          },
+          "GigabitEthernet1/1/2": {
+            "client_id": "cisco-5c5a.c777.b7c8-Gi1/1/2",
+            "default_gateway": "112.1.1.1",
+            "hostname": "cmt-cat9k-3",
+            "ip_address": "112.1.1.11",
+            "lease_seconds": 95580,
+            "next_timer_fires_after": "12:01:35",
+            "rebind_seconds": 83629,
+            "renewal_seconds": 47790,
+            "retry_count": 0,
+            "server_id": "111.1.1.1",
+            "state": "Bound",
+            "subnet_mask": "255.255.255.0",
+            "transaction_id": "D7AA0C97"
+          }
+        }
+      }
+    }
+  ]
+}

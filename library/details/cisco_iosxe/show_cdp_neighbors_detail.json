@@ -1,0 +1,88 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show cdp neighbors detail",
+  "schema": {
+    "name": "ShowCdpNeighborsDetailResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "type": "dict",
+              "key": "str",
+              "value": {
+                "name": "CdpNeighborDetailEntry",
+                "fields": {
+                  "device_id": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "entry_addresses": {
+                    "type": {
+                      "type": "list",
+                      "items": "str"
+                    },
+                    "required": true
+                  },
+                  "platform": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "capabilities": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "port_id": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "hold_time": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "version": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "advertisement_version": {
+                    "type": "int",
+                    "required": false
+                  },
+                  "native_vlan": {
+                    "type": "int",
+                    "required": false
+                  },
+                  "duplex": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "vtp_management_domain": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "management_addresses": {
+                    "type": {
+                      "type": "list",
+                      "items": "str"
+                    },
+                    "required": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_entries": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": []
+}

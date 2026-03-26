@@ -1,0 +1,69 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show graceful-reload",
+  "schema": {
+    "name": "ShowGracefulReloadResult",
+    "fields": {
+      "infra_status": {
+        "type": "str",
+        "required": true
+      },
+      "minimum_uptime_seconds": {
+        "type": "int",
+        "required": true
+      },
+      "clients": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ClientEntry",
+            "fields": {
+              "id": {
+                "type": "str",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic graceful reload status with five clients",
+      "input": "Graceful Reload Infra Status: Started in stacking mode, not running\nMinimum required system uptime before fast reload can be supported is 5 seconds\nClient OSPFV3                          : (0x10203004) Status: GR stack none: Up\nClient OSPF                            : (0x10203003) Status: GR stack none: Up\nClient IS-IS                           : (0x10203002) Status: GR stack none: Up\nClient GR_CLIENT_FIB                   : (0x10203001) Status: GR stack none: Up\nClient GR_CLIENT_RIB                   : (0x10203000) Status: GR stack none: Up\n",
+      "expected": {
+        "infra_status": "Started in stacking mode, not running",
+        "minimum_uptime_seconds": 5,
+        "clients": {
+          "ospfv3": {
+            "id": "0x10203004",
+            "status": "GR stack none: Up"
+          },
+          "ospf": {
+            "id": "0x10203003",
+            "status": "GR stack none: Up"
+          },
+          "is_is": {
+            "id": "0x10203002",
+            "status": "GR stack none: Up"
+          },
+          "gr_client_fib": {
+            "id": "0x10203001",
+            "status": "GR stack none: Up"
+          },
+          "gr_client_rib": {
+            "id": "0x10203000",
+            "status": "GR stack none: Up"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+{
+  "os": "cisco_nxos",
+  "command": "dir",
+  "schema": {
+    "name": "DirResult",
+    "fields": {
+      "files": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "FileEntry",
+            "fields": {
+              "size": {
+                "type": "int",
+                "required": true
+              },
+              "date": {
+                "type": "str",
+                "required": true
+              },
+              "is_directory": {
+                "type": "bool",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "filesystem": {
+        "type": "str",
+        "required": false
+      },
+      "usage": {
+        "type": {
+          "name": "UsageInfo",
+          "fields": {
+            "bytes_used": {
+              "type": "int",
+              "required": true
+            },
+            "bytes_free": {
+              "type": "int",
+              "required": true
+            },
+            "bytes_total": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Directory listing with usage summary",
+      "input": "       4096    Nov 18 15:29:15 2017  .patch/\n       4096    Jun 28 21:35:36 2021  .snapshots/\n     196358    Mar 10 17:15:18 2020  capture_auto_capture.tgz\n       4096    Nov 18 15:29:15 2017  fault-management-logs/\n   70076928    Apr 24 17:25:03 2018  flash:\n       1801    Nov 18 15:49:06 2017  license_JPA21G_36.lic\n       4096    Sep 23 10:04:15 2019  lost+found/\n  538255348    Jan 31 16:57:56 2021  n7700-s2-dk9.8.4.3.bin\n   64396288    Jan 31 17:26:12 2021  n7700-s2-kickstart.8.4.3.bin\n       4096    Nov 18 15:30:32 2017  scripts/\n   18788554    Jun 29 12:59:57 2021  showtech_mpls_ldp_202106291259\n       4096    Sep 10 15:01:42 2019  sup-2/\n    2813192    Sep 01 08:35:52 2021  tech_bgp.txt\n   87673293    Apr 18 09:34:13 2019  tech_mod15.txt\n      41525    Jul 06 09:08:35 2020  tftp\n       4096    Nov 18 15:29:15 2017  vdc_2/\n       4096    Nov 18 15:29:17 2017  virtual-instance/\n\nUsage for bootflash://\n 1531203584 bytes used\n 2166267904 bytes free\n 3697471488 bytes total\n",
+      "expected": {
+        "files": {
+          ".patch/": {
+            "size": 4096,
+            "date": "Nov 18 15:29:15 2017",
+            "is_directory": true
+          },
+          ".snapshots/": {
+            "size": 4096,
+            "date": "Jun 28 21:35:36 2021",
+            "is_directory": true
+          },
+          "capture_auto_capture.tgz": {
+            "size": 196358,
+            "date": "Mar 10 17:15:18 2020"
+          },
+          "fault-management-logs/": {
+            "size": 4096,
+            "date": "Nov 18 15:29:15 2017",
+            "is_directory": true
+          },
+          "flash:": {
+            "size": 70076928,
+            "date": "Apr 24 17:25:03 2018"
+          },
+          "license_JPA21G_36.lic": {
+            "size": 1801,
+            "date": "Nov 18 15:49:06 2017"
+          },
+          "lost+found/": {
+            "size": 4096,
+            "date": "Sep 23 10:04:15 2019",
+            "is_directory": true
+          },
+          "n7700-s2-dk9.8.4.3.bin": {
+            "size": 538255348,
+            "date": "Jan 31 16:57:56 2021"
+          },
+          "n7700-s2-kickstart.8.4.3.bin": {
+            "size": 64396288,
+            "date": "Jan 31 17:26:12 2021"
+          },
+          "scripts/": {
+            "size": 4096,
+            "date": "Nov 18 15:30:32 2017",
+            "is_directory": true
+          },
+          "showtech_mpls_ldp_202106291259": {
+            "size": 18788554,
+            "date": "Jun 29 12:59:57 2021"
+          },
+          "sup-2/": {
+            "size": 4096,
+            "date": "Sep 10 15:01:42 2019",
+            "is_directory": true
+          },
+          "tech_bgp.txt": {
+            "size": 2813192,
+            "date": "Sep 01 08:35:52 2021"
+          },
+          "tech_mod15.txt": {
+            "size": 87673293,
+            "date": "Apr 18 09:34:13 2019"
+          },
+          "tftp": {
+            "size": 41525,
+            "date": "Jul 06 09:08:35 2020"
+          },
+          "vdc_2/": {
+            "size": 4096,
+            "date": "Nov 18 15:29:15 2017",
+            "is_directory": true
+          },
+          "virtual-instance/": {
+            "size": 4096,
+            "date": "Nov 18 15:29:17 2017",
+            "is_directory": true
+          }
+        },
+        "filesystem": "bootflash",
+        "usage": {
+          "bytes_used": 1531203584,
+          "bytes_free": 2166267904,
+          "bytes_total": 3697471488
+        }
+      }
+    }
+  ]
+}

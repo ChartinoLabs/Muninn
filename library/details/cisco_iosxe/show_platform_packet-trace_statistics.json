@@ -1,0 +1,258 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show platform packet-trace statistics",
+  "schema": {
+    "name": "ShowPlatformPacketTraceStatisticsResult",
+    "fields": {
+      "packets_summary": {
+        "type": {
+          "name": "PacketsSummary",
+          "fields": {
+            "matched": {
+              "type": "int",
+              "required": false
+            },
+            "traced": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "packets_received": {
+        "type": {
+          "name": "PacketsReceived",
+          "fields": {
+            "ingress": {
+              "type": "int",
+              "required": true
+            },
+            "inject": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "packets_processed": {
+        "type": {
+          "name": "PacketsProcessed",
+          "fields": {
+            "forward": {
+              "type": "int",
+              "required": true
+            },
+            "punt": {
+              "type": "int",
+              "required": true
+            },
+            "punt_causes": {
+              "type": {
+                "type": "dict",
+                "key": "str",
+                "value": {
+                  "name": "CauseLeaf",
+                  "fields": {
+                    "count": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "cause": {
+                      "type": "str",
+                      "required": true
+                    }
+                  }
+                }
+              },
+              "required": false
+            },
+            "drop": {
+              "type": "int",
+              "required": true
+            },
+            "drop_causes": {
+              "type": {
+                "type": "dict",
+                "key": "str",
+                "value": {
+                  "type": "ref",
+                  "name": "CauseLeaf"
+                }
+              },
+              "required": false
+            },
+            "consume": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "pkt_dir_in": {
+        "type": {
+          "name": "DirectionCounters",
+          "fields": {
+            "infra": {
+              "type": {
+                "name": "ProtocolCounters",
+                "fields": {
+                  "dropped": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "consumed": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "forwarded": {
+                    "type": "int",
+                    "required": true
+                  }
+                }
+              },
+              "required": true
+            },
+            "tcp": {
+              "type": {
+                "type": "ref",
+                "name": "ProtocolCounters"
+              },
+              "required": true
+            },
+            "udp": {
+              "type": {
+                "type": "ref",
+                "name": "ProtocolCounters"
+              },
+              "required": true
+            },
+            "ip": {
+              "type": {
+                "type": "ref",
+                "name": "ProtocolCounters"
+              },
+              "required": true
+            },
+            "ipv6": {
+              "type": {
+                "type": "ref",
+                "name": "ProtocolCounters"
+              },
+              "required": true
+            },
+            "arp": {
+              "type": {
+                "type": "ref",
+                "name": "ProtocolCounters"
+              },
+              "required": true
+            }
+          }
+        },
+        "required": false
+      },
+      "pkt_dir_out": {
+        "type": {
+          "type": "ref",
+          "name": "DirectionCounters"
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Packet trace statistics with punt causes and directional counters",
+      "input": "Packets Summary\n  Matched  3\n  Traced   3\nPackets Received\n  Ingress  0\n  Inject   0\nPackets Processed\n  Forward  0\n  Punt     3\n    Count       Code  Cause\n    3           56    RP injected for-us control\n  Drop     0\n  Consume  0\n\n          PKT_DIR_IN\n             Dropped       Consumed       Forwarded\nINFRA            0             0             0\nTCP              0             0             0\nUDP              0             0             0\nIP               0             0             0\nIPV6             0             0             0\nARP              0             0             0\n\n         PKT_DIR_OUT\n             Dropped       Consumed       Forwarded\nINFRA            0             0             0\nTCP              0             0             0\nUDP              0             0             0\nIP               0             0             0\nIPV6             0             0             0\nARP              0             0             0\n",
+      "expected": {
+        "packets_summary": {
+          "traced": 3,
+          "matched": 3
+        },
+        "packets_received": {
+          "ingress": 0,
+          "inject": 0
+        },
+        "packets_processed": {
+          "forward": 0,
+          "punt": 3,
+          "drop": 0,
+          "consume": 0,
+          "punt_causes": {
+            "56": {
+              "count": 3,
+              "cause": "RP injected for-us control"
+            }
+          }
+        },
+        "pkt_dir_in": {
+          "infra": {
+            "dropped": 0,
+            "consumed": 0,
+            "forwarded": 0
+          },
+          "tcp": {
+            "dropped": 0,
+            "consumed": 0,
+            "forwarded": 0
+          },
+          "udp": {
+            "dropped": 0,
+            "consumed": 0,
+            "forwarded": 0
+          },
+          "ip": {
+            "dropped": 0,
+            "consumed": 0,
+            "forwarded": 0
+          },
+          "ipv6": {
+            "dropped": 0,
+            "consumed": 0,
+            "forwarded": 0
+          },
+          "arp": {
+            "dropped": 0,
+            "consumed": 0,
+            "forwarded": 0
+          }
+        },
+        "pkt_dir_out": {
+          "infra": {
+            "dropped": 0,
+            "consumed": 0,
+            "forwarded": 0
+          },
+          "tcp": {
+            "dropped": 0,
+            "consumed": 0,
+            "forwarded": 0
+          },
+          "udp": {
+            "dropped": 0,
+            "consumed": 0,
+            "forwarded": 0
+          },
+          "ip": {
+            "dropped": 0,
+            "consumed": 0,
+            "forwarded": 0
+          },
+          "ipv6": {
+            "dropped": 0,
+            "consumed": 0,
+            "forwarded": 0
+          },
+          "arp": {
+            "dropped": 0,
+            "consumed": 0,
+            "forwarded": 0
+          }
+        }
+      }
+    }
+  ]
+}

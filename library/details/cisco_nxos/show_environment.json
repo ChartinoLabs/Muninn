@@ -1,0 +1,1156 @@
+{
+  "os": "cisco_nxos",
+  "command": "show environment",
+  "schema": {
+    "name": "ShowEnvironmentResult",
+    "fields": {
+      "fans": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "FanEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "model": {
+                "type": "str",
+                "required": false
+              },
+              "hw_version": {
+                "type": "str",
+                "required": false
+              },
+              "direction": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "fan_zone_speed": {
+        "type": "str",
+        "required": false
+      },
+      "fan_air_filter": {
+        "type": "str",
+        "required": false
+      },
+      "power_supplies": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PowerSupplyEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "model": {
+                "type": "str",
+                "required": false
+              },
+              "actual_output_watts": {
+                "type": "int",
+                "required": false
+              },
+              "actual_input_watts": {
+                "type": "int",
+                "required": false
+              },
+              "total_capacity_watts": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "voltage": {
+        "type": "int",
+        "required": false
+      },
+      "modules": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ModuleEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "model": {
+                "type": "str",
+                "required": false
+              },
+              "actual_draw_watts": {
+                "type": "float",
+                "required": false
+              },
+              "power_allocated_watts": {
+                "type": "float",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "power_summary": {
+        "type": {
+          "name": "PowerSummary",
+          "fields": {
+            "redundancy_mode_configured": {
+              "type": "str",
+              "required": true
+            },
+            "redundancy_mode_operational": {
+              "type": "str",
+              "required": true
+            },
+            "total_capacity_watts": {
+              "type": "float",
+              "required": false
+            },
+            "total_grid_a_capacity_watts": {
+              "type": "float",
+              "required": false
+            },
+            "total_grid_b_capacity_watts": {
+              "type": "float",
+              "required": false
+            },
+            "total_power_all_inputs_watts": {
+              "type": "float",
+              "required": false
+            },
+            "total_power_output_watts": {
+              "type": "float",
+              "required": false
+            },
+            "total_power_input_watts": {
+              "type": "float",
+              "required": false
+            },
+            "total_power_allocated_watts": {
+              "type": "float",
+              "required": false
+            },
+            "total_power_available_watts": {
+              "type": "float",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "clocks": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ClockEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "model": {
+                "type": "str",
+                "required": false
+              },
+              "hw_version": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "temperatures": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "TemperatureSensorEntry",
+              "fields": {
+                "major_threshold_celsius": {
+                  "type": "int",
+                  "required": true
+                },
+                "minor_threshold_celsius": {
+                  "type": "int",
+                  "required": true
+                },
+                "current_temp_celsius": {
+                  "type": "int",
+                  "required": true
+                },
+                "status": {
+                  "type": "str",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "N9K chassis with fans, power supplies, modules, and temperature sensors",
+      "input": "Fan:\n---------------------------------------------------------------------------\nFan             Model                Hw     Direction       Status\n---------------------------------------------------------------------------\nFan1(sys_fan1)  N9K-C9808-FAN-A      1.0    front-to-back   Ok\nFan2(sys_fan2)  N9K-C9808-FAN-A      1.0    front-to-back   Ok\nFan3(sys_fan3)  N9K-C9808-FAN-A      1.0    front-to-back   Ok\nFan4(sys_fan4)  N9K-C9808-FAN-A      1.0    front-to-back   Ok\nFan_in_PS1                           --     front-to-back   Absent\nFan_in_PS2                           --     front-to-back   Absent\nFan_in_PS3                           --     front-to-back   Absent\nFan_in_PS4                           --     front-to-back   Ok\nFan_in_PS5                           --     front-to-back   Ok\nFan_in_PS6                           --     front-to-back   Shutdown\nFan_in_PS7                           --     front-to-back   Ok\nFan_in_PS8                           --     front-to-back   Ok\nFan_in_PS9                           --     front-to-back   Shutdown\nFan Zone Speed: Zone 1: 0x80\nFan Air Filter : NotSupported\n\n\nPower Supply:\nVoltage: 54 Volts\nPower                      Actual             Actual        Total\nSupply    Model            Output             Input        Capacity     Status\n                           (Watts )           (Watts )     (Watts )\n-------  ----------  ---------------  ------  ----------  --------------------\n1        ------------            0 W                0 W         0 W   Absent\n2        ------------            0 W                0 W         0 W   Absent\n3        ------------            0 W                0 W         0 W   Absent\n4        NXK-HV-6.3KW20A-A     429 W              475 W      3150 W      Ok\n5        NXK-HV-6.3KW20A-A     415 W              468 W      3150 W      Ok\n6        NXK-HV-6.3KW20A-A       0 W                0 W         0 W   Shutdown\n7        NXK-HV-6.3KW20A-A     425 W              478 W      3150 W      Ok\n8        NXK-HV-6.3KW20A-A     450 W              506 W      3150 W      Ok\n9        NXK-HV-6.3KW20A-A       0 W                0 W         0 W   Shutdown\n\n\n                                  Actual        Power\nModule    Model                     Draw    Allocated    Status\n                                 (Watts )     (Watts )\n-------  -------------------  -----------  -----------  --------------\n1        N9K-X9836DM-A           597.00 W     2435.94 W    Powered-Up\nXb19     N9K-C9808-FM-A          192.00 W     574.56 W    Powered-Up\nXb20     xbar                      N/A          0.00 W    Absent\nXb21     xbar                      N/A          0.00 W    Absent\nXb22     xbar                      N/A          0.00 W    Absent\nXb23     N9K-C9808-FM-A          193.00 W     574.56 W    Powered-Up\nXb24     xbar                      N/A          0.00 W    Absent\nXb25     xbar                      N/A          0.00 W    Absent\nXb26     xbar                      N/A          0.00 W    Absent\n27       N9K-C9800-SUP-A          75.00 W      94.50 W    Powered-Up\n28       supervisor                N/A         94.50 W    Absent\nfan1     N9K-C9808-FAN-A         171.00 W     686.00 W    Powered-Up\nfan2     N9K-C9808-FAN-A         173.00 W     686.00 W    Powered-Up\nfan3     N9K-C9808-FAN-A         176.00 W     686.00 W    Powered-Up\nfan4     N9K-C9808-FAN-A         171.00 W     686.00 W    Powered-Up\n\nN/A - Per module power not available\n\n\nPower Usage Summary:\n--------------------\nPower Supply redundancy mode (configured)                Non-Redundant(combined)\nPower Supply redundancy mode (operational)               Non-Redundant(combined)\n\nTotal Power Capacity (based on configured mode)            12599.00 W\nTotal Grid-A (first inlet of all PS slots) Power Capacity  6300.00 W\nTotal Grid-B (second inlet of all PS slots) Power Capacity 6300.00 W\nTotal Power of all Inputs (cumulative)                     12599.00 W\nTotal Power Output (actual draw)                           1719.00 W\nTotal Power Input (actual draw)                            1927.00 W\nTotal Power Allocated (budget)                             6521.00 W\nTotal Power Available for additional modules               6078.28 W\n\n\n\nTemperature:\n--------------------------------------------------------------------\nModule   Sensor        MajorThresh   MinorThres   CurTemp     Status\n                       (Celsius)     (Celsius)    (Celsius)\n--------------------------------------------------------------------\n1        CPU             100             98          57         Ok\n1        Sone-1          110             100         38         Ok\n1        Sone-2          110             100         44         Ok\n1        Sone-3          110             100         45         Ok\n19       Sone-1          110             100         35         Ok\n19       Sone-2          110             100         37         Ok\n23       Sone-1          110             100         36         Ok\n23       Sone-2          110             100         38         Ok\n27       OUTLET          85              80          27         Ok\n27       INLET           45              42          25         Ok\n27       CPU             97              93          37         Ok\n",
+      "expected": {
+        "fan_zone_speed": "Zone 1: 0x80",
+        "fan_air_filter": "NotSupported",
+        "fans": {
+          "Fan1(sys_fan1)": {
+            "status": "Ok",
+            "model": "N9K-C9808-FAN-A",
+            "hw_version": "1.0",
+            "direction": "front-to-back"
+          },
+          "Fan2(sys_fan2)": {
+            "status": "Ok",
+            "model": "N9K-C9808-FAN-A",
+            "hw_version": "1.0",
+            "direction": "front-to-back"
+          },
+          "Fan3(sys_fan3)": {
+            "status": "Ok",
+            "model": "N9K-C9808-FAN-A",
+            "hw_version": "1.0",
+            "direction": "front-to-back"
+          },
+          "Fan4(sys_fan4)": {
+            "status": "Ok",
+            "model": "N9K-C9808-FAN-A",
+            "hw_version": "1.0",
+            "direction": "front-to-back"
+          },
+          "Fan_in_PS1": {
+            "status": "Absent",
+            "direction": "front-to-back"
+          },
+          "Fan_in_PS2": {
+            "status": "Absent",
+            "direction": "front-to-back"
+          },
+          "Fan_in_PS3": {
+            "status": "Absent",
+            "direction": "front-to-back"
+          },
+          "Fan_in_PS4": {
+            "status": "Ok",
+            "direction": "front-to-back"
+          },
+          "Fan_in_PS5": {
+            "status": "Ok",
+            "direction": "front-to-back"
+          },
+          "Fan_in_PS6": {
+            "status": "Shutdown",
+            "direction": "front-to-back"
+          },
+          "Fan_in_PS7": {
+            "status": "Ok",
+            "direction": "front-to-back"
+          },
+          "Fan_in_PS8": {
+            "status": "Ok",
+            "direction": "front-to-back"
+          },
+          "Fan_in_PS9": {
+            "status": "Shutdown",
+            "direction": "front-to-back"
+          }
+        },
+        "voltage": 54,
+        "power_supplies": {
+          "1": {
+            "status": "Absent",
+            "actual_output_watts": 0,
+            "actual_input_watts": 0,
+            "total_capacity_watts": 0
+          },
+          "2": {
+            "status": "Absent",
+            "actual_output_watts": 0,
+            "actual_input_watts": 0,
+            "total_capacity_watts": 0
+          },
+          "3": {
+            "status": "Absent",
+            "actual_output_watts": 0,
+            "actual_input_watts": 0,
+            "total_capacity_watts": 0
+          },
+          "4": {
+            "status": "Ok",
+            "model": "NXK-HV-6.3KW20A-A",
+            "actual_output_watts": 429,
+            "actual_input_watts": 475,
+            "total_capacity_watts": 3150
+          },
+          "5": {
+            "status": "Ok",
+            "model": "NXK-HV-6.3KW20A-A",
+            "actual_output_watts": 415,
+            "actual_input_watts": 468,
+            "total_capacity_watts": 3150
+          },
+          "6": {
+            "status": "Shutdown",
+            "model": "NXK-HV-6.3KW20A-A",
+            "actual_output_watts": 0,
+            "actual_input_watts": 0,
+            "total_capacity_watts": 0
+          },
+          "7": {
+            "status": "Ok",
+            "model": "NXK-HV-6.3KW20A-A",
+            "actual_output_watts": 425,
+            "actual_input_watts": 478,
+            "total_capacity_watts": 3150
+          },
+          "8": {
+            "status": "Ok",
+            "model": "NXK-HV-6.3KW20A-A",
+            "actual_output_watts": 450,
+            "actual_input_watts": 506,
+            "total_capacity_watts": 3150
+          },
+          "9": {
+            "status": "Shutdown",
+            "model": "NXK-HV-6.3KW20A-A",
+            "actual_output_watts": 0,
+            "actual_input_watts": 0,
+            "total_capacity_watts": 0
+          }
+        },
+        "modules": {
+          "1": {
+            "status": "Powered-Up",
+            "model": "N9K-X9836DM-A",
+            "actual_draw_watts": 597.0,
+            "power_allocated_watts": 2435.94
+          },
+          "Xb19": {
+            "status": "Powered-Up",
+            "model": "N9K-C9808-FM-A",
+            "actual_draw_watts": 192.0,
+            "power_allocated_watts": 574.56
+          },
+          "Xb20": {
+            "status": "Absent",
+            "model": "xbar",
+            "power_allocated_watts": 0.0
+          },
+          "Xb21": {
+            "status": "Absent",
+            "model": "xbar",
+            "power_allocated_watts": 0.0
+          },
+          "Xb22": {
+            "status": "Absent",
+            "model": "xbar",
+            "power_allocated_watts": 0.0
+          },
+          "Xb23": {
+            "status": "Powered-Up",
+            "model": "N9K-C9808-FM-A",
+            "actual_draw_watts": 193.0,
+            "power_allocated_watts": 574.56
+          },
+          "Xb24": {
+            "status": "Absent",
+            "model": "xbar",
+            "power_allocated_watts": 0.0
+          },
+          "Xb25": {
+            "status": "Absent",
+            "model": "xbar",
+            "power_allocated_watts": 0.0
+          },
+          "Xb26": {
+            "status": "Absent",
+            "model": "xbar",
+            "power_allocated_watts": 0.0
+          },
+          "27": {
+            "status": "Powered-Up",
+            "model": "N9K-C9800-SUP-A",
+            "actual_draw_watts": 75.0,
+            "power_allocated_watts": 94.5
+          },
+          "28": {
+            "status": "Absent",
+            "model": "supervisor",
+            "power_allocated_watts": 94.5
+          },
+          "fan1": {
+            "status": "Powered-Up",
+            "model": "N9K-C9808-FAN-A",
+            "actual_draw_watts": 171.0,
+            "power_allocated_watts": 686.0
+          },
+          "fan2": {
+            "status": "Powered-Up",
+            "model": "N9K-C9808-FAN-A",
+            "actual_draw_watts": 173.0,
+            "power_allocated_watts": 686.0
+          },
+          "fan3": {
+            "status": "Powered-Up",
+            "model": "N9K-C9808-FAN-A",
+            "actual_draw_watts": 176.0,
+            "power_allocated_watts": 686.0
+          },
+          "fan4": {
+            "status": "Powered-Up",
+            "model": "N9K-C9808-FAN-A",
+            "actual_draw_watts": 171.0,
+            "power_allocated_watts": 686.0
+          }
+        },
+        "power_summary": {
+          "redundancy_mode_configured": "Non-Redundant(combined)",
+          "redundancy_mode_operational": "Non-Redundant(combined)",
+          "total_capacity_watts": 12599.0,
+          "total_grid_a_capacity_watts": 6300.0,
+          "total_grid_b_capacity_watts": 6300.0,
+          "total_power_all_inputs_watts": 12599.0,
+          "total_power_output_watts": 1719.0,
+          "total_power_input_watts": 1927.0,
+          "total_power_allocated_watts": 6521.0,
+          "total_power_available_watts": 6078.28
+        },
+        "temperatures": {
+          "1": {
+            "CPU": {
+              "major_threshold_celsius": 100,
+              "minor_threshold_celsius": 98,
+              "current_temp_celsius": 57,
+              "status": "Ok"
+            },
+            "Sone-1": {
+              "major_threshold_celsius": 110,
+              "minor_threshold_celsius": 100,
+              "current_temp_celsius": 38,
+              "status": "Ok"
+            },
+            "Sone-2": {
+              "major_threshold_celsius": 110,
+              "minor_threshold_celsius": 100,
+              "current_temp_celsius": 44,
+              "status": "Ok"
+            },
+            "Sone-3": {
+              "major_threshold_celsius": 110,
+              "minor_threshold_celsius": 100,
+              "current_temp_celsius": 45,
+              "status": "Ok"
+            }
+          },
+          "19": {
+            "Sone-1": {
+              "major_threshold_celsius": 110,
+              "minor_threshold_celsius": 100,
+              "current_temp_celsius": 35,
+              "status": "Ok"
+            },
+            "Sone-2": {
+              "major_threshold_celsius": 110,
+              "minor_threshold_celsius": 100,
+              "current_temp_celsius": 37,
+              "status": "Ok"
+            }
+          },
+          "23": {
+            "Sone-1": {
+              "major_threshold_celsius": 110,
+              "minor_threshold_celsius": 100,
+              "current_temp_celsius": 36,
+              "status": "Ok"
+            },
+            "Sone-2": {
+              "major_threshold_celsius": 110,
+              "minor_threshold_celsius": 100,
+              "current_temp_celsius": 38,
+              "status": "Ok"
+            }
+          },
+          "27": {
+            "OUTLET": {
+              "major_threshold_celsius": 85,
+              "minor_threshold_celsius": 80,
+              "current_temp_celsius": 27,
+              "status": "Ok"
+            },
+            "INLET": {
+              "major_threshold_celsius": 45,
+              "minor_threshold_celsius": 42,
+              "current_temp_celsius": 25,
+              "status": "Ok"
+            },
+            "CPU": {
+              "major_threshold_celsius": 97,
+              "minor_threshold_celsius": 93,
+              "current_temp_celsius": 37,
+              "status": "Ok"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "N7K chassis with clock section, no fan direction, no input watts",
+      "input": "Power Supply:\nVoltage: 50 Volts\nPower                              Actual        Total\nSupply    Model                    Output     Capacity    Status\n                                 (Watts )     (Watts )\n-------  -------------------  -----------  -----------  --------------\n1        N7K-AC-3KW                 407 W       3000 W     Ok\n2        N7K-AC-3KW                 370 W       3000 W     Ok\n\n\n                                  Actual        Power\nModule    Model                     Draw    Allocated    Status\n                                 (Watts )     (Watts )\n-------  -------------------  -----------  -----------  --------------\n1        N7K-SUP2E                  125 W        265 W    Powered-Up\n2        N7K-SUP2E                  125 W        265 W    Powered-Up\n3        N7K-M224XP-23L             602 W        795 W    Powered-Up\n4        N7K-M202CF-22L             620 W        795 W    Powered-Up\nfan1     N7K-C7004-FAN               91 W        450 W    Powered-Up\n\nN/A - Per module power not available\n\n\nPower Usage Summary:\n--------------------\nPower Supply redundancy mode (configured)                PS-Redundant\nPower Supply redundancy mode (operational)               PS-Redundant\n\nTotal Power Capacity (based on configured mode)               9000 W\nTotal Power of all Inputs (cumulative)                       12000 W\nTotal Power Output (actual draw)                              1555 W\nTotal Power Allocated (budget)                                2570 W\nTotal Power Available for additional modules                  6430 W\n\nClock:\n----------------------------------------------------------\nClock           Model                Hw         Status\n----------------------------------------------------------\nA               Clock Module         --         NotSupported/None\nB               Clock Module         --         NotSupported/None\n\n\nFan:\n------------------------------------------------------\nFan             Model                Hw         Status\n------------------------------------------------------\nFan1(sys_fan1)  N7K-C7004-FAN        1.0        Ok\nFan_in_PS1      --                   --         Ok\nFan_in_PS2      --                   --         Ok\nFan Zone Speed: Zone 1: 0x7f\n\n\nTemperature:\n--------------------------------------------------------------------\nModule   Sensor        MajorThresh   MinorThres   CurTemp     Status\n                       (Celsius)     (Celsius)    (Celsius)\n--------------------------------------------------------------------\n1        Inlet  (s1)     60              42          25         Ok\n\n1        PMFPGA (s2)     80              60          36         Ok\n\n1        Crossbar(s3)    105             95          41         Ok\n\n2        Inlet  (s1)     60              42          25         Ok\n\n2        PMFPGA (s2)     80              60          35         Ok\n\n2        Crossbar(s3)    105             95          40         Ok\n\n3        MAC0Sn0(s2)     115             105         42         Ok\n\n3        MAC0Sn1(s3)     115             105         43         Ok\n\n3        MAC0-Buf0(s4)   115             105         35         Ok\n\n4        MAC0Sn0(s2)     115             105         35         Ok\n\n4        MAC0Sn1(s3)     115             105         36         Ok\n\n4        MAC0-Buf0(s4)   115             105         46         Ok\n",
+      "expected": {
+        "voltage": 50,
+        "power_supplies": {
+          "1": {
+            "status": "Ok",
+            "model": "N7K-AC-3KW",
+            "actual_output_watts": 407,
+            "total_capacity_watts": 3000
+          },
+          "2": {
+            "status": "Ok",
+            "model": "N7K-AC-3KW",
+            "actual_output_watts": 370,
+            "total_capacity_watts": 3000
+          }
+        },
+        "modules": {
+          "1": {
+            "status": "Powered-Up",
+            "model": "N7K-SUP2E",
+            "actual_draw_watts": 125.0,
+            "power_allocated_watts": 265.0
+          },
+          "2": {
+            "status": "Powered-Up",
+            "model": "N7K-SUP2E",
+            "actual_draw_watts": 125.0,
+            "power_allocated_watts": 265.0
+          },
+          "3": {
+            "status": "Powered-Up",
+            "model": "N7K-M224XP-23L",
+            "actual_draw_watts": 602.0,
+            "power_allocated_watts": 795.0
+          },
+          "4": {
+            "status": "Powered-Up",
+            "model": "N7K-M202CF-22L",
+            "actual_draw_watts": 620.0,
+            "power_allocated_watts": 795.0
+          },
+          "fan1": {
+            "status": "Powered-Up",
+            "model": "N7K-C7004-FAN",
+            "actual_draw_watts": 91.0,
+            "power_allocated_watts": 450.0
+          }
+        },
+        "power_summary": {
+          "redundancy_mode_configured": "PS-Redundant",
+          "redundancy_mode_operational": "PS-Redundant",
+          "total_capacity_watts": 9000.0,
+          "total_power_all_inputs_watts": 12000.0,
+          "total_power_output_watts": 1555.0,
+          "total_power_allocated_watts": 2570.0,
+          "total_power_available_watts": 6430.0
+        },
+        "clocks": {
+          "A": {
+            "status": "NotSupported/None",
+            "model": "Clock Module"
+          },
+          "B": {
+            "status": "NotSupported/None",
+            "model": "Clock Module"
+          }
+        },
+        "fan_zone_speed": "Zone 1: 0x7f",
+        "fans": {
+          "Fan1(sys_fan1)": {
+            "status": "Ok",
+            "model": "N7K-C7004-FAN",
+            "hw_version": "1.0"
+          },
+          "Fan_in_PS1": {
+            "status": "Ok"
+          },
+          "Fan_in_PS2": {
+            "status": "Ok"
+          }
+        },
+        "temperatures": {
+          "1": {
+            "Inlet  (s1)": {
+              "major_threshold_celsius": 60,
+              "minor_threshold_celsius": 42,
+              "current_temp_celsius": 25,
+              "status": "Ok"
+            },
+            "PMFPGA (s2)": {
+              "major_threshold_celsius": 80,
+              "minor_threshold_celsius": 60,
+              "current_temp_celsius": 36,
+              "status": "Ok"
+            },
+            "Crossbar(s3)": {
+              "major_threshold_celsius": 105,
+              "minor_threshold_celsius": 95,
+              "current_temp_celsius": 41,
+              "status": "Ok"
+            }
+          },
+          "2": {
+            "Inlet  (s1)": {
+              "major_threshold_celsius": 60,
+              "minor_threshold_celsius": 42,
+              "current_temp_celsius": 25,
+              "status": "Ok"
+            },
+            "PMFPGA (s2)": {
+              "major_threshold_celsius": 80,
+              "minor_threshold_celsius": 60,
+              "current_temp_celsius": 35,
+              "status": "Ok"
+            },
+            "Crossbar(s3)": {
+              "major_threshold_celsius": 105,
+              "minor_threshold_celsius": 95,
+              "current_temp_celsius": 40,
+              "status": "Ok"
+            }
+          },
+          "3": {
+            "MAC0Sn0(s2)": {
+              "major_threshold_celsius": 115,
+              "minor_threshold_celsius": 105,
+              "current_temp_celsius": 42,
+              "status": "Ok"
+            },
+            "MAC0Sn1(s3)": {
+              "major_threshold_celsius": 115,
+              "minor_threshold_celsius": 105,
+              "current_temp_celsius": 43,
+              "status": "Ok"
+            },
+            "MAC0-Buf0(s4)": {
+              "major_threshold_celsius": 115,
+              "minor_threshold_celsius": 105,
+              "current_temp_celsius": 35,
+              "status": "Ok"
+            }
+          },
+          "4": {
+            "MAC0Sn0(s2)": {
+              "major_threshold_celsius": 115,
+              "minor_threshold_celsius": 105,
+              "current_temp_celsius": 35,
+              "status": "Ok"
+            },
+            "MAC0Sn1(s3)": {
+              "major_threshold_celsius": 115,
+              "minor_threshold_celsius": 105,
+              "current_temp_celsius": 36,
+              "status": "Ok"
+            },
+            "MAC0-Buf0(s4)": {
+              "major_threshold_celsius": 115,
+              "minor_threshold_celsius": 105,
+              "current_temp_celsius": 46,
+              "status": "Ok"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "N9K-C9300 with N/A power budget, no modules section",
+      "input": "Power Supply:\nVoltage: 12 Volts\nPower                             Actual      Actual        Total\nSupply    Model                   Output      Input      Capacity    Status\n                                (Watts )    (Watts )     (Watts )\n-------  -------------------  ----------  ----------  ----------  --------------\n1        N9K-PAC-650W              101 W       103 W       650 W     Ok\n2        N9K-PAC-650W               96 W       102 W       650 W     Ok\n\n\nPower Usage Summary:\n--------------------\nPower Supply redundancy mode (configured)                PS-Redundant\nPower Supply redundancy mode (operational)               PS-Redundant\n\nTotal Power Capacity (based on configured mode)             650.00 W\nTotal Grid-A (first half of PS slots) Power Capacity        650.00 W\nTotal Grid-B (second half of PS slots) Power Capacity       650.00 W\nTotal Power of all Inputs (cumulative)                     1300.00 W\nTotal Power Output (actual draw)                            197.00 W\nTotal Power Input (actual draw)                             206.00 W\nTotal Power Allocated (budget)                                N/A\nTotal Power Available for additional modules                  N/A\n\nFan:\n---------------------------------------------------------------------------\nFan             Model                Hw     Direction       Status\n---------------------------------------------------------------------------\nFan1(sys_fan1)  N9K-C9300-FAN2       --     front-to-back   Ok\nFan2(sys_fan2)  N9K-C9300-FAN2       --     front-to-back   Ok\nFan3(sys_fan3)  N9K-C9300-FAN2       --     front-to-back   Ok\nFan_in_PS1      --                   --     front-to-back   Ok\nFan_in_PS2      --                   --     front-to-back   Ok\nFan Zone Speed: Zone 1: 0x80\nFan Air Filter : NotSupported\n\n\nTemperature:\n--------------------------------------------------------------------\nModule   Sensor        MajorThresh   MinorThres   CurTemp     Status\n                       (Celsius)     (Celsius)    (Celsius)\n--------------------------------------------------------------------\n1        FRONT           70              42          24         Ok\n1        BACK            80              70          26         Ok\n1        CPU             90              80          42         Ok\n1        TD2-1           105             90          35         Ok\n1        NS-1            105             90          37         Ok\n",
+      "expected": {
+        "voltage": 12,
+        "power_supplies": {
+          "1": {
+            "status": "Ok",
+            "model": "N9K-PAC-650W",
+            "actual_output_watts": 101,
+            "actual_input_watts": 103,
+            "total_capacity_watts": 650
+          },
+          "2": {
+            "status": "Ok",
+            "model": "N9K-PAC-650W",
+            "actual_output_watts": 96,
+            "actual_input_watts": 102,
+            "total_capacity_watts": 650
+          }
+        },
+        "power_summary": {
+          "redundancy_mode_configured": "PS-Redundant",
+          "redundancy_mode_operational": "PS-Redundant",
+          "total_capacity_watts": 650.0,
+          "total_grid_a_capacity_watts": 650.0,
+          "total_grid_b_capacity_watts": 650.0,
+          "total_power_all_inputs_watts": 1300.0,
+          "total_power_output_watts": 197.0,
+          "total_power_input_watts": 206.0
+        },
+        "fan_zone_speed": "Zone 1: 0x80",
+        "fan_air_filter": "NotSupported",
+        "fans": {
+          "Fan1(sys_fan1)": {
+            "status": "Ok",
+            "model": "N9K-C9300-FAN2",
+            "direction": "front-to-back"
+          },
+          "Fan2(sys_fan2)": {
+            "status": "Ok",
+            "model": "N9K-C9300-FAN2",
+            "direction": "front-to-back"
+          },
+          "Fan3(sys_fan3)": {
+            "status": "Ok",
+            "model": "N9K-C9300-FAN2",
+            "direction": "front-to-back"
+          },
+          "Fan_in_PS1": {
+            "status": "Ok",
+            "direction": "front-to-back"
+          },
+          "Fan_in_PS2": {
+            "status": "Ok",
+            "direction": "front-to-back"
+          }
+        },
+        "temperatures": {
+          "1": {
+            "FRONT": {
+              "major_threshold_celsius": 70,
+              "minor_threshold_celsius": 42,
+              "current_temp_celsius": 24,
+              "status": "Ok"
+            },
+            "BACK": {
+              "major_threshold_celsius": 80,
+              "minor_threshold_celsius": 70,
+              "current_temp_celsius": 26,
+              "status": "Ok"
+            },
+            "CPU": {
+              "major_threshold_celsius": 90,
+              "minor_threshold_celsius": 80,
+              "current_temp_celsius": 42,
+              "status": "Ok"
+            },
+            "TD2-1": {
+              "major_threshold_celsius": 105,
+              "minor_threshold_celsius": 90,
+              "current_temp_celsius": 35,
+              "status": "Ok"
+            },
+            "NS-1": {
+              "major_threshold_celsius": 105,
+              "minor_threshold_celsius": 90,
+              "current_temp_celsius": 37,
+              "status": "Ok"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Minimal output with only fan and temperature sections, no power supply or modules",
+      "input": "Fan:\n------------------------------------------------------\nFan             Model                Hw         Status\n------------------------------------------------------\nFan1(sys_fan1)  N3K-C3064-FAN        1.0        Ok\nFan2(sys_fan2)  N3K-C3064-FAN        1.0        Ok\nFan_in_PS1      --                   --         Ok\nFan_in_PS2      --                   --         Ok\nFan Zone Speed: Zone 1: 0x4d\n\n\nTemperature:\n--------------------------------------------------------------------\nModule   Sensor        MajorThresh   MinorThres   CurTemp     Status\n                       (Celsius)     (Celsius)    (Celsius)\n--------------------------------------------------------------------\n1        Outlet (s1)     60              42          30         Ok\n1        Inlet  (s2)     45              38          22         Ok\n",
+      "expected": {
+        "fan_zone_speed": "Zone 1: 0x4d",
+        "fans": {
+          "Fan1(sys_fan1)": {
+            "status": "Ok",
+            "model": "N3K-C3064-FAN",
+            "hw_version": "1.0"
+          },
+          "Fan2(sys_fan2)": {
+            "status": "Ok",
+            "model": "N3K-C3064-FAN",
+            "hw_version": "1.0"
+          },
+          "Fan_in_PS1": {
+            "status": "Ok"
+          },
+          "Fan_in_PS2": {
+            "status": "Ok"
+          }
+        },
+        "temperatures": {
+          "1": {
+            "Outlet (s1)": {
+              "major_threshold_celsius": 60,
+              "minor_threshold_celsius": 42,
+              "current_temp_celsius": 30,
+              "status": "Ok"
+            },
+            "Inlet  (s2)": {
+              "major_threshold_celsius": 45,
+              "minor_threshold_celsius": 38,
+              "current_temp_celsius": 22,
+              "status": "Ok"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "N9K with back-to-front fan direction, single power supply, Grid-B at zero",
+      "input": "Fan:\n---------------------------------------------------------------------------\nFan             Model                Hw     Direction       Status\n---------------------------------------------------------------------------\nFan1(sys_fan1)  N9K-C9332-FAN        1.0    back-to-front   Ok\nFan2(sys_fan2)  N9K-C9332-FAN        1.0    back-to-front   Ok\nFan_in_PS1      --                   --     back-to-front   Ok\nFan Zone Speed: Zone 1: 0x66\nFan Air Filter : NotSupported\n\n\nPower Supply:\nVoltage: 12 Volts\nPower                             Actual      Actual        Total\nSupply    Model                   Output      Input      Capacity    Status\n                                (Watts )    (Watts )     (Watts )\n-------  -------------------  ----------  ----------  ----------  --------------\n1        N9K-PAC-1200W             312 W       340 W      1200 W     Ok\n\n\n                                  Actual        Power\nModule    Model                     Draw    Allocated    Status\n                                 (Watts )     (Watts )\n-------  -------------------  -----------  -----------  --------------\n1        N9K-C9332PQ               210.00 W     350.00 W    Powered-Up\nfan1     N9K-C9332-FAN              42.00 W     100.00 W    Powered-Up\n\nN/A - Per module power not available\n\n\nPower Usage Summary:\n--------------------\nPower Supply redundancy mode (configured)                Non-Redundant(combined)\nPower Supply redundancy mode (operational)               Non-Redundant(combined)\n\nTotal Power Capacity (based on configured mode)             1200.00 W\nTotal Grid-A (first half of PS slots) Power Capacity        1200.00 W\nTotal Grid-B (second half of PS slots) Power Capacity          0.00 W\nTotal Power of all Inputs (cumulative)                      1200.00 W\nTotal Power Output (actual draw)                             312.00 W\nTotal Power Input (actual draw)                              340.00 W\nTotal Power Allocated (budget)                               450.00 W\nTotal Power Available for additional modules                 750.00 W\n\n\nTemperature:\n--------------------------------------------------------------------\nModule   Sensor        MajorThresh   MinorThres   CurTemp     Status\n                       (Celsius)     (Celsius)    (Celsius)\n--------------------------------------------------------------------\n1        FRONT           70              42          28         Ok\n1        BACK            80              70          33         Ok\n1        CPU             90              80          48         Ok\n",
+      "expected": {
+        "fan_zone_speed": "Zone 1: 0x66",
+        "fan_air_filter": "NotSupported",
+        "fans": {
+          "Fan1(sys_fan1)": {
+            "status": "Ok",
+            "model": "N9K-C9332-FAN",
+            "hw_version": "1.0",
+            "direction": "back-to-front"
+          },
+          "Fan2(sys_fan2)": {
+            "status": "Ok",
+            "model": "N9K-C9332-FAN",
+            "hw_version": "1.0",
+            "direction": "back-to-front"
+          },
+          "Fan_in_PS1": {
+            "status": "Ok",
+            "direction": "back-to-front"
+          }
+        },
+        "voltage": 12,
+        "power_supplies": {
+          "1": {
+            "status": "Ok",
+            "model": "N9K-PAC-1200W",
+            "actual_output_watts": 312,
+            "actual_input_watts": 340,
+            "total_capacity_watts": 1200
+          }
+        },
+        "modules": {
+          "1": {
+            "status": "Powered-Up",
+            "model": "N9K-C9332PQ",
+            "actual_draw_watts": 210.0,
+            "power_allocated_watts": 350.0
+          },
+          "fan1": {
+            "status": "Powered-Up",
+            "model": "N9K-C9332-FAN",
+            "actual_draw_watts": 42.0,
+            "power_allocated_watts": 100.0
+          }
+        },
+        "power_summary": {
+          "redundancy_mode_configured": "Non-Redundant(combined)",
+          "redundancy_mode_operational": "Non-Redundant(combined)",
+          "total_capacity_watts": 1200.0,
+          "total_grid_a_capacity_watts": 1200.0,
+          "total_grid_b_capacity_watts": 0.0,
+          "total_power_all_inputs_watts": 1200.0,
+          "total_power_output_watts": 312.0,
+          "total_power_input_watts": 340.0,
+          "total_power_allocated_watts": 450.0,
+          "total_power_available_watts": 750.0
+        },
+        "temperatures": {
+          "1": {
+            "FRONT": {
+              "major_threshold_celsius": 70,
+              "minor_threshold_celsius": 42,
+              "current_temp_celsius": 28,
+              "status": "Ok"
+            },
+            "BACK": {
+              "major_threshold_celsius": 80,
+              "minor_threshold_celsius": 70,
+              "current_temp_celsius": 33,
+              "status": "Ok"
+            },
+            "CPU": {
+              "major_threshold_celsius": 90,
+              "minor_threshold_celsius": 80,
+              "current_temp_celsius": 48,
+              "status": "Ok"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "N7K-C7009 with dual supervisors, 8 modules, 4 power supplies, clock with hw_version, shutdown PS fan",
+      "input": "Power Supply:\nVoltage: 50 Volts\nPower                              Actual        Total\nSupply    Model                    Output     Capacity    Status\n                                 (Watts )     (Watts )\n-------  -------------------  -----------  -----------  --------------\n1        N7K-AC-6.0KW                2100 W       6000 W     Ok\n2        N7K-AC-6.0KW                2050 W       6000 W     Ok\n3        N7K-AC-6.0KW                   0 W       6000 W     Shutdown\n4        N7K-AC-6.0KW                2200 W       6000 W     Ok\n\n\n                                  Actual        Power\nModule    Model                     Draw    Allocated    Status\n                                 (Watts )     (Watts )\n-------  -------------------  -----------  -----------  --------------\n1        N7K-SUP2E                  130 W        265 W    Powered-Up\n2        N7K-SUP2E                  128 W        265 W    Powered-Up\n3        N7K-F348XP-25              750 W        900 W    Powered-Up\n4        N7K-F348XP-25              745 W        900 W    Powered-Up\n5        N7K-M324FQ-25L             380 W        550 W    Powered-Up\n6        N7K-M348XP-25L             410 W        550 W    Powered-Up\n7        N7K-M324FQ-25L             385 W        550 W    Powered-Up\n8        N7K-M348XP-25L             415 W        550 W    Powered-Up\nfan1     N7K-C7009-FAN              180 W        450 W    Powered-Up\nfan2     N7K-C7009-FAN              182 W        450 W    Powered-Up\n\nN/A - Per module power not available\n\n\nPower Usage Summary:\n--------------------\nPower Supply redundancy mode (configured)                PS-Redundant\nPower Supply redundancy mode (operational)               PS-Redundant\n\nTotal Power Capacity (based on configured mode)              18000 W\nTotal Power of all Inputs (cumulative)                       24000 W\nTotal Power Output (actual draw)                              6350 W\nTotal Power Allocated (budget)                                5430 W\nTotal Power Available for additional modules                 12570 W\n\nClock:\n----------------------------------------------------------\nClock           Model                Hw         Status\n----------------------------------------------------------\nA               Clock Module         1.0        Ok\nB               Clock Module         1.0        Ok\n\n\nFan:\n------------------------------------------------------\nFan             Model                Hw         Status\n------------------------------------------------------\nFan1(sys_fan1)  N7K-C7009-FAN        1.0        Ok\nFan2(sys_fan2)  N7K-C7009-FAN        1.0        Ok\nFan3(sys_fan3)  N7K-C7009-FAN        1.0        Ok\nFan_in_PS1      --                   --         Ok\nFan_in_PS2      --                   --         Ok\nFan_in_PS3      --                   --         Shutdown\nFan_in_PS4      --                   --         Ok\nFan Zone Speed: Zone 1: 0x73\n\n\nTemperature:\n--------------------------------------------------------------------\nModule   Sensor        MajorThresh   MinorThres   CurTemp     Status\n                       (Celsius)     (Celsius)    (Celsius)\n--------------------------------------------------------------------\n1        Inlet  (s1)     60              42          28         Ok\n1        PMFPGA (s2)     80              60          40         Ok\n1        Crossbar(s3)    105             95          45         Ok\n2        Inlet  (s1)     60              42          27         Ok\n2        PMFPGA (s2)     80              60          39         Ok\n2        Crossbar(s3)    105             95          44         Ok\n3        MAC0Sn0(s2)     115             105         50         Ok\n3        MAC0Sn1(s3)     115             105         52         Ok\n4        MAC0Sn0(s2)     115             105         48         Ok\n4        MAC0Sn1(s3)     115             105         49         Ok\n5        MAC0Sn0(s2)     115             105         46         Ok\n6        MAC0Sn0(s2)     115             105         47         Ok\n7        MAC0Sn0(s2)     115             105         45         Ok\n8        MAC0Sn0(s2)     115             105         44         Ok\n",
+      "expected": {
+        "voltage": 50,
+        "power_supplies": {
+          "1": {
+            "status": "Ok",
+            "model": "N7K-AC-6.0KW",
+            "actual_output_watts": 2100,
+            "total_capacity_watts": 6000
+          },
+          "2": {
+            "status": "Ok",
+            "model": "N7K-AC-6.0KW",
+            "actual_output_watts": 2050,
+            "total_capacity_watts": 6000
+          },
+          "3": {
+            "status": "Shutdown",
+            "model": "N7K-AC-6.0KW",
+            "actual_output_watts": 0,
+            "total_capacity_watts": 6000
+          },
+          "4": {
+            "status": "Ok",
+            "model": "N7K-AC-6.0KW",
+            "actual_output_watts": 2200,
+            "total_capacity_watts": 6000
+          }
+        },
+        "modules": {
+          "1": {
+            "status": "Powered-Up",
+            "model": "N7K-SUP2E",
+            "actual_draw_watts": 130.0,
+            "power_allocated_watts": 265.0
+          },
+          "2": {
+            "status": "Powered-Up",
+            "model": "N7K-SUP2E",
+            "actual_draw_watts": 128.0,
+            "power_allocated_watts": 265.0
+          },
+          "3": {
+            "status": "Powered-Up",
+            "model": "N7K-F348XP-25",
+            "actual_draw_watts": 750.0,
+            "power_allocated_watts": 900.0
+          },
+          "4": {
+            "status": "Powered-Up",
+            "model": "N7K-F348XP-25",
+            "actual_draw_watts": 745.0,
+            "power_allocated_watts": 900.0
+          },
+          "5": {
+            "status": "Powered-Up",
+            "model": "N7K-M324FQ-25L",
+            "actual_draw_watts": 380.0,
+            "power_allocated_watts": 550.0
+          },
+          "6": {
+            "status": "Powered-Up",
+            "model": "N7K-M348XP-25L",
+            "actual_draw_watts": 410.0,
+            "power_allocated_watts": 550.0
+          },
+          "7": {
+            "status": "Powered-Up",
+            "model": "N7K-M324FQ-25L",
+            "actual_draw_watts": 385.0,
+            "power_allocated_watts": 550.0
+          },
+          "8": {
+            "status": "Powered-Up",
+            "model": "N7K-M348XP-25L",
+            "actual_draw_watts": 415.0,
+            "power_allocated_watts": 550.0
+          },
+          "fan1": {
+            "status": "Powered-Up",
+            "model": "N7K-C7009-FAN",
+            "actual_draw_watts": 180.0,
+            "power_allocated_watts": 450.0
+          },
+          "fan2": {
+            "status": "Powered-Up",
+            "model": "N7K-C7009-FAN",
+            "actual_draw_watts": 182.0,
+            "power_allocated_watts": 450.0
+          }
+        },
+        "power_summary": {
+          "redundancy_mode_configured": "PS-Redundant",
+          "redundancy_mode_operational": "PS-Redundant",
+          "total_capacity_watts": 18000.0,
+          "total_power_all_inputs_watts": 24000.0,
+          "total_power_output_watts": 6350.0,
+          "total_power_allocated_watts": 5430.0,
+          "total_power_available_watts": 12570.0
+        },
+        "clocks": {
+          "A": {
+            "status": "Ok",
+            "model": "Clock Module",
+            "hw_version": "1.0"
+          },
+          "B": {
+            "status": "Ok",
+            "model": "Clock Module",
+            "hw_version": "1.0"
+          }
+        },
+        "fan_zone_speed": "Zone 1: 0x73",
+        "fans": {
+          "Fan1(sys_fan1)": {
+            "status": "Ok",
+            "model": "N7K-C7009-FAN",
+            "hw_version": "1.0"
+          },
+          "Fan2(sys_fan2)": {
+            "status": "Ok",
+            "model": "N7K-C7009-FAN",
+            "hw_version": "1.0"
+          },
+          "Fan3(sys_fan3)": {
+            "status": "Ok",
+            "model": "N7K-C7009-FAN",
+            "hw_version": "1.0"
+          },
+          "Fan_in_PS1": {
+            "status": "Ok"
+          },
+          "Fan_in_PS2": {
+            "status": "Ok"
+          },
+          "Fan_in_PS3": {
+            "status": "Shutdown"
+          },
+          "Fan_in_PS4": {
+            "status": "Ok"
+          }
+        },
+        "temperatures": {
+          "1": {
+            "Inlet  (s1)": {
+              "major_threshold_celsius": 60,
+              "minor_threshold_celsius": 42,
+              "current_temp_celsius": 28,
+              "status": "Ok"
+            },
+            "PMFPGA (s2)": {
+              "major_threshold_celsius": 80,
+              "minor_threshold_celsius": 60,
+              "current_temp_celsius": 40,
+              "status": "Ok"
+            },
+            "Crossbar(s3)": {
+              "major_threshold_celsius": 105,
+              "minor_threshold_celsius": 95,
+              "current_temp_celsius": 45,
+              "status": "Ok"
+            }
+          },
+          "2": {
+            "Inlet  (s1)": {
+              "major_threshold_celsius": 60,
+              "minor_threshold_celsius": 42,
+              "current_temp_celsius": 27,
+              "status": "Ok"
+            },
+            "PMFPGA (s2)": {
+              "major_threshold_celsius": 80,
+              "minor_threshold_celsius": 60,
+              "current_temp_celsius": 39,
+              "status": "Ok"
+            },
+            "Crossbar(s3)": {
+              "major_threshold_celsius": 105,
+              "minor_threshold_celsius": 95,
+              "current_temp_celsius": 44,
+              "status": "Ok"
+            }
+          },
+          "3": {
+            "MAC0Sn0(s2)": {
+              "major_threshold_celsius": 115,
+              "minor_threshold_celsius": 105,
+              "current_temp_celsius": 50,
+              "status": "Ok"
+            },
+            "MAC0Sn1(s3)": {
+              "major_threshold_celsius": 115,
+              "minor_threshold_celsius": 105,
+              "current_temp_celsius": 52,
+              "status": "Ok"
+            }
+          },
+          "4": {
+            "MAC0Sn0(s2)": {
+              "major_threshold_celsius": 115,
+              "minor_threshold_celsius": 105,
+              "current_temp_celsius": 48,
+              "status": "Ok"
+            },
+            "MAC0Sn1(s3)": {
+              "major_threshold_celsius": 115,
+              "minor_threshold_celsius": 105,
+              "current_temp_celsius": 49,
+              "status": "Ok"
+            }
+          },
+          "5": {
+            "MAC0Sn0(s2)": {
+              "major_threshold_celsius": 115,
+              "minor_threshold_celsius": 105,
+              "current_temp_celsius": 46,
+              "status": "Ok"
+            }
+          },
+          "6": {
+            "MAC0Sn0(s2)": {
+              "major_threshold_celsius": 115,
+              "minor_threshold_celsius": 105,
+              "current_temp_celsius": 47,
+              "status": "Ok"
+            }
+          },
+          "7": {
+            "MAC0Sn0(s2)": {
+              "major_threshold_celsius": 115,
+              "minor_threshold_celsius": 105,
+              "current_temp_celsius": 45,
+              "status": "Ok"
+            }
+          },
+          "8": {
+            "MAC0Sn0(s2)": {
+              "major_threshold_celsius": 115,
+              "minor_threshold_celsius": 105,
+              "current_temp_celsius": 44,
+              "status": "Ok"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

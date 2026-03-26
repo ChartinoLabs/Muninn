@@ -1,0 +1,143 @@
+{
+  "os": "cisco_ios",
+  "command": "show environment power all",
+  "schema": {
+    "name": "ShowEnvironmentPowerAllResult",
+    "fields": {
+      "power_supplies": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PowerSupplyEntry",
+            "fields": {
+              "pid": {
+                "type": "str",
+                "required": true
+              },
+              "serial": {
+                "type": "str",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "sys_pwr": {
+                "type": "str",
+                "required": true
+              },
+              "poe_pwr": {
+                "type": "str",
+                "required": true
+              },
+              "watts": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Mixed power supply states including one with no input power",
+      "input": "SW  PID                 Serial#     Status           Sys Pwr  PoE Pwr  Watts\n--  ------------------  ----------  ---------------  -------  -------  -----\n1A  PWR-C1-1100WAC      ABC123456AB  OK              Good     Good     1100\n1B  PWR-C1-1100WAC      ABC123456CD  OK              Good     Good     1100\n2A  PWR-C1-1100WAC      ABC123456EF  OK              Good     Good     1100\n2B  PWR-C1-1100WAC      ABC123456GH  OK              Good     Good     1100\n3A  Unknown             Unknown      No Input Power  Bad      Bad      235\n3B  PWR-C1-1100WAC      ABC123456KL  OK              Good     Good     1100\n",
+      "expected": {
+        "power_supplies": {
+          "1A": {
+            "pid": "PWR-C1-1100WAC",
+            "poe_pwr": "Good",
+            "serial": "ABC123456AB",
+            "status": "OK",
+            "sys_pwr": "Good",
+            "watts": 1100
+          },
+          "1B": {
+            "pid": "PWR-C1-1100WAC",
+            "poe_pwr": "Good",
+            "serial": "ABC123456CD",
+            "status": "OK",
+            "sys_pwr": "Good",
+            "watts": 1100
+          },
+          "2A": {
+            "pid": "PWR-C1-1100WAC",
+            "poe_pwr": "Good",
+            "serial": "ABC123456EF",
+            "status": "OK",
+            "sys_pwr": "Good",
+            "watts": 1100
+          },
+          "2B": {
+            "pid": "PWR-C1-1100WAC",
+            "poe_pwr": "Good",
+            "serial": "ABC123456GH",
+            "status": "OK",
+            "sys_pwr": "Good",
+            "watts": 1100
+          },
+          "3A": {
+            "pid": "Unknown",
+            "poe_pwr": "Bad",
+            "serial": "Unknown",
+            "status": "No Input Power",
+            "sys_pwr": "Bad",
+            "watts": 235
+          },
+          "3B": {
+            "pid": "PWR-C1-1100WAC",
+            "poe_pwr": "Good",
+            "serial": "ABC123456KL",
+            "status": "OK",
+            "sys_pwr": "Good",
+            "watts": 1100
+          }
+        }
+      }
+    },
+    {
+      "name": "All power supplies in OK state",
+      "input": "SW  PID                 Serial#     Status           Sys Pwr  PoE Pwr  Watts\n--  ------------------  ----------  ---------------  -------  -------  -----\n1A  PWR-C1-1100WAC      DEF123456AB  OK              Good     Good     1100\n1B  PWR-C1-1100WAC      DEF123456CD  OK              Good     Good     1100\n2A  PWR-C1-1100WAC      DEF123456EF  OK              Good     Good     1100\n2B  PWR-C1-1100WAC      DEF123456GH  OK              Good     Good     1100\n",
+      "expected": {
+        "power_supplies": {
+          "1A": {
+            "pid": "PWR-C1-1100WAC",
+            "poe_pwr": "Good",
+            "serial": "DEF123456AB",
+            "status": "OK",
+            "sys_pwr": "Good",
+            "watts": 1100
+          },
+          "1B": {
+            "pid": "PWR-C1-1100WAC",
+            "poe_pwr": "Good",
+            "serial": "DEF123456CD",
+            "status": "OK",
+            "sys_pwr": "Good",
+            "watts": 1100
+          },
+          "2A": {
+            "pid": "PWR-C1-1100WAC",
+            "poe_pwr": "Good",
+            "serial": "DEF123456EF",
+            "status": "OK",
+            "sys_pwr": "Good",
+            "watts": 1100
+          },
+          "2B": {
+            "pid": "PWR-C1-1100WAC",
+            "poe_pwr": "Good",
+            "serial": "DEF123456GH",
+            "status": "OK",
+            "sys_pwr": "Good",
+            "watts": 1100
+          }
+        }
+      }
+    }
+  ]
+}

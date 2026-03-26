@@ -1,0 +1,36 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show sdwan security-info",
+  "schema": {
+    "name": "ShowSdwanSecurityInfoResult",
+    "fields": {
+      "settings": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": "str"
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "security-info authentication-type deprecated\nsecurity-info rekey  86400\nsecurity-info replay-window 8192\nsecurity-info encryption-supported AES_GCM_256\nsecurity-info fips-mode Disabled\nsecurity-info pairwise-keying Disabled\nsecurity-info pwk-sym-rekey Enabled\nsecurity-info extended-ar-window Disabled\nsecurity-info integrity-type \"ip-udp-esp esp\"\n",
+      "expected": {
+        "settings": {
+          "authentication-type": "deprecated",
+          "rekey": "86400",
+          "replay-window": "8192",
+          "encryption-supported": "AES_GCM_256",
+          "fips-mode": "Disabled",
+          "pairwise-keying": "Disabled",
+          "pwk-sym-rekey": "Enabled",
+          "extended-ar-window": "Disabled",
+          "integrity-type": "ip-udp-esp esp"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ipv6 eigrp neighbors",
+  "schema": {
+    "name": "ShowIpv6EigrpNeighborsResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "Ipv6EigrpNeighborEntry",
+              "fields": {
+                "handle": {
+                  "type": "int",
+                  "required": true
+                },
+                "hold_time": {
+                  "type": "int",
+                  "required": true
+                },
+                "uptime": {
+                  "type": "str",
+                  "required": true
+                },
+                "srtt": {
+                  "type": "int",
+                  "required": true
+                },
+                "rto": {
+                  "type": "int",
+                  "required": true
+                },
+                "queue_count": {
+                  "type": "int",
+                  "required": true
+                },
+                "sequence_number": {
+                  "type": "int",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Two IPv6 EIGRP neighbors on separate interfaces",
+      "input": "\nEIGRP-IPv6 Neighbors for AS(1)\nH   Address                 Interface              Hold Uptime   SRTT   RTO  Q  Seq\n                                                   (sec)         (ms)       Cnt Num\n0   FE80::A8BB:CCFF:FE00:200 Gi0/0                  12 00:00:21    10   100  0   3\n1   FE80::A8BB:CCFF:FE00:300 Gi0/1                  14 00:05:07  1996  5000  0   8\n",
+      "expected": {
+        "neighbors": {
+          "GigabitEthernet0/0": {
+            "FE80::A8BB:CCFF:FE00:200": {
+              "handle": 0,
+              "hold_time": 12,
+              "queue_count": 0,
+              "rto": 100,
+              "sequence_number": 3,
+              "srtt": 10,
+              "uptime": "00:00:21"
+            }
+          },
+          "GigabitEthernet0/1": {
+            "FE80::A8BB:CCFF:FE00:300": {
+              "handle": 1,
+              "hold_time": 14,
+              "queue_count": 0,
+              "rto": 5000,
+              "sequence_number": 8,
+              "srtt": 1996,
+              "uptime": "00:05:07"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

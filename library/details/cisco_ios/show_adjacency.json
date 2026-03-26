@@ -1,0 +1,74 @@
+{
+  "os": "cisco_ios",
+  "command": "show adjacency",
+  "schema": {
+    "name": "ShowAdjacencyResult",
+    "fields": {
+      "adjacencies": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "AdjacencyEntry",
+              "fields": {
+                "protocol": {
+                  "type": "str",
+                  "required": true
+                },
+                "incomplete": {
+                  "type": "bool",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic adjacency table with multiple interfaces and an incomplete entry",
+      "input": "Router#show adjacency\nProtocol Interface                 Address\nIP       Vlan1                     10.255.1.1(11)\nIP       Vlan1                     10.255.1.11(8)\nIP       Vlan1                     10.255.1.250(8)\nIP       GigabitEthernet0/0/0      10.180.14.15(13)\nIP       Tunnel0                   172.17.10.158(13)\nIP       Tunnel0                   227.0.0.0(3) (incomplete)\n",
+      "expected": {
+        "adjacencies": {
+          "10.255.1.1": {
+            "Vlan1": {
+              "protocol": "IP"
+            }
+          },
+          "10.255.1.11": {
+            "Vlan1": {
+              "protocol": "IP"
+            }
+          },
+          "10.255.1.250": {
+            "Vlan1": {
+              "protocol": "IP"
+            }
+          },
+          "10.180.14.15": {
+            "GigabitEthernet0/0/0": {
+              "protocol": "IP"
+            }
+          },
+          "172.17.10.158": {
+            "Tunnel0": {
+              "protocol": "IP"
+            }
+          },
+          "227.0.0.0": {
+            "Tunnel0": {
+              "protocol": "IP",
+              "incomplete": true
+            }
+          }
+        }
+      }
+    }
+  ]
+}

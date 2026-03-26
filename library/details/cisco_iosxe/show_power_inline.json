@@ -1,0 +1,138 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show power inline",
+  "schema": {
+    "name": "ShowPowerInlineResult",
+    "fields": {
+      "watts_available": {
+        "type": "float",
+        "required": false
+      },
+      "watts_used": {
+        "type": "float",
+        "required": false
+      },
+      "watts_remaining": {
+        "type": "float",
+        "required": false
+      },
+      "modules": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ModuleEntry",
+            "fields": {
+              "available": {
+                "type": "float",
+                "required": true
+              },
+              "used": {
+                "type": "float",
+                "required": true
+              },
+              "remaining": {
+                "type": "float",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceEntry",
+            "fields": {
+              "admin": {
+                "type": "str",
+                "required": true
+              },
+              "oper": {
+                "type": "str",
+                "required": true
+              },
+              "power": {
+                "type": "float",
+                "required": true
+              },
+              "device": {
+                "type": "str",
+                "required": false
+              },
+              "class_": {
+                "type": "str",
+                "required": false
+              },
+              "max": {
+                "type": "float",
+                "required": false
+              },
+              "module": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Interface-only format with single powered access point, no module or totals info",
+      "input": "Interface Admin  Oper       Power   Device              Class Max\n                            (Watts)\n--------- ------ ---------- ------- ------------------- ----- ----\nGi1/0/13  auto   on         15.4    AIR-CAP2602I-A-K9   3     30.0\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1/0/13": {
+            "admin": "auto",
+            "oper": "on",
+            "power": 15.4,
+            "device": "AIR-CAP2602I-A-K9",
+            "class_": "3",
+            "max": 30.0
+          }
+        }
+      }
+    },
+    {
+      "name": "Power-deny oper state with low max wattage and zero power budget",
+      "input": "Available:80.0(w)  Used:0.0(w)  Remaining:80.0(w)\n\nInterface Admin  Oper       Power   Device              Class Max\n                            (Watts)\n--------- ------ ---------- ------- ------------------- ----- ----\nGi0/1/0   auto   off        0.0     n/a                 n/a   30.0\nGi0/1/1   auto   power-deny 0.0     n/a                 n/a   4.0\nGi0/1/2   auto   off        0.0     n/a                 n/a   30.0\nGi0/1/3   auto   off        0.0     n/a                 n/a   30.0\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet0/1/0": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0
+          },
+          "GigabitEthernet0/1/1": {
+            "admin": "auto",
+            "oper": "power-deny",
+            "power": 0.0,
+            "max": 4.0
+          },
+          "GigabitEthernet0/1/2": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0
+          },
+          "GigabitEthernet0/1/3": {
+            "admin": "auto",
+            "oper": "off",
+            "power": 0.0,
+            "max": 30.0
+          }
+        },
+        "watts_available": 80.0,
+        "watts_used": 0.0,
+        "watts_remaining": 80.0
+      }
+    }
+  ]
+}

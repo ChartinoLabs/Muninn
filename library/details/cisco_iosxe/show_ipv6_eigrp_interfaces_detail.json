@@ -1,0 +1,213 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ipv6 eigrp interfaces detail",
+  "schema": {
+    "name": "ShowIpEigrpInterfacesDetailResult",
+    "fields": {
+      "as_number": {
+        "type": "int",
+        "required": true
+      },
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "EigrpInterfaceDetailEntry",
+            "fields": {
+              "peers": {
+                "type": "int",
+                "required": true
+              },
+              "xmit_q_unreliable": {
+                "type": "int",
+                "required": true
+              },
+              "xmit_q_reliable": {
+                "type": "int",
+                "required": true
+              },
+              "peer_q_unreliable": {
+                "type": "int",
+                "required": true
+              },
+              "peer_q_reliable": {
+                "type": "int",
+                "required": true
+              },
+              "mean_srtt": {
+                "type": "int",
+                "required": true
+              },
+              "pacing_time_unreliable": {
+                "type": "int",
+                "required": true
+              },
+              "pacing_time_reliable": {
+                "type": "int",
+                "required": true
+              },
+              "mcast_flow_timer": {
+                "type": "int",
+                "required": true
+              },
+              "pending_routes": {
+                "type": "int",
+                "required": true
+              },
+              "hello_interval": {
+                "type": "int",
+                "required": true
+              },
+              "hold_time": {
+                "type": "int",
+                "required": true
+              },
+              "split_horizon_enabled": {
+                "type": "bool",
+                "required": true
+              },
+              "next_xmit_serial": {
+                "type": "str",
+                "required": true
+              },
+              "packetized_sent": {
+                "type": "int",
+                "required": true
+              },
+              "packetized_expedited": {
+                "type": "int",
+                "required": true
+              },
+              "hellos_sent": {
+                "type": "int",
+                "required": true
+              },
+              "hellos_expedited": {
+                "type": "int",
+                "required": true
+              },
+              "unreliable_mcasts": {
+                "type": "int",
+                "required": true
+              },
+              "reliable_mcasts": {
+                "type": "int",
+                "required": true
+              },
+              "unreliable_ucasts": {
+                "type": "int",
+                "required": true
+              },
+              "reliable_ucasts": {
+                "type": "int",
+                "required": true
+              },
+              "mcast_exceptions": {
+                "type": "int",
+                "required": true
+              },
+              "cr_packets": {
+                "type": "int",
+                "required": true
+              },
+              "acks_suppressed": {
+                "type": "int",
+                "required": true
+              },
+              "retransmissions_sent": {
+                "type": "int",
+                "required": true
+              },
+              "out_of_sequence_rcvd": {
+                "type": "int",
+                "required": true
+              },
+              "authentication_mode": {
+                "type": "str",
+                "required": false
+              },
+              "topologies_advertised": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Two interfaces with IPv6 EIGRP detail",
+      "input": "EIGRP-IPv6 Interfaces for AS(20)\n                              Xmit Queue   PeerQ        Mean   Pacing Time   Multicast    Pending\nInterface              Peers  Un/Reliable  Un/Reliable  SRTT   Un/Reliable   Flow Timer   Routes\nGi0/1                    1        0/0       0/0          12       0/50          100          0\n  Hello-interval is 5, Hold-time is 15\n  Split-horizon is enabled\n  Next xmit serial <none>\n  Packetized sent/expedited: 5/0\n  Hello's sent/expedited: 120/3\n  Un/reliable mcasts: 4/2  Un/reliable ucasts: 3/5\n  Mcast exceptions: 1  CR packets: 0  ACKs suppressed: 2\n  Retransmissions sent: 1  Out-of-sequence rcvd: 0\n  Topology-ids on interface - 0\n  Authentication mode is not set\n  Topologies advertised on this interface:  base\n  Topologies not advertised on this interface:\nLo0                      0        0/0       0/0           0       0/0            0           0\n  Hello-interval is 5, Hold-time is 15\n  Split-horizon is enabled\n  Next xmit serial <none>\n  Packetized sent/expedited: 0/0\n  Hello's sent/expedited: 0/0\n  Un/reliable mcasts: 0/0  Un/reliable ucasts: 0/0\n  Mcast exceptions: 0  CR packets: 0  ACKs suppressed: 0\n  Retransmissions sent: 0  Out-of-sequence rcvd: 0\n  Topology-ids on interface - 0\n  Authentication mode is md5\n  Topologies advertised on this interface:  base\n  Topologies not advertised on this interface:\n",
+      "expected": {
+        "as_number": 20,
+        "interfaces": {
+          "GigabitEthernet0/1": {
+            "acks_suppressed": 2,
+            "cr_packets": 0,
+            "hello_interval": 5,
+            "hellos_expedited": 3,
+            "hellos_sent": 120,
+            "hold_time": 15,
+            "mcast_exceptions": 1,
+            "mcast_flow_timer": 100,
+            "mean_srtt": 12,
+            "next_xmit_serial": "<none>",
+            "out_of_sequence_rcvd": 0,
+            "pacing_time_reliable": 50,
+            "pacing_time_unreliable": 0,
+            "packetized_expedited": 0,
+            "packetized_sent": 5,
+            "peer_q_reliable": 0,
+            "peer_q_unreliable": 0,
+            "peers": 1,
+            "pending_routes": 0,
+            "reliable_mcasts": 2,
+            "reliable_ucasts": 5,
+            "retransmissions_sent": 1,
+            "split_horizon_enabled": true,
+            "topologies_advertised": "base",
+            "unreliable_mcasts": 4,
+            "unreliable_ucasts": 3,
+            "xmit_q_reliable": 0,
+            "xmit_q_unreliable": 0
+          },
+          "Loopback0": {
+            "acks_suppressed": 0,
+            "authentication_mode": "md5",
+            "cr_packets": 0,
+            "hello_interval": 5,
+            "hellos_expedited": 0,
+            "hellos_sent": 0,
+            "hold_time": 15,
+            "mcast_exceptions": 0,
+            "mcast_flow_timer": 0,
+            "mean_srtt": 0,
+            "next_xmit_serial": "<none>",
+            "out_of_sequence_rcvd": 0,
+            "pacing_time_reliable": 0,
+            "pacing_time_unreliable": 0,
+            "packetized_expedited": 0,
+            "packetized_sent": 0,
+            "peer_q_reliable": 0,
+            "peer_q_unreliable": 0,
+            "peers": 0,
+            "pending_routes": 0,
+            "reliable_mcasts": 0,
+            "reliable_ucasts": 0,
+            "retransmissions_sent": 0,
+            "split_horizon_enabled": true,
+            "topologies_advertised": "base",
+            "unreliable_mcasts": 0,
+            "unreliable_ucasts": 0,
+            "xmit_q_reliable": 0,
+            "xmit_q_unreliable": 0
+          }
+        }
+      }
+    }
+  ]
+}

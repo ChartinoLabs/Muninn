@@ -1,0 +1,29 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show stackwise-virtual bandwidth",
+  "schema": {
+    "name": "ShowStackwiseVirtualBandwidthResult",
+    "fields": {
+      "bandwidth": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": "str"
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Per-switch SVL bandwidth",
+      "input": "Switch  Bandwidth\n------  ---------\n1        100G\n2        100G\n",
+      "expected": {
+        "bandwidth": {
+          "1": "100G",
+          "2": "100G"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,217 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show redundancy",
+  "schema": {
+    "name": "ShowRedundancyResult",
+    "fields": {
+      "available_system_uptime": {
+        "type": "str",
+        "required": true
+      },
+      "switchovers_system_experienced": {
+        "type": "int",
+        "required": true
+      },
+      "standby_failures": {
+        "type": "int",
+        "required": true
+      },
+      "last_switchover_reason": {
+        "type": "str",
+        "required": true
+      },
+      "hardware_mode": {
+        "type": "str",
+        "required": true
+      },
+      "configured_redundancy_mode": {
+        "type": "str",
+        "required": true
+      },
+      "operating_redundancy_mode": {
+        "type": "str",
+        "required": true
+      },
+      "maintenance_mode": {
+        "type": "str",
+        "required": true
+      },
+      "communications": {
+        "type": "str",
+        "required": true
+      },
+      "communications_reason": {
+        "type": "str",
+        "required": false
+      },
+      "active": {
+        "type": {
+          "name": "ProcessorEntry",
+          "fields": {
+            "location": {
+              "type": "str",
+              "required": true
+            },
+            "software_state": {
+              "type": "str",
+              "required": true
+            },
+            "uptime_in_current_state": {
+              "type": "str",
+              "required": true
+            },
+            "image_version": {
+              "type": "str",
+              "required": true
+            },
+            "boot": {
+              "type": "str",
+              "required": false
+            },
+            "config_file": {
+              "type": "str",
+              "required": false
+            },
+            "bootldr": {
+              "type": "str",
+              "required": false
+            },
+            "config_register": {
+              "type": "str",
+              "required": false
+            },
+            "fast_switchover": {
+              "type": "str",
+              "required": false
+            },
+            "initial_garp": {
+              "type": "str",
+              "required": false
+            }
+          }
+        },
+        "required": true
+      },
+      "standby": {
+        "type": {
+          "type": "ref",
+          "name": "ProcessorEntry"
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Duplex SSO with active and standby hot processors",
+      "input": "Redundant System Information :\n------------------------------\n       Available system uptime = 1 day, 15 hours, 3 minutes\nSwitchovers system experienced = 0\n              Standby failures = 0\n        Last switchover reason = none\n\n                 Hardware Mode = Duplex\n    Configured Redundancy Mode = sso\n     Operating Redundancy Mode = sso\n              Maintenance Mode = Disabled\n                Communications = Up\n\nCurrent Processor Information :\n-------------------------------\n               Active Location = Switch 1\n        Current Software state = ACTIVE\n       Uptime in current state = 1 day, 15 hours, 3 minutes\n                 Image Version = Cisco IOS Software [Dublin], Catalyst L3 Switch Software (CAT9K_IOSXE), Version 17.14.1, RELEASE SOFTWARE (fc1)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2024 by Cisco Systems, Inc.\nCompiled Fri 05-Apr-24 00:08 by mcpre\n                          BOOT = bootflash:packages.conf;\n                   CONFIG_FILE =\n             Fast Switchover   = Enabled\n                Initial Garp   = Enabled\n\nPeer Processor Information :\n----------------------------\n              Standby Location = Switch 2\n        Current Software state = STANDBY HOT\n       Uptime in current state = 1 day, 15 hours, 0 minutes\n                 Image Version = Cisco IOS Software [Dublin], Catalyst L3 Switch Software (CAT9K_IOSXE), Version 17.14.1, RELEASE SOFTWARE (fc1)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2024 by Cisco Systems, Inc.\nCompiled Fri 05-Apr-24 00:08 by mcpre\n                          BOOT = bootflash:packages.conf;\n                   CONFIG_FILE =\n",
+      "expected": {
+        "active": {
+          "boot": "bootflash:packages.conf;",
+          "fast_switchover": "Enabled",
+          "image_version": "Cisco IOS Software [Dublin], Catalyst L3 Switch Software (CAT9K_IOSXE), Version 17.14.1, RELEASE SOFTWARE (fc1)",
+          "initial_garp": "Enabled",
+          "location": "Switch 1",
+          "software_state": "ACTIVE",
+          "uptime_in_current_state": "1 day, 15 hours, 3 minutes"
+        },
+        "available_system_uptime": "1 day, 15 hours, 3 minutes",
+        "communications": "Up",
+        "configured_redundancy_mode": "sso",
+        "hardware_mode": "Duplex",
+        "last_switchover_reason": "none",
+        "maintenance_mode": "Disabled",
+        "operating_redundancy_mode": "sso",
+        "standby": {
+          "boot": "bootflash:packages.conf;",
+          "image_version": "Cisco IOS Software [Dublin], Catalyst L3 Switch Software (CAT9K_IOSXE), Version 17.14.1, RELEASE SOFTWARE (fc1)",
+          "location": "Switch 2",
+          "software_state": "STANDBY HOT",
+          "uptime_in_current_state": "1 day, 15 hours, 0 minutes"
+        },
+        "standby_failures": 0,
+        "switchovers_system_experienced": 0
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": "Redundant System Information :\n------------------------------\n       Available system uptime = 1 week, 4 days, 4 hours, 49 minutes\nSwitchovers system experienced = 0\n              Standby failures = 0\n        Last switchover reason = none\n\n                 Hardware Mode = Simplex\n    Configured Redundancy Mode = Non-redundant\n     Operating Redundancy Mode = Non-redundant\n              Maintenance Mode = Disabled\n                Communications = Down      Reason: Failure\n\nCurrent Processor Information :\n-------------------------------\n               Active Location = slot 6\n        Current Software state = ACTIVE\n       Uptime in current state = 1 week, 4 days, 4 hours, 48 minutes\n                 Image Version = Cisco IOS Software [IOSXE], Virtual XE Software (X86_64_LINUX_IOSD-UNIVERSALK9-M), Version 17.16.1a, RELEASE SOFTWARE (fc1)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2024 by Cisco Systems, Inc.\nCompiled Thu 19-Dec-24 18:08 by mcpre\n        Configuration register = 0x2102\n             Fast Switchover   = Enabled\n                Initial Garp   = Enabled\n\nPeer (slot: 7) information is not available because it is in 'DISABLED' state\n",
+      "expected": {
+        "available_system_uptime": "1 week, 4 days, 4 hours, 49 minutes",
+        "switchovers_system_experienced": 0,
+        "standby_failures": 0,
+        "last_switchover_reason": "none",
+        "hardware_mode": "Simplex",
+        "configured_redundancy_mode": "Non-redundant",
+        "operating_redundancy_mode": "Non-redundant",
+        "maintenance_mode": "Disabled",
+        "communications": "Down",
+        "communications_reason": "Failure",
+        "active": {
+          "location": "slot 6",
+          "software_state": "ACTIVE",
+          "uptime_in_current_state": "1 week, 4 days, 4 hours, 48 minutes",
+          "image_version": "Cisco IOS Software [IOSXE], Virtual XE Software (X86_64_LINUX_IOSD-UNIVERSALK9-M), Version 17.16.1a, RELEASE SOFTWARE (fc1)",
+          "config_register": "0x2102",
+          "fast_switchover": "Enabled",
+          "initial_garp": "Enabled"
+        }
+      }
+    },
+    {
+      "name": "Simplex mode with no standby processor available",
+      "input": "Redundant System Information :\n------------------------------\n       Available system uptime = 46 weeks, 4 days, 22 hours, 52 minutes\nSwitchovers system experienced = 0\n              Standby failures = 0\n        Last switchover reason = none\n\n                 Hardware Mode = Simplex\n    Configured Redundancy Mode = sso\n     Operating Redundancy Mode = sso\n              Maintenance Mode = Disabled\n                Communications = Down      Reason: Failure\n\nCurrent Processor Information :\n-------------------------------\n               Active Location = slot 1\n        Current Software state = ACTIVE\n       Uptime in current state = 46 weeks, 4 days, 22 hours, 52 minutes\n                 Image Version = Cisco IOS Software, c6848x Software (c6848x-ADVENTERPRISEK9-M), Version 15.4(1)SY4, RELEASE SOFTWARE (fc3)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2018 by Cisco Systems, Inc.\nCompiled Fri 02-Feb-18 02:00 by prod_rel_team\n                          BOOT = bootdisk:/c6848x-adventerprisek9-mz.SPA.154-1.SY4.bin,12;\n        Configuration register = 0x2102\n\nPeer (slot: unavailable) information is not available because it is in 'DISABLED' state\n",
+      "expected": {
+        "active": {
+          "boot": "bootdisk:/c6848x-adventerprisek9-mz.SPA.154-1.SY4.bin,12;",
+          "config_register": "0x2102",
+          "image_version": "Cisco IOS Software, c6848x Software (c6848x-ADVENTERPRISEK9-M), Version 15.4(1)SY4, RELEASE SOFTWARE (fc3)",
+          "location": "slot 1",
+          "software_state": "ACTIVE",
+          "uptime_in_current_state": "46 weeks, 4 days, 22 hours, 52 minutes"
+        },
+        "available_system_uptime": "46 weeks, 4 days, 22 hours, 52 minutes",
+        "communications": "Down",
+        "communications_reason": "Failure",
+        "configured_redundancy_mode": "sso",
+        "hardware_mode": "Simplex",
+        "last_switchover_reason": "none",
+        "maintenance_mode": "Disabled",
+        "operating_redundancy_mode": "sso",
+        "standby_failures": 0,
+        "switchovers_system_experienced": 0
+      }
+    },
+    {
+      "name": "ASR1000 duplex with config register on both processors",
+      "input": "Redundant System Information :\n------------------------------\n       Available system uptime = 15 hours, 4 minutes\nSwitchovers system experienced = 0\n              Standby failures = 0\n        Last switchover reason = none\n\n                 Hardware Mode = Duplex\n    Configured Redundancy Mode = sso\n     Operating Redundancy Mode = sso\n              Maintenance Mode = Disabled\n                Communications = Up\n\nCurrent Processor Information :\n-------------------------------\n               Active Location = slot 6\n        Current Software state = ACTIVE\n       Uptime in current state = 15 hours, 4 minutes\n                 Image Version = Cisco IOS Software [Everest], ASR1000 Software (X86_64_LINUX_IOSD-UNIVERSALK9-M), Experimental Version 16.4.20170425:070036 [v164_throttle-BLD-BLD_V164_THROTTLE_LATEST_20170425_075354 141]\nCopyright (c) 1986-2017 by Cisco Systems, Inc.\nCompiled Tue 25-Apr-17 06:17 by mcpre\n                          BOOT = harddisk:test-image-PE1-13116843,12;\n                   CONFIG_FILE =\n        Configuration register = 0x2102\n\nPeer Processor Information :\n----------------------------\n              Standby Location = slot 7\n        Current Software state = STANDBY HOT\n       Uptime in current state = 15 hours, 1 minute\n                 Image Version = Cisco IOS Software [Everest], ASR1000 Software (X86_64_LINUX_IOSD-UNIVERSALK9-M), Experimental Version 16.4.20170425:070036 [v164_throttle-BLD-BLD_V164_THROTTLE_LATEST_20170425_075354 141]\nCopyright (c) 1986-2017 by Cisco Systems, Inc.\nCompiled Tue 25-Apr-17 06:17 by mcpre\n                          BOOT = harddisk:test-image-PE1-13116843,12;\n                   CONFIG_FILE =\n        Configuration register = 0x2102\n",
+      "expected": {
+        "active": {
+          "boot": "harddisk:test-image-PE1-13116843,12;",
+          "config_register": "0x2102",
+          "image_version": "Cisco IOS Software [Everest], ASR1000 Software (X86_64_LINUX_IOSD-UNIVERSALK9-M), Experimental Version 16.4.20170425:070036 [v164_throttle-BLD-BLD_V164_THROTTLE_LATEST_20170425_075354 141]",
+          "location": "slot 6",
+          "software_state": "ACTIVE",
+          "uptime_in_current_state": "15 hours, 4 minutes"
+        },
+        "available_system_uptime": "15 hours, 4 minutes",
+        "communications": "Up",
+        "configured_redundancy_mode": "sso",
+        "hardware_mode": "Duplex",
+        "last_switchover_reason": "none",
+        "maintenance_mode": "Disabled",
+        "operating_redundancy_mode": "sso",
+        "standby": {
+          "boot": "harddisk:test-image-PE1-13116843,12;",
+          "config_register": "0x2102",
+          "image_version": "Cisco IOS Software [Everest], ASR1000 Software (X86_64_LINUX_IOSD-UNIVERSALK9-M), Experimental Version 16.4.20170425:070036 [v164_throttle-BLD-BLD_V164_THROTTLE_LATEST_20170425_075354 141]",
+          "location": "slot 7",
+          "software_state": "STANDBY HOT",
+          "uptime_in_current_state": "15 hours, 1 minute"
+        },
+        "standby_failures": 0,
+        "switchovers_system_experienced": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,220 @@
+{
+  "os": "cisco_nxos",
+  "command": "show ip ospf neighbor",
+  "schema": {
+    "name": "ShowIpOspfNeighborResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "OspfVrfEntry",
+            "fields": {
+              "processes": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "OspfProcessEntry",
+                    "fields": {
+                      "neighbors": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "type": "dict",
+                            "key": "str",
+                            "value": {
+                              "name": "OspfNeighborEntry",
+                              "fields": {
+                                "priority": {
+                                  "type": "int",
+                                  "required": true
+                                },
+                                "state": {
+                                  "type": "str",
+                                  "required": true
+                                },
+                                "address": {
+                                  "type": "str",
+                                  "required": true
+                                },
+                                "up_time": {
+                                  "type": "str",
+                                  "required": false
+                                },
+                                "role": {
+                                  "type": "str",
+                                  "required": false
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple OSPF neighbors on different interfaces",
+      "input": " OSPF Process ID DC_UNDERLAY VRF default\n Total number of neighbors: 3\n Neighbor ID     Pri State            Up Time  Address         Interface\n 192.168.1.8       1 FULL/ -          2y0w     192.168.2.2     Vlan2\n 192.168.1.3       1 FULL/ -          2y10w    192.168.1.3    Eth1/1\n 192.168.1.4       1 FULL/ -          2y11w    192.168.1.4    Eth1/2\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "processes": {
+              "DC_UNDERLAY": {
+                "neighbors": {
+                  "Ethernet1/1": {
+                    "192.168.1.3": {
+                      "address": "192.168.1.3",
+                      "priority": 1,
+                      "state": "FULL",
+                      "up_time": "2y10w"
+                    }
+                  },
+                  "Ethernet1/2": {
+                    "192.168.1.4": {
+                      "address": "192.168.1.4",
+                      "priority": 1,
+                      "state": "FULL",
+                      "up_time": "2y11w"
+                    }
+                  },
+                  "Vlan2": {
+                    "192.168.1.8": {
+                      "address": "192.168.2.2",
+                      "priority": 1,
+                      "state": "FULL",
+                      "up_time": "2y0w"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Multiple VRFs with DROTHER role and omitted up_time when CLI shows dash",
+      "input": "router1# sh ip ospf neighbors vrf all\n OSPF Process ID 1111 VRF CUSTVRF1\n Total number of neighbors: 3\n Neighbor ID     Pri State            Up Time  Address         Interface\n 10.0.0.1          1 FULL/ -          8w6d     11.11.11.11     Vlan999\n 10.0.0.2          1 FULL/ -          5w6d     22.22.22.22     Po1\n 10.0.0.3          1 FULL/ -          5w6d     44.44.44.44     Po2\n OSPF Process ID 2222 VRF CUSTVRF2\n Total number of neighbors: 1\n Neighbor ID     Pri State            Up Time  Address         Interface\n 10.0.0.4          1 FULL/ -          8w6d     55.55.55.55     Vlan1000\n OSPF Process ID 3333 VRF CUSTVRF2\n Total number of neighbors: 2\n Neighbor ID     Pri State            Up Time  Address         Interface\n 10.0.0.5          1 FULL/ -          7w2d     66.66.66.66     Po3\n 10.0.0.6          1 INIT/DROTHER     -        77.77.77.77     Po4\n",
+      "expected": {
+        "vrfs": {
+          "CUSTVRF1": {
+            "processes": {
+              "1111": {
+                "neighbors": {
+                  "Port-channel1": {
+                    "10.0.0.2": {
+                      "address": "22.22.22.22",
+                      "priority": 1,
+                      "state": "FULL",
+                      "up_time": "5w6d"
+                    }
+                  },
+                  "Port-channel2": {
+                    "10.0.0.3": {
+                      "address": "44.44.44.44",
+                      "priority": 1,
+                      "state": "FULL",
+                      "up_time": "5w6d"
+                    }
+                  },
+                  "Vlan999": {
+                    "10.0.0.1": {
+                      "address": "11.11.11.11",
+                      "priority": 1,
+                      "state": "FULL",
+                      "up_time": "8w6d"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "CUSTVRF2": {
+            "processes": {
+              "2222": {
+                "neighbors": {
+                  "Vlan1000": {
+                    "10.0.0.4": {
+                      "address": "55.55.55.55",
+                      "priority": 1,
+                      "state": "FULL",
+                      "up_time": "8w6d"
+                    }
+                  }
+                }
+              },
+              "3333": {
+                "neighbors": {
+                  "Port-channel3": {
+                    "10.0.0.5": {
+                      "address": "66.66.66.66",
+                      "priority": 1,
+                      "state": "FULL",
+                      "up_time": "7w2d"
+                    }
+                  },
+                  "Port-channel4": {
+                    "10.0.0.6": {
+                      "address": "77.77.77.77",
+                      "priority": 1,
+                      "role": "DROTHER",
+                      "state": "INIT"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Empty role column does not consume uptime",
+      "input": " OSPF Process ID 4444 VRF default\n Total number of neighbors: 2\n Neighbor ID     Pri State            Up Time  Address         Interface\n 10.0.0.7          1 FULL/            4d19h    88.88.88.88     Eth1/3\n 10.0.0.8          1 EXSTART/BDR      33m      99.99.99.99     Eth1/4\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "processes": {
+              "4444": {
+                "neighbors": {
+                  "Ethernet1/3": {
+                    "10.0.0.7": {
+                      "address": "88.88.88.88",
+                      "priority": 1,
+                      "state": "FULL",
+                      "up_time": "4d19h"
+                    }
+                  },
+                  "Ethernet1/4": {
+                    "10.0.0.8": {
+                      "address": "99.99.99.99",
+                      "priority": 1,
+                      "role": "BDR",
+                      "state": "EXSTART",
+                      "up_time": "33m"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

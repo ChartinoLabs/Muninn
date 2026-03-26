@@ -1,0 +1,81 @@
+{
+  "os": "cisco_ios",
+  "command": "show snmp community",
+  "schema": {
+    "name": "ShowSnmpCommunityResult",
+    "fields": {
+      "communities": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SnmpCommunityEntry",
+            "fields": {
+              "index": {
+                "type": "str",
+                "required": true
+              },
+              "security_name": {
+                "type": "str",
+                "required": true
+              },
+              "storage_type": {
+                "type": "str",
+                "required": true
+              },
+              "access_list": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with multiple SNMP communities",
+      "input": "Community name: ILMI\nCommunity Index: cisco0\nCommunity SecurityName: ILMI\nstorage-type: read-only  active\n\n\nCommunity name: public\nCommunity Index: cisco1\nCommunity SecurityName: public\nstorage-type: nonvolatile        active\n\n\nCommunity name: private\nCommunity Index: cisco2\nCommunity SecurityName: private\nstorage-type: nonvolatile        active\n",
+      "expected": {
+        "communities": {
+          "ILMI": {
+            "index": "cisco0",
+            "security_name": "ILMI",
+            "storage_type": "read-only"
+          },
+          "private": {
+            "index": "cisco2",
+            "security_name": "private",
+            "storage_type": "nonvolatile"
+          },
+          "public": {
+            "index": "cisco1",
+            "security_name": "public",
+            "storage_type": "nonvolatile"
+          }
+        }
+      }
+    },
+    {
+      "name": "Community with access list configured",
+      "input": "Community name: public\nCommunity Index: cisco1\nCommunity SecurityName: public\nstorage-type: nonvolatile        active\n\n\nCommunity name: Monitoring\nCommunity Index: cisco1\nCommunity SecurityName: Monitoring\nstorage-type: nonvolatile\t active\taccess-list: 33\n",
+      "expected": {
+        "communities": {
+          "Monitoring": {
+            "access_list": "33",
+            "index": "cisco1",
+            "security_name": "Monitoring",
+            "storage_type": "nonvolatile"
+          },
+          "public": {
+            "index": "cisco1",
+            "security_name": "public",
+            "storage_type": "nonvolatile"
+          }
+        }
+      }
+    }
+  ]
+}

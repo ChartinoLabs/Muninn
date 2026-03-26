@@ -1,0 +1,127 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show endpoint-tracker records",
+  "schema": {
+    "name": "ShowEndpointTrackerRecordsResult",
+    "fields": {
+      "rows": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "EndpointTrackerRecordRow",
+            "fields": {
+              "record_name": {
+                "type": "str",
+                "required": true
+              },
+              "endpoint": {
+                "type": "str",
+                "required": true
+              },
+              "tracker_type": {
+                "type": "str",
+                "required": true
+              },
+              "endpoint_type": {
+                "type": "str",
+                "required": false
+              },
+              "threshold_ms": {
+                "type": "str",
+                "required": false
+              },
+              "multiplier": {
+                "type": "str",
+                "required": false
+              },
+              "interval_s": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "show endpoint-tracker records\n\nRecord Name                      Endpoint                              EndPoint Type Threshold(ms) Multiplier Interval(s) Tracker-Type\ngroup-udp-tcp-10001              tcp-10002 OR udp-10002                N/A           N/A           N/A        N/A         tracker-group\nnat-dia-tracker-4351             151.151.151.1                         IP            300           3          60          interface\ntcp-10001                        10.157.10.2                           TCP           100           1          20          static-route\ntcp-10002                        10.160.10.2                           UDP           100           1          20          static-route\nudp-10001                        10.157.10.2                           UDP           100           1          20          static-route\nudp-10002                        10.160.10.2                           UDP           100           1          20          static-route\ntrack1                           198.168.20.2                          IP            300           3          60          interface\ntrack3                           www.diatracker.com                    DNS_NAME      300           3          60          interface\n",
+      "expected": {
+        "rows": {
+          "group-udp-tcp-10001": {
+            "record_name": "group-udp-tcp-10001",
+            "endpoint": "tcp-10002 OR udp-10002",
+            "tracker_type": "tracker-group"
+          },
+          "nat-dia-tracker-4351": {
+            "record_name": "nat-dia-tracker-4351",
+            "endpoint": "151.151.151.1",
+            "endpoint_type": "IP",
+            "threshold_ms": "300",
+            "multiplier": "3",
+            "interval_s": "60",
+            "tracker_type": "interface"
+          },
+          "tcp-10001": {
+            "record_name": "tcp-10001",
+            "endpoint": "10.157.10.2",
+            "endpoint_type": "TCP",
+            "threshold_ms": "100",
+            "multiplier": "1",
+            "interval_s": "20",
+            "tracker_type": "static-route"
+          },
+          "tcp-10002": {
+            "record_name": "tcp-10002",
+            "endpoint": "10.160.10.2",
+            "endpoint_type": "UDP",
+            "threshold_ms": "100",
+            "multiplier": "1",
+            "interval_s": "20",
+            "tracker_type": "static-route"
+          },
+          "udp-10001": {
+            "record_name": "udp-10001",
+            "endpoint": "10.157.10.2",
+            "endpoint_type": "UDP",
+            "threshold_ms": "100",
+            "multiplier": "1",
+            "interval_s": "20",
+            "tracker_type": "static-route"
+          },
+          "udp-10002": {
+            "record_name": "udp-10002",
+            "endpoint": "10.160.10.2",
+            "endpoint_type": "UDP",
+            "threshold_ms": "100",
+            "multiplier": "1",
+            "interval_s": "20",
+            "tracker_type": "static-route"
+          },
+          "track1": {
+            "record_name": "track1",
+            "endpoint": "198.168.20.2",
+            "endpoint_type": "IP",
+            "threshold_ms": "300",
+            "multiplier": "3",
+            "interval_s": "60",
+            "tracker_type": "interface"
+          },
+          "track3": {
+            "record_name": "track3",
+            "endpoint": "www.diatracker.com",
+            "endpoint_type": "DNS_NAME",
+            "threshold_ms": "300",
+            "multiplier": "3",
+            "interval_s": "60",
+            "tracker_type": "interface"
+          }
+        }
+      }
+    }
+  ]
+}

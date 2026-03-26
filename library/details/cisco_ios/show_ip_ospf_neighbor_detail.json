@@ -1,0 +1,234 @@
+{
+  "os": "cisco_ios",
+  "command": "show ip ospf neighbor detail",
+  "schema": {
+    "name": "ShowIpOspfNeighborDetailResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "InterfaceNeighborEntry",
+              "fields": {
+                "interface_address": {
+                  "type": "str",
+                  "required": true
+                },
+                "area": {
+                  "type": "str",
+                  "required": true
+                },
+                "interface": {
+                  "type": "str",
+                  "required": true
+                },
+                "priority": {
+                  "type": "int",
+                  "required": true
+                },
+                "state": {
+                  "type": "str",
+                  "required": true
+                },
+                "state_changes": {
+                  "type": "int",
+                  "required": true
+                },
+                "dr": {
+                  "type": "str",
+                  "required": true
+                },
+                "bdr": {
+                  "type": "str",
+                  "required": true
+                },
+                "dead_timer": {
+                  "type": "str",
+                  "required": true
+                },
+                "uptime": {
+                  "type": "str",
+                  "required": true
+                },
+                "retransmission_queue_length": {
+                  "type": "int",
+                  "required": true
+                },
+                "retransmission_count": {
+                  "type": "int",
+                  "required": true
+                },
+                "retransmission_stats": {
+                  "type": {
+                    "name": "RetransmissionStats",
+                    "fields": {
+                      "last_scan_length": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "max_scan_length": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "last_scan_time_msec": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "max_scan_time_msec": {
+                        "type": "int",
+                        "required": true
+                      }
+                    }
+                  },
+                  "required": true
+                },
+                "interface_id": {
+                  "type": "int",
+                  "required": false
+                },
+                "sr_adj_label": {
+                  "type": "int",
+                  "required": false
+                },
+                "hello_options": {
+                  "type": "str",
+                  "required": false
+                },
+                "dbd_options": {
+                  "type": "str",
+                  "required": false
+                },
+                "lls_options": {
+                  "type": "str",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic OSPF neighbor detail with two FULL neighbors",
+      "input": "Neighbor 192.168.5.2, interface address 10.225.200.28\n    In the area 0 via interface GigabitEthernet1/0/0\n    Neighbor priority is 1, State is FULL, 6 state changes\n    DR is 10.225.200.28 BDR is 10.225.200.30\n    Options is 0x42\n    LLS Options is 0x1 (LR), last OOB-Resync 00:03:08 ago\n    Dead timer due in 00:00:36\n    Neighbor is up for 00:09:46\n   Index 1/1, retransmission queue length 0, number of retransmission 1\n    First 0x0(0)/0x0(0) Next 0x0(0)/0x0(0)\n    Last retransmission scan length is 1, maximum is 1\n    Last retransmission scan time is 0 msec, maximum is 0 msec\n\nNeighbor 10.0.0.2, interface address 10.0.0.2\n    In the area 0 via interface FastEthernet0/0\n    Neighbor priority is 1, State is FULL, 6 state changes\n    DR is 10.0.0.1 BDR is 10.0.0.2\n    Options is 0x52\n    Dead timer due in 00:00:39\n    Neighbor is up for 00:03:15\n    Index 1/1, retransmission queue length 0, number of retransmission 1\n    First 0x0(0)/0x0(0) Next 0x0(0)/0x0(0)\n    Last retransmission scan length is 1, maximum is 1\n    Last retransmission scan time is 0 msec, maximum is 0 msec\n",
+      "expected": {
+        "neighbors": {
+          "10.0.0.2": {
+            "FastEthernet0/0": {
+              "area": "0",
+              "bdr": "10.0.0.2",
+              "dead_timer": "00:00:39",
+              "dr": "10.0.0.1",
+              "hello_options": "0x52",
+              "interface": "FastEthernet0/0",
+              "interface_address": "10.0.0.2",
+              "priority": 1,
+              "retransmission_count": 1,
+              "retransmission_queue_length": 0,
+              "retransmission_stats": {
+                "last_scan_length": 1,
+                "last_scan_time_msec": 0,
+                "max_scan_length": 1,
+                "max_scan_time_msec": 0
+              },
+              "state": "FULL",
+              "state_changes": 6,
+              "uptime": "00:03:15"
+            }
+          },
+          "192.168.5.2": {
+            "GigabitEthernet1/0/0": {
+              "area": "0",
+              "bdr": "10.225.200.30",
+              "dead_timer": "00:00:36",
+              "dr": "10.225.200.28",
+              "hello_options": "0x42",
+              "interface": "GigabitEthernet1/0/0",
+              "interface_address": "10.225.200.28",
+              "lls_options": "0x1 (LR), last OOB-Resync 00:03:08 ago",
+              "priority": 1,
+              "retransmission_count": 1,
+              "retransmission_queue_length": 0,
+              "retransmission_stats": {
+                "last_scan_length": 1,
+                "last_scan_time_msec": 0,
+                "max_scan_length": 1,
+                "max_scan_time_msec": 0
+              },
+              "state": "FULL",
+              "state_changes": 6,
+              "uptime": "00:09:46"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Same neighbor on multiple interfaces with SR adj labels and Hello/DBD options",
+      "input": "Neighbor 10.16.2.2, interface address 192.168.154.2, interface-id 24\n    In the area 8 via interface GigabitEthernet0/1/2\n    Neighbor priority is 0, State is FULL, 6 state changes\n    DR is 0.0.0.0 BDR is 0.0.0.0\n    SR adj label 16\n    Options is 0x12 in Hello (E-bit, L-bit)\n    Options is 0x52 in DBD (E-bit, L-bit, O-bit)\n    LLS Options is 0x1 (LR)\n    Dead timer due in 00:00:38\n    Neighbor is up for 3d16h\n    Index 1/3/3, retransmission queue length 0, number of retransmission 0\n    First 0x0(0)/0x0(0)/0x0(0) Next 0x0(0)/0x0(0)/0x0(0)\n    Last retransmission scan length is 0, maximum is 0\n    Last retransmission scan time is 0 msec, maximum is 0 msec\nNeighbor 10.16.2.2, interface address 192.168.4.2, interface-id 23\n    In the area 8 via interface GigabitEthernet0/1/1\n    Neighbor priority is 0, State is FULL, 6 state changes\n    DR is 0.0.0.0 BDR is 0.0.0.0\n    SR adj label 17\n    Options is 0x12 in Hello (E-bit, L-bit)\n    Options is 0x52 in DBD (E-bit, L-bit, O-bit)\n    LLS Options is 0x1 (LR)\n    Dead timer due in 00:00:35\n    Neighbor is up for 1w0d\n    Index 1/4/4, retransmission queue length 0, number of retransmission 2\n    First 0x0(0)/0x0(0)/0x0(0) Next 0x0(0)/0x0(0)/0x0(0)\n    Last retransmission scan length is 1, maximum is 1\n    Last retransmission scan time is 0 msec, maximum is 0 msec\n",
+      "expected": {
+        "neighbors": {
+          "10.16.2.2": {
+            "GigabitEthernet0/1/1": {
+              "area": "8",
+              "bdr": "0.0.0.0",
+              "dbd_options": "0x52 (E-bit, L-bit, O-bit)",
+              "dead_timer": "00:00:35",
+              "dr": "0.0.0.0",
+              "hello_options": "0x12 (E-bit, L-bit)",
+              "interface": "GigabitEthernet0/1/1",
+              "interface_address": "192.168.4.2",
+              "interface_id": 23,
+              "lls_options": "0x1 (LR)",
+              "priority": 0,
+              "retransmission_count": 2,
+              "retransmission_queue_length": 0,
+              "retransmission_stats": {
+                "last_scan_length": 1,
+                "last_scan_time_msec": 0,
+                "max_scan_length": 1,
+                "max_scan_time_msec": 0
+              },
+              "sr_adj_label": 17,
+              "state": "FULL",
+              "state_changes": 6,
+              "uptime": "1w0d"
+            },
+            "GigabitEthernet0/1/2": {
+              "area": "8",
+              "bdr": "0.0.0.0",
+              "dbd_options": "0x52 (E-bit, L-bit, O-bit)",
+              "dead_timer": "00:00:38",
+              "dr": "0.0.0.0",
+              "hello_options": "0x12 (E-bit, L-bit)",
+              "interface": "GigabitEthernet0/1/2",
+              "interface_address": "192.168.154.2",
+              "interface_id": 24,
+              "lls_options": "0x1 (LR)",
+              "priority": 0,
+              "retransmission_count": 0,
+              "retransmission_queue_length": 0,
+              "retransmission_stats": {
+                "last_scan_length": 0,
+                "last_scan_time_msec": 0,
+                "max_scan_length": 0,
+                "max_scan_time_msec": 0
+              },
+              "sr_adj_label": 16,
+              "state": "FULL",
+              "state_changes": 6,
+              "uptime": "3d16h"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

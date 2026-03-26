@@ -1,0 +1,238 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show track",
+  "schema": {
+    "name": "ShowTrackResult",
+    "fields": {
+      "tracks": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "TrackEntry",
+            "fields": {
+              "track_type": {
+                "type": "str",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "change_count": {
+                "type": "int",
+                "required": true
+              },
+              "last_change": {
+                "type": "str",
+                "required": true
+              },
+              "object_name": {
+                "type": "str",
+                "required": false
+              },
+              "address": {
+                "type": "str",
+                "required": false
+              },
+              "mask": {
+                "type": "str",
+                "required": false
+              },
+              "parameter": {
+                "type": "str",
+                "required": false
+              },
+              "state_description": {
+                "type": "str",
+                "required": false
+              },
+              "delayed": {
+                "type": {
+                  "name": "DelayedInfo",
+                  "fields": {
+                    "delayed_state": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "secs_remaining": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "connection_state": {
+                      "type": "str",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "delay_up_secs": {
+                "type": "int",
+                "required": false
+              },
+              "delay_down_secs": {
+                "type": "int",
+                "required": false
+              },
+              "first_hop_interface_state": {
+                "type": "str",
+                "required": false
+              },
+              "prev_first_hop_interface": {
+                "type": "str",
+                "required": false
+              },
+              "threshold_down": {
+                "type": "int",
+                "required": false
+              },
+              "threshold_up": {
+                "type": "int",
+                "required": false
+              },
+              "latest_op_return_code": {
+                "type": "str",
+                "required": false
+              },
+              "latest_rtt_ms": {
+                "type": "int",
+                "required": false
+              },
+              "tracked_by": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "type": "dict",
+                      "key": "str",
+                      "value": {
+                        "name": "TrackedByEntry",
+                        "fields": {
+                          "name": {
+                            "type": "str",
+                            "required": true
+                          },
+                          "interface": {
+                            "type": "str",
+                            "required": false
+                          },
+                          "group_id": {
+                            "type": "int",
+                            "required": false
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Interface line-protocol tracking with VRRP tracked-by",
+      "input": "Track 1\n  Interface GigabitEthernet3.420 line-protocol\n  Line protocol is Up\n    1 change, last change 00:00:27\n  Tracked by:\n    VRRP GigabitEthernet3.420 10\n",
+      "expected": {
+        "tracks": {
+          "1": {
+            "change_count": 1,
+            "last_change": "00:00:27",
+            "object_name": "GigabitEthernet3.420",
+            "parameter": "line-protocol",
+            "state": "Up",
+            "track_type": "Interface",
+            "tracked_by": {
+              "VRRP": {
+                "10": {
+                  "GigabitEthernet3.420": {
+                    "group_id": 10,
+                    "interface": "GigabitEthernet3.420",
+                    "name": "VRRP"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Multiple track types including IP route with delay, metric threshold, and IP SLA",
+      "input": "Track 2\n  IP route 10.21.12.0 255.255.255.0 reachability\n  Reachability is Down (no ip route), delayed Up (1 sec remaining) (connected)\n    1 change, last change 00:00:24\n  Delay up 20 secs, down 10 secs\n  First-hop interface is unknown (was Ethernet1/0)\n  Tracked by:\n    HSRP Ethernet0/0 3\n    HSRP Ethernet0/1 3\n\nTrack 1\n  IP route 172.16.52.0 255.255.255.0 metric threshold\n  Metric threshold is Down (no route)\n    1 change, last change 00:00:35\n  Metric threshold down 255 up 254\n  Delay up 2 secs, down 1 sec\n  First-hop interface is unknown\n\nTrack 34\n  IP SLA 34 state\n  State is Up\n    11 changes, last change 1d16h\n  Latest operation return code: OK\n  Latest RTT (millisecs) 16\n",
+      "expected": {
+        "tracks": {
+          "1": {
+            "address": "172.16.52.0",
+            "change_count": 1,
+            "delay_down_secs": 1,
+            "delay_up_secs": 2,
+            "first_hop_interface_state": "unknown",
+            "last_change": "00:00:35",
+            "mask": "255.255.255.0",
+            "parameter": "metric threshold",
+            "state": "Down",
+            "state_description": "no route",
+            "threshold_down": 255,
+            "threshold_up": 254,
+            "track_type": "IP route"
+          },
+          "2": {
+            "address": "10.21.12.0",
+            "change_count": 1,
+            "delay_down_secs": 10,
+            "delay_up_secs": 20,
+            "delayed": {
+              "connection_state": "connected",
+              "delayed_state": "Up",
+              "secs_remaining": 1
+            },
+            "first_hop_interface_state": "unknown",
+            "last_change": "00:00:24",
+            "mask": "255.255.255.0",
+            "parameter": "reachability",
+            "prev_first_hop_interface": "Ethernet1/0",
+            "state": "Down",
+            "state_description": "no ip route",
+            "track_type": "IP route",
+            "tracked_by": {
+              "HSRP": {
+                "3": {
+                  "Ethernet0/0": {
+                    "group_id": 3,
+                    "interface": "Ethernet0/0",
+                    "name": "HSRP"
+                  },
+                  "Ethernet0/1": {
+                    "group_id": 3,
+                    "interface": "Ethernet0/1",
+                    "name": "HSRP"
+                  }
+                }
+              }
+            }
+          },
+          "34": {
+            "change_count": 11,
+            "last_change": "1d16h",
+            "latest_op_return_code": "OK",
+            "latest_rtt_ms": 16,
+            "object_name": "34",
+            "parameter": "state",
+            "state": "Up",
+            "track_type": "IP SLA"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "os": "cisco_nxos",
+  "command": "show interface description",
+  "schema": {
+    "name": "ShowInterfaceDescriptionResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceDescriptionEntry",
+            "fields": {
+              "type": {
+                "type": "str",
+                "required": false
+              },
+              "speed": {
+                "type": "str",
+                "required": false
+              },
+              "description": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic interface description output with physical and logical interfaces",
+      "input": "-------------------------------------------------------------------------------\nInterface                Description\n-------------------------------------------------------------------------------\nmgmt0                    --\n\n-------------------------------------------------------------------------------\nPort          Type   Speed   Description\n-------------------------------------------------------------------------------\nEth1/1        eth    10G     --\nEth1/2        eth    10G     Uplink to spine-01\nEth1/3        eth    1000    Server port DB-01\nEth1/4        eth    10G     This is a test description\n\n-------------------------------------------------------------------------------\nInterface                Description\n-------------------------------------------------------------------------------\nPo10                     Port-channel to core\nPo20                     --\nLo0                      Router ID\nLo1                      --\nVlan10                   Management VLAN\nVlan20                   --\n",
+      "expected": {
+        "interfaces": {
+          "mgmt0": {},
+          "Ethernet1/1": {
+            "type": "eth",
+            "speed": "10G"
+          },
+          "Ethernet1/2": {
+            "type": "eth",
+            "speed": "10G",
+            "description": "Uplink to spine-01"
+          },
+          "Ethernet1/3": {
+            "type": "eth",
+            "speed": "1000",
+            "description": "Server port DB-01"
+          },
+          "Ethernet1/4": {
+            "type": "eth",
+            "speed": "10G",
+            "description": "This is a test description"
+          },
+          "Port-channel10": {
+            "description": "Port-channel to core"
+          },
+          "Port-channel20": {},
+          "Loopback0": {
+            "description": "Router ID"
+          },
+          "Loopback1": {},
+          "Vlan10": {
+            "description": "Management VLAN"
+          },
+          "Vlan20": {}
+        }
+      }
+    }
+  ]
+}

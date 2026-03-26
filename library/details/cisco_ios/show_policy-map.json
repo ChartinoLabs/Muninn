@@ -1,0 +1,244 @@
+{
+  "os": "cisco_ios",
+  "command": "show policy-map",
+  "schema": {
+    "name": "ShowPolicyMapResult",
+    "fields": {
+      "policy_maps": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PolicyMapEntry",
+            "fields": {
+              "classes": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "ClassEntry",
+                    "fields": {
+                      "match": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": false
+                      },
+                      "packets": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "bytes": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "rate_bps": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "offered_rate_bps": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "drop_rate_bps": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "police": {
+                        "type": {
+                          "name": "PoliceEntry",
+                          "fields": {
+                            "cir_bps": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "bc_bytes": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "be_bytes": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "conform_action": {
+                              "type": "str",
+                              "required": false
+                            },
+                            "exceed_action": {
+                              "type": "str",
+                              "required": false
+                            },
+                            "violate_action": {
+                              "type": "str",
+                              "required": false
+                            },
+                            "conform_packets": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "conform_bytes": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "exceed_packets": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "exceed_bytes": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "violate_packets": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "violate_bytes": {
+                              "type": "int",
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "shape": {
+                        "type": {
+                          "name": "ShapeEntry",
+                          "fields": {
+                            "type": {
+                              "type": "str",
+                              "required": true
+                            },
+                            "cir_bps": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "bc_bits": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "be_bits": {
+                              "type": "int",
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "bandwidth": {
+                        "type": {
+                          "name": "BandwidthEntry",
+                          "fields": {
+                            "kbps": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "percent": {
+                              "type": "int",
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "queue_limit": {
+                        "type": {
+                          "name": "QueueLimitEntry",
+                          "fields": {
+                            "packets": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "bytes": {
+                              "type": "int",
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "service_policy": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Policy maps with police, shape, bandwidth, and match criteria",
+      "input": "  Policy Map QOS-POLICY\n    Class VOICE\n      Match: dscp ef\n      police cir 128000 bc 8000\n        conform-action transmit\n        exceed-action drop\n        conformed 15000 packets, 9600000 bytes\n        exceeded 500 packets, 320000 bytes\n    Class VIDEO\n      Match: dscp af41\n      Match: dscp cs4\n      bandwidth 256 (kbps)\n      queue-limit 64 packets\n    Class class-default\n      Match: any\n      shape average 1000000\n\n  Policy Map PARENT-POLICY\n    Class CRITICAL-DATA\n      Match: access-group name CRITICAL-ACL\n      bandwidth 30%\n      service-policy CHILD-POLICY\n    Class class-default\n      Match: any\n",
+      "expected": {
+        "policy_maps": {
+          "PARENT-POLICY": {
+            "classes": {
+              "CRITICAL-DATA": {
+                "bandwidth": {
+                  "percent": 30
+                },
+                "match": [
+                  "access-group name CRITICAL-ACL"
+                ],
+                "service_policy": "CHILD-POLICY"
+              },
+              "class-default": {
+                "match": [
+                  "any"
+                ]
+              }
+            }
+          },
+          "QOS-POLICY": {
+            "classes": {
+              "VIDEO": {
+                "bandwidth": {
+                  "kbps": 256
+                },
+                "match": [
+                  "dscp af41",
+                  "dscp cs4"
+                ],
+                "queue_limit": {
+                  "packets": 64
+                }
+              },
+              "VOICE": {
+                "match": [
+                  "dscp ef"
+                ],
+                "police": {
+                  "bc_bytes": 8000,
+                  "cir_bps": 128000,
+                  "conform_action": "transmit",
+                  "conform_bytes": 9600000,
+                  "conform_packets": 15000,
+                  "exceed_action": "drop",
+                  "exceed_bytes": 320000,
+                  "exceed_packets": 500
+                }
+              },
+              "class-default": {
+                "match": [
+                  "any"
+                ],
+                "shape": {
+                  "cir_bps": 1000000,
+                  "type": "average"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

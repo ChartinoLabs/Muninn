@@ -1,0 +1,85 @@
+{
+  "os": "cisco_ios",
+  "command": "show ip vrf interfaces",
+  "schema": {
+    "name": "ShowIpVrfInterfacesResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfInterfaceEntry",
+            "fields": {
+              "vrf": {
+                "type": "str",
+                "required": true
+              },
+              "protocol": {
+                "type": "str",
+                "required": true
+              },
+              "ip_address": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple VRFs with several interfaces including an unassigned IP",
+      "input": "Interface              IP-Address      VRF                              Protocol\nVl1100                 192.168.100.1   BYOD-Guest                       up\nVl1200                 192.168.200.1   BYOD-Guest                       up\nVl1832                 10.255.0.10     BYOD-Guest                       up\nGi0/0                  unassigned      Mgmt-vrf                         down\nVl520                  172.31.2.253    SP-INET                          up\nVl1836                 10.255.0.18     SP-INET                          up\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet0/0": {
+            "protocol": "down",
+            "vrf": "Mgmt-vrf"
+          },
+          "VLAN1100": {
+            "ip_address": "192.168.100.1",
+            "protocol": "up",
+            "vrf": "BYOD-Guest"
+          },
+          "VLAN1200": {
+            "ip_address": "192.168.200.1",
+            "protocol": "up",
+            "vrf": "BYOD-Guest"
+          },
+          "VLAN1832": {
+            "ip_address": "10.255.0.10",
+            "protocol": "up",
+            "vrf": "BYOD-Guest"
+          },
+          "VLAN1836": {
+            "ip_address": "10.255.0.18",
+            "protocol": "up",
+            "vrf": "SP-INET"
+          },
+          "VLAN520": {
+            "ip_address": "172.31.2.253",
+            "protocol": "up",
+            "vrf": "SP-INET"
+          }
+        }
+      }
+    },
+    {
+      "name": "Single VRF interface entry",
+      "input": "Interface              IP-Address      VRF                              Protocol\nLoopback100            10.10.10.1      CORPORATE                        up\n",
+      "expected": {
+        "interfaces": {
+          "Loopback100": {
+            "ip_address": "10.10.10.1",
+            "protocol": "up",
+            "vrf": "CORPORATE"
+          }
+        }
+      }
+    }
+  ]
+}

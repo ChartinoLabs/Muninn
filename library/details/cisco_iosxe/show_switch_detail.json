@@ -1,0 +1,199 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show switch detail",
+  "schema": {
+    "name": "ShowSwitchDetailResult",
+    "fields": {
+      "stack_mac_address": {
+        "type": "str",
+        "required": true
+      },
+      "switches": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SwitchEntry",
+            "fields": {
+              "role": {
+                "type": "str",
+                "required": true
+              },
+              "mac_address": {
+                "type": "str",
+                "required": true
+              },
+              "priority": {
+                "type": "int",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "is_active": {
+                "type": "bool",
+                "required": true
+              },
+              "hw_version": {
+                "type": "str",
+                "required": false
+              },
+              "stack_ports": {
+                "type": {
+                  "name": "StackPortEntry",
+                  "fields": {
+                    "port1_status": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "port2_status": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "port1_neighbor": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "port2_neighbor": {
+                      "type": "str",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "mac_persistency_wait_time": {
+        "type": "str",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Four-member stack with Active, Standby, and Member roles",
+      "input": "Switch/Stack Mac Address : cc98.9114.3580 - Local Mac Address\nMac persistency wait time: Indefinite\n                                             H/W   Current\nSwitch#   Role    Mac Address     Priority Version  State\n-------------------------------------------------------------------------------------\n*1       Active   cc98.9114.3580     15     V01     Ready\n 2       Member   706b.b9c8.2380     2      V01     Ready\n 3       Member   a0f8.4911.c080     3      V01     Ready\n 4       Standby  cc98.911a.0800     8      V01     Ready\n\n\n\n         Stack Port Status             Neighbors\nSwitch#  Port 1     Port 2           Port 1   Port 2\n--------------------------------------------------------\n  1         OK         OK               2        4\n  2         OK         OK               3        1\n  3         OK         OK               4        2\n  4         OK         OK               1        3\n",
+      "expected": {
+        "mac_persistency_wait_time": "Indefinite",
+        "stack_mac_address": "cc98.9114.3580",
+        "switches": {
+          "1": {
+            "hw_version": "V01",
+            "is_active": true,
+            "mac_address": "cc98.9114.3580",
+            "priority": 15,
+            "role": "Active",
+            "stack_ports": {
+              "port1_neighbor": "2",
+              "port1_status": "OK",
+              "port2_neighbor": "4",
+              "port2_status": "OK"
+            },
+            "state": "Ready"
+          },
+          "2": {
+            "hw_version": "V01",
+            "is_active": false,
+            "mac_address": "706b.b9c8.2380",
+            "priority": 2,
+            "role": "Member",
+            "stack_ports": {
+              "port1_neighbor": "3",
+              "port1_status": "OK",
+              "port2_neighbor": "1",
+              "port2_status": "OK"
+            },
+            "state": "Ready"
+          },
+          "3": {
+            "hw_version": "V01",
+            "is_active": false,
+            "mac_address": "a0f8.4911.c080",
+            "priority": 3,
+            "role": "Member",
+            "stack_ports": {
+              "port1_neighbor": "4",
+              "port1_status": "OK",
+              "port2_neighbor": "2",
+              "port2_status": "OK"
+            },
+            "state": "Ready"
+          },
+          "4": {
+            "hw_version": "V01",
+            "is_active": false,
+            "mac_address": "cc98.911a.0800",
+            "priority": 8,
+            "role": "Standby",
+            "stack_ports": {
+              "port1_neighbor": "1",
+              "port1_status": "OK",
+              "port2_neighbor": "3",
+              "port2_status": "OK"
+            },
+            "state": "Ready"
+          }
+        }
+      }
+    },
+    {
+      "name": "Single switch with Master role and ports down",
+      "input": "Switch/Stack Mac Address : a0e0.af1d.bb80\n                                           H/W   Current\nSwitch#  Role   Mac Address     Priority Version  State\n----------------------------------------------------------\n*1       Master a0e0.af1d.bb80     1      3       Ready\n\n\n\n         Stack Port Status             Neighbors\nSwitch#  Port 1     Port 2           Port 1   Port 2\n--------------------------------------------------------\n  1       Down       Down             None     None\n",
+      "expected": {
+        "stack_mac_address": "a0e0.af1d.bb80",
+        "switches": {
+          "1": {
+            "hw_version": "3",
+            "is_active": true,
+            "mac_address": "a0e0.af1d.bb80",
+            "priority": 1,
+            "role": "Master",
+            "stack_ports": {
+              "port1_neighbor": "None",
+              "port1_status": "DOWN",
+              "port2_neighbor": "None",
+              "port2_status": "DOWN"
+            },
+            "state": "Ready"
+          }
+        }
+      }
+    },
+    {
+      "name": "Stack with an unprovisioned member missing hardware version",
+      "input": "Switch/Stack Mac Address : 6c71.abcd.a200  - Local Mac Address\nMac persistency wait time: Indefinite\n                                             H/W   Current\nSwitch#   Role    Mac Address     Priority Version  State\n-------------------------------------------------------------------------------------\n*1       Active   6c71.abcd.a200     1      V03     Ready\n 2       Member   0000.0000.0000     0              Unprovisioned\n\n\n\n         Stack Port Status             Neighbors\nSwitch#  Port 1     Port 2           Port 1   Port 2\n--------------------------------------------------------\n  1       DOWN       DOWN             None     None\n",
+      "expected": {
+        "mac_persistency_wait_time": "Indefinite",
+        "stack_mac_address": "6c71.abcd.a200",
+        "switches": {
+          "1": {
+            "hw_version": "V03",
+            "is_active": true,
+            "mac_address": "6c71.abcd.a200",
+            "priority": 1,
+            "role": "Active",
+            "stack_ports": {
+              "port1_neighbor": "None",
+              "port1_status": "DOWN",
+              "port2_neighbor": "None",
+              "port2_status": "DOWN"
+            },
+            "state": "Ready"
+          },
+          "2": {
+            "is_active": false,
+            "mac_address": "0000.0000.0000",
+            "priority": 0,
+            "role": "Member",
+            "state": "Unprovisioned"
+          }
+        }
+      }
+    }
+  ]
+}

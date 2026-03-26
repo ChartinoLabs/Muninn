@@ -1,0 +1,87 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show platform software meraki-service",
+  "schema": {
+    "name": "ShowPlatformSoftwareMerakiServiceResult",
+    "fields": {
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ProcessEntry",
+            "fields": {
+              "running": {
+                "type": "bool",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic Meraki service output with four processes",
+      "input": "\nMeraki Process Summary:\n----------------------------------------------\nMeraki Mgrd                    : Running\nMeraki Tunnel Client           : Running\nIOS Console Service            : Running\nNextunnel Packet Capture       : Not Running\n",
+      "expected": {
+        "processes": {
+          "meraki_mgrd": {
+            "running": true
+          },
+          "meraki_tunnel_client": {
+            "running": true
+          },
+          "ios_console_service": {
+            "running": true
+          },
+          "nextunnel_packet_capture": {
+            "running": false
+          }
+        }
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": "Meraki Process Summary:\n----------------------------------------------\nMeraki Mgrd                    : Not Running\nMeraki Tunnel Client           : Not Running\nIOS Console Service            : Not Running\n",
+      "expected": {
+        "processes": {
+          "meraki_mgrd": {
+            "running": false
+          },
+          "meraki_tunnel_client": {
+            "running": false
+          },
+          "ios_console_service": {
+            "running": false
+          }
+        }
+      }
+    },
+    {
+      "name": "Meraki service output with five processes including Meraki Ncmd",
+      "input": "\nMeraki Process Summary:\n----------------------------------------------\nMeraki Mgrd                    : Running\nMeraki Tunnel Client           : Running\nIOS Console Service            : Running\nNextunnel Packet Capture       : Not Running\nMeraki Ncmd                    : Running\n",
+      "expected": {
+        "processes": {
+          "meraki_mgrd": {
+            "running": true
+          },
+          "meraki_tunnel_client": {
+            "running": true
+          },
+          "ios_console_service": {
+            "running": true
+          },
+          "nextunnel_packet_capture": {
+            "running": false
+          },
+          "meraki_ncmd": {
+            "running": true
+          }
+        }
+      }
+    }
+  ]
+}

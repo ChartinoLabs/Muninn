@@ -1,0 +1,19 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show standby delay",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Show standby delay output with one interface",
+      "input": "Interface          Minimum Reload\nGigabitEthernet1   99      888\n",
+      "expected": {
+        "GigabitEthernet1": {
+          "delay": {
+            "minimum_delay": 99,
+            "reload_delay": 888
+          }
+        }
+      }
+    }
+  ]
+}

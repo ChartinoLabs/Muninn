@@ -1,0 +1,155 @@
+{
+  "os": "cisco_ios",
+  "command": "show snmp group",
+  "schema": {
+    "name": "ShowSnmpGroupResult",
+    "fields": {
+      "groups": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "SnmpGroupEntry",
+              "fields": {
+                "group_name": {
+                  "type": "str",
+                  "required": true
+                },
+                "security_model": {
+                  "type": "str",
+                  "required": true
+                },
+                "context_name": {
+                  "type": "str",
+                  "required": false
+                },
+                "storage_type": {
+                  "type": "str",
+                  "required": true
+                },
+                "read_view": {
+                  "type": "str",
+                  "required": false
+                },
+                "write_view": {
+                  "type": "str",
+                  "required": false
+                },
+                "notify_view": {
+                  "type": "str",
+                  "required": false
+                },
+                "row_status": {
+                  "type": "str",
+                  "required": true
+                },
+                "access_list": {
+                  "type": "str",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple SNMP groups with v1, v2c, and v3 security models",
+      "input": "groupname: GROUP1                           security model:v3 priv\ncontextname: <no context specified>         storage-type: nonvolatile\nreadview : g1readview                       writeview: <no writeview specified>\nnotifyview: g1notifyview\nrow status: active      access-list: snmp-acl-name\n\ngroupname: ILMI                             security model:v1\ncontextname: <no context specified>         storage-type: permanent\nreadview : *ilmi                            writeview: *ilmi\nnotifyview: <no notifyview specified>\nrow status: active\n\ngroupname: ILMI                             security model:v2c\ncontextname: <no context specified>         storage-type: permanent\nreadview : *ilmi                            writeview: *ilmi\nnotifyview: <no notifyview specified>\nrow status: active\n\ngroupname: GROUP2                           security model:v1\ncontextname: <no context specified>         storage-type: nonvolatile\nreadview : v1default                        writeview: <no writeview specified>\nnotifyview: <no notifyview specified>\nrow status: active      access-list: snmp-acl-name\n\ngroupname: GROUP2                           security model:v2c\ncontextname: <no context specified>         storage-type: nonvolatile\nreadview : v1default                        writeview: <no writeview specified>\nnotifyview: <no notifyview specified>\nrow status: active      access-list: snmp-acl-name\n\ngroupname: GROUP3                           security model:v1\ncontextname: <no context specified>         storage-type: nonvolatile\nreadview : v1default                        writeview: <no writeview specified>\nnotifyview: <no notifyview specified>\nrow status: active      access-list: snmp-acl-name\n\ngroupname: GROUP3                           security model:v2c\ncontextname: <no context specified>         storage-type: nonvolatile\nreadview : v1default                        writeview: <no writeview specified>\nnotifyview: <no notifyview specified>\nrow status: active      access-list: snmp-acl-name\n",
+      "expected": {
+        "groups": {
+          "GROUP1": {
+            "v3 priv": {
+              "access_list": "snmp-acl-name",
+              "group_name": "GROUP1",
+              "notify_view": "g1notifyview",
+              "read_view": "g1readview",
+              "row_status": "active",
+              "security_model": "v3 priv",
+              "storage_type": "nonvolatile"
+            }
+          },
+          "GROUP2": {
+            "v1": {
+              "access_list": "snmp-acl-name",
+              "group_name": "GROUP2",
+              "read_view": "v1default",
+              "row_status": "active",
+              "security_model": "v1",
+              "storage_type": "nonvolatile"
+            },
+            "v2c": {
+              "access_list": "snmp-acl-name",
+              "group_name": "GROUP2",
+              "read_view": "v1default",
+              "row_status": "active",
+              "security_model": "v2c",
+              "storage_type": "nonvolatile"
+            }
+          },
+          "GROUP3": {
+            "v1": {
+              "access_list": "snmp-acl-name",
+              "group_name": "GROUP3",
+              "read_view": "v1default",
+              "row_status": "active",
+              "security_model": "v1",
+              "storage_type": "nonvolatile"
+            },
+            "v2c": {
+              "access_list": "snmp-acl-name",
+              "group_name": "GROUP3",
+              "read_view": "v1default",
+              "row_status": "active",
+              "security_model": "v2c",
+              "storage_type": "nonvolatile"
+            }
+          },
+          "ILMI": {
+            "v1": {
+              "group_name": "ILMI",
+              "read_view": "*ilmi",
+              "row_status": "active",
+              "security_model": "v1",
+              "storage_type": "permanent",
+              "write_view": "*ilmi"
+            },
+            "v2c": {
+              "group_name": "ILMI",
+              "read_view": "*ilmi",
+              "row_status": "active",
+              "security_model": "v2c",
+              "storage_type": "permanent",
+              "write_view": "*ilmi"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Single SNMP group with v3 authentication",
+      "input": "groupname: NETADMIN                         security model:v3 auth\ncontextname: <no context specified>         storage-type: nonvolatile\nreadview : fullview                         writeview: fullview\nnotifyview: fullview\nrow status: active\n",
+      "expected": {
+        "groups": {
+          "NETADMIN": {
+            "v3 auth": {
+              "group_name": "NETADMIN",
+              "notify_view": "fullview",
+              "read_view": "fullview",
+              "row_status": "active",
+              "security_model": "v3 auth",
+              "storage_type": "nonvolatile",
+              "write_view": "fullview"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

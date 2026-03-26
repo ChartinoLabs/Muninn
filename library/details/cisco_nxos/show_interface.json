@@ -1,0 +1,562 @@
+{
+  "os": "cisco_nxos",
+  "command": "show interface",
+  "schema": {
+    "name": "ShowInterfaceResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "line_protocol": {
+                "type": "str",
+                "required": false
+              },
+              "admin_state": {
+                "type": "str",
+                "required": false
+              },
+              "hardware": {
+                "type": "str",
+                "required": false
+              },
+              "mtu": {
+                "type": "int",
+                "required": false
+              },
+              "bandwidth_kbps": {
+                "type": "int",
+                "required": false
+              },
+              "delay_usec": {
+                "type": "int",
+                "required": false
+              },
+              "encapsulation": {
+                "type": "str",
+                "required": false
+              },
+              "description": {
+                "type": "str",
+                "required": false
+              },
+              "address": {
+                "type": "str",
+                "required": false
+              },
+              "bia": {
+                "type": "str",
+                "required": false
+              },
+              "ip_address": {
+                "type": "str",
+                "required": false
+              },
+              "ip_prefix_length": {
+                "type": "int",
+                "required": false
+              },
+              "reliability": {
+                "type": "str",
+                "required": false
+              },
+              "txload": {
+                "type": "str",
+                "required": false
+              },
+              "rxload": {
+                "type": "str",
+                "required": false
+              },
+              "duplex": {
+                "type": "str",
+                "required": false
+              },
+              "speed": {
+                "type": "str",
+                "required": false
+              },
+              "media_type": {
+                "type": "str",
+                "required": false
+              },
+              "port_mode": {
+                "type": "str",
+                "required": false
+              },
+              "medium": {
+                "type": "str",
+                "required": false
+              },
+              "beacon": {
+                "type": "str",
+                "required": false
+              },
+              "interface_type": {
+                "type": "str",
+                "required": false
+              },
+              "switchport_monitor": {
+                "type": "str",
+                "required": false
+              },
+              "last_link_flapped": {
+                "type": "str",
+                "required": false
+              },
+              "last_clearing": {
+                "type": "str",
+                "required": false
+              },
+              "interface_resets": {
+                "type": "int",
+                "required": false
+              },
+              "input_rate_bps": {
+                "type": "int",
+                "required": false
+              },
+              "input_rate_pps": {
+                "type": "int",
+                "required": false
+              },
+              "output_rate_bps": {
+                "type": "int",
+                "required": false
+              },
+              "output_rate_pps": {
+                "type": "int",
+                "required": false
+              },
+              "load_interval_1": {
+                "type": "int",
+                "required": false
+              },
+              "load_interval_2": {
+                "type": "int",
+                "required": false
+              },
+              "rx_counters": {
+                "type": {
+                  "name": "RxCountersEntry",
+                  "fields": {
+                    "unicast_packets": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "multicast_packets": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "broadcast_packets": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "bytes": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "input_packets": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "jumbo_packets": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "storm_suppression_packets": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "runts": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "giants": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "crc": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "no_buffer": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "input_errors": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "short_frame": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "overrun": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "underrun": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "ignored": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "watchdog": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "bad_etype_drop": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "bad_proto_drop": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "if_down_drop": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "input_with_dribble": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "input_discard": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "pause": {
+                      "type": "int",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "tx_counters": {
+                "type": {
+                  "name": "TxCountersEntry",
+                  "fields": {
+                    "unicast_packets": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "multicast_packets": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "broadcast_packets": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "bytes": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "output_packets": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "jumbo_packets": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "output_errors": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "collision": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "deferred": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "late_collision": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "lost_carrier": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "no_carrier": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "babble": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "output_discard": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "pause": {
+                      "type": "int",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show interface output with Ethernet, loopback, and mgmt interfaces",
+      "input": "Ethernet1/1 is up\nadmin state is up, Dedicated Interface\n  Hardware: 100/1000/10000 Ethernet, address: 002a.6aff.451c (bia 002a.6aff.451c)\n  Description: to-spine1\n  Internet Address is 10.1.1.1/30\n  MTU 9216 bytes, BW 10000000 Kbit, DLY 10 usec\n  reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation ARPA, medium is broadcast\n  Port mode is routed\n  full-duplex, 10 Gb/s, media type is 10G\n  Beacon is turned off\n  EtherType is 0x8100\n  Switchport monitor is off\n  Last link flapped 2weeks 3day(s)\n  Last clearing of \"show interface\" counters never\n  3 interface resets\n  Load-Interval #1 is 30 seconds\n  30 seconds input rate 5248 bits/sec, 7 packets/sec\n  30 seconds output rate 6912 bits/sec, 8 packets/sec\n  Load-Interval #2 is 300 seconds\n  300 seconds input rate 4800 bits/sec, 6 packets/sec\n  300 seconds output rate 6400 bits/sec, 7 packets/sec\n  RX\n    543210 unicast packets  12345 multicast packets  678 broadcast packets\n    67890123 bytes\n    556233 input packets  0 jumbo packets  0 storm suppression packets\n    0 runts  0 giants  0 CRC/FCS  0 no buffer\n    0 input error  0 short frame  0 overrun  0 underrun  0 ignored\n    0 watchdog  0 bad etype drop  0 bad proto drop  0 if down drop\n    0 input with dribble  0 input discard\n    0 Rx pause\n  TX\n    234567 unicast packets  56789 multicast packets  890 broadcast packets\n    45678901 bytes\n    292246 output packets  0 jumbo packets\n    0 output error  0 collision  0 deferred  0 late collision\n    0 lost carrier  0 no carrier  0 babble  0 output discard\n    0 Tx pause\n\nmgmt0 is up\nadmin state is up,\n  Hardware: GigabitEthernet, address: 002a.6aff.4500 (bia 002a.6aff.4500)\n  Internet Address is 192.168.1.10/24\n  MTU 1500 bytes, BW 1000000 Kbit, DLY 10 usec\n  reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation ARPA, medium is broadcast\n  full-duplex, 1000 Mb/s\n  Beacon is turned off\n  Last link flapped 5weeks 2day(s)\n  Last clearing of \"show interface\" counters never\n  1 interface resets\n  Load-Interval #1 is 30 seconds\n  30 seconds input rate 1024 bits/sec, 1 packets/sec\n  30 seconds output rate 512 bits/sec, 0 packets/sec\n  RX\n    98765 unicast packets  4321 multicast packets  100 broadcast packets\n    12345678 bytes\n    103186 input packets  0 jumbo packets  0 storm suppression packets\n    0 runts  0 giants  0 CRC/FCS  0 no buffer\n    0 input error  0 short frame  0 overrun  0 underrun  0 ignored\n    0 watchdog  0 bad etype drop  0 bad proto drop  0 if down drop\n    0 input with dribble  0 input discard\n    0 Rx pause\n  TX\n    87654 unicast packets  3210 multicast packets  50 broadcast packets\n    9876543 bytes\n    90914 output packets  0 jumbo packets\n    0 output error  0 collision  0 deferred  0 late collision\n    0 lost carrier  0 no carrier  0 babble  0 output discard\n    0 Tx pause\n\nloopback0 is up\nadmin state is up,\n  Hardware: Loopback\n  Internet Address is 10.0.0.1/32\n  MTU 1500 bytes, BW 8000000 Kbit, DLY 5000 usec\n  reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation LOOPBACK, medium is broadcast\n\nEthernet1/2 is down (Administratively down)\nadmin state is down, Dedicated Interface\n  Hardware: 100/1000/10000 Ethernet, address: 002a.6aff.451d (bia 002a.6aff.451d)\n  MTU 1500 bytes, BW 10000000 Kbit, DLY 10 usec\n  reliability 255/255, txload 1/255, rxload 1/255\n  Encapsulation ARPA, medium is broadcast\n  Port mode is access\n  auto-speed, 10G\n  Beacon is turned off\n  EtherType is 0x8100\n  Last link flapped never\n  Last clearing of \"show interface\" counters never\n  0 interface resets\n  Load-Interval #1 is 30 seconds\n  30 seconds input rate 0 bits/sec, 0 packets/sec\n  30 seconds output rate 0 bits/sec, 0 packets/sec\n  RX\n    0 unicast packets  0 multicast packets  0 broadcast packets\n    0 bytes\n    0 input packets  0 jumbo packets  0 storm suppression packets\n    0 runts  0 giants  0 CRC/FCS  0 no buffer\n    0 input error  0 short frame  0 overrun  0 underrun  0 ignored\n    0 watchdog  0 bad etype drop  0 bad proto drop  0 if down drop\n    0 input with dribble  0 input discard\n    0 Rx pause\n  TX\n    0 unicast packets  0 multicast packets  0 broadcast packets\n    0 bytes\n    0 output packets  0 jumbo packets\n    0 output error  0 collision  0 deferred  0 late collision\n    0 lost carrier  0 no carrier  0 babble  0 output discard\n    0 Tx pause\n",
+      "expected": {
+        "interfaces": {
+          "Ethernet1/1": {
+            "address": "002a.6aff.451c",
+            "admin_state": "up",
+            "bandwidth_kbps": 10000000,
+            "beacon": "off",
+            "bia": "002a.6aff.451c",
+            "delay_usec": 10,
+            "description": "to-spine1",
+            "duplex": "full-duplex",
+            "encapsulation": "ARPA",
+            "hardware": "100/1000/10000 Ethernet",
+            "input_rate_bps": 5248,
+            "input_rate_pps": 7,
+            "interface_resets": 3,
+            "interface_type": "0x8100",
+            "ip_address": "10.1.1.1",
+            "ip_prefix_length": 30,
+            "last_clearing": "never",
+            "last_link_flapped": "2weeks 3day(s)",
+            "load_interval_1": 30,
+            "load_interval_2": 300,
+            "media_type": "10G",
+            "medium": "broadcast",
+            "mtu": 9216,
+            "output_rate_bps": 6912,
+            "output_rate_pps": 8,
+            "port_mode": "routed",
+            "reliability": "255/255",
+            "rx_counters": {
+              "bad_etype_drop": 0,
+              "bad_proto_drop": 0,
+              "broadcast_packets": 678,
+              "bytes": 67890123,
+              "crc": 0,
+              "giants": 0,
+              "if_down_drop": 0,
+              "ignored": 0,
+              "input_discard": 0,
+              "input_errors": 0,
+              "input_packets": 556233,
+              "input_with_dribble": 0,
+              "jumbo_packets": 0,
+              "multicast_packets": 12345,
+              "no_buffer": 0,
+              "overrun": 0,
+              "pause": 0,
+              "runts": 0,
+              "short_frame": 0,
+              "storm_suppression_packets": 0,
+              "underrun": 0,
+              "unicast_packets": 543210,
+              "watchdog": 0
+            },
+            "rxload": "1/255",
+            "speed": "10 Gb/s",
+            "status": "up",
+            "switchport_monitor": "off",
+            "tx_counters": {
+              "babble": 0,
+              "broadcast_packets": 890,
+              "bytes": 45678901,
+              "collision": 0,
+              "deferred": 0,
+              "jumbo_packets": 0,
+              "late_collision": 0,
+              "lost_carrier": 0,
+              "multicast_packets": 56789,
+              "no_carrier": 0,
+              "output_discard": 0,
+              "output_errors": 0,
+              "output_packets": 292246,
+              "pause": 0,
+              "unicast_packets": 234567
+            },
+            "txload": "1/255"
+          },
+          "Ethernet1/2": {
+            "address": "002a.6aff.451d",
+            "admin_state": "down",
+            "bandwidth_kbps": 10000000,
+            "beacon": "off",
+            "bia": "002a.6aff.451d",
+            "delay_usec": 10,
+            "encapsulation": "ARPA",
+            "hardware": "100/1000/10000 Ethernet",
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "interface_resets": 0,
+            "interface_type": "0x8100",
+            "last_clearing": "never",
+            "last_link_flapped": "never",
+            "load_interval_1": 30,
+            "media_type": "10G",
+            "medium": "broadcast",
+            "mtu": 1500,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0,
+            "port_mode": "access",
+            "reliability": "255/255",
+            "rx_counters": {
+              "bad_etype_drop": 0,
+              "bad_proto_drop": 0,
+              "broadcast_packets": 0,
+              "bytes": 0,
+              "crc": 0,
+              "giants": 0,
+              "if_down_drop": 0,
+              "ignored": 0,
+              "input_discard": 0,
+              "input_errors": 0,
+              "input_packets": 0,
+              "input_with_dribble": 0,
+              "jumbo_packets": 0,
+              "multicast_packets": 0,
+              "no_buffer": 0,
+              "overrun": 0,
+              "pause": 0,
+              "runts": 0,
+              "short_frame": 0,
+              "storm_suppression_packets": 0,
+              "underrun": 0,
+              "unicast_packets": 0,
+              "watchdog": 0
+            },
+            "rxload": "1/255",
+            "speed": "auto-speed",
+            "status": "down (Administratively down)",
+            "tx_counters": {
+              "babble": 0,
+              "broadcast_packets": 0,
+              "bytes": 0,
+              "collision": 0,
+              "deferred": 0,
+              "jumbo_packets": 0,
+              "late_collision": 0,
+              "lost_carrier": 0,
+              "multicast_packets": 0,
+              "no_carrier": 0,
+              "output_discard": 0,
+              "output_errors": 0,
+              "output_packets": 0,
+              "pause": 0,
+              "unicast_packets": 0
+            },
+            "txload": "1/255"
+          },
+          "Loopback0": {
+            "admin_state": "up",
+            "bandwidth_kbps": 8000000,
+            "delay_usec": 5000,
+            "encapsulation": "LOOPBACK",
+            "hardware": "Loopback",
+            "ip_address": "10.0.0.1",
+            "ip_prefix_length": 32,
+            "medium": "broadcast",
+            "mtu": 1500,
+            "reliability": "255/255",
+            "rxload": "1/255",
+            "status": "up",
+            "txload": "1/255"
+          },
+          "mgmt0": {
+            "address": "002a.6aff.4500",
+            "admin_state": "up",
+            "bandwidth_kbps": 1000000,
+            "beacon": "off",
+            "bia": "002a.6aff.4500",
+            "delay_usec": 10,
+            "duplex": "full-duplex",
+            "encapsulation": "ARPA",
+            "hardware": "GigabitEthernet",
+            "input_rate_bps": 1024,
+            "input_rate_pps": 1,
+            "interface_resets": 1,
+            "ip_address": "192.168.1.10",
+            "ip_prefix_length": 24,
+            "last_clearing": "never",
+            "last_link_flapped": "5weeks 2day(s)",
+            "load_interval_1": 30,
+            "medium": "broadcast",
+            "mtu": 1500,
+            "output_rate_bps": 512,
+            "output_rate_pps": 0,
+            "reliability": "255/255",
+            "rx_counters": {
+              "bad_etype_drop": 0,
+              "bad_proto_drop": 0,
+              "broadcast_packets": 100,
+              "bytes": 12345678,
+              "crc": 0,
+              "giants": 0,
+              "if_down_drop": 0,
+              "ignored": 0,
+              "input_discard": 0,
+              "input_errors": 0,
+              "input_packets": 103186,
+              "input_with_dribble": 0,
+              "jumbo_packets": 0,
+              "multicast_packets": 4321,
+              "no_buffer": 0,
+              "overrun": 0,
+              "pause": 0,
+              "runts": 0,
+              "short_frame": 0,
+              "storm_suppression_packets": 0,
+              "underrun": 0,
+              "unicast_packets": 98765,
+              "watchdog": 0
+            },
+            "rxload": "1/255",
+            "speed": "1000 Mb/s",
+            "status": "up",
+            "tx_counters": {
+              "babble": 0,
+              "broadcast_packets": 50,
+              "bytes": 9876543,
+              "collision": 0,
+              "deferred": 0,
+              "jumbo_packets": 0,
+              "late_collision": 0,
+              "lost_carrier": 0,
+              "multicast_packets": 3210,
+              "no_carrier": 0,
+              "output_discard": 0,
+              "output_errors": 0,
+              "output_packets": 90914,
+              "pause": 0,
+              "unicast_packets": 87654
+            },
+            "txload": "1/255"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,350 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show controller ethernet-controller",
+  "schema": {
+    "name": "ShowControllerEthernetControllerResult",
+    "fields": {
+      "interface": {
+        "type": "str",
+        "required": true
+      },
+      "statistics": {
+        "type": {
+          "name": "ControllerEthernetStatistics",
+          "fields": {
+            "transmit": {
+              "type": {
+                "type": "dict",
+                "key": "str",
+                "value": {
+                  "name": "ControllerEthernetCounterEntry",
+                  "fields": {
+                    "value": {
+                      "type": "str",
+                      "required": true
+                    }
+                  }
+                }
+              },
+              "required": true
+            },
+            "receive": {
+              "type": {
+                "type": "dict",
+                "key": "str",
+                "value": {
+                  "type": "ref",
+                  "name": "ControllerEthernetCounterEntry"
+                }
+              },
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "last_update": {
+        "type": "str",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_basic",
+      "input": "Transmit                  TwentyFiveGigE1/0/21          Receive\n     32771558 Total bytes                    79667040 Total bytes\n        41594 Unicast frames                      566 Unicast frames\n      2662024 Unicast bytes                     36552 Unicast bytes\n       374037 Multicast frames                1026274 Multicast frames\n     30094446 Multicast bytes                79482748 Multicast bytes\n          170 Broadcast frames                   1680 Broadcast frames\n        15088 Broadcast bytes                  147740 Broadcast bytes\n            0 System FCS error frames               0 IpgViolation frames\n            0 MacUnderrun frames                    0 MacOverrun frames\n            0 Pause frames                          0 Pause frames\n            0 Cos 0 Pause frames                    0 Cos 0 Pause frames\n            0 Cos 1 Pause frames                    0 Cos 1 Pause frames\n            0 Cos 2 Pause frames                    0 Cos 2 Pause frames\n            0 Cos 3 Pause frames                    0 Cos 3 Pause frames\n            0 Cos 4 Pause frames                    0 Cos 4 Pause frames\n            0 Cos 5 Pause frames                    0 Cos 5 Pause frames\n            0 Cos 6 Pause frames                    0 Cos 6 Pause frames\n            0 Cos 7 Pause frames                    0 Cos 7 Pause frames\n            0 Oam frames                            0 OamProcessed frames\n            0 Oam frames                            0 OamDropped frames\n       113581 Minimum size frames              111896 Minimum size frames\n       288088 65 to 127 byte frames            896461 65 to 127 byte frames\n         2827 128 to 255 byte frames             2986 128 to 255 byte frames\n        11305 256 to 511 byte frames            17177 256 to 511 byte frames\n            0 512 to 1023 byte frames               0 512 to 1023 byte frames\n            0 1024 to 1518 byte frames              0 1024 to 1518 byte frames\n            0 1519 to 2047 byte frames              0 1519 to 2047 byte frames\n            0 2048 to 4095 byte frames              0 2048 to 4095 byte frames\n            0 4096 to 8191 byte frames              0 4096 to 8191 byte frames\n            0 8192 to 16383 byte frames             0 8192 to 16383 byte frames\n            0 16384 to 32767 byte frame             0 16384 to 32767 byte frame\n            0 > 32768 byte frames                   0 > 32768 byte frames\n            0 Late collision frames                 0 SymbolErr frames\n            0 Excess Defer frames                   0 Collision fragments\n            0 Good (1 coll) frames                  0 ValidUnderSize frames\n            0 Good (>1 coll) frames                 0 InvalidOverSize frames\n            0 Deferred frames                       0 ValidOverSize frames\n            0 Gold frames dropped                   0 FcsErr frames\n            0 Gold frames truncated\n            0 Gold frames successful\n            0 1 collision frames\n            0 2 collision frames\n            0 3 collision frames\n            0 4 collision frames\n            0 5 collision frames\n            0 6 collision frames\n            0 7 collision frames\n            0 8 collision frames\n            0 9 collision frames\n            0 10 collision frames\n            0 11 collision frames\n            0 12 collision frames\n            0 13 collision frames\n            0 14 collision frames\n            0 15 collision frames\n            0 Excess collision frames\n\nLAST UPDATE 561 msecs AGO\n",
+      "expected": {
+        "interface": "TwentyFiveGigE1/0/21",
+        "statistics": {
+          "transmit": {
+            "Total bytes": {
+              "value": "32771558"
+            },
+            "Unicast frames": {
+              "value": "41594"
+            },
+            "Unicast bytes": {
+              "value": "2662024"
+            },
+            "Multicast frames": {
+              "value": "374037"
+            },
+            "Multicast bytes": {
+              "value": "30094446"
+            },
+            "Broadcast frames": {
+              "value": "170"
+            },
+            "Broadcast bytes": {
+              "value": "15088"
+            },
+            "System FCS error frames": {
+              "value": "0"
+            },
+            "MacUnderrun frames": {
+              "value": "0"
+            },
+            "Pause frames": {
+              "value": "0"
+            },
+            "Cos 0 Pause frames": {
+              "value": "0"
+            },
+            "Cos 1 Pause frames": {
+              "value": "0"
+            },
+            "Cos 2 Pause frames": {
+              "value": "0"
+            },
+            "Cos 3 Pause frames": {
+              "value": "0"
+            },
+            "Cos 4 Pause frames": {
+              "value": "0"
+            },
+            "Cos 5 Pause frames": {
+              "value": "0"
+            },
+            "Cos 6 Pause frames": {
+              "value": "0"
+            },
+            "Cos 7 Pause frames": {
+              "value": "0"
+            },
+            "Oam frames": {
+              "value": "0"
+            },
+            "Oam frames (2)": {
+              "value": "0"
+            },
+            "Minimum size frames": {
+              "value": "113581"
+            },
+            "65 to 127 byte frames": {
+              "value": "288088"
+            },
+            "128 to 255 byte frames": {
+              "value": "2827"
+            },
+            "256 to 511 byte frames": {
+              "value": "11305"
+            },
+            "512 to 1023 byte frames": {
+              "value": "0"
+            },
+            "1024 to 1518 byte frames": {
+              "value": "0"
+            },
+            "1519 to 2047 byte frames": {
+              "value": "0"
+            },
+            "2048 to 4095 byte frames": {
+              "value": "0"
+            },
+            "4096 to 8191 byte frames": {
+              "value": "0"
+            },
+            "8192 to 16383 byte frames": {
+              "value": "0"
+            },
+            "16384 to 32767 byte frame": {
+              "value": "0"
+            },
+            "> 32768 byte frames": {
+              "value": "0"
+            },
+            "Late collision frames": {
+              "value": "0"
+            },
+            "Excess Defer frames": {
+              "value": "0"
+            },
+            "Good (1 coll) frames": {
+              "value": "0"
+            },
+            "Good (>1 coll) frames": {
+              "value": "0"
+            },
+            "Deferred frames": {
+              "value": "0"
+            },
+            "Gold frames dropped": {
+              "value": "0"
+            },
+            "Gold frames truncated": {
+              "value": "0"
+            },
+            "Gold frames successful": {
+              "value": "0"
+            },
+            "1 collision frames": {
+              "value": "0"
+            },
+            "2 collision frames": {
+              "value": "0"
+            },
+            "3 collision frames": {
+              "value": "0"
+            },
+            "4 collision frames": {
+              "value": "0"
+            },
+            "5 collision frames": {
+              "value": "0"
+            },
+            "6 collision frames": {
+              "value": "0"
+            },
+            "7 collision frames": {
+              "value": "0"
+            },
+            "8 collision frames": {
+              "value": "0"
+            },
+            "9 collision frames": {
+              "value": "0"
+            },
+            "10 collision frames": {
+              "value": "0"
+            },
+            "11 collision frames": {
+              "value": "0"
+            },
+            "12 collision frames": {
+              "value": "0"
+            },
+            "13 collision frames": {
+              "value": "0"
+            },
+            "14 collision frames": {
+              "value": "0"
+            },
+            "15 collision frames": {
+              "value": "0"
+            },
+            "Excess collision frames": {
+              "value": "0"
+            }
+          },
+          "receive": {
+            "Total bytes": {
+              "value": "79667040"
+            },
+            "Unicast frames": {
+              "value": "566"
+            },
+            "Unicast bytes": {
+              "value": "36552"
+            },
+            "Multicast frames": {
+              "value": "1026274"
+            },
+            "Multicast bytes": {
+              "value": "79482748"
+            },
+            "Broadcast frames": {
+              "value": "1680"
+            },
+            "Broadcast bytes": {
+              "value": "147740"
+            },
+            "IpgViolation frames": {
+              "value": "0"
+            },
+            "MacOverrun frames": {
+              "value": "0"
+            },
+            "Pause frames": {
+              "value": "0"
+            },
+            "Cos 0 Pause frames": {
+              "value": "0"
+            },
+            "Cos 1 Pause frames": {
+              "value": "0"
+            },
+            "Cos 2 Pause frames": {
+              "value": "0"
+            },
+            "Cos 3 Pause frames": {
+              "value": "0"
+            },
+            "Cos 4 Pause frames": {
+              "value": "0"
+            },
+            "Cos 5 Pause frames": {
+              "value": "0"
+            },
+            "Cos 6 Pause frames": {
+              "value": "0"
+            },
+            "Cos 7 Pause frames": {
+              "value": "0"
+            },
+            "OamProcessed frames": {
+              "value": "0"
+            },
+            "OamDropped frames": {
+              "value": "0"
+            },
+            "Minimum size frames": {
+              "value": "111896"
+            },
+            "65 to 127 byte frames": {
+              "value": "896461"
+            },
+            "128 to 255 byte frames": {
+              "value": "2986"
+            },
+            "256 to 511 byte frames": {
+              "value": "17177"
+            },
+            "512 to 1023 byte frames": {
+              "value": "0"
+            },
+            "1024 to 1518 byte frames": {
+              "value": "0"
+            },
+            "1519 to 2047 byte frames": {
+              "value": "0"
+            },
+            "2048 to 4095 byte frames": {
+              "value": "0"
+            },
+            "4096 to 8191 byte frames": {
+              "value": "0"
+            },
+            "8192 to 16383 byte frames": {
+              "value": "0"
+            },
+            "16384 to 32767 byte frame": {
+              "value": "0"
+            },
+            "> 32768 byte frames": {
+              "value": "0"
+            },
+            "SymbolErr frames": {
+              "value": "0"
+            },
+            "Collision fragments": {
+              "value": "0"
+            },
+            "ValidUnderSize frames": {
+              "value": "0"
+            },
+            "InvalidOverSize frames": {
+              "value": "0"
+            },
+            "ValidOverSize frames": {
+              "value": "0"
+            },
+            "FcsErr frames": {
+              "value": "0"
+            }
+          }
+        },
+        "last_update": "561 msecs AGO"
+      }
+    }
+  ]
+}

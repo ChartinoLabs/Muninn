@@ -1,0 +1,94 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show platform software yang-management process",
+  "schema": {
+    "name": "ShowPlatformSoftwareYangManagementProcessResult",
+    "fields": {
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ProcessEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with YANG management processes and mixed Running/Not Running states",
+      "input": "confd            : Running\nnesd             : Running\nsyncfd           : Running\nncsshd           : Running\ndmiauthd         : Running\nnginx            : Running\nndbmand          : Running\npubd             : Running\ngnmib            : Not Running\n",
+      "expected": {
+        "processes": {
+          "confd": {
+            "status": "Running"
+          },
+          "dmiauthd": {
+            "status": "Running"
+          },
+          "gnmib": {
+            "status": "Not Running"
+          },
+          "ncsshd": {
+            "status": "Running"
+          },
+          "ndbmand": {
+            "status": "Running"
+          },
+          "nesd": {
+            "status": "Running"
+          },
+          "nginx": {
+            "status": "Running"
+          },
+          "pubd": {
+            "status": "Running"
+          },
+          "syncfd": {
+            "status": "Running"
+          }
+        }
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": "confd            : Running\nnesd             : Running\nsyncfd           : Running\nncsshd           : Running\ndmiauthd         : Running\nnginx            : Running\nndbmand          : Running\npubd             : Running\n",
+      "expected": {
+        "processes": {
+          "confd": {
+            "status": "Running"
+          },
+          "nesd": {
+            "status": "Running"
+          },
+          "syncfd": {
+            "status": "Running"
+          },
+          "ncsshd": {
+            "status": "Running"
+          },
+          "dmiauthd": {
+            "status": "Running"
+          },
+          "nginx": {
+            "status": "Running"
+          },
+          "ndbmand": {
+            "status": "Running"
+          },
+          "pubd": {
+            "status": "Running"
+          }
+        }
+      }
+    }
+  ]
+}

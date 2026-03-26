@@ -1,0 +1,63 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show cloud-mgmt",
+  "schema": {
+    "name": "ShowCloudMgmtResult",
+    "fields": {
+      "switches": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SwitchEntry",
+            "fields": {
+              "switch_num": {
+                "type": "int",
+                "required": true
+              },
+              "pid": {
+                "type": "str",
+                "required": true
+              },
+              "serial_number": {
+                "type": "str",
+                "required": true
+              },
+              "cloud_id": {
+                "type": "str",
+                "required": false
+              },
+              "mac_address": {
+                "type": "str",
+                "required": true
+              },
+              "cloud_managed": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Single switch with cloud management enabled",
+      "input": "Switch                 Serial                                               Cloud\nNum    PID             Number             Cloud ID        Mac Address       Managed\n-----------------------------------------------------------------------------------------------\n1   C9350-48U          FOC2829Y10T        Q5CF-TM95-4VEL  d47f:35ff:d880    Yes\n",
+      "expected": {
+        "switches": {
+          "1": {
+            "switch_num": 1,
+            "pid": "C9350-48U",
+            "serial_number": "FOC2829Y10T",
+            "mac_address": "d47f:35ff:d880",
+            "cloud_managed": "Yes",
+            "cloud_id": "Q5CF-TM95-4VEL"
+          }
+        }
+      }
+    }
+  ]
+}

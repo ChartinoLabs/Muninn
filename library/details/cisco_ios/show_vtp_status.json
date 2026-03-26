@@ -1,0 +1,92 @@
+{
+  "os": "cisco_ios",
+  "command": "show vtp status",
+  "schema": {
+    "name": "ShowVtpStatusResult",
+    "fields": {
+      "vtp_version_running": {
+        "type": "int",
+        "required": true
+      },
+      "domain_name": {
+        "type": "str",
+        "required": true
+      },
+      "operating_mode": {
+        "type": "str",
+        "required": true
+      },
+      "max_vlans": {
+        "type": "int",
+        "required": true
+      },
+      "existing_vlans": {
+        "type": "int",
+        "required": true
+      },
+      "configuration_revision": {
+        "type": "int",
+        "required": true
+      },
+      "vtp_version_capable": {
+        "type": "str",
+        "required": false
+      },
+      "pruning_mode": {
+        "type": "str",
+        "required": false
+      },
+      "traps_generation": {
+        "type": "str",
+        "required": false
+      },
+      "device_id": {
+        "type": "str",
+        "required": false
+      },
+      "last_modified_by": {
+        "type": "str",
+        "required": false
+      },
+      "last_modified_at": {
+        "type": "str",
+        "required": false
+      },
+      "local_updater_id": {
+        "type": "str",
+        "required": false
+      },
+      "local_updater_interface": {
+        "type": "str",
+        "required": false
+      },
+      "md5_digest": {
+        "type": "str",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show vtp status output with all common fields",
+      "input": "VTP Version capable             : 1 to 3\nVTP version running             : 1\nVTP Domain Name                 : router_vtp\nVTP Pruning Mode                : Disabled\nVTP Traps Generation            : Disabled\nDevice ID                       : e05f.dead.beef\nConfiguration last modified by 10.0.0.1 at 6-12-15 14:06:57\nLocal updater ID is 10.1.1.1 on interface Vl1 (lowest numbered VLAN interface found)\n\nFeature VLAN:\n--------------\nVTP Operating Mode                : Server\nMaximum VLANs supported locally   : 1005\nNumber of existing VLANs          : 20\nConfiguration Revision            : 38\nMD5 digest                        : 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF\n                                    0x89 0x07 0xE4 0x53 0xBA 0xB1 0x1C 0xC1\n",
+      "expected": {
+        "vtp_version_capable": "1 to 3",
+        "vtp_version_running": 1,
+        "domain_name": "router_vtp",
+        "pruning_mode": "Disabled",
+        "traps_generation": "Disabled",
+        "device_id": "e05f.dead.beef",
+        "last_modified_by": "10.0.0.1",
+        "last_modified_at": "6-12-15 14:06:57",
+        "local_updater_id": "10.1.1.1",
+        "local_updater_interface": "Vl1",
+        "operating_mode": "Server",
+        "max_vlans": 1005,
+        "existing_vlans": 20,
+        "configuration_revision": 38,
+        "md5_digest": "0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0x89 0x07 0xE4 0x53 0xBA 0xB1 0x1C 0xC1"
+      }
+    }
+  ]
+}

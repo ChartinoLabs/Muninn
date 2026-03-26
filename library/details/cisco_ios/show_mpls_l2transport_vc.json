@@ -1,0 +1,83 @@
+{
+  "os": "cisco_ios",
+  "command": "show mpls l2transport vc",
+  "schema": {
+    "name": "ShowMplsL2transportVcResult",
+    "fields": {
+      "virtual_circuits": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VcEntry",
+            "fields": {
+              "local_interface": {
+                "type": "str",
+                "required": true
+              },
+              "local_circuit": {
+                "type": "str",
+                "required": true
+              },
+              "destination": {
+                "type": "str",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "local_label": {
+                "type": "int",
+                "required": false
+              },
+              "remote_label": {
+                "type": "int",
+                "required": false
+              },
+              "output_interface": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple MPLS L2 transport VCs with various interface types and statuses",
+      "input": "Local intf     Local circuit              Dest address    VC ID      Status\n-------------  -------------------------- --------------- ---------- ----------\nGi0/0/0.100    Ethernet VLAN 100          10.1.1.1        100        UP\nFa2/0          HDLC                       172.16.0.1      200        DOWN\nSe0/0/0        PPP                        192.168.1.1     300        UP\nGi0/1.50       Ethernet VLAN 50           10.2.2.2        400        UP\n",
+      "expected": {
+        "virtual_circuits": {
+          "100": {
+            "destination": "10.1.1.1",
+            "local_circuit": "Ethernet VLAN 100",
+            "local_interface": "GigabitEthernet0/0/0.100",
+            "status": "UP"
+          },
+          "200": {
+            "destination": "172.16.0.1",
+            "local_circuit": "HDLC",
+            "local_interface": "FastEthernet2/0",
+            "status": "DOWN"
+          },
+          "300": {
+            "destination": "192.168.1.1",
+            "local_circuit": "PPP",
+            "local_interface": "Serial0/0/0",
+            "status": "UP"
+          },
+          "400": {
+            "destination": "10.2.2.2",
+            "local_circuit": "Ethernet VLAN 50",
+            "local_interface": "GigabitEthernet0/1.50",
+            "status": "UP"
+          }
+        }
+      }
+    }
+  ]
+}

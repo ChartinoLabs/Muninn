@@ -1,0 +1,56 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show vtemplate",
+  "schema": {
+    "name": "ShowVtemplateResult",
+    "fields": {
+      "templates": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VtemplateEntry",
+            "fields": {
+              "type": {
+                "type": "str",
+                "required": true
+              },
+              "in_use": {
+                "type": "int",
+                "required": true
+              },
+              "protect": {
+                "type": "bool",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show vtemplate output with multiple templates",
+      "input": "Router#show vtemplate\nVirtual-Template  Type        In Use  Protect\n1                 PPTP        0\n2                 L2TP        3       Yes\n3                 GRE         1\n",
+      "expected": {
+        "templates": {
+          "1": {
+            "type": "PPTP",
+            "in_use": 0
+          },
+          "2": {
+            "type": "L2TP",
+            "in_use": 3,
+            "protect": true
+          },
+          "3": {
+            "type": "GRE",
+            "in_use": 1
+          }
+        }
+      }
+    }
+  ]
+}

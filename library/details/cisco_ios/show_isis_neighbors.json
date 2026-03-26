@@ -1,0 +1,125 @@
+{
+  "os": "cisco_ios",
+  "command": "show isis neighbors",
+  "schema": {
+    "name": "ShowIsisNeighborsResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "IsisNeighborEntry",
+            "fields": {
+              "interfaces": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "IsisInterfaceEntry",
+                    "fields": {
+                      "adjacencies": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "IsisAdjacencyEntry",
+                            "fields": {
+                              "state": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "holdtime": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "circuit_id": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "ip_address": {
+                                "type": "str",
+                                "required": false
+                              }
+                            }
+                          }
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic IS-IS neighbors with L1 and L2 adjacencies",
+      "input": "System Id       Type Interface     IP Address      State Holdtime Circuit Id\nvMX1            L1   Gi2           10.1.2.1        UP    19       XRv3.03\nvMX1            L2   Gi2           10.1.2.1        UP    24       XRv3.03\nXRv3            L1   Gi2           10.1.2.3        UP    8        XRv3.03\nXRv3            L2   Gi2           10.1.2.3        UP    7        XRv3.03\nvEOS4           L2   Gi3           10.2.4.4        UP    23       0F\n",
+      "expected": {
+        "neighbors": {
+          "vMX1": {
+            "interfaces": {
+              "GigabitEthernet2": {
+                "adjacencies": {
+                  "L1": {
+                    "state": "UP",
+                    "holdtime": 19,
+                    "circuit_id": "XRv3.03",
+                    "ip_address": "10.1.2.1"
+                  },
+                  "L2": {
+                    "state": "UP",
+                    "holdtime": 24,
+                    "circuit_id": "XRv3.03",
+                    "ip_address": "10.1.2.1"
+                  }
+                }
+              }
+            }
+          },
+          "XRv3": {
+            "interfaces": {
+              "GigabitEthernet2": {
+                "adjacencies": {
+                  "L1": {
+                    "state": "UP",
+                    "holdtime": 8,
+                    "circuit_id": "XRv3.03",
+                    "ip_address": "10.1.2.3"
+                  },
+                  "L2": {
+                    "state": "UP",
+                    "holdtime": 7,
+                    "circuit_id": "XRv3.03",
+                    "ip_address": "10.1.2.3"
+                  }
+                }
+              }
+            }
+          },
+          "vEOS4": {
+            "interfaces": {
+              "GigabitEthernet3": {
+                "adjacencies": {
+                  "L2": {
+                    "state": "UP",
+                    "holdtime": 23,
+                    "circuit_id": "0F",
+                    "ip_address": "10.2.4.4"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

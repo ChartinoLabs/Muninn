@@ -1,0 +1,462 @@
+{
+  "os": "cisco_ios",
+  "command": "show inventory",
+  "schema": {
+    "name": "ShowInventoryResult",
+    "fields": {
+      "inventory": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InventoryItem",
+            "fields": {
+              "name": {
+                "type": "str",
+                "required": true
+              },
+              "description": {
+                "type": "str",
+                "required": true
+              },
+              "pid": {
+                "type": "str",
+                "required": false
+              },
+              "vid": {
+                "type": "str",
+                "required": false
+              },
+              "serial_number": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Single inventory item from IOSv virtual chassis",
+      "input": "NAME: \"IOSv\", DESCR: \"IOSv chassis, Hw Serial#: 9K66Z7TOKAACDEQA24N7S, Hw Revision: 1.0\"\nPID: IOSv              , VID: 1.0, SN: 9K66Z7TOKAACDEQA24N7S\n",
+      "expected": {
+        "inventory": {
+          "IOSv": {
+            "name": "IOSv",
+            "description": "IOSv chassis, Hw Serial#: 9K66Z7TOKAACDEQA24N7S, Hw Revision: 1.0",
+            "pid": "IOSv",
+            "vid": "1.0",
+            "serial_number": "9K66Z7TOKAACDEQA24N7S"
+          }
+        }
+      }
+    },
+    {
+      "name": "Multiple inventory items with empty PID/VID fields from WS-C4948 switch",
+      "input": "NAME: \"Switch System\", DESCR: \"Cisco Systems, Inc. WS-C4948 1 slot switch \"\nPID:                   , VID:      , SN: FOX1638GU8L\n\nNAME: \"Linecard(slot 1)\", DESCR: \"10/100/1000BaseT (RJ45), 1000BaseX (SFP) Supervisor with 48 10/100/1000BASE-T ports and 4 1000BASE-\"\nPID: WS-C4948          , VID: V12  , SN: FOX1638GU8L\n\nNAME: \"GigabitEthernet1/45\", DESCR: \"1000BaseSX\"\nPID: Unspecified       , VID:      , SN: AGM1637LJE4\n\nNAME: \"GigabitEthernet1/47\", DESCR: \"1000BaseSX\"\nPID: GLC-SX-MM         , VID: V03  , SN: VB12150046\n\nNAME: \"Power Supply 1\", DESCR: \"Power Supply ( AC 300W )\"\nPID: PWR-C49-300AC     , VID:      , SN: PAC15240NRN\n\nNAME: \"Power Supply 2\", DESCR: \"Power Supply ( AC 300W )\"\nPID: PWR-C49-300AC     , VID:      , SN: PAC15240S5T\n",
+      "expected": {
+        "inventory": {
+          "Switch System": {
+            "name": "Switch System",
+            "description": "Cisco Systems, Inc. WS-C4948 1 slot switch ",
+            "serial_number": "FOX1638GU8L"
+          },
+          "Linecard(slot 1)": {
+            "name": "Linecard(slot 1)",
+            "description": "10/100/1000BaseT (RJ45), 1000BaseX (SFP) Supervisor with 48 10/100/1000BASE-T ports and 4 1000BASE-",
+            "pid": "WS-C4948",
+            "vid": "V12",
+            "serial_number": "FOX1638GU8L"
+          },
+          "GigabitEthernet1/45": {
+            "name": "GigabitEthernet1/45",
+            "description": "1000BaseSX",
+            "pid": "Unspecified",
+            "serial_number": "AGM1637LJE4"
+          },
+          "GigabitEthernet1/47": {
+            "name": "GigabitEthernet1/47",
+            "description": "1000BaseSX",
+            "pid": "GLC-SX-MM",
+            "vid": "V03",
+            "serial_number": "VB12150046"
+          },
+          "Power Supply 1": {
+            "name": "Power Supply 1",
+            "description": "Power Supply ( AC 300W )",
+            "pid": "PWR-C49-300AC",
+            "serial_number": "PAC15240NRN"
+          },
+          "Power Supply 2": {
+            "name": "Power Supply 2",
+            "description": "Power Supply ( AC 300W )",
+            "pid": "PWR-C49-300AC",
+            "serial_number": "PAC15240S5T"
+          }
+        }
+      }
+    },
+    {
+      "name": "Router inventory with command echo in output from Cisco 3945",
+      "input": "\nbest-c3945-IOS3#show inventory\nNAME: \"CISCO3945-CHASSIS\", DESCR: \"CISCO3945-CHASSIS\"\nPID: CISCO3945-CHASSIS , VID: V05 , SN: FGL161010K8\n\nNAME: \"Cisco Services Performance Engine 150 for Cisco 3900 ISR on Slot 0\", DESCR: \"Cisco Services Performance Engine 150 for Cisco 3900 ISR\"\nPID: C3900-SPE150/K9   , VID: V05 , SN: FOC16050QP6\n\nNAME: \"Two-Port Fast Ethernet High Speed WAN Interface Card on Slot 0 SubSlot 3\", DESCR: \"Two-Port Fast Ethernet High Speed WAN Interface Card\"\nPID: HWIC-2FE          , VID: V02 , SN: FOC16062824\n\nNAME: \"C3900 AC Power Supply 1\", DESCR: \"C3900 AC Power Supply 1\"\nPID: PWR-3900-AC       , VID: V03 , SN: QCS1604P0BT\n",
+      "expected": {
+        "inventory": {
+          "CISCO3945-CHASSIS": {
+            "name": "CISCO3945-CHASSIS",
+            "description": "CISCO3945-CHASSIS",
+            "pid": "CISCO3945-CHASSIS",
+            "vid": "V05",
+            "serial_number": "FGL161010K8"
+          },
+          "Cisco Services Performance Engine 150 for Cisco 3900 ISR on Slot 0": {
+            "name": "Cisco Services Performance Engine 150 for Cisco 3900 ISR on Slot 0",
+            "description": "Cisco Services Performance Engine 150 for Cisco 3900 ISR",
+            "pid": "C3900-SPE150/K9",
+            "vid": "V05",
+            "serial_number": "FOC16050QP6"
+          },
+          "Two-Port Fast Ethernet High Speed WAN Interface Card on Slot 0 SubSlot 3": {
+            "name": "Two-Port Fast Ethernet High Speed WAN Interface Card on Slot 0 SubSlot 3",
+            "description": "Two-Port Fast Ethernet High Speed WAN Interface Card",
+            "pid": "HWIC-2FE",
+            "vid": "V02",
+            "serial_number": "FOC16062824"
+          },
+          "C3900 AC Power Supply 1": {
+            "name": "C3900 AC Power Supply 1",
+            "description": "C3900 AC Power Supply 1",
+            "pid": "PWR-3900-AC",
+            "vid": "V03",
+            "serial_number": "QCS1604P0BT"
+          }
+        }
+      }
+    },
+    {
+      "name": "Large Catalyst 6500 4-slot chassis with supervisor, line cards, transceivers, fans, and power supplies",
+      "input": "NAME: \"WS-C6504-E\", DESCR: \"Cisco Systems Cisco 6500 4-slot Chassis System\"\nPID: WS-C6504-E        ,                     VID: V01, SN: FXS1712Q1R8\n\nNAME: \"CLK-7600 1\", DESCR: \"OSR-7600 Clock FRU 1\"\nPID: CLK-7600          ,                     VID:    , SN: FXS170802GL\n\nNAME: \"CLK-7600 2\", DESCR: \"OSR-7600 Clock FRU 2\"\nPID: CLK-7600          ,                     VID:    , SN: FXS170802GL\n\nNAME: \"1\", DESCR: \"VS-SUP2T-10G 5 ports Supervisor Engine 2T 10GE w/ CTS Rev. 1.5\"\nPID: VS-SUP2T-10G      ,                     VID: V05, SN: SAL17152N0F\n\nNAME: \"msfc sub-module of 1\", DESCR: \"VS-F6K-MSFC5 CPU Daughterboard Rev. 2.0\"\nPID: VS-F6K-MSFC5      ,                     VID:    , SN: SAL17142D06\n\nNAME: \"VS-F6K-PFC4 Policy Feature Card 4 EARL sub-module of 1\", DESCR: \"VS-F6K-PFC4 Policy Feature Card 4 Rev. 2.0\"\nPID: VS-F6K-PFC4       ,                     VID: V03, SN: SAL17163901\n\nNAME: \"Transceiver Te1/4\", DESCR: \"X2 Transceiver 10Gbase-SR Te1/4\"\nPID: X2-10GB-SR        ,                     VID: V06 , SN: ONT170202T1\n\nNAME: \"Transceiver Te1/5\", DESCR: \"X2 Transceiver 10Gbase-SR Te1/5\"\nPID: X2-10GB-SR        ,                     VID: V06 , SN: ONT1702033D\n\nNAME: \"2\", DESCR: \"WS-X6816-10GE CEF720 16 port 10GE Rev. 2.0\"\nPID: WS-X6816-10GE     ,                     VID: V02, SN: SAL17152QB3\n\nNAME: \"WS-F6K-DFC4-E Distributed Forwarding Card 4 EARL sub-module of 2\", DESCR: \"WS-F6K-DFC4-E Distributed Forwarding Card 4 Rev. 1.2\"\nPID: WS-F6K-DFC4-E     ,                     VID: V02, SN: SAL171846RF\n\nNAME: \"Transceiver Te2/1\", DESCR: \"X2 Transceiver 10Gbase-SR Te2/1\"\nPID: X2-10GB-SR        ,                     VID: V06 , SN: ONT17020338\n\nNAME: \"Transceiver Te2/2\", DESCR: \"X2 Transceiver 10Gbase-SR Te2/2\"\nPID: X2-10GB-SR        ,                     VID: V06 , SN: ONT1702020H\n\nNAME: \"Transceiver Te2/3\", DESCR: \"X2 Transceiver 10Gbase-SR Te2/3\"\nPID: X2-10GB-SR        ,                     VID: V06 , SN: ONT170202UU\n\nNAME: \"Transceiver Te2/4\", DESCR: \"X2 Transceiver 10Gbase-SR Te2/4\"\nPID: X2-10GB-SR        ,                     VID: V06 , SN: ONT170202T5\n\nNAME: \"Transceiver Te2/5\", DESCR: \"X2 Transceiver 10Gbase-SR Te2/5\"\nPID: X2-10GB-SR        ,                     VID: V05 , SN: AGA1515XZE2\n\nNAME: \"Transceiver Te2/6\", DESCR: \"X2 Transceiver 10Gbase-SR Te2/6\"\nPID: X2-10GB-SR        ,                     VID: V06 , SN: FNS153920YJ\n\nNAME: \"Transceiver Te2/16\", DESCR: \"X2 Transceiver 10Gbase-SR Te2/16\"\nPID: X2-10GB-SR        ,                     VID: V06 , SN: ONT170201TT\n\nNAME: \"3\", DESCR: \"WS-X6824-SFP CEF720 24 port 1000mb SFP Rev. 1.0\"\nPID: WS-X6824-SFP      ,                     VID: V01, SN: SAL17152EG9\n\nNAME: \"WS-F6K-DFC4-A Distributed Forwarding Card 4 EARL sub-module of 3\", DESCR: \"WS-F6K-DFC4-A Distributed Forwarding Card 4 Rev. 1.0\"\nPID: WS-F6K-DFC4-A     ,                     VID: V04, SN: SAL171848KL\n\nNAME: \"4\", DESCR: \"WS-X6748-GE-TX CEF720 48 port 10/100/1000mb Ethernet Rev. 3.4\"\nPID: WS-X6748-GE-TX    ,                     VID: V04, SN: SAL14017TWF\n\nNAME: \"WS-F6700-CFC Centralized Forwarding Card EARL sub-module of 4\", DESCR: \"WS-F6700-CFC Centralized Forwarding Card Rev. 4.1\"\nPID: WS-F6700-CFC      ,                     VID: V06, SN: SAL13516QS8\n\nNAME: \"FAN-MOD-4HS 1\", DESCR: \"High Speed Fan Module for CISCO7604 1\"\nPID: FAN-MOD-4HS       ,                     VID: V01, SN: DCH170900PF\n\nNAME: \"PS 1 PWR-2700-AC/4\", DESCR: \"2700W AC power supply for CISCO7604 1\"\nPID: PWR-2700-AC/4     ,                     VID: V03, SN: APS1707008Y\n\nNAME: \"PS 2 PWR-2700-AC/4\", DESCR: \"2700W AC power supply for CISCO7604 2\"\nPID: PWR-2700-AC/4     ,                     VID: V03, SN: APS17070093\n",
+      "expected": {
+        "inventory": {
+          "WS-C6504-E": {
+            "name": "WS-C6504-E",
+            "description": "Cisco Systems Cisco 6500 4-slot Chassis System",
+            "pid": "WS-C6504-E",
+            "vid": "V01",
+            "serial_number": "FXS1712Q1R8"
+          },
+          "CLK-7600 1": {
+            "name": "CLK-7600 1",
+            "description": "OSR-7600 Clock FRU 1",
+            "pid": "CLK-7600",
+            "serial_number": "FXS170802GL"
+          },
+          "CLK-7600 2": {
+            "name": "CLK-7600 2",
+            "description": "OSR-7600 Clock FRU 2",
+            "pid": "CLK-7600",
+            "serial_number": "FXS170802GL"
+          },
+          "1": {
+            "name": "1",
+            "description": "VS-SUP2T-10G 5 ports Supervisor Engine 2T 10GE w/ CTS Rev. 1.5",
+            "pid": "VS-SUP2T-10G",
+            "vid": "V05",
+            "serial_number": "SAL17152N0F"
+          },
+          "msfc sub-module of 1": {
+            "name": "msfc sub-module of 1",
+            "description": "VS-F6K-MSFC5 CPU Daughterboard Rev. 2.0",
+            "pid": "VS-F6K-MSFC5",
+            "serial_number": "SAL17142D06"
+          },
+          "VS-F6K-PFC4 Policy Feature Card 4 EARL sub-module of 1": {
+            "name": "VS-F6K-PFC4 Policy Feature Card 4 EARL sub-module of 1",
+            "description": "VS-F6K-PFC4 Policy Feature Card 4 Rev. 2.0",
+            "pid": "VS-F6K-PFC4",
+            "vid": "V03",
+            "serial_number": "SAL17163901"
+          },
+          "Transceiver Te1/4": {
+            "name": "Transceiver Te1/4",
+            "description": "X2 Transceiver 10Gbase-SR Te1/4",
+            "pid": "X2-10GB-SR",
+            "vid": "V06",
+            "serial_number": "ONT170202T1"
+          },
+          "Transceiver Te1/5": {
+            "name": "Transceiver Te1/5",
+            "description": "X2 Transceiver 10Gbase-SR Te1/5",
+            "pid": "X2-10GB-SR",
+            "vid": "V06",
+            "serial_number": "ONT1702033D"
+          },
+          "2": {
+            "name": "2",
+            "description": "WS-X6816-10GE CEF720 16 port 10GE Rev. 2.0",
+            "pid": "WS-X6816-10GE",
+            "vid": "V02",
+            "serial_number": "SAL17152QB3"
+          },
+          "WS-F6K-DFC4-E Distributed Forwarding Card 4 EARL sub-module of 2": {
+            "name": "WS-F6K-DFC4-E Distributed Forwarding Card 4 EARL sub-module of 2",
+            "description": "WS-F6K-DFC4-E Distributed Forwarding Card 4 Rev. 1.2",
+            "pid": "WS-F6K-DFC4-E",
+            "vid": "V02",
+            "serial_number": "SAL171846RF"
+          },
+          "Transceiver Te2/1": {
+            "name": "Transceiver Te2/1",
+            "description": "X2 Transceiver 10Gbase-SR Te2/1",
+            "pid": "X2-10GB-SR",
+            "vid": "V06",
+            "serial_number": "ONT17020338"
+          },
+          "Transceiver Te2/2": {
+            "name": "Transceiver Te2/2",
+            "description": "X2 Transceiver 10Gbase-SR Te2/2",
+            "pid": "X2-10GB-SR",
+            "vid": "V06",
+            "serial_number": "ONT1702020H"
+          },
+          "Transceiver Te2/3": {
+            "name": "Transceiver Te2/3",
+            "description": "X2 Transceiver 10Gbase-SR Te2/3",
+            "pid": "X2-10GB-SR",
+            "vid": "V06",
+            "serial_number": "ONT170202UU"
+          },
+          "Transceiver Te2/4": {
+            "name": "Transceiver Te2/4",
+            "description": "X2 Transceiver 10Gbase-SR Te2/4",
+            "pid": "X2-10GB-SR",
+            "vid": "V06",
+            "serial_number": "ONT170202T5"
+          },
+          "Transceiver Te2/5": {
+            "name": "Transceiver Te2/5",
+            "description": "X2 Transceiver 10Gbase-SR Te2/5",
+            "pid": "X2-10GB-SR",
+            "vid": "V05",
+            "serial_number": "AGA1515XZE2"
+          },
+          "Transceiver Te2/6": {
+            "name": "Transceiver Te2/6",
+            "description": "X2 Transceiver 10Gbase-SR Te2/6",
+            "pid": "X2-10GB-SR",
+            "vid": "V06",
+            "serial_number": "FNS153920YJ"
+          },
+          "Transceiver Te2/16": {
+            "name": "Transceiver Te2/16",
+            "description": "X2 Transceiver 10Gbase-SR Te2/16",
+            "pid": "X2-10GB-SR",
+            "vid": "V06",
+            "serial_number": "ONT170201TT"
+          },
+          "3": {
+            "name": "3",
+            "description": "WS-X6824-SFP CEF720 24 port 1000mb SFP Rev. 1.0",
+            "pid": "WS-X6824-SFP",
+            "vid": "V01",
+            "serial_number": "SAL17152EG9"
+          },
+          "WS-F6K-DFC4-A Distributed Forwarding Card 4 EARL sub-module of 3": {
+            "name": "WS-F6K-DFC4-A Distributed Forwarding Card 4 EARL sub-module of 3",
+            "description": "WS-F6K-DFC4-A Distributed Forwarding Card 4 Rev. 1.0",
+            "pid": "WS-F6K-DFC4-A",
+            "vid": "V04",
+            "serial_number": "SAL171848KL"
+          },
+          "4": {
+            "name": "4",
+            "description": "WS-X6748-GE-TX CEF720 48 port 10/100/1000mb Ethernet Rev. 3.4",
+            "pid": "WS-X6748-GE-TX",
+            "vid": "V04",
+            "serial_number": "SAL14017TWF"
+          },
+          "WS-F6700-CFC Centralized Forwarding Card EARL sub-module of 4": {
+            "name": "WS-F6700-CFC Centralized Forwarding Card EARL sub-module of 4",
+            "description": "WS-F6700-CFC Centralized Forwarding Card Rev. 4.1",
+            "pid": "WS-F6700-CFC",
+            "vid": "V06",
+            "serial_number": "SAL13516QS8"
+          },
+          "FAN-MOD-4HS 1": {
+            "name": "FAN-MOD-4HS 1",
+            "description": "High Speed Fan Module for CISCO7604 1",
+            "pid": "FAN-MOD-4HS",
+            "vid": "V01",
+            "serial_number": "DCH170900PF"
+          },
+          "PS 1 PWR-2700-AC/4": {
+            "name": "PS 1 PWR-2700-AC/4",
+            "description": "2700W AC power supply for CISCO7604 1",
+            "pid": "PWR-2700-AC/4",
+            "vid": "V03",
+            "serial_number": "APS1707008Y"
+          },
+          "PS 2 PWR-2700-AC/4": {
+            "name": "PS 2 PWR-2700-AC/4",
+            "description": "2700W AC power supply for CISCO7604 2",
+            "pid": "PWR-2700-AC/4",
+            "vid": "V03",
+            "serial_number": "APS17070093"
+          }
+        }
+      }
+    },
+    {
+      "name": "Switch stack with multiple switches, power supplies, FlexStack module, and SFP transceivers",
+      "input": "NAME: \"1\", DESCR: \"WS-C8888X-88\"\nPID: WS-C0123X-45T-S   , VID: V00  , SN: FDO123R12W\n\nNAME: \"Switch 1 - Power Supply 1\", DESCR: \"ABC Power Supply\"\nPID: C3KX-PWR-350WAC   , VID: V01D , SN: DTN1504L0E9\n\nNAME: \"TenGigabitEthernet1/1/1\", DESCR: \"SFP-10GBase-SR\"\nPID: SFP-10G-SR          , VID: V03  , SN: SPC1519005V\n\nNAME: \"2\", DESCR: \"WS-C3210X-48\"\nPID: WS-C3210X-48T-S   , VID: V02  , SN: FD5678Z90P\n\nNAME: \"Switch 2 - Power Supply 1\", DESCR: \"BCA Power Supply\"\nPID: C3KX-PWR-007CBA   , VID: V01L , SN: LTP13579L3R\n\n\nNAME: \"TenGigabitEthernet2/1/1\", DESCR: \"SFP-10GBase-LR\"\nPID: SFP-10G-LR          , VID: V02  , SN: ONT182746GZ\n\nNAME: \"1\", DESCR: \"WS-C1010XR-48FPS-I\"\nPID: WS-C1010XR-48FPS-I, VID: V05  , SN: FD2043B0K3\n\nNAME: \"Switch 1 - Power Supply 1\", DESCR: \"LLL Power Supply\"\nPID: PWR-C2-2929WAC    , VID: V02L , SN: LIT03728KKK\n\nNAME: \"Switch 1 - FlexStackPlus Module\", DESCR: \"Stacking Module\"\nPID: C1010X-STACK      , VID: V02  , SN: FD232323XXZ\n\nNAME: \"GigabitEthernet1/0/49\", DESCR: \"1000BaseSX SFP\"\nPID: GLC-SX-MMD          , VID: V01  , SN: ACW102938VS\n",
+      "expected": {
+        "inventory": {
+          "1": {
+            "name": "1",
+            "description": "WS-C1010XR-48FPS-I",
+            "pid": "WS-C1010XR-48FPS-I",
+            "vid": "V05",
+            "serial_number": "FD2043B0K3"
+          },
+          "Switch 1 - Power Supply 1": {
+            "name": "Switch 1 - Power Supply 1",
+            "description": "LLL Power Supply",
+            "pid": "PWR-C2-2929WAC",
+            "vid": "V02L",
+            "serial_number": "LIT03728KKK"
+          },
+          "TenGigabitEthernet1/1/1": {
+            "name": "TenGigabitEthernet1/1/1",
+            "description": "SFP-10GBase-SR",
+            "pid": "SFP-10G-SR",
+            "vid": "V03",
+            "serial_number": "SPC1519005V"
+          },
+          "2": {
+            "name": "2",
+            "description": "WS-C3210X-48",
+            "pid": "WS-C3210X-48T-S",
+            "vid": "V02",
+            "serial_number": "FD5678Z90P"
+          },
+          "Switch 2 - Power Supply 1": {
+            "name": "Switch 2 - Power Supply 1",
+            "description": "BCA Power Supply",
+            "pid": "C3KX-PWR-007CBA",
+            "vid": "V01L",
+            "serial_number": "LTP13579L3R"
+          },
+          "TenGigabitEthernet2/1/1": {
+            "name": "TenGigabitEthernet2/1/1",
+            "description": "SFP-10GBase-LR",
+            "pid": "SFP-10G-LR",
+            "vid": "V02",
+            "serial_number": "ONT182746GZ"
+          },
+          "Switch 1 - FlexStackPlus Module": {
+            "name": "Switch 1 - FlexStackPlus Module",
+            "description": "Stacking Module",
+            "pid": "C1010X-STACK",
+            "vid": "V02",
+            "serial_number": "FD232323XXZ"
+          },
+          "GigabitEthernet1/0/49": {
+            "name": "GigabitEthernet1/0/49",
+            "description": "1000BaseSX SFP",
+            "pid": "GLC-SX-MMD",
+            "vid": "V01",
+            "serial_number": "ACW102938VS"
+          }
+        }
+      }
+    },
+    {
+      "name": "Cisco 3825 router with voice modules including FXS/DID and FXO daughtercards",
+      "input": "NAME: \"3825 chassis\", DESCR: \"3825 chassis\"\nPID: CISCO3825         , VID: V05 , SN: FTX7908A3RQ\n\nNAME: \"VWIC2-2MFT-T1/E1 - 2-Port RJ-48 Multiflex Trunk - T1/E1 on Slot 0 SubSlot 0\", DESCR: \"VWIC2-2MFT-T1/E1 - 2-Port RJ-48 Multiflex Trunk - T1/E1\"\nPID: VWIC2-2MFT-T1/E1  , VID: V01 , SN: FOC65428K9F\n\nNAME: \"Wan Interface Card BRI U (2091, 3086) on Slot 0 SubSlot 1\", DESCR: \"Wan Interface Card BRI U (2091, 3086)\"\nPID: WIC-1B-U-V2       , VID: V01, SN: 10293847\n\nNAME: \"PVDMII DSP SIMM with four DSPs on Slot 0 SubSlot 4\", DESCR: \"PVDMII DSP SIMM with four DSPs\"\nPID: PVDM2-64          , VID: V01 , SN: FOC63358WSI\n\nNAME: \"High Density Voice Module - 8FXS/DID on Slot 1\", DESCR: \"High Density Voice Module - 8FXS/DID\"\nPID: EVM-HD-8FXS/DID   , VID: V04 , SN: FOC65798TG8\n\nNAME: \"Six port FXO voice interface daughtercard on Slot 1 SubSlot 1\", DESCR: \"Six port FXO voice interface daughtercard\"\nPID: EM-HDA-6FXO       , VID: V03 , SN: FOC85389QXB\n",
+      "expected": {
+        "inventory": {
+          "3825 chassis": {
+            "name": "3825 chassis",
+            "description": "3825 chassis",
+            "pid": "CISCO3825",
+            "vid": "V05",
+            "serial_number": "FTX7908A3RQ"
+          },
+          "VWIC2-2MFT-T1/E1 - 2-Port RJ-48 Multiflex Trunk - T1/E1 on Slot 0 SubSlot 0": {
+            "name": "VWIC2-2MFT-T1/E1 - 2-Port RJ-48 Multiflex Trunk - T1/E1 on Slot 0 SubSlot 0",
+            "description": "VWIC2-2MFT-T1/E1 - 2-Port RJ-48 Multiflex Trunk - T1/E1",
+            "pid": "VWIC2-2MFT-T1/E1",
+            "vid": "V01",
+            "serial_number": "FOC65428K9F"
+          },
+          "Wan Interface Card BRI U (2091, 3086) on Slot 0 SubSlot 1": {
+            "name": "Wan Interface Card BRI U (2091, 3086) on Slot 0 SubSlot 1",
+            "description": "Wan Interface Card BRI U (2091, 3086)",
+            "pid": "WIC-1B-U-V2",
+            "vid": "V01",
+            "serial_number": "10293847"
+          },
+          "PVDMII DSP SIMM with four DSPs on Slot 0 SubSlot 4": {
+            "name": "PVDMII DSP SIMM with four DSPs on Slot 0 SubSlot 4",
+            "description": "PVDMII DSP SIMM with four DSPs",
+            "pid": "PVDM2-64",
+            "vid": "V01",
+            "serial_number": "FOC63358WSI"
+          },
+          "High Density Voice Module - 8FXS/DID on Slot 1": {
+            "name": "High Density Voice Module - 8FXS/DID on Slot 1",
+            "description": "High Density Voice Module - 8FXS/DID",
+            "pid": "EVM-HD-8FXS/DID",
+            "vid": "V04",
+            "serial_number": "FOC65798TG8"
+          },
+          "Six port FXO voice interface daughtercard on Slot 1 SubSlot 1": {
+            "name": "Six port FXO voice interface daughtercard on Slot 1 SubSlot 1",
+            "description": "Six port FXO voice interface daughtercard",
+            "pid": "EM-HDA-6FXO",
+            "vid": "V03",
+            "serial_number": "FOC85389QXB"
+          }
+        }
+      }
+    },
+    {
+      "name": "Single ME1200 network interface device with blank line between NAME and PID lines",
+      "input": "NAME: \"ME1200\", DESCR: \"Network Interface Device\"\n\nPID: ME1200-4S-A , VID: V01 , SN: RTC213800DC\n",
+      "expected": {
+        "inventory": {
+          "ME1200": {
+            "name": "ME1200",
+            "description": "Network Interface Device",
+            "pid": "ME1200-4S-A",
+            "vid": "V01",
+            "serial_number": "RTC213800DC"
+          }
+        }
+      }
+    },
+    {
+      "name": "Cisco 3640 router with duplicate FastEthernet module names resulting in key deduplication",
+      "input": "NAME: \"3640 chassis\", DESCR: \"3640 chassis\"\nPID:                   , VID: 0xFF, SN: FF1045C5\n\nNAME: \"One port Fastethernet TX\", DESCR: \"One port Fastethernet TX\"\nPID: NM-1FE-TX=        , VID: 1.0, SN: 7720321\n\nNAME: \"One port Fastethernet TX\", DESCR: \"One port Fastethernet TX\"\nPID: NM-1FE-TX=        , VID: 1.0, SN: 7720321\n\nNAME: \"One port Fastethernet TX\", DESCR: \"One port Fastethernet TX\"\nPID: NM-1FE-TX=        , VID: 1.0, SN: 7720321\n",
+      "expected": {
+        "inventory": {
+          "3640 chassis": {
+            "name": "3640 chassis",
+            "description": "3640 chassis",
+            "vid": "0xFF",
+            "serial_number": "FF1045C5"
+          },
+          "One port Fastethernet TX": {
+            "name": "One port Fastethernet TX",
+            "description": "One port Fastethernet TX",
+            "pid": "NM-1FE-TX=",
+            "vid": "1.0",
+            "serial_number": "7720321"
+          }
+        }
+      }
+    }
+  ]
+}

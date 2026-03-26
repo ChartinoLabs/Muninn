@@ -1,0 +1,158 @@
+{
+  "os": "cisco_nxos",
+  "command": "show lldp neighbors detail",
+  "schema": {
+    "name": "ShowLldpNeighborsDetailResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "LldpNeighborDetailEntry",
+            "fields": {
+              "chassis_id": {
+                "type": "str",
+                "required": true
+              },
+              "port_id": {
+                "type": "str",
+                "required": true
+              },
+              "port_description": {
+                "type": "str",
+                "required": false
+              },
+              "system_name": {
+                "type": "str",
+                "required": false
+              },
+              "system_description": {
+                "type": "str",
+                "required": false
+              },
+              "time_remaining": {
+                "type": "int",
+                "required": false
+              },
+              "system_capabilities": {
+                "type": "str",
+                "required": false
+              },
+              "enabled_capabilities": {
+                "type": "str",
+                "required": false
+              },
+              "management_address": {
+                "type": "str",
+                "required": false
+              },
+              "management_address_ipv6": {
+                "type": "str",
+                "required": false
+              },
+              "vlan_id": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_entries": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic LLDP neighbor detail with multiple neighbors including mgmt interface",
+      "input": "Capability codes:\n  (R) Router, (B) Bridge, (T) Telephone, (C) DOCSIS Cable Device\n  (W) WLAN Access Point, (P) Repeater, (S) Station, (O) Other\nDevice ID            Local Intf      Hold-time  Capability  Port ID\n\nChassis id: 0014.1c57.a48b\nPort id: Fa1/0/9\nLocal Port id: mgmt0\nPort Description: FastEthernet1/0/9\nSystem Name: Switch.cisco.com\nSystem Description: Cisco IOS Software, C3750 Software (C3750-IPBASEK9-M), Version 12.2(44)SE2, RELEASE SOFTWARE (fc2)\nCopyright (c) 1986-2008 by Cisco Systems, Inc.\nCompiled Thu 01-May-08 15:42 by antonino\nTime remaining: 91 seconds\nSystem Capabilities: B, R\nEnabled Capabilities: B, R\nManagement Address: 10.30.140.1\nVlan ID: 100\n\n\nChassis id: 5087.89a1.d8d6\nPort id: Ethernet1/1\nLocal Port id: Eth1/1\nPort Description: Ethernet1/1\nSystem Name: n9k2.company.com\nSystem Description: Cisco Nexus Operating System (NX-OS) Software 7.0(3)I4(1)\nTAC support: http://www.cisco.com/tac\nCopyright (c) 2002-2016, Cisco Systems, Inc. All rights reserved.\nTime remaining: 93 seconds\nSystem Capabilities: B, R\nEnabled Capabilities: B, R\nManagement Address: 10.30.140.21\nVlan ID: 1\n\n\nChassis id: 5087.89a1.d8d7\nPort id: Ethernet1/2\nLocal Port id: Eth1/2\nPort Description: Ethernet1/2\nSystem Name: n9k2.company.com\nSystem Description: Cisco Nexus Operating System (NX-OS) Software 7.0(3)I4(1)\nTAC support: http://www.cisco.com/tac\nCopyright (c) 2002-2016, Cisco Systems, Inc. All rights reserved.\nTime remaining: 93 seconds\nSystem Capabilities: B, R\nEnabled Capabilities: B, R\nManagement Address: 10.30.140.21\nVlan ID: 1\n\n\nChassis id: 547f.eeaf.7818\nPort id: Ethernet1/49\nLocal Port id: Eth2/2\nPort Description: Ethernet1/49\nSystem Name: N3K.cisconxapi.com\nSystem Description: Cisco Nexus Operating System (NX-OS) Software 6.0(2)U4(1)\nTAC support: http://www.cisco.com/tac\nCopyright (c) 2002-2014, Cisco Systems, Inc. All rights reserved.\nTime remaining: 93 seconds\nSystem Capabilities: B, R\nEnabled Capabilities: B, R\nManagement Address: 10.30.140.30\nVlan ID: 1\n\nTotal entries displayed: 4\n",
+      "expected": {
+        "neighbors": {
+          "mgmt0": {
+            "chassis_id": "0014.1c57.a48b",
+            "port_id": "FastEthernet1/0/9",
+            "port_description": "FastEthernet1/0/9",
+            "system_name": "Switch.cisco.com",
+            "system_description": "Cisco IOS Software, C3750 Software (C3750-IPBASEK9-M), Version 12.2(44)SE2, RELEASE SOFTWARE (fc2)",
+            "time_remaining": 91,
+            "system_capabilities": "B, R",
+            "enabled_capabilities": "B, R",
+            "management_address": "10.30.140.1",
+            "vlan_id": 100
+          },
+          "Ethernet1/1": {
+            "chassis_id": "5087.89a1.d8d6",
+            "port_id": "Ethernet1/1",
+            "port_description": "Ethernet1/1",
+            "system_name": "n9k2.company.com",
+            "system_description": "Cisco Nexus Operating System (NX-OS) Software 7.0(3)I4(1)",
+            "time_remaining": 93,
+            "system_capabilities": "B, R",
+            "enabled_capabilities": "B, R",
+            "management_address": "10.30.140.21",
+            "vlan_id": 1
+          },
+          "Ethernet1/2": {
+            "chassis_id": "5087.89a1.d8d7",
+            "port_id": "Ethernet1/2",
+            "port_description": "Ethernet1/2",
+            "system_name": "n9k2.company.com",
+            "system_description": "Cisco Nexus Operating System (NX-OS) Software 7.0(3)I4(1)",
+            "time_remaining": 93,
+            "system_capabilities": "B, R",
+            "enabled_capabilities": "B, R",
+            "management_address": "10.30.140.21",
+            "vlan_id": 1
+          },
+          "Ethernet2/2": {
+            "chassis_id": "547f.eeaf.7818",
+            "port_id": "Ethernet1/49",
+            "port_description": "Ethernet1/49",
+            "system_name": "N3K.cisconxapi.com",
+            "system_description": "Cisco Nexus Operating System (NX-OS) Software 6.0(2)U4(1)",
+            "time_remaining": 93,
+            "system_capabilities": "B, R",
+            "enabled_capabilities": "B, R",
+            "management_address": "10.30.140.30",
+            "vlan_id": 1
+          }
+        },
+        "total_entries": 4
+      }
+    },
+    {
+      "name": "LLDP neighbors with IPv6 fields, non-interface port IDs, and not-advertised values",
+      "input": "Capability codes:\n  (R) Router, (B) Bridge, (T) Telephone, (C) DOCSIS Cable Device\n  (W) WLAN Access Point, (P) Repeater, (S) Station, (O) Other\nDevice ID            Local Intf      Hold-time  Capability  Port ID\n\nChassis id: 3473.2d00.0001\nPort id: Ethernet1/52\nLocal Port id: Eth1/52\nPort Description: SW-NEXUS-UPLINK\nSystem Name: SW-NEXUS\nSystem Description: Cisco Nexus Operating System (NX-OS) Software 9.3(8)\nTAC support: http://www.cisco.com/tac\nCopyright (c) 2002-2021, Cisco Systems, Inc. All rights reserved.\nTime remaining: 97 seconds\nSystem Capabilities: B, R\nEnabled Capabilities: B, R\nManagement Address: 192.168.1.2\nManagement Address IPV6: not advertised\nVlan ID: not advertised\n\n\nChassis id: 24a9.3700.0001\nPort id: 1a51.4800.0001\nLocal Port id: Eth101/1/10\nPort Description: eth0\nSystem Name: pure-storage\nSystem Description: FlashArray FA-X20R3 pure-storage\nTime remaining: 3 seconds\nSystem Capabilities: B, W, R, S\nEnabled Capabilities: B\nManagement Address: not advertised\nManagement Address IPV6: not advertised\nVlan ID: 0\n",
+      "expected": {
+        "neighbors": {
+          "Ethernet1/52": {
+            "chassis_id": "3473.2d00.0001",
+            "port_id": "Ethernet1/52",
+            "port_description": "SW-NEXUS-UPLINK",
+            "system_name": "SW-NEXUS",
+            "system_description": "Cisco Nexus Operating System (NX-OS) Software 9.3(8)",
+            "time_remaining": 97,
+            "system_capabilities": "B, R",
+            "enabled_capabilities": "B, R",
+            "management_address": "192.168.1.2"
+          },
+          "Ethernet101/1/10": {
+            "chassis_id": "24a9.3700.0001",
+            "port_id": "1a51.4800.0001",
+            "port_description": "Ethernet0",
+            "system_name": "pure-storage",
+            "system_description": "FlashArray FA-X20R3 pure-storage",
+            "time_remaining": 3,
+            "system_capabilities": "B, W, R, S",
+            "enabled_capabilities": "B",
+            "vlan_id": 0
+          }
+        }
+      }
+    }
+  ]
+}

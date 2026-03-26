@@ -1,0 +1,347 @@
+{
+  "os": "cisco_ios",
+  "command": "show standby",
+  "schema": {
+    "name": "ShowStandbyResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "StandbyInterfaceEntry",
+            "fields": {
+              "groups": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "StandbyGroupEntry",
+                    "fields": {
+                      "interface": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "group": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "version": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "state": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "state_changes": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "last_state_change": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "virtual_ip": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "secondary_virtual_ips": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": false
+                      },
+                      "active_virtual_mac": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "local_virtual_mac": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "hello_time_sec": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "hold_time_sec": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "authentication_type": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "authentication_string": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "preemption": {
+                        "type": "bool",
+                        "required": true
+                      },
+                      "preemption_delay_min_sec": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "preemption_delay_reload_sec": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "active_router": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "active_router_priority": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "active_router_mac": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "standby_router": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "standby_router_priority": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "priority": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "configured_priority": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "group_name": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "tracks": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "type": "dict",
+                            "key": "str",
+                            "value": {
+                              "name": "TrackEntry",
+                              "fields": {
+                                "type": {
+                                  "type": "str",
+                                  "required": true
+                                },
+                                "name": {
+                                  "type": "str",
+                                  "required": true
+                                },
+                                "state": {
+                                  "type": "str",
+                                  "required": false
+                                },
+                                "decrement": {
+                                  "type": "int",
+                                  "required": false
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Single HSRP group in standby state with MD5 authentication and preemption delay",
+      "input": "Vlan50 - Group 50 (version 2)\n  State is Standby\n    1 state change, last state change 10w3d\n  Virtual IP address is 10.0.52.161\n  Active virtual MAC address is 0000.0c9f.f032 (MAC Not In Use)\n    Local virtual MAC address is 0000.0c9f.f032 (v2 default)\n  Hello time 3 sec, hold time 10 sec\n    Next hello sent in 2.512 secs\n  Authentication MD5, key-string\n  Preemption enabled, delay min 120 secs\n  Active router is 10.0.52.163, priority 110 (expires in 10.464 sec)\n    MAC address is 6073.5c43.63b7\n  Standby router is local\n  Priority 90 (configured 90)\n  Group name is \"hsrp-Vl50-50\" (default)\n",
+      "expected": {
+        "interfaces": {
+          "Vlan50": {
+            "groups": {
+              "50": {
+                "active_router": "10.0.52.163",
+                "active_router_mac": "6073.5c43.63b7",
+                "active_router_priority": 110,
+                "active_virtual_mac": "0000.0c9f.f032",
+                "authentication_type": "MD5",
+                "configured_priority": 90,
+                "group": 50,
+                "group_name": "hsrp-Vl50-50",
+                "hello_time_sec": 3,
+                "hold_time_sec": 10,
+                "interface": "Vlan50",
+                "last_state_change": "10w3d",
+                "local_virtual_mac": "0000.0c9f.f032",
+                "preemption": true,
+                "preemption_delay_min_sec": 120,
+                "priority": 90,
+                "standby_router": "local",
+                "state": "Standby",
+                "state_changes": 1,
+                "version": 2,
+                "virtual_ip": "10.0.52.161"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Multiple HSRP groups across different interfaces with track objects and track interfaces",
+      "input": "Vlan111 - Group 1\n  State is Standby\n    1 state change, last state change 26w2d\n  Virtual IP address is 192.168.77.62\n  Active virtual MAC address is 0000.0c07.ac01\n    Local virtual MAC address is 0000.0c07.ac01 (v1 default)\n  Hello time 3 sec, hold time 10 sec\n    Next hello sent in 0.704 secs\n  Preemption enabled, delay min 180 secs\n  Active router is 192.168.77.60, priority 255 (expires in 10.416 sec)\n  Standby router is local\n  Priority 255 (configured 255)\n    Track object 1 state Up decrement 60\n  Group name is \"hsrp-Vl111-1\" (default)\nBDI10 - Group 1\n  State is Active\n    14 state changes, last state change 17w6d\n    Track object 1 state Up\n  Virtual IP address is 203.57.147.1\n  Active virtual MAC address is 0000.0c07.ac01 (MAC In Use)\n    Local virtual MAC address is 0000.0c07.ac01 (v1 default)\n  Hello time 3 sec, hold time 10 sec\n    Next hello sent in 1.040 secs\n  Preemption enabled, delay min 180 secs\n  Active router is local\n  Standby router is 203.57.147.3, priority 230 (expires in 10.240 sec)\n  Priority 240 (configured 240)\n  Group name is \"hsrp-BD10-1\" (default)\n  FLAGS: 1/1\nVlan703 - Group 4\n  State is Active\n    11 state changes, last state change 5d14h\n  Virtual IP address is 172.23.40.9\n  Active virtual MAC address is 0000.0c07.ac04\n    Local virtual MAC address is 0000.0c07.ac04 (v1 default)\n  Hello time 3 sec, hold time 10 sec\n    Next hello sent in 0.340 secs\n  Preemption enabled, delay min 180 secs\n  Active router is local\n  Standby router is unknown\n  Priority 200 (configured 200)\n    Track interface Dialer0 state Up decrement 10\n  IP redundancy name is \"hsrp-Vl703-4\" (default)\nGigabitEthernet0/1.2951 - Group 1 (version 2)\n  State is Active\n    2 state changes, last state change 3y37w\n  Virtual IP address is 111.222.230.17\n  Active virtual MAC address is 0000.0c9f.f001\n    Local virtual MAC address is 0000.0c9f.f001 (v2 default)\n  Hello time 3 sec, hold time 10 sec\n    Next hello sent in 2.720 secs\n  Preemption enabled, delay min 180 secs, reload 300 secs\n  Active router is local\n  Standby router is unknown\n  Priority 255 (configured 255)\n    Track object 1 (unknown)\n  Group name is \"hsrp-Gi0/1.2951-1\" (default)\n",
+      "expected": {
+        "interfaces": {
+          "BDI10": {
+            "groups": {
+              "1": {
+                "active_router": "local",
+                "active_virtual_mac": "0000.0c07.ac01",
+                "configured_priority": 240,
+                "group": 1,
+                "group_name": "hsrp-BD10-1",
+                "hello_time_sec": 3,
+                "hold_time_sec": 10,
+                "interface": "BDI10",
+                "last_state_change": "17w6d",
+                "local_virtual_mac": "0000.0c07.ac01",
+                "preemption": true,
+                "preemption_delay_min_sec": 180,
+                "priority": 240,
+                "standby_router": "203.57.147.3",
+                "standby_router_priority": 230,
+                "state": "Active",
+                "state_changes": 14,
+                "tracks": {
+                  "object": {
+                    "1": {
+                      "name": "1",
+                      "state": "Up",
+                      "type": "object"
+                    }
+                  }
+                },
+                "virtual_ip": "203.57.147.1"
+              }
+            }
+          },
+          "GigabitEthernet0/1.2951": {
+            "groups": {
+              "1": {
+                "active_router": "local",
+                "active_virtual_mac": "0000.0c9f.f001",
+                "configured_priority": 255,
+                "group": 1,
+                "group_name": "hsrp-Gi0/1.2951-1",
+                "hello_time_sec": 3,
+                "hold_time_sec": 10,
+                "interface": "GigabitEthernet0/1.2951",
+                "last_state_change": "3y37w",
+                "local_virtual_mac": "0000.0c9f.f001",
+                "preemption": true,
+                "preemption_delay_min_sec": 180,
+                "preemption_delay_reload_sec": 300,
+                "priority": 255,
+                "standby_router": "unknown",
+                "state": "Active",
+                "state_changes": 2,
+                "tracks": {
+                  "object": {
+                    "1": {
+                      "name": "1",
+                      "state": "unknown",
+                      "type": "object"
+                    }
+                  }
+                },
+                "version": 2,
+                "virtual_ip": "111.222.230.17"
+              }
+            }
+          },
+          "Vlan111": {
+            "groups": {
+              "1": {
+                "active_router": "192.168.77.60",
+                "active_router_priority": 255,
+                "active_virtual_mac": "0000.0c07.ac01",
+                "configured_priority": 255,
+                "group": 1,
+                "group_name": "hsrp-Vl111-1",
+                "hello_time_sec": 3,
+                "hold_time_sec": 10,
+                "interface": "Vlan111",
+                "last_state_change": "26w2d",
+                "local_virtual_mac": "0000.0c07.ac01",
+                "preemption": true,
+                "preemption_delay_min_sec": 180,
+                "priority": 255,
+                "standby_router": "local",
+                "state": "Standby",
+                "state_changes": 1,
+                "tracks": {
+                  "object": {
+                    "1": {
+                      "decrement": 60,
+                      "name": "1",
+                      "state": "Up",
+                      "type": "object"
+                    }
+                  }
+                },
+                "virtual_ip": "192.168.77.62"
+              }
+            }
+          },
+          "Vlan703": {
+            "groups": {
+              "4": {
+                "active_router": "local",
+                "active_virtual_mac": "0000.0c07.ac04",
+                "configured_priority": 200,
+                "group": 4,
+                "group_name": "hsrp-Vl703-4",
+                "hello_time_sec": 3,
+                "hold_time_sec": 10,
+                "interface": "Vlan703",
+                "last_state_change": "5d14h",
+                "local_virtual_mac": "0000.0c07.ac04",
+                "preemption": true,
+                "preemption_delay_min_sec": 180,
+                "priority": 200,
+                "standby_router": "unknown",
+                "state": "Active",
+                "state_changes": 11,
+                "tracks": {
+                  "interface": {
+                    "Dialer0": {
+                      "decrement": 10,
+                      "name": "Dialer0",
+                      "state": "Up",
+                      "type": "interface"
+                    }
+                  }
+                },
+                "virtual_ip": "172.23.40.9"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

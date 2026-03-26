@@ -1,0 +1,119 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show nve vni",
+  "schema": {
+    "name": "ShowNveVniResult",
+    "fields": {
+      "vnis": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "NveVniEntry",
+            "fields": {
+              "interface": {
+                "type": "str",
+                "required": true
+              },
+              "vni": {
+                "type": "int",
+                "required": true
+              },
+              "vni_state": {
+                "type": "str",
+                "required": true
+              },
+              "mode": {
+                "type": "str",
+                "required": true
+              },
+              "cfg": {
+                "type": "str",
+                "required": true
+              },
+              "multicast_group": {
+                "type": "str",
+                "required": false
+              },
+              "vlan": {
+                "type": "int",
+                "required": false
+              },
+              "vrf": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple VNI entries with mixed L2CP/L3CP modes and states",
+      "input": "Interface  VNI        Multicast-group VNI state  Mode  VLAN  cfg vrf\nnve1       30000      N/A             BD Down/Re L3CP  N/A   CLI red\nnve1       20014      229.1.1.4       BD Down/Re L2CP  N/A   CLI N/A\nnve1       20013      229.1.1.3       BD Down/Re L2CP  N/A   CLI N/A\nnve1       20012      N/A             Up         L2CP  12    CLI N/A\nnve1       20011      N/A             Up         L2CP  11    CLI N/A\n",
+      "expected": {
+        "vnis": {
+          "20011": {
+            "cfg": "CLI",
+            "interface": "nve1",
+            "mode": "L2CP",
+            "vlan": 11,
+            "vni": 20011,
+            "vni_state": "Up"
+          },
+          "20012": {
+            "cfg": "CLI",
+            "interface": "nve1",
+            "mode": "L2CP",
+            "vlan": 12,
+            "vni": 20012,
+            "vni_state": "Up"
+          },
+          "20013": {
+            "cfg": "CLI",
+            "interface": "nve1",
+            "mode": "L2CP",
+            "multicast_group": "229.1.1.3",
+            "vni": 20013,
+            "vni_state": "BD Down/Re"
+          },
+          "20014": {
+            "cfg": "CLI",
+            "interface": "nve1",
+            "mode": "L2CP",
+            "multicast_group": "229.1.1.4",
+            "vni": 20014,
+            "vni_state": "BD Down/Re"
+          },
+          "30000": {
+            "cfg": "CLI",
+            "interface": "nve1",
+            "mode": "L3CP",
+            "vni": 30000,
+            "vni_state": "BD Down/Re",
+            "vrf": "red"
+          }
+        }
+      }
+    },
+    {
+      "name": "Single VNI entry with Up state",
+      "input": "Interface  VNI        Multicast-group VNI state  Mode  VLAN  cfg vrf\nnve1       20011      N/A             Up         L2CP  11    CLI N/A\n",
+      "expected": {
+        "vnis": {
+          "20011": {
+            "cfg": "CLI",
+            "interface": "nve1",
+            "mode": "L2CP",
+            "vlan": 11,
+            "vni": 20011,
+            "vni_state": "Up"
+          }
+        }
+      }
+    }
+  ]
+}

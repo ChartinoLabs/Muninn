@@ -1,0 +1,100 @@
+{
+  "os": "cisco_ios",
+  "command": "show power status",
+  "schema": {
+    "name": "ShowPowerStatusResult",
+    "fields": {
+      "supplies": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PowerSupplyEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "model": {
+                "type": "str",
+                "required": false
+              },
+              "type": {
+                "type": "str",
+                "required": false
+              },
+              "fan_sensor": {
+                "type": "str",
+                "required": false
+              },
+              "inline_status": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Simple output with two power supplies and no sub-supplies",
+      "input": "Power                                             Fan      Inline\nSupply  Model No          Type       Status       Sensor   Status\n------  ----------------  ---------  -----------  -------  -------\nPS1     PWR-C4KX-750AC-R  AC 750W    good         good     n.a.\nPS2     PWR-C4KX-750AC-R  AC 750W    good         good     n.a.\n",
+      "expected": {
+        "supplies": {
+          "PS1": {
+            "fan_sensor": "good",
+            "model": "PWR-C4KX-750AC-R",
+            "status": "good",
+            "type": "AC 750W"
+          },
+          "PS2": {
+            "fan_sensor": "good",
+            "model": "PWR-C4KX-750AC-R",
+            "status": "good",
+            "type": "AC 750W"
+          }
+        }
+      }
+    },
+    {
+      "name": "Output with sub-supplies, mixed statuses, and footer warning",
+      "input": "Power                                             Fan      Inline\nSupply  Model No          Type       Status       Sensor   Status\n------  ----------------  ---------  -----------  -------  -------\nPS1     PWR-C45-4200ACV   AC 4200W   good         good     good\nPS1-1                         220V   good\nPS1-2                         220V   good\nPS2     PWR-C45-4200ACV   AC 4200W   err-disable  good     good\nPS2-1                                off\nPS2-2                         220V   good\n\n*** Power Supplies of different type have been detected***\n",
+      "expected": {
+        "supplies": {
+          "PS1": {
+            "fan_sensor": "good",
+            "inline_status": "good",
+            "model": "PWR-C45-4200ACV",
+            "status": "good",
+            "type": "AC 4200W"
+          },
+          "PS1-1": {
+            "status": "good",
+            "type": "220V"
+          },
+          "PS1-2": {
+            "status": "good",
+            "type": "220V"
+          },
+          "PS2": {
+            "fan_sensor": "good",
+            "inline_status": "good",
+            "model": "PWR-C45-4200ACV",
+            "status": "err-disable",
+            "type": "AC 4200W"
+          },
+          "PS2-1": {
+            "status": "off"
+          },
+          "PS2-2": {
+            "status": "good",
+            "type": "220V"
+          }
+        }
+      }
+    }
+  ]
+}

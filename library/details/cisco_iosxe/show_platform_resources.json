@@ -1,0 +1,806 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show platform resources",
+  "schema": {
+    "name": "ShowPlatformResourcesResult",
+    "fields": {
+      "components": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ComponentEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "role": {
+                "type": "str",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "resources": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "ResourceEntry",
+                    "fields": {
+                      "usage": {
+                        "type": "float",
+                        "required": true
+                      },
+                      "usage_unit": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "usage_percent": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "max": {
+                        "type": "float",
+                        "required": true
+                      },
+                      "max_unit": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "warning_percent": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "critical_percent": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "state": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "sub_components": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "SubComponentEntry",
+                    "fields": {
+                      "state": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "resources": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "type": "ref",
+                            "name": "ResourceEntry"
+                          }
+                        },
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with RP and ESP components on ISR platform",
+      "input": "**State Acronym: H - Healthy, W - Warning, C - Critical\nResource                 Usage                 Max             Warning         Critical        State\n----------------------------------------------------------------------------------------------------\nRP0 (ok, active)                                                                               H\n Control Processor       12.43%                100%            80%             90%             H\n  DRAM                   3665MB(48%)           7567MB          88%             93%             H\n  bootflash              3303MB(45%)           7342MB          70%             90%             H\n  harddisk               1015MB(7%)            14534MB         90%             95%             H\nESP0(ok, active)                                                                               H\n QFP                                                                                           H\n  DRAM                   233176KB(44%)         524288KB        85%             95%             H\n  IRAM                   414KB(20%)            2048KB          85%             95%             H\n  CPU Utilization        0.00%                 100%            90%             95%             H\n  B4Q Pool 124           15KB(0%)              1686KB          75%             85%             H\n  B4Q Pool 128           6KB(0%)               1740KB          75%             85%             H\n  B4Q Pool 256           9KB(0%)               3481KB          75%             85%             H\n  B4Q Pool 512           9KB(0%)               4177KB          75%             85%             H\n  B4Q Pool 1024          144KB(1%)             7736KB          75%             85%             H\n  B4Q Pool 1536          207KB(1%)             11247KB         75%             85%             H\n  B4Q Pool 2048          0KB(0%)               14744KB         75%             85%             H\n  B4Q Pool 4096          0KB(0%)               28696KB         75%             85%             H\n  B4Q Pool 10240         380KB(1%)             37820KB         75%             85%             H\n  B4Q Pool 16384         0KB(0%)               51808KB         75%             85%             H\n  B4Q PMD                33952KB(25%)          130944KB        75%             85%             H\n",
+      "expected": {
+        "components": {
+          "ESP0": {
+            "role": "active",
+            "state": "H",
+            "status": "ok",
+            "sub_components": {
+              "QFP": {
+                "resources": {
+                  "B4Q PMD": {
+                    "critical_percent": 85,
+                    "max": 130944.0,
+                    "max_unit": "KB",
+                    "state": "H",
+                    "usage": 33952.0,
+                    "usage_percent": 25,
+                    "usage_unit": "KB",
+                    "warning_percent": 75
+                  },
+                  "B4Q Pool 1024": {
+                    "critical_percent": 85,
+                    "max": 7736.0,
+                    "max_unit": "KB",
+                    "state": "H",
+                    "usage": 144.0,
+                    "usage_percent": 1,
+                    "usage_unit": "KB",
+                    "warning_percent": 75
+                  },
+                  "B4Q Pool 10240": {
+                    "critical_percent": 85,
+                    "max": 37820.0,
+                    "max_unit": "KB",
+                    "state": "H",
+                    "usage": 380.0,
+                    "usage_percent": 1,
+                    "usage_unit": "KB",
+                    "warning_percent": 75
+                  },
+                  "B4Q Pool 124": {
+                    "critical_percent": 85,
+                    "max": 1686.0,
+                    "max_unit": "KB",
+                    "state": "H",
+                    "usage": 15.0,
+                    "usage_percent": 0,
+                    "usage_unit": "KB",
+                    "warning_percent": 75
+                  },
+                  "B4Q Pool 128": {
+                    "critical_percent": 85,
+                    "max": 1740.0,
+                    "max_unit": "KB",
+                    "state": "H",
+                    "usage": 6.0,
+                    "usage_percent": 0,
+                    "usage_unit": "KB",
+                    "warning_percent": 75
+                  },
+                  "B4Q Pool 1536": {
+                    "critical_percent": 85,
+                    "max": 11247.0,
+                    "max_unit": "KB",
+                    "state": "H",
+                    "usage": 207.0,
+                    "usage_percent": 1,
+                    "usage_unit": "KB",
+                    "warning_percent": 75
+                  },
+                  "B4Q Pool 16384": {
+                    "critical_percent": 85,
+                    "max": 51808.0,
+                    "max_unit": "KB",
+                    "state": "H",
+                    "usage": 0.0,
+                    "usage_percent": 0,
+                    "usage_unit": "KB",
+                    "warning_percent": 75
+                  },
+                  "B4Q Pool 2048": {
+                    "critical_percent": 85,
+                    "max": 14744.0,
+                    "max_unit": "KB",
+                    "state": "H",
+                    "usage": 0.0,
+                    "usage_percent": 0,
+                    "usage_unit": "KB",
+                    "warning_percent": 75
+                  },
+                  "B4Q Pool 256": {
+                    "critical_percent": 85,
+                    "max": 3481.0,
+                    "max_unit": "KB",
+                    "state": "H",
+                    "usage": 9.0,
+                    "usage_percent": 0,
+                    "usage_unit": "KB",
+                    "warning_percent": 75
+                  },
+                  "B4Q Pool 4096": {
+                    "critical_percent": 85,
+                    "max": 28696.0,
+                    "max_unit": "KB",
+                    "state": "H",
+                    "usage": 0.0,
+                    "usage_percent": 0,
+                    "usage_unit": "KB",
+                    "warning_percent": 75
+                  },
+                  "B4Q Pool 512": {
+                    "critical_percent": 85,
+                    "max": 4177.0,
+                    "max_unit": "KB",
+                    "state": "H",
+                    "usage": 9.0,
+                    "usage_percent": 0,
+                    "usage_unit": "KB",
+                    "warning_percent": 75
+                  },
+                  "CPU Utilization": {
+                    "critical_percent": 95,
+                    "max": 100.0,
+                    "max_unit": "%",
+                    "state": "H",
+                    "usage": 0.0,
+                    "usage_unit": "%",
+                    "warning_percent": 90
+                  },
+                  "DRAM": {
+                    "critical_percent": 95,
+                    "max": 524288.0,
+                    "max_unit": "KB",
+                    "state": "H",
+                    "usage": 233176.0,
+                    "usage_percent": 44,
+                    "usage_unit": "KB",
+                    "warning_percent": 85
+                  },
+                  "IRAM": {
+                    "critical_percent": 95,
+                    "max": 2048.0,
+                    "max_unit": "KB",
+                    "state": "H",
+                    "usage": 414.0,
+                    "usage_percent": 20,
+                    "usage_unit": "KB",
+                    "warning_percent": 85
+                  }
+                },
+                "state": "H"
+              }
+            }
+          },
+          "RP0": {
+            "resources": {
+              "Control Processor": {
+                "critical_percent": 90,
+                "max": 100.0,
+                "max_unit": "%",
+                "state": "H",
+                "usage": 12.43,
+                "usage_unit": "%",
+                "warning_percent": 80
+              },
+              "DRAM": {
+                "critical_percent": 93,
+                "max": 7567.0,
+                "max_unit": "MB",
+                "state": "H",
+                "usage": 3665.0,
+                "usage_percent": 48,
+                "usage_unit": "MB",
+                "warning_percent": 88
+              },
+              "bootflash": {
+                "critical_percent": 90,
+                "max": 7342.0,
+                "max_unit": "MB",
+                "state": "H",
+                "usage": 3303.0,
+                "usage_percent": 45,
+                "usage_unit": "MB",
+                "warning_percent": 70
+              },
+              "harddisk": {
+                "critical_percent": 95,
+                "max": 14534.0,
+                "max_unit": "MB",
+                "state": "H",
+                "usage": 1015.0,
+                "usage_percent": 7,
+                "usage_unit": "MB",
+                "warning_percent": 90
+              }
+            },
+            "role": "active",
+            "state": "H",
+            "status": "ok"
+          }
+        }
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": "**State Acronym: H - Healthy, W - Warning, C - Critical\nResource                 Usage                 Max             Warning         Critical        State\n----------------------------------------------------------------------------------------------------\nRP0 (ok, active)                                                                               H\n Control Processor       32.52%                100%            80%             90%             H\n  DRAM                   2760MB(71%)           3867MB          88%             93%             H\nESP0(ok, active)                                                                               H\n QFP                                                                                           H\n  DRAM                   26812KB(10%)          262144KB        85%             95%             H\n  IRAM                   207KB(10%)            2048KB          85%             95%             H\n  CPU Utilization        18.00%                100%            60%             80%             H\n  B4Q Pool 124           2KB(0%)               1587KB          75%             85%             H\n  B4Q Pool 128           2KB(0%)               1966KB          75%             85%             H\n  B4Q Pool 256           4KB(0%)               3932KB          75%             85%             H\n  B4Q Pool 512           7KB(0%)               5767KB          75%             85%             H\n  B4Q Pool 1024          11KB(0%)              8155KB          75%             85%             H\n  B4Q Pool 1536          6KB(0%)               9678KB          75%             85%             H\n  B4Q Pool 2048          26KB(0%)              8634KB          75%             85%             H\n  B4Q Pool 4096          0KB(0%)               8260KB          75%             85%             H\n  B4Q Pool 10240         70KB(1%)              6470KB          75%             85%             H\n  B4Q Pool 16384         0KB(0%)               1296KB          75%             85%             H\n  B4Q PMD                8528KB(2%)            369600KB        75%             85%             H\n",
+      "expected": {
+        "components": {
+          "RP0": {
+            "status": "ok",
+            "role": "active",
+            "state": "H",
+            "resources": {
+              "Control Processor": {
+                "usage": 32.52,
+                "usage_unit": "%",
+                "max": 100.0,
+                "max_unit": "%",
+                "warning_percent": 80,
+                "critical_percent": 90,
+                "state": "H"
+              },
+              "DRAM": {
+                "usage": 2760.0,
+                "usage_unit": "MB",
+                "usage_percent": 71,
+                "max": 3867.0,
+                "max_unit": "MB",
+                "warning_percent": 88,
+                "critical_percent": 93,
+                "state": "H"
+              }
+            }
+          },
+          "ESP0": {
+            "status": "ok",
+            "role": "active",
+            "state": "H",
+            "sub_components": {
+              "QFP": {
+                "state": "H",
+                "resources": {
+                  "DRAM": {
+                    "usage": 26812.0,
+                    "usage_unit": "KB",
+                    "usage_percent": 10,
+                    "max": 262144.0,
+                    "max_unit": "KB",
+                    "warning_percent": 85,
+                    "critical_percent": 95,
+                    "state": "H"
+                  },
+                  "IRAM": {
+                    "usage": 207.0,
+                    "usage_unit": "KB",
+                    "usage_percent": 10,
+                    "max": 2048.0,
+                    "max_unit": "KB",
+                    "warning_percent": 85,
+                    "critical_percent": 95,
+                    "state": "H"
+                  },
+                  "CPU Utilization": {
+                    "usage": 18.0,
+                    "usage_unit": "%",
+                    "max": 100.0,
+                    "max_unit": "%",
+                    "warning_percent": 60,
+                    "critical_percent": 80,
+                    "state": "H"
+                  },
+                  "B4Q Pool 124": {
+                    "usage": 2.0,
+                    "usage_unit": "KB",
+                    "usage_percent": 0,
+                    "max": 1587.0,
+                    "max_unit": "KB",
+                    "warning_percent": 75,
+                    "critical_percent": 85,
+                    "state": "H"
+                  },
+                  "B4Q Pool 128": {
+                    "usage": 2.0,
+                    "usage_unit": "KB",
+                    "usage_percent": 0,
+                    "max": 1966.0,
+                    "max_unit": "KB",
+                    "warning_percent": 75,
+                    "critical_percent": 85,
+                    "state": "H"
+                  },
+                  "B4Q Pool 256": {
+                    "usage": 4.0,
+                    "usage_unit": "KB",
+                    "usage_percent": 0,
+                    "max": 3932.0,
+                    "max_unit": "KB",
+                    "warning_percent": 75,
+                    "critical_percent": 85,
+                    "state": "H"
+                  },
+                  "B4Q Pool 512": {
+                    "usage": 7.0,
+                    "usage_unit": "KB",
+                    "usage_percent": 0,
+                    "max": 5767.0,
+                    "max_unit": "KB",
+                    "warning_percent": 75,
+                    "critical_percent": 85,
+                    "state": "H"
+                  },
+                  "B4Q Pool 1024": {
+                    "usage": 11.0,
+                    "usage_unit": "KB",
+                    "usage_percent": 0,
+                    "max": 8155.0,
+                    "max_unit": "KB",
+                    "warning_percent": 75,
+                    "critical_percent": 85,
+                    "state": "H"
+                  },
+                  "B4Q Pool 1536": {
+                    "usage": 6.0,
+                    "usage_unit": "KB",
+                    "usage_percent": 0,
+                    "max": 9678.0,
+                    "max_unit": "KB",
+                    "warning_percent": 75,
+                    "critical_percent": 85,
+                    "state": "H"
+                  },
+                  "B4Q Pool 2048": {
+                    "usage": 26.0,
+                    "usage_unit": "KB",
+                    "usage_percent": 0,
+                    "max": 8634.0,
+                    "max_unit": "KB",
+                    "warning_percent": 75,
+                    "critical_percent": 85,
+                    "state": "H"
+                  },
+                  "B4Q Pool 4096": {
+                    "usage": 0.0,
+                    "usage_unit": "KB",
+                    "usage_percent": 0,
+                    "max": 8260.0,
+                    "max_unit": "KB",
+                    "warning_percent": 75,
+                    "critical_percent": 85,
+                    "state": "H"
+                  },
+                  "B4Q Pool 10240": {
+                    "usage": 70.0,
+                    "usage_unit": "KB",
+                    "usage_percent": 1,
+                    "max": 6470.0,
+                    "max_unit": "KB",
+                    "warning_percent": 75,
+                    "critical_percent": 85,
+                    "state": "H"
+                  },
+                  "B4Q Pool 16384": {
+                    "usage": 0.0,
+                    "usage_unit": "KB",
+                    "usage_percent": 0,
+                    "max": 1296.0,
+                    "max_unit": "KB",
+                    "warning_percent": 75,
+                    "critical_percent": 85,
+                    "state": "H"
+                  },
+                  "B4Q PMD": {
+                    "usage": 8528.0,
+                    "usage_unit": "KB",
+                    "usage_percent": 2,
+                    "max": 369600.0,
+                    "max_unit": "KB",
+                    "warning_percent": 75,
+                    "critical_percent": 85,
+                    "state": "H"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Modular chassis with dual RP, dual ESP, and SIP components",
+      "input": "Resource                 Usage                 Max             Warning         Critical        State\n----------------------------------------------------------------------------------------------------\nRP0 (ok, active)                                                                               H\nControl Processor       0.25%                 100%            80%             90%             H\nDRAM                   3388MB(44%)           7557MB          88%             93%             H\nbootflash              1443MB(19%)           7281MB          88%             93%             H\nharddisk               69916MB(74%)          93836MB         88%             93%             H\nRP1 (ok, standby)                                                              H\nControl Processor       0.20%                 100%            80%             90%             H\nDRAM                   3331MB(44%)           7557MB          88%             93%             H\nbootflash              2162MB(31%)           6840MB          88%             93%             H\nharddisk               48619MB(51%)          93836MB         88%             93%             H\nESP0(ok, active)                                                                               H\nControl Processor       1.40%                 100%            80%             90%             H\nDRAM                   1057MB(6%)            15911MB         88%             93%             H\nQFP                                                                                           H\nTCAM                   16cells(0%)           1048576cells    65%             85%             H\nDRAM                   238906KB(5%)          4194304KB       85%             95%             H\nIRAM                   13014KB(9%)           131072KB        85%             95%             H\nCPU Utilization        0.00%                 100%            90%             95%             H\nPkt Buf Mem (0)        67KB(0%)              524288KB        85%             95%             H\nPkt Buf Mem (1)        67KB(0%)              524288KB        85%             95%             H\nESP1(ok, standby)                                                                              H\nControl Processor       2.23%                 100%            80%             90%             H\nDRAM                   1055MB(6%)            15911MB         88%             93%             H\nQFP                                                                                           H\nTCAM                   16cells(0%)           1048576cells    65%             85%             H\nDRAM                   238906KB(5%)          4194304KB       85%             95%             H\nIRAM                   13014KB(9%)           131072KB        85%             95%             H\nCPU Utilization        0.00%                 100%            90%             95%             H\nPkt Buf Mem (0)        67KB(0%)              524288KB        85%             95%             H\nPkt Buf Mem (1)        67KB(0%)              524288KB        85%             95%             H\nSIP0                                                                                           H\nControl Processor       13.32%                100%            80%             90%             H\nDRAM                   703MB(35%)            1955MB          88%             93%             H\n",
+      "expected": {
+        "components": {
+          "ESP0": {
+            "resources": {
+              "Control Processor": {
+                "critical_percent": 90,
+                "max": 100.0,
+                "max_unit": "%",
+                "state": "H",
+                "usage": 1.4,
+                "usage_unit": "%",
+                "warning_percent": 80
+              },
+              "DRAM": {
+                "critical_percent": 93,
+                "max": 15911.0,
+                "max_unit": "MB",
+                "state": "H",
+                "usage": 1057.0,
+                "usage_percent": 6,
+                "usage_unit": "MB",
+                "warning_percent": 88
+              }
+            },
+            "role": "active",
+            "state": "H",
+            "status": "ok",
+            "sub_components": {
+              "QFP": {
+                "resources": {
+                  "CPU Utilization": {
+                    "critical_percent": 95,
+                    "max": 100.0,
+                    "max_unit": "%",
+                    "state": "H",
+                    "usage": 0.0,
+                    "usage_unit": "%",
+                    "warning_percent": 90
+                  },
+                  "DRAM": {
+                    "critical_percent": 95,
+                    "max": 4194304.0,
+                    "max_unit": "KB",
+                    "state": "H",
+                    "usage": 238906.0,
+                    "usage_percent": 5,
+                    "usage_unit": "KB",
+                    "warning_percent": 85
+                  },
+                  "IRAM": {
+                    "critical_percent": 95,
+                    "max": 131072.0,
+                    "max_unit": "KB",
+                    "state": "H",
+                    "usage": 13014.0,
+                    "usage_percent": 9,
+                    "usage_unit": "KB",
+                    "warning_percent": 85
+                  },
+                  "Pkt Buf Mem (0)": {
+                    "critical_percent": 95,
+                    "max": 524288.0,
+                    "max_unit": "KB",
+                    "state": "H",
+                    "usage": 67.0,
+                    "usage_percent": 0,
+                    "usage_unit": "KB",
+                    "warning_percent": 85
+                  },
+                  "Pkt Buf Mem (1)": {
+                    "critical_percent": 95,
+                    "max": 524288.0,
+                    "max_unit": "KB",
+                    "state": "H",
+                    "usage": 67.0,
+                    "usage_percent": 0,
+                    "usage_unit": "KB",
+                    "warning_percent": 85
+                  },
+                  "TCAM": {
+                    "critical_percent": 85,
+                    "max": 1048576.0,
+                    "max_unit": "cells",
+                    "state": "H",
+                    "usage": 16.0,
+                    "usage_percent": 0,
+                    "usage_unit": "cells",
+                    "warning_percent": 65
+                  }
+                },
+                "state": "H"
+              }
+            }
+          },
+          "ESP1": {
+            "resources": {
+              "Control Processor": {
+                "critical_percent": 90,
+                "max": 100.0,
+                "max_unit": "%",
+                "state": "H",
+                "usage": 2.23,
+                "usage_unit": "%",
+                "warning_percent": 80
+              },
+              "DRAM": {
+                "critical_percent": 93,
+                "max": 15911.0,
+                "max_unit": "MB",
+                "state": "H",
+                "usage": 1055.0,
+                "usage_percent": 6,
+                "usage_unit": "MB",
+                "warning_percent": 88
+              }
+            },
+            "role": "standby",
+            "state": "H",
+            "status": "ok",
+            "sub_components": {
+              "QFP": {
+                "resources": {
+                  "CPU Utilization": {
+                    "critical_percent": 95,
+                    "max": 100.0,
+                    "max_unit": "%",
+                    "state": "H",
+                    "usage": 0.0,
+                    "usage_unit": "%",
+                    "warning_percent": 90
+                  },
+                  "DRAM": {
+                    "critical_percent": 95,
+                    "max": 4194304.0,
+                    "max_unit": "KB",
+                    "state": "H",
+                    "usage": 238906.0,
+                    "usage_percent": 5,
+                    "usage_unit": "KB",
+                    "warning_percent": 85
+                  },
+                  "IRAM": {
+                    "critical_percent": 95,
+                    "max": 131072.0,
+                    "max_unit": "KB",
+                    "state": "H",
+                    "usage": 13014.0,
+                    "usage_percent": 9,
+                    "usage_unit": "KB",
+                    "warning_percent": 85
+                  },
+                  "Pkt Buf Mem (0)": {
+                    "critical_percent": 95,
+                    "max": 524288.0,
+                    "max_unit": "KB",
+                    "state": "H",
+                    "usage": 67.0,
+                    "usage_percent": 0,
+                    "usage_unit": "KB",
+                    "warning_percent": 85
+                  },
+                  "Pkt Buf Mem (1)": {
+                    "critical_percent": 95,
+                    "max": 524288.0,
+                    "max_unit": "KB",
+                    "state": "H",
+                    "usage": 67.0,
+                    "usage_percent": 0,
+                    "usage_unit": "KB",
+                    "warning_percent": 85
+                  },
+                  "TCAM": {
+                    "critical_percent": 85,
+                    "max": 1048576.0,
+                    "max_unit": "cells",
+                    "state": "H",
+                    "usage": 16.0,
+                    "usage_percent": 0,
+                    "usage_unit": "cells",
+                    "warning_percent": 65
+                  }
+                },
+                "state": "H"
+              }
+            }
+          },
+          "RP0": {
+            "resources": {
+              "Control Processor": {
+                "critical_percent": 90,
+                "max": 100.0,
+                "max_unit": "%",
+                "state": "H",
+                "usage": 0.25,
+                "usage_unit": "%",
+                "warning_percent": 80
+              },
+              "DRAM": {
+                "critical_percent": 93,
+                "max": 7557.0,
+                "max_unit": "MB",
+                "state": "H",
+                "usage": 3388.0,
+                "usage_percent": 44,
+                "usage_unit": "MB",
+                "warning_percent": 88
+              },
+              "bootflash": {
+                "critical_percent": 93,
+                "max": 7281.0,
+                "max_unit": "MB",
+                "state": "H",
+                "usage": 1443.0,
+                "usage_percent": 19,
+                "usage_unit": "MB",
+                "warning_percent": 88
+              },
+              "harddisk": {
+                "critical_percent": 93,
+                "max": 93836.0,
+                "max_unit": "MB",
+                "state": "H",
+                "usage": 69916.0,
+                "usage_percent": 74,
+                "usage_unit": "MB",
+                "warning_percent": 88
+              }
+            },
+            "role": "active",
+            "state": "H",
+            "status": "ok"
+          },
+          "RP1": {
+            "resources": {
+              "Control Processor": {
+                "critical_percent": 90,
+                "max": 100.0,
+                "max_unit": "%",
+                "state": "H",
+                "usage": 0.2,
+                "usage_unit": "%",
+                "warning_percent": 80
+              },
+              "DRAM": {
+                "critical_percent": 93,
+                "max": 7557.0,
+                "max_unit": "MB",
+                "state": "H",
+                "usage": 3331.0,
+                "usage_percent": 44,
+                "usage_unit": "MB",
+                "warning_percent": 88
+              },
+              "bootflash": {
+                "critical_percent": 93,
+                "max": 6840.0,
+                "max_unit": "MB",
+                "state": "H",
+                "usage": 2162.0,
+                "usage_percent": 31,
+                "usage_unit": "MB",
+                "warning_percent": 88
+              },
+              "harddisk": {
+                "critical_percent": 93,
+                "max": 93836.0,
+                "max_unit": "MB",
+                "state": "H",
+                "usage": 48619.0,
+                "usage_percent": 51,
+                "usage_unit": "MB",
+                "warning_percent": 88
+              }
+            },
+            "role": "standby",
+            "state": "H",
+            "status": "ok"
+          },
+          "SIP0": {
+            "resources": {
+              "Control Processor": {
+                "critical_percent": 90,
+                "max": 100.0,
+                "max_unit": "%",
+                "state": "H",
+                "usage": 13.32,
+                "usage_unit": "%",
+                "warning_percent": 80
+              },
+              "DRAM": {
+                "critical_percent": 93,
+                "max": 1955.0,
+                "max_unit": "MB",
+                "state": "H",
+                "usage": 703.0,
+                "usage_percent": 35,
+                "usage_unit": "MB",
+                "warning_percent": 88
+              }
+            },
+            "role": "unknown",
+            "state": "H",
+            "status": "ok"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,435 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show mac address-table",
+  "schema": {
+    "name": "ShowMacAddressTableResult",
+    "fields": {
+      "mac_table": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "MacTableRow",
+              "fields": {
+                "kind": {
+                  "type": {
+                    "type": "literal",
+                    "values": [
+                      "unicast",
+                      "multicast"
+                    ]
+                  },
+                  "required": false
+                },
+                "type": {
+                  "type": "str",
+                  "required": false
+                },
+                "ports": {
+                  "type": {
+                    "type": "list",
+                    "items": "str"
+                  },
+                  "required": false
+                },
+                "primary": {
+                  "type": "bool",
+                  "required": false
+                },
+                "age": {
+                  "type": "int",
+                  "required": false
+                },
+                "learn": {
+                  "type": "bool",
+                  "required": false
+                },
+                "protocols": {
+                  "type": {
+                    "type": "list",
+                    "items": "str"
+                  },
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "total_mac_addresses": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic MAC address table filtered by VLAN with static and dynamic entries",
+      "input": "show mac address-table vlan 101\n\n            Mac Address Table\n-------------------------------------------\n\nVlan    Mac Address       Type        Ports\n----    -----------       --------    -----\n101    701f.53ff.4de2    STATIC      Gi2/0/30\n101    cc5a.53ff.acc7    STATIC      Vl101\n101    cc98.91ff.cbc2    DYNAMIC     Gi1/0/32\n101    cc98.91ff.e84f    DYNAMIC     Gi1/0/31\n101    cc98.91ff.e97e    DYNAMIC     Gi1/0/28\n101    cc98.91ff.09b8    DYNAMIC     Gi1/0/34\n101    cc98.91ff.0cc4    DYNAMIC     Gi1/0/33\n101    cc98.91ff.0d94    DYNAMIC     Gi1/0/29\nTotal Mac Addresses for this criterion: 8\n",
+      "expected": {
+        "mac_table": {
+          "101": {
+            "701f.53ff.4de2": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "GigabitEthernet2/0/30"
+              ]
+            },
+            "cc5a.53ff.acc7": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "VLAN101"
+              ]
+            },
+            "cc98.91ff.cbc2": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet1/0/32"
+              ]
+            },
+            "cc98.91ff.e84f": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet1/0/31"
+              ]
+            },
+            "cc98.91ff.e97e": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet1/0/28"
+              ]
+            },
+            "cc98.91ff.09b8": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet1/0/34"
+              ]
+            },
+            "cc98.91ff.0cc4": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet1/0/33"
+              ]
+            },
+            "cc98.91ff.0d94": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet1/0/29"
+              ]
+            }
+          }
+        },
+        "total_mac_addresses": 8
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": "          Mac Address Table\n-------------------------------------------\n\nVlan    Mac Address       Type        Ports\n----    -----------       --------    -----\n All    0100.0ccc.cccc    STATIC      CPU\n All    0100.0ccc.cccd    STATIC      CPU\n All    0100.0ccc.ccce    STATIC      CPU\n All    0180.c200.0000    STATIC      CPU\n All    0180.c200.0001    STATIC      CPU\n All    0180.c200.0002    STATIC      CPU\n All    0180.c200.0003    STATIC      CPU\n All    0180.c200.0004    STATIC      CPU\n All    0180.c200.0005    STATIC      CPU\n All    0180.c200.0006    STATIC      CPU\n All    0180.c200.0007    STATIC      CPU\n All    0180.c200.0008    STATIC      CPU\n All    0180.c200.0009    STATIC      CPU\n All    0180.c200.000a    STATIC      CPU\n All    0180.c200.000b    STATIC      CPU\n All    0180.c200.000c    STATIC      CPU\n All    0180.c200.000d    STATIC      CPU\n All    0180.c200.000e    STATIC      CPU\n All    0180.c200.000f    STATIC      CPU\n All    0180.c200.0010    STATIC      CPU\nTotal Mac Addresses for this criterion: 20\n",
+      "expected": {
+        "mac_table": {
+          "all": {
+            "0100.0ccc.cccc": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "0100.0ccc.cccd": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "0100.0ccc.ccce": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "0180.c200.0000": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "0180.c200.0001": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "0180.c200.0002": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "0180.c200.0003": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "0180.c200.0004": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "0180.c200.0005": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "0180.c200.0006": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "0180.c200.0007": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "0180.c200.0008": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "0180.c200.0009": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "0180.c200.000a": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "0180.c200.000b": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "0180.c200.000c": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "0180.c200.000d": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "0180.c200.000e": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "0180.c200.000f": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            },
+            "0180.c200.0010": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "CPU"
+              ]
+            }
+          }
+        },
+        "total_mac_addresses": 20
+      }
+    },
+    {
+      "name": "Unicast format with single and multiple protocol bindings",
+      "input": "Unicast Entries\n vlan   mac address     type        protocols               port\n-------+---------------+--------+---------------------+--------------------\n   2    701f.53ff.4de2   dynamic ip                    Port-channel1\n   2    cc98.91ff.cbc2   dynamic ip,ipx                Port-channel1\n",
+      "expected": {
+        "mac_table": {
+          "2": {
+            "701f.53ff.4de2": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel1"
+              ],
+              "protocols": [
+                "ip"
+              ]
+            },
+            "cc98.91ff.cbc2": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Port-channel1"
+              ],
+              "protocols": [
+                "ip",
+                "ipx"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Standard format with blank lines between entries, all dynamic on single interface, high VLAN",
+      "input": "          Mac Address Table\n\n-------------------------------------------\n\n\n\nVlan    Mac Address       Type        Ports\n\n----    -----------       --------    -----\n\n1000    0001.0000.0001    DYNAMIC     Gi3/0/3\n\n1000    0001.0000.0002    DYNAMIC     Gi3/0/3\n\n1000    0001.0000.0003    DYNAMIC     Gi3/0/3\n\n1000    0001.0000.0004    DYNAMIC     Gi3/0/3\n\n1000    0001.0000.0005    DYNAMIC     Gi3/0/3\n\n1000    0001.0000.0006    DYNAMIC     Gi3/0/3\n\n1000    0001.0000.0007    DYNAMIC     Gi3/0/3\n\n1000    0001.0000.0008    DYNAMIC     Gi3/0/3\n\n1000    0001.0000.0009    DYNAMIC     Gi3/0/3\n\n1000    0001.0000.000a    DYNAMIC     Gi3/0/3\n\nTotal Mac Addresses for this criterion: 10\n",
+      "expected": {
+        "mac_table": {
+          "1000": {
+            "0001.0000.0001": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet3/0/3"
+              ]
+            },
+            "0001.0000.0002": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet3/0/3"
+              ]
+            },
+            "0001.0000.0003": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet3/0/3"
+              ]
+            },
+            "0001.0000.0004": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet3/0/3"
+              ]
+            },
+            "0001.0000.0005": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet3/0/3"
+              ]
+            },
+            "0001.0000.0006": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet3/0/3"
+              ]
+            },
+            "0001.0000.0007": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet3/0/3"
+              ]
+            },
+            "0001.0000.0008": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet3/0/3"
+              ]
+            },
+            "0001.0000.0009": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet3/0/3"
+              ]
+            },
+            "0001.0000.000a": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "GigabitEthernet3/0/3"
+              ]
+            }
+          }
+        },
+        "total_mac_addresses": 10
+      }
+    },
+    {
+      "name": "Standard format with static and dynamic entries, Drop port, high VLAN numbers including 4003",
+      "input": "          Mac Address Table\n-------------------------------------------\n\nVlan    Mac Address       Type        Ports\n----    -----------       --------    -----\n2000    000c.290e.8a72    STATIC      Gi4/0/3\n2000    d824.bdbb.b7f9    STATIC      Gi4/0/3\n4003    d824.bdbb.b7f9    DYNAMIC     Drop\nTotal Mac Addresses for this criterion: 3\n",
+      "expected": {
+        "mac_table": {
+          "2000": {
+            "000c.290e.8a72": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "GigabitEthernet4/0/3"
+              ]
+            },
+            "d824.bdbb.b7f9": {
+              "kind": "unicast",
+              "type": "static",
+              "ports": [
+                "GigabitEthernet4/0/3"
+              ]
+            }
+          },
+          "4003": {
+            "d824.bdbb.b7f9": {
+              "kind": "unicast",
+              "type": "dynamic",
+              "ports": [
+                "Drop"
+              ]
+            }
+          }
+        },
+        "total_mac_addresses": 3
+      }
+    }
+  ]
+}

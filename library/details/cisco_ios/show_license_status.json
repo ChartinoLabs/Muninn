@@ -1,0 +1,140 @@
+{
+  "os": "cisco_ios",
+  "command": "show license status",
+  "schema": {
+    "name": "ShowLicenseStatusResult",
+    "fields": {
+      "license_types": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "LicenseTypeEntry",
+            "fields": {
+              "description": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "license_operations": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "LicenseOperationEntry",
+            "fields": {
+              "description": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "callhome_operations": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "CallHomeOperationEntry",
+            "fields": {
+              "description": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "device_status": {
+        "type": {
+          "name": "DeviceStatusEntry",
+          "fields": {
+            "credential_type": {
+              "type": "str",
+              "required": true
+            },
+            "credential_verification": {
+              "type": "str",
+              "required": true
+            },
+            "rehost_type": {
+              "type": "str",
+              "required": true
+            }
+          }
+        },
+        "required": false
+      },
+      "swift_url": {
+        "type": "str",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Catalyst switch with all license status sections including types, operations, call-home, device status, and SWIFT URL",
+      "input": "                License Type Supported\n        permanent  Non-expiring node locked license\n        extension  Expiring node locked license\n        evaluation Expiring non node locked license\n                License Operation Supported\n        install    Install license\n        clear      Clear license\n        annotate   Comment license\n        save       Save license\n        revoke     Revoke license\n        call-home  License call-home\n                Call-home Operation Supported\n        show pak   Display license pak via call-home\n        install    Install license via call-home\n        revoke     Revoke license via call-home\n        resend     Fetch license via call-home\n                Device status\n        Device Credential type: DEVICE\n        Device Credential Verification: PASS\n        Rehost Type: DC_OR_IC\n\nSWIFT url status\n        Swift URL set to default value : https://tools.cisco.com/SWIFT/Licensing\n",
+      "expected": {
+        "license_types": {
+          "permanent": {
+            "description": "Non-expiring node locked license"
+          },
+          "extension": {
+            "description": "Expiring node locked license"
+          },
+          "evaluation": {
+            "description": "Expiring non node locked license"
+          }
+        },
+        "license_operations": {
+          "install": {
+            "description": "Install license"
+          },
+          "clear": {
+            "description": "Clear license"
+          },
+          "annotate": {
+            "description": "Comment license"
+          },
+          "save": {
+            "description": "Save license"
+          },
+          "revoke": {
+            "description": "Revoke license"
+          },
+          "call-home": {
+            "description": "License call-home"
+          }
+        },
+        "callhome_operations": {
+          "show pak": {
+            "description": "Display license pak via call-home"
+          },
+          "install": {
+            "description": "Install license via call-home"
+          },
+          "revoke": {
+            "description": "Revoke license via call-home"
+          },
+          "resend": {
+            "description": "Fetch license via call-home"
+          }
+        },
+        "device_status": {
+          "credential_type": "DEVICE",
+          "credential_verification": "PASS",
+          "rehost_type": "DC_OR_IC"
+        },
+        "swift_url": "https://tools.cisco.com/SWIFT/Licensing"
+      }
+    }
+  ]
+}

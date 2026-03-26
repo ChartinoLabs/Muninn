@@ -1,0 +1,279 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show platform software infractructure inject",
+  "schema": {
+    "name": "ShowPlatformSoftwareInfractructureInjectResult",
+    "fields": {
+      "l3_statistics": {
+        "type": {
+          "name": "L3Statistics",
+          "fields": {
+            "total_inject": {
+              "type": "int",
+              "required": true
+            },
+            "failed_inject": {
+              "type": "int",
+              "required": true
+            },
+            "sent": {
+              "type": "int",
+              "required": true
+            },
+            "prerouted": {
+              "type": "int",
+              "required": true
+            },
+            "non_cef_capable": {
+              "type": "int",
+              "required": true
+            },
+            "non_unicast": {
+              "type": "int",
+              "required": true
+            },
+            "ip": {
+              "type": "int",
+              "required": true
+            },
+            "ipv6": {
+              "type": "int",
+              "required": true
+            },
+            "mpls": {
+              "type": "int",
+              "required": true
+            },
+            "non_ip_tunnel": {
+              "type": "int",
+              "required": true
+            },
+            "udlr_tunnel": {
+              "type": "int",
+              "required": true
+            },
+            "p2mp_replicated_mcast": {
+              "type": "int",
+              "required": true
+            },
+            "non_ip_fastswitched_over_tunnel": {
+              "type": "int",
+              "required": true
+            },
+            "legacy_pak_path": {
+              "type": "int",
+              "required": true
+            },
+            "other_packet": {
+              "type": "int",
+              "required": true
+            },
+            "ip_fragmented": {
+              "type": "int",
+              "required": true
+            },
+            "normal": {
+              "type": "int",
+              "required": true
+            },
+            "nexthop": {
+              "type": "int",
+              "required": true
+            },
+            "adjacency": {
+              "type": "int",
+              "required": true
+            },
+            "feature": {
+              "type": "int",
+              "required": true
+            },
+            "undefined": {
+              "type": "int",
+              "required": true
+            },
+            "pak_find_no_adj": {
+              "type": "int",
+              "required": true
+            },
+            "no_adj_id": {
+              "type": "int",
+              "required": true
+            },
+            "sb_alloc": {
+              "type": "int",
+              "required": true
+            },
+            "sb_local": {
+              "type": "int",
+              "required": true
+            },
+            "p2mcast_failed_count": {
+              "type": "int",
+              "required": true
+            },
+            "p2mcast_enqueue_fail": {
+              "type": "int",
+              "required": true
+            },
+            "unicast_dhc": {
+              "type": "int",
+              "required": true
+            },
+            "mobile_ip": {
+              "type": "int",
+              "required": true
+            },
+            "ipv6_na": {
+              "type": "int",
+              "required": true
+            },
+            "ipv6_ns": {
+              "type": "int",
+              "required": true
+            },
+            "transport_failed_cases": {
+              "type": "int",
+              "required": true
+            },
+            "grow_packet_buffer": {
+              "type": "int",
+              "required": true
+            },
+            "cant_l3_inject_pkts": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "per_feature_statistics": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": "int"
+        },
+        "required": false
+      },
+      "l2_statistics": {
+        "type": {
+          "name": "L2Statistics",
+          "fields": {
+            "total_l2_inject": {
+              "type": "int",
+              "required": true
+            },
+            "failed_l2_inject": {
+              "type": "int",
+              "required": true
+            },
+            "total_bd_inject": {
+              "type": "int",
+              "required": true
+            },
+            "failed_bd_inject": {
+              "type": "int",
+              "required": true
+            },
+            "total_bd_local_inject": {
+              "type": "int",
+              "required": true
+            },
+            "failed_bd_local_inject": {
+              "type": "int",
+              "required": true
+            },
+            "total_efp_inject": {
+              "type": "int",
+              "required": true
+            },
+            "failed_efp_inject": {
+              "type": "int",
+              "required": true
+            },
+            "total_vlan_inject": {
+              "type": "int",
+              "required": true
+            },
+            "failed_vlan_inject": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with L3, per-feature, and L2 injection statistics",
+      "input": "Statistics for L3 injected packets:\n 3524142 total inject pak, 0 failed\n 0 sent, 0 prerouted\n 0 non-CEF capable, 0 non-unicast\n 135 IP, 12147 IPv6\n 0 MPLS, 0 Non-IP Tunnel\n 0 UDLR tunnel, 0 P2MP replicated mcast\n 0 Non-IP Fastswitched over Tunnel, 3524007 legacy pak path\n 0 Other packet\n 0 IP fragmented\n 135 normal, 0 nexthop\n 0 adjacency, 0 feature\n 0 undefined\n 0 pak find no adj, 0 no adj-id\n 1023352 sb alloc, 135 sb local\n 0 p2mcast failed count 0 p2mcast enqueue fail\n 0 unicast dhc\n 0 mobile ip\n 0 IPv6 NA\n 0 IPv6 NS\n 0 Transport failed cases\n 0 Grow packet buffer\n 0 Cant-l3-inject-pkts\n per feature packet inject statistics\n 0 Feature multicast\n 0 Feature Edge Switching Service\n 0 Feature Session Border Controller\n 0 Feature interrupt level\n 0 Feature use outbound interface\n 0 Feature interrupt level with OCE\n 0 Feature ICMPv6 error message\n 0 Feature Session Border Controller media packet injection\n 0 Feature Tunnel Ethernet over GRE\n 0 Feature Secure Socket Layer Virtual Private Network\n 0 Feature EPC Wireshark injecting packets\n 0 Feature multicast overlay replication\n\nStatistics for L2 injected packets:\n 28324 total L2 inject pak, 0 failed\n 28324 total BD  inject pak, 0 failed\n 0 total BD-local  inject pak, 0 failed\n 0 total EFP inject pak, 0 failed\n 0 total VLAN inject pak, 0 failed\n",
+      "expected": {
+        "l3_statistics": {
+          "total_inject": 3524142,
+          "failed_inject": 0,
+          "sent": 0,
+          "prerouted": 0,
+          "non_cef_capable": 0,
+          "non_unicast": 0,
+          "ip": 135,
+          "ipv6": 12147,
+          "mpls": 0,
+          "non_ip_tunnel": 0,
+          "udlr_tunnel": 0,
+          "p2mp_replicated_mcast": 0,
+          "non_ip_fastswitched_over_tunnel": 0,
+          "legacy_pak_path": 3524007,
+          "other_packet": 0,
+          "ip_fragmented": 0,
+          "normal": 135,
+          "nexthop": 0,
+          "adjacency": 0,
+          "feature": 0,
+          "undefined": 0,
+          "pak_find_no_adj": 0,
+          "no_adj_id": 0,
+          "sb_alloc": 1023352,
+          "sb_local": 135,
+          "p2mcast_failed_count": 0,
+          "p2mcast_enqueue_fail": 0,
+          "unicast_dhc": 0,
+          "mobile_ip": 0,
+          "ipv6_na": 0,
+          "ipv6_ns": 0,
+          "transport_failed_cases": 0,
+          "grow_packet_buffer": 0,
+          "cant_l3_inject_pkts": 0
+        },
+        "per_feature_statistics": {
+          "feature_multicast": 0,
+          "feature_edge_switching_service": 0,
+          "feature_session_border_controller": 0,
+          "feature_interrupt_level": 0,
+          "feature_use_outbound_interface": 0,
+          "feature_interrupt_level_with_oce": 0,
+          "feature_icmpv6_error_message": 0,
+          "feature_session_border_controller_media_packet_injection": 0,
+          "feature_tunnel_ethernet_over_gre": 0,
+          "feature_secure_socket_layer_virtual_private_network": 0,
+          "feature_epc_wireshark_injecting_packets": 0,
+          "feature_multicast_overlay_replication": 0
+        },
+        "l2_statistics": {
+          "total_l2_inject": 28324,
+          "failed_l2_inject": 0,
+          "total_bd_inject": 28324,
+          "failed_bd_inject": 0,
+          "total_bd_local_inject": 0,
+          "failed_bd_local_inject": 0,
+          "total_efp_inject": 0,
+          "failed_efp_inject": 0,
+          "total_vlan_inject": 0,
+          "failed_vlan_inject": 0
+        }
+      }
+    }
+  ]
+}

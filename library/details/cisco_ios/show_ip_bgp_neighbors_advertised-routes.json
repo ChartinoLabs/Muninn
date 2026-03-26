@@ -1,0 +1,106 @@
+{
+  "os": "cisco_ios",
+  "command": "show ip bgp neighbors advertised-routes",
+  "schema": {
+    "name": "ShowIpBgpNeighborsAdvertisedRoutesResult",
+    "fields": {
+      "local_router_id": {
+        "type": "str",
+        "required": true
+      },
+      "table_version": {
+        "type": "int",
+        "required": true
+      },
+      "routes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RouteEntry",
+            "fields": {
+              "status_codes": {
+                "type": "str",
+                "required": true
+              },
+              "next_hop": {
+                "type": "str",
+                "required": true
+              },
+              "metric": {
+                "type": "int",
+                "required": false
+              },
+              "local_pref": {
+                "type": "int",
+                "required": false
+              },
+              "weight": {
+                "type": "int",
+                "required": true
+              },
+              "path": {
+                "type": "str",
+                "required": true
+              },
+              "origin": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_prefixes": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic BGP advertised routes with multiple prefixes and varying attributes",
+      "input": "BGP table version is 128, local router ID is 10.0.0.1\nStatus codes: s suppressed, d damped, h history, * valid, > best, i - internal,\n              r RIB-failure, S Stale\nOrigin codes: i - IGP, e - EGP, ? - incomplete\n\n   Network          Next Hop            Metric LocPrf Weight Path\n*> 10.0.0.0/24      0.0.0.0                  0         32768 i\n*> 10.1.0.0/24      0.0.0.0                  0         32768 i\n*> 172.16.0.0/16    10.0.0.2               100    100      0 65001 i\n*> 192.168.1.0/24   10.0.0.3                                0 65002 65003 ?\n\nTotal number of prefixes 4\n",
+      "expected": {
+        "local_router_id": "10.0.0.1",
+        "routes": {
+          "10.0.0.0/24": {
+            "metric": 0,
+            "next_hop": "0.0.0.0",
+            "origin": "i",
+            "path": "",
+            "status_codes": "*>",
+            "weight": 32768
+          },
+          "10.1.0.0/24": {
+            "metric": 0,
+            "next_hop": "0.0.0.0",
+            "origin": "i",
+            "path": "",
+            "status_codes": "*>",
+            "weight": 32768
+          },
+          "172.16.0.0/16": {
+            "local_pref": 100,
+            "metric": 100,
+            "next_hop": "10.0.0.2",
+            "origin": "i",
+            "path": "65001",
+            "status_codes": "*>",
+            "weight": 0
+          },
+          "192.168.1.0/24": {
+            "next_hop": "10.0.0.3",
+            "origin": "?",
+            "path": "65002 65003",
+            "status_codes": "*>",
+            "weight": 0
+          }
+        },
+        "table_version": 128,
+        "total_prefixes": 4
+      }
+    }
+  ]
+}

@@ -1,0 +1,318 @@
+{
+  "os": "cisco_ios",
+  "command": "show ip route summary",
+  "schema": {
+    "name": "ShowIpRouteSummaryResult",
+    "fields": {
+      "routing_table": {
+        "type": {
+          "name": "RoutingTableInfo",
+          "fields": {
+            "name": {
+              "type": "str",
+              "required": false
+            },
+            "maximum_paths": {
+              "type": "int",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "route_sources": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RouteSourceEntry",
+            "fields": {
+              "networks": {
+                "type": "int",
+                "required": true
+              },
+              "subnets": {
+                "type": "int",
+                "required": false
+              },
+              "replicates": {
+                "type": "int",
+                "required": false
+              },
+              "overhead": {
+                "type": "int",
+                "required": false
+              },
+              "memory_bytes": {
+                "type": "int",
+                "required": true
+              },
+              "ospf": {
+                "type": {
+                  "name": "OspfSubdetail",
+                  "fields": {
+                    "intra_area": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "inter_area": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "external_1": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "external_2": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "nssa_external_1": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "nssa_external_2": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "bgp": {
+                "type": {
+                  "name": "BgpSubdetail",
+                  "fields": {
+                    "external": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "internal": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "local": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "isis": {
+                "type": {
+                  "name": "IsisSubdetail",
+                  "fields": {
+                    "level_1": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "level_2": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "inter_area": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total": {
+        "type": {
+          "name": "TotalEntry",
+          "fields": {
+            "networks": {
+              "type": "int",
+              "required": true
+            },
+            "subnets": {
+              "type": "int",
+              "required": false
+            },
+            "replicates": {
+              "type": "int",
+              "required": false
+            },
+            "overhead": {
+              "type": "int",
+              "required": false
+            },
+            "memory_bytes": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with routing table info, EIGRP, and OSPF sub-details",
+      "input": "IP routing table name is default (0x0)\nIP routing table maximum-paths is 32\nRoute Source    Networks    Subnets     Replicates  Overhead    Memory (bytes)\nconnected       0           41          0           3936        11808\nstatic          0           3           0           288         864\napplication     0           0           0           0           0\nnhrp            0           0           0           0           0\neigrp 65329     3           3013        0           481920      868608\nospf 20         1           0           0           384         292\n  Intra-area: 0 Inter-area: 0 External-1: 0 External-2: 1\n  NSSA External-1: 0 NSSA External-2: 0\ninternal        24                                              240672\nTotal           28          3057        0           486528      1122244\n",
+      "expected": {
+        "route_sources": {
+          "application": {
+            "memory_bytes": 0,
+            "networks": 0,
+            "overhead": 0,
+            "replicates": 0,
+            "subnets": 0
+          },
+          "connected": {
+            "memory_bytes": 11808,
+            "networks": 0,
+            "overhead": 3936,
+            "replicates": 0,
+            "subnets": 41
+          },
+          "eigrp 65329": {
+            "memory_bytes": 868608,
+            "networks": 3,
+            "overhead": 481920,
+            "replicates": 0,
+            "subnets": 3013
+          },
+          "internal": {
+            "memory_bytes": 240672,
+            "networks": 24
+          },
+          "nhrp": {
+            "memory_bytes": 0,
+            "networks": 0,
+            "overhead": 0,
+            "replicates": 0,
+            "subnets": 0
+          },
+          "ospf 20": {
+            "memory_bytes": 292,
+            "networks": 1,
+            "ospf": {
+              "external_1": 0,
+              "external_2": 1,
+              "inter_area": 0,
+              "intra_area": 0,
+              "nssa_external_1": 0,
+              "nssa_external_2": 0
+            },
+            "overhead": 384,
+            "replicates": 0,
+            "subnets": 0
+          },
+          "static": {
+            "memory_bytes": 864,
+            "networks": 0,
+            "overhead": 288,
+            "replicates": 0,
+            "subnets": 3
+          }
+        },
+        "routing_table": {
+          "maximum_paths": 32,
+          "name": "default"
+        },
+        "total": {
+          "memory_bytes": 1122244,
+          "networks": 28,
+          "overhead": 486528,
+          "replicates": 0,
+          "subnets": 3057
+        }
+      }
+    },
+    {
+      "name": "Output with BGP, ISIS, and OSPF sub-details and no routing table header",
+      "input": "Route Source    Networks    Subnets     Replicates  Overhead    Memory (bytes)\nconnected       0           6           0           408         1080\nstatic          0           0           0           0           0\napplication     0           0           0           0           0\neigrp 100       0           0           0           0           0\nbgp 65001       0           0           0           0           0\n  External: 0 Internal: 0 Local: 0\nisis test1      0           0           0           0           0\n  Level 1: 0 Level 2: 0 Inter-area: 0\nospf 188        0           0           0           0           0\n  Intra-area: 0 Inter-area: 0 External-1: 0 External-2: 0\n  NSSA External-1: 0 NSSA External-2: 0\ninternal        2                                               920\nTotal           2           6           0           408         2000\n",
+      "expected": {
+        "route_sources": {
+          "application": {
+            "memory_bytes": 0,
+            "networks": 0,
+            "overhead": 0,
+            "replicates": 0,
+            "subnets": 0
+          },
+          "bgp 65001": {
+            "bgp": {
+              "external": 0,
+              "internal": 0,
+              "local": 0
+            },
+            "memory_bytes": 0,
+            "networks": 0,
+            "overhead": 0,
+            "replicates": 0,
+            "subnets": 0
+          },
+          "connected": {
+            "memory_bytes": 1080,
+            "networks": 0,
+            "overhead": 408,
+            "replicates": 0,
+            "subnets": 6
+          },
+          "eigrp 100": {
+            "memory_bytes": 0,
+            "networks": 0,
+            "overhead": 0,
+            "replicates": 0,
+            "subnets": 0
+          },
+          "internal": {
+            "memory_bytes": 920,
+            "networks": 2
+          },
+          "isis test1": {
+            "isis": {
+              "inter_area": 0,
+              "level_1": 0,
+              "level_2": 0
+            },
+            "memory_bytes": 0,
+            "networks": 0,
+            "overhead": 0,
+            "replicates": 0,
+            "subnets": 0
+          },
+          "ospf 188": {
+            "memory_bytes": 0,
+            "networks": 0,
+            "ospf": {
+              "external_1": 0,
+              "external_2": 0,
+              "inter_area": 0,
+              "intra_area": 0,
+              "nssa_external_1": 0,
+              "nssa_external_2": 0
+            },
+            "overhead": 0,
+            "replicates": 0,
+            "subnets": 0
+          },
+          "static": {
+            "memory_bytes": 0,
+            "networks": 0,
+            "overhead": 0,
+            "replicates": 0,
+            "subnets": 0
+          }
+        },
+        "total": {
+          "memory_bytes": 2000,
+          "networks": 2,
+          "overhead": 408,
+          "replicates": 0,
+          "subnets": 6
+        }
+      }
+    }
+  ]
+}

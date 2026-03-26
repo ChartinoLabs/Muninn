@@ -1,0 +1,38 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show redundancy config-sync failures mcl",
+  "schema": {
+    "name": "ShowRedundancyConfigSyncFailuresMclResult",
+    "fields": {
+      "failures": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Empty MCL list with no config-sync failures",
+      "input": "Mismatched Command List\n-----------------------\n\nThe list is Empty\n",
+      "expected": {
+        "failures": []
+      }
+    },
+    {
+      "name": "MCL list with config-sync failure entries",
+      "input": "Mismatched Command List\n-----------------------\n00:06:31: Config Sync: Starting lines from MCL file:\ninterface GigabitEthernet7/7\n! <submode> \"interface\"\n- ip address 192.0.2.0 255.255.255.0\n! </submode> \"interface\"\n",
+      "expected": {
+        "failures": [
+          "00:06:31: Config Sync: Starting lines from MCL file:",
+          "interface GigabitEthernet7/7",
+          "! <submode> \"interface\"",
+          "- ip address 192.0.2.0 255.255.255.0",
+          "! </submode> \"interface\""
+        ]
+      }
+    }
+  ]
+}

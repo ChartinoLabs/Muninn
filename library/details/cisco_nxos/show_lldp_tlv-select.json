@@ -1,0 +1,36 @@
+{
+  "os": "cisco_nxos",
+  "command": "show lldp tlv-select",
+  "schema": {
+    "name": "ShowLldpTlvSelectResult",
+    "fields": {
+      "suppress_tlv_advertisement": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": "bool"
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Show lldp tlv-select output with advertised TLVs",
+      "input": "management-address-v4\nmanagement-address-v6\nport-description\nport-vlan\npower-management\nsystem-capabilities\nsystem-description\nsystem-name\ndcbxp\n",
+      "expected": {
+        "suppress_tlv_advertisement": {
+          "port_description": false,
+          "system_name": false,
+          "system_description": false,
+          "system_capabilities": false,
+          "management_address_v4": false,
+          "management_address_v6": false,
+          "power_management": false,
+          "port_vlan": false,
+          "dcbxp": false
+        }
+      }
+    }
+  ]
+}

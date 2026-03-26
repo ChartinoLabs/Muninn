@@ -1,0 +1,853 @@
+{
+  "os": "cisco_nxos",
+  "command": "show ip bgp summary",
+  "schema": {
+    "name": "ShowIpBgpSummaryResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfEntry",
+            "fields": {
+              "address_families": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "AddressFamilyEntry",
+                    "fields": {
+                      "router_id": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "local_as": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "table_version": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "config_peers": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "capable_peers": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "memory": {
+                        "type": {
+                          "name": "MemoryInfo",
+                          "fields": {
+                            "network_entries": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "paths": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "bytes_used": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "attribute_entries": {
+                              "type": {
+                                "name": "BracketEntries",
+                                "fields": {
+                                  "count": {
+                                    "type": "int",
+                                    "required": true
+                                  },
+                                  "bytes": {
+                                    "type": "int",
+                                    "required": true
+                                  }
+                                }
+                              },
+                              "required": true
+                            },
+                            "as_path_entries": {
+                              "type": {
+                                "type": "ref",
+                                "name": "BracketEntries"
+                              },
+                              "required": true
+                            },
+                            "community_entries": {
+                              "type": {
+                                "type": "ref",
+                                "name": "BracketEntries"
+                              },
+                              "required": true
+                            },
+                            "clusterlist_entries": {
+                              "type": {
+                                "type": "ref",
+                                "name": "BracketEntries"
+                              },
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": true
+                      },
+                      "dampening": {
+                        "type": {
+                          "name": "DampeningInfo",
+                          "fields": {
+                            "history_paths": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "dampened_paths": {
+                              "type": "int",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "received_paths": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "neighbors": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "NeighborEntry",
+                            "fields": {
+                              "version": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "remote_as": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "msg_rcvd": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "msg_sent": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "tbl_ver": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "in_queue": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "out_queue": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "up_down": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "state_pfxrcd": {
+                                "type": "str",
+                                "required": true
+                              }
+                            }
+                          }
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Single VRF/AF with many neighbors, wrapped neighbor line, various states including Idle and Idle (Admin)",
+      "input": "BGP summary information for VRF default, address family IPv4 Multicast\nBGP router identifier 2.2.2.3, local AS number 102\nBGP table version is 5, IPv4 Multicast config peers 2, capable peers 0\n1 network entries and 1 paths using 104 bytes of memory\nBGP attribute entries [1/124], BGP AS path entries [0/0]\nBGP community entries [0/0], BGP clusterlist entries [0/0]\nNeighbor V AS MsgRcvd MsgSent TblVer InQ OutQ Up/Down State/PfxRcd\n10.0.0.100 4 64497 0 0 0 0 0 03:20:10 Idle\n192.168.1.3 4 0 0 0 0 0 0 01:51:38 Idle\n10.0.0.1        4        65000 2746767 2396274 512185206    0    0 3w0d       558720\n10.0.0.2        4        65001 2855873 2409742 512185206    0    0 3w0d       558720\n10.0.0.3        4        65002  695143  689871 512185203    0    0 1y10w           0\n10.0.0.4        4        65003 1030294 1220041 512185206    0    0 1y50w        1351\n10.0.0.5        4        65004 26552304 14931352 512185206    0    0 19w5d      558720\n10.0.0.6        4        65005 26532908 14931123 512185206    0    0 19w5d      558720\n10.0.0.7        4        65006 12245684 9181569 512185203    0    0 1y10w          82\n10.0.0.8        4        65007 12250936 9181571 512185203    0    0 1y10w          82\n10.0.0.9        4        65008  222146 14368489 512185203    0    0 22w0d           0\n10.0.0.10       4        65009 26930508  942614 512185203    0    0 1y10w     Idle (Admin)\n10.0.0.11       4        65010\n                               2655204 14931352 512185206   0    0 1w5d      4452\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "address_families": {
+              "IPv4 Multicast": {
+                "router_id": "2.2.2.3",
+                "local_as": "102",
+                "table_version": 5,
+                "config_peers": 2,
+                "capable_peers": 0,
+                "memory": {
+                  "network_entries": 1,
+                  "paths": 1,
+                  "bytes_used": 104,
+                  "attribute_entries": {
+                    "count": 1,
+                    "bytes": 124
+                  },
+                  "as_path_entries": {
+                    "count": 0,
+                    "bytes": 0
+                  },
+                  "community_entries": {
+                    "count": 0,
+                    "bytes": 0
+                  },
+                  "clusterlist_entries": {
+                    "count": 0,
+                    "bytes": 0
+                  }
+                },
+                "neighbors": {
+                  "10.0.0.100": {
+                    "version": 4,
+                    "remote_as": "64497",
+                    "msg_rcvd": 0,
+                    "msg_sent": 0,
+                    "tbl_ver": 0,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "03:20:10",
+                    "state_pfxrcd": "Idle"
+                  },
+                  "192.168.1.3": {
+                    "version": 4,
+                    "remote_as": "0",
+                    "msg_rcvd": 0,
+                    "msg_sent": 0,
+                    "tbl_ver": 0,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "01:51:38",
+                    "state_pfxrcd": "Idle"
+                  },
+                  "10.0.0.1": {
+                    "version": 4,
+                    "remote_as": "65000",
+                    "msg_rcvd": 2746767,
+                    "msg_sent": 2396274,
+                    "tbl_ver": 512185206,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "3w0d",
+                    "state_pfxrcd": "558720"
+                  },
+                  "10.0.0.2": {
+                    "version": 4,
+                    "remote_as": "65001",
+                    "msg_rcvd": 2855873,
+                    "msg_sent": 2409742,
+                    "tbl_ver": 512185206,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "3w0d",
+                    "state_pfxrcd": "558720"
+                  },
+                  "10.0.0.3": {
+                    "version": 4,
+                    "remote_as": "65002",
+                    "msg_rcvd": 695143,
+                    "msg_sent": 689871,
+                    "tbl_ver": 512185203,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "1y10w",
+                    "state_pfxrcd": "0"
+                  },
+                  "10.0.0.4": {
+                    "version": 4,
+                    "remote_as": "65003",
+                    "msg_rcvd": 1030294,
+                    "msg_sent": 1220041,
+                    "tbl_ver": 512185206,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "1y50w",
+                    "state_pfxrcd": "1351"
+                  },
+                  "10.0.0.5": {
+                    "version": 4,
+                    "remote_as": "65004",
+                    "msg_rcvd": 26552304,
+                    "msg_sent": 14931352,
+                    "tbl_ver": 512185206,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "19w5d",
+                    "state_pfxrcd": "558720"
+                  },
+                  "10.0.0.6": {
+                    "version": 4,
+                    "remote_as": "65005",
+                    "msg_rcvd": 26532908,
+                    "msg_sent": 14931123,
+                    "tbl_ver": 512185206,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "19w5d",
+                    "state_pfxrcd": "558720"
+                  },
+                  "10.0.0.7": {
+                    "version": 4,
+                    "remote_as": "65006",
+                    "msg_rcvd": 12245684,
+                    "msg_sent": 9181569,
+                    "tbl_ver": 512185203,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "1y10w",
+                    "state_pfxrcd": "82"
+                  },
+                  "10.0.0.8": {
+                    "version": 4,
+                    "remote_as": "65007",
+                    "msg_rcvd": 12250936,
+                    "msg_sent": 9181571,
+                    "tbl_ver": 512185203,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "1y10w",
+                    "state_pfxrcd": "82"
+                  },
+                  "10.0.0.9": {
+                    "version": 4,
+                    "remote_as": "65008",
+                    "msg_rcvd": 222146,
+                    "msg_sent": 14368489,
+                    "tbl_ver": 512185203,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "22w0d",
+                    "state_pfxrcd": "0"
+                  },
+                  "10.0.0.10": {
+                    "version": 4,
+                    "remote_as": "65009",
+                    "msg_rcvd": 26930508,
+                    "msg_sent": 942614,
+                    "tbl_ver": 512185203,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "1y10w",
+                    "state_pfxrcd": "Idle (Admin)"
+                  },
+                  "10.0.0.11": {
+                    "version": 4,
+                    "remote_as": "65010",
+                    "msg_rcvd": 2655204,
+                    "msg_sent": 14931352,
+                    "tbl_ver": 512185206,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "1w5d",
+                    "state_pfxrcd": "4452"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Multiple VRFs and address families with IPv6 wrapped neighbor, Shut (Admin) state, empty AF sections",
+      "input": "BGP summary information for VRF VRF1, address family IPv4 Unicast\nBGP router identifier 10.64.4.4, local AS number 100\nBGP table version is 40, IPv4 Unicast config peers 1, capable peers 0\n5 network entries and 5 paths using 620 bytes of memory\nBGP attribute entries [3/384], BGP AS path entries [0/0]\nBGP community entries [0/0], BGP clusterlist entries [1/4]\nDampening configured, 0 history paths, 0 dampened paths\n\nNeighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd\n10.16.2.10        4     0       0       0        0    0    0     5w6d Idle\n\nBGP summary information for VRF VRF1, address family IPv6 Unicast\n\nBGP summary information for VRF default, address family IPv4 Unicast\nBGP router identifier 10.4.1.1, local AS number 100\nBGP table version is 2, IPv4 Unicast config peers 1, capable peers 0\n0 network entries and 0 paths using 0 bytes of memory\nBGP attribute entries [0/0], BGP AS path entries [0/0]\nBGP community entries [0/0], BGP clusterlist entries [1/4]\nDampening configured, 0 history paths, 0 dampened paths\n\nNeighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd\n10.16.2.5         4   200       0       0        0    0    0     5w6d Shut (Admin)\n2001:db8:8191:506d:5::5\n\t\t3   200       0       0        0    0    0     5w5d Shut (Admin)\n\nBGP summary information for VRF default, address family IPv6 Unicast\n\nBGP summary information for VRF default, address family VPNv4 Unicast\nBGP router identifier 10.4.1.1, local AS number 100\nBGP table version is 53, VPNv4 Unicast config peers 1, capable peers 1\n5 network entries and 5 paths using 620 bytes of memory\nBGP attribute entries [1/128], BGP AS path entries [0/0]\nBGP community entries [0/0], BGP clusterlist entries [1/4]\n\nNeighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd\n10.16.2.2         4   100  108554  108566       53    0    0     5w6d 1\n\nBGP summary information for VRF default, address family VPNv6 Unicast\nBGP router identifier 10.4.1.1, local AS number 100\nBGP table version is 45, VPNv6 Unicast config peers 1, capable peers 1\n4 network entries and 4 paths using 544 bytes of memory\nBGP attribute entries [1/128], BGP AS path entries [0/0]\nBGP community entries [0/0], BGP clusterlist entries [1/4]\n\nNeighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd\n10.16.2.2         4   100  108554  108566       45    0    0     5w6d 1\n\nBGP summary information for VRF default, address family IPv6 Label Unicast\n",
+      "expected": {
+        "vrfs": {
+          "VRF1": {
+            "address_families": {
+              "IPv4 Unicast": {
+                "router_id": "10.64.4.4",
+                "local_as": "100",
+                "table_version": 40,
+                "config_peers": 1,
+                "capable_peers": 0,
+                "memory": {
+                  "network_entries": 5,
+                  "paths": 5,
+                  "bytes_used": 620,
+                  "attribute_entries": {
+                    "count": 3,
+                    "bytes": 384
+                  },
+                  "as_path_entries": {
+                    "count": 0,
+                    "bytes": 0
+                  },
+                  "community_entries": {
+                    "count": 0,
+                    "bytes": 0
+                  },
+                  "clusterlist_entries": {
+                    "count": 1,
+                    "bytes": 4
+                  }
+                },
+                "dampening": {
+                  "history_paths": 0,
+                  "dampened_paths": 0
+                },
+                "neighbors": {
+                  "10.16.2.10": {
+                    "version": 4,
+                    "remote_as": "0",
+                    "msg_rcvd": 0,
+                    "msg_sent": 0,
+                    "tbl_ver": 0,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "5w6d",
+                    "state_pfxrcd": "Idle"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "address_families": {
+              "IPv4 Unicast": {
+                "router_id": "10.4.1.1",
+                "local_as": "100",
+                "table_version": 2,
+                "config_peers": 1,
+                "capable_peers": 0,
+                "memory": {
+                  "network_entries": 0,
+                  "paths": 0,
+                  "bytes_used": 0,
+                  "attribute_entries": {
+                    "count": 0,
+                    "bytes": 0
+                  },
+                  "as_path_entries": {
+                    "count": 0,
+                    "bytes": 0
+                  },
+                  "community_entries": {
+                    "count": 0,
+                    "bytes": 0
+                  },
+                  "clusterlist_entries": {
+                    "count": 1,
+                    "bytes": 4
+                  }
+                },
+                "dampening": {
+                  "history_paths": 0,
+                  "dampened_paths": 0
+                },
+                "neighbors": {
+                  "10.16.2.5": {
+                    "version": 4,
+                    "remote_as": "200",
+                    "msg_rcvd": 0,
+                    "msg_sent": 0,
+                    "tbl_ver": 0,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "5w6d",
+                    "state_pfxrcd": "Shut (Admin)"
+                  },
+                  "2001:db8:8191:506d:5::5": {
+                    "version": 3,
+                    "remote_as": "200",
+                    "msg_rcvd": 0,
+                    "msg_sent": 0,
+                    "tbl_ver": 0,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "5w5d",
+                    "state_pfxrcd": "Shut (Admin)"
+                  }
+                }
+              },
+              "VPNv4 Unicast": {
+                "router_id": "10.4.1.1",
+                "local_as": "100",
+                "table_version": 53,
+                "config_peers": 1,
+                "capable_peers": 1,
+                "memory": {
+                  "network_entries": 5,
+                  "paths": 5,
+                  "bytes_used": 620,
+                  "attribute_entries": {
+                    "count": 1,
+                    "bytes": 128
+                  },
+                  "as_path_entries": {
+                    "count": 0,
+                    "bytes": 0
+                  },
+                  "community_entries": {
+                    "count": 0,
+                    "bytes": 0
+                  },
+                  "clusterlist_entries": {
+                    "count": 1,
+                    "bytes": 4
+                  }
+                },
+                "neighbors": {
+                  "10.16.2.2": {
+                    "version": 4,
+                    "remote_as": "100",
+                    "msg_rcvd": 108554,
+                    "msg_sent": 108566,
+                    "tbl_ver": 53,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "5w6d",
+                    "state_pfxrcd": "1"
+                  }
+                }
+              },
+              "VPNv6 Unicast": {
+                "router_id": "10.4.1.1",
+                "local_as": "100",
+                "table_version": 45,
+                "config_peers": 1,
+                "capable_peers": 1,
+                "memory": {
+                  "network_entries": 4,
+                  "paths": 4,
+                  "bytes_used": 544,
+                  "attribute_entries": {
+                    "count": 1,
+                    "bytes": 128
+                  },
+                  "as_path_entries": {
+                    "count": 0,
+                    "bytes": 0
+                  },
+                  "community_entries": {
+                    "count": 0,
+                    "bytes": 0
+                  },
+                  "clusterlist_entries": {
+                    "count": 1,
+                    "bytes": 4
+                  }
+                },
+                "neighbors": {
+                  "10.16.2.2": {
+                    "version": 4,
+                    "remote_as": "100",
+                    "msg_rcvd": 108554,
+                    "msg_sent": 108566,
+                    "tbl_ver": 45,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "5w6d",
+                    "state_pfxrcd": "1"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Multiple AFs with dampening, received paths for soft reconfig, prompt line, IPv6 neighbors on single line",
+      "input": "pinxdt-n9kv-2# show bgp vrf all all summary\nBGP summary information for VRF ac, address family IPv4 Unicast\n\nBGP summary information for VRF default, address family IPv4 Unicast\nBGP router identifier 10.186.101.1, local AS number 333\nBGP table version is 25, IPv4 Unicast config peers 2, capable peers 2\n6 network entries and 11 paths using 1524 bytes of memory\nBGP attribute entries [3/468], BGP AS path entries [0/0]\nBGP community entries [1/32], BGP clusterlist entries [0/0]\n3 received paths for inbound soft reconfiguration\n3 identical, 0 modified, 0 filtered received paths using 0 bytes\n\nNeighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd\n10.186.0.2        4   333      17      15       25    0    0 00:08:22 3\n2001:db8:8b05::112       4   333      16      13       25    0    0 00:08:17 3\n\nBGP summary information for VRF default, address family IPv4 Multicast\nBGP router identifier 10.186.101.1, local AS number 333\nBGP table version is 19, IPv4 Multicast config peers 1, capable peers 1\n8 network entries and 8 paths using 1856 bytes of memory\nBGP attribute entries [2/312], BGP AS path entries [0/0]\nBGP community entries [1/32], BGP clusterlist entries [0/0]\n3 received paths for inbound soft reconfiguration\n3 identical, 0 modified, 0 filtered received paths using 0 bytes\n\nNeighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd\n10.186.0.2        4   333      17      15       19    0    0 00:08:22 3\n\nBGP summary information for VRF default, address family IPv6 Unicast\n\nBGP summary information for VRF default, address family IPv6 Multicast\n\nBGP summary information for VRF default, address family VPNv4 Unicast\n\nBGP summary information for VRF vpn1, address family IPv4 Unicast\n\nBGP summary information for VRF vpn1, address family IPv6 Unicast\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "address_families": {
+              "IPv4 Unicast": {
+                "router_id": "10.186.101.1",
+                "local_as": "333",
+                "table_version": 25,
+                "config_peers": 2,
+                "capable_peers": 2,
+                "memory": {
+                  "network_entries": 6,
+                  "paths": 11,
+                  "bytes_used": 1524,
+                  "attribute_entries": {
+                    "count": 3,
+                    "bytes": 468
+                  },
+                  "as_path_entries": {
+                    "count": 0,
+                    "bytes": 0
+                  },
+                  "community_entries": {
+                    "count": 1,
+                    "bytes": 32
+                  },
+                  "clusterlist_entries": {
+                    "count": 0,
+                    "bytes": 0
+                  }
+                },
+                "received_paths": 3,
+                "neighbors": {
+                  "10.186.0.2": {
+                    "version": 4,
+                    "remote_as": "333",
+                    "msg_rcvd": 17,
+                    "msg_sent": 15,
+                    "tbl_ver": 25,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "00:08:22",
+                    "state_pfxrcd": "3"
+                  },
+                  "2001:db8:8b05::112": {
+                    "version": 4,
+                    "remote_as": "333",
+                    "msg_rcvd": 16,
+                    "msg_sent": 13,
+                    "tbl_ver": 25,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "00:08:17",
+                    "state_pfxrcd": "3"
+                  }
+                }
+              },
+              "IPv4 Multicast": {
+                "router_id": "10.186.101.1",
+                "local_as": "333",
+                "table_version": 19,
+                "config_peers": 1,
+                "capable_peers": 1,
+                "memory": {
+                  "network_entries": 8,
+                  "paths": 8,
+                  "bytes_used": 1856,
+                  "attribute_entries": {
+                    "count": 2,
+                    "bytes": 312
+                  },
+                  "as_path_entries": {
+                    "count": 0,
+                    "bytes": 0
+                  },
+                  "community_entries": {
+                    "count": 1,
+                    "bytes": 32
+                  },
+                  "clusterlist_entries": {
+                    "count": 0,
+                    "bytes": 0
+                  }
+                },
+                "received_paths": 3,
+                "neighbors": {
+                  "10.186.0.2": {
+                    "version": 4,
+                    "remote_as": "333",
+                    "msg_rcvd": 17,
+                    "msg_sent": 15,
+                    "tbl_ver": 19,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "00:08:22",
+                    "state_pfxrcd": "3"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Large AS numbers causing line wrapping, IPv6 neighbors with address-only and triple-line wrapping, Active and Idle states",
+      "input": "show bgp vrf all all summary\n\nBGP summary information for VRF hgtref, address family IPv4 Unicast\nBGP router identifier 10.167.68.54, local AS number 65100\nBGP table version is 96073, IPv4 Unicast config peers 9, capable peers 9\n5312 network entries and 26682 paths using 3839280 bytes of memory\nBGP attribute entries [463/77784], BGP AS path entries [283/8242]\nBGP community entries [437/24892], BGP clusterlist entries [0/0]\n\nNeighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd\n10.167.68.50    4 65100   52705   44731    96073    0    0    6d13h 4951\n10.167.68.51    4 65100   52681   44731    96073    0    0    6d12h 4951\n10.167.68.55    4 65100   44729   44727    96073    0    0     2w1d 2\n10.167.70.123   4 4230103023\n                          44738   47436    96073    0    0     2w1d 2\n10.167.70.137   4 4230103023\n                          44738   47437    96073    0    0     2w1d 2\n\nBGP summary information for VRF hgtref, address family IPv6 Unicast\nBGP router identifier 10.167.68.54, local AS number 65100\nBGP table version is 13, IPv6 Unicast config peers 9, capable peers 7\n0 network entries and 0 paths using 0 bytes of memory\nBGP attribute entries [0/0], BGP AS path entries [0/0]\nBGP community entries [437/24892], BGP clusterlist entries [0/0]\n\nNeighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd\n1227:81:e000:50::\n                4 65100   44728   44731       13    0    0    6d13h 0\n1227:81:e000:50::1\n                4 65100   44728   44731       13    0    0    6d12h 0\n1227:81:e000:50::5\n                4 65100   44725   44727       13    0    0     2w1d 0\n1227:81:e000:54:2000::1\n                4 4130103024\n                              0       0        0    0    0     2w1d Active\n1227:81:e000:54:2000::3\n                4 4130103024\n                              0       0        0    0    0     2w1d Idle\n",
+      "expected": {
+        "vrfs": {
+          "hgtref": {
+            "address_families": {
+              "IPv4 Unicast": {
+                "router_id": "10.167.68.54",
+                "local_as": "65100",
+                "table_version": 96073,
+                "config_peers": 9,
+                "capable_peers": 9,
+                "memory": {
+                  "network_entries": 5312,
+                  "paths": 26682,
+                  "bytes_used": 3839280,
+                  "attribute_entries": {
+                    "count": 463,
+                    "bytes": 77784
+                  },
+                  "as_path_entries": {
+                    "count": 283,
+                    "bytes": 8242
+                  },
+                  "community_entries": {
+                    "count": 437,
+                    "bytes": 24892
+                  },
+                  "clusterlist_entries": {
+                    "count": 0,
+                    "bytes": 0
+                  }
+                },
+                "neighbors": {
+                  "10.167.68.50": {
+                    "version": 4,
+                    "remote_as": "65100",
+                    "msg_rcvd": 52705,
+                    "msg_sent": 44731,
+                    "tbl_ver": 96073,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "6d13h",
+                    "state_pfxrcd": "4951"
+                  },
+                  "10.167.68.51": {
+                    "version": 4,
+                    "remote_as": "65100",
+                    "msg_rcvd": 52681,
+                    "msg_sent": 44731,
+                    "tbl_ver": 96073,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "6d12h",
+                    "state_pfxrcd": "4951"
+                  },
+                  "10.167.68.55": {
+                    "version": 4,
+                    "remote_as": "65100",
+                    "msg_rcvd": 44729,
+                    "msg_sent": 44727,
+                    "tbl_ver": 96073,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "2w1d",
+                    "state_pfxrcd": "2"
+                  },
+                  "10.167.70.123": {
+                    "version": 4,
+                    "remote_as": "4230103023",
+                    "msg_rcvd": 44738,
+                    "msg_sent": 47436,
+                    "tbl_ver": 96073,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "2w1d",
+                    "state_pfxrcd": "2"
+                  },
+                  "10.167.70.137": {
+                    "version": 4,
+                    "remote_as": "4230103023",
+                    "msg_rcvd": 44738,
+                    "msg_sent": 47437,
+                    "tbl_ver": 96073,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "2w1d",
+                    "state_pfxrcd": "2"
+                  }
+                }
+              },
+              "IPv6 Unicast": {
+                "router_id": "10.167.68.54",
+                "local_as": "65100",
+                "table_version": 13,
+                "config_peers": 9,
+                "capable_peers": 7,
+                "memory": {
+                  "network_entries": 0,
+                  "paths": 0,
+                  "bytes_used": 0,
+                  "attribute_entries": {
+                    "count": 0,
+                    "bytes": 0
+                  },
+                  "as_path_entries": {
+                    "count": 0,
+                    "bytes": 0
+                  },
+                  "community_entries": {
+                    "count": 437,
+                    "bytes": 24892
+                  },
+                  "clusterlist_entries": {
+                    "count": 0,
+                    "bytes": 0
+                  }
+                },
+                "neighbors": {
+                  "1227:81:e000:50::": {
+                    "version": 4,
+                    "remote_as": "65100",
+                    "msg_rcvd": 44728,
+                    "msg_sent": 44731,
+                    "tbl_ver": 13,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "6d13h",
+                    "state_pfxrcd": "0"
+                  },
+                  "1227:81:e000:50::1": {
+                    "version": 4,
+                    "remote_as": "65100",
+                    "msg_rcvd": 44728,
+                    "msg_sent": 44731,
+                    "tbl_ver": 13,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "6d12h",
+                    "state_pfxrcd": "0"
+                  },
+                  "1227:81:e000:50::5": {
+                    "version": 4,
+                    "remote_as": "65100",
+                    "msg_rcvd": 44725,
+                    "msg_sent": 44727,
+                    "tbl_ver": 13,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "2w1d",
+                    "state_pfxrcd": "0"
+                  },
+                  "1227:81:e000:54:2000::1": {
+                    "version": 4,
+                    "remote_as": "4130103024",
+                    "msg_rcvd": 0,
+                    "msg_sent": 0,
+                    "tbl_ver": 0,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "2w1d",
+                    "state_pfxrcd": "Active"
+                  },
+                  "1227:81:e000:54:2000::3": {
+                    "version": 4,
+                    "remote_as": "4130103024",
+                    "msg_rcvd": 0,
+                    "msg_sent": 0,
+                    "tbl_ver": 0,
+                    "in_queue": 0,
+                    "out_queue": 0,
+                    "up_down": "2w1d",
+                    "state_pfxrcd": "Idle"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,175 @@
+{
+  "os": "cisco_ios",
+  "command": "show tacacs",
+  "schema": {
+    "name": "ShowTacacsResult",
+    "fields": {
+      "servers": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "TacacsServerEntry",
+            "fields": {
+              "server_port": {
+                "type": "int",
+                "required": true
+              },
+              "socket_opens": {
+                "type": "int",
+                "required": true
+              },
+              "socket_closes": {
+                "type": "int",
+                "required": true
+              },
+              "socket_aborts": {
+                "type": "int",
+                "required": true
+              },
+              "socket_errors": {
+                "type": "int",
+                "required": true
+              },
+              "socket_timeouts": {
+                "type": "int",
+                "required": true
+              },
+              "failed_connect_attempts": {
+                "type": "int",
+                "required": true
+              },
+              "total_packets_sent": {
+                "type": "int",
+                "required": true
+              },
+              "total_packets_recv": {
+                "type": "int",
+                "required": true
+              },
+              "server_name": {
+                "type": "str",
+                "required": false
+              },
+              "server_status": {
+                "type": "str",
+                "required": false
+              },
+              "authc_fail_count": {
+                "type": "int",
+                "required": false
+              },
+              "authz_fail_count": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with two TACACS+ servers",
+      "input": "Tacacs+ Server -  public  :\n            Server address: 10.1.1.140\n               Server port: 49\n              Socket opens:     138084\n             Socket closes:     137992\n             Socket aborts:          0\n             Socket errors:          0\n           Socket Timeouts:         59\n   Failed Connect Attempts:         52\n        Total Packets Sent:     147753\n        Total Packets Recv:     147693\n\n\nTacacs+ Server -  public  :\n            Server address: 10.2.1.140\n               Server port: 49\n              Socket opens:       2027\n             Socket closes:       2027\n             Socket aborts:          0\n             Socket errors:          0\n           Socket Timeouts:          0\n   Failed Connect Attempts:          2\n        Total Packets Sent:       2053\n        Total Packets Recv:       2053\n",
+      "expected": {
+        "servers": {
+          "10.1.1.140": {
+            "server_port": 49,
+            "socket_opens": 138084,
+            "socket_closes": 137992,
+            "socket_aborts": 0,
+            "socket_errors": 0,
+            "socket_timeouts": 59,
+            "failed_connect_attempts": 52,
+            "total_packets_sent": 147753,
+            "total_packets_recv": 147693
+          },
+          "10.2.1.140": {
+            "server_port": 49,
+            "socket_opens": 2027,
+            "socket_closes": 2027,
+            "socket_aborts": 0,
+            "socket_errors": 0,
+            "socket_timeouts": 0,
+            "failed_connect_attempts": 2,
+            "total_packets_sent": 2053,
+            "total_packets_recv": 2053
+          }
+        }
+      }
+    },
+    {
+      "name": "Output with named TACACS+ servers",
+      "input": "Tacacs+ Server -  public  :\n               Server name: TACACS_ABC\n            Server address: 10.1.1.141\n               Server port: 49\n              Socket opens:     146715\n             Socket closes:     146715\n             Socket aborts:          0\n             Socket errors:          0\n           Socket Timeouts:          0\n   Failed Connect Attempts:        114\n        Total Packets Sent:     166094\n        Total Packets Recv:     166094\n\n\nTacacs+ Server -  public  :\n               Server name: TACACS_XYZ\n            Server address: 10.2.1.141\n               Server port: 49\n              Socket opens:       2640\n             Socket closes:       2640\n             Socket aborts:          0\n             Socket errors:          0\n           Socket Timeouts:          0\n   Failed Connect Attempts:          0\n        Total Packets Sent:       2954\n        Total Packets Recv:       2953\n",
+      "expected": {
+        "servers": {
+          "10.1.1.141": {
+            "server_port": 49,
+            "socket_opens": 146715,
+            "socket_closes": 146715,
+            "socket_aborts": 0,
+            "socket_errors": 0,
+            "socket_timeouts": 0,
+            "failed_connect_attempts": 114,
+            "total_packets_sent": 166094,
+            "total_packets_recv": 166094,
+            "server_name": "TACACS_ABC"
+          },
+          "10.2.1.141": {
+            "server_port": 49,
+            "socket_opens": 2640,
+            "socket_closes": 2640,
+            "socket_aborts": 0,
+            "socket_errors": 0,
+            "socket_timeouts": 0,
+            "failed_connect_attempts": 0,
+            "total_packets_sent": 2954,
+            "total_packets_recv": 2953,
+            "server_name": "TACACS_XYZ"
+          }
+        }
+      }
+    },
+    {
+      "name": "Output with server status and authentication/authorization fail counts",
+      "input": "Tacacs+ Server -  public  :\n               Server name: TACACS_1\n            Server address: 10.20.30.1\n               Server port: 49\n              Socket opens:      21752\n             Socket closes:      21752\n             Socket aborts:          0\n             Socket errors:          0\n           Socket Timeouts:          0\n   Failed Connect Attempts:         52\n        Total Packets Sent:      23450\n        Total Packets Recv:      23439\n             Server Status: Alive\nContinous Authc fail count:          2\nContinous Authz fail count:          0\n\n\nTacacs+ Server -  public  :\n               Server name: TACACS_2\n            Server address: 10.20.30.2\n               Server port: 49\n              Socket opens:        169\n             Socket closes:        169\n             Socket aborts:          0\n             Socket errors:          0\n           Socket Timeouts:          0\n   Failed Connect Attempts:          0\n        Total Packets Sent:        174\n        Total Packets Recv:        174\n             Server Status: Alive\nContinous Authc fail count:          0\nContinous Authz fail count:          0\n",
+      "expected": {
+        "servers": {
+          "10.20.30.1": {
+            "server_port": 49,
+            "socket_opens": 21752,
+            "socket_closes": 21752,
+            "socket_aborts": 0,
+            "socket_errors": 0,
+            "socket_timeouts": 0,
+            "failed_connect_attempts": 52,
+            "total_packets_sent": 23450,
+            "total_packets_recv": 23439,
+            "server_name": "TACACS_1",
+            "server_status": "Alive",
+            "authc_fail_count": 2,
+            "authz_fail_count": 0
+          },
+          "10.20.30.2": {
+            "server_port": 49,
+            "socket_opens": 169,
+            "socket_closes": 169,
+            "socket_aborts": 0,
+            "socket_errors": 0,
+            "socket_timeouts": 0,
+            "failed_connect_attempts": 0,
+            "total_packets_sent": 174,
+            "total_packets_recv": 174,
+            "server_name": "TACACS_2",
+            "server_status": "Alive",
+            "authc_fail_count": 0,
+            "authz_fail_count": 0
+          }
+        }
+      }
+    }
+  ]
+}

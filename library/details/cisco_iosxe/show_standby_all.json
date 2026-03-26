@@ -1,0 +1,271 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show standby all",
+  "schema": {
+    "name": "ShowStandbyAllResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "HsrpInterfaceEntry",
+            "fields": {
+              "groups": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "HsrpGroupEntry",
+                    "fields": {
+                      "state": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "hello_time": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "hold_time": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "preemption": {
+                        "type": "bool",
+                        "required": true
+                      },
+                      "priority": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "version": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "state_changes": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "last_state_change": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "track_object": {
+                        "type": {
+                          "name": "TrackObjectEntry",
+                          "fields": {
+                            "id": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "state": {
+                              "type": "str",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "virtual_ip": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "active_virtual_mac": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "local_virtual_mac": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "authentication": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "auth_key_chain": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "preemption_delay": {
+                        "type": {
+                          "name": "PreemptionDelay",
+                          "fields": {
+                            "minimum": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "reload": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "sync": {
+                              "type": "int",
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "active_router": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "standby_router": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "configured_priority": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "group_name": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple interfaces with various HSRP states including Active, Disabled, and Standby",
+      "input": "Port-channel1 - Group 0 (version 2)\n  State is Active\n    8 state changes, last state change 1w0d\n    Track object 1 (unknown)\n  Virtual IP address is 192.168.1.254\n  Active virtual MAC address is 0000.0cff.909f (MAC In Use)\n    Local virtual MAC address is 0000.0cff.909f (v2 default)\n  Hello time 5 sec, hold time 20 sec\n    Next hello sent in 2.848 secs\n  Authentication MD5, key-chain \"5\"\n  Preemption enabled, delay min 5 secs, reload 10 secs, sync 20 secs\n  Active router is local\n  Standby router is 192.168.1.2, priority 100 (expires in 10.624 sec)\n  Priority 100 (default 100)\n  Group name is \"hsrp-Gi1/0/1-0\" (default)\nGigabitEthernet1/0/2 - Group 10\n  State is Disabled\n  Virtual IP address is unknown\n  Active virtual MAC address is unknown (MAC Not In Use)\n    Local virtual MAC address is 0000.0cff.b311 (v1 default)\n  Hello time 3 sec, hold time 10 sec\n  Authentication MD5, key-chain \"cisco123\"\n  Preemption enabled\n  Active router is unknown\n  Standby router is unknown\n  Priority 110 (configured 110)\n  Group name is \"hsrp-Gi1/0/2-10\" (default)\nGigabitEthernet3 - Group 10\n  State is Standby\n    1 state change, last state change 00:00:08\n  Virtual IP address is 10.1.2.254\n  Active virtual MAC address is 0050.56ff.c8ce (MAC Not In Use)\n    Local virtual MAC address is 0000.0cff.b311 (v1 default)\n  Hello time 3 sec, hold time 10 sec\n    Next hello sent in 2.096 secs\n  Preemption enabled\n  Active router is 10.1.2.1, priority 120 (expires in 0.816 sec)\n  Standby router is local\n  Priority 110 (configured 110)\n  Group name is \"hsrp-Gi3-10\" (default)\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1/0/2": {
+            "groups": {
+              "10": {
+                "auth_key_chain": "cisco123",
+                "authentication": "MD5",
+                "configured_priority": 110,
+                "group_name": "hsrp-Gi1/0/2-10",
+                "hello_time": 3,
+                "hold_time": 10,
+                "local_virtual_mac": "0000.0cff.b311",
+                "preemption": true,
+                "priority": 110,
+                "state": "Disabled"
+              }
+            }
+          },
+          "GigabitEthernet3": {
+            "groups": {
+              "10": {
+                "active_router": "10.1.2.1",
+                "active_virtual_mac": "0050.56ff.c8ce",
+                "configured_priority": 110,
+                "group_name": "hsrp-Gi3-10",
+                "hello_time": 3,
+                "hold_time": 10,
+                "last_state_change": "00:00:08",
+                "local_virtual_mac": "0000.0cff.b311",
+                "preemption": true,
+                "priority": 110,
+                "standby_router": "local",
+                "state": "Standby",
+                "state_changes": 1,
+                "virtual_ip": "10.1.2.254"
+              }
+            }
+          },
+          "Port-channel1": {
+            "groups": {
+              "0": {
+                "active_router": "local",
+                "active_virtual_mac": "0000.0cff.909f",
+                "auth_key_chain": "5",
+                "authentication": "MD5",
+                "configured_priority": 100,
+                "group_name": "hsrp-Gi1/0/1-0",
+                "hello_time": 5,
+                "hold_time": 20,
+                "last_state_change": "1w0d",
+                "local_virtual_mac": "0000.0cff.909f",
+                "preemption": true,
+                "preemption_delay": {
+                  "minimum": 5,
+                  "reload": 10,
+                  "sync": 20
+                },
+                "priority": 100,
+                "standby_router": "192.168.1.2",
+                "state": "Active",
+                "state_changes": 8,
+                "track_object": {
+                  "id": 1,
+                  "state": "unknown"
+                },
+                "version": 2,
+                "virtual_ip": "192.168.1.254"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Sub-interfaces with HSRP version 2 and MD5 authentication",
+      "input": "GigabitEthernet1/0/1.100 - Group 0 (version 2)\n  State is Active\n    8 state changes, last state change 1w0d\n    Track object 1 (unknown)\n  Virtual IP address is 192.168.1.254\n  Active virtual MAC address is 0000.0cff.909f (MAC In Use)\n    Local virtual MAC address is 0000.0cff.909f (v2 default)\n  Hello time 5 sec, hold time 20 sec\n    Next hello sent in 2.848 secs\n  Authentication MD5, key-chain \"5\"\n  Preemption enabled, delay min 5 secs, reload 10 secs, sync 20 secs\n  Active router is local\n  Standby router is 192.168.1.2, priority 100 (expires in 10.624 sec)\n  Priority 100 (default 100)\n  Group name is \"hsrp-Gi1/0/1-0\" (default)\nGigabitEthernet1/0/1.200 - Group 10\n  State is Disabled\n  Virtual IP address is unknown\n  Active virtual MAC address is unknown (MAC Not In Use)\n    Local virtual MAC address is 0000.0cff.b311 (v1 default)\n  Hello time 3 sec, hold time 10 sec\n  Authentication MD5, key-chain \"cisco123\"\n  Preemption enabled\n  Active router is unknown\n  Standby router is unknown\n  Priority 110 (configured 110)\n  Group name is \"hsrp-Gi1/0/2-10\" (default)\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1/0/1.100": {
+            "groups": {
+              "0": {
+                "active_router": "local",
+                "active_virtual_mac": "0000.0cff.909f",
+                "auth_key_chain": "5",
+                "authentication": "MD5",
+                "configured_priority": 100,
+                "group_name": "hsrp-Gi1/0/1-0",
+                "hello_time": 5,
+                "hold_time": 20,
+                "last_state_change": "1w0d",
+                "local_virtual_mac": "0000.0cff.909f",
+                "preemption": true,
+                "preemption_delay": {
+                  "minimum": 5,
+                  "reload": 10,
+                  "sync": 20
+                },
+                "priority": 100,
+                "standby_router": "192.168.1.2",
+                "state": "Active",
+                "state_changes": 8,
+                "track_object": {
+                  "id": 1,
+                  "state": "unknown"
+                },
+                "version": 2,
+                "virtual_ip": "192.168.1.254"
+              }
+            }
+          },
+          "GigabitEthernet1/0/1.200": {
+            "groups": {
+              "10": {
+                "auth_key_chain": "cisco123",
+                "authentication": "MD5",
+                "configured_priority": 110,
+                "group_name": "hsrp-Gi1/0/2-10",
+                "hello_time": 3,
+                "hold_time": 10,
+                "local_virtual_mac": "0000.0cff.b311",
+                "preemption": true,
+                "priority": 110,
+                "state": "Disabled"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

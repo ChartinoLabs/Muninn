@@ -1,0 +1,193 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show standby brief",
+  "schema": {
+    "name": "ShowStandbyBriefResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "HsrpInterfaceBriefEntry",
+            "fields": {
+              "groups": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "HsrpGroupEntry",
+                    "fields": {
+                      "priority": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "preempt": {
+                        "type": "bool",
+                        "required": true
+                      },
+                      "state": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "active": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "standby": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "virtual_ip": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple VLAN interfaces with preempt enabled and Active state",
+      "input": "                     P indicates configured to preempt.\n                     |\nInterface   Grp  Pri P State   Active          Standby         Virtual IP\nVl500       20   100 P Active  local           100.1.50.2      100.1.50.254\nVl501       21   100 P Active  local           100.1.51.2      100.1.51.254\nVl502       22   100 P Active  local           100.1.52.2      100.1.52.254\n",
+      "expected": {
+        "interfaces": {
+          "VLAN500": {
+            "groups": {
+              "20": {
+                "priority": 100,
+                "preempt": true,
+                "state": "Active",
+                "active": "local",
+                "standby": "100.1.50.2",
+                "virtual_ip": "100.1.50.254"
+              }
+            }
+          },
+          "VLAN501": {
+            "groups": {
+              "21": {
+                "priority": 100,
+                "preempt": true,
+                "state": "Active",
+                "active": "local",
+                "standby": "100.1.51.2",
+                "virtual_ip": "100.1.51.254"
+              }
+            }
+          },
+          "VLAN502": {
+            "groups": {
+              "22": {
+                "priority": 100,
+                "preempt": true,
+                "state": "Active",
+                "active": "local",
+                "standby": "100.1.52.2",
+                "virtual_ip": "100.1.52.254"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "IPv6 virtual IP with continuation line and multiple groups on same interface",
+      "input": "                     P indicates configured to preempt.\n                     |\nInterface   Grp  Pri P State   Active          Standby         Virtual IP\nVl11        0    200 P Active  local           FE80::2E5A:FFF:FE1C:2064\n                                                               FE80::5:73FF:FEA0:0\nVl11        11   200 P Active  local           11.11.11.4      11.11.11.5\n",
+      "expected": {
+        "interfaces": {
+          "VLAN11": {
+            "groups": {
+              "0": {
+                "priority": 200,
+                "preempt": true,
+                "state": "Active",
+                "active": "local",
+                "standby": "FE80::2E5A:FFF:FE1C:2064",
+                "virtual_ip": "FE80::5:73FF:FEA0:0"
+              },
+              "11": {
+                "priority": 200,
+                "preempt": true,
+                "state": "Active",
+                "active": "local",
+                "standby": "11.11.11.4",
+                "virtual_ip": "11.11.11.5"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Single HSRP group in Init state with preempt disabled and unknown active/standby",
+      "input": "                     P indicates configured to preempt.\n                     |\nInterface   Grp  Pri P State   Active          Standby         Virtual IP\nVl1309      1    110   Init    unknown         unknown         40.1.31.100\n",
+      "expected": {
+        "interfaces": {
+          "VLAN1309": {
+            "groups": {
+              "1": {
+                "priority": 110,
+                "preempt": false,
+                "state": "Init",
+                "virtual_ip": "40.1.31.100"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "BridgeDomain interfaces with mixed Active and Standby states where local is the standby router",
+      "input": "                     P indicates configured to preempt.\n                     |\nInterface   Grp  Pri P State   Active          Standby         Virtual IP\nBD3328       128   110 P Active  local           10.202.145.253   10.202.145.254\nBD3329       129   90 P Standby  10.198.64.29    local         10.198.64.30\nBD3330       130   90 P Standby  10.198.64.61    local         10.198.64.62\n",
+      "expected": {
+        "interfaces": {
+          "BD3328": {
+            "groups": {
+              "128": {
+                "priority": 110,
+                "preempt": true,
+                "state": "Active",
+                "active": "local",
+                "standby": "10.202.145.253",
+                "virtual_ip": "10.202.145.254"
+              }
+            }
+          },
+          "BD3329": {
+            "groups": {
+              "129": {
+                "priority": 90,
+                "preempt": true,
+                "state": "Standby",
+                "active": "10.198.64.29",
+                "standby": "local",
+                "virtual_ip": "10.198.64.30"
+              }
+            }
+          },
+          "BD3330": {
+            "groups": {
+              "130": {
+                "priority": 90,
+                "preempt": true,
+                "state": "Standby",
+                "active": "10.198.64.61",
+                "standby": "local",
+                "virtual_ip": "10.198.64.62"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

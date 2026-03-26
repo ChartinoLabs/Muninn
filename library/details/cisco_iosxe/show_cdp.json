@@ -1,0 +1,51 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show cdp",
+  "schema": {
+    "name": "ShowCdpResult",
+    "fields": {
+      "cdp_enabled": {
+        "type": "bool",
+        "required": true
+      },
+      "send_interval": {
+        "type": "int",
+        "required": true
+      },
+      "holdtime": {
+        "type": "int",
+        "required": true
+      },
+      "cdp_version": {
+        "type": "int",
+        "required": false
+      },
+      "device_id_type": {
+        "type": "str",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show cdp output with default CDP settings",
+      "input": "Router#show cdp\nGlobal CDP information:\n        Sending CDP packets every 60 seconds\n        Sending a holdtime value of 180 seconds\n        Sending CDPv2 advertisements is  enabled\n",
+      "expected": {
+        "cdp_enabled": true,
+        "send_interval": 60,
+        "holdtime": 180,
+        "cdp_version": 2
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": "Global CDP information:\n\tSending CDP packets every 60 seconds\n\tSending a holdtime value of 180 seconds\n\tSending CDPv2 advertisements is enabled\n",
+      "expected": {
+        "cdp_enabled": true,
+        "send_interval": 60,
+        "holdtime": 180,
+        "cdp_version": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,866 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ipv6 route",
+  "schema": {
+    "name": "ShowIpv6RouteResult",
+    "fields": {
+      "vrf": {
+        "type": "str",
+        "required": true
+      },
+      "entry_count": {
+        "type": "int",
+        "required": true
+      },
+      "routes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RouteEntry",
+            "fields": {
+              "protocol": {
+                "type": "str",
+                "required": true
+              },
+              "network": {
+                "type": "str",
+                "required": true
+              },
+              "admin_distance": {
+                "type": "int",
+                "required": true
+              },
+              "metric": {
+                "type": "int",
+                "required": true
+              },
+              "tag": {
+                "type": "int",
+                "required": false
+              },
+              "next_hops": {
+                "type": {
+                  "type": "list",
+                  "items": {
+                    "name": "NextHopEntry",
+                    "fields": {
+                      "type": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "next_hop": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "interface": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "next_hop_vrf": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "interface_vrf": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Default VRF with multiple protocols (EIGRP, OSPF, ISIS, RIP) and ECMP routes",
+      "input": "IPv6 Routing Table - default - 24 entries\nCodes: C - Connected, L - Local, S - Static, U - Per-user Static route\n    B - BGP, R - RIP, H - NHRP, I1 - ISIS L1\n    I2 - ISIS L2, IA - ISIS interarea, IS - ISIS summary, D - EIGRP\n    EX - EIGRP external, ND - ND Default, NDp - ND Prefix, DCE - Destination\n    NDr - Redirect, RL - RPL, O - OSPF Intra, OI - OSPF Inter\n    OE1 - OSPF ext 1, OE2 - OSPF ext 2, ON1 - OSPF NSSA ext 1\n    ON2 - OSPF NSSA ext 2, la - LISP alt, lr - LISP site-registrations\n    ld - LISP dyn-eid, lA - LISP away, le - LISP extranet-policy\n    a - Application\nLC  2001:1:1:1::1/128 [0/0]\n    via Loopback0, receive\nD   2001:2:2:2::2/128 [90/10752]\n    via FE80::F816:3EFF:FE21:73F6, GigabitEthernet2.90\nD   2001:3:3:3::3/128 [90/2570240]\n    via FE80::5C00:80FF:FE02:7, GigabitEthernet3.90\nC   2001:10:12:90::/64 [0/0]\n    via GigabitEthernet2.90, directly connected\nL   2001:10:12:90::1/128 [0/0]\n    via GigabitEthernet2.90, receive\nC   2001:10:12:110::/64 [0/0]\n    via GigabitEthernet2.110, directly connected\nL   2001:10:12:110::1/128 [0/0]\n    via GigabitEthernet2.110, receive\nC   2001:10:12:115::/64 [0/0]\n    via GigabitEthernet2.115, directly connected\nL   2001:10:12:115::1/128 [0/0]\n    via GigabitEthernet2.115, receive\nC   2001:10:12:120::/64 [0/0]\n    via GigabitEthernet2.120, directly connected\nL   2001:10:12:120::1/128 [0/0]\n    via GigabitEthernet2.120, receive\nC   2001:10:13:90::/64 [0/0]\n    via GigabitEthernet3.90, directly connected\nL   2001:10:13:90::1/128 [0/0]\n    via GigabitEthernet3.90, receive\nC   2001:10:13:110::/64 [0/0]\n    via GigabitEthernet3.110, directly connected\nL   2001:10:13:110::1/128 [0/0]\n    via GigabitEthernet3.110, receive\nC   2001:10:13:115::/64 [0/0]\n    via GigabitEthernet3.115, directly connected\nL   2001:10:13:115::1/128 [0/0]\n    via GigabitEthernet3.115, receive\nC   2001:10:13:120::/64 [0/0]\n    via GigabitEthernet3.120, directly connected\nL   2001:10:13:120::1/128 [0/0]\n    via GigabitEthernet3.120, receive\nD   2001:10:23:90::/64 [90/15360]\n    via FE80::F816:3EFF:FE21:73F6, GigabitEthernet2.90\n    via FE80::5C00:80FF:FE02:7, GigabitEthernet3.90\nO   2001:10:23:110::/64 [110/2]\n    via FE80::F816:3EFF:FE21:73F6, GigabitEthernet2.110\nI1  2001:10:23:115::/64 [115/20]\n    via FE80::F816:3EFF:FE21:73F6, GigabitEthernet2.115\nR   2001:10:23:120::/64 [120/2]\n    via FE80::5C00:80FF:FE02:7, GigabitEthernet3.120\nL   FF00::/8 [0/0]\n    via Null0, receive\n",
+      "expected": {
+        "vrf": "default",
+        "entry_count": 24,
+        "routes": {
+          "2001:1:1:1::1/128": {
+            "protocol": "LC",
+            "network": "2001:1:1:1::1/128",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "Loopback0"
+              }
+            ]
+          },
+          "2001:2:2:2::2/128": {
+            "protocol": "D",
+            "network": "2001:2:2:2::2/128",
+            "admin_distance": 90,
+            "metric": 10752,
+            "next_hops": [
+              {
+                "type": "via",
+                "next_hop": "FE80::F816:3EFF:FE21:73F6",
+                "interface": "GigabitEthernet2.90"
+              }
+            ]
+          },
+          "2001:3:3:3::3/128": {
+            "protocol": "D",
+            "network": "2001:3:3:3::3/128",
+            "admin_distance": 90,
+            "metric": 2570240,
+            "next_hops": [
+              {
+                "type": "via",
+                "next_hop": "FE80::5C00:80FF:FE02:7",
+                "interface": "GigabitEthernet3.90"
+              }
+            ]
+          },
+          "2001:10:12:90::/64": {
+            "protocol": "C",
+            "network": "2001:10:12:90::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "directly connected",
+                "interface": "GigabitEthernet2.90"
+              }
+            ]
+          },
+          "2001:10:12:90::1/128": {
+            "protocol": "L",
+            "network": "2001:10:12:90::1/128",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "GigabitEthernet2.90"
+              }
+            ]
+          },
+          "2001:10:12:110::/64": {
+            "protocol": "C",
+            "network": "2001:10:12:110::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "directly connected",
+                "interface": "GigabitEthernet2.110"
+              }
+            ]
+          },
+          "2001:10:12:110::1/128": {
+            "protocol": "L",
+            "network": "2001:10:12:110::1/128",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "GigabitEthernet2.110"
+              }
+            ]
+          },
+          "2001:10:12:115::/64": {
+            "protocol": "C",
+            "network": "2001:10:12:115::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "directly connected",
+                "interface": "GigabitEthernet2.115"
+              }
+            ]
+          },
+          "2001:10:12:115::1/128": {
+            "protocol": "L",
+            "network": "2001:10:12:115::1/128",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "GigabitEthernet2.115"
+              }
+            ]
+          },
+          "2001:10:12:120::/64": {
+            "protocol": "C",
+            "network": "2001:10:12:120::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "directly connected",
+                "interface": "GigabitEthernet2.120"
+              }
+            ]
+          },
+          "2001:10:12:120::1/128": {
+            "protocol": "L",
+            "network": "2001:10:12:120::1/128",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "GigabitEthernet2.120"
+              }
+            ]
+          },
+          "2001:10:13:90::/64": {
+            "protocol": "C",
+            "network": "2001:10:13:90::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "directly connected",
+                "interface": "GigabitEthernet3.90"
+              }
+            ]
+          },
+          "2001:10:13:90::1/128": {
+            "protocol": "L",
+            "network": "2001:10:13:90::1/128",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "GigabitEthernet3.90"
+              }
+            ]
+          },
+          "2001:10:13:110::/64": {
+            "protocol": "C",
+            "network": "2001:10:13:110::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "directly connected",
+                "interface": "GigabitEthernet3.110"
+              }
+            ]
+          },
+          "2001:10:13:110::1/128": {
+            "protocol": "L",
+            "network": "2001:10:13:110::1/128",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "GigabitEthernet3.110"
+              }
+            ]
+          },
+          "2001:10:13:115::/64": {
+            "protocol": "C",
+            "network": "2001:10:13:115::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "directly connected",
+                "interface": "GigabitEthernet3.115"
+              }
+            ]
+          },
+          "2001:10:13:115::1/128": {
+            "protocol": "L",
+            "network": "2001:10:13:115::1/128",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "GigabitEthernet3.115"
+              }
+            ]
+          },
+          "2001:10:13:120::/64": {
+            "protocol": "C",
+            "network": "2001:10:13:120::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "directly connected",
+                "interface": "GigabitEthernet3.120"
+              }
+            ]
+          },
+          "2001:10:13:120::1/128": {
+            "protocol": "L",
+            "network": "2001:10:13:120::1/128",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "GigabitEthernet3.120"
+              }
+            ]
+          },
+          "2001:10:23:90::/64": {
+            "protocol": "D",
+            "network": "2001:10:23:90::/64",
+            "admin_distance": 90,
+            "metric": 15360,
+            "next_hops": [
+              {
+                "type": "via",
+                "next_hop": "FE80::F816:3EFF:FE21:73F6",
+                "interface": "GigabitEthernet2.90"
+              },
+              {
+                "type": "via",
+                "next_hop": "FE80::5C00:80FF:FE02:7",
+                "interface": "GigabitEthernet3.90"
+              }
+            ]
+          },
+          "2001:10:23:110::/64": {
+            "protocol": "O",
+            "network": "2001:10:23:110::/64",
+            "admin_distance": 110,
+            "metric": 2,
+            "next_hops": [
+              {
+                "type": "via",
+                "next_hop": "FE80::F816:3EFF:FE21:73F6",
+                "interface": "GigabitEthernet2.110"
+              }
+            ]
+          },
+          "2001:10:23:115::/64": {
+            "protocol": "I1",
+            "network": "2001:10:23:115::/64",
+            "admin_distance": 115,
+            "metric": 20,
+            "next_hops": [
+              {
+                "type": "via",
+                "next_hop": "FE80::F816:3EFF:FE21:73F6",
+                "interface": "GigabitEthernet2.115"
+              }
+            ]
+          },
+          "2001:10:23:120::/64": {
+            "protocol": "R",
+            "network": "2001:10:23:120::/64",
+            "admin_distance": 120,
+            "metric": 2,
+            "next_hops": [
+              {
+                "type": "via",
+                "next_hop": "FE80::5C00:80FF:FE02:7",
+                "interface": "GigabitEthernet3.120"
+              }
+            ]
+          },
+          "FF00::/8": {
+            "protocol": "L",
+            "network": "FF00::/8",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "Null0"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "VRF Red with BGP tagged routes and inter-VRF next-hops",
+      "input": "IPv6 Routing Table - Red - 7 entries\nCodes: C - Connected, L - Local, S - Static, U - Per-user Static route\nB - BGP, R - RIP, H - NHRP, I1 - ISIS L1\nI2 - ISIS L2, IA - ISIS interarea, IS - ISIS summary, D - EIGRP\nEX - EIGRP external, ND - ND Default, NDp - ND Prefix, DCE - Destination\nNDr - Redirect, O - OSPF Intra, OI - OSPF Inter, OE1 - OSPF ext 1\nOE2 - OSPF ext 2, ON1 - OSPF NSSA ext 1, ON2 - OSPF NSSA ext 2\nla - LISP alt, lr - LISP site-registrations, ld - LISP dyn-eid\nlA - LISP away, le - LISP extranet-policy, lp - LISP publications\nls - LISP destinations-summary\n    C 2001:192:168:2::/64 [0/0]\n    via Vlan11, directly connected\n    B 2001:192:168:2::1/128 [20/0], tag 1\n    via 33.33.33.33%default, Vlan100%default\n    L 2001:192:168:2::100/128 [0/0]\n    via Vlan11, receive\n    C 2001:192:168:255::/64 [0/0]\n    via Vlan4000, directly connected\n    B 2001:192:168:255::1/128 [20/0], tag 1\n    via 33.33.33.33%default, Vlan100%default\n    L 2001:192:168:255::100/128 [0/0]\n    via Vlan4000, receive\n    L FF00::/8 [0/0]\n    via Null0, receive\n",
+      "expected": {
+        "vrf": "Red",
+        "entry_count": 7,
+        "routes": {
+          "2001:192:168:2::/64": {
+            "protocol": "C",
+            "network": "2001:192:168:2::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "directly connected",
+                "interface": "Vlan11"
+              }
+            ]
+          },
+          "2001:192:168:2::1/128": {
+            "protocol": "B",
+            "network": "2001:192:168:2::1/128",
+            "admin_distance": 20,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "via",
+                "next_hop": "33.33.33.33",
+                "next_hop_vrf": "default",
+                "interface": "Vlan100",
+                "interface_vrf": "default"
+              }
+            ],
+            "tag": 1
+          },
+          "2001:192:168:2::100/128": {
+            "protocol": "L",
+            "network": "2001:192:168:2::100/128",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "Vlan11"
+              }
+            ]
+          },
+          "2001:192:168:255::/64": {
+            "protocol": "C",
+            "network": "2001:192:168:255::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "directly connected",
+                "interface": "Vlan4000"
+              }
+            ]
+          },
+          "2001:192:168:255::1/128": {
+            "protocol": "B",
+            "network": "2001:192:168:255::1/128",
+            "admin_distance": 20,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "via",
+                "next_hop": "33.33.33.33",
+                "next_hop_vrf": "default",
+                "interface": "Vlan100",
+                "interface_vrf": "default"
+              }
+            ],
+            "tag": 1
+          },
+          "2001:192:168:255::100/128": {
+            "protocol": "L",
+            "network": "2001:192:168:255::100/128",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "Vlan4000"
+              }
+            ]
+          },
+          "FF00::/8": {
+            "protocol": "L",
+            "network": "FF00::/8",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "Null0"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "Named VRF with EIGRP ECMP, ISIS L1, and RIP routes across numbered subinterfaces",
+      "input": "IPv6 Routing Table - VRF1 - 23 entries\nCodes: C - Connected, L - Local, S - Static, U - Per-user Static route\n    B - BGP, R - RIP, H - NHRP, I1 - ISIS L1\n    I2 - ISIS L2, IA - ISIS interarea, IS - ISIS summary, D - EIGRP\n    EX - EIGRP external, ND - ND Default, NDp - ND Prefix, DCE - Destination\n    NDr - Redirect, RL - RPL, O - OSPF Intra, OI - OSPF Inter\n    OE1 - OSPF ext 1, OE2 - OSPF ext 2, ON1 - OSPF NSSA ext 1\n    ON2 - OSPF NSSA ext 2, la - LISP alt, lr - LISP site-registrations\n    ld - LISP dyn-eid, lA - LISP away, le - LISP extranet-policy\n    a - Application\nLC  2001:1:1:1::1/128 [0/0]\n    via Loopback300, receive\nD   2001:2:2:2::2/128 [90/10752]\n    via FE80::F816:3EFF:FE21:73F6, GigabitEthernet2.390\nD   2001:3:3:3::3/128 [90/2570240]\n    via FE80::5C00:80FF:FE02:7, GigabitEthernet3.390\nC   2001:10:12:90::/64 [0/0]\n    via GigabitEthernet2.390, directly connected\nL   2001:10:12:90::1/128 [0/0]\n    via GigabitEthernet2.390, receive\nC   2001:10:12:110::/64 [0/0]\n    via GigabitEthernet2.410, directly connected\nL   2001:10:12:110::1/128 [0/0]\n    via GigabitEthernet2.410, receive\nC   2001:10:12:115::/64 [0/0]\n    via GigabitEthernet2.415, directly connected\nL   2001:10:12:115::1/128 [0/0]\n    via GigabitEthernet2.415, receive\nC   2001:10:12:120::/64 [0/0]\n    via GigabitEthernet2.420, directly connected\nL   2001:10:12:120::1/128 [0/0]\n    via GigabitEthernet2.420, receive\nC   2001:10:13:90::/64 [0/0]\n    via GigabitEthernet3.390, directly connected\nL   2001:10:13:90::1/128 [0/0]\n    via GigabitEthernet3.390, receive\nC   2001:10:13:110::/64 [0/0]\n    via GigabitEthernet3.410, directly connected\nL   2001:10:13:110::1/128 [0/0]\n    via GigabitEthernet3.410, receive\nC   2001:10:13:115::/64 [0/0]\n    via GigabitEthernet3.415, directly connected\nL   2001:10:13:115::1/128 [0/0]\n    via GigabitEthernet3.415, receive\nC   2001:10:13:120::/64 [0/0]\n    via GigabitEthernet3.420, directly connected\nL   2001:10:13:120::1/128 [0/0]\n    via GigabitEthernet3.420, receive\nD   2001:10:23:90::/64 [90/15360]\n    via FE80::F816:3EFF:FE21:73F6, GigabitEthernet2.390\n    via FE80::5C00:80FF:FE02:7, GigabitEthernet3.390\nI1  2001:10:23:115::/64 [115/50]\n    via FE80::5C00:80FF:FE02:7, GigabitEthernet3.415\nR   2001:10:23:120::/64 [120/2]\n    via FE80::5C00:80FF:FE02:7, GigabitEthernet3.420\nL   FF00::/8 [0/0]\n    via Null0, receive\n",
+      "expected": {
+        "vrf": "VRF1",
+        "entry_count": 23,
+        "routes": {
+          "2001:1:1:1::1/128": {
+            "protocol": "LC",
+            "network": "2001:1:1:1::1/128",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "Loopback300"
+              }
+            ]
+          },
+          "2001:2:2:2::2/128": {
+            "protocol": "D",
+            "network": "2001:2:2:2::2/128",
+            "admin_distance": 90,
+            "metric": 10752,
+            "next_hops": [
+              {
+                "type": "via",
+                "next_hop": "FE80::F816:3EFF:FE21:73F6",
+                "interface": "GigabitEthernet2.390"
+              }
+            ]
+          },
+          "2001:3:3:3::3/128": {
+            "protocol": "D",
+            "network": "2001:3:3:3::3/128",
+            "admin_distance": 90,
+            "metric": 2570240,
+            "next_hops": [
+              {
+                "type": "via",
+                "next_hop": "FE80::5C00:80FF:FE02:7",
+                "interface": "GigabitEthernet3.390"
+              }
+            ]
+          },
+          "2001:10:12:90::/64": {
+            "protocol": "C",
+            "network": "2001:10:12:90::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "directly connected",
+                "interface": "GigabitEthernet2.390"
+              }
+            ]
+          },
+          "2001:10:12:90::1/128": {
+            "protocol": "L",
+            "network": "2001:10:12:90::1/128",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "GigabitEthernet2.390"
+              }
+            ]
+          },
+          "2001:10:12:110::/64": {
+            "protocol": "C",
+            "network": "2001:10:12:110::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "directly connected",
+                "interface": "GigabitEthernet2.410"
+              }
+            ]
+          },
+          "2001:10:12:110::1/128": {
+            "protocol": "L",
+            "network": "2001:10:12:110::1/128",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "GigabitEthernet2.410"
+              }
+            ]
+          },
+          "2001:10:12:115::/64": {
+            "protocol": "C",
+            "network": "2001:10:12:115::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "directly connected",
+                "interface": "GigabitEthernet2.415"
+              }
+            ]
+          },
+          "2001:10:12:115::1/128": {
+            "protocol": "L",
+            "network": "2001:10:12:115::1/128",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "GigabitEthernet2.415"
+              }
+            ]
+          },
+          "2001:10:12:120::/64": {
+            "protocol": "C",
+            "network": "2001:10:12:120::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "directly connected",
+                "interface": "GigabitEthernet2.420"
+              }
+            ]
+          },
+          "2001:10:12:120::1/128": {
+            "protocol": "L",
+            "network": "2001:10:12:120::1/128",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "GigabitEthernet2.420"
+              }
+            ]
+          },
+          "2001:10:13:90::/64": {
+            "protocol": "C",
+            "network": "2001:10:13:90::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "directly connected",
+                "interface": "GigabitEthernet3.390"
+              }
+            ]
+          },
+          "2001:10:13:90::1/128": {
+            "protocol": "L",
+            "network": "2001:10:13:90::1/128",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "GigabitEthernet3.390"
+              }
+            ]
+          },
+          "2001:10:13:110::/64": {
+            "protocol": "C",
+            "network": "2001:10:13:110::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "directly connected",
+                "interface": "GigabitEthernet3.410"
+              }
+            ]
+          },
+          "2001:10:13:110::1/128": {
+            "protocol": "L",
+            "network": "2001:10:13:110::1/128",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "GigabitEthernet3.410"
+              }
+            ]
+          },
+          "2001:10:13:115::/64": {
+            "protocol": "C",
+            "network": "2001:10:13:115::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "directly connected",
+                "interface": "GigabitEthernet3.415"
+              }
+            ]
+          },
+          "2001:10:13:115::1/128": {
+            "protocol": "L",
+            "network": "2001:10:13:115::1/128",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "GigabitEthernet3.415"
+              }
+            ]
+          },
+          "2001:10:13:120::/64": {
+            "protocol": "C",
+            "network": "2001:10:13:120::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "directly connected",
+                "interface": "GigabitEthernet3.420"
+              }
+            ]
+          },
+          "2001:10:13:120::1/128": {
+            "protocol": "L",
+            "network": "2001:10:13:120::1/128",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "GigabitEthernet3.420"
+              }
+            ]
+          },
+          "2001:10:23:90::/64": {
+            "protocol": "D",
+            "network": "2001:10:23:90::/64",
+            "admin_distance": 90,
+            "metric": 15360,
+            "next_hops": [
+              {
+                "type": "via",
+                "next_hop": "FE80::F816:3EFF:FE21:73F6",
+                "interface": "GigabitEthernet2.390"
+              },
+              {
+                "type": "via",
+                "next_hop": "FE80::5C00:80FF:FE02:7",
+                "interface": "GigabitEthernet3.390"
+              }
+            ]
+          },
+          "2001:10:23:115::/64": {
+            "protocol": "I1",
+            "network": "2001:10:23:115::/64",
+            "admin_distance": 115,
+            "metric": 50,
+            "next_hops": [
+              {
+                "type": "via",
+                "next_hop": "FE80::5C00:80FF:FE02:7",
+                "interface": "GigabitEthernet3.415"
+              }
+            ]
+          },
+          "2001:10:23:120::/64": {
+            "protocol": "R",
+            "network": "2001:10:23:120::/64",
+            "admin_distance": 120,
+            "metric": 2,
+            "next_hops": [
+              {
+                "type": "via",
+                "next_hop": "FE80::5C00:80FF:FE02:7",
+                "interface": "GigabitEthernet3.420"
+              }
+            ]
+          },
+          "FF00::/8": {
+            "protocol": "L",
+            "network": "FF00::/8",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "Null0"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "Static routes with next-hop-only entries (no interface), BGP ECMP over serial links, and mixed next-hop types on a single route",
+      "input": "IPv6 Routing Table - default - 6 entries\nCodes: C - Connected, L - Local, S - Static, U - Per-user Static route\n       B - BGP, HA - Home Agent, MR - Mobile Router, R - RIP\n       H - NHRP, D - EIGRP, EX - EIGRP external, ND - ND Default\n       NDp - ND Prefix, DCE - Destination, NDr - Redirect, O - OSPF Intra\n       OI - OSPF Inter, OE1 - OSPF ext 1, OE2 - OSPF ext 2, ON1 - OSPF NSSA ext 1\n       ON2 - OSPF NSSA ext 2, l - LISP\nC   2A05:C100:2A::/64 [0/0]\n     via Vlan1, directly connected\nB   2001:DB8:4::2/48 [20/0]\n     via FE80::A8BB:CCFF:FE02:8B00, Serial6/0\n     via A8BB::FE80:CCFF:FE02:8B00, Serial4/0\nL   FF00::/8 [0/0]\n     via Null0, receive\nS   5555:4444::4/128 [1/0]\n     via 2A05:C100:2A::56\n     via 2A05:C100:2A::5765\n     via 2A05:C100:2A::3:344, Vlan1\n     via Vlan1, directly connected\n",
+      "expected": {
+        "vrf": "default",
+        "entry_count": 6,
+        "routes": {
+          "2A05:C100:2A::/64": {
+            "protocol": "C",
+            "network": "2A05:C100:2A::/64",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "directly connected",
+                "interface": "Vlan1"
+              }
+            ]
+          },
+          "2001:DB8:4::2/48": {
+            "protocol": "B",
+            "network": "2001:DB8:4::2/48",
+            "admin_distance": 20,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "via",
+                "next_hop": "FE80::A8BB:CCFF:FE02:8B00",
+                "interface": "Serial6/0"
+              },
+              {
+                "type": "via",
+                "next_hop": "A8BB::FE80:CCFF:FE02:8B00",
+                "interface": "Serial4/0"
+              }
+            ]
+          },
+          "FF00::/8": {
+            "protocol": "L",
+            "network": "FF00::/8",
+            "admin_distance": 0,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "receive",
+                "interface": "Null0"
+              }
+            ]
+          },
+          "5555:4444::4/128": {
+            "protocol": "S",
+            "network": "5555:4444::4/128",
+            "admin_distance": 1,
+            "metric": 0,
+            "next_hops": [
+              {
+                "type": "via",
+                "next_hop": "2A05:C100:2A::56"
+              },
+              {
+                "type": "via",
+                "next_hop": "2A05:C100:2A::5765"
+              },
+              {
+                "type": "via",
+                "next_hop": "2A05:C100:2A::3:344",
+                "interface": "Vlan1"
+              },
+              {
+                "type": "directly connected",
+                "interface": "Vlan1"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

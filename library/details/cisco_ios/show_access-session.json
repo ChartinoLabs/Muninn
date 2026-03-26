@@ -1,0 +1,129 @@
+{
+  "os": "cisco_ios",
+  "command": "show access-session",
+  "schema": {
+    "name": "ShowAuthenticationSessionsResult",
+    "fields": {
+      "sessions": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "AuthSessionEntry",
+              "fields": {
+                "method": {
+                  "type": "str",
+                  "required": false
+                },
+                "domain": {
+                  "type": "str",
+                  "required": true
+                },
+                "status": {
+                  "type": "str",
+                  "required": true
+                },
+                "session_id": {
+                  "type": "str",
+                  "required": true
+                },
+                "fg": {
+                  "type": "str",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "session_count": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic access-session table with multiple auth methods and statuses",
+      "input": "Interface  MAC Address     Method   Domain   Status         Session ID\nFa3/0/40   (unknown)       mab      UNKNOWN  Running        0A5C58FE00000018000101FF\nFa3/0/13   002a.12cd.3d08  mab      DATA     Authz Success  0A0A7F9B0000A92A2C0101FF\nFa3/0/1    347a.12cd.3fe8  mab      VOICE    Authz Success  0A0A7F9B00000055000101FF\nFa2/0/27   8c8a.12cd.3d3d  dot1x    DATA     Authz Success  0A5C58FE0000000D000101FF\n",
+      "expected": {
+        "sessions": {
+          "FastEthernet2/0/27": {
+            "8c8a.12cd.3d3d": {
+              "domain": "DATA",
+              "method": "dot1x",
+              "session_id": "0A5C58FE0000000D000101FF",
+              "status": "Authz Success"
+            }
+          },
+          "FastEthernet3/0/1": {
+            "347a.12cd.3fe8": {
+              "domain": "VOICE",
+              "method": "mab",
+              "session_id": "0A0A7F9B00000055000101FF",
+              "status": "Authz Success"
+            }
+          },
+          "FastEthernet3/0/13": {
+            "002a.12cd.3d08": {
+              "domain": "DATA",
+              "method": "mab",
+              "session_id": "0A0A7F9B0000A92A2C0101FF",
+              "status": "Authz Success"
+            }
+          },
+          "FastEthernet3/0/40": {
+            "(unknown)": {
+              "domain": "UNKNOWN",
+              "method": "mab",
+              "session_id": "0A5C58FE00000018000101FF",
+              "status": "Running"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Access-session with Fg column, separator line, session count, and Unauth status",
+      "input": "\nInterface    MAC Address    Method  Domain  Status Fg Session ID\n------------------------------------------------------------------------------\nGi1/0/10     c89a.12cd.3b74 dot1x   DATA    Auth      0A0A1DFE00000FB3000101FF\nGi1/0/5      848a.12cd.3636 mab     VOICE   Auth      0A0A1DFE00000FBD000101FF\nGi1/0/26     005a.12cd.3567 N/A     UNKNOWN Unauth    0A0A1DFE00001F8D160101FF\nGi1/0/26     004a.12cd.3c40 mab     DATA    Auth      0A0A1DFE00001C8D5E0101FF\n\nSession count = 4\n\nKey to Session Events Blocked Status Flags:\n\n  A - Applying Policy (multi-line status for details)\n  D - Awaiting Deletion\n  F - Final Removal in progress\n  I - Awaiting IIF ID allocation\n  N - Waiting for AAA to come up\n  P - Pushed Session\n  R - Removing User Profile (multi-line status for details)\n  U - Applying User Profile (multi-line status for details)\n  X - Unknown Blocker\n",
+      "expected": {
+        "session_count": 4,
+        "sessions": {
+          "GigabitEthernet1/0/10": {
+            "c89a.12cd.3b74": {
+              "domain": "DATA",
+              "method": "dot1x",
+              "session_id": "0A0A1DFE00000FB3000101FF",
+              "status": "Auth"
+            }
+          },
+          "GigabitEthernet1/0/26": {
+            "004a.12cd.3c40": {
+              "domain": "DATA",
+              "method": "mab",
+              "session_id": "0A0A1DFE00001C8D5E0101FF",
+              "status": "Auth"
+            },
+            "005a.12cd.3567": {
+              "domain": "UNKNOWN",
+              "session_id": "0A0A1DFE00001F8D160101FF",
+              "status": "Unauth"
+            }
+          },
+          "GigabitEthernet1/0/5": {
+            "848a.12cd.3636": {
+              "domain": "VOICE",
+              "method": "mab",
+              "session_id": "0A0A1DFE00000FBD000101FF",
+              "status": "Auth"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

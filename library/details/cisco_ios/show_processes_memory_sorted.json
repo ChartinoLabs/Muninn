@@ -1,0 +1,279 @@
+{
+  "os": "cisco_ios",
+  "command": "show processes memory sorted",
+  "schema": {
+    "name": "ShowProcessesMemoryResult",
+    "fields": {
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "list",
+            "items": {
+              "name": "ProcessEntry",
+              "fields": {
+                "tty": {
+                  "type": "int",
+                  "required": true
+                },
+                "allocated": {
+                  "type": "int",
+                  "required": true
+                },
+                "freed": {
+                  "type": "int",
+                  "required": true
+                },
+                "holding": {
+                  "type": "int",
+                  "required": true
+                },
+                "getbufs": {
+                  "type": "int",
+                  "required": true
+                },
+                "retbufs": {
+                  "type": "int",
+                  "required": true
+                },
+                "name": {
+                  "type": "str",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with multiple pools and processes sorted by holding",
+      "input": "Processor Pool Total:  919638648 Used:  236752096 Free:  682886552\n lsmpi_io Pool Total:    6295128 Used:    6294296 Free:        832\n\n PID TTY  Allocated      Freed    Holding    Getbufs    Retbufs Process\n   0   0  209299480   13474544  178205704          0          0 *Init*\n  78   0 2569666688    1554280   27061536          0          0 IOSD ipc task\n   0   0  607956496  428619384    6374592   17503559          0 *Dead*\n 365   0    3946896       5680    3983160     849828          0 EEM ED Syslog\n   1   0    1583728       3472    1613672          0          0 Chunk Manager\n 382   0    1510464      33704    1506704          0          0 EEM Server\n 165   0    2957736      12304    1112904          0          0 CWAN OIR Handler\n   0   0          0          0     657856          0          0 *MallocLite*\n   4   0     525856      23256     458696          0          0 RF Slave Main Th\n 366   0     381680       5680     417944      72316          0 EEM ED Generic\n 338   0     309184       1640     361488          0          0 Crypto IKEv2\n 480   0     167752        448     221248          0          0 MRIB Process\n  10   0 4096314696 4096430632     215576 3914231834 3914277834 Pool Manager\n\n342936032 Total\n",
+      "expected": {
+        "processor_pool": {
+          "total": 919638648,
+          "used": 236752096,
+          "free": 682886552
+        },
+        "lsmpi_io_pool": {
+          "total": 6295128,
+          "used": 6294296,
+          "free": 832
+        },
+        "processes": {
+          "0": [
+            {
+              "tty": 0,
+              "allocated": 209299480,
+              "freed": 13474544,
+              "holding": 178205704,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "*Init*"
+            },
+            {
+              "tty": 0,
+              "allocated": 607956496,
+              "freed": 428619384,
+              "holding": 6374592,
+              "getbufs": 17503559,
+              "retbufs": 0,
+              "name": "*Dead*"
+            },
+            {
+              "tty": 0,
+              "allocated": 0,
+              "freed": 0,
+              "holding": 657856,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "*MallocLite*"
+            }
+          ],
+          "78": [
+            {
+              "tty": 0,
+              "allocated": 2569666688,
+              "freed": 1554280,
+              "holding": 27061536,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "IOSD ipc task"
+            }
+          ],
+          "365": [
+            {
+              "tty": 0,
+              "allocated": 3946896,
+              "freed": 5680,
+              "holding": 3983160,
+              "getbufs": 849828,
+              "retbufs": 0,
+              "name": "EEM ED Syslog"
+            }
+          ],
+          "1": [
+            {
+              "tty": 0,
+              "allocated": 1583728,
+              "freed": 3472,
+              "holding": 1613672,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Chunk Manager"
+            }
+          ],
+          "382": [
+            {
+              "tty": 0,
+              "allocated": 1510464,
+              "freed": 33704,
+              "holding": 1506704,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "EEM Server"
+            }
+          ],
+          "165": [
+            {
+              "tty": 0,
+              "allocated": 2957736,
+              "freed": 12304,
+              "holding": 1112904,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "CWAN OIR Handler"
+            }
+          ],
+          "4": [
+            {
+              "tty": 0,
+              "allocated": 525856,
+              "freed": 23256,
+              "holding": 458696,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "RF Slave Main Th"
+            }
+          ],
+          "366": [
+            {
+              "tty": 0,
+              "allocated": 381680,
+              "freed": 5680,
+              "holding": 417944,
+              "getbufs": 72316,
+              "retbufs": 0,
+              "name": "EEM ED Generic"
+            }
+          ],
+          "338": [
+            {
+              "tty": 0,
+              "allocated": 309184,
+              "freed": 1640,
+              "holding": 361488,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Crypto IKEv2"
+            }
+          ],
+          "480": [
+            {
+              "tty": 0,
+              "allocated": 167752,
+              "freed": 448,
+              "holding": 221248,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "MRIB Process"
+            }
+          ],
+          "10": [
+            {
+              "tty": 0,
+              "allocated": 4096314696,
+              "freed": 4096430632,
+              "holding": 215576,
+              "getbufs": 3914231834,
+              "retbufs": 3914277834,
+              "name": "Pool Manager"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Output with a single processor pool and fewer processes",
+      "input": "Processor Pool Total:  563180224 Used:   71304104 Free:  491876120\n\n PID TTY  Allocated      Freed    Holding    Getbufs    Retbufs Process\n   0   0  230525016   71495656  152989632          0          0 *Init*\n   3   0  460065600  459342968     705128          0          0 Exec\n   5   0 1489388792 1489394664     106080 1378634186 1378638862 Pool Manager\n   1   0      30864       3088      40872          0          0 Chunk Manager\n   2   0        232        232       7096          0          0 Load Meter\n",
+      "expected": {
+        "processor_pool": {
+          "total": 563180224,
+          "used": 71304104,
+          "free": 491876120
+        },
+        "processes": {
+          "0": [
+            {
+              "tty": 0,
+              "allocated": 230525016,
+              "freed": 71495656,
+              "holding": 152989632,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "*Init*"
+            }
+          ],
+          "3": [
+            {
+              "tty": 0,
+              "allocated": 460065600,
+              "freed": 459342968,
+              "holding": 705128,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Exec"
+            }
+          ],
+          "5": [
+            {
+              "tty": 0,
+              "allocated": 1489388792,
+              "freed": 1489394664,
+              "holding": 106080,
+              "getbufs": 1378634186,
+              "retbufs": 1378638862,
+              "name": "Pool Manager"
+            }
+          ],
+          "1": [
+            {
+              "tty": 0,
+              "allocated": 30864,
+              "freed": 3088,
+              "holding": 40872,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Chunk Manager"
+            }
+          ],
+          "2": [
+            {
+              "tty": 0,
+              "allocated": 232,
+              "freed": 232,
+              "holding": 7096,
+              "getbufs": 0,
+              "retbufs": 0,
+              "name": "Load Meter"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

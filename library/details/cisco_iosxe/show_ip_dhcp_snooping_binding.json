@@ -1,0 +1,126 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip dhcp snooping binding",
+  "schema": {
+    "name": "ShowIpDhcpSnoopingBindingResult",
+    "fields": {
+      "total_bindings": {
+        "type": "int",
+        "required": true
+      },
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "DhcpSnoopingInterface",
+            "fields": {
+              "vlan": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "DhcpSnoopingBindingEntry",
+                    "fields": {
+                      "mac": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "ip": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "lease": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "type": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Show ip dhcp snooping binding output with command echo and one binding",
+      "input": "show ip dhcp snooping binding\nMacAddress          IpAddress        Lease(sec)  Type           VLAN  Interface\n------------------  ---------------  ----------  -------------  ----  --------------------\n00:11:01:00:00:01   100.100.0.3      1128        dhcp-snooping   100   FiftyGigE6/0/25\nTotal number of bindings: 1\n",
+      "expected": {
+        "interfaces": {
+          "FiftyGigabitEthernet6/0/25": {
+            "vlan": {
+              "100": {
+                "mac": "00:11:01:00:00:01",
+                "ip": "100.100.0.3",
+                "lease": 1128,
+                "type": "dhcp-snooping"
+              }
+            }
+          }
+        },
+        "total_bindings": 1
+      }
+    },
+    {
+      "name": "Live device output",
+      "input": "MacAddress          IpAddress        Lease(sec)  Type           VLAN  Interface\n------------------  ---------------  ----------  -------------  ----  --------------------\nTotal number of bindings: 0\n",
+      "expected": {
+        "total_bindings": 0
+      }
+    },
+    {
+      "name": "Show ip dhcp snooping binding output with GigabitEthernet3/0/3",
+      "input": "MacAddress          IpAddress        Lease(sec)  Type           VLAN  Interface\n------------------  ---------------  ----------  -------------  ----  --------------------\n00:19:08:00:00:01   101.1.0.4        146         dhcp-snooping   101   GigabitEthernet3/0/3\nTotal number of bindings: 1\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet3/0/3": {
+            "vlan": {
+              "101": {
+                "mac": "00:19:08:00:00:01",
+                "ip": "101.1.0.4",
+                "lease": 146,
+                "type": "dhcp-snooping"
+              }
+            }
+          }
+        },
+        "total_bindings": 1
+      }
+    },
+    {
+      "name": "Show ip dhcp snooping binding output with GigabitEthernet2/0/4",
+      "input": "MacAddress          IpAddress        Lease(sec)  Type           VLAN  Interface\n------------------  ---------------  ----------  -------------  ----  --------------------\n00:19:09:00:00:02   101.1.0.4        111         dhcp-snooping   101   GigabitEthernet2/0/4\nTotal number of bindings: 1\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet2/0/4": {
+            "vlan": {
+              "101": {
+                "mac": "00:19:09:00:00:02",
+                "ip": "101.1.0.4",
+                "lease": 111,
+                "type": "dhcp-snooping"
+              }
+            }
+          }
+        },
+        "total_bindings": 1
+      }
+    },
+    {
+      "name": "Show ip dhcp snooping binding output with no bindings",
+      "input": "MacAddress          IpAddress        Lease(sec)  Type           VLAN  Interface\n------------------  ---------------  ----------  -------------  ----  --------------------\n\nTotal number of bindings: 0\n",
+      "expected": {
+        "total_bindings": 0
+      }
+    }
+  ]
+}

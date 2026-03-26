@@ -1,0 +1,169 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show platform nat translations active",
+  "schema": {
+    "name": "ShowPlatformNatTranslationsActiveResult",
+    "fields": {
+      "translations": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "type": "dict",
+              "key": "str",
+              "value": {
+                "type": "dict",
+                "key": "str",
+                "value": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "NatTranslationEntry",
+                    "fields": {
+                      "protocol": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "inside_global": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "inside_local": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "outside_local": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "outside_global": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "inside_global_port": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "inside_local_port": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "outside_local_port": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "outside_global_port": {
+                        "type": "int",
+                        "required": false
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_translations": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Active NAT translations with TCP, UDP, and static entries",
+      "input": "Pro  Inside global      Inside local       Outside local      Outside global\ntcp  192.168.1.1:514   192.168.2.3:53     192.168.2.22:256   192.168.2.22:256\ntcp  192.168.1.1:513   192.168.2.2:53     192.168.2.22:256   192.168.2.22:256\ntcp  192.168.1.1:512   192.168.2.4:53     192.168.2.22:256   192.168.2.22:256\nudp  10.1.1.1:1024     192.168.10.5:5060  10.0.0.1:53        10.0.0.1:53\n---  172.16.6.14       10.10.10.4         ---                ---\nTotal number of translations: 5\n",
+      "expected": {
+        "translations": {
+          "tcp": {
+            "192.168.1.1": {
+              "514": {
+                "192.168.2.22": {
+                  "256": {
+                    "protocol": "tcp",
+                    "inside_global": "192.168.1.1",
+                    "inside_local": "192.168.2.3",
+                    "outside_local": "192.168.2.22",
+                    "outside_global": "192.168.2.22",
+                    "inside_global_port": 514,
+                    "inside_local_port": 53,
+                    "outside_local_port": 256,
+                    "outside_global_port": 256
+                  }
+                }
+              },
+              "513": {
+                "192.168.2.22": {
+                  "256": {
+                    "protocol": "tcp",
+                    "inside_global": "192.168.1.1",
+                    "inside_local": "192.168.2.2",
+                    "outside_local": "192.168.2.22",
+                    "outside_global": "192.168.2.22",
+                    "inside_global_port": 513,
+                    "inside_local_port": 53,
+                    "outside_local_port": 256,
+                    "outside_global_port": 256
+                  }
+                }
+              },
+              "512": {
+                "192.168.2.22": {
+                  "256": {
+                    "protocol": "tcp",
+                    "inside_global": "192.168.1.1",
+                    "inside_local": "192.168.2.4",
+                    "outside_local": "192.168.2.22",
+                    "outside_global": "192.168.2.22",
+                    "inside_global_port": 512,
+                    "inside_local_port": 53,
+                    "outside_local_port": 256,
+                    "outside_global_port": 256
+                  }
+                }
+              }
+            }
+          },
+          "udp": {
+            "10.1.1.1": {
+              "1024": {
+                "10.0.0.1": {
+                  "53": {
+                    "protocol": "udp",
+                    "inside_global": "10.1.1.1",
+                    "inside_local": "192.168.10.5",
+                    "outside_local": "10.0.0.1",
+                    "outside_global": "10.0.0.1",
+                    "inside_global_port": 1024,
+                    "inside_local_port": 5060,
+                    "outside_local_port": 53,
+                    "outside_global_port": 53
+                  }
+                }
+              }
+            }
+          },
+          "static": {
+            "172.16.6.14": {
+              "no_port": {
+                "N/A": {
+                  "no_port": {
+                    "protocol": "static",
+                    "inside_global": "172.16.6.14",
+                    "inside_local": "10.10.10.4"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "total_translations": 5
+      }
+    }
+  ]
+}

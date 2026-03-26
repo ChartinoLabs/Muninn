@@ -1,0 +1,114 @@
+{
+  "os": "cisco_nxos",
+  "command": "show bfd neighbors",
+  "schema": {
+    "name": "ShowBfdNeighborsResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "BfdNeighborEntry",
+              "fields": {
+                "our_address": {
+                  "type": "str",
+                  "required": true
+                },
+                "local_discriminator": {
+                  "type": "int",
+                  "required": true
+                },
+                "remote_discriminator": {
+                  "type": "int",
+                  "required": true
+                },
+                "rh_rs": {
+                  "type": "str",
+                  "required": true
+                },
+                "holddown": {
+                  "type": "int",
+                  "required": true
+                },
+                "holddown_multiplier": {
+                  "type": "int",
+                  "required": true
+                },
+                "state": {
+                  "type": "str",
+                  "required": true
+                },
+                "vrf": {
+                  "type": "str",
+                  "required": true
+                },
+                "session_type": {
+                  "type": "str",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_entries": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic BFD neighbors with multiple sessions",
+      "input": "OurAddr         NeighAddr       LD/RD                 RH/RS           Holdown(mult)     State       Int                   Vrf                              Type\n172.23.0.18     172.23.0.19     1090540255/1090566886 Up              862(3)            Up          Eth1/10               default                          SH\n172.23.0.22     172.23.0.23     1090540256/1090561429 Up              647(3)            Up          Eth1/12               default                          SH\n172.23.0.20     172.23.0.21     1090540257/1090566968 Up              729(3)            Up          Eth1/11               default                          SH\n",
+      "expected": {
+        "neighbors": {
+          "172.23.0.19": {
+            "Ethernet1/10": {
+              "our_address": "172.23.0.18",
+              "local_discriminator": 1090540255,
+              "remote_discriminator": 1090566886,
+              "rh_rs": "Up",
+              "holddown": 862,
+              "holddown_multiplier": 3,
+              "state": "Up",
+              "vrf": "default",
+              "session_type": "SH"
+            }
+          },
+          "172.23.0.23": {
+            "Ethernet1/12": {
+              "our_address": "172.23.0.22",
+              "local_discriminator": 1090540256,
+              "remote_discriminator": 1090561429,
+              "rh_rs": "Up",
+              "holddown": 647,
+              "holddown_multiplier": 3,
+              "state": "Up",
+              "vrf": "default",
+              "session_type": "SH"
+            }
+          },
+          "172.23.0.21": {
+            "Ethernet1/11": {
+              "our_address": "172.23.0.20",
+              "local_discriminator": 1090540257,
+              "remote_discriminator": 1090566968,
+              "rh_rs": "Up",
+              "holddown": 729,
+              "holddown_multiplier": 3,
+              "state": "Up",
+              "vrf": "default",
+              "session_type": "SH"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

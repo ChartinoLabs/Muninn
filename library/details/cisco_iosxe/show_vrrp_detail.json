@@ -1,0 +1,185 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show vrrp detail",
+  "schema": {
+    "name": "ShowVrrpAllResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "VrrpGroupEntry",
+              "fields": {
+                "state": {
+                  "type": "str",
+                  "required": true
+                },
+                "virtual_ip_address": {
+                  "type": "str",
+                  "required": true
+                },
+                "virtual_mac_address": {
+                  "type": "str",
+                  "required": true
+                },
+                "advertisement_interval_secs": {
+                  "type": "float",
+                  "required": true
+                },
+                "preemption": {
+                  "type": "str",
+                  "required": true
+                },
+                "priority": {
+                  "type": "int",
+                  "required": true
+                },
+                "configured_priority": {
+                  "type": "int",
+                  "required": false
+                },
+                "master_router_ip": {
+                  "type": "str",
+                  "required": false
+                },
+                "master_router_is_local": {
+                  "type": "bool",
+                  "required": false
+                },
+                "master_router_priority": {
+                  "type": "int",
+                  "required": false
+                },
+                "master_advertisement_interval_secs": {
+                  "type": "float",
+                  "required": false
+                },
+                "master_down_interval_secs": {
+                  "type": "float",
+                  "required": false
+                },
+                "master_down_expires_secs": {
+                  "type": "float",
+                  "required": false
+                },
+                "master_advertisement_expires_msec": {
+                  "type": "int",
+                  "required": false
+                },
+                "track_objects": {
+                  "type": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "name": "TrackObjectEntry",
+                      "fields": {
+                        "state": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "decrement": {
+                          "type": "int",
+                          "required": true
+                        }
+                      }
+                    }
+                  },
+                  "required": false
+                },
+                "address_family": {
+                  "type": "str",
+                  "required": false
+                },
+                "description": {
+                  "type": "str",
+                  "required": false
+                },
+                "flags": {
+                  "type": "str",
+                  "required": false
+                },
+                "authentication": {
+                  "type": "str",
+                  "required": false
+                },
+                "state_duration_secs": {
+                  "type": "float",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic VRRP detail output with master and backup states",
+      "input": "GigabitEthernet0/0/6.101 - Group 1 - Address-Family IPv4\n  State is BACKUP\n  State duration 5 hours 41 mins 27 secs\n  Virtual IP address is 192.105.105.201\n  Virtual MAC address is 0000.5E00.0101\n  Advertisement interval is 1000 msec\n  Preemption enabled\n  Priority is 200\n  State change reason is VRRP_PREEMPT\n  Tloc preference not configured, value 0\n  Master Router is 192.105.105.91, priority is 220\n  Master Advertisement interval is 1000 msec (learned)\n  Master Down interval is 3218 msec (expires in 3066 msec)\n  FLAGS: 0/1\n  VRRPv3 Advertisements: sent 23 (errors 0) - rcvd 26331\n  VRRPv2 Advertisements: sent 23 (errors 0) - rcvd 2\n  Group Discarded Packets: 26361\n    VRRPv2 incompatibility: 26329\n    IP Address Owner conflicts: 0\n    Invalid address count: 0\n    IP address configuration mismatch : 0\n    Invalid Advert Interval: 0\n    Adverts received in Init state: 32\n    Invalid group other reason: 0\n  Group State transition:\n    Init to master: 0\n    Init to backup: 2 (Last change Tue Feb 15 07:17:16.662)\n    Backup to master: 2 (Last change Tue Feb 15 07:17:19.881)\n    Master to backup: 1 (Last change Tue Feb 15 07:17:37.384)\n    Master to init: 1 (Last change Tue Feb 15 07:12:56.285)\n    Backup to init: 0\nGigabitEthernet0/0/6.102 - Group 2 - Address-Family IPv4\n  State is MASTER\n  State duration 5 hours 41 mins 37 secs\n  Virtual IP address is 192.105.105.202\n  Virtual MAC address is 0000.5E00.0102\n  Advertisement interval is 3000 msec\n  Preemption enabled\n  Priority is 100\n  State change reason is VRRP_MASTER_NO_RESP\n  Tloc preference not configured, value 0\n    Track object omp state UP shutdown\n  Master Router is 192.105.105.102 (local), priority is 100\n  Master Advertisement interval is 3000 msec (expires in 1304 msec)\n  Master Down interval is unknown\n  FLAGS: 1/1\n  VRRPv3 Advertisements: sent 7598 (errors 0) - rcvd 3592\n  VRRPv2 Advertisements: sent 7598 (errors 0) - rcvd 1\n  Group Discarded Packets: 3623\n    VRRPv2 incompatibility: 3591\n    IP Address Owner conflicts: 0\n    Invalid address count: 0\n    IP address configuration mismatch : 3593\n    Invalid Advert Interval: 0\n    Adverts received in Init state: 32\n    Invalid group other reason: 0\n  Group State transition:\n    Init to master: 0\n    Init to backup: 2 (Last change Tue Feb 15 07:17:16.663)\n    Backup to master: 2 (Last change Tue Feb 15 07:17:27.491)\n    Master to backup: 0\n    Master to init: 1 (Last change Tue Feb 15 07:12:56.286)\n    Backup to init: 0\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet0/0/6.101": {
+            "1": {
+              "address_family": "IPv4",
+              "advertisement_interval_secs": 1.0,
+              "flags": "0/1",
+              "master_advertisement_interval_secs": 1.0,
+              "master_down_expires_secs": 3066.0,
+              "master_down_interval_secs": 3.218,
+              "master_router_ip": "192.105.105.91",
+              "master_router_priority": 220,
+              "preemption": "enabled",
+              "priority": 200,
+              "state": "BACKUP",
+              "virtual_ip_address": "192.105.105.201",
+              "virtual_mac_address": "0000.5E00.0101"
+            }
+          },
+          "GigabitEthernet0/0/6.102": {
+            "2": {
+              "address_family": "IPv4",
+              "advertisement_interval_secs": 3.0,
+              "flags": "1/1",
+              "master_advertisement_expires_msec": 1304,
+              "master_advertisement_interval_secs": 3.0,
+              "master_router_ip": "192.105.105.102",
+              "master_router_is_local": true,
+              "master_router_priority": 100,
+              "preemption": "enabled",
+              "priority": 100,
+              "state": "MASTER",
+              "virtual_ip_address": "192.105.105.202",
+              "virtual_mac_address": "0000.5E00.0102"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "VRRP group in INIT state with no virtual IP address configured",
+      "input": "GigabitEthernet0/0/2.150 - Group 2 - Address-Family IPv4\n  State is INIT (No layer3 interface address)\n  State duration 6 hours 40 mins 47 secs\n  Virtual IP address is no address\n  Virtual MAC address is 0000.5E00.0102\n  Advertisement interval is 1000 msec\n  Preemption enabled\n  Priority is 250\n  State change reason is VRRP_INIT\n  Tloc preference not configured, value 0\n  Master Router is unknown, priority is unknown\n  Master Advertisement interval is unknown\n  Master Down interval is unknown\n  FLAGS: 1/0\n  VRRPv3 Advertisements: sent 0 (errors 0) - rcvd 0\n  VRRPv2 Advertisements: sent 0 (errors 0) - rcvd 0\n  Group Discarded Packets: 0\n    VRRPv2 incompatibility: 0\n    IP Address Owner conflicts: 0\n    Invalid address count: 0\n    IP address configuration mismatch : 0\n    Invalid Advert Interval: 0\n    Adverts received in Init state: 0\n    Invalid group other reason: 0\n  Group State transition:\n    Init to master: 0\n    Init to backup: 0\n    Backup to master: 0\n    Master to backup: 0\n    Master to init: 0\n    Backup to init: 0\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet0/0/2.150": {
+            "2": {
+              "address_family": "IPv4",
+              "advertisement_interval_secs": 1.0,
+              "flags": "1/0",
+              "preemption": "enabled",
+              "priority": 250,
+              "state": "INIT",
+              "virtual_ip_address": "no address",
+              "virtual_mac_address": "0000.5E00.0102"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

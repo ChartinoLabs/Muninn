@@ -1,0 +1,805 @@
+{
+  "os": "cisco_nxos",
+  "command": "show ipv6 route",
+  "schema": {
+    "name": "ShowIpv6RouteResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfRoutes",
+            "fields": {
+              "routes": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "RouteEntry",
+                    "fields": {
+                      "ubest": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "mbest": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "attached": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "next_hops": {
+                        "type": {
+                          "type": "list",
+                          "items": {
+                            "name": "NextHop",
+                            "fields": {
+                              "next_hop": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "interface": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "preference": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "metric": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "uptime": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "protocol": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "best": {
+                                "type": "bool",
+                                "required": false
+                              },
+                              "tag": {
+                                "type": "int",
+                                "required": false
+                              },
+                              "route_type": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "segid": {
+                                "type": "int",
+                                "required": false
+                              },
+                              "tunnelid": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "encap": {
+                                "type": "str",
+                                "required": false
+                              }
+                            }
+                          }
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multi-VRF IPv6 routing table with static, OSPFv3, BGP, and direct/local routes including IPv4-mapped next-hops and tag values",
+      "input": "R3_nxosv# show ipv6 route vrf all\nIPv6 Routing Table for VRF \"default\"\n'*' denotes best ucast next-hop\n'**' denotes best mcast next-hop\n'[x/y]' denotes [preference/metric]\n\n2001:1:1:1::1/128, ubest/mbest: 2/0\n    *via 2001:10:1:3::1, Eth1/2, [1/0], 01:02:00, static\n    *via 2001:20:1:3::1, Eth1/3, [1/0], 01:02:00, static\n2001:10:1:2::/64, ubest/mbest: 4/0\n    *via fe80::5054:ff:fe64:bd2e, Eth1/3, [110/41], 01:01:10, ospfv3-1, intra\n    *via fe80::5054:ff:fea5:6e95, Eth1/2, [110/41], 01:01:10, ospfv3-1, intra\n    *via fe80::5054:ff:fea7:1341, Eth1/4, [110/41], 01:01:10, ospfv3-1, intra\n    *via fe80::5054:ff:feb3:b312, Eth1/1, [110/41], 01:01:10, ospfv3-1, intra\n\n2001:31:31:31::31/128, ubest/mbest: 1/0\n    *via ::ffff:10.229.11.11%default:IPv4, [200/0], 01:01:43, bgp-100, internal,\ntag 100\n2001:32:32:32::32/128, ubest/mbest: 2/0\n    *via fe80::5054:ff:fea7:1341, Eth1/4, [200/0], 01:01:24, bgp-100, internal,\ntag 100\n    *via fe80::5054:ff:feb3:b312, Eth1/1, [200/0], 01:01:24, bgp-100, internal,\ntag 100\n2001:33:33:33::33/128, ubest/mbest: 2/0, attached\n    *via 2001:33:33:33::33, Lo3, [0/0], 01:02:01, direct,\n    *via 2001:33:33:33::33, Lo3, [0/0], 01:02:01, local\n\nIPv6 Routing Table for VRF \"VRF1\"\n'*' denotes best ucast next-hop\n'**' denotes best mcast next-hop\n'[x/y]' denotes [preference/metric]\n\n2001:1:1:1::1/128, ubest/mbest: 2/0, attached\n    *via 2001:1:1:1::1, Lo4, [0/0], 00:00:35, direct,\n    *via 2001:1:1:1::1, Lo4, [0/0], 00:00:35, local\n\nIPv6 Routing Table for VRF \"management\"\n'*' denotes best ucast next-hop\n'**' denotes best mcast next-hop\n'[x/y]' denotes [preference/metric]\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "routes": {
+              "2001:1:1:1::1/128": {
+                "ubest": 2,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "2001:10:1:3::1",
+                    "preference": 1,
+                    "metric": 0,
+                    "uptime": "01:02:00",
+                    "protocol": "static",
+                    "best": true,
+                    "interface": "Ethernet1/2"
+                  },
+                  {
+                    "next_hop": "2001:20:1:3::1",
+                    "preference": 1,
+                    "metric": 0,
+                    "uptime": "01:02:00",
+                    "protocol": "static",
+                    "best": true,
+                    "interface": "Ethernet1/3"
+                  }
+                ]
+              },
+              "2001:10:1:2::/64": {
+                "ubest": 4,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "fe80::5054:ff:fe64:bd2e",
+                    "preference": 110,
+                    "metric": 41,
+                    "uptime": "01:01:10",
+                    "protocol": "ospfv3-1",
+                    "best": true,
+                    "interface": "Ethernet1/3",
+                    "route_type": "intra"
+                  },
+                  {
+                    "next_hop": "fe80::5054:ff:fea5:6e95",
+                    "preference": 110,
+                    "metric": 41,
+                    "uptime": "01:01:10",
+                    "protocol": "ospfv3-1",
+                    "best": true,
+                    "interface": "Ethernet1/2",
+                    "route_type": "intra"
+                  },
+                  {
+                    "next_hop": "fe80::5054:ff:fea7:1341",
+                    "preference": 110,
+                    "metric": 41,
+                    "uptime": "01:01:10",
+                    "protocol": "ospfv3-1",
+                    "best": true,
+                    "interface": "Ethernet1/4",
+                    "route_type": "intra"
+                  },
+                  {
+                    "next_hop": "fe80::5054:ff:feb3:b312",
+                    "preference": 110,
+                    "metric": 41,
+                    "uptime": "01:01:10",
+                    "protocol": "ospfv3-1",
+                    "best": true,
+                    "interface": "Ethernet1/1",
+                    "route_type": "intra"
+                  }
+                ]
+              },
+              "2001:31:31:31::31/128": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "::ffff:10.229.11.11%default:IPv4",
+                    "preference": 200,
+                    "metric": 0,
+                    "uptime": "01:01:43",
+                    "protocol": "bgp-100",
+                    "best": true,
+                    "route_type": "internal",
+                    "tag": 100
+                  }
+                ]
+              },
+              "2001:32:32:32::32/128": {
+                "ubest": 2,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "fe80::5054:ff:fea7:1341",
+                    "preference": 200,
+                    "metric": 0,
+                    "uptime": "01:01:24",
+                    "protocol": "bgp-100",
+                    "best": true,
+                    "interface": "Ethernet1/4",
+                    "route_type": "internal",
+                    "tag": 100
+                  },
+                  {
+                    "next_hop": "fe80::5054:ff:feb3:b312",
+                    "preference": 200,
+                    "metric": 0,
+                    "uptime": "01:01:24",
+                    "protocol": "bgp-100",
+                    "best": true,
+                    "interface": "Ethernet1/1",
+                    "route_type": "internal",
+                    "tag": 100
+                  }
+                ]
+              },
+              "2001:33:33:33::33/128": {
+                "ubest": 2,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "2001:33:33:33::33",
+                    "preference": 0,
+                    "metric": 0,
+                    "uptime": "01:02:01",
+                    "protocol": "direct",
+                    "best": true,
+                    "interface": "Loopback3"
+                  },
+                  {
+                    "next_hop": "2001:33:33:33::33",
+                    "preference": 0,
+                    "metric": 0,
+                    "uptime": "01:02:01",
+                    "protocol": "local",
+                    "best": true,
+                    "interface": "Loopback3"
+                  }
+                ],
+                "attached": true
+              }
+            }
+          },
+          "VRF1": {
+            "routes": {
+              "2001:1:1:1::1/128": {
+                "ubest": 2,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "2001:1:1:1::1",
+                    "preference": 0,
+                    "metric": 0,
+                    "uptime": "00:00:35",
+                    "protocol": "direct",
+                    "best": true,
+                    "interface": "Loopback4"
+                  },
+                  {
+                    "next_hop": "2001:1:1:1::1",
+                    "preference": 0,
+                    "metric": 0,
+                    "uptime": "00:00:35",
+                    "protocol": "local",
+                    "best": true,
+                    "interface": "Loopback4"
+                  }
+                ],
+                "attached": true
+              }
+            }
+          },
+          "management": {
+            "routes": {}
+          }
+        }
+      }
+    },
+    {
+      "name": "VXLAN overlay IPv6 routes with BGP next-hops including segid, tunnelid, encap attributes and HMM routes",
+      "input": "IPv6 Routing Table for VRF \"myvrf_50003\"\n'*' denotes best ucast next-hop\n'**' denotes best mcast next-hop\n'[x/y]' denotes [preference/metric]\n\n2001:100:20:b::/64, ubest/mbest: 1/0, attached\n    *via 2001:100:20:b::1, Vlan111, [0/0], 3d21h, direct, tag 12345\n2001:100:20:b::1/128, ubest/mbest: 1/0, attached\n    *via 2001:100:20:b::1, Vlan111, [0/0], 3d21h, local, tag 12345\n2001:100:20:b:12::1/128, ubest/mbest: 1/0\n    *via ::ffff:40.17.113.3%default:IPv4, [200/0], 0.000000, bgp-65103, internal, tag 6555\n, segid 50003 tunnelid: 0x28117103 encap: VXLAN\n\n2001:100:20:b:12::2/128, ubest/mbest: 1/0\n    *via ::ffff:40.17.113.3%default:IPv4, [200/0], 0.000000, bgp-65103, internal, tag 6555\n, segid 50003 tunnelid: 0x28117103 encap: VXLAN\n\n2001:100:20:b:12::3/128, ubest/mbest: 1/0\n    *via ::ffff:40.17.113.3%default:IPv4, [200/0], 0.000000, bgp-65103, , tag 6555\n, segid 50003 tunnelid: 0x28117103 encap: VXLAN\n\n2001:100:20:b:12::4/128, ubest/mbest: 1/0\n    *via ::ffff:40.17.113.3%default:IPv4, [200/0], 0.000000, bgp-65103, , tag 6555\n, segid 50003 tunnelid: 0x28117103 encap: VXLAN\n\n2001:100:20:b:44::1/128, ubest/mbest: 1/0, attached\n    *via 2001:100:20:b:44::1, Vlan111, [190/0], 1d20h, hmm\n2001:100:20:b:44::5/128, ubest/mbest: 1/0, attached\n    *via 2001:100:20:b:44::5, Vlan111, [190/0], 1d20h, hmm\n2001:100:20:b:44::8/128, ubest/mbest: 1/0, attached\n    *via 2001:100:20:b:44::8, Vlan111, [190/0], 1d20h, hmm\n2001:100:20:b:44::9/128, ubest/mbest: 1/0, attached\n    *via 2001:100:20:b:44::9, Vlan111, [190/0], 1d20h, hmm\n",
+      "expected": {
+        "vrfs": {
+          "myvrf_50003": {
+            "routes": {
+              "2001:100:20:b::/64": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "2001:100:20:b::1",
+                    "preference": 0,
+                    "metric": 0,
+                    "uptime": "3d21h",
+                    "protocol": "direct",
+                    "best": true,
+                    "interface": "Vlan111",
+                    "tag": 12345
+                  }
+                ],
+                "attached": true
+              },
+              "2001:100:20:b::1/128": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "2001:100:20:b::1",
+                    "preference": 0,
+                    "metric": 0,
+                    "uptime": "3d21h",
+                    "protocol": "local",
+                    "best": true,
+                    "interface": "Vlan111",
+                    "tag": 12345
+                  }
+                ],
+                "attached": true
+              },
+              "2001:100:20:b:12::1/128": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "::ffff:40.17.113.3%default:IPv4",
+                    "preference": 200,
+                    "metric": 0,
+                    "uptime": "0.000000",
+                    "protocol": "bgp-65103",
+                    "best": true,
+                    "route_type": "internal",
+                    "tag": 6555,
+                    "segid": 50003,
+                    "tunnelid": "0x28117103",
+                    "encap": "VXLAN"
+                  }
+                ]
+              },
+              "2001:100:20:b:12::2/128": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "::ffff:40.17.113.3%default:IPv4",
+                    "preference": 200,
+                    "metric": 0,
+                    "uptime": "0.000000",
+                    "protocol": "bgp-65103",
+                    "best": true,
+                    "route_type": "internal",
+                    "tag": 6555,
+                    "segid": 50003,
+                    "tunnelid": "0x28117103",
+                    "encap": "VXLAN"
+                  }
+                ]
+              },
+              "2001:100:20:b:12::3/128": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "::ffff:40.17.113.3%default:IPv4",
+                    "preference": 200,
+                    "metric": 0,
+                    "uptime": "0.000000",
+                    "protocol": "bgp-65103",
+                    "best": true,
+                    "tag": 6555,
+                    "segid": 50003,
+                    "tunnelid": "0x28117103",
+                    "encap": "VXLAN"
+                  }
+                ]
+              },
+              "2001:100:20:b:12::4/128": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "::ffff:40.17.113.3%default:IPv4",
+                    "preference": 200,
+                    "metric": 0,
+                    "uptime": "0.000000",
+                    "protocol": "bgp-65103",
+                    "best": true,
+                    "tag": 6555,
+                    "segid": 50003,
+                    "tunnelid": "0x28117103",
+                    "encap": "VXLAN"
+                  }
+                ]
+              },
+              "2001:100:20:b:44::1/128": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "2001:100:20:b:44::1",
+                    "preference": 190,
+                    "metric": 0,
+                    "uptime": "1d20h",
+                    "protocol": "hmm",
+                    "best": true,
+                    "interface": "Vlan111"
+                  }
+                ],
+                "attached": true
+              },
+              "2001:100:20:b:44::5/128": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "2001:100:20:b:44::5",
+                    "preference": 190,
+                    "metric": 0,
+                    "uptime": "1d20h",
+                    "protocol": "hmm",
+                    "best": true,
+                    "interface": "Vlan111"
+                  }
+                ],
+                "attached": true
+              },
+              "2001:100:20:b:44::8/128": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "2001:100:20:b:44::8",
+                    "preference": 190,
+                    "metric": 0,
+                    "uptime": "1d20h",
+                    "protocol": "hmm",
+                    "best": true,
+                    "interface": "Vlan111"
+                  }
+                ],
+                "attached": true
+              },
+              "2001:100:20:b:44::9/128": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "2001:100:20:b:44::9",
+                    "preference": 190,
+                    "metric": 0,
+                    "uptime": "1d20h",
+                    "protocol": "hmm",
+                    "best": true,
+                    "interface": "Vlan111"
+                  }
+                ],
+                "attached": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "EIGRP routes with sub-interfaces across two VRFs including direct/local attached routes and truncated route entry",
+      "input": "IPv6 Routing Table for VRF \"default\"\n'*' denotes best ucast next-hop\n'**' denotes best mcast next-hop\n'[x/y]' denotes [preference/metric]\n\n2001:1:1:1::1/128, ubest/mbest: 1/0\n    *via fe80::f816:3eff:fef8:e824, Eth1/2.90, [90/2848], 03:55:29, eigrp-test, internal\n2001:2:2:2::2/128, ubest/mbest: 1/0\n    *via fe80::f816:3eff:fe80:67f4, Eth1/1.90, [90/2842], 03:51:46, eigrp-test, internal\n2001:3:3:3::3/128, ubest/mbest: 2/0, attached\n    *via 2001:3:3:3::3, Lo0, [0/0], 03:55:33, direct,\n    *via 2001:3:3:3::3, Lo0, [0/0], 03:55:33, local\n2001:10:12:90::/64, ubest/mbest: 2/0\n    *via fe80::f816:3eff:fe80:67f4, Eth1/1.90, [90/3072], 03:51:46, eigrp-test, internal\n    *via fe80::f816:3eff:fef8:e824, Eth1/2.90, [90/3072], 03:55:29, eigrp-test, internal\n2001:10:12:120::/64, ubest/mbest: 1/0\n    *via fe80::f816:3eff:fef8:e824, Eth1/2.90, [90/3072], 03:39:27, eigrp-test, internal\n2001:10:13:90::/64, ubest/mbest: 1/0, attached\n    *via 2001:10:13:90::3, Eth1/2.90, [0/0], 03:55:45, direct,\n2001:10:13:90::3/128, ubest/mbest: 1/0, attached\n    *via 2001:10:13:90::3, Eth1/2.90, [0/0], 03:55:45, local\n2001:10:23:120::/64, ubest/mbest: 1/0, attached\n    *via 2001:10:23:120::3, Eth1/1.120, [0/0], 02:50:42, direct,\n2001:10:23:120::3/128, ubest/mbest: 1/0, attached\n    *via 2001:10:23:120::3, Eth1/1.120, [0/0], 02:50:42, local\n\n    IPv6 Routing Table for VRF \"VRF1\"\n'*' denotes best ucast next-hop\n'**' denotes best mcast next-hop\n'[x/y]' denotes [preference/metric]\n\n2001:1:1:1::1/128, ubest/mbest: 1/0\n    *via fe80::f816:3eff:fef8:e824, Eth1/2.390, [90/2848], 03:55:29, eigrp-test, internal\n2001:2:2:2::2/128, ubest/mbest: 1/0\n    *via fe80::f816:3eff:fe80:67f4, Eth1/1.390, [90/2842], 03:51:47, eigrp-test, internal\n2001:3:3:3::3/128, ubest/mbest: 2/0, attached\n    *via 2001:3:3:3::3, Lo300, [0/0], 03:55:33, direct,\n    *via 2001:3:3:3::3, Lo300, [0/0], 03:55:33, local\n2001:10:12:90::/64, ubest/mbest: 2/0\n    *via fe80::f816:3eff:fe80:67f4, Eth1/1.390, [90/3072], 03:51:47, eigrp-test, internal\n    *via fe80::f816:3eff:fef8:e824, Eth1/2.390, [90/3072], 03:55:29, eigrp-test, internal\n2001:10:12:120::/64, ubest/mbest: 1/0\n    *via fe80::f816:3eff:fef8:e824, Eth1/2.390, [90/3072], 03:25:35, eigrp-test, internal\n2001:10:13:90::/64, ubest/mbest: 1/0, attached\n    *via 2001:10:13:90::3, Eth1/2.390, [0/0], 03:55:44, direct,\n2001:10:13:110::3/128, ubest/mbest: 1/0, attached\n    *via 2001:10:13:110::3, Eth1/2.410, [0/0], 03:55:43, local\n2001:10:13:115::/64, ubest/mbest: 1/0, attached\n    *via 2001:10:13:115::3, Eth1/2.415, [0/0], 03:55:43, direct,\n2001:10:13:120::3/128, ubest/mbest: 1/0, attached\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "routes": {
+              "2001:1:1:1::1/128": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "fe80::f816:3eff:fef8:e824",
+                    "preference": 90,
+                    "metric": 2848,
+                    "uptime": "03:55:29",
+                    "protocol": "eigrp-test",
+                    "best": true,
+                    "interface": "Ethernet1/2.90",
+                    "route_type": "internal"
+                  }
+                ]
+              },
+              "2001:2:2:2::2/128": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "fe80::f816:3eff:fe80:67f4",
+                    "preference": 90,
+                    "metric": 2842,
+                    "uptime": "03:51:46",
+                    "protocol": "eigrp-test",
+                    "best": true,
+                    "interface": "Ethernet1/1.90",
+                    "route_type": "internal"
+                  }
+                ]
+              },
+              "2001:3:3:3::3/128": {
+                "ubest": 2,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "2001:3:3:3::3",
+                    "preference": 0,
+                    "metric": 0,
+                    "uptime": "03:55:33",
+                    "protocol": "direct",
+                    "best": true,
+                    "interface": "Loopback0"
+                  },
+                  {
+                    "next_hop": "2001:3:3:3::3",
+                    "preference": 0,
+                    "metric": 0,
+                    "uptime": "03:55:33",
+                    "protocol": "local",
+                    "best": true,
+                    "interface": "Loopback0"
+                  }
+                ],
+                "attached": true
+              },
+              "2001:10:12:90::/64": {
+                "ubest": 2,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "fe80::f816:3eff:fe80:67f4",
+                    "preference": 90,
+                    "metric": 3072,
+                    "uptime": "03:51:46",
+                    "protocol": "eigrp-test",
+                    "best": true,
+                    "interface": "Ethernet1/1.90",
+                    "route_type": "internal"
+                  },
+                  {
+                    "next_hop": "fe80::f816:3eff:fef8:e824",
+                    "preference": 90,
+                    "metric": 3072,
+                    "uptime": "03:55:29",
+                    "protocol": "eigrp-test",
+                    "best": true,
+                    "interface": "Ethernet1/2.90",
+                    "route_type": "internal"
+                  }
+                ]
+              },
+              "2001:10:12:120::/64": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "fe80::f816:3eff:fef8:e824",
+                    "preference": 90,
+                    "metric": 3072,
+                    "uptime": "03:39:27",
+                    "protocol": "eigrp-test",
+                    "best": true,
+                    "interface": "Ethernet1/2.90",
+                    "route_type": "internal"
+                  }
+                ]
+              },
+              "2001:10:13:90::/64": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "2001:10:13:90::3",
+                    "preference": 0,
+                    "metric": 0,
+                    "uptime": "03:55:45",
+                    "protocol": "direct",
+                    "best": true,
+                    "interface": "Ethernet1/2.90"
+                  }
+                ],
+                "attached": true
+              },
+              "2001:10:13:90::3/128": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "2001:10:13:90::3",
+                    "preference": 0,
+                    "metric": 0,
+                    "uptime": "03:55:45",
+                    "protocol": "local",
+                    "best": true,
+                    "interface": "Ethernet1/2.90"
+                  }
+                ],
+                "attached": true
+              },
+              "2001:10:23:120::/64": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "2001:10:23:120::3",
+                    "preference": 0,
+                    "metric": 0,
+                    "uptime": "02:50:42",
+                    "protocol": "direct",
+                    "best": true,
+                    "interface": "Ethernet1/1.120"
+                  }
+                ],
+                "attached": true
+              },
+              "2001:10:23:120::3/128": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "2001:10:23:120::3",
+                    "preference": 0,
+                    "metric": 0,
+                    "uptime": "02:50:42",
+                    "protocol": "local",
+                    "best": true,
+                    "interface": "Ethernet1/1.120"
+                  }
+                ],
+                "attached": true
+              }
+            }
+          },
+          "VRF1": {
+            "routes": {
+              "2001:1:1:1::1/128": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "fe80::f816:3eff:fef8:e824",
+                    "preference": 90,
+                    "metric": 2848,
+                    "uptime": "03:55:29",
+                    "protocol": "eigrp-test",
+                    "best": true,
+                    "interface": "Ethernet1/2.390",
+                    "route_type": "internal"
+                  }
+                ]
+              },
+              "2001:2:2:2::2/128": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "fe80::f816:3eff:fe80:67f4",
+                    "preference": 90,
+                    "metric": 2842,
+                    "uptime": "03:51:47",
+                    "protocol": "eigrp-test",
+                    "best": true,
+                    "interface": "Ethernet1/1.390",
+                    "route_type": "internal"
+                  }
+                ]
+              },
+              "2001:3:3:3::3/128": {
+                "ubest": 2,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "2001:3:3:3::3",
+                    "preference": 0,
+                    "metric": 0,
+                    "uptime": "03:55:33",
+                    "protocol": "direct",
+                    "best": true,
+                    "interface": "Loopback300"
+                  },
+                  {
+                    "next_hop": "2001:3:3:3::3",
+                    "preference": 0,
+                    "metric": 0,
+                    "uptime": "03:55:33",
+                    "protocol": "local",
+                    "best": true,
+                    "interface": "Loopback300"
+                  }
+                ],
+                "attached": true
+              },
+              "2001:10:12:90::/64": {
+                "ubest": 2,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "fe80::f816:3eff:fe80:67f4",
+                    "preference": 90,
+                    "metric": 3072,
+                    "uptime": "03:51:47",
+                    "protocol": "eigrp-test",
+                    "best": true,
+                    "interface": "Ethernet1/1.390",
+                    "route_type": "internal"
+                  },
+                  {
+                    "next_hop": "fe80::f816:3eff:fef8:e824",
+                    "preference": 90,
+                    "metric": 3072,
+                    "uptime": "03:55:29",
+                    "protocol": "eigrp-test",
+                    "best": true,
+                    "interface": "Ethernet1/2.390",
+                    "route_type": "internal"
+                  }
+                ]
+              },
+              "2001:10:12:120::/64": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "fe80::f816:3eff:fef8:e824",
+                    "preference": 90,
+                    "metric": 3072,
+                    "uptime": "03:25:35",
+                    "protocol": "eigrp-test",
+                    "best": true,
+                    "interface": "Ethernet1/2.390",
+                    "route_type": "internal"
+                  }
+                ]
+              },
+              "2001:10:13:90::/64": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "2001:10:13:90::3",
+                    "preference": 0,
+                    "metric": 0,
+                    "uptime": "03:55:44",
+                    "protocol": "direct",
+                    "best": true,
+                    "interface": "Ethernet1/2.390"
+                  }
+                ],
+                "attached": true
+              },
+              "2001:10:13:110::3/128": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "2001:10:13:110::3",
+                    "preference": 0,
+                    "metric": 0,
+                    "uptime": "03:55:43",
+                    "protocol": "local",
+                    "best": true,
+                    "interface": "Ethernet1/2.410"
+                  }
+                ],
+                "attached": true
+              },
+              "2001:10:13:115::/64": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [
+                  {
+                    "next_hop": "2001:10:13:115::3",
+                    "preference": 0,
+                    "metric": 0,
+                    "uptime": "03:55:43",
+                    "protocol": "direct",
+                    "best": true,
+                    "interface": "Ethernet1/2.415"
+                  }
+                ],
+                "attached": true
+              },
+              "2001:10:13:120::3/128": {
+                "ubest": 1,
+                "mbest": 0,
+                "next_hops": [],
+                "attached": true
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

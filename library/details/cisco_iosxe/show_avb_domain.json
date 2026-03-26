@@ -1,0 +1,157 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show avb domain",
+  "schema": {
+    "name": "ShowAvbDomainResult",
+    "fields": {
+      "class_a": {
+        "type": {
+          "name": "AvbClassSummary",
+          "fields": {
+            "priority_code_point": {
+              "type": "int",
+              "required": true
+            },
+            "vlan": {
+              "type": "int",
+              "required": true
+            },
+            "core_ports": {
+              "type": "int",
+              "required": true
+            },
+            "boundary_ports": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "class_b": {
+        "type": {
+          "type": "ref",
+          "name": "AvbClassSummary"
+        },
+        "required": true
+      },
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "AvbInterfaceEntry",
+            "fields": {
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "delay": {
+                "type": "str",
+                "required": false
+              },
+              "information": {
+                "type": "str",
+                "required": false
+              },
+              "class_a": {
+                "type": {
+                  "name": "AvbInterfaceClassEntry",
+                  "fields": {
+                    "role": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "pcp": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "vid": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "class_b": {
+                "type": {
+                  "type": "ref",
+                  "name": "AvbInterfaceClassEntry"
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show avb domain output with core and boundary ports",
+      "input": "Switch#show avb domain\n\nAVB Class-A\n    Priority Code Point     : 3\n    VLAN                    : 2\n    Core ports              : 2\n    Boundary ports          : 31\n\nAVB Class-B\n    Priority Code Point     : 2\n    VLAN                    : 2\n    Core ports              : 0\n    Boundary ports          : 33\n\n--------------------------------------------------------------------------------\nInterface    State       Delay    PCP  VID  Information\n--------------------------------------------------------------------------------\n    Te1/0/1          up    300ns\n   Class-  A        core             3    2\n   Class-  B    boundary             0    0\n----\n    Te1/0/2          up      N/A                    Port is not asCapable\n----\n    Te1/0/3          up    284ns\n   Class-  A        core             3    2\n   Class-  B    boundary             0    0\n----\n     Te1/0/4        down      N/A                        Oper state not up\n----\n     Te1/0/5        down      N/A                        Oper state not up\n----\n     Te1/0/6        down      N/A                        Oper state not up\n----\n",
+      "expected": {
+        "class_a": {
+          "priority_code_point": 3,
+          "vlan": 2,
+          "core_ports": 2,
+          "boundary_ports": 31
+        },
+        "class_b": {
+          "priority_code_point": 2,
+          "vlan": 2,
+          "core_ports": 0,
+          "boundary_ports": 33
+        },
+        "interfaces": {
+          "TenGigabitEthernet1/0/1": {
+            "state": "up",
+            "delay": "300ns",
+            "class_a": {
+              "role": "core",
+              "pcp": 3,
+              "vid": 2
+            },
+            "class_b": {
+              "role": "boundary",
+              "pcp": 0,
+              "vid": 0
+            }
+          },
+          "TenGigabitEthernet1/0/2": {
+            "state": "up",
+            "information": "Port is not asCapable"
+          },
+          "TenGigabitEthernet1/0/3": {
+            "state": "up",
+            "delay": "284ns",
+            "class_a": {
+              "role": "core",
+              "pcp": 3,
+              "vid": 2
+            },
+            "class_b": {
+              "role": "boundary",
+              "pcp": 0,
+              "vid": 0
+            }
+          },
+          "TenGigabitEthernet1/0/4": {
+            "state": "down",
+            "information": "Oper state not up"
+          },
+          "TenGigabitEthernet1/0/5": {
+            "state": "down",
+            "information": "Oper state not up"
+          },
+          "TenGigabitEthernet1/0/6": {
+            "state": "down",
+            "information": "Oper state not up"
+          }
+        }
+      }
+    }
+  ]
+}

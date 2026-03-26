@@ -1,0 +1,243 @@
+{
+  "os": "cisco_nxos",
+  "command": "show processes cpu",
+  "schema": {
+    "name": "ShowProcessesCpuResult",
+    "fields": {
+      "cpu_utilization_five_sec": {
+        "type": "int",
+        "required": true
+      },
+      "cpu_utilization_one_min": {
+        "type": "int",
+        "required": true
+      },
+      "cpu_utilization_five_min": {
+        "type": "int",
+        "required": true
+      },
+      "interrupt_percentage": {
+        "type": "int",
+        "required": true
+      },
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ProcessEntry",
+            "fields": {
+              "runtime_ms": {
+                "type": "int",
+                "required": true
+              },
+              "invoked": {
+                "type": "int",
+                "required": true
+              },
+              "usecs": {
+                "type": "int",
+                "required": true
+              },
+              "five_sec": {
+                "type": "float",
+                "required": true
+              },
+              "one_min": {
+                "type": "float",
+                "required": true
+              },
+              "five_min": {
+                "type": "float",
+                "required": true
+              },
+              "tty": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with multiple processes and CPU utilization",
+      "input": "CPU utilization for five seconds: 15%/1%; one minute: 12%; five minutes: 10%\nPID    Runtime(ms)  Invoked   uSecs  5Sec    1Min    5Min    TTY  Process\n-----  -----------  --------  -----  ------  ------  ------  ---  -----------\n    1         6170      1011      6   0.00%   0.00%  0.00%   -    init\n 2828           20         6      3   0.00%   0.00%  0.00%   -    portmap\n 2866           20         8      2   0.00%   0.00%  0.00%   -    rpc.statd\n 2876         3490     12448      0   0.92%   0.34%  0.10%   -    sysmgr\n 3383           80         6     13   0.00%   0.00%  0.00%   -    xinetd\n 3384           40         5      8   0.00%   0.00%  0.00%   -    tftpd\n 3385         1650      6566      0   0.00%   0.01%  0.01%   -    syslogd\n 3386          450        51      8   0.00%   0.00%  0.00%   -    sdwrapd\n 3387          650        92      7   0.00%   0.00%  0.00%   -    pfm_dummy\n 3388         2920      4747      0   0.00%   0.03%  0.03%   -    platform\n 3400          150       731      0   0.00%   0.00%  0.00%   -    klogd\n 3403          560       863      0   0.00%   0.00%  0.00%   -    vshd\n 3404          670      1698      0   0.00%   0.00%  0.00%   -    vpc_config_sync\n 3405          270      2214      0   0.00%   0.00%  0.00%   -    smm\n 3406          620      1399      0   0.00%   0.00%  0.00%   -    session-mgr\n 3407          730      4464      0   0.00%   0.00%  0.00%   -    psshelper\n 3408          820      1531      0   0.00%   0.00%  0.00%   -    pixm\n 3410          580     19429      0   0.00%   0.03%  0.03%   -    pdsd\n",
+      "expected": {
+        "cpu_utilization_five_min": 10,
+        "cpu_utilization_five_sec": 15,
+        "cpu_utilization_one_min": 12,
+        "interrupt_percentage": 1,
+        "processes": {
+          "1/init": {
+            "five_min": 0.0,
+            "five_sec": 0.0,
+            "invoked": 1011,
+            "one_min": 0.0,
+            "runtime_ms": 6170,
+            "usecs": 6
+          },
+          "2828/portmap": {
+            "five_min": 0.0,
+            "five_sec": 0.0,
+            "invoked": 6,
+            "one_min": 0.0,
+            "runtime_ms": 20,
+            "usecs": 3
+          },
+          "2866/rpc.statd": {
+            "five_min": 0.0,
+            "five_sec": 0.0,
+            "invoked": 8,
+            "one_min": 0.0,
+            "runtime_ms": 20,
+            "usecs": 2
+          },
+          "2876/sysmgr": {
+            "five_min": 0.1,
+            "five_sec": 0.92,
+            "invoked": 12448,
+            "one_min": 0.34,
+            "runtime_ms": 3490,
+            "usecs": 0
+          },
+          "3383/xinetd": {
+            "five_min": 0.0,
+            "five_sec": 0.0,
+            "invoked": 6,
+            "one_min": 0.0,
+            "runtime_ms": 80,
+            "usecs": 13
+          },
+          "3384/tftpd": {
+            "five_min": 0.0,
+            "five_sec": 0.0,
+            "invoked": 5,
+            "one_min": 0.0,
+            "runtime_ms": 40,
+            "usecs": 8
+          },
+          "3385/syslogd": {
+            "five_min": 0.01,
+            "five_sec": 0.0,
+            "invoked": 6566,
+            "one_min": 0.01,
+            "runtime_ms": 1650,
+            "usecs": 0
+          },
+          "3386/sdwrapd": {
+            "five_min": 0.0,
+            "five_sec": 0.0,
+            "invoked": 51,
+            "one_min": 0.0,
+            "runtime_ms": 450,
+            "usecs": 8
+          },
+          "3387/pfm_dummy": {
+            "five_min": 0.0,
+            "five_sec": 0.0,
+            "invoked": 92,
+            "one_min": 0.0,
+            "runtime_ms": 650,
+            "usecs": 7
+          },
+          "3388/platform": {
+            "five_min": 0.03,
+            "five_sec": 0.0,
+            "invoked": 4747,
+            "one_min": 0.03,
+            "runtime_ms": 2920,
+            "usecs": 0
+          },
+          "3400/klogd": {
+            "five_min": 0.0,
+            "five_sec": 0.0,
+            "invoked": 731,
+            "one_min": 0.0,
+            "runtime_ms": 150,
+            "usecs": 0
+          },
+          "3403/vshd": {
+            "five_min": 0.0,
+            "five_sec": 0.0,
+            "invoked": 863,
+            "one_min": 0.0,
+            "runtime_ms": 560,
+            "usecs": 0
+          },
+          "3404/vpc_config_sync": {
+            "five_min": 0.0,
+            "five_sec": 0.0,
+            "invoked": 1698,
+            "one_min": 0.0,
+            "runtime_ms": 670,
+            "usecs": 0
+          },
+          "3405/smm": {
+            "five_min": 0.0,
+            "five_sec": 0.0,
+            "invoked": 2214,
+            "one_min": 0.0,
+            "runtime_ms": 270,
+            "usecs": 0
+          },
+          "3406/session-mgr": {
+            "five_min": 0.0,
+            "five_sec": 0.0,
+            "invoked": 1399,
+            "one_min": 0.0,
+            "runtime_ms": 620,
+            "usecs": 0
+          },
+          "3407/psshelper": {
+            "five_min": 0.0,
+            "five_sec": 0.0,
+            "invoked": 4464,
+            "one_min": 0.0,
+            "runtime_ms": 730,
+            "usecs": 0
+          },
+          "3408/pixm": {
+            "five_min": 0.0,
+            "five_sec": 0.0,
+            "invoked": 1531,
+            "one_min": 0.0,
+            "runtime_ms": 820,
+            "usecs": 0
+          },
+          "3410/pdsd": {
+            "five_min": 0.03,
+            "five_sec": 0.0,
+            "invoked": 19429,
+            "one_min": 0.03,
+            "runtime_ms": 580,
+            "usecs": 0
+          }
+        }
+      }
+    },
+    {
+      "name": "Minimal output with a single process entry",
+      "input": "CPU utilization for five seconds: 3%/0%; one minute: 5%; five minutes: 2%\nPID    Runtime(ms)  Invoked   uSecs  5Sec    1Min    5Min    TTY  Process\n-----  -----------  --------  -----  ------  ------  ------  ---  -----------\n    1         6170      1011      6   0.00%   0.00%  0.00%   -    init\n",
+      "expected": {
+        "cpu_utilization_five_min": 2,
+        "cpu_utilization_five_sec": 3,
+        "cpu_utilization_one_min": 5,
+        "interrupt_percentage": 0,
+        "processes": {
+          "1/init": {
+            "five_min": 0.0,
+            "five_sec": 0.0,
+            "invoked": 1011,
+            "one_min": 0.0,
+            "runtime_ms": 6170,
+            "usecs": 6
+          }
+        }
+      }
+    }
+  ]
+}

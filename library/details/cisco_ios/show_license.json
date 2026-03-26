@@ -1,0 +1,153 @@
+{
+  "os": "cisco_ios",
+  "command": "show license",
+  "schema": {
+    "name": "ShowLicenseResult",
+    "fields": {
+      "licenses": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "LicenseEntry",
+            "fields": {
+              "index": {
+                "type": "int",
+                "required": true
+              },
+              "feature": {
+                "type": "str",
+                "required": true
+              },
+              "license_type": {
+                "type": "str",
+                "required": false
+              },
+              "license_state": {
+                "type": "str",
+                "required": false
+              },
+              "license_count": {
+                "type": "str",
+                "required": false
+              },
+              "license_priority": {
+                "type": "str",
+                "required": false
+              },
+              "period_left": {
+                "type": "str",
+                "required": false
+              },
+              "period_used": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with multiple license features including permanent and eval licenses",
+      "input": "Index 1 Feature: appxk9\n        Period left: Life time\n        License Type: Permanent\n        License State: Active, In Use\n        License Count: Non-Counted\n        License Priority: Medium\nIndex 2 Feature: uck9\n        Period left: Not Activated\n        Period Used: 0  minute  0  second\n        License Type: EvalRightToUse\n        License State: Active, Not in Use, EULA not accepted\n        License Count: Non-Counted\n        License Priority: None\nIndex 3 Feature: securityk9\n        Period left: Life time\n        License Type: Permanent\n        License State: Active, In Use\n        License Count: Non-Counted\n        License Priority: Medium\nIndex 4 Feature: ipbasek9\n        Period left: Life time\n        License Type: Permanent\n        License State: Active, In Use\n        License Count: Non-Counted\n        License Priority: Medium\nIndex 5 Feature: FoundationSuiteK9\n        Period left: Not Activated\n        Period Used: 0  minute  0  second\n        License Type: EvalRightToUse\n        License State: Active, Not in Use, EULA not accepted\n        License Count: Non-Counted\n        License Priority: None\nIndex 6 Feature: AdvUCSuiteK9\n        Period left: Not Activated\n        Period Used: 0  minute  0  second\n        License Type: EvalRightToUse\n        License State: Active, Not in Use, EULA not accepted\n        License Count: Non-Counted\n        License Priority: None\nIndex 7 Feature: cme-srst\n        Period left: Not Activated\n        Period Used: 0  minute  0  second\n        License Type: EvalRightToUse\n        License State: Active, Not in Use, EULA not accepted\n        License Count: 0/0  (In-use/Violation)\n        License Priority: None\nIndex 8 Feature: hseck9\n        Period left: Life time\n        License Type: Permanent\n        License State: Active, In Use\n        License Count: Non-Counted\n        License Priority: Medium\nIndex 9 Feature: throughput\n        Period left: Not Activated\n        Period Used: 0  minute  0  second\n        License Type: EvalRightToUse\n        License State: Active, Not in Use, EULA not accepted\n        License Count: Non-Counted\n        License Priority: None\nIndex 10 Feature: internal_service\n",
+      "expected": {
+        "licenses": {
+          "AdvUCSuiteK9": {
+            "feature": "AdvUCSuiteK9",
+            "index": 6,
+            "license_count": "Non-Counted",
+            "license_priority": "None",
+            "license_state": "Active, Not in Use, EULA not accepted",
+            "license_type": "EvalRightToUse",
+            "period_left": "Not Activated",
+            "period_used": "0  minute  0  second"
+          },
+          "FoundationSuiteK9": {
+            "feature": "FoundationSuiteK9",
+            "index": 5,
+            "license_count": "Non-Counted",
+            "license_priority": "None",
+            "license_state": "Active, Not in Use, EULA not accepted",
+            "license_type": "EvalRightToUse",
+            "period_left": "Not Activated",
+            "period_used": "0  minute  0  second"
+          },
+          "appxk9": {
+            "feature": "appxk9",
+            "index": 1,
+            "license_count": "Non-Counted",
+            "license_priority": "Medium",
+            "license_state": "Active, In Use",
+            "license_type": "Permanent",
+            "period_left": "Life time"
+          },
+          "cme-srst": {
+            "feature": "cme-srst",
+            "index": 7,
+            "license_count": "0/0  (In-use/Violation)",
+            "license_priority": "None",
+            "license_state": "Active, Not in Use, EULA not accepted",
+            "license_type": "EvalRightToUse",
+            "period_left": "Not Activated",
+            "period_used": "0  minute  0  second"
+          },
+          "hseck9": {
+            "feature": "hseck9",
+            "index": 8,
+            "license_count": "Non-Counted",
+            "license_priority": "Medium",
+            "license_state": "Active, In Use",
+            "license_type": "Permanent",
+            "period_left": "Life time"
+          },
+          "internal_service": {
+            "feature": "internal_service",
+            "index": 10
+          },
+          "ipbasek9": {
+            "feature": "ipbasek9",
+            "index": 4,
+            "license_count": "Non-Counted",
+            "license_priority": "Medium",
+            "license_state": "Active, In Use",
+            "license_type": "Permanent",
+            "period_left": "Life time"
+          },
+          "securityk9": {
+            "feature": "securityk9",
+            "index": 3,
+            "license_count": "Non-Counted",
+            "license_priority": "Medium",
+            "license_state": "Active, In Use",
+            "license_type": "Permanent",
+            "period_left": "Life time"
+          },
+          "throughput": {
+            "feature": "throughput",
+            "index": 9,
+            "license_count": "Non-Counted",
+            "license_priority": "None",
+            "license_state": "Active, Not in Use, EULA not accepted",
+            "license_type": "EvalRightToUse",
+            "period_left": "Not Activated",
+            "period_used": "0  minute  0  second"
+          },
+          "uck9": {
+            "feature": "uck9",
+            "index": 2,
+            "license_count": "Non-Counted",
+            "license_priority": "None",
+            "license_state": "Active, Not in Use, EULA not accepted",
+            "license_type": "EvalRightToUse",
+            "period_left": "Not Activated",
+            "period_used": "0  minute  0  second"
+          }
+        }
+      }
+    }
+  ]
+}
