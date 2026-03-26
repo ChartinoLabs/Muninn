@@ -1,7 +1,7 @@
 """Parser for 'show policy-map interface' command on IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -648,7 +648,7 @@ def _handle_priority_line(
 
     prio_lvl_m = _PRIORITY_LEVEL_RE.match(stripped)
     if prio_lvl_m:
-        prio_entry: PriorityEntry = class_entry.get("priority", {})  # type: ignore[assignment]
+        prio_entry = cast(PriorityEntry, class_entry.get("priority", {}))
         prio_entry["level"] = int(prio_lvl_m.group(1))
         class_entry["priority"] = prio_entry
         return True

@@ -206,8 +206,9 @@ def _build_summary(
         raise ValueError(msg)
 
     summary = PacketsSummary(traced=counters["traced"])
-    if counters.get("matched") is not None:
-        summary["matched"] = counters["matched"]  # type: ignore[assignment]
+    matched = counters.get("matched")
+    if matched is not None:
+        summary["matched"] = matched
     return summary
 
 

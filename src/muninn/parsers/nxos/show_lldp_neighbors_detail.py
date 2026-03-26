@@ -2,7 +2,7 @@
 
 import re
 from collections.abc import Callable
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -159,7 +159,7 @@ class ShowLldpNeighborsDetailParser(BaseParser[ShowLldpNeighborsDetailResult]):
     ) -> None:
         """Save a completed entry into the neighbors dict if valid."""
         if local_port and entry.get("chassis_id"):
-            neighbors[local_port] = entry  # type: ignore[assignment]
+            neighbors[local_port] = cast(LldpNeighborDetailEntry, entry)
 
     @classmethod
     def _try_match_field(cls, stripped: str, entry: dict[str, str | int]) -> bool:
