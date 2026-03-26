@@ -99,7 +99,7 @@ def _build_entry(
     entry: LldpNeighborDetailEntry = {
         "chassis_id": str(chassis_id),
         "port_id": _canonicalize_if_interface(str(port_id)),
-        "time_remaining": int(time_remaining),  # type: ignore[arg-type]
+        "time_remaining": int(str(time_remaining)),
     }
 
     _optional_str_fields: tuple[OptionalStrField, ...] = (

@@ -1,6 +1,7 @@
 """Parser for 'show cdp neighbors detail' command on NX-OS."""
 
 import re
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from typing import ClassVar, Literal, NotRequired, TypedDict
 
@@ -232,7 +233,8 @@ class ShowCdpNeighborsDetailParser(
 
         for key in _OPTIONAL_LIST_FIELDS:
             if fields.get(key):
-                entry[key] = list(fields[key])  # type: ignore[literal-required, arg-type]
+                value = fields[key]
+                entry[key] = list(value) if isinstance(value, Iterable) else [value]  # type: ignore[literal-required]
 
     @classmethod
     def _save_record(cls, state: _ParseState) -> None:

@@ -411,8 +411,8 @@ def _build_route_entry(
         if type_name:
             entry["type"] = type_name
 
-    flag_dict = _parse_flags(flags)
-    entry.update(flag_dict)
+    for flag_key, flag_val in _parse_flags(flags).items():
+        entry[flag_key] = flag_val
 
     return entry
 

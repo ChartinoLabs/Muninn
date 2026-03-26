@@ -227,7 +227,7 @@ def _split_session_blocks(output: str) -> list[list[str]]:
     return blocks
 
 
-def _try_parse_sa_fields(line: str, sa: dict) -> bool:
+def _try_parse_sa_fields(line: str, sa: IpsecSaEntry) -> bool:
     """Attempt to parse SA detail fields into the given dict.
 
     Returns True if the line was consumed.
@@ -261,7 +261,7 @@ def _parse_ipsec_sa_block(
     """
     sas: list[IpsecSaEntry] = []
     idx = start
-    current_sa: dict | None = None
+    current_sa: IpsecSaEntry | None = None
 
     while idx < len(lines):
         line = lines[idx]
@@ -274,8 +274,8 @@ def _parse_ipsec_sa_block(
         m = _SPI_RE.match(line)
         if m:
             if current_sa is not None:
-                sas.append(current_sa)  # type: ignore[arg-type]
-            current_sa = {"spi": _normalize_spi(m.group(1))}
+                sas.append(current_sa)
+            current_sa = IpsecSaEntry(spi=_normalize_spi(m.group(1)))
             idx += 1
             continue
 
@@ -286,7 +286,7 @@ def _parse_ipsec_sa_block(
         idx += 1
 
     if current_sa is not None:
-        sas.append(current_sa)  # type: ignore[arg-type]
+        sas.append(current_sa)
 
     return sas, idx
 
