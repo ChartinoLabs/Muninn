@@ -61,6 +61,19 @@ docs = [
     "mkdocs-material>=9.7.6",
 ]
 
+[tool.ty.rules]
+# Suppressed rules introduced by ty 0.0.25. Each has a tracking issue
+# to fix the underlying code and re-enable the rule.
+# See: https://github.com/ChartinoLabs/Muninn/issues?q=label:ty-strictness
+missing-typed-dict-key = "ignore"  # #673 — parsers build TypedDicts incrementally
+invalid-return-type = "ignore"     # #674 — dict returned where TypedDict expected
+invalid-key = "ignore"             # #675 — dynamic key subscript on TypedDict
+invalid-argument-type = "ignore"   # #676 — type narrows not yet recognized
+invalid-assignment = "ignore"      # #677 — assignments to TypedDict fields via dynamic keys
+no-matching-overload = "ignore"    # #678 — setdefault/dict method overload mismatches
+call-non-callable = "ignore"       # #679 — false positives on TypedDict value callables
+unresolved-attribute = "ignore"    # #680 — attribute access on union types
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "test_*.py"
