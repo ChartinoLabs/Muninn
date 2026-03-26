@@ -47,6 +47,41 @@ class CiscoIOS(OperatingSystem):
     aliases = ("ios", "cisco_ios")
 
 
+class AristaEOS(OperatingSystem):
+    """Arista EOS (data center and campus switches)."""
+
+    name = "arista_eos"
+    aliases = ("arista_eos", "eos", "arista")
+
+
+class JuniperJunos(OperatingSystem):
+    """Juniper Junos (MX, QFX, EX, SRX, PTX)."""
+
+    name = "juniper_junos"
+    aliases = ("juniper_junos", "junos", "juniper")
+
+
+class PaloAltoPanOS(OperatingSystem):
+    """Palo Alto PAN-OS (next-generation firewalls)."""
+
+    name = "paloalto_panos"
+    aliases = ("paloalto_panos", "panos", "paloalto", "pan-os", "pan_os")
+
+
+class NokiaSROS(OperatingSystem):
+    """Nokia SR OS (7750 SR, 7210 SAS, 7450 ESS)."""
+
+    name = "nokia_sros"
+    aliases = ("nokia_sros", "sros", "nokia", "sr-os", "sr_os")
+
+
+class Linux(OperatingSystem):
+    """Linux (including SONiC, Cumulus, FRR-based platforms)."""
+
+    name = "linux"
+    aliases = ("linux",)
+
+
 class OS(Enum):
     """Enumeration of supported operating systems.
 
@@ -63,6 +98,11 @@ class OS(Enum):
     CISCO_IOSXE = CiscoIOSXE
     CISCO_IOSXR = CiscoIOSXR
     CISCO_IOS = CiscoIOS
+    ARISTA_EOS = AristaEOS
+    JUNIPER_JUNOS = JuniperJunos
+    PALOALTO_PANOS = PaloAltoPanOS
+    NOKIA_SROS = NokiaSROS
+    LINUX = Linux
 
 
 # Build lookup table: alias -> OS enum member
