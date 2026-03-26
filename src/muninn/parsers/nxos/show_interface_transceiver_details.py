@@ -2,7 +2,7 @@
 
 import re
 from dataclasses import dataclass, field
-from typing import ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -236,7 +236,8 @@ def _handle_diagnostics(
         entry_key = _DIAG_FIELD_MAP.get(diag_match.group("field"))
         if entry_key:
             reading = _build_diagnostic_reading(diag_match)
-            entry[entry_key] = reading  # type: ignore[literal-required]
+            _d = cast(dict[str, Any], entry)
+            _d[entry_key] = reading
         return True
 
     tx_fault_match = _TX_FAULT_PATTERN.match(stripped)
@@ -302,7 +303,8 @@ def _handle_identification(
         if bitrate is not None:
             state.current_entry["nominal_bitrate_mbps"] = bitrate
     else:
-        state.current_entry[mapped_key] = raw_value  # type: ignore[literal-required]
+        _d2 = cast(dict[str, Any], state.current_entry)
+        _d2[mapped_key] = raw_value
     return True
 
 

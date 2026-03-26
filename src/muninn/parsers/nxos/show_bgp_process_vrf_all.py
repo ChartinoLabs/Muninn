@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -377,17 +377,18 @@ def _parse_af_detail_line(
     af_entry: AddressFamilyEntry,
 ) -> bool:
     """Try to parse a single AF detail line. Returns True if consumed."""
+    _d = cast(dict[str, Any], af_entry)
     for pattern, key in _AF_DETAIL_STR_DISPATCH:
         if m := pattern.match(line):
-            af_entry[key] = m.group(1)  # type: ignore[literal-required]
+            _d[key] = m.group(1)
             return True
     for pattern, key in _AF_DETAIL_INT_DISPATCH:
         if m := pattern.match(line):
-            af_entry[key] = int(m.group(1))  # type: ignore[literal-required]
+            _d[key] = int(m.group(1))
             return True
     for pattern, key in _AF_DETAIL_BOOL_DISPATCH:
         if pattern.match(line):
-            af_entry[key] = True  # type: ignore[literal-required]
+            _d[key] = True
             return True
     return False
 
@@ -431,17 +432,18 @@ def _try_parse_rt_list(
     af_entry: AddressFamilyEntry,
 ) -> tuple[bool, int]:
     """Try to parse an RT list header and its values. Returns (matched, new_idx)."""
+    _d = cast(dict[str, Any], af_entry)
     for pattern, key in _RT_LIST_DISPATCH:
         m = pattern.match(line)
         if m:
             inline = m.group(1)
             idx += 1
             if inline and inline.strip():
-                af_entry[key] = [inline.strip()]  # type: ignore[literal-required]
+                _d[key] = [inline.strip()]
             else:
                 values, idx = _collect_rt_values(lines, idx)
                 if values:
-                    af_entry[key] = values  # type: ignore[literal-required]
+                    _d[key] = values
             return True, idx
     return False, idx
 

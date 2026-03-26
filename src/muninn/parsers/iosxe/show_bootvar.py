@@ -1,7 +1,7 @@
 """Parser for 'show bootvar' command on IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -116,7 +116,8 @@ def _process_line(
             value = _clean_value(match.group("value"))
             if value is not None:
                 entry = _ensure_entry(switches, key)
-                entry[field] = value  # type: ignore[literal-required]
+                _d = cast(dict[str, Any], entry)
+                _d[field] = value
             return
 
 
