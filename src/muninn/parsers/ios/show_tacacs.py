@@ -109,10 +109,10 @@ def _build_entry(fields: dict[str, str | int]) -> TacacsServerEntry:
     entry = TacacsServerEntry(**{k: int(fields[k]) for k in _REQUIRED_INT_KEYS})  # type: ignore[typeddict-item]
     for key in _OPTIONAL_STR_KEYS:
         if key in fields:
-            entry[key] = str(fields[key])  # type: ignore[literal-required]
+            entry[key] = str(fields[key])
     for key in _OPTIONAL_INT_KEYS:
         if key in fields:
-            entry[key] = int(fields[key])  # type: ignore[literal-required]
+            entry[key] = int(fields[key])
     return entry
 
 

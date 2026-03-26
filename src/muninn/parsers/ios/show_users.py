@@ -90,7 +90,7 @@ def _build_entry(match: re.Match[str]) -> tuple[str, str, UserEntry]:
     for field in _OPTIONAL_FIELDS:
         value = match.group(field)
         if value:
-            entry[field] = value  # type: ignore[literal-required]
+            entry[field] = value
 
     return line_type, line_id, entry
 

@@ -643,7 +643,7 @@ def _handle_priority_line(
         }
         if prio_m.group(3) is not None:
             prio["exceed_drops"] = int(prio_m.group(3))
-        class_entry["priority"] = PriorityEntry(**prio)  # type: ignore[arg-type]
+        class_entry["priority"] = PriorityEntry(**prio)
         return True
 
     prio_lvl_m = _PRIORITY_LEVEL_RE.match(stripped)

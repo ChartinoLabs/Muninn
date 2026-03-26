@@ -246,7 +246,7 @@ def _handle_police_config(state: _ParserState, line: str) -> bool:
         police["cir_bps"] = int(m.group("cir"))
         burst_type = m.group("burst_type")
         burst_key = "cir_bc_bytes" if burst_type == "bc" else "cir_be_bytes"
-        police[burst_key] = int(m.group("burst"))  # type: ignore[literal-required]
+        police[burst_key] = int(m.group("burst"))
         state.start_police(police)
         return True
 
@@ -281,11 +281,11 @@ def _handle_police_counters(state: _ParserState, line: str) -> bool:
             actions=actions,
             bps=0,
         )
-        state.current_police[counter_type] = counters  # type: ignore[literal-required]
+        state.current_police[counter_type] = counters
         return True
 
     if state.last_counter_type is not None and (m := _ACTION_LINE.match(line)):
-        counter_entry = state.current_police.get(state.last_counter_type)  # type: ignore[arg-type]
+        counter_entry = state.current_police.get(state.last_counter_type)
         if counter_entry is not None:
             counter_entry["actions"][m.group("action")] = True
         return True

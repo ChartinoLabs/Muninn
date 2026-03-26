@@ -168,7 +168,7 @@ class ShowEnvironmentTemperatureParser(
                 sensor_type = sensor_match.group("sensor").lower()
                 current_switch = list(switches.values())[-1]
                 sensor_entry, idx = _parse_sensor(lines, idx)
-                current_switch[sensor_type] = sensor_entry  # type: ignore[literal-required]
+                current_switch[sensor_type] = sensor_entry
                 continue
 
             idx += 1
