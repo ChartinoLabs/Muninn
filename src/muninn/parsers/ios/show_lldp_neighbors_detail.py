@@ -1,7 +1,7 @@
 """Parser for 'show lldp neighbors detail' command on IOS."""
 
 import re
-from typing import ClassVar, Literal, NotRequired, TypedDict
+from typing import ClassVar, Literal, NotRequired, TypedDict, cast
 
 from netutils.interface import canonical_interface_name
 
@@ -116,7 +116,7 @@ def _build_entry(
 
     mgmt = fields.get("management_addresses")
     if mgmt:
-        entry["management_addresses"] = mgmt  # type: ignore[assignment]
+        entry["management_addresses"] = cast(list[str], mgmt)
 
     return entry
 

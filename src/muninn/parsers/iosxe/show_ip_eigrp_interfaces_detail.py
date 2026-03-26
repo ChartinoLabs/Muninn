@@ -5,7 +5,7 @@ Also handles 'show ipv6 eigrp interfaces detail'.
 
 import re
 from collections.abc import Callable
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -283,7 +283,7 @@ class ShowIpEigrpInterfacesDetailParser(
                 iface = canonical_interface_name(
                     row_match.group("interface"), os=OS.CISCO_IOSXE
                 )
-                interfaces[iface] = current_entry  # type: ignore[assignment]
+                interfaces[iface] = cast(EigrpInterfaceDetailEntry, current_entry)
                 continue
 
             if current_entry is not None:

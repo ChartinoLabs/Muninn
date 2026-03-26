@@ -1,7 +1,7 @@
 """Parser for 'show interface' command on NX-OS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -463,12 +463,12 @@ def _parse_rx_tx_counters(
     if rx_lines:
         parsed_rx = _parse_counter_values(rx_lines, _RX_FIELD_MAP)
         if parsed_rx:
-            rx_counters = parsed_rx  # type: ignore[assignment]
+            rx_counters = cast(RxCountersEntry, parsed_rx)
 
     if tx_lines:
         parsed_tx = _parse_counter_values(tx_lines, _TX_FIELD_MAP)
         if parsed_tx:
-            tx_counters = parsed_tx  # type: ignore[assignment]
+            tx_counters = cast(TxCountersEntry, parsed_tx)
 
     return rx_counters, tx_counters
 

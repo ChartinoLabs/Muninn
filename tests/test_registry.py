@@ -822,4 +822,4 @@ class TestParserTags:
             source="built_in",
         )
         with pytest.raises(AttributeError):
-            info.os = OS.CISCO_IOSXE  # type: ignore[misc]
+            info.os = OS.CISCO_IOSXE  # type: ignore[misc]  # ty: ignore[invalid-assignment]

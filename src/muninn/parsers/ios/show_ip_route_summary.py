@@ -1,7 +1,7 @@
 """Parser for 'show ip route summary' command on IOS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -190,7 +190,7 @@ def _process_data_row(
     if source == "Total":
         return source, entry  # type: ignore[return-value]
 
-    route_sources[source] = entry  # type: ignore[assignment]
+    route_sources[source] = cast(RouteSourceEntry, entry)
     return source, None
 
 
