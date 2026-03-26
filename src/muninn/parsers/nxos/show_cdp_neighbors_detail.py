@@ -1,8 +1,9 @@
 """Parser for 'show cdp neighbors detail' command on NX-OS."""
 
 import re
+from collections.abc import Iterable
 from dataclasses import dataclass, field
-from typing import ClassVar, Literal, NotRequired, TypedDict
+from typing import Any, ClassVar, Literal, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -232,7 +233,9 @@ class ShowCdpNeighborsDetailParser(
 
         for key in _OPTIONAL_LIST_FIELDS:
             if fields.get(key):
-                entry[key] = list(fields[key])  # type: ignore[literal-required, arg-type]
+                value = fields[key]
+                _d = cast(dict[str, Any], entry)
+                _d[key] = list(value) if isinstance(value, Iterable) else [value]
 
     @classmethod
     def _save_record(cls, state: _ParseState) -> None:
@@ -294,9 +297,10 @@ class ShowCdpNeighborsDetailParser(
             if state.addr_section == "interface"
             else "mgmt_addresses"
         )
-        if key not in state.fields:
-            state.fields[key] = []
-        addr_list = state.fields[key]
+        _d = cast(dict[str, Any], state.fields)
+        if key not in _d:
+            _d[key] = []
+        addr_list = _d[key]
         if isinstance(addr_list, list):
             addr_list.append(addr)
         return True

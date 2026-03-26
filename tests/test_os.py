@@ -109,4 +109,4 @@ class TestResolveOS:
     def test_invalid_type_raises_type_error(self) -> None:
         """Invalid input type raises TypeError."""
         with pytest.raises(TypeError, match="Cannot resolve OS from type"):
-            resolve_os(123)  # type: ignore[arg-type]
+            resolve_os(123)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]

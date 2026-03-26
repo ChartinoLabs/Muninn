@@ -85,7 +85,7 @@ class AddressFamilyEntry(TypedDict):
     table_version: int
     main_routing_table_version: int
     memory: MemoryInfo
-    activity: ActivityInfo
+    activity: NotRequired[ActivityInfo]
     neighbors: dict[str, NeighborEntry]
 
 
@@ -306,13 +306,11 @@ def _parse_address_family(lines: list[str], af_name: str) -> AddressFamilyEntry 
         "table_version": table_version,
         "main_routing_table_version": main_version,
         "memory": memory,
-        "activity": activity,  # type: ignore[typeddict-item]
         "neighbors": neighbors,
     }
 
-    # Omit activity if not present
-    if activity is None:
-        del entry["activity"]  # type: ignore[misc]
+    if activity is not None:
+        entry["activity"] = activity
 
     return entry
 

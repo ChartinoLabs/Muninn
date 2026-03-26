@@ -94,6 +94,17 @@ def _parse_line(line: str, fields: _CdpFields) -> None:
         fields.device_id_type = match.group("device_id_type").strip()
 
 
+def _build_enabled_result(
+    send_interval: int | None, holdtime: int | None
+) -> ShowCdpResult:
+    """Build result for an enabled CDP configuration."""
+    return ShowCdpResult(
+        cdp_enabled=True,
+        send_interval=send_interval if send_interval is not None else 0,
+        holdtime=holdtime if holdtime is not None else 0,
+    )
+
+
 def _build_result(fields: _CdpFields) -> ShowCdpResult:
     """Build the result dict from accumulated fields.
 
@@ -114,12 +125,8 @@ def _build_result(fields: _CdpFields) -> ShowCdpResult:
     if not fields.cdp_enabled:
         return ShowCdpResult(cdp_enabled=False, send_interval=0, holdtime=0)
 
-    # At this point send_interval and holdtime are guaranteed non-None
-    result = ShowCdpResult(
-        cdp_enabled=True,
-        send_interval=fields.send_interval,  # type: ignore[typeddict-item]
-        holdtime=fields.holdtime,  # type: ignore[typeddict-item]
-    )
+    # send_interval and holdtime are guaranteed non-None by guards above
+    result = _build_enabled_result(fields.send_interval, fields.holdtime)
     if fields.cdp_version is not None:
         result["cdp_version"] = fields.cdp_version
     if fields.device_id_type is not None:

@@ -114,6 +114,31 @@ def _parse_routes(lines: list[str]) -> dict[str, TopologyEntry]:
     return routes
 
 
+def _split_as_sections(lines: list[str]) -> list[tuple[int, str, list[str]]]:
+    """Split output lines into per-AS sections."""
+    sections: list[tuple[int, str, list[str]]] = []
+    current_as: int | None = None
+    current_rid: str | None = None
+    current_lines: list[str] = []
+
+    for line in lines:
+        stripped = line.strip()
+        header_match = _AS_HEADER_RE.match(stripped)
+        if header_match:
+            if current_as is not None and current_rid is not None:
+                sections.append((current_as, current_rid, current_lines))
+            current_as = int(header_match.group(1))
+            current_rid = header_match.group(2)
+            current_lines = []
+        elif current_as is not None:
+            current_lines.append(line)
+
+    if current_as is not None and current_rid is not None:
+        sections.append((current_as, current_rid, current_lines))
+
+    return sections
+
+
 @register(OS.CISCO_IOS, "show ip eigrp topology")
 class ShowIpEigrpTopologyParser(BaseParser["ShowIpEigrpTopologyResult"]):
     """Parser for 'show ip eigrp topology' command.
@@ -145,28 +170,7 @@ class ShowIpEigrpTopologyParser(BaseParser["ShowIpEigrpTopologyResult"]):
             ValueError: If the output cannot be parsed.
         """
         autonomous_systems: dict[str, AutonomousSystemEntry] = {}
-        lines = output.splitlines()
-
-        # Split into AS sections
-        sections: list[tuple[int, str, list[str]]] = []
-        current_as: int | None = None
-        current_rid: str | None = None
-        current_lines: list[str] = []
-
-        for line in lines:
-            stripped = line.strip()
-            header_match = _AS_HEADER_RE.match(stripped)
-            if header_match:
-                if current_as is not None:
-                    sections.append((current_as, current_rid, current_lines))  # type: ignore[arg-type]
-                current_as = int(header_match.group(1))
-                current_rid = header_match.group(2)
-                current_lines = []
-            elif current_as is not None:
-                current_lines.append(line)
-
-        if current_as is not None:
-            sections.append((current_as, current_rid, current_lines))  # type: ignore[arg-type]
+        sections = _split_as_sections(output.splitlines())
 
         for as_number, router_id, section_lines in sections:
             routes = _parse_routes(section_lines)
