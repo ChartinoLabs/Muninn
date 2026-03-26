@@ -102,6 +102,11 @@ Full documentation is available at **[chartinolabs.github.io/Muninn](https://cha
 - [Changelog Fragments Guide](changes/README.md) - How to add release-note fragments
 - [Releasing](RELEASING.md) - How to compile release notes and cut a release
 
+## Acknowledgments
+
+- **CLI output fixtures** — Some test fixtures in this project use CLI output samples sourced from the [Cisco Genieparser](https://github.com/CiscoTestAutomation/genieparser) and [Network to Code ntc-templates](https://github.com/networktocode/ntc-templates) repositories.
+- **Schema inspiration** — Parsed data schemas for some parsers were heavily inspired by the schema structures in the [Cisco GenieParser](https://github.com/CiscoTestAutomation/genieparser) repository.
+
 ## Status
 
 Early development. See the [Design Philosophy](https://chartinolabs.github.io/Muninn/design/) page for project direction.
