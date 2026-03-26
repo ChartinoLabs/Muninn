@@ -1,6 +1,7 @@
 """Parser for 'show lldp neighbors detail' command on NX-OS."""
 
 import re
+from collections.abc import Callable
 from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
@@ -10,6 +11,9 @@ from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 _NOT_ADVERTISED = "not advertised"
+
+_Transform = Callable[[str], str | int]
+_FieldSpec = tuple[re.Pattern[str], str, _Transform]
 
 
 class LldpNeighborDetailEntry(TypedDict):
@@ -82,7 +86,7 @@ class ShowLldpNeighborsDetailParser(BaseParser[ShowLldpNeighborsDetailResult]):
     # Table-driven field patterns: (pattern, field_name, transform)
     # Transform is a callable that converts the matched value string.
     # A transform returning None means the field should be omitted.
-    _FIELD_PATTERNS: tuple[tuple[re.Pattern[str], str, object], ...] = (
+    _FIELD_PATTERNS: tuple[_FieldSpec, ...] = (
         (
             re.compile(r"^Port\s+Description:\s+(?P<value>.+)$", re.I),
             "port_description",
@@ -116,7 +120,7 @@ class ShowLldpNeighborsDetailParser(BaseParser[ShowLldpNeighborsDetailResult]):
     )
 
     # Fields that use "not advertised" sentinel and should be omitted when so
-    _OPTIONAL_ADDR_PATTERNS: tuple[tuple[re.Pattern[str], str, object], ...] = (
+    _OPTIONAL_ADDR_PATTERNS: tuple[_FieldSpec, ...] = (
         (
             re.compile(r"^Management\s+Address\s+IPV6:\s+(?P<value>.+)$", re.I),
             "management_address_ipv6",
@@ -163,7 +167,7 @@ class ShowLldpNeighborsDetailParser(BaseParser[ShowLldpNeighborsDetailResult]):
         for pattern, field, transform in cls._FIELD_PATTERNS:
             match = pattern.match(stripped)
             if match:
-                entry[field] = transform(match.group("value"))  # type: ignore[operator]
+                entry[field] = transform(match.group("value"))
                 return True
         return False
 
@@ -177,7 +181,7 @@ class ShowLldpNeighborsDetailParser(BaseParser[ShowLldpNeighborsDetailResult]):
             if match:
                 value = match.group("value").strip()
                 if value.lower() != _NOT_ADVERTISED:
-                    entry[field] = transform(value)  # type: ignore[operator]
+                    entry[field] = transform(value)
                 return True
         return False
 
