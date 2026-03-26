@@ -98,12 +98,10 @@ def _build_enabled_result(
     send_interval: int | None, holdtime: int | None
 ) -> ShowCdpResult:
     """Build result for an enabled CDP configuration."""
-    assert send_interval is not None
-    assert holdtime is not None
     return ShowCdpResult(
         cdp_enabled=True,
-        send_interval=send_interval,
-        holdtime=holdtime,
+        send_interval=send_interval if send_interval is not None else 0,
+        holdtime=holdtime if holdtime is not None else 0,
     )
 
 

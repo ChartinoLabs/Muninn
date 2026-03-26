@@ -79,7 +79,8 @@ def _handle_as_line(match: re.Match[str], state: _ParserState) -> None:
 
 def _handle_section_line(match: re.Match[str], state: _ParserState) -> None:
     """Handle a process section header line."""
-    assert state.current_as is not None
+    if state.current_as is None:
+        return
     state.current_section = match.group("section").lower()
     processes = state.instances[state.current_as]["processes"]
     processes[state.current_section] = EigrpProcessTimers(timers={})
@@ -92,8 +93,8 @@ def _normalize_timer_name(timer_type: str) -> str:
 
 def _handle_timer_line(match: re.Match[str], state: _ParserState) -> None:
     """Handle a timer entry line."""
-    assert state.current_as is not None
-    assert state.current_section is not None
+    if state.current_as is None or state.current_section is None:
+        return
     timer_type = match.group("type").strip()
     timer_data = TimerAttributes(expiration=float(match.group("expiration")))
     processes = state.instances[state.current_as]["processes"]
