@@ -297,8 +297,8 @@ class ShowCdpNeighborsDetailParser(
         if key not in state.fields:
             state.fields[key] = []
         addr_list = state.fields[key]
-        assert isinstance(addr_list, list)
-        addr_list.append(addr)
+        if isinstance(addr_list, list):
+            addr_list.append(addr)
         return True
 
     @classmethod
