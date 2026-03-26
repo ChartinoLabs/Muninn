@@ -1,7 +1,7 @@
 """Parser for 'show ipv6 dhcp interface' command on IOS-XE."""
 
 import re
-from typing import Any, ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -253,7 +253,7 @@ def _save_server(
 ) -> None:
     """Flush a completed server entry into the servers dict."""
     if data is not None and addr is not None:
-        servers[addr] = KnownServerEntry(**data)  # type: ignore[arg-type]
+        servers[addr] = cast(KnownServerEntry, data)
 
 
 def _parse_client_entry_fields(
@@ -316,7 +316,7 @@ def _parse_client_block(lines: list[str]) -> ClientInterfaceEntry:
     if servers:
         entry["known_servers"] = servers
 
-    return ClientInterfaceEntry(**entry)  # type: ignore[arg-type]
+    return cast(ClientInterfaceEntry, entry)
 
 
 def _parse_server_block(lines: list[str]) -> ServerInterfaceEntry:
@@ -333,7 +333,7 @@ def _parse_server_block(lines: list[str]) -> ServerInterfaceEntry:
         elif m := _RAPID_COMMIT.match(line):
             entry["rapid_commit"] = m.group("val")
 
-    return ServerInterfaceEntry(**entry)  # type: ignore[arg-type]
+    return cast(ServerInterfaceEntry, entry)
 
 
 def _parse_relay_block(lines: list[str]) -> RelayInterfaceEntry:
@@ -356,7 +356,7 @@ def _parse_relay_block(lines: list[str]) -> RelayInterfaceEntry:
     if destinations:
         entry["relay_destinations"] = destinations
 
-    return RelayInterfaceEntry(**entry)  # type: ignore[arg-type]
+    return cast(RelayInterfaceEntry, entry)
 
 
 def _split_interface_blocks(

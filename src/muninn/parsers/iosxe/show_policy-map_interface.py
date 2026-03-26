@@ -326,7 +326,7 @@ def _parse_police_block(lines: list[str], start: int) -> tuple[PoliceEntry | Non
     if "conformed_bytes" not in police or "conformed_action" not in police:
         return None, idx
 
-    return PoliceEntry(**police), idx  # type: ignore[arg-type]
+    return cast(PoliceEntry, police), idx
 
 
 def _try_match_queue_stats(
@@ -419,7 +419,7 @@ def _parse_queueing(class_entry: ClassMapEntry, lines: list[str], idx: int) -> i
         break
 
     if "queue_depth" in queueing:
-        class_entry["queueing"] = QueueingEntry(**queueing)  # type: ignore[arg-type]
+        class_entry["queueing"] = cast(QueueingEntry, queueing)
 
     return idx
 
@@ -456,7 +456,7 @@ def _parse_shape(class_entry: ClassMapEntry, lines: list[str], idx: int) -> int:
             idx += 1
         break
 
-    class_entry["shape"] = ShapeEntry(**shape)  # type: ignore[arg-type]
+    class_entry["shape"] = cast(ShapeEntry, shape)
     return idx
 
 

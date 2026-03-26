@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -295,7 +295,7 @@ def _parse_process_info(lines: list[str]) -> ProcessInfo:
         elif m := _SR_GLOBAL_BLOCK_RE.match(stripped):
             fields["segment_routing_global_block"] = m.group(1)
 
-    return ProcessInfo(**fields)  # type: ignore[typeddict-item]
+    return cast(ProcessInfo, fields)
 
 
 def _parse_attributes_info(lines: list[str]) -> AttributesInfo:
@@ -309,7 +309,7 @@ def _parse_attributes_info(lines: list[str]) -> AttributesInfo:
                 fields[key] = int(m.group(1))
                 break
 
-    return AttributesInfo(**fields)  # type: ignore[typeddict-item]
+    return cast(AttributesInfo, fields)
 
 
 def _parse_vrf_fields(lines: list[str]) -> VrfEntry:
@@ -332,7 +332,7 @@ def _parse_vrf_fields(lines: list[str]) -> VrfEntry:
         stripped = line.strip()
         _try_dispatch(stripped, _VRF_FIELD_DISPATCH, fields)
 
-    return VrfEntry(**fields)  # type: ignore[typeddict-item]
+    return cast(VrfEntry, fields)
 
 
 def _collect_rt_values(lines: list[str], start_idx: int) -> tuple[list[str], int]:

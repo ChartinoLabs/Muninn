@@ -1,7 +1,7 @@
 """Parser for 'show graceful-reload' command on IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -117,4 +117,4 @@ class ShowGracefulReloadParser(BaseParser[ShowGracefulReloadResult]):
         if clients:
             result["clients"] = clients
 
-        return ShowGracefulReloadResult(**result)  # type: ignore[typeddict-item]
+        return cast(ShowGracefulReloadResult, result)
