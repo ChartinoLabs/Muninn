@@ -5,7 +5,7 @@ details with running state, CPLD/firmware versions, and timing information.
 """
 
 import re
-from typing import Any, ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -111,7 +111,7 @@ def _assign_kv_to_subslot(
         return
     subslots = slots[slot_id]["subslots"]
     if subslot_id in subslots:
-        _d: dict[str, Any] = subslots[subslot_id]
+        _d = cast(dict[str, Any], subslots[subslot_id])
         _d[key] = value
 
 
@@ -124,7 +124,7 @@ def _assign_kv_to_slot(
     """Assign a key-value pair to a slot entry."""
     key = _SLOT_KEY_MAP.get(label)
     if key:
-        _d: dict[str, Any] = slots[slot_id]
+        _d = cast(dict[str, Any], slots[slot_id])
         _d[key] = value
 
 

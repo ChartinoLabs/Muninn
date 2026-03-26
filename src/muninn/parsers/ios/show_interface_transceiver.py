@@ -1,7 +1,7 @@
 """Parser for 'show interfaces transceiver' command on IOS."""
 
 import re
-from typing import Any, ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -84,7 +84,7 @@ _FIELD_MAP: tuple[tuple[int, str], ...] = (
 def _build_entry(m: re.Match[str]) -> TransceiverEntry:
     """Build a TransceiverEntry from a regex match, omitting N/A values."""
     entry: TransceiverEntry = {}
-    _d: dict[str, Any] = entry  # untyped alias for dynamic key assignment
+    _d = cast(dict[str, Any], entry)
     for group_idx, key in _FIELD_MAP:
         value = _parse_value(m.group(group_idx))
         if value is not None:

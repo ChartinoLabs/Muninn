@@ -1,7 +1,7 @@
 """Parser for 'show ip ospf database' command on NX-OS."""
 
 import re
-from typing import Any, ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -172,7 +172,7 @@ def _process_lsa_entry(
     if is_external:
         _insert_lsa(external, link_id, adv_router, entry)
     elif current_area is not None:
-        area_data: dict[str, Any] = areas[current_area]
+        area_data = cast(dict[str, Any], areas[current_area])
         if current_lsa_type not in area_data:
             area_data[current_lsa_type] = {}
         type_data: dict[str, dict[str, LsaEntry]] = area_data[current_lsa_type]

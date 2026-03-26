@@ -1,7 +1,7 @@
 """Parser for 'show environment all' command on IOS-XE."""
 
 import re
-from typing import Any, ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -289,7 +289,7 @@ def _store_temperature(
         red=int(parts["red"]),
     )
     key = f"{sensor.lower()}_temperature"
-    _d: dict[str, Any] = sw
+    _d = cast(dict[str, Any], sw)
     _d[key] = temp
 
 

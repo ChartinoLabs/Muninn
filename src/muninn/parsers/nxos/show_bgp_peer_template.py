@@ -1,7 +1,7 @@
 """Parser for 'show bgp peer-template' command on NX-OS."""
 
 import re
-from typing import Any, ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -78,7 +78,7 @@ def _convert_field(field: str, value: str) -> str | int:
 
 def _apply_str_fields(lines: list[str], entry: PeerTemplateEntry) -> None:
     """Extract string and integer fields using capture-group patterns."""
-    _d: dict[str, Any] = entry  # untyped alias for dynamic key assignment
+    _d = cast(dict[str, Any], entry)
     for pattern, field in _STR_FIELD_PATTERNS:
         for line in lines:
             m = pattern.match(line)
@@ -89,7 +89,7 @@ def _apply_str_fields(lines: list[str], entry: PeerTemplateEntry) -> None:
 
 def _apply_bool_flags(lines: list[str], entry: PeerTemplateEntry) -> None:
     """Set boolean flags found in the output lines."""
-    _d: dict[str, Any] = entry  # untyped alias for dynamic key assignment
+    _d = cast(dict[str, Any], entry)
     for line in lines:
         for pattern, field in _BOOL_FLAG_PATTERNS:
             if pattern.match(line):

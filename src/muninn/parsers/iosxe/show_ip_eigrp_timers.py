@@ -1,7 +1,7 @@
 """Parser for 'show ip eigrp timers' command on IOS-XE."""
 
 import re
-from typing import Any, ClassVar, TypedDict
+from typing import Any, ClassVar, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -108,13 +108,13 @@ def _handle_timer_line(match: re.Match[str], state: _ParserState) -> None:
         )
 
         timers.setdefault(timer_name, InterfaceTimers(interfaces={}))
-        intf_bucket: dict[str, Any] = timers[timer_name]
+        intf_bucket = cast(dict[str, Any], timers[timer_name])
         intf_bucket["interfaces"][interface] = timer_data
         return
 
     timer_name = _normalize_timer_name(timer_type.strip("()"))
     timers.setdefault(timer_name, TimerEntries(entries=[]))
-    entry_bucket: dict[str, Any] = timers[timer_name]
+    entry_bucket = cast(dict[str, Any], timers[timer_name])
     entry_bucket["entries"].append(timer_data)
 
 

@@ -1,7 +1,7 @@
 """Parser for 'show license' command on IOS."""
 
 import re
-from typing import Any, ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -99,7 +99,7 @@ class ShowLicenseParser(BaseParser[ShowLicenseResult]):
                 raw_value = attr_match.group(2).strip()
                 field_name = _ATTR_MAP.get(raw_key)
                 if field_name is not None:
-                    _d: dict[str, Any] = current_entry
+                    _d = cast(dict[str, Any], current_entry)
                     _d[field_name] = raw_value
 
         if not licenses:

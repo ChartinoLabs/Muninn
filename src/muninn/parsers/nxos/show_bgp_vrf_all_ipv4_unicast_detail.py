@@ -1,7 +1,7 @@
 """Parser for 'show bgp vrf all ipv4 unicast detail' command on NX-OS."""
 
 import re
-from typing import Any, ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -223,7 +223,7 @@ def _build_path_entry(state: _PathState) -> PathEntry:
         "status": state.status,
         "best_path": state.best_path,
     }
-    _d: dict[str, Any] = entry  # untyped alias for dynamic key assignment
+    _d = cast(dict[str, Any], entry)
     for attr, key in _OPTIONAL_PATH_FIELDS:
         value = getattr(state, attr)
         if value is not None:

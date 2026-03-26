@@ -1,7 +1,7 @@
 """Parser for 'show boot' command on IOS-XE."""
 
 import re
-from typing import Any, ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -271,7 +271,7 @@ def _apply_patterns(
     entry: BootEntry,
 ) -> bool:
     """Try each pattern against line; set field on match. Return True if matched."""
-    _d: dict[str, Any] = entry  # untyped alias for dynamic key assignment
+    _d = cast(dict[str, Any], entry)
     for pattern, field, converter in patterns:
         match = pattern.match(line)
         if match:

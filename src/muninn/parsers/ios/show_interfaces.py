@@ -533,7 +533,7 @@ def _parse_rates(line: str, entry: dict) -> bool:
 def _parse_counters(lines: list[str]) -> CountersEntry:
     """Parse counter lines from a block."""
     counters: CountersEntry = {}
-    _d: dict[str, Any] = counters  # untyped alias for dynamic key assignment
+    _d = cast(dict[str, Any], counters)
     for line in lines:
         for pattern, fields in _COUNTER_PATTERNS:
             m = pattern.match(line)
@@ -572,7 +572,7 @@ _TUNNEL_INT_FIELDS: tuple[tuple[re.Pattern[str], str], ...] = (
 
 def _apply_tunnel_line(line: str, tunnel: TunnelInfo) -> None:
     """Try to match a single line against tunnel patterns."""
-    _d: dict[str, Any] = tunnel  # untyped alias for dynamic key assignment
+    _d = cast(dict[str, Any], tunnel)
     for pattern, key in _TUNNEL_STR_FIELDS:
         m = pattern.match(line)
         if m:

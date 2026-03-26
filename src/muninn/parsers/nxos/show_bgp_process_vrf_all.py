@@ -377,7 +377,7 @@ def _parse_af_detail_line(
     af_entry: AddressFamilyEntry,
 ) -> bool:
     """Try to parse a single AF detail line. Returns True if consumed."""
-    _d: dict[str, Any] = af_entry  # untyped alias for dynamic key assignment
+    _d = cast(dict[str, Any], af_entry)
     for pattern, key in _AF_DETAIL_STR_DISPATCH:
         if m := pattern.match(line):
             _d[key] = m.group(1)
@@ -432,7 +432,7 @@ def _try_parse_rt_list(
     af_entry: AddressFamilyEntry,
 ) -> tuple[bool, int]:
     """Try to parse an RT list header and its values. Returns (matched, new_idx)."""
-    _d: dict[str, Any] = af_entry  # untyped alias for dynamic key assignment
+    _d = cast(dict[str, Any], af_entry)
     for pattern, key in _RT_LIST_DISPATCH:
         m = pattern.match(line)
         if m:
