@@ -436,7 +436,9 @@ def _dispatch_line(
     # Check for VRF header
     vrf_entry = _parse_vrf_header(stripped)
     if vrf_entry is not None:
-        name = _VRF_HEADER.match(stripped).group("name")  # type: ignore[union-attr]
+        header_match = _VRF_HEADER.match(stripped)
+        assert header_match is not None
+        name = header_match.group("name")
         vrfs[name] = vrf_entry
         return name, None, idx + 1
 
