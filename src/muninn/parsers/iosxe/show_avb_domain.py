@@ -202,7 +202,8 @@ def _parse_interfaces(lines: list[str]) -> dict[str, AvbInterfaceEntry]:
         cls_match = _CLASS_DETAIL_RE.match(stripped)
         if cls_match and current_intf is not None:
             key, cls_entry = _build_class_entry(cls_match)
-            interfaces[current_intf][key] = cls_entry  # type: ignore[literal-required]
+            _d: dict[str, Any] = interfaces[current_intf]
+            _d[key] = cls_entry
 
     return interfaces
 

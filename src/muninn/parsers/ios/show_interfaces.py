@@ -1,7 +1,7 @@
 """Parser for 'show interfaces' command on IOS/IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -533,6 +533,7 @@ def _parse_rates(line: str, entry: dict) -> bool:
 def _parse_counters(lines: list[str]) -> CountersEntry:
     """Parse counter lines from a block."""
     counters: CountersEntry = {}
+    _d: dict[str, Any] = counters  # untyped alias for dynamic key assignment
     for line in lines:
         for pattern, fields in _COUNTER_PATTERNS:
             m = pattern.match(line)
@@ -540,7 +541,7 @@ def _parse_counters(lines: list[str]) -> CountersEntry:
                 for group_idx, field_name in fields:
                     val = m.group(group_idx)
                     if val is not None:
-                        counters[field_name] = int(val)  # type: ignore[literal-required]
+                        _d[field_name] = int(val)
                 break
     return counters
 
@@ -571,10 +572,11 @@ _TUNNEL_INT_FIELDS: tuple[tuple[re.Pattern[str], str], ...] = (
 
 def _apply_tunnel_line(line: str, tunnel: TunnelInfo) -> None:
     """Try to match a single line against tunnel patterns."""
+    _d: dict[str, Any] = tunnel  # untyped alias for dynamic key assignment
     for pattern, key in _TUNNEL_STR_FIELDS:
         m = pattern.match(line)
         if m:
-            tunnel[key] = m.group(1)  # type: ignore[literal-required]
+            _d[key] = m.group(1)
             return
 
     m = _TUNNEL_SOURCE_RE.match(line)
@@ -592,7 +594,7 @@ def _apply_tunnel_line(line: str, tunnel: TunnelInfo) -> None:
     for pattern, key in _TUNNEL_INT_FIELDS:
         m = pattern.match(line)
         if m:
-            tunnel[key] = int(m.group(1))  # type: ignore[literal-required]
+            _d[key] = int(m.group(1))
             return
 
     m = _TUNNEL_KEY_SEQ_RE.match(line)

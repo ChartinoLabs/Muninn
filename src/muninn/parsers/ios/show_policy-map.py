@@ -171,6 +171,22 @@ class _ParseState:
         self.current_class = _ClassState()
 
 
+def _apply_police_stats(police: PoliceEntry, stats_match: re.Match[str]) -> None:
+    """Apply police statistics from a regex match to the police entry."""
+    stat_type = stats_match.group("type")
+    packets = int(stats_match.group("packets"))
+    bytes_ = int(stats_match.group("bytes"))
+    if stat_type == "conformed":
+        police["conform_packets"] = packets
+        police["conform_bytes"] = bytes_
+    elif stat_type == "exceeded":
+        police["exceed_packets"] = packets
+        police["exceed_bytes"] = bytes_
+    elif stat_type == "violated":
+        police["violate_packets"] = packets
+        police["violate_bytes"] = bytes_
+
+
 def _parse_police_line(line: str, state: _ParseState) -> bool:
     """Attempt to parse a police-related line. Returns True if handled."""
     cir_match = _POLICE_CIR.match(line)
@@ -195,19 +211,7 @@ def _parse_police_line(line: str, state: _ParseState) -> bool:
 
     stats_match = _POLICE_STATS.match(line)
     if stats_match:
-        stat_type = stats_match.group("type")
-        prefix_map = {
-            "conformed": "conform",
-            "exceeded": "exceed",
-            "violated": "violate",
-        }
-        prefix = prefix_map[stat_type]
-        state.current_class.police[f"{prefix}_packets"] = int(  # type: ignore[literal-required]
-            stats_match.group("packets")
-        )
-        state.current_class.police[f"{prefix}_bytes"] = int(  # type: ignore[literal-required]
-            stats_match.group("bytes")
-        )
+        _apply_police_stats(state.current_class.police, stats_match)
         return True
 
     return False

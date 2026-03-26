@@ -1,7 +1,7 @@
 """Parser for 'show snmp group' command on IOS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -61,7 +61,8 @@ def _normalize_view(value: str | None) -> str | None:
 def _set_optional(entry: SnmpGroupEntry, field: str, value: str | None) -> None:
     """Set an optional field on the entry if the value is not None."""
     if value is not None:
-        entry[field] = value  # type: ignore[literal-required]
+        _d: dict[str, Any] = entry
+        _d[field] = value
 
 
 def _extract_views(text: str) -> tuple[str | None, str | None, str | None]:

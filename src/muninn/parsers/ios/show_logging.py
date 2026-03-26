@@ -234,16 +234,14 @@ def _parse_section(line: str) -> tuple[str, LoggingSectionEntry] | None:
 
 def _apply_persistent_groups(m: re.Match[str], entry: PersistentLoggingEntry) -> None:
     """Apply regex groups from persistent logging match to entry."""
-    group_fields: list[tuple[int, str]] = [
-        (2, "url"),
-        (3, "disk_space_bytes"),
-        (4, "file_size_bytes"),
-        (5, "batch_size_bytes"),
-    ]
-    for group_idx, field in group_fields:
-        val = m.group(group_idx)
-        if val:
-            entry[field] = int(val) if field != "url" else val  # type: ignore[literal-required]
+    if url := m.group(2):
+        entry["url"] = url
+    if val := m.group(3):
+        entry["disk_space_bytes"] = int(val)
+    if val := m.group(4):
+        entry["file_size_bytes"] = int(val)
+    if val := m.group(5):
+        entry["batch_size_bytes"] = int(val)
 
 
 def _apply_persistent_flags(line: str, entry: PersistentLoggingEntry) -> None:

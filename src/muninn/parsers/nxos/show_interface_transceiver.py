@@ -1,7 +1,7 @@
 """Parser for 'show interface transceiver' command on NX-OS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -118,10 +118,11 @@ class ShowInterfaceTransceiverParser(
 
             entry: TransceiverEntry = {"sfp": sfp}
 
+            _d: dict[str, Any] = entry  # untyped alias for dynamic key assignment
             for group_name, key in _FIELD_MAP:
                 val = _parse_float(match.group(group_name))
                 if val is not None:
-                    entry[key] = val  # type: ignore[literal-required]
+                    _d[key] = val
 
             interfaces[port] = entry
 

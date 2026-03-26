@@ -271,12 +271,13 @@ def _apply_patterns(
     entry: BootEntry,
 ) -> bool:
     """Try each pattern against line; set field on match. Return True if matched."""
+    _d: dict[str, Any] = entry  # untyped alias for dynamic key assignment
     for pattern, field, converter in patterns:
         match = pattern.match(line)
         if match:
             value = converter(match.group("value"))
             if value is not None:
-                entry[field] = value  # type: ignore[literal-required]
+                _d[field] = value
             return True
     return False
 

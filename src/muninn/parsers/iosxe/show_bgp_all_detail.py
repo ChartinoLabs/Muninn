@@ -1,7 +1,7 @@
 """Parser for 'show bgp all detail' / 'show ip bgp all detail' on IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -251,17 +251,18 @@ _ORIGIN_BOOL_FLAGS: tuple[tuple[str, str], ...] = (
 
 def _apply_origin_match(m: re.Match[str], path: PathEntry) -> None:
     """Apply Origin line match groups to a path entry."""
+    _d: dict[str, Any] = path  # untyped alias for dynamic key assignment
     path["origin"] = m.group("origin")
     for group_name, field_name in _ORIGIN_INT_FIELDS:
         val = m.group(group_name)
         if val:
-            path[field_name] = int(val)  # type: ignore[literal-required]
+            _d[field_name] = int(val)
     flag_set = {f.strip() for f in m.group("flags").split(",")}
     path["valid"] = "valid" in flag_set
     path["best"] = "best" in flag_set
     for flag, field in _ORIGIN_BOOL_FLAGS:
         if flag in flag_set:
-            path[field] = True  # type: ignore[literal-required]
+            _d[field] = True
     if any("multipath" in f for f in flag_set):
         path["multipath"] = True
 

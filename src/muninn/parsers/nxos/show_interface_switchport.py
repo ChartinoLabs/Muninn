@@ -1,7 +1,7 @@
 """Parser for 'show interface switchport' command on NX-OS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -174,10 +174,11 @@ def _apply_optional_fields(
     fields: dict[str, str],
 ) -> None:
     """Apply optional string fields and admin private-vlan dict."""
+    _d: dict[str, Any] = entry  # untyped alias for dynamic key assignment
     for field in _OPTIONAL_STR_FIELDS:
         val = fields.get(field)
         if val and val.lower() != "none":
-            entry[field] = val  # type: ignore[literal-required]
+            _d[field] = val
 
     admin_pv: dict[str, str] = {}
     for raw_label, dict_key in _ADMIN_PV_MAP.items():
