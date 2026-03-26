@@ -1,7 +1,7 @@
 """Parser for 'show interfaces' command on IOS/IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -865,7 +865,7 @@ def _parse_block(lines: list[str]) -> InterfaceEntry | None:
         in_counters = _collect_counter_line(line, counter_lines, in_counters)
 
     _finalize_block(entry, lines[1:], counter_lines)
-    return entry  # type: ignore[return-value]
+    return cast(InterfaceEntry, entry)
 
 
 @register(OS.CISCO_IOS, "show interfaces")

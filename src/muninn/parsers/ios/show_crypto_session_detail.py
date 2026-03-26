@@ -1,7 +1,7 @@
 """Parser for 'show crypto session detail' command on IOS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -405,7 +405,7 @@ def _parse_ipsec_flow(
     if not flow:
         return None, idx
 
-    return flow, idx  # type: ignore[return-value]
+    return cast(IpsecFlowEntry, flow), idx
 
 
 def _parse_context_lines(lines: list[str], peer_idx: int, entry: dict) -> None:
@@ -563,7 +563,7 @@ def _parse_session_block(
     _parse_context_lines(lines, peer_idx, entry)
     _parse_peer_body(lines, peer_idx + 1, entry)
 
-    return entry  # type: ignore[return-value]
+    return cast(CryptoSessionEntry, entry)
 
 
 @register(OS.CISCO_IOS, "show crypto session detail")

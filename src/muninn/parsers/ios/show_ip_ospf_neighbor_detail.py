@@ -1,7 +1,7 @@
 """Parser for 'show ip ospf neighbor detail' command on IOS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -250,7 +250,7 @@ def _parse_block(lines: list[str]) -> tuple[str, str, InterfaceNeighborEntry] | 
     _parse_options(body, entry)
     _parse_timers_and_retransmission(body, entry)
 
-    return neighbor_id, interface_name, entry  # type: ignore[return-value]
+    return neighbor_id, interface_name, cast(InterfaceNeighborEntry, entry)
 
 
 @register(OS.CISCO_IOS, "show ip ospf neighbor detail")

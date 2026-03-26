@@ -1,7 +1,7 @@
 """Parser for 'show interface' command on NX-OS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -511,7 +511,7 @@ def _parse_block(lines: list[str]) -> InterfaceEntry | None:
     if tx_counters:
         entry["tx_counters"] = tx_counters
 
-    return entry  # type: ignore[return-value]
+    return cast(InterfaceEntry, entry)
 
 
 @register(OS.CISCO_NXOS, "show interface")

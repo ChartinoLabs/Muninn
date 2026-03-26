@@ -1,7 +1,7 @@
 """Parser for 'show vpc' command on NX-OS."""
 
 import re
-from typing import Any, ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from netutils.interface import canonical_interface_name
 
@@ -212,4 +212,4 @@ class ShowVpcParser(BaseParser["ShowVpcResult"]):
         if peer_links:
             result["peer_links"] = peer_links
 
-        return result  # type: ignore[return-value]
+        return cast(ShowVpcResult, result)

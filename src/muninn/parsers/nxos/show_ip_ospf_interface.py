@@ -1,7 +1,7 @@
 """Parser for 'show ip ospf interface' command on NX-OS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -316,7 +316,7 @@ def _parse_block(lines: list[str]) -> OspfInterfaceEntry | None:
     _parse_auth(body, entry)
     _parse_features(body, entry)
 
-    return entry  # type: ignore[return-value]
+    return cast(OspfInterfaceEntry, entry)
 
 
 def _normalize_interface_name(raw_name: str) -> str:

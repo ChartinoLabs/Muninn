@@ -1,7 +1,7 @@
 """Parser for 'show ip bgp summary' command on IOS/IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -196,7 +196,7 @@ def _parse_memory(lines: list[str]) -> MemoryInfo:
             memory["total_bytes"] = int(m.group(1))
             continue
 
-    return memory  # type: ignore[return-value]
+    return cast(MemoryInfo, memory)
 
 
 def _parse_activity(lines: list[str]) -> ActivityInfo | None:

@@ -2,7 +2,7 @@
 
 import re
 from collections.abc import Callable
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -311,7 +311,7 @@ def _parse_block(lines: list[str]) -> tuple[str, str, SessionEntry] | None:
 
     interface = entry["interface"]
     session_id = entry["common_session_id"]
-    return interface, session_id, entry  # type: ignore[return-value]
+    return interface, session_id, cast(SessionEntry, entry)
 
 
 @register(OS.CISCO_IOS, "show authentication sessions method details")

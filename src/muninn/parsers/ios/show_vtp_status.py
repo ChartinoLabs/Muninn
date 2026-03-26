@@ -1,7 +1,7 @@
 """Parser for 'show vtp status' command on IOS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -215,4 +215,4 @@ class ShowVtpStatusParser(BaseParser["ShowVtpStatusResult"]):
             msg = f"Missing required VTP status fields: {', '.join(missing)}"
             raise ValueError(msg)
 
-        return result  # type: ignore[return-value]
+        return cast(ShowVtpStatusResult, result)

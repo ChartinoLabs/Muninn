@@ -1,7 +1,7 @@
 """Parser for 'show ip ospf interface' command on IOS/IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -533,7 +533,7 @@ def _parse_block(lines: list[str]) -> OspfInterfaceEntry | None:
     _parse_neighbors(body, entry)
     _parse_flood_stats(body, entry)
 
-    return entry  # type: ignore[return-value]
+    return cast(OspfInterfaceEntry, entry)
 
 
 @register(OS.CISCO_IOS, "show ip ospf interface")

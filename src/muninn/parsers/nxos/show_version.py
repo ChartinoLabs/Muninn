@@ -1,7 +1,7 @@
 """Parser for 'show version' command on NX-OS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -361,4 +361,4 @@ class ShowVersionParser(BaseParser[ShowVersionResult]):
         if "plugins" not in result:
             result["plugins"] = []
 
-        return result  # type: ignore[return-value]
+        return cast(ShowVersionResult, result)

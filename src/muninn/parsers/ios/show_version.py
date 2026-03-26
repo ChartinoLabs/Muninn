@@ -1,7 +1,7 @@
 """Parser for 'show version' command on IOS/IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -462,4 +462,4 @@ class ShowVersionParser(BaseParser["ShowVersionResult"]):
 
         _parse_switch_stack(lines, result)
 
-        return result  # type: ignore[return-value]
+        return cast(ShowVersionResult, result)

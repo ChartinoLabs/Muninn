@@ -1,7 +1,7 @@
 """Parser for 'show standby internal' command on IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -273,4 +273,4 @@ class ShowStandbyInternalParser(BaseParser[ShowStandbyInternalResult]):
         _parse_table_sections(lines, idx, result)
         _validate_result(result)
 
-        return result  # type: ignore[return-value]
+        return cast(ShowStandbyInternalResult, result)
