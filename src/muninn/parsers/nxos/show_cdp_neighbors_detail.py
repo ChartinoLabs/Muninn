@@ -296,7 +296,9 @@ class ShowCdpNeighborsDetailParser(
         )
         if key not in state.fields:
             state.fields[key] = []
-        state.fields[key].append(addr)  # type: ignore[union-attr]
+        addr_list = state.fields[key]
+        if isinstance(addr_list, list):
+            addr_list.append(addr)
         return True
 
     @classmethod
