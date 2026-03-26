@@ -163,6 +163,13 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         "nxos/show_ipv6_route/001_multi_vrf_mixed_protocols/expected.json",
         "nxos/show_ipv6_route/002_vxlan_overlay/expected.json",
         "nxos/show_ipv6_route/003_eigrp_subinterfaces/expected.json",
+        # --- Juniper Junos ---
+        # software_packages uses list-of-dicts because package names are not
+        # unique (real device output can list the same package name twice).
+        "juniper_junos/show_version/001_mx240/expected.json",
+        "juniper_junos/show_version/002_qfx5100/expected.json",
+        "juniper_junos/show_version/003_srx_cluster/expected.json",
+        "juniper_junos/show_version/004_ex4550_multi_fpc/expected.json",
     }
 )
 
