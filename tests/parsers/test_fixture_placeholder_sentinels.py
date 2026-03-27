@@ -36,37 +36,7 @@ _NA_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset({}
 
 # Legacy fixtures that still use empty strings as values. Prefer omitting the key
 # (or using ``null`` if the schema uses optional fields) instead of ``""``.
-_EMPTY_STRING_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset(
-    {
-        # --- IOS ---
-        "ios/show_cdp_neighbors_detail/001_multiple_neighbors/expected.json",
-        "ios/show_cdp_neighbors_detail/002_single_neighbor/expected.json",
-        "ios/show_ip_bgp_neighbors_advertised-routes/001_basic/expected.json",
-        # --- IOS-XE ---
-        "iosxe/show_bgp_all/001_basic/expected.json",
-        "iosxe/show_bgp_all/001_live_device/expected.json",
-        "iosxe/show_bgp_all/002_multiple_rds_and_vrfs/expected.json",
-        "iosxe/show_interfaces/002_mixed_types/expected.json",
-        "iosxe/show_inventory/008_c3850_5switch_stack/expected.json",
-        "iosxe/show_ip_bgp/001_basic/expected.json",
-        "iosxe/show_ip_bgp/002_multipath_and_continuations/expected.json",
-        "iosxe/show_ip_bgp/003_wrapped_networks/expected.json",
-        "iosxe/show_ip_bgp_all/001_live_device/expected.json",
-        "iosxe/show_ip_bgp_all/002_multiple_address_families/expected.json",
-        "iosxe/show_ip_bgp_regexp_^$/001_basic/expected.json",
-        "iosxe/show_stackwise-virtual_neighbors/001_basic/expected.json",
-        "iosxe/show_vlan/002_all_statuses_remote_span_private_vlans/expected.json",
-        # --- Nokia SR OS ---
-        "nokia_sros/show_port/001_mixed_slots_and_satellites/expected.json",
-        "nokia_sros/show_port/003_connector_ports/expected.json",
-        # --- NX-OS ---
-        "nxos/show_bgp_vrf_all_all/001_basic/expected.json",
-        "nxos/show_ip_bgp/001_basic_routes/expected.json",
-        "nxos/show_ip_bgp/002_multi_vrf/expected.json",
-        "nxos/show_ip_bgp/003_route_distinguisher/expected.json",
-        "nxos/show_ip_bgp/004_ipv6_wrapped_networks/expected.json",
-    }
-)
+_EMPTY_STRING_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset({})
 
 PARSERS_TEST_DIR = Path(__file__).parent
 
