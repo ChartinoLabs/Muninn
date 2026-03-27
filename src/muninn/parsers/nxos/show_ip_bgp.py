@@ -12,13 +12,13 @@ from muninn.tags import ParserTag
 class PathEntry(TypedDict):
     """Schema for a single BGP path."""
 
-    status_codes: str
-    path_type: str
+    status_codes: NotRequired[str]
+    path_type: NotRequired[str]
     next_hop: str
     metric: NotRequired[int]
     locprf: NotRequired[int]
     weight: int
-    as_path: str
+    as_path: NotRequired[str]
     origin: str
 
 
@@ -193,13 +193,16 @@ def _build_path_entry(
 
     as_path, origin = _parse_origin_and_path(path_field)
     entry: PathEntry = {
-        "status_codes": status_codes,
-        "path_type": path_type,
         "next_hop": next_hop,
         "weight": weight,
-        "as_path": as_path,
         "origin": origin,
     }
+    if status_codes:
+        entry["status_codes"] = status_codes
+    if path_type:
+        entry["path_type"] = path_type
+    if as_path:
+        entry["as_path"] = as_path
     if metric_str:
         entry["metric"] = int(metric_str)
     if locprf_str:
@@ -312,6 +315,19 @@ class _RouteState:
         self.awaiting_data: bool = False
 
 
+def _apply_pending_state(path_entry: PathEntry, state: _RouteState) -> None:
+    """Apply pending status/path_type from a wrapped network line."""
+    if state.pending_status:
+        path_entry["status_codes"] = state.pending_status
+    else:
+        path_entry.pop("status_codes", None)
+    if state.pending_path_type:
+        path_entry["path_type"] = state.pending_path_type
+    else:
+        path_entry.pop("path_type", None)
+    state.awaiting_data = False
+
+
 def _handle_route_line(
     line: str,
     cols: tuple[int, int, int, int, int],
@@ -333,11 +349,8 @@ def _handle_route_line(
             state.awaiting_data = True
         return
 
-    # Apply pending status/path_type from wrapped network line
     if state.awaiting_data and not network:
-        path_entry["status_codes"] = state.pending_status
-        path_entry["path_type"] = state.pending_path_type
-        state.awaiting_data = False
+        _apply_pending_state(path_entry, state)
 
     if state.current_network and path_entry:
         _add_path_to_routes(target, state.current_network, path_entry)
