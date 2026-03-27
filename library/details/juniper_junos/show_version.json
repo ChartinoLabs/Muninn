@@ -1,0 +1,473 @@
+{
+  "os": "juniper_junos",
+  "command": "show version",
+  "schema": {
+    "name": "ShowVersionResult",
+    "fields": {
+      "hostname": {
+        "type": "str",
+        "required": true
+      },
+      "model": {
+        "type": "str",
+        "required": true
+      },
+      "junos_version": {
+        "type": "str",
+        "required": false
+      },
+      "software_packages": {
+        "type": {
+          "type": "list",
+          "items": {
+            "name": "SoftwarePackage",
+            "fields": {
+              "name": {
+                "type": "str",
+                "required": true
+              },
+              "version": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "MX240 router with Junos 13.3R1.4 and QFabric",
+      "input": "fpc0:\n-------------------------------------------------------------------------\nHostname: lab\nModel: mx240\nJunos: 13.3R1.4\nJUNOS Base OS boot [13.3R1.4]\nJUNOS Base OS Software Suite [13.3R1.4]\nJUNOS Kernel Software Suite [13.3R1.4]\nJUNOS Crypto Software Suite [13.3R1.4]\nJUNOS Packet Forwarding Engine Support (M/T/EX Common) [13.3R1.4]\nJUNOS Packet Forwarding Engine Support (MX Common) [13.3R1.4]\nJUNOS Online Documentation [113.3R1.4]\nJUNOS Services AACL Container package [13.3R1.4]\nJUNOS Services Application Level Gateways [13.3R1.4]\nJUNOS AppId Services [13.3R1.4]\nJUNOS Border Gateway Function package [13.3R1.4]\nJUNOS Services Captive Portal and Content Delivery Container package [13.3R1.4]\nJUNOS Services HTTP Content Management package [13.3R1.4]\nJUNOS IDP Services [13.3R1.4]\nJUNOS Services Jflow Container package [13.3R1.4]\nJUNOS Services LL-PDF Container package [13.3R1.4]\nJUNOS Services MobileNext Software package [13.3R1.4]\nJUNOS Services Mobile Subscriber Service Container package [13.3R1.4]\nJUNOS Services NAT [13.3R1.4]\nJUNOS Services PTSP Container package [13.3R1.4]\nJUNOS Services RPM [13.3R1.4]\nJUNOS Services Stateful Firewall [13.3R1.4]\nJUNOS Voice Services Container package [13.3R1.4]\nJUNOS Services Crypto [13.3R1.4]\nJUNOS Services SSL [13.3R1.4]\nJUNOS Services IPSec [13.3R1.4]\nJUNOS platform Software Suite [13.3R1.4]\nJUNOS Runtime Software Suite [13.3R1.4]\nJUNOS Routing Software Suite [13.3R1.4]\nJUNOS py-base-i386 [13.3R1.4]\nlabpkg [7.0]\nSerial Number: qfsn-0123456789\nQFabric System ID: f158527a-f99e-11e0-9fbd-00e081c57cda\n\n{master:0}\n",
+      "expected": {
+        "hostname": "lab",
+        "junos_version": "13.3R1.4",
+        "model": "mx240",
+        "software_packages": [
+          {
+            "name": "JUNOS Base OS boot",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Base OS Software Suite",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Kernel Software Suite",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Crypto Software Suite",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Packet Forwarding Engine Support (M/T/EX Common)",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Packet Forwarding Engine Support (MX Common)",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Online Documentation",
+            "version": "113.3R1.4"
+          },
+          {
+            "name": "JUNOS Services AACL Container package",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Services Application Level Gateways",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS AppId Services",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Border Gateway Function package",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Services Captive Portal and Content Delivery Container package",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Services HTTP Content Management package",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS IDP Services",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Services Jflow Container package",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Services LL-PDF Container package",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Services MobileNext Software package",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Services Mobile Subscriber Service Container package",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Services NAT",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Services PTSP Container package",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Services RPM",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Services Stateful Firewall",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Voice Services Container package",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Services Crypto",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Services SSL",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Services IPSec",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS platform Software Suite",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Runtime Software Suite",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS Routing Software Suite",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "JUNOS py-base-i386",
+            "version": "13.3R1.4"
+          },
+          {
+            "name": "labpkg",
+            "version": "7.0"
+          }
+        ]
+      }
+    },
+    {
+      "name": "QFX5100-48T-6Q switch with Junos 21.4R3-S3.4",
+      "input": "fpc0:\n-------------------------------------------------------------------------\nHostname: asxx.xx.xx\nModel: qfx5100-48t-6q\nJunos: 21.4R3-S3.4\nJUNOS Base OS boot [21.4R3-S3.4]\nJUNOS Base OS Software Suite [21.4R3-S3.4]\nJUNOS Online Documentation [21.4R3-S3.4]\nJUNOS Crypto Software Suite [21.4R3-S3.4]\nJUNOS Crypto Software Suite [21.4R3-S3.4]\nJUNOS Kernel Software Suite [21.4R3-S3.4]\nJUNOS Packet Forwarding Engine Support (qfx-ex-x86-32) [21.4R3-S3.4]\nJUNOS Phone-Home Software Suite [21.4R3-S3.4]\nJUNOS Routing Software Suite [21.4R3-S3.4]\nJUNOS SDN Software Suite [21.4R3-S3.4]\nJUNOS jsd [i386-21.4R3-S3.4-jet-1]\nJUNOS Enterprise Software Suite [21.4R3-S3.4]\nJUNOS Web Management Platform Package [21.4R3-S3.4]\nJUNOS Openconfig [21.4R3-S3.4]\nJUNOS py-base-i386 [21.4R3-S3.4]\nJUNOS py-extensions-i386 [21.4R3-S3.4]\nCHEF client bundle [11.10.4_2.0_i386]\nJUNOS Host Software [20.4R3-S4.8]\nJunos for Automation Enhancement\n",
+      "expected": {
+        "hostname": "asxx.xx.xx",
+        "junos_version": "21.4R3-S3.4",
+        "model": "qfx5100-48t-6q",
+        "software_packages": [
+          {
+            "name": "JUNOS Base OS boot",
+            "version": "21.4R3-S3.4"
+          },
+          {
+            "name": "JUNOS Base OS Software Suite",
+            "version": "21.4R3-S3.4"
+          },
+          {
+            "name": "JUNOS Online Documentation",
+            "version": "21.4R3-S3.4"
+          },
+          {
+            "name": "JUNOS Crypto Software Suite",
+            "version": "21.4R3-S3.4"
+          },
+          {
+            "name": "JUNOS Crypto Software Suite",
+            "version": "21.4R3-S3.4"
+          },
+          {
+            "name": "JUNOS Kernel Software Suite",
+            "version": "21.4R3-S3.4"
+          },
+          {
+            "name": "JUNOS Packet Forwarding Engine Support (qfx-ex-x86-32)",
+            "version": "21.4R3-S3.4"
+          },
+          {
+            "name": "JUNOS Phone-Home Software Suite",
+            "version": "21.4R3-S3.4"
+          },
+          {
+            "name": "JUNOS Routing Software Suite",
+            "version": "21.4R3-S3.4"
+          },
+          {
+            "name": "JUNOS SDN Software Suite",
+            "version": "21.4R3-S3.4"
+          },
+          {
+            "name": "JUNOS jsd",
+            "version": "i386-21.4R3-S3.4-jet-1"
+          },
+          {
+            "name": "JUNOS Enterprise Software Suite",
+            "version": "21.4R3-S3.4"
+          },
+          {
+            "name": "JUNOS Web Management Platform Package",
+            "version": "21.4R3-S3.4"
+          },
+          {
+            "name": "JUNOS Openconfig",
+            "version": "21.4R3-S3.4"
+          },
+          {
+            "name": "JUNOS py-base-i386",
+            "version": "21.4R3-S3.4"
+          },
+          {
+            "name": "JUNOS py-extensions-i386",
+            "version": "21.4R3-S3.4"
+          },
+          {
+            "name": "CHEF client bundle",
+            "version": "11.10.4_2.0_i386"
+          },
+          {
+            "name": "JUNOS Host Software",
+            "version": "20.4R3-S4.8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SRX1500 cluster with two nodes running Junos 19.4R3-S1.3",
+      "input": "node0:\n--------------------------------------------------------------------------\nHostname: lab\nModel: srx1500\nJunos: 19.4R3-S1.3\nJUNOS OS Kernel 64-bit  [20201028.e1cef1d_builder_stable_11]\nJUNOS OS libs [20201028.e1cef1d_builder_stable_11]\nJUNOS OS runtime [20201028.e1cef1d_builder_stable_11]\nJUNOS OS time zone information [20201028.e1cef1d_builder_stable_11]\nJUNOS OS libs compat32 [20201028.e1cef1d_builder_stable_11]\nJUNOS OS 32-bit compatibility [20201028.e1cef1d_builder_stable_11]\nJUNOS py extensions2 [20201202.202156_builder_junos_194_r3_s1]\nJUNOS py extensions [20201202.202156_builder_junos_194_r3_s1]\nJUNOS py base2 [20201202.202156_builder_junos_194_r3_s1]\nJUNOS py base [20201202.202156_builder_junos_194_r3_s1]\nJUNOS OS vmguest [20201028.e1cef1d_builder_stable_11]\nJUNOS OS crypto [20201028.e1cef1d_builder_stable_11]\nJUNOS OS boot-ve files [20201028.e1cef1d_builder_stable_11]\nJUNOS network stack and utilities [20201202.202156_builder_junos_194_r3_s1]\nJUNOS libs [20201202.202156_builder_junos_194_r3_s1]\nJUNOS libs compat32 [20201202.202156_builder_junos_194_r3_s1]\nJUNOS runtime [20201202.202156_builder_junos_194_r3_s1]\nJUNOS na telemetry [19.4R3-S1.3]\nJUNOS Web Management Platform Package [20201202.202156_builder_junos_194_r3_s1]\nJUNOS srx libs compat32 [20201202.202156_builder_junos_194_r3_s1]\nJUNOS srx runtime [20201202.202156_builder_junos_194_r3_s1]\nJUNOS srx platform support [20201202.202156_builder_junos_194_r3_s1]\nJUNOS common platform support [20201202.202156_builder_junos_194_r3_s1]\nJUNOS srxtvp runtime [20201202.202156_builder_junos_194_r3_s1]\nRedis [20201202.202156_builder_junos_194_r3_s1]\nJUNOS pppoe [20201202.202156_builder_junos_194_r3_s1]\nJUNOS Openconfig [19.4R3-S1.3]\nJUNOS mtx network modules [20201202.202156_builder_junos_194_r3_s1]\nJUNOS modules [20201202.202156_builder_junos_194_r3_s1]\nJUNOS srxtvp modules [20201202.202156_builder_junos_194_r3_s1]\nJUNOS srxtvp libs [20201202.202156_builder_junos_194_r3_s1]\nJUNOS srx libs [20201202.202156_builder_junos_194_r3_s1]\nJUNOS srx Data Plane Crypto Support [20201202.202156_builder_junos_194_r3_s1]\nJUNOS daemons [20201202.202156_builder_junos_194_r3_s1]\nJUNOS srx daemons [20201202.202156_builder_junos_194_r3_s1]\nJUNOS SRX TVP AppQos Daemon [20201202.202156_builder_junos_194_r3_s1]\nJUNOS Extension Toolkit [20201202.202156_builder_junos_194_r3_s1]\nJUNOS Phone-home [20201202.202156_builder_junos_194_r3_s1]\nJUNOS Juniper Malware Removal Tool (JMRT) [1.0.0+20201202.202156_builder_junos_194_r3_s1]\nJUNOS J-Insight [20201202.202156_builder_junos_194_r3_s1]\nJUNOS Online Documentation [20201202.202156_builder_junos_194_r3_s1]\nJUNOS jail runtime [20201028.e1cef1d_builder_stable_11]\nJUNOS FIPS mode utilities [20201202.202156_builder_junos_194_r3_s1]\n\nnode1:\n--------------------------------------------------------------------------\nHostname: lab\nModel: srx1500\nJunos: 19.4R3-S1.3\nJUNOS OS Kernel 64-bit  [20201028.e1cef1d_builder_stable_11]\nJUNOS OS libs [20201028.e1cef1d_builder_stable_11]\nJUNOS OS runtime [20201028.e1cef1d_builder_stable_11]\nJUNOS OS time zone information [20201028.e1cef1d_builder_stable_11]\nJUNOS OS libs compat32 [20201028.e1cef1d_builder_stable_11]\nJUNOS OS 32-bit compatibility [20201028.e1cef1d_builder_stable_11]\nJUNOS py extensions2 [20201202.202156_builder_junos_194_r3_s1]\nJUNOS py extensions [20201202.202156_builder_junos_194_r3_s1]\nJUNOS py base2 [20201202.202156_builder_junos_194_r3_s1]\nJUNOS py base [20201202.202156_builder_junos_194_r3_s1]\nJUNOS OS vmguest [20201028.e1cef1d_builder_stable_11]\nJUNOS OS crypto [20201028.e1cef1d_builder_stable_11]\nJUNOS OS boot-ve files [20201028.e1cef1d_builder_stable_11]\nJUNOS network stack and utilities [20201202.202156_builder_junos_194_r3_s1]\nJUNOS libs [20201202.202156_builder_junos_194_r3_s1]\nJUNOS libs compat32 [20201202.202156_builder_junos_194_r3_s1]\nJUNOS runtime [20201202.202156_builder_junos_194_r3_s1]\nJUNOS na telemetry [19.4R3-S1.3]\nJUNOS Web Management Platform Package [20201202.202156_builder_junos_194_r3_s1]\nJUNOS srx libs compat32 [20201202.202156_builder_junos_194_r3_s1]\nJUNOS srx runtime [20201202.202156_builder_junos_194_r3_s1]\nJUNOS srx platform support [20201202.202156_builder_junos_194_r3_s1]\nJUNOS common platform support [20201202.202156_builder_junos_194_r3_s1]\nJUNOS srxtvp runtime [20201202.202156_builder_junos_194_r3_s1]\nRedis [20201202.202156_builder_junos_194_r3_s1]\nJUNOS pppoe [20201202.202156_builder_junos_194_r3_s1]\nJUNOS Openconfig [19.4R3-S1.3]\nJUNOS mtx network modules [20201202.202156_builder_junos_194_r3_s1]\nJUNOS modules [20201202.202156_builder_junos_194_r3_s1]\nJUNOS srxtvp modules [20201202.202156_builder_junos_194_r3_s1]\nJUNOS srxtvp libs [20201202.202156_builder_junos_194_r3_s1]\nJUNOS srx libs [20201202.202156_builder_junos_194_r3_s1]\nJUNOS srx Data Plane Crypto Support [20201202.202156_builder_junos_194_r3_s1]\nJUNOS daemons [20201202.202156_builder_junos_194_r3_s1]\nJUNOS srx daemons [20201202.202156_builder_junos_194_r3_s1]\nJUNOS SRX TVP AppQos Daemon [20201202.202156_builder_junos_194_r3_s1]\nJUNOS Extension Toolkit [20201202.202156_builder_junos_194_r3_s1]\nJUNOS Phone-home [20201202.202156_builder_junos_194_r3_s1]\nJUNOS Juniper Malware Removal Tool (JMRT) [1.0.0+20201202.202156_builder_junos_194_r3_s1]\nJUNOS J-Insight [20201202.202156_builder_junos_194_r3_s1]\nJUNOS Online Documentation [20201202.202156_builder_junos_194_r3_s1]\nJUNOS jail runtime [20201028.e1cef1d_builder_stable_11]\nJUNOS FIPS mode utilities [20201202.202156_builder_junos_194_r3_s1]\n\n{primary:node0}\n",
+      "expected": {
+        "hostname": "lab",
+        "junos_version": "19.4R3-S1.3",
+        "model": "srx1500",
+        "software_packages": [
+          {
+            "name": "JUNOS OS Kernel 64-bit",
+            "version": "20201028.e1cef1d_builder_stable_11"
+          },
+          {
+            "name": "JUNOS OS libs",
+            "version": "20201028.e1cef1d_builder_stable_11"
+          },
+          {
+            "name": "JUNOS OS runtime",
+            "version": "20201028.e1cef1d_builder_stable_11"
+          },
+          {
+            "name": "JUNOS OS time zone information",
+            "version": "20201028.e1cef1d_builder_stable_11"
+          },
+          {
+            "name": "JUNOS OS libs compat32",
+            "version": "20201028.e1cef1d_builder_stable_11"
+          },
+          {
+            "name": "JUNOS OS 32-bit compatibility",
+            "version": "20201028.e1cef1d_builder_stable_11"
+          },
+          {
+            "name": "JUNOS py extensions2",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS py extensions",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS py base2",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS py base",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS OS vmguest",
+            "version": "20201028.e1cef1d_builder_stable_11"
+          },
+          {
+            "name": "JUNOS OS crypto",
+            "version": "20201028.e1cef1d_builder_stable_11"
+          },
+          {
+            "name": "JUNOS OS boot-ve files",
+            "version": "20201028.e1cef1d_builder_stable_11"
+          },
+          {
+            "name": "JUNOS network stack and utilities",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS libs",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS libs compat32",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS runtime",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS na telemetry",
+            "version": "19.4R3-S1.3"
+          },
+          {
+            "name": "JUNOS Web Management Platform Package",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS srx libs compat32",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS srx runtime",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS srx platform support",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS common platform support",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS srxtvp runtime",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "Redis",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS pppoe",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS Openconfig",
+            "version": "19.4R3-S1.3"
+          },
+          {
+            "name": "JUNOS mtx network modules",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS modules",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS srxtvp modules",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS srxtvp libs",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS srx libs",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS srx Data Plane Crypto Support",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS daemons",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS srx daemons",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS SRX TVP AppQos Daemon",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS Extension Toolkit",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS Phone-home",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS Juniper Malware Removal Tool (JMRT)",
+            "version": "1.0.0+20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS J-Insight",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS Online Documentation",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          },
+          {
+            "name": "JUNOS jail runtime",
+            "version": "20201028.e1cef1d_builder_stable_11"
+          },
+          {
+            "name": "JUNOS FIPS mode utilities",
+            "version": "20201202.202156_builder_junos_194_r3_s1"
+          }
+        ]
+      }
+    },
+    {
+      "name": "EX4550-32F virtual chassis with two FPCs running Junos 13.2X51-D35.3",
+      "input": "fpc0:\n--------------------------------------------------------------------------\nHostname: lab\nModel: ex4550-32f\nJUNOS EX  Software Suite [13.2X51-D35.3]\nJUNOS FIPS mode utilities [13.2X51-D35.3]\nJUNOS Online Documentation [13.2X51-D35.3]\nJUNOS EX 4500 Software Suite [13.2X51-D35.3]\nJUNOS Web Management [13.2X51-D35.3]\n\nfpc1:\n--------------------------------------------------------------------------\nHostname: lab\nModel: ex4550-32f\nJUNOS EX  Software Suite [13.2X51-D35.3]\nJUNOS FIPS mode utilities [13.2X51-D35.3]\nJUNOS Online Documentation [13.2X51-D35.3]\nJUNOS EX 4500 Software Suite [13.2X51-D35.3]\nJUNOS Web Management [13.2X51-D35.3]\n\n{master:0}\n",
+      "expected": {
+        "hostname": "lab",
+        "model": "ex4550-32f",
+        "software_packages": [
+          {
+            "name": "JUNOS EX  Software Suite",
+            "version": "13.2X51-D35.3"
+          },
+          {
+            "name": "JUNOS FIPS mode utilities",
+            "version": "13.2X51-D35.3"
+          },
+          {
+            "name": "JUNOS Online Documentation",
+            "version": "13.2X51-D35.3"
+          },
+          {
+            "name": "JUNOS EX 4500 Software Suite",
+            "version": "13.2X51-D35.3"
+          },
+          {
+            "name": "JUNOS Web Management",
+            "version": "13.2X51-D35.3"
+          }
+        ]
+      }
+    }
+  ]
+}
