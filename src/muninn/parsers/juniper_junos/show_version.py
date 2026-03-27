@@ -93,9 +93,9 @@ class ShowVersionParser(BaseParser[ShowVersionResult]):
                 return
 
         if match := cls._PACKAGE.match(line):
-            packages: list[SoftwarePackage] = result.setdefault(  # type: ignore[assignment]
-                "software_packages", []
-            )
+            if "software_packages" not in result:
+                result["software_packages"] = []
+            packages = cast(list[SoftwarePackage], result["software_packages"])
             packages.append(
                 SoftwarePackage(
                     name=match.group("name"),
