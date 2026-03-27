@@ -1,0 +1,212 @@
+{
+  "os": "arista_eos",
+  "command": "show version",
+  "schema": {
+    "name": "ShowVersionResult",
+    "fields": {
+      "model": {
+        "type": "str",
+        "required": true
+      },
+      "hardware_version": {
+        "type": "str",
+        "required": false
+      },
+      "serial_number": {
+        "type": "str",
+        "required": false
+      },
+      "hardware_mac_address": {
+        "type": "str",
+        "required": false
+      },
+      "system_mac_address": {
+        "type": "str",
+        "required": true
+      },
+      "software_image_version": {
+        "type": "str",
+        "required": true
+      },
+      "architecture": {
+        "type": "str",
+        "required": true
+      },
+      "internal_build_version": {
+        "type": "str",
+        "required": true
+      },
+      "internal_build_id": {
+        "type": "str",
+        "required": true
+      },
+      "image_format_version": {
+        "type": "str",
+        "required": false
+      },
+      "image_optimization": {
+        "type": "str",
+        "required": false
+      },
+      "ceos_tools_version": {
+        "type": "str",
+        "required": false
+      },
+      "kernel_version": {
+        "type": "str",
+        "required": false
+      },
+      "uptime": {
+        "type": {
+          "name": "UptimeInfo",
+          "fields": {
+            "weeks": {
+              "type": "int",
+              "required": false
+            },
+            "days": {
+              "type": "int",
+              "required": true
+            },
+            "hours": {
+              "type": "int",
+              "required": true
+            },
+            "minutes": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "total_memory_kb": {
+        "type": "int",
+        "required": true
+      },
+      "free_memory_kb": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "vEOS virtual appliance with minimal hardware info",
+      "input": "Arista vEOS\nHardware version:\nSerial number:\nSystem MAC address:  2803.829a.1347\n\nSoftware image version: 4.14.7M\nArchitecture:           i386\nInternal build version: 4.14.7M-2384414.4147M\nInternal build ID:      92a53fad-f853-42a5-9f57-c3c4ea3c26b3\n\nUptime:                 1 hour and 5 minutes\nTotal memory:           2028860 kB\nFree memory:            301240 kB\n",
+      "expected": {
+        "model": "vEOS",
+        "system_mac_address": "2803.829a.1347",
+        "software_image_version": "4.14.7M",
+        "architecture": "i386",
+        "internal_build_version": "4.14.7M-2384414.4147M",
+        "internal_build_id": "92a53fad-f853-42a5-9f57-c3c4ea3c26b3",
+        "uptime": {
+          "days": 0,
+          "hours": 1,
+          "minutes": 5
+        },
+        "total_memory_kb": 2028860,
+        "free_memory_kb": 301240
+      }
+    },
+    {
+      "name": "Physical CCS-720XP campus switch with long uptime",
+      "input": "Arista CCS-720XP-24ZY4-F\nHardware version: 11.00\nSerial number: JPE11400249\nHardware MAC address: fcbd.67c7.ffe7\nSystem MAC address: fcbd.67c7.ffe7\n\nSoftware image version: 4.27.6M\nArchitecture: i686\nInternal build version: 4.27.6M-28481162.4276M\nInternal build ID: f62c8154-2e05-4650-be1e-c30774deec7e\nImage format version: 2.0\nImage optimization: DEFAULT\n\nUptime: 134 weeks, 5 days, 23 hours and 44 minutes\nTotal memory: 3982820 kB\nFree memory: 1807180 kB\n",
+      "expected": {
+        "model": "CCS-720XP-24ZY4-F",
+        "hardware_version": "11.00",
+        "serial_number": "JPE11400249",
+        "hardware_mac_address": "fcbd.67c7.ffe7",
+        "system_mac_address": "fcbd.67c7.ffe7",
+        "software_image_version": "4.27.6M",
+        "architecture": "i686",
+        "internal_build_version": "4.27.6M-28481162.4276M",
+        "internal_build_id": "f62c8154-2e05-4650-be1e-c30774deec7e",
+        "image_format_version": "2.0",
+        "image_optimization": "DEFAULT",
+        "uptime": {
+          "weeks": 134,
+          "days": 5,
+          "hours": 23,
+          "minutes": 44
+        },
+        "total_memory_kb": 3982820,
+        "free_memory_kb": 1807180
+      }
+    },
+    {
+      "name": "Physical DCS-7010T data center switch",
+      "input": "Arista DCS-7010T-48-R\nHardware version: 12.03\nSerial number: JPE18523609\nHardware MAC address: 985d.82b8.faf5\nSystem MAC address: 985d.82b8.faf5\n\nSoftware image version: 4.28.9M\nArchitecture: i686\nInternal build version: 4.28.9M-33818481.4289M\nInternal build ID: ecbeee98-6249-4e05-84e6-60b46a08f83e\nImage format version: 3.0\nImage optimization: Strata-4GB\n\nUptime: 3 weeks, 0 days, 20 hours and 45 minutes\nTotal memory: 3982456 kB\nFree memory: 2076700 kB\n",
+      "expected": {
+        "model": "DCS-7010T-48-R",
+        "hardware_version": "12.03",
+        "serial_number": "JPE18523609",
+        "hardware_mac_address": "985d.82b8.faf5",
+        "system_mac_address": "985d.82b8.faf5",
+        "software_image_version": "4.28.9M",
+        "architecture": "i686",
+        "internal_build_version": "4.28.9M-33818481.4289M",
+        "internal_build_id": "ecbeee98-6249-4e05-84e6-60b46a08f83e",
+        "image_format_version": "3.0",
+        "image_optimization": "Strata-4GB",
+        "uptime": {
+          "weeks": 3,
+          "days": 0,
+          "hours": 20,
+          "minutes": 45
+        },
+        "total_memory_kb": 3982456,
+        "free_memory_kb": 2076700
+      }
+    },
+    {
+      "name": "cEOS-Lab container with engineering build and cEOS tools",
+      "input": "Arista cEOSLab\nHardware version:\nSerial number: 35BA12C16E793CAD48DE0EEC072CFD74\nHardware MAC address: 001c.73cd.2352\nSystem MAC address: 001c.73cd.2352\n\nSoftware image version: 4.31.6M-39953990.4316M (engineering build)\nArchitecture: x86_64\nInternal build version: 4.31.6M-39953990.4316M\nInternal build ID: 27a18095-d8a6-4dcf-a74c-c9ad0f655faf\nImage format version: 1.0\nImage optimization: None\n\ncEOS tools version: (unknown)\nKernel version: 6.8.0-60-generic\n\nUptime: 2 days, 15 hours and 56 minutes\nTotal memory: 43138472 kB\nFree memory: 27548760 kB\n",
+      "expected": {
+        "model": "cEOSLab",
+        "serial_number": "35BA12C16E793CAD48DE0EEC072CFD74",
+        "hardware_mac_address": "001c.73cd.2352",
+        "system_mac_address": "001c.73cd.2352",
+        "software_image_version": "4.31.6M-39953990.4316M (engineering build)",
+        "architecture": "x86_64",
+        "internal_build_version": "4.31.6M-39953990.4316M",
+        "internal_build_id": "27a18095-d8a6-4dcf-a74c-c9ad0f655faf",
+        "image_format_version": "1.0",
+        "image_optimization": "None",
+        "ceos_tools_version": "(unknown)",
+        "kernel_version": "6.8.0-60-generic",
+        "uptime": {
+          "days": 2,
+          "hours": 15,
+          "minutes": 56
+        },
+        "total_memory_kb": 43138472,
+        "free_memory_kb": 27548760
+      }
+    },
+    {
+      "name": "cEOS-Lab container on WSL2 without serial number or cEOS tools",
+      "input": "Arista cEOSLab\nHardware version:\nSerial number:\nHardware MAC address: 001c.7312.b056\nSystem MAC address: 001c.7312.b056\n\nSoftware image version: 4.32.1F-37265360.4321F (engineering build)\nArchitecture: x86_64\nInternal build version: 4.32.1F-37265360.4321F\nInternal build ID: 5cc97ff0-08f5-438e-9b7c-c94dea3f44a6\nImage format version: 1.0\nImage optimization: None\n\nKernel version: 6.6.87.2-microsoft-standard-WSL2\n\nUptime: 1 hour and 16 minutes\nTotal memory: 16378596 kB\nFree memory: 8609248 kB\n",
+      "expected": {
+        "model": "cEOSLab",
+        "system_mac_address": "001c.7312.b056",
+        "hardware_mac_address": "001c.7312.b056",
+        "software_image_version": "4.32.1F-37265360.4321F (engineering build)",
+        "architecture": "x86_64",
+        "internal_build_version": "4.32.1F-37265360.4321F",
+        "internal_build_id": "5cc97ff0-08f5-438e-9b7c-c94dea3f44a6",
+        "image_format_version": "1.0",
+        "image_optimization": "None",
+        "kernel_version": "6.6.87.2-microsoft-standard-WSL2",
+        "uptime": {
+          "days": 0,
+          "hours": 1,
+          "minutes": 16
+        },
+        "total_memory_kb": 16378596,
+        "free_memory_kb": 8609248
+      }
+    }
+  ]
+}
