@@ -1,0 +1,205 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show version",
+  "schema": {
+    "name": "ShowVersionResult",
+    "fields": {
+      "software_version": {
+        "type": "str",
+        "required": true
+      },
+      "copyright_years": {
+        "type": "str",
+        "required": false
+      },
+      "rom": {
+        "type": "str",
+        "required": false
+      },
+      "build_info": {
+        "type": {
+          "name": "BuildInfo",
+          "fields": {
+            "built_by": {
+              "type": "str",
+              "required": false
+            },
+            "built_on": {
+              "type": "str",
+              "required": false
+            },
+            "built_host": {
+              "type": "str",
+              "required": false
+            },
+            "workspace": {
+              "type": "str",
+              "required": false
+            },
+            "version": {
+              "type": "str",
+              "required": false
+            },
+            "location": {
+              "type": "str",
+              "required": false
+            },
+            "label": {
+              "type": "str",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "device_name": {
+        "type": "str",
+        "required": false
+      },
+      "chassis": {
+        "type": "str",
+        "required": true
+      },
+      "chassis_detail": {
+        "type": "str",
+        "required": false
+      },
+      "processor": {
+        "type": "str",
+        "required": false
+      },
+      "processor_speed": {
+        "type": "str",
+        "required": false
+      },
+      "memory": {
+        "type": "str",
+        "required": false
+      },
+      "image_file": {
+        "type": "str",
+        "required": false
+      },
+      "uptime": {
+        "type": {
+          "name": "UptimeInfo",
+          "fields": {
+            "years": {
+              "type": "int",
+              "required": false
+            },
+            "weeks": {
+              "type": "int",
+              "required": false
+            },
+            "days": {
+              "type": "int",
+              "required": false
+            },
+            "hours": {
+              "type": "int",
+              "required": false
+            },
+            "minutes": {
+              "type": "int",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "config_register": {
+        "type": "str",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Classic ASR9K format with ROM, image file, and config register",
+      "input": "\nCisco IOS XR Software, Version 6.1.4.10I[Default]\nCopyright (c) 2017 by Cisco Systems, Inc.\n\nROM: System Bootstrap, Version 0.75(c) 1994-2012 by Cisco Systems,  Inc.\n\nPE1 uptime is 5 hours, 14 minutes\nSystem image file is \"disk0:asr9k-os-mbi-6.1.4.10I/0x100305/mbiasr9k-rsp3.vm\"\n\ncisco ASR9K Series (Intel 686 F6M14S4) processor with 6291456K bytes of memory.\nIntel 686 F6M14S4 processor at 2134MHz, Revision 2.174\nASR 9006 4 Line Card Slot Chassis with V2 AC PEM\n\n2 FastEthernet\n4 Management Ethernet\n20 GigabitEthernet\n503k bytes of non-volatile configuration memory.\n6271M bytes of hard disk.\n12510192k bytes of disk0: (Sector size 512 bytes).\n12510192k bytes of disk1: (Sector size 512 bytes).\n\nConfiguration register on node 0/RSP0/CPU0 is 0x1922\nBoot device on node 0/RSP0/CPU0 is disk0:\nPackage active on node 0/RSP0/CPU0:\n",
+      "expected": {
+        "software_version": "6.1.4.10I",
+        "copyright_years": "2017",
+        "rom": "System Bootstrap, Version 0.75(c) 1994-2012 by Cisco Systems,  Inc.",
+        "device_name": "PE1",
+        "chassis": "cisco ASR9K Series",
+        "processor": "Intel 686 F6M14S4",
+        "memory": "6291456K bytes",
+        "processor_speed": "2134MHz",
+        "chassis_detail": "ASR 9006 4 Line Card Slot Chassis with V2 AC PEM",
+        "image_file": "disk0:asr9k-os-mbi-6.1.4.10I/0x100305/mbiasr9k-rsp3.vm",
+        "uptime": {
+          "hours": 5,
+          "minutes": 14
+        },
+        "config_register": "0x1922"
+      }
+    },
+    {
+      "name": "IOS-XRv virtual router with GRUB ROM",
+      "input": "\nCisco IOS XR Software, Version 6.2.1.23I[Default]\nCopyright (c) 2016 by Cisco Systems, Inc.\n\nROM: GRUB, Version 1.99(0), DEV RELEASE\n\niosxrvuut uptime is 5 days, 25 minutes\nSystem image file is \"bootflash:disk0/xrvr-os-mbi-6.2.1.23I/mbixrvr-rp.vm\"\n\ncisco IOS XRv Series (Pentium Celeron Stepping 3) processor with 4193911K bytes of memory.\nPentium Celeron Stepping 3 processor at 2931MHz, Revision 2.174\nIOS XRv Chassis\n\n1 Management Ethernet\n7 GigabitEthernet\n97070k bytes of non-volatile configuration memory.\n866M bytes of hard disk.\n2321392k bytes of disk0: (Sector size 512 bytes).\n\nConfiguration register on node 0/0/CPU0 is 0x1\nBoot device on node 0/0/CPU0 is disk0:\nPackage active on node 0/0/CPU0:\n",
+      "expected": {
+        "software_version": "6.2.1.23I",
+        "copyright_years": "2016",
+        "rom": "GRUB, Version 1.99(0), DEV RELEASE",
+        "device_name": "iosxrvuut",
+        "chassis": "cisco IOS XRv Series",
+        "processor": "Pentium Celeron Stepping 3",
+        "memory": "4193911K bytes",
+        "processor_speed": "2931MHz",
+        "chassis_detail": "IOS XRv Chassis",
+        "image_file": "bootflash:disk0/xrvr-os-mbi-6.2.1.23I/mbixrvr-rp.vm",
+        "uptime": {
+          "days": 5,
+          "minutes": 25
+        },
+        "config_register": "0x1"
+      }
+    },
+    {
+      "name": "CRS-16/S-B chassis with SMU packages",
+      "input": "Mon Oct 14 17:44:22.298 EDT\n\nCisco IOS XR Software, Version 6.4.2[Default]\nCopyright (c) 2019 by Cisco Systems, Inc.\n\nROM: System Bootstrap, Version 2.12(20170128:070504) [CRS ROMMON],\n\n\ntcore3-rohan uptime is 4 days, 5 hours, 46 minutes\nSystem image file is \"disk0:hfr-os-mbi-6.4.2.CSCvm85739-1.0.0/0x100008/mbihfr-rp-x86e.vm\"\n\ncisco CRS-16/S-B (Intel 686 F6M14S4) processor with 12582912K bytes of memory.\nIntel 686 F6M14S4 processor at 2127Mhz, Revision 2.174\nCRS 16 Slots Line Card Chassis for CRS-16/S-B\n\n2 Management Ethernet\n54 TenGigE\n59 DWDM controller(s)\n54 WANPHY controller(s)\n5 HundredGigE\n5 GigabitEthernet\n4 SONET/SDH\n4 Packet over SONET/SDH\n1019k bytes of non-volatile configuration memory.\n16726M bytes of hard disk.\n11881456k bytes of disk0: (Sector size 512 bytes).\n11881456k bytes of disk1: (Sector size 512 bytes).\n\nBoot device on node 0/0/CPU0 is lcdisk0:\nPackage active on node 0/0/CPU0:\niosxr-mpls-6.4.2.CSCvr26601, V 1.0.0[SMU], Cisco Systems, at disk0:iosxr-mpls-6.4.2.CSCvr26601-1.0.0\n    Built on Fri Oct  4 05:07:32 EDT 2019\n    By iox-lnx-smu2 in /san2/EFR/smu_r64x_6_4_2/workspace for pie\n\nhfr-px-6.4.2.CSCvr26601, V 1.0.0[SMU], Cisco Systems, at disk0:hfr-px-6.4.2.CSCvr26601-1.0.0\n    Built on Fri Oct  4 05:07:38 EDT 2019\n    By iox-lnx-smu2 in /san2/EFR/smu_r64x_6_4_2/workspace for pie\n",
+      "expected": {
+        "software_version": "6.4.2",
+        "copyright_years": "2019",
+        "rom": "System Bootstrap, Version 2.12(20170128:070504) [CRS ROMMON]",
+        "device_name": "tcore3-rohan",
+        "chassis": "cisco CRS-16/S-B",
+        "processor": "Intel 686 F6M14S4",
+        "memory": "12582912K bytes",
+        "processor_speed": "2127Mhz",
+        "chassis_detail": "CRS 16 Slots Line Card Chassis for CRS-16/S-B",
+        "image_file": "disk0:hfr-os-mbi-6.4.2.CSCvm85739-1.0.0/0x100008/mbihfr-rp-x86e.vm",
+        "uptime": {
+          "days": 4,
+          "hours": 5,
+          "minutes": 46
+        }
+      }
+    },
+    {
+      "name": "NCS-5500 with build info block and no ROM line",
+      "input": "Wed Mar 14 12:31:28.607 UTC\n\nCisco IOS XR Software, Version 6.1.4\nCopyright (c) 2013-2016 by Cisco Systems, Inc.\n\nBuild Information:\n Built By     : ahoang\n Built On     : Thu Jun 29 15:31:09 PDT 2017\n Build Host   : iox-lnx-032\n Workspace    : /auto/srcarchive13/production/6.1.4/ncs5500/workspace\n Version      : 6.1.4\n Location     : /opt/cisco/XR/packages/\n\ncisco NCS-5500 () processor\nSystem uptime is 4 weeks, 6 days, 1 hour, 42 minutes\n",
+      "expected": {
+        "software_version": "6.1.4",
+        "copyright_years": "2013-2016",
+        "build_info": {
+          "built_by": "ahoang",
+          "built_on": "Thu Jun 29 15:31:09 PDT 2017",
+          "built_host": "iox-lnx-032",
+          "workspace": "/auto/srcarchive13/production/6.1.4/ncs5500/workspace",
+          "version": "6.1.4",
+          "location": "/opt/cisco/XR/packages/"
+        },
+        "chassis": "cisco NCS-5500",
+        "uptime": {
+          "weeks": 4,
+          "days": 6,
+          "hours": 1,
+          "minutes": 42
+        }
+      }
+    }
+  ]
+}
