@@ -14,12 +14,12 @@ class PathEntry(TypedDict):
     """Schema for a single BGP path."""
 
     status_codes: str
-    path_type: str
+    path_type: NotRequired[str]
     next_hop: str
     metric: NotRequired[int]
     locprf: NotRequired[int]
     weight: int
-    as_path: str
+    as_path: NotRequired[str]
     origin: str
 
 
@@ -214,12 +214,14 @@ def _build_path_entry(
     as_path, origin = _parse_origin_and_path(path_field)
     entry: PathEntry = {
         "status_codes": status_codes,
-        "path_type": path_type,
         "next_hop": next_hop,
         "weight": weight,
-        "as_path": as_path,
         "origin": origin,
     }
+    if path_type:
+        entry["path_type"] = path_type
+    if as_path:
+        entry["as_path"] = as_path
     if metric_str:
         entry["metric"] = int(metric_str)
     if locprf_str:
@@ -280,7 +282,10 @@ def _handle_data_line(
 
     if state.awaiting_data and not network and entry:
         entry["status_codes"] = state.pending_status
-        entry["path_type"] = state.pending_path_type
+        if state.pending_path_type:
+            entry["path_type"] = state.pending_path_type
+        else:
+            entry.pop("path_type", None)
         state.awaiting_data = False
 
     if state.current_network and entry:
