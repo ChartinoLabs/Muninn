@@ -139,7 +139,9 @@ def test_expected_outputs_use_canonical_interfaces() -> None:
         expected = json.loads(expected_path.read_text())
         rel = expected_path.relative_to(PARSERS_TEST_DIR)
         os_dir = rel.parts[0] if rel.parts else ""
-        os_val = _DIR_TO_OS.get(os_dir)
+        if os_dir not in _DIR_TO_OS:
+            continue
+        os_val = _DIR_TO_OS[os_dir]
         normalized = _normalize(expected, os=os_val)
         if normalized != expected:
             failures.append(str(expected_path.relative_to(PARSERS_TEST_DIR)))

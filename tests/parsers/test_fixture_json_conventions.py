@@ -163,6 +163,11 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         "nxos/show_ipv6_route/001_multi_vrf_mixed_protocols/expected.json",
         "nxos/show_ipv6_route/002_vxlan_overlay/expected.json",
         "nxos/show_ipv6_route/003_eigrp_subinterfaces/expected.json",
+        # --- Linux ---
+        # ip address show: addresses list has no natural unique key
+        "linux/ip_address_show/001_standard_linux/expected.json",
+        "linux/ip_address_show/002_multiple_interfaces_with_ipv6/expected.json",
+        "linux/ip_address_show/003_busybox/expected.json",
     }
 )
 

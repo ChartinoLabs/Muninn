@@ -220,7 +220,8 @@ class _ParseState:
 
     def _handle_iface_detail(self, line: str) -> None:
         """Parse a detail line belonging to the current interface."""
-        assert self.current_iface is not None  # noqa: S101
+        if self.current_iface is None:
+            return
 
         if _parse_link(line, self.current_iface):
             self.current_addr = None
