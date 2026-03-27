@@ -1,0 +1,216 @@
+{
+  "os": "paloalto_panos",
+  "command": "show system info",
+  "schema": {
+    "name": "ShowSystemInfoResult",
+    "fields": {
+      "hostname": {
+        "type": "str",
+        "required": true
+      },
+      "ip_address": {
+        "type": "str",
+        "required": true
+      },
+      "model": {
+        "type": "str",
+        "required": true
+      },
+      "serial": {
+        "type": "str",
+        "required": true
+      },
+      "sw_version": {
+        "type": "str",
+        "required": true
+      },
+      "uptime": {
+        "type": "str",
+        "required": true
+      },
+      "family": {
+        "type": "str",
+        "required": true
+      },
+      "mac_address": {
+        "type": "str",
+        "required": true
+      },
+      "netmask": {
+        "type": "str",
+        "required": false
+      },
+      "default_gateway": {
+        "type": "str",
+        "required": false
+      },
+      "ipv6_address": {
+        "type": "str",
+        "required": false
+      },
+      "ipv6_link_local_address": {
+        "type": "str",
+        "required": false
+      },
+      "ipv6_default_gateway": {
+        "type": "str",
+        "required": false
+      },
+      "time": {
+        "type": "str",
+        "required": false
+      },
+      "vm_mac_base": {
+        "type": "str",
+        "required": false
+      },
+      "vm_mac_count": {
+        "type": "int",
+        "required": false
+      },
+      "vm_uuid": {
+        "type": "str",
+        "required": false
+      },
+      "vm_cpuid": {
+        "type": "str",
+        "required": false
+      },
+      "vm_license": {
+        "type": "str",
+        "required": false
+      },
+      "vm_mode": {
+        "type": "str",
+        "required": false
+      },
+      "global_protect_client_package_version": {
+        "type": "str",
+        "required": false
+      },
+      "app_version": {
+        "type": "str",
+        "required": false
+      },
+      "app_release_date": {
+        "type": "str",
+        "required": false
+      },
+      "av_version": {
+        "type": "str",
+        "required": false
+      },
+      "av_release_date": {
+        "type": "str",
+        "required": false
+      },
+      "threat_version": {
+        "type": "str",
+        "required": false
+      },
+      "threat_release_date": {
+        "type": "str",
+        "required": false
+      },
+      "wf_private_version": {
+        "type": "str",
+        "required": false
+      },
+      "wf_private_release_date": {
+        "type": "str",
+        "required": false
+      },
+      "url_db": {
+        "type": "str",
+        "required": false
+      },
+      "wildfire_version": {
+        "type": "str",
+        "required": false
+      },
+      "wildfire_release_date": {
+        "type": "str",
+        "required": false
+      },
+      "url_filtering_version": {
+        "type": "str",
+        "required": false
+      },
+      "global_protect_datafile_version": {
+        "type": "str",
+        "required": false
+      },
+      "global_protect_datafile_release_date": {
+        "type": "str",
+        "required": false
+      },
+      "logdb_version": {
+        "type": "str",
+        "required": false
+      },
+      "platform_family": {
+        "type": "str",
+        "required": false
+      },
+      "vpn_disable_mode": {
+        "type": "str",
+        "required": false
+      },
+      "multi_vsys": {
+        "type": "str",
+        "required": false
+      },
+      "operational_mode": {
+        "type": "str",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "PA-VM virtual firewall on VMWare ESXi with PAN-OS 7.0.1",
+      "input": "hostname: pa1\nip-address: 10.0.0.90\nnetmask: 255.255.255.0\ndefault-gateway: 10.0.0.2\nipv6-address: unknown\nipv6-link-local-address: fe80::20c:29ff:fe6d:c67e/64\nipv6-default-gateway:\nmac-address: 00:0c:29:6d:c6:7e\ntime: Thu Apr 28 06:33:12 2016\nuptime: 2 days, 2:38:49\nfamily: vm\nmodel: PA-VM\nserial: unknown\nvm-mac-base: BA:DB:EE:FB:AD:00\nvm-mac-count: 255\nvm-uuid: 564D8B6D-7BDB-75AF-400F-B062016DC67E\nvm-cpuid: FB060000FDFB8B07\nvm-license: none\nvm-mode: VMWare ESXi\nsw-version: 7.0.1\nglobal-protect-client-package-version: 0.0.0\napp-version: 497-2688\napp-release-date: unknown\nav-version: 0\nav-release-date: unknown\nthreat-version: 0\nthreat-release-date: unknown\nwf-private-version: 0\nwf-private-release-date: unknown\nurl-db: paloaltonetworks\nwildfire-version: 0\nwildfire-release-date: unknown\nurl-filtering-version: 0000.00.00.000\nglobal-protect-datafile-version: 0\nglobal-protect-datafile-release-date: unknown\nlogdb-version: 7.0.9\nplatform-family: vm\nvpn-disable-mode: off\nmulti-vsys: off\noperational-mode: normal\n",
+      "expected": {
+        "hostname": "pa1",
+        "ip_address": "10.0.0.90",
+        "netmask": "255.255.255.0",
+        "default_gateway": "10.0.0.2",
+        "ipv6_address": "unknown",
+        "ipv6_link_local_address": "fe80::20c:29ff:fe6d:c67e/64",
+        "mac_address": "00:0c:29:6d:c6:7e",
+        "time": "Thu Apr 28 06:33:12 2016",
+        "uptime": "2 days, 2:38:49",
+        "family": "vm",
+        "model": "PA-VM",
+        "serial": "unknown",
+        "vm_mac_base": "BA:DB:EE:FB:AD:00",
+        "vm_mac_count": 255,
+        "vm_uuid": "564D8B6D-7BDB-75AF-400F-B062016DC67E",
+        "vm_cpuid": "FB060000FDFB8B07",
+        "vm_license": "none",
+        "vm_mode": "VMWare ESXi",
+        "sw_version": "7.0.1",
+        "global_protect_client_package_version": "0.0.0",
+        "app_version": "497-2688",
+        "app_release_date": "unknown",
+        "av_version": "0",
+        "av_release_date": "unknown",
+        "threat_version": "0",
+        "threat_release_date": "unknown",
+        "wf_private_version": "0",
+        "wf_private_release_date": "unknown",
+        "url_db": "paloaltonetworks",
+        "wildfire_version": "0",
+        "wildfire_release_date": "unknown",
+        "url_filtering_version": "0000.00.00.000",
+        "global_protect_datafile_version": "0",
+        "global_protect_datafile_release_date": "unknown",
+        "logdb_version": "7.0.9",
+        "platform_family": "vm",
+        "vpn_disable_mode": "off",
+        "multi_vsys": "off",
+        "operational_mode": "normal"
+      }
+    }
+  ]
+}
