@@ -69,7 +69,7 @@
                                       },
                                       "path_type": {
                                         "type": "str",
-                                        "required": true
+                                        "required": false
                                       },
                                       "next_hop": {
                                         "type": "str",
@@ -89,7 +89,7 @@
                                       },
                                       "as_path": {
                                         "type": "str",
-                                        "required": true
+                                        "required": false
                                       },
                                       "origin": {
                                         "type": "str",
@@ -135,320 +135,290 @@
       "expected": {
         "address_families": {
           "VPNv4 Unicast": {
-            "table_version": 18,
-            "router_id": "192.0.2.4",
             "route_distinguishers": {
               "65000:100": {
+                "default_vrf": "RED",
                 "rd": "65000:100",
                 "routes": {
                   "10.12.10.0/30": {
                     "paths": [
                       {
-                        "status_codes": "r",
-                        "path_type": "i",
-                        "next_hop": "198.51.100.1",
-                        "weight": 0,
-                        "as_path": "",
-                        "origin": "?",
+                        "locprf": 100,
                         "metric": 0,
-                        "locprf": 100
+                        "next_hop": "198.51.100.1",
+                        "origin": "?",
+                        "path_type": "i",
+                        "status_codes": "r",
+                        "weight": 0
                       },
                       {
-                        "status_codes": "r>",
-                        "path_type": "i",
-                        "next_hop": "198.51.100.2",
-                        "weight": 0,
-                        "as_path": "",
-                        "origin": "?",
+                        "locprf": 100,
                         "metric": 0,
-                        "locprf": 100
+                        "next_hop": "198.51.100.2",
+                        "origin": "?",
+                        "path_type": "i",
+                        "status_codes": "r>",
+                        "weight": 0
                       }
                     ]
                   },
                   "10.13.10.0/30": {
                     "paths": [
                       {
-                        "status_codes": "r>",
-                        "path_type": "i",
-                        "next_hop": "198.51.100.3",
-                        "weight": 0,
-                        "as_path": "",
-                        "origin": "?",
+                        "locprf": 100,
                         "metric": 0,
-                        "locprf": 100
+                        "next_hop": "198.51.100.3",
+                        "origin": "?",
+                        "path_type": "i",
+                        "status_codes": "r>",
+                        "weight": 0
                       },
                       {
-                        "status_codes": "r",
-                        "path_type": "i",
-                        "next_hop": "198.51.100.1",
-                        "weight": 0,
-                        "as_path": "",
-                        "origin": "?",
+                        "locprf": 100,
                         "metric": 0,
-                        "locprf": 100
+                        "next_hop": "198.51.100.1",
+                        "origin": "?",
+                        "path_type": "i",
+                        "status_codes": "r",
+                        "weight": 0
                       }
                     ]
                   },
                   "10.24.10.0/30": {
                     "paths": [
                       {
-                        "status_codes": "*",
-                        "path_type": "i",
-                        "next_hop": "198.51.100.2",
-                        "weight": 0,
-                        "as_path": "",
-                        "origin": "?",
+                        "locprf": 100,
                         "metric": 0,
-                        "locprf": 100
+                        "next_hop": "198.51.100.2",
+                        "origin": "?",
+                        "path_type": "i",
+                        "status_codes": "*",
+                        "weight": 0
                       },
                       {
-                        "status_codes": "*>",
-                        "path_type": "",
+                        "metric": 0,
                         "next_hop": "0.0.0.0",
-                        "weight": 32768,
-                        "as_path": "",
                         "origin": "?",
-                        "metric": 0
+                        "status_codes": "*>",
+                        "weight": 32768
                       }
                     ]
                   },
                   "10.34.10.0/30": {
                     "paths": [
                       {
-                        "status_codes": "*",
-                        "path_type": "i",
-                        "next_hop": "198.51.100.3",
-                        "weight": 0,
-                        "as_path": "",
-                        "origin": "?",
+                        "locprf": 100,
                         "metric": 0,
-                        "locprf": 100
+                        "next_hop": "198.51.100.3",
+                        "origin": "?",
+                        "path_type": "i",
+                        "status_codes": "*",
+                        "weight": 0
                       },
                       {
-                        "status_codes": "*>",
-                        "path_type": "",
+                        "metric": 0,
                         "next_hop": "0.0.0.0",
-                        "weight": 32768,
-                        "as_path": "",
                         "origin": "?",
-                        "metric": 0
+                        "status_codes": "*>",
+                        "weight": 32768
                       }
                     ]
                   },
                   "198.51.100.1/32": {
                     "paths": [
                       {
-                        "status_codes": "r>",
-                        "path_type": "i",
-                        "next_hop": "198.51.100.1",
-                        "weight": 0,
-                        "as_path": "",
-                        "origin": "?",
+                        "locprf": 100,
                         "metric": 0,
-                        "locprf": 100
+                        "next_hop": "198.51.100.1",
+                        "origin": "?",
+                        "path_type": "i",
+                        "status_codes": "r>",
+                        "weight": 0
                       }
                     ]
                   },
                   "198.51.100.2/32": {
                     "paths": [
                       {
-                        "status_codes": "r>",
-                        "path_type": "i",
-                        "next_hop": "198.51.100.2",
-                        "weight": 0,
-                        "as_path": "",
-                        "origin": "?",
+                        "locprf": 100,
                         "metric": 0,
-                        "locprf": 100
+                        "next_hop": "198.51.100.2",
+                        "origin": "?",
+                        "path_type": "i",
+                        "status_codes": "r>",
+                        "weight": 0
                       }
                     ]
                   },
                   "198.51.100.3/32": {
                     "paths": [
                       {
-                        "status_codes": "r>",
-                        "path_type": "i",
-                        "next_hop": "198.51.100.3",
-                        "weight": 0,
-                        "as_path": "",
-                        "origin": "?",
+                        "locprf": 100,
                         "metric": 0,
-                        "locprf": 100
+                        "next_hop": "198.51.100.3",
+                        "origin": "?",
+                        "path_type": "i",
+                        "status_codes": "r>",
+                        "weight": 0
                       }
                     ]
                   },
                   "198.51.100.4/32": {
                     "paths": [
                       {
-                        "status_codes": "*>",
-                        "path_type": "",
+                        "metric": 0,
                         "next_hop": "0.0.0.0",
-                        "weight": 32768,
-                        "as_path": "",
                         "origin": "?",
-                        "metric": 0
+                        "status_codes": "*>",
+                        "weight": 32768
                       }
                     ]
                   }
-                },
-                "default_vrf": "RED"
+                }
               },
               "65000:200": {
+                "default_vrf": "BLUE",
                 "rd": "65000:200",
                 "routes": {
                   "10.12.20.0/30": {
                     "paths": [
                       {
-                        "status_codes": "r",
-                        "path_type": "i",
-                        "next_hop": "203.0.113.1",
-                        "weight": 0,
-                        "as_path": "",
-                        "origin": "?",
+                        "locprf": 100,
                         "metric": 0,
-                        "locprf": 100
+                        "next_hop": "203.0.113.1",
+                        "origin": "?",
+                        "path_type": "i",
+                        "status_codes": "r",
+                        "weight": 0
                       },
                       {
-                        "status_codes": "r>",
-                        "path_type": "i",
-                        "next_hop": "203.0.113.2",
-                        "weight": 0,
-                        "as_path": "",
-                        "origin": "?",
+                        "locprf": 100,
                         "metric": 0,
-                        "locprf": 100
+                        "next_hop": "203.0.113.2",
+                        "origin": "?",
+                        "path_type": "i",
+                        "status_codes": "r>",
+                        "weight": 0
                       }
                     ]
                   },
                   "10.13.20.0/30": {
                     "paths": [
                       {
-                        "status_codes": "r",
-                        "path_type": "i",
-                        "next_hop": "203.0.113.1",
-                        "weight": 0,
-                        "as_path": "",
-                        "origin": "?",
+                        "locprf": 100,
                         "metric": 0,
-                        "locprf": 100
+                        "next_hop": "203.0.113.1",
+                        "origin": "?",
+                        "path_type": "i",
+                        "status_codes": "r",
+                        "weight": 0
                       },
                       {
-                        "status_codes": "r>",
-                        "path_type": "i",
-                        "next_hop": "203.0.113.3",
-                        "weight": 0,
-                        "as_path": "",
-                        "origin": "?",
+                        "locprf": 100,
                         "metric": 0,
-                        "locprf": 100
+                        "next_hop": "203.0.113.3",
+                        "origin": "?",
+                        "path_type": "i",
+                        "status_codes": "r>",
+                        "weight": 0
                       }
                     ]
                   },
                   "10.24.20.0/30": {
                     "paths": [
                       {
-                        "status_codes": "*",
-                        "path_type": "i",
-                        "next_hop": "203.0.113.2",
-                        "weight": 0,
-                        "as_path": "",
-                        "origin": "?",
+                        "locprf": 100,
                         "metric": 0,
-                        "locprf": 100
+                        "next_hop": "203.0.113.2",
+                        "origin": "?",
+                        "path_type": "i",
+                        "status_codes": "*",
+                        "weight": 0
                       },
                       {
-                        "status_codes": "*>",
-                        "path_type": "",
+                        "metric": 0,
                         "next_hop": "0.0.0.0",
-                        "weight": 32768,
-                        "as_path": "",
                         "origin": "?",
-                        "metric": 0
+                        "status_codes": "*>",
+                        "weight": 32768
                       }
                     ]
                   },
                   "10.34.20.0/30": {
                     "paths": [
                       {
-                        "status_codes": "*",
-                        "path_type": "i",
-                        "next_hop": "203.0.113.3",
-                        "weight": 0,
-                        "as_path": "",
-                        "origin": "?",
+                        "locprf": 100,
                         "metric": 0,
-                        "locprf": 100
+                        "next_hop": "203.0.113.3",
+                        "origin": "?",
+                        "path_type": "i",
+                        "status_codes": "*",
+                        "weight": 0
                       },
                       {
-                        "status_codes": "*>",
-                        "path_type": "",
+                        "metric": 0,
                         "next_hop": "0.0.0.0",
-                        "weight": 32768,
-                        "as_path": "",
                         "origin": "?",
-                        "metric": 0
+                        "status_codes": "*>",
+                        "weight": 32768
                       }
                     ]
                   },
                   "203.0.113.1/32": {
                     "paths": [
                       {
-                        "status_codes": "r>",
-                        "path_type": "i",
-                        "next_hop": "203.0.113.1",
-                        "weight": 0,
-                        "as_path": "",
-                        "origin": "?",
+                        "locprf": 100,
                         "metric": 0,
-                        "locprf": 100
+                        "next_hop": "203.0.113.1",
+                        "origin": "?",
+                        "path_type": "i",
+                        "status_codes": "r>",
+                        "weight": 0
                       }
                     ]
                   },
                   "203.0.113.2/32": {
                     "paths": [
                       {
-                        "status_codes": "r>",
-                        "path_type": "i",
-                        "next_hop": "203.0.113.2",
-                        "weight": 0,
-                        "as_path": "",
-                        "origin": "?",
+                        "locprf": 100,
                         "metric": 0,
-                        "locprf": 100
+                        "next_hop": "203.0.113.2",
+                        "origin": "?",
+                        "path_type": "i",
+                        "status_codes": "r>",
+                        "weight": 0
                       }
                     ]
                   },
                   "203.0.113.3/32": {
                     "paths": [
                       {
-                        "status_codes": "r>",
-                        "path_type": "i",
-                        "next_hop": "203.0.113.3",
-                        "weight": 0,
-                        "as_path": "",
-                        "origin": "?",
+                        "locprf": 100,
                         "metric": 0,
-                        "locprf": 100
+                        "next_hop": "203.0.113.3",
+                        "origin": "?",
+                        "path_type": "i",
+                        "status_codes": "r>",
+                        "weight": 0
                       }
                     ]
                   },
                   "203.0.113.4/32": {
                     "paths": [
                       {
-                        "status_codes": "*>",
-                        "path_type": "",
+                        "metric": 0,
                         "next_hop": "0.0.0.0",
-                        "weight": 32768,
-                        "as_path": "",
                         "origin": "?",
-                        "metric": 0
+                        "status_codes": "*>",
+                        "weight": 32768
                       }
                     ]
                   }
-                },
-                "default_vrf": "BLUE"
+                }
               }
-            }
+            },
+            "router_id": "192.0.2.4",
+            "table_version": 18
           }
         }
       }
@@ -540,11 +510,9 @@
                   "[5][65535:1][0][24][10.1.1.0]/17": {
                     "paths": [
                       {
-                        "as_path": "",
                         "metric": 0,
                         "next_hop": "0.0.0.0",
                         "origin": "?",
-                        "path_type": "",
                         "status_codes": "*>",
                         "weight": 32768
                       }
@@ -553,11 +521,9 @@
                   "[5][65535:1][0][24][10.36.3.0]/17": {
                     "paths": [
                       {
-                        "as_path": "",
                         "metric": 0,
                         "next_hop": "0.0.0.0",
                         "origin": "?",
-                        "path_type": "",
                         "status_codes": "*>",
                         "weight": 32768
                       },
@@ -566,7 +532,6 @@
                         "locprf": 0,
                         "next_hop": "10.36.3.254",
                         "origin": "?",
-                        "path_type": "",
                         "status_codes": "*",
                         "weight": 0
                       }
@@ -590,11 +555,9 @@
                   "10.1.1.0/24": {
                     "paths": [
                       {
-                        "as_path": "",
                         "metric": 0,
                         "next_hop": "0.0.0.0",
                         "origin": "?",
-                        "path_type": "",
                         "status_codes": "*>",
                         "weight": 32768
                       }
@@ -607,16 +570,13 @@
                         "locprf": 0,
                         "next_hop": "10.36.3.254",
                         "origin": "?",
-                        "path_type": "",
                         "status_codes": "*",
                         "weight": 0
                       },
                       {
-                        "as_path": "",
                         "metric": 0,
                         "next_hop": "0.0.0.0",
                         "origin": "?",
-                        "path_type": "",
                         "status_codes": "*>",
                         "weight": 32768
                       }

@@ -17,7 +17,7 @@
               },
               "description": {
                 "type": "str",
-                "required": true
+                "required": false
               },
               "pid": {
                 "type": "str",
@@ -656,152 +656,151 @@
       "input": "NAME: \"c38xx Stack\", DESCR: \"c38xx Stack\"\nPID: WS-C3850-24P-E    , VID: V01  , SN: FCW1932D0LB\n\nNAME: \"Switch 1\", DESCR: \"WS-C3850-24P-E\"\nPID: WS-C3850-24P-E    , VID: V01  , SN: FCW1932D0LB\n\nNAME: \"StackPort1/1\", DESCR: \"StackPort1/1\"\nPID: STACK-T1-50CM     , VID: V01  , SN: LCC1921G11G\n\nNAME: \"StackPort1/2\", DESCR: \"StackPort1/2\"\nPID: STACK-T1-50CM     , VID: V01  , SN: LCC1921G250\n\nNAME: \"Switch 1 - Power Supply A\", DESCR: \"Switch 1 - Power Supply A\"\nPID: C3KX-PWR-715WAC   , VID: V01  , SN: LIT14291MTJ\n\nNAME: \"Switch 2\", DESCR: \"WS-C3850-24P-E\"\nPID: WS-C3850-24P-E    , VID: V04  , SN: FOC1932X0K1\n\nNAME: \"StackPort2/1\", DESCR: \"StackPort2/1\"\nPID: STACK-T1-50CM     , VID: V01  , SN: MOC1932A0BU\n\nNAME: \"StackPort2/2\", DESCR: \"StackPort2/2\"\nPID: STACK-T1-50CM     , VID: V01  , SN: LCC1921G10J\n\nNAME: \"Switch 2 - Power Supply A\", DESCR: \"Switch 2 - Power Supply A\"\nPID: C3KX-PWR-715WAC   , VID: V01  , SN: LIT15090DUL\n\nNAME: \"Switch 3\", DESCR: \"WS-C3850-24P-E\"\nPID: WS-C3850-24P-E    , VID: V04  , SN: FCW1932C0MA\n\nNAME: \"StackPort3/1\", DESCR: \"StackPort3/1\"\nPID: STACK-T1-50CM     , VID: V01  , SN: LCC1921G10J\n\nNAME: \"StackPort3/2\", DESCR: \"StackPort3/2\"\nPID: STACK-T1-50CM     , VID: V01  , SN: LCC1921G106\n\nNAME: \"Switch 3 - Power Supply A\", DESCR: \"Switch 3 - Power Supply A\"\nPID: PWR-C1-715WAC     , VID: V01  , SN: LIT19220MG1\n\nNAME: \"Switch 4\", DESCR: \"WS-C3850-24P-E\"\nPID: WS-C3850-24P-E    , VID: V04  , SN: FCW1932D0L0\n\nNAME: \"StackPort4/1\", DESCR: \"StackPort4/1\"\nPID: STACK-T1-50CM     , VID: V01  , SN: LCC1921G250\n\nNAME: \"StackPort4/2\", DESCR: \"StackPort4/2\"\nPID: STACK-T1-50CM     , VID: V01  , SN: MOC1932A0BU\n\nNAME: \"Switch 4 - Power Supply A\", DESCR: \"\"\nPID: C3KX-PWR-715WAC   , VID: V01  , SN: LIT15140DEP\n\nNAME: \"Switch 5\", DESCR: \"WS-C3850-24P-E\"\nPID: WS-C3850-24P-E    , VID: V04  , SN: FOC1932X0F9\n\nNAME: \"StackPort5/1\", DESCR: \"StackPort5/1\"\nPID: STACK-T1-50CM     , VID: V01  , SN: LCC1921G106\n\nNAME: \"StackPort5/2\", DESCR: \"StackPort5/2\"\nPID: STACK-T1-50CM     , VID: V01  , SN: LCC1921G11G\n\nNAME: \"Switch 5 - Power Supply A\", DESCR: \"Switch 5 - Power Supply A\"\nPID: PWR-C1-715WAC     , VID: V01  , SN: LIT17130ZDU\n",
       "expected": {
         "inventory": {
-          "c38xx Stack": {
-            "name": "c38xx Stack",
-            "description": "c38xx Stack",
-            "pid": "WS-C3850-24P-E",
-            "vid": "V01",
-            "serial_number": "FCW1932D0LB"
-          },
-          "Switch 1": {
-            "name": "Switch 1",
-            "description": "WS-C3850-24P-E",
-            "pid": "WS-C3850-24P-E",
-            "vid": "V01",
-            "serial_number": "FCW1932D0LB"
-          },
           "StackPort1/1": {
-            "name": "StackPort1/1",
             "description": "StackPort1/1",
+            "name": "StackPort1/1",
             "pid": "STACK-T1-50CM",
-            "vid": "V01",
-            "serial_number": "LCC1921G11G"
+            "serial_number": "LCC1921G11G",
+            "vid": "V01"
           },
           "StackPort1/2": {
-            "name": "StackPort1/2",
             "description": "StackPort1/2",
+            "name": "StackPort1/2",
             "pid": "STACK-T1-50CM",
-            "vid": "V01",
-            "serial_number": "LCC1921G250"
-          },
-          "Switch 1 - Power Supply A": {
-            "name": "Switch 1 - Power Supply A",
-            "description": "Switch 1 - Power Supply A",
-            "pid": "C3KX-PWR-715WAC",
-            "vid": "V01",
-            "serial_number": "LIT14291MTJ"
-          },
-          "Switch 2": {
-            "name": "Switch 2",
-            "description": "WS-C3850-24P-E",
-            "pid": "WS-C3850-24P-E",
-            "vid": "V04",
-            "serial_number": "FOC1932X0K1"
+            "serial_number": "LCC1921G250",
+            "vid": "V01"
           },
           "StackPort2/1": {
-            "name": "StackPort2/1",
             "description": "StackPort2/1",
+            "name": "StackPort2/1",
             "pid": "STACK-T1-50CM",
-            "vid": "V01",
-            "serial_number": "MOC1932A0BU"
+            "serial_number": "MOC1932A0BU",
+            "vid": "V01"
           },
           "StackPort2/2": {
-            "name": "StackPort2/2",
             "description": "StackPort2/2",
+            "name": "StackPort2/2",
             "pid": "STACK-T1-50CM",
-            "vid": "V01",
-            "serial_number": "LCC1921G10J"
-          },
-          "Switch 2 - Power Supply A": {
-            "name": "Switch 2 - Power Supply A",
-            "description": "Switch 2 - Power Supply A",
-            "pid": "C3KX-PWR-715WAC",
-            "vid": "V01",
-            "serial_number": "LIT15090DUL"
-          },
-          "Switch 3": {
-            "name": "Switch 3",
-            "description": "WS-C3850-24P-E",
-            "pid": "WS-C3850-24P-E",
-            "vid": "V04",
-            "serial_number": "FCW1932C0MA"
+            "serial_number": "LCC1921G10J",
+            "vid": "V01"
           },
           "StackPort3/1": {
-            "name": "StackPort3/1",
             "description": "StackPort3/1",
+            "name": "StackPort3/1",
             "pid": "STACK-T1-50CM",
-            "vid": "V01",
-            "serial_number": "LCC1921G10J"
+            "serial_number": "LCC1921G10J",
+            "vid": "V01"
           },
           "StackPort3/2": {
-            "name": "StackPort3/2",
             "description": "StackPort3/2",
+            "name": "StackPort3/2",
             "pid": "STACK-T1-50CM",
-            "vid": "V01",
-            "serial_number": "LCC1921G106"
-          },
-          "Switch 3 - Power Supply A": {
-            "name": "Switch 3 - Power Supply A",
-            "description": "Switch 3 - Power Supply A",
-            "pid": "PWR-C1-715WAC",
-            "vid": "V01",
-            "serial_number": "LIT19220MG1"
-          },
-          "Switch 4": {
-            "name": "Switch 4",
-            "description": "WS-C3850-24P-E",
-            "pid": "WS-C3850-24P-E",
-            "vid": "V04",
-            "serial_number": "FCW1932D0L0"
+            "serial_number": "LCC1921G106",
+            "vid": "V01"
           },
           "StackPort4/1": {
-            "name": "StackPort4/1",
             "description": "StackPort4/1",
+            "name": "StackPort4/1",
             "pid": "STACK-T1-50CM",
-            "vid": "V01",
-            "serial_number": "LCC1921G250"
+            "serial_number": "LCC1921G250",
+            "vid": "V01"
           },
           "StackPort4/2": {
-            "name": "StackPort4/2",
             "description": "StackPort4/2",
+            "name": "StackPort4/2",
             "pid": "STACK-T1-50CM",
-            "vid": "V01",
-            "serial_number": "MOC1932A0BU"
+            "serial_number": "MOC1932A0BU",
+            "vid": "V01"
+          },
+          "StackPort5/1": {
+            "description": "StackPort5/1",
+            "name": "StackPort5/1",
+            "pid": "STACK-T1-50CM",
+            "serial_number": "LCC1921G106",
+            "vid": "V01"
+          },
+          "StackPort5/2": {
+            "description": "StackPort5/2",
+            "name": "StackPort5/2",
+            "pid": "STACK-T1-50CM",
+            "serial_number": "LCC1921G11G",
+            "vid": "V01"
+          },
+          "Switch 1": {
+            "description": "WS-C3850-24P-E",
+            "name": "Switch 1",
+            "pid": "WS-C3850-24P-E",
+            "serial_number": "FCW1932D0LB",
+            "vid": "V01"
+          },
+          "Switch 1 - Power Supply A": {
+            "description": "Switch 1 - Power Supply A",
+            "name": "Switch 1 - Power Supply A",
+            "pid": "C3KX-PWR-715WAC",
+            "serial_number": "LIT14291MTJ",
+            "vid": "V01"
+          },
+          "Switch 2": {
+            "description": "WS-C3850-24P-E",
+            "name": "Switch 2",
+            "pid": "WS-C3850-24P-E",
+            "serial_number": "FOC1932X0K1",
+            "vid": "V04"
+          },
+          "Switch 2 - Power Supply A": {
+            "description": "Switch 2 - Power Supply A",
+            "name": "Switch 2 - Power Supply A",
+            "pid": "C3KX-PWR-715WAC",
+            "serial_number": "LIT15090DUL",
+            "vid": "V01"
+          },
+          "Switch 3": {
+            "description": "WS-C3850-24P-E",
+            "name": "Switch 3",
+            "pid": "WS-C3850-24P-E",
+            "serial_number": "FCW1932C0MA",
+            "vid": "V04"
+          },
+          "Switch 3 - Power Supply A": {
+            "description": "Switch 3 - Power Supply A",
+            "name": "Switch 3 - Power Supply A",
+            "pid": "PWR-C1-715WAC",
+            "serial_number": "LIT19220MG1",
+            "vid": "V01"
+          },
+          "Switch 4": {
+            "description": "WS-C3850-24P-E",
+            "name": "Switch 4",
+            "pid": "WS-C3850-24P-E",
+            "serial_number": "FCW1932D0L0",
+            "vid": "V04"
           },
           "Switch 4 - Power Supply A": {
             "name": "Switch 4 - Power Supply A",
-            "description": "",
             "pid": "C3KX-PWR-715WAC",
-            "vid": "V01",
-            "serial_number": "LIT15140DEP"
+            "serial_number": "LIT15140DEP",
+            "vid": "V01"
           },
           "Switch 5": {
-            "name": "Switch 5",
             "description": "WS-C3850-24P-E",
+            "name": "Switch 5",
             "pid": "WS-C3850-24P-E",
-            "vid": "V04",
-            "serial_number": "FOC1932X0F9"
-          },
-          "StackPort5/1": {
-            "name": "StackPort5/1",
-            "description": "StackPort5/1",
-            "pid": "STACK-T1-50CM",
-            "vid": "V01",
-            "serial_number": "LCC1921G106"
-          },
-          "StackPort5/2": {
-            "name": "StackPort5/2",
-            "description": "StackPort5/2",
-            "pid": "STACK-T1-50CM",
-            "vid": "V01",
-            "serial_number": "LCC1921G11G"
+            "serial_number": "FOC1932X0F9",
+            "vid": "V04"
           },
           "Switch 5 - Power Supply A": {
-            "name": "Switch 5 - Power Supply A",
             "description": "Switch 5 - Power Supply A",
+            "name": "Switch 5 - Power Supply A",
             "pid": "PWR-C1-715WAC",
-            "vid": "V01",
-            "serial_number": "LIT17130ZDU"
+            "serial_number": "LIT17130ZDU",
+            "vid": "V01"
+          },
+          "c38xx Stack": {
+            "description": "c38xx Stack",
+            "name": "c38xx Stack",
+            "pid": "WS-C3850-24P-E",
+            "serial_number": "FCW1932D0LB",
+            "vid": "V01"
           }
         }
       }

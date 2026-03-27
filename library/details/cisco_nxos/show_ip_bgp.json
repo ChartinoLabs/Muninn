@@ -41,11 +41,11 @@
                                     "fields": {
                                       "status_codes": {
                                         "type": "str",
-                                        "required": true
+                                        "required": false
                                       },
                                       "path_type": {
                                         "type": "str",
-                                        "required": true
+                                        "required": false
                                       },
                                       "next_hop": {
                                         "type": "str",
@@ -65,7 +65,7 @@
                                       },
                                       "as_path": {
                                         "type": "str",
-                                        "required": true
+                                        "required": false
                                       },
                                       "origin": {
                                         "type": "str",
@@ -129,89 +129,87 @@
           "default": {
             "address_families": {
               "IPv4 Unicast": {
-                "table_version": 100,
                 "router_id": "10.10.0.1",
                 "routes": {
                   "10.10.0.1/32": {
                     "paths": [
                       {
-                        "status_codes": "*>",
-                        "path_type": "l",
-                        "next_hop": "0.0.0.0",
                         "locprf": 100,
-                        "weight": 32768,
-                        "as_path": "",
-                        "origin": "i"
+                        "next_hop": "0.0.0.0",
+                        "origin": "i",
+                        "path_type": "l",
+                        "status_codes": "*>",
+                        "weight": 32768
                       }
                     ]
                   },
                   "10.10.0.2/32": {
                     "paths": [
                       {
-                        "status_codes": "x",
-                        "path_type": "e",
-                        "next_hop": "10.10.2.1",
-                        "weight": 0,
                         "as_path": "64102 64002",
-                        "origin": "i"
+                        "next_hop": "10.10.2.1",
+                        "origin": "i",
+                        "path_type": "e",
+                        "status_codes": "x",
+                        "weight": 0
                       },
                       {
-                        "status_codes": "*>",
-                        "path_type": "e",
-                        "next_hop": "10.10.1.1",
-                        "weight": 0,
                         "as_path": "64101 64002",
-                        "origin": "i"
+                        "next_hop": "10.10.1.1",
+                        "origin": "i",
+                        "path_type": "e",
+                        "status_codes": "*>",
+                        "weight": 0
                       }
                     ]
                   },
                   "10.10.0.201/32": {
                     "paths": [
                       {
-                        "status_codes": "*>",
-                        "path_type": "e",
-                        "next_hop": "10.10.2.1",
-                        "weight": 0,
                         "as_path": "64102 64201",
-                        "origin": "i"
+                        "next_hop": "10.10.2.1",
+                        "origin": "i",
+                        "path_type": "e",
+                        "status_codes": "*>",
+                        "weight": 0
                       },
                       {
-                        "status_codes": "*",
-                        "path_type": "e",
-                        "next_hop": "10.10.1.1",
-                        "weight": 0,
                         "as_path": "64101 64201",
-                        "origin": "i"
-                      }
-                    ]
-                  },
-                  "100.100.100.108/30": {
-                    "paths": [
-                      {
-                        "status_codes": "*>",
+                        "next_hop": "10.10.1.1",
+                        "origin": "i",
                         "path_type": "e",
-                        "next_hop": "10.10.2.1",
-                        "weight": 0,
-                        "as_path": "64102 {64201 64202}",
-                        "origin": "i"
+                        "status_codes": "*",
+                        "weight": 0
                       }
                     ]
                   },
                   "10.16.1.0/24": {
                     "paths": [
                       {
-                        "status_codes": "*>",
-                        "path_type": "r",
-                        "next_hop": "0.0.0.0",
-                        "metric": 4444,
                         "locprf": 100,
-                        "weight": 32768,
-                        "as_path": "",
-                        "origin": "?"
+                        "metric": 4444,
+                        "next_hop": "0.0.0.0",
+                        "origin": "?",
+                        "path_type": "r",
+                        "status_codes": "*>",
+                        "weight": 32768
+                      }
+                    ]
+                  },
+                  "100.100.100.108/30": {
+                    "paths": [
+                      {
+                        "as_path": "64102 {64201 64202}",
+                        "next_hop": "10.10.2.1",
+                        "origin": "i",
+                        "path_type": "e",
+                        "status_codes": "*>",
+                        "weight": 0
                       }
                     ]
                   }
-                }
+                },
+                "table_version": 100
               }
             }
           }
@@ -226,105 +224,102 @@
           "default": {
             "address_families": {
               "IPv4 Unicast": {
-                "table_version": 4,
                 "router_id": "10.253.253.253",
                 "routes": {
                   "10.253.253.253/32": {
                     "paths": [
                       {
-                        "status_codes": "*>",
-                        "path_type": "l",
-                        "next_hop": "0.0.0.0",
                         "locprf": 100,
-                        "weight": 32768,
-                        "as_path": "",
-                        "origin": "i"
+                        "next_hop": "0.0.0.0",
+                        "origin": "i",
+                        "path_type": "l",
+                        "status_codes": "*>",
+                        "weight": 32768
                       }
                     ]
                   },
                   "10.254.254.254/32": {
                     "paths": [
                       {
-                        "status_codes": "*>",
-                        "path_type": "e",
-                        "next_hop": "10.255.255.254",
-                        "weight": 0,
                         "as_path": "65535",
-                        "origin": "i"
+                        "next_hop": "10.255.255.254",
+                        "origin": "i",
+                        "path_type": "e",
+                        "status_codes": "*>",
+                        "weight": 0
                       }
                     ]
                   }
-                }
+                },
+                "table_version": 4
               }
             }
           },
           "vrf_a": {
             "address_families": {
               "IPv4 Unicast": {
-                "table_version": 7,
                 "router_id": "10.0.0.0",
                 "routes": {
                   "10.0.0.0/32": {
                     "paths": [
                       {
-                        "status_codes": "*>",
-                        "path_type": "l",
-                        "next_hop": "0.0.0.0",
                         "locprf": 100,
-                        "weight": 32768,
-                        "as_path": "",
-                        "origin": "i"
+                        "next_hop": "0.0.0.0",
+                        "origin": "i",
+                        "path_type": "l",
+                        "status_codes": "*>",
+                        "weight": 32768
                       }
                     ]
                   },
                   "10.1.1.1/32": {
                     "paths": [
                       {
-                        "status_codes": "*>",
-                        "path_type": "e",
-                        "next_hop": "10.255.255.2",
-                        "weight": 0,
                         "as_path": "65535",
-                        "origin": "i"
+                        "next_hop": "10.255.255.2",
+                        "origin": "i",
+                        "path_type": "e",
+                        "status_codes": "*>",
+                        "weight": 0
                       }
                     ]
                   }
-                }
+                },
+                "table_version": 7
               }
             }
           },
           "vrf_b": {
             "address_families": {
               "IPv4 Unicast": {
-                "table_version": 8,
                 "router_id": "10.0.2.0",
                 "routes": {
                   "10.0.2.0/32": {
                     "paths": [
                       {
-                        "status_codes": "*>",
-                        "path_type": "l",
-                        "next_hop": "0.0.0.0",
                         "locprf": 100,
-                        "weight": 32768,
-                        "as_path": "",
-                        "origin": "i"
+                        "next_hop": "0.0.0.0",
+                        "origin": "i",
+                        "path_type": "l",
+                        "status_codes": "*>",
+                        "weight": 32768
                       }
                     ]
                   },
                   "10.3.3.1/32": {
                     "paths": [
                       {
-                        "status_codes": "*>",
-                        "path_type": "e",
-                        "next_hop": "10.255.255.6",
-                        "weight": 0,
                         "as_path": "65535",
-                        "origin": "i"
+                        "next_hop": "10.255.255.6",
+                        "origin": "i",
+                        "path_type": "e",
+                        "status_codes": "*>",
+                        "weight": 0
                       }
                     ]
                   }
-                }
+                },
+                "table_version": 8
               }
             }
           }
@@ -339,50 +334,45 @@
           "default": {
             "address_families": {
               "VPNv4 Unicast": {
-                "table_version": 23,
-                "router_id": "10.186.101.1",
                 "route_distinguishers": {
                   "1:100": {
                     "rd_vrf": "vpn1",
                     "routes": {
-                      "10.4.1.0/24": {
-                        "paths": [
-                          {
-                            "status_codes": "*>",
-                            "path_type": "l",
-                            "next_hop": "0.0.0.0",
-                            "locprf": 100,
-                            "weight": 32768,
-                            "as_path": "",
-                            "origin": "i"
-                          }
-                        ]
-                      },
-                      "10.16.1.0/24": {
-                        "paths": [
-                          {
-                            "status_codes": "*>",
-                            "path_type": "r",
-                            "next_hop": "0.0.0.0",
-                            "metric": 4444,
-                            "locprf": 100,
-                            "weight": 32768,
-                            "as_path": "",
-                            "origin": "?"
-                          }
-                        ]
-                      },
                       "10.16.0.0/8": {
                         "paths": [
                           {
-                            "status_codes": "*>",
-                            "path_type": "i",
-                            "next_hop": "10.186.0.2",
-                            "metric": 0,
                             "locprf": 100,
-                            "weight": 0,
-                            "as_path": "",
-                            "origin": "?"
+                            "metric": 0,
+                            "next_hop": "10.186.0.2",
+                            "origin": "?",
+                            "path_type": "i",
+                            "status_codes": "*>",
+                            "weight": 0
+                          }
+                        ]
+                      },
+                      "10.16.1.0/24": {
+                        "paths": [
+                          {
+                            "locprf": 100,
+                            "metric": 4444,
+                            "next_hop": "0.0.0.0",
+                            "origin": "?",
+                            "path_type": "r",
+                            "status_codes": "*>",
+                            "weight": 32768
+                          }
+                        ]
+                      },
+                      "10.4.1.0/24": {
+                        "paths": [
+                          {
+                            "locprf": 100,
+                            "next_hop": "0.0.0.0",
+                            "origin": "i",
+                            "path_type": "l",
+                            "status_codes": "*>",
+                            "weight": 32768
                           }
                         ]
                       }
@@ -391,41 +381,39 @@
                   "2:100": {
                     "rd_vrf": "vpn2",
                     "routes": {
-                      "10.16.1.0/24": {
-                        "paths": [
-                          {
-                            "status_codes": "*>",
-                            "path_type": "r",
-                            "next_hop": "0.0.0.0",
-                            "metric": 4444,
-                            "locprf": 100,
-                            "weight": 32768,
-                            "as_path": "",
-                            "origin": "?"
-                          }
-                        ]
-                      },
                       "10.106.0.0/8": {
                         "paths": [
                           {
-                            "status_codes": "*>",
-                            "path_type": "r",
-                            "next_hop": "0.0.0.0",
-                            "metric": 4444,
                             "locprf": 100,
-                            "weight": 32768,
-                            "as_path": "",
-                            "origin": "?"
+                            "metric": 4444,
+                            "next_hop": "0.0.0.0",
+                            "origin": "?",
+                            "path_type": "r",
+                            "status_codes": "*>",
+                            "weight": 32768
+                          }
+                        ]
+                      },
+                      "10.16.1.0/24": {
+                        "paths": [
+                          {
+                            "locprf": 100,
+                            "metric": 4444,
+                            "next_hop": "0.0.0.0",
+                            "origin": "?",
+                            "path_type": "r",
+                            "status_codes": "*>",
+                            "weight": 32768
                           }
                         ]
                       }
                     }
                   }
-                }
+                },
+                "router_id": "10.186.101.1",
+                "table_version": 23
               },
               "VPNv6 Unicast": {
-                "table_version": 7,
-                "router_id": "10.186.101.1",
                 "route_distinguishers": {
                   "1:100": {
                     "rd_vrf": "vpn1",
@@ -433,14 +421,13 @@
                       "2001:11::1/128": {
                         "paths": [
                           {
-                            "status_codes": "*>",
-                            "path_type": "r",
-                            "next_hop": "0::",
-                            "metric": 0,
                             "locprf": 100,
-                            "weight": 32768,
-                            "as_path": "",
-                            "origin": "?"
+                            "metric": 0,
+                            "next_hop": "0::",
+                            "origin": "?",
+                            "path_type": "r",
+                            "status_codes": "*>",
+                            "weight": 32768
                           }
                         ]
                       }
@@ -452,20 +439,21 @@
                       "2001:11::1/128": {
                         "paths": [
                           {
-                            "status_codes": "*>",
-                            "path_type": "r",
-                            "next_hop": "0::",
-                            "metric": 0,
                             "locprf": 100,
-                            "weight": 32768,
-                            "as_path": "",
-                            "origin": "?"
+                            "metric": 0,
+                            "next_hop": "0::",
+                            "origin": "?",
+                            "path_type": "r",
+                            "status_codes": "*>",
+                            "weight": 32768
                           }
                         ]
                       }
                     }
                   }
-                }
+                },
+                "router_id": "10.186.101.1",
+                "table_version": 7
               }
             }
           }
@@ -480,57 +468,55 @@
           "default": {
             "address_families": {
               "IPv6 Unicast": {
-                "table_version": 177,
                 "router_id": "1.1.1.1",
                 "routes": {
                   "110:110:110::110/128": {
                     "paths": [
                       {
-                        "status_codes": "*>",
-                        "path_type": "r",
-                        "next_hop": "0::",
-                        "metric": 0,
                         "locprf": 100,
-                        "weight": 32768,
-                        "as_path": "",
-                        "origin": "?"
+                        "metric": 0,
+                        "next_hop": "0::",
+                        "origin": "?",
+                        "path_type": "r",
+                        "status_codes": "*>",
+                        "weight": 32768
                       }
                     ]
                   },
                   "122:122::122:122/128": {
                     "paths": [
                       {
-                        "status_codes": "*>",
-                        "path_type": "e",
-                        "next_hop": "99:99:99::99",
-                        "weight": 30,
                         "as_path": "2",
-                        "origin": "i"
+                        "next_hop": "99:99:99::99",
+                        "origin": "i",
+                        "path_type": "e",
+                        "status_codes": "*>",
+                        "weight": 30
                       }
                     ]
                   },
                   "123:123::123:123/128": {
                     "paths": [
                       {
-                        "status_codes": "",
-                        "path_type": "e",
-                        "next_hop": "99:99:99::99",
-                        "weight": 10,
                         "as_path": "2",
-                        "origin": "i"
+                        "next_hop": "99:99:99::99",
+                        "origin": "i",
+                        "path_type": "e",
+                        "weight": 10
                       },
                       {
-                        "status_codes": "*>",
-                        "path_type": "i",
-                        "next_hop": "98:98:98::98",
-                        "locprf": 100,
-                        "weight": 20,
                         "as_path": "3 2",
-                        "origin": "i"
+                        "locprf": 100,
+                        "next_hop": "98:98:98::98",
+                        "origin": "i",
+                        "path_type": "i",
+                        "status_codes": "*>",
+                        "weight": 20
                       }
                     ]
                   }
-                }
+                },
+                "table_version": 177
               }
             }
           }
