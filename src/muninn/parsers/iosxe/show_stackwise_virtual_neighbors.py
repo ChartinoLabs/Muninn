@@ -1,7 +1,7 @@
 """Parser for 'show stackwise-virtual neighbors' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -13,7 +13,7 @@ from muninn.utils import canonical_interface_name
 class NeighborPortRemote(TypedDict):
     """Remote SVL neighbor port for a local interface."""
 
-    remote_port: str
+    remote_port: NotRequired[str]
 
 
 class NeighborSwitchEntry(TypedDict):
@@ -90,9 +90,7 @@ def _parse_neighbors_table(lines: list[str]) -> dict[str, NeighborSwitchEntry]:
             )
         elif m := _CONT_ONE.match(line):
             local = _canon(m.group("local"))
-            switches[current_switch]["ports"][local] = NeighborPortRemote(
-                remote_port="",
-            )
+            switches[current_switch]["ports"][local] = NeighborPortRemote()
 
     return switches
 
