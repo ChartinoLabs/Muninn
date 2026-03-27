@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
+from muninn.utils import canonical_interface_name
 
 
 class InterfaceBriefEntry(TypedDict):
@@ -76,7 +77,7 @@ class ShowInterfacesBriefParser(BaseParser[ShowInterfacesBriefResult]):
             if not match:
                 continue
 
-            name = match.group("name")
+            name = canonical_interface_name(match.group("name"), os=OS.CISCO_IOSXR)
             entry = InterfaceBriefEntry(
                 interface_state=match.group("intf_state"),
                 line_protocol_state=match.group("line_state"),
