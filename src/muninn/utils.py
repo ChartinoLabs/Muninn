@@ -14,6 +14,21 @@ _IOS_FOUR_HUNDRED_GIGE_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
+# IOS-XR abbreviated prefixes that netutils does not expand.
+_IOSXR_PREFIX_MAP: dict[str, str] = {
+    "mg": "MgmtEth",
+    "nu": "Null",
+    "tt": "tunnel-te",
+}
+_IOSXR_PREFIX_PATTERN = re.compile(
+    r"^(?P<prefix>" + "|".join(_IOSXR_PREFIX_MAP) + r")(?P<suffix>\d.*)$",
+    re.IGNORECASE,
+)
+
+# netutils canonicalization is Cisco-centric; non-Cisco platforms use
+# their own naming conventions that should not be rewritten.
+_CISCO_OSES = frozenset({OS.CISCO_IOS, OS.CISCO_IOSXE, OS.CISCO_IOSXR, OS.CISCO_NXOS})
+
 
 def canonical_interface_name(name: str, *, os: OS | None = None) -> str:
     """Return the canonical form of an interface name.
@@ -30,6 +45,9 @@ def canonical_interface_name(name: str, *, os: OS | None = None) -> str:
     Returns:
         Canonical interface name string.
     """
+    if os is not None and os not in _CISCO_OSES:
+        return name
+
     if os is OS.CISCO_NXOS:
         name_lower = name.lower()
         for prefix in _NXOS_PASSTHROUGH_PREFIXES:
@@ -40,5 +58,11 @@ def canonical_interface_name(name: str, *, os: OS | None = None) -> str:
         match = _IOS_FOUR_HUNDRED_GIGE_PATTERN.match(name)
         if match:
             name = f"FourHundredGigabitEthernet{match.group('suffix')}"
+
+    if os is OS.CISCO_IOSXR:
+        match = _IOSXR_PREFIX_PATTERN.match(name)
+        if match:
+            canonical_prefix = _IOSXR_PREFIX_MAP[match.group("prefix").lower()]
+            name = f"{canonical_prefix}{match.group('suffix')}"
 
     return _upstream_canonical(name)
