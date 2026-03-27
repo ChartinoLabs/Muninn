@@ -12,7 +12,6 @@ from muninn.tags import ParserTag
 class AddressEntry(TypedDict):
     """Schema for an IP address entry (inet or inet6)."""
 
-    address: str
     prefix_length: int
     family: str
     scope: str
@@ -40,7 +39,7 @@ class InterfaceEntry(TypedDict):
     mac_address: NotRequired[str]
     broadcast_mac: NotRequired[str]
     altname: NotRequired[str]
-    addresses: list[AddressEntry]
+    addresses: dict[str, AddressEntry]
 
 
 IpAddressShowResult = dict[str, InterfaceEntry]
@@ -110,7 +109,7 @@ def _parse_header(line: str) -> InterfaceEntry | None:
         "mtu": int(header_match.group("mtu")),
         "state": header_match.group("state") or "UNKNOWN",
         "link_type": "",
-        "addresses": [],
+        "addresses": {},
     }
 
     qdisc = header_match.group("qdisc")
@@ -146,14 +145,14 @@ def _parse_link(line: str, iface: InterfaceEntry) -> bool:
     return True
 
 
-def _parse_address(line: str) -> AddressEntry | None:
-    """Parse an inet/inet6 address line into an AddressEntry."""
+def _parse_address(line: str) -> tuple[str, AddressEntry] | None:
+    """Parse an inet/inet6 address line into an (address, AddressEntry) tuple."""
     inet_match = _INET_RE.match(line)
     if not inet_match:
         return None
 
+    address = inet_match.group("address")
     addr: AddressEntry = {
-        "address": inet_match.group("address"),
         "prefix_length": int(inet_match.group("prefix")),
         "family": inet_match.group("family"),
         "scope": inet_match.group("scope"),
@@ -172,7 +171,7 @@ def _parse_address(line: str) -> AddressEntry | None:
         if "noprefixroute" in words:
             addr["noprefixroute"] = True
 
-    return addr
+    return address, addr
 
 
 def _parse_altname(line: str, iface: InterfaceEntry) -> bool:
@@ -231,10 +230,11 @@ class _ParseState:
             self.current_addr = None
             return
 
-        addr = _parse_address(line)
-        if addr is not None:
+        parsed = _parse_address(line)
+        if parsed is not None:
+            address_key, addr = parsed
             self.current_addr = addr
-            self.current_iface["addresses"].append(addr)
+            self.current_iface["addresses"][address_key] = addr
             return
 
         if self.current_addr is not None:
