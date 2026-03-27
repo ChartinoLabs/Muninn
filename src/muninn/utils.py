@@ -25,9 +25,11 @@ _IOSXR_PREFIX_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
-# netutils canonicalization is Cisco-centric; non-Cisco platforms use
-# their own naming conventions that should not be rewritten.
-_CISCO_OSES = frozenset({OS.CISCO_IOS, OS.CISCO_IOSXE, OS.CISCO_IOSXR, OS.CISCO_NXOS})
+# Platforms where netutils canonicalization is incorrect — these use their
+# own naming conventions (e.g. lo0, eth0, ge-0/0/0) that must not be rewritten.
+_NETUTILS_PASSTHROUGH_OSES = frozenset(
+    {OS.JUNIPER_JUNOS, OS.NOKIA_SROS, OS.PALOALTO_PANOS, OS.LINUX}
+)
 
 
 def canonical_interface_name(name: str, *, os: OS | None = None) -> str:
@@ -45,7 +47,7 @@ def canonical_interface_name(name: str, *, os: OS | None = None) -> str:
     Returns:
         Canonical interface name string.
     """
-    if os is not None and os not in _CISCO_OSES:
+    if os in _NETUTILS_PASSTHROUGH_OSES:
         return name
 
     if os is OS.CISCO_NXOS:
