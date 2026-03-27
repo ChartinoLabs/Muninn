@@ -17,7 +17,7 @@ class RouteEntry(TypedDict):
     metric: NotRequired[int]
     local_pref: NotRequired[int]
     weight: int
-    path: str
+    path: NotRequired[str]
     origin: str
 
 
@@ -88,6 +88,15 @@ def _find_column_positions(line: str) -> dict[str, int]:
     return columns
 
 
+def _parse_origin_and_path(path_and_origin: str) -> tuple[str, str]:
+    """Split a combined path+origin field into (as_path, origin)."""
+    if not path_and_origin:
+        return ("", "")
+    if path_and_origin[-1] in ("i", "e", "?"):
+        return (path_and_origin[:-1].strip(), path_and_origin[-1])
+    return (path_and_origin, "")
+
+
 def _parse_route_by_columns(
     line: str,
     columns: dict[str, int],
@@ -123,41 +132,26 @@ def _parse_route_by_columns(
     if not nexthop_field:
         return None
 
-    # Metric field: from metric_col to locprf_col
-    metric_field = line[metric_col:locprf_col].strip()
-
-    # LocPrf field: from locprf_col to weight_col
-    locprf_field = line[locprf_col:weight_col].strip()
-
     # Weight field: from weight_col to path_col
     weight_field = line[weight_col:path_col].strip()
     if not weight_field:
         return None
 
-    # Path + origin: everything from path_col onwards
-    path_and_origin = line[path_col:].strip()
-
-    # Origin code is the last non-whitespace character (i, e, or ?)
-    if not path_and_origin:
-        origin = ""
-        as_path = ""
-    elif path_and_origin[-1] in ("i", "e", "?"):
-        origin = path_and_origin[-1]
-        as_path = path_and_origin[:-1].strip()
-    else:
-        origin = ""
-        as_path = path_and_origin
+    as_path, origin = _parse_origin_and_path(line[path_col:].strip())
 
     entry: RouteEntry = {
         "status_codes": status_part,
         "next_hop": nexthop_field,
         "weight": int(weight_field),
-        "path": as_path,
         "origin": origin,
     }
 
+    if as_path:
+        entry["path"] = as_path
+    metric_field = line[metric_col:locprf_col].strip()
     if metric_field:
         entry["metric"] = int(metric_field)
+    locprf_field = line[locprf_col:weight_col].strip()
     if locprf_field:
         entry["local_pref"] = int(locprf_field)
 
