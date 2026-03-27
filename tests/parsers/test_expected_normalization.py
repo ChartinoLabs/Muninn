@@ -6,16 +6,26 @@ import json
 from pathlib import Path
 from typing import TypeAlias
 
-from muninn.os import OS
+from muninn.os import OS, resolve_os
 from muninn.utils import canonical_interface_name
 
 PARSERS_TEST_DIR = Path(__file__).parent
 
-_DIR_TO_OS: dict[str, OS] = {
-    "ios": OS.CISCO_IOS,
-    "iosxe": OS.CISCO_IOSXE,
-    "nxos": OS.CISCO_NXOS,
-}
+
+def _build_dir_to_os() -> dict[str, OS]:
+    """Build mapping from test directory names to OS enum members."""
+    mapping: dict[str, OS] = {}
+    for child in sorted(PARSERS_TEST_DIR.iterdir()):
+        if not child.is_dir():
+            continue
+        try:
+            mapping[child.name] = resolve_os(child.name)
+        except (ValueError, TypeError):
+            continue
+    return mapping
+
+
+_DIR_TO_OS: dict[str, OS] = _build_dir_to_os()
 
 JSONValue: TypeAlias = (
     dict[str, "JSONValue"] | list["JSONValue"] | str | int | float | bool | None
@@ -50,7 +60,8 @@ def _looks_like_interface(value: str) -> bool:
         r"Vlan|Po(?:rt-channel)?|Tu(?:nnel)?|Se(?:rial)?|"
         r"nve|BDI|Twe(?:ntyFiveGigE)?|"
         r"Virtual-Access|Virtual-Template|Vi|Vt|"
-        r"ATM|AT|Dialer|Di)\d",
+        r"ATM|AT|Dialer|Di|"
+        r"MgmtEth|Mg|Nu(?:ll)?|tunnel-te|tt)\d",
         re.IGNORECASE,
     )
     return bool(interface_pattern.match(value))
