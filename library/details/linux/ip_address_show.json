@@ -1,0 +1,445 @@
+{
+  "os": "linux",
+  "command": "ip address show",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Standard Linux with VRF, bridge, and point-to-point interfaces",
+      "input": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    inet 127.0.0.1/8 scope host lo\n       valid_lft forever preferred_lft forever\n2: ens32: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    link/ether 00:0c:29:56:07:1b brd ff:ff:ff:ff:ff:ff\n    inet 192.168.131.128/24 brd 192.168.131.255 scope global dynamic ens32\n       valid_lft 1307sec preferred_lft 1307sec\n3: gpd0: <POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP> mtu 1400 qdisc fq_codel state UNKNOWN group default qlen 500\n    link/none\n    inet 10.20.20.12/32 scope global gpd0\n       valid_lft forever preferred_lft forever\n4: br-218f5e637867: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default\n    link/ether 02:42:5d:d7:c2:c1 brd ff:ff:ff:ff:ff:ff\n    inet 172.21.0.1/16 brd 172.21.255.255 scope global br-218f5e637867\n       valid_lft forever preferred_lft forever\n5: vrf-blue: <NOARP,MASTER,UP,LOWER_UP> mtu 65575 qdisc noqueue state UP group default qlen 1000\n    link/ether ee:be:e9:28:70:69 brd ff:ff:ff:ff:ff:ff\n6: brblue: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master vrf-blue state UNKNOWN group default qlen 1000\n    link/ether 66:37:23:9b:9e:e4 brd ff:ff:ff:ff:ff:ff\n    inet 10.0.0.1/24 scope global brblue\n       valid_lft forever preferred_lft forever\n    inet 192.168.0.1/25 scope global brred\n       valid_lft forever preferred_lft forever\n",
+      "expected": {
+        "lo": {
+          "index": 1,
+          "name": "lo",
+          "flags": [
+            "LOOPBACK",
+            "UP",
+            "LOWER_UP"
+          ],
+          "mtu": 65536,
+          "state": "UNKNOWN",
+          "link_type": "loopback",
+          "addresses": {
+            "127.0.0.1": {
+              "prefix_length": 8,
+              "family": "inet",
+              "scope": "host",
+              "valid_lft": "forever",
+              "preferred_lft": "forever"
+            }
+          },
+          "qdisc": "noqueue",
+          "group": "default",
+          "qlen": 1000,
+          "mac_address": "00:00:00:00:00:00",
+          "broadcast_mac": "00:00:00:00:00:00"
+        },
+        "ens32": {
+          "index": 2,
+          "name": "ens32",
+          "flags": [
+            "BROADCAST",
+            "MULTICAST",
+            "UP",
+            "LOWER_UP"
+          ],
+          "mtu": 1500,
+          "state": "UP",
+          "link_type": "ether",
+          "addresses": {
+            "192.168.131.128": {
+              "prefix_length": 24,
+              "family": "inet",
+              "scope": "global",
+              "broadcast": "192.168.131.255",
+              "dynamic": true,
+              "valid_lft": "1307sec",
+              "preferred_lft": "1307sec"
+            }
+          },
+          "qdisc": "fq_codel",
+          "group": "default",
+          "qlen": 1000,
+          "mac_address": "00:0c:29:56:07:1b",
+          "broadcast_mac": "ff:ff:ff:ff:ff:ff"
+        },
+        "gpd0": {
+          "index": 3,
+          "name": "gpd0",
+          "flags": [
+            "POINTOPOINT",
+            "MULTICAST",
+            "NOARP",
+            "UP",
+            "LOWER_UP"
+          ],
+          "mtu": 1400,
+          "state": "UNKNOWN",
+          "link_type": "none",
+          "addresses": {
+            "10.20.20.12": {
+              "prefix_length": 32,
+              "family": "inet",
+              "scope": "global",
+              "valid_lft": "forever",
+              "preferred_lft": "forever"
+            }
+          },
+          "qdisc": "fq_codel",
+          "group": "default",
+          "qlen": 500
+        },
+        "br-218f5e637867": {
+          "index": 4,
+          "name": "br-218f5e637867",
+          "flags": [
+            "NO-CARRIER",
+            "BROADCAST",
+            "MULTICAST",
+            "UP"
+          ],
+          "mtu": 1500,
+          "state": "DOWN",
+          "link_type": "ether",
+          "addresses": {
+            "172.21.0.1": {
+              "prefix_length": 16,
+              "family": "inet",
+              "scope": "global",
+              "broadcast": "172.21.255.255",
+              "valid_lft": "forever",
+              "preferred_lft": "forever"
+            }
+          },
+          "qdisc": "noqueue",
+          "group": "default",
+          "mac_address": "02:42:5d:d7:c2:c1",
+          "broadcast_mac": "ff:ff:ff:ff:ff:ff"
+        },
+        "vrf-blue": {
+          "index": 5,
+          "name": "vrf-blue",
+          "flags": [
+            "NOARP",
+            "MASTER",
+            "UP",
+            "LOWER_UP"
+          ],
+          "mtu": 65575,
+          "state": "UP",
+          "link_type": "ether",
+          "addresses": {},
+          "qdisc": "noqueue",
+          "group": "default",
+          "qlen": 1000,
+          "mac_address": "ee:be:e9:28:70:69",
+          "broadcast_mac": "ff:ff:ff:ff:ff:ff"
+        },
+        "brblue": {
+          "index": 6,
+          "name": "brblue",
+          "flags": [
+            "BROADCAST",
+            "MULTICAST",
+            "UP",
+            "LOWER_UP"
+          ],
+          "mtu": 1500,
+          "state": "UNKNOWN",
+          "link_type": "ether",
+          "addresses": {
+            "10.0.0.1": {
+              "prefix_length": 24,
+              "family": "inet",
+              "scope": "global",
+              "valid_lft": "forever",
+              "preferred_lft": "forever"
+            },
+            "192.168.0.1": {
+              "prefix_length": 25,
+              "family": "inet",
+              "scope": "global",
+              "valid_lft": "forever",
+              "preferred_lft": "forever"
+            }
+          },
+          "qdisc": "noqueue",
+          "master": "vrf-blue",
+          "group": "default",
+          "qlen": 1000,
+          "mac_address": "66:37:23:9b:9e:e4",
+          "broadcast_mac": "ff:ff:ff:ff:ff:ff"
+        }
+      }
+    },
+    {
+      "name": "Multiple interfaces with IPv6, altnames, secondary addresses, and noprefixroute",
+      "input": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    inet 127.0.0.1/8 scope host lo\n       valid_lft forever preferred_lft forever\n    inet6 ::1/128 scope host\n       valid_lft forever preferred_lft forever\n2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    link/ether 52:54:00:8c:62:44 brd ff:ff:ff:ff:ff:ff\n    inet 192.168.121.241/24 brd 192.168.121.255 scope global dynamic eth0\n       valid_lft 3515sec preferred_lft 3515sec\n    inet 192.168.121.45/24 scope global secondary eth0\n       valid_lft forever preferred_lft forever\n    inet6 fe80::5054:ff:fe8c:6244/64 scope link\n       valid_lft forever preferred_lft forever\n3: ens33: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    link/ether 00:0c:29:b0:21:7d brd ff:ff:ff:ff:ff:ff\n    altname enp2s1\n    inet 192.168.94.133/24 brd 192.168.94.255 scope global dynamic noprefixroute ens33\n       valid_lft 1541sec preferred_lft 1541sec\n    inet6 fe80::b681:60db:7206:13a0/64 scope link noprefixroute\n       valid_lft forever preferred_lft forever\n4: ens37: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    link/ether 00:50:56:20:47:14 brd ff:ff:ff:ff:ff:ff\n    altname enp2s5\n    inet 192.168.94.134/24 brd 192.168.94.255 scope global dynamic noprefixroute ens37\n       valid_lft 1541sec preferred_lft 1541sec\n    inet6 fe80::6c2a:3447:5d99:700a/64 scope link noprefixroute\n       valid_lft forever preferred_lft forever\n5: ens38: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000\n    link/ether 00:50:56:37:93:58 brd ff:ff:ff:ff:ff:ff\n    altname enp2s6\n    inet 192.168.94.135/24 brd 192.168.94.255 scope global dynamic noprefixroute ens38\n       valid_lft 1540sec preferred_lft 1540sec\n    inet6 fe80::97ef:a3f1:a962:9ef0/64 scope link noprefixroute\n       valid_lft forever preferred_lft forever\n",
+      "expected": {
+        "lo": {
+          "index": 1,
+          "name": "lo",
+          "flags": [
+            "LOOPBACK",
+            "UP",
+            "LOWER_UP"
+          ],
+          "mtu": 65536,
+          "state": "UNKNOWN",
+          "link_type": "loopback",
+          "addresses": {
+            "127.0.0.1": {
+              "prefix_length": 8,
+              "family": "inet",
+              "scope": "host",
+              "valid_lft": "forever",
+              "preferred_lft": "forever"
+            },
+            "::1": {
+              "prefix_length": 128,
+              "family": "inet6",
+              "scope": "host",
+              "valid_lft": "forever",
+              "preferred_lft": "forever"
+            }
+          },
+          "qdisc": "noqueue",
+          "group": "default",
+          "qlen": 1000,
+          "mac_address": "00:00:00:00:00:00",
+          "broadcast_mac": "00:00:00:00:00:00"
+        },
+        "eth0": {
+          "index": 2,
+          "name": "eth0",
+          "flags": [
+            "BROADCAST",
+            "MULTICAST",
+            "UP",
+            "LOWER_UP"
+          ],
+          "mtu": 1500,
+          "state": "UP",
+          "link_type": "ether",
+          "addresses": {
+            "192.168.121.241": {
+              "prefix_length": 24,
+              "family": "inet",
+              "scope": "global",
+              "broadcast": "192.168.121.255",
+              "dynamic": true,
+              "valid_lft": "3515sec",
+              "preferred_lft": "3515sec"
+            },
+            "192.168.121.45": {
+              "prefix_length": 24,
+              "family": "inet",
+              "scope": "global",
+              "secondary": true,
+              "valid_lft": "forever",
+              "preferred_lft": "forever"
+            },
+            "fe80::5054:ff:fe8c:6244": {
+              "prefix_length": 64,
+              "family": "inet6",
+              "scope": "link",
+              "valid_lft": "forever",
+              "preferred_lft": "forever"
+            }
+          },
+          "qdisc": "fq_codel",
+          "group": "default",
+          "qlen": 1000,
+          "mac_address": "52:54:00:8c:62:44",
+          "broadcast_mac": "ff:ff:ff:ff:ff:ff"
+        },
+        "ens33": {
+          "index": 3,
+          "name": "ens33",
+          "flags": [
+            "BROADCAST",
+            "MULTICAST",
+            "UP",
+            "LOWER_UP"
+          ],
+          "mtu": 1500,
+          "state": "UP",
+          "link_type": "ether",
+          "addresses": {
+            "192.168.94.133": {
+              "prefix_length": 24,
+              "family": "inet",
+              "scope": "global",
+              "broadcast": "192.168.94.255",
+              "dynamic": true,
+              "noprefixroute": true,
+              "valid_lft": "1541sec",
+              "preferred_lft": "1541sec"
+            },
+            "fe80::b681:60db:7206:13a0": {
+              "prefix_length": 64,
+              "family": "inet6",
+              "scope": "link",
+              "noprefixroute": true,
+              "valid_lft": "forever",
+              "preferred_lft": "forever"
+            }
+          },
+          "qdisc": "fq_codel",
+          "group": "default",
+          "qlen": 1000,
+          "mac_address": "00:0c:29:b0:21:7d",
+          "broadcast_mac": "ff:ff:ff:ff:ff:ff",
+          "altname": "enp2s1"
+        },
+        "ens37": {
+          "index": 4,
+          "name": "ens37",
+          "flags": [
+            "BROADCAST",
+            "MULTICAST",
+            "UP",
+            "LOWER_UP"
+          ],
+          "mtu": 1500,
+          "state": "UP",
+          "link_type": "ether",
+          "addresses": {
+            "192.168.94.134": {
+              "prefix_length": 24,
+              "family": "inet",
+              "scope": "global",
+              "broadcast": "192.168.94.255",
+              "dynamic": true,
+              "noprefixroute": true,
+              "valid_lft": "1541sec",
+              "preferred_lft": "1541sec"
+            },
+            "fe80::6c2a:3447:5d99:700a": {
+              "prefix_length": 64,
+              "family": "inet6",
+              "scope": "link",
+              "noprefixroute": true,
+              "valid_lft": "forever",
+              "preferred_lft": "forever"
+            }
+          },
+          "qdisc": "fq_codel",
+          "group": "default",
+          "qlen": 1000,
+          "mac_address": "00:50:56:20:47:14",
+          "broadcast_mac": "ff:ff:ff:ff:ff:ff",
+          "altname": "enp2s5"
+        },
+        "ens38": {
+          "index": 5,
+          "name": "ens38",
+          "flags": [
+            "BROADCAST",
+            "MULTICAST",
+            "UP",
+            "LOWER_UP"
+          ],
+          "mtu": 1500,
+          "state": "UP",
+          "link_type": "ether",
+          "addresses": {
+            "192.168.94.135": {
+              "prefix_length": 24,
+              "family": "inet",
+              "scope": "global",
+              "broadcast": "192.168.94.255",
+              "dynamic": true,
+              "noprefixroute": true,
+              "valid_lft": "1540sec",
+              "preferred_lft": "1540sec"
+            },
+            "fe80::97ef:a3f1:a962:9ef0": {
+              "prefix_length": 64,
+              "family": "inet6",
+              "scope": "link",
+              "noprefixroute": true,
+              "valid_lft": "forever",
+              "preferred_lft": "forever"
+            }
+          },
+          "qdisc": "fq_codel",
+          "group": "default",
+          "qlen": 1000,
+          "mac_address": "00:50:56:37:93:58",
+          "broadcast_mac": "ff:ff:ff:ff:ff:ff",
+          "altname": "enp2s6"
+        }
+      }
+    },
+    {
+      "name": "BusyBox ip address show output without group or qlen fields",
+      "input": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    inet 127.0.0.1/8 scope host lo\n       valid_lft forever preferred_lft forever\n    inet6 ::1/128 scope host\n       valid_lft forever preferred_lft forever\n2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP\n    link/ether 01:02:03:04:05:06 brd ff:ff:ff:ff:ff:ff\n    inet 192.168.1.1/24 brd 192.168.1.255 scope global eth0\n       valid_lft forever preferred_lft forever\n    inet6 fe80::302:03ff:fe04:0506/64 scope link\n       valid_lft forever preferred_lft forever\n",
+      "expected": {
+        "lo": {
+          "index": 1,
+          "name": "lo",
+          "flags": [
+            "LOOPBACK",
+            "UP",
+            "LOWER_UP"
+          ],
+          "mtu": 65536,
+          "state": "UNKNOWN",
+          "link_type": "loopback",
+          "addresses": {
+            "127.0.0.1": {
+              "prefix_length": 8,
+              "family": "inet",
+              "scope": "host",
+              "valid_lft": "forever",
+              "preferred_lft": "forever"
+            },
+            "::1": {
+              "prefix_length": 128,
+              "family": "inet6",
+              "scope": "host",
+              "valid_lft": "forever",
+              "preferred_lft": "forever"
+            }
+          },
+          "qdisc": "noqueue",
+          "mac_address": "00:00:00:00:00:00",
+          "broadcast_mac": "00:00:00:00:00:00"
+        },
+        "eth0": {
+          "index": 2,
+          "name": "eth0",
+          "flags": [
+            "BROADCAST",
+            "MULTICAST",
+            "UP",
+            "LOWER_UP"
+          ],
+          "mtu": 1500,
+          "state": "UP",
+          "link_type": "ether",
+          "addresses": {
+            "192.168.1.1": {
+              "prefix_length": 24,
+              "family": "inet",
+              "scope": "global",
+              "broadcast": "192.168.1.255",
+              "valid_lft": "forever",
+              "preferred_lft": "forever"
+            },
+            "fe80::302:03ff:fe04:0506": {
+              "prefix_length": 64,
+              "family": "inet6",
+              "scope": "link",
+              "valid_lft": "forever",
+              "preferred_lft": "forever"
+            }
+          },
+          "qdisc": "noqueue",
+          "mac_address": "01:02:03:04:05:06",
+          "broadcast_mac": "ff:ff:ff:ff:ff:ff"
+        }
+      }
+    }
+  ]
+}
