@@ -3,102 +3,105 @@
         "default": {
             "address_families": {
                 "IPv4 Unicast": {
+                    "table_version": 4,
                     "router_id": "10.253.253.253",
                     "routes": {
                         "10.253.253.253/32": {
                             "paths": [
                                 {
-                                    "locprf": 100,
-                                    "next_hop": "0.0.0.0",
-                                    "origin": "i",
-                                    "path_type": "l",
                                     "status_codes": "*>",
-                                    "weight": 32768
+                                    "path_type": "l",
+                                    "next_hop": "0.0.0.0",
+                                    "locprf": 100,
+                                    "weight": 32768,
+                                    "as_path": "",
+                                    "origin": "i"
                                 }
                             ]
                         },
                         "10.254.254.254/32": {
                             "paths": [
                                 {
-                                    "as_path": "65535",
-                                    "next_hop": "10.255.255.254",
-                                    "origin": "i",
-                                    "path_type": "e",
                                     "status_codes": "*>",
-                                    "weight": 0
+                                    "path_type": "e",
+                                    "next_hop": "10.255.255.254",
+                                    "weight": 0,
+                                    "as_path": "65535",
+                                    "origin": "i"
                                 }
                             ]
                         }
-                    },
-                    "table_version": 4
+                    }
                 }
             }
         },
         "vrf_a": {
             "address_families": {
                 "IPv4 Unicast": {
+                    "table_version": 7,
                     "router_id": "10.0.0.0",
                     "routes": {
                         "10.0.0.0/32": {
                             "paths": [
                                 {
-                                    "locprf": 100,
-                                    "next_hop": "0.0.0.0",
-                                    "origin": "i",
-                                    "path_type": "l",
                                     "status_codes": "*>",
-                                    "weight": 32768
+                                    "path_type": "l",
+                                    "next_hop": "0.0.0.0",
+                                    "locprf": 100,
+                                    "weight": 32768,
+                                    "as_path": "",
+                                    "origin": "i"
                                 }
                             ]
                         },
                         "10.1.1.1/32": {
                             "paths": [
                                 {
-                                    "as_path": "65535",
-                                    "next_hop": "10.255.255.2",
-                                    "origin": "i",
-                                    "path_type": "e",
                                     "status_codes": "*>",
-                                    "weight": 0
+                                    "path_type": "e",
+                                    "next_hop": "10.255.255.2",
+                                    "weight": 0,
+                                    "as_path": "65535",
+                                    "origin": "i"
                                 }
                             ]
                         }
-                    },
-                    "table_version": 7
+                    }
                 }
             }
         },
         "vrf_b": {
             "address_families": {
                 "IPv4 Unicast": {
+                    "table_version": 8,
                     "router_id": "10.0.2.0",
                     "routes": {
                         "10.0.2.0/32": {
                             "paths": [
                                 {
-                                    "locprf": 100,
-                                    "next_hop": "0.0.0.0",
-                                    "origin": "i",
-                                    "path_type": "l",
                                     "status_codes": "*>",
-                                    "weight": 32768
+                                    "path_type": "l",
+                                    "next_hop": "0.0.0.0",
+                                    "locprf": 100,
+                                    "weight": 32768,
+                                    "as_path": "",
+                                    "origin": "i"
                                 }
                             ]
                         },
                         "10.3.3.1/32": {
                             "paths": [
                                 {
-                                    "as_path": "65535",
-                                    "next_hop": "10.255.255.6",
-                                    "origin": "i",
-                                    "path_type": "e",
                                     "status_codes": "*>",
-                                    "weight": 0
+                                    "path_type": "e",
+                                    "next_hop": "10.255.255.6",
+                                    "weight": 0,
+                                    "as_path": "65535",
+                                    "origin": "i"
                                 }
                             ]
                         }
-                    },
-                    "table_version": 8
+                    }
                 }
             }
         }

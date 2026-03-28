@@ -49,7 +49,7 @@ class InterfaceEntry(TypedDict):
     """Schema for a single interface from ifconfig output."""
 
     interface: str
-    flags: str
+    flags: list[str]
     mtu: int
     type: NotRequired[str]
     description: NotRequired[str]
@@ -218,9 +218,13 @@ def _parse_modern_header(line: str) -> InterfaceEntry | None:
     match = _MODERN_HEADER_RE.match(line)
     if not match:
         return None
+    raw_flags = match.group("flags")
+    # Extract flags from inside angle brackets: "4163<UP,BROADCAST,RUNNING,MULTICAST>"
+    bracket_match = re.search(r"<([^>]*)>", raw_flags)
+    flags = bracket_match.group(1).split(",") if bracket_match else []
     return InterfaceEntry(
         interface=match.group("name"),
-        flags=match.group("flags"),
+        flags=flags,
         mtu=int(match.group("mtu")),
     )
 
@@ -233,7 +237,7 @@ def _parse_legacy_header(line: str) -> InterfaceEntry | None:
     encap = match.group("encap")
     iface = InterfaceEntry(
         interface=match.group("name"),
-        flags="",
+        flags=[],
         mtu=0,
         type=encap,
         description=encap,
@@ -428,7 +432,7 @@ def _parse_detail_line(line: str, iface: InterfaceEntry) -> None:
     # Legacy flags/MTU
     flags_match = _LEGACY_FLAGS_RE.match(line)
     if flags_match:
-        iface["flags"] = flags_match.group("flags").strip()
+        iface["flags"] = flags_match.group("flags").strip().split()
         iface["mtu"] = int(flags_match.group("mtu"))
         return
 

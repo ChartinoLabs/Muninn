@@ -70,8 +70,8 @@ class CountersEntry(TypedDict):
 class PortChannelMemberEntry(TypedDict):
     """Per-member duplex and speed (see ``PortChannelInfo.members`` keys)."""
 
-    duplex: NotRequired[str]
-    speed: NotRequired[str]
+    duplex: str
+    speed: str
 
 
 class PortChannelInfo(TypedDict):
@@ -646,7 +646,7 @@ def _parse_port_channel(lines: list[str]) -> PortChannelInfo:
             member_str = m.group(1).strip()
             for name in member_str.split():
                 canon = canonical_interface_name(name, os=OS.CISCO_IOS)
-                members[canon] = {}
+                members[canon] = {"duplex": "", "speed": ""}
             pc["active_members"] = len(members)
             continue
 
