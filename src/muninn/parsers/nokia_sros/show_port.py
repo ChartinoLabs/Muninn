@@ -13,7 +13,7 @@ class PortEntry(TypedDict):
     """Schema for a single port entry."""
 
     admin_state: str
-    link_state: NotRequired[str]
+    link_state: str
     port_state: str
     cfg_mtu: NotRequired[int]
     oper_mtu: NotRequired[int]
@@ -124,6 +124,7 @@ class ShowPortParser(BaseParser[ShowPortResult]):
 
         entry: PortEntry = {
             "admin_state": match.group("admin_state"),
+            "link_state": "",
             "port_state": match.group("port_state"),
             "port_type": "conn",
         }

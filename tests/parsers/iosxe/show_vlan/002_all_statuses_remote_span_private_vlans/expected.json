@@ -1,67 +1,9 @@
 {
-    "private_vlans": {
-        "10": {
-            "ports": [],
-            "secondary": 10,
-            "type": "community"
-        },
-        "105": {
-            "ports": [],
-            "primary": 20,
-            "secondary": 105,
-            "type": "isolated"
-        },
-        "151": {
-            "ports": [],
-            "primary": 100,
-            "secondary": 151,
-            "type": "non-operational"
-        },
-        "202": {
-            "ports": [],
-            "secondary": 202,
-            "type": "community"
-        },
-        "301": {
-            "ports": [
-                "FastEthernet5/3",
-                "FastEthernet5/25"
-            ],
-            "primary": 2,
-            "secondary": 301,
-            "type": "community"
-        },
-        "302": {
-            "ports": [],
-            "primary": 2,
-            "secondary": 302,
-            "type": "community"
-        },
-        "303": {
-            "ports": [],
-            "secondary": 303,
-            "type": "community"
-        },
-        "402": {
-            "ports": [],
-            "primary": 101,
-            "secondary": 402,
-            "type": "non-operational"
-        }
-    },
-    "remote_span_vlans": [
-        20,
-        21,
-        24,
-        25,
-        26,
-        27,
-        102
-    ],
     "vlans": {
         "1": {
-            "mtu": 1500,
+            "vlan_id": 1,
             "name": "default",
+            "status": "active",
             "ports": [
                 "GigabitEthernet1/0/1",
                 "GigabitEthernet1/0/2",
@@ -80,84 +22,147 @@
                 "GigabitEthernet1/0/21",
                 "GigabitEthernet1/0/22"
             ],
+            "type": "enet",
             "said": 100001,
-            "status": "active",
-            "trans1": 0,
-            "trans2": 0,
-            "type": "enet",
-            "vlan_id": 1
-        },
-        "100": {
             "mtu": 1500,
-            "name": "V100",
-            "ports": [],
-            "said": 100100,
-            "status": "suspended",
             "trans1": 0,
-            "trans2": 0,
-            "type": "enet",
-            "vlan_id": 100
-        },
-        "101": {
-            "mtu": 1500,
-            "name": "VLAN-0101",
-            "ports": [],
-            "said": 100101,
-            "status": "active",
-            "trans1": 0,
-            "trans2": 0,
-            "type": "enet",
-            "vlan_id": 101
-        },
-        "102": {
-            "mtu": 0,
-            "name": "VLAN_0102",
-            "ports": [],
-            "said": 0,
-            "status": "active",
-            "trans1": 0,
-            "trans2": 0,
-            "vlan_id": 102
-        },
-        "103": {
-            "mtu": 0,
-            "name": "VLAN-0103",
-            "ports": [],
-            "said": 0,
-            "status": "act/unsup",
-            "trans1": 0,
-            "trans2": 0,
-            "vlan_id": 103
-        },
-        "104": {
-            "mtu": 0,
-            "name": "VLAN_0104",
-            "ports": [],
-            "said": 0,
-            "status": "act/lshut",
-            "trans1": 0,
-            "trans2": 0,
-            "vlan_id": 104
+            "trans2": 0
         },
         "2": {
-            "mtu": 0,
+            "vlan_id": 2,
             "name": "VLAN_0002",
-            "ports": [],
-            "said": 0,
             "status": "active",
+            "ports": [],
+            "type": "",
+            "said": 0,
+            "mtu": 0,
             "trans1": 0,
-            "trans2": 0,
-            "vlan_id": 2
+            "trans2": 0
         },
         "20": {
-            "mtu": 0,
+            "vlan_id": 20,
             "name": "VLAN-0020",
-            "ports": [],
-            "said": 0,
             "status": "active",
+            "ports": [],
+            "type": "",
+            "said": 0,
+            "mtu": 0,
             "trans1": 0,
-            "trans2": 0,
-            "vlan_id": 20
+            "trans2": 0
+        },
+        "100": {
+            "vlan_id": 100,
+            "name": "V100",
+            "status": "suspended",
+            "ports": [],
+            "type": "enet",
+            "said": 100100,
+            "mtu": 1500,
+            "trans1": 0,
+            "trans2": 0
+        },
+        "101": {
+            "vlan_id": 101,
+            "name": "VLAN-0101",
+            "status": "active",
+            "ports": [],
+            "type": "enet",
+            "said": 100101,
+            "mtu": 1500,
+            "trans1": 0,
+            "trans2": 0
+        },
+        "102": {
+            "vlan_id": 102,
+            "name": "VLAN_0102",
+            "status": "active",
+            "ports": [],
+            "type": "",
+            "said": 0,
+            "mtu": 0,
+            "trans1": 0,
+            "trans2": 0
+        },
+        "103": {
+            "vlan_id": 103,
+            "name": "VLAN-0103",
+            "status": "act/unsup",
+            "ports": [],
+            "type": "",
+            "said": 0,
+            "mtu": 0,
+            "trans1": 0,
+            "trans2": 0
+        },
+        "104": {
+            "vlan_id": 104,
+            "name": "VLAN_0104",
+            "status": "act/lshut",
+            "ports": [],
+            "type": "",
+            "said": 0,
+            "mtu": 0,
+            "trans1": 0,
+            "trans2": 0
+        }
+    },
+    "remote_span_vlans": [
+        20,
+        21,
+        24,
+        25,
+        26,
+        27,
+        102
+    ],
+    "private_vlans": {
+        "10": {
+            "secondary": 10,
+            "type": "community",
+            "ports": []
+        },
+        "105": {
+            "secondary": 105,
+            "type": "isolated",
+            "ports": [],
+            "primary": 20
+        },
+        "151": {
+            "secondary": 151,
+            "type": "non-operational",
+            "ports": [],
+            "primary": 100
+        },
+        "202": {
+            "secondary": 202,
+            "type": "community",
+            "ports": []
+        },
+        "301": {
+            "secondary": 301,
+            "type": "community",
+            "ports": [
+                "FastEthernet5/3",
+                "FastEthernet5/25"
+            ],
+            "primary": 2
+        },
+        "302": {
+            "secondary": 302,
+            "type": "community",
+            "ports": [],
+            "primary": 2
+        },
+        "303": {
+            "secondary": 303,
+            "type": "community",
+            "ports": []
+        },
+        "402": {
+            "secondary": 402,
+            "type": "non-operational",
+            "ports": [],
+            "primary": 101
         }
     }
 }

@@ -3,87 +3,89 @@
         "default": {
             "address_families": {
                 "IPv4 Unicast": {
+                    "table_version": 100,
                     "router_id": "10.10.0.1",
                     "routes": {
                         "10.10.0.1/32": {
                             "paths": [
                                 {
-                                    "locprf": 100,
-                                    "next_hop": "0.0.0.0",
-                                    "origin": "i",
-                                    "path_type": "l",
                                     "status_codes": "*>",
-                                    "weight": 32768
+                                    "path_type": "l",
+                                    "next_hop": "0.0.0.0",
+                                    "locprf": 100,
+                                    "weight": 32768,
+                                    "as_path": "",
+                                    "origin": "i"
                                 }
                             ]
                         },
                         "10.10.0.2/32": {
                             "paths": [
                                 {
-                                    "as_path": "64102 64002",
-                                    "next_hop": "10.10.2.1",
-                                    "origin": "i",
-                                    "path_type": "e",
                                     "status_codes": "x",
-                                    "weight": 0
+                                    "path_type": "e",
+                                    "next_hop": "10.10.2.1",
+                                    "weight": 0,
+                                    "as_path": "64102 64002",
+                                    "origin": "i"
                                 },
                                 {
-                                    "as_path": "64101 64002",
-                                    "next_hop": "10.10.1.1",
-                                    "origin": "i",
-                                    "path_type": "e",
                                     "status_codes": "*>",
-                                    "weight": 0
+                                    "path_type": "e",
+                                    "next_hop": "10.10.1.1",
+                                    "weight": 0,
+                                    "as_path": "64101 64002",
+                                    "origin": "i"
                                 }
                             ]
                         },
                         "10.10.0.201/32": {
                             "paths": [
                                 {
-                                    "as_path": "64102 64201",
-                                    "next_hop": "10.10.2.1",
-                                    "origin": "i",
-                                    "path_type": "e",
                                     "status_codes": "*>",
-                                    "weight": 0
+                                    "path_type": "e",
+                                    "next_hop": "10.10.2.1",
+                                    "weight": 0,
+                                    "as_path": "64102 64201",
+                                    "origin": "i"
                                 },
                                 {
-                                    "as_path": "64101 64201",
-                                    "next_hop": "10.10.1.1",
-                                    "origin": "i",
-                                    "path_type": "e",
                                     "status_codes": "*",
-                                    "weight": 0
-                                }
-                            ]
-                        },
-                        "10.16.1.0/24": {
-                            "paths": [
-                                {
-                                    "locprf": 100,
-                                    "metric": 4444,
-                                    "next_hop": "0.0.0.0",
-                                    "origin": "?",
-                                    "path_type": "r",
-                                    "status_codes": "*>",
-                                    "weight": 32768
+                                    "path_type": "e",
+                                    "next_hop": "10.10.1.1",
+                                    "weight": 0,
+                                    "as_path": "64101 64201",
+                                    "origin": "i"
                                 }
                             ]
                         },
                         "100.100.100.108/30": {
                             "paths": [
                                 {
-                                    "as_path": "64102 {64201 64202}",
-                                    "next_hop": "10.10.2.1",
-                                    "origin": "i",
-                                    "path_type": "e",
                                     "status_codes": "*>",
-                                    "weight": 0
+                                    "path_type": "e",
+                                    "next_hop": "10.10.2.1",
+                                    "weight": 0,
+                                    "as_path": "64102 {64201 64202}",
+                                    "origin": "i"
+                                }
+                            ]
+                        },
+                        "10.16.1.0/24": {
+                            "paths": [
+                                {
+                                    "status_codes": "*>",
+                                    "path_type": "r",
+                                    "next_hop": "0.0.0.0",
+                                    "metric": 4444,
+                                    "locprf": 100,
+                                    "weight": 32768,
+                                    "as_path": "",
+                                    "origin": "?"
                                 }
                             ]
                         }
-                    },
-                    "table_version": 100
+                    }
                 }
             }
         }
