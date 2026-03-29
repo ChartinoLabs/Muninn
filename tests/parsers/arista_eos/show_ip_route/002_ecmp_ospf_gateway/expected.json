@@ -1,0 +1,74 @@
+{
+    "vrf": "default",
+    "routes": {
+        "0.0.0.0/0": {
+            "network": "0.0.0.0",
+            "mask": 0,
+            "protocol": "ospf",
+            "protocol_code": "O E1",
+            "type_code": "E1",
+            "type": "external-type-1",
+            "next_hops": [
+                {
+                    "admin_distance": 110,
+                    "metric": 21,
+                    "next_hop": "172.83.43.48",
+                    "outgoing_interface": "Vlan55"
+                },
+                {
+                    "admin_distance": 110,
+                    "metric": 21,
+                    "next_hop": "172.83.43.50",
+                    "outgoing_interface": "Vlan65"
+                }
+            ]
+        },
+        "10.1.26.0/24": {
+            "network": "10.1.26.0",
+            "mask": 24,
+            "protocol": "static",
+            "protocol_code": "S",
+            "next_hops": [
+                {
+                    "admin_distance": 1,
+                    "metric": 0,
+                    "next_hop": "142.54.229.92",
+                    "outgoing_interface": "Vlan2503"
+                }
+            ]
+        },
+        "74.119.147.148/32": {
+            "network": "74.119.147.148",
+            "mask": 32,
+            "protocol": "bgp",
+            "protocol_code": "B I",
+            "type_code": "I",
+            "type": "ibgp",
+            "next_hops": [
+                {
+                    "admin_distance": 200,
+                    "metric": 0,
+                    "next_hop": "199.229.255.31",
+                    "outgoing_interface": "Vlan70"
+                },
+                {
+                    "admin_distance": 200,
+                    "metric": 0,
+                    "next_hop": "199.229.255.35",
+                    "outgoing_interface": "Vlan71"
+                }
+            ]
+        },
+        "192.168.1.0/24": {
+            "network": "192.168.1.0",
+            "mask": 24,
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+                {
+                    "outgoing_interface": "Vlan100"
+                }
+            ]
+        }
+    }
+}
