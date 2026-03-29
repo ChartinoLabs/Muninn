@@ -1,0 +1,76 @@
+{
+  "os": "nokia_sros",
+  "command": "show service sap-using",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Mixed SAPs with LAG and physical port entries including varying QoS and filter values",
+      "input": "===============================================================================\nService Access Points\n===============================================================================\nPortId                          SvcId      Ing.  Ing.    Egr.  Egr.   Adm  Opr\n                                           QoS   Fltr    QoS   Fltr\n-------------------------------------------------------------------------------\nlag-21:300                      1          11130 none    11140 none   Up   Up\nlag-22:300                      1          11130 ip4     11140 none   Up   Up\n1/1/c6/1:234                    400        1     none    1     none   Up   Down\nlag-21:400                      76415001   10    none    1     none   Up   Up\nlag-22:400                      76415002   10    none    1     none   Up   Up\n-------------------------------------------------------------------------------\nNumber of SAPs : 5\n-------------------------------------------------------------------------------\n===============================================================================\n",
+      "expected": {
+        "lag-21:300": {
+          "service_id": "1",
+          "ingress_qos": "11130",
+          "egress_qos": "11140",
+          "admin_state": "Up",
+          "oper_state": "Up"
+        },
+        "lag-22:300": {
+          "service_id": "1",
+          "ingress_qos": "11130",
+          "ingress_filter": "ip4",
+          "egress_qos": "11140",
+          "admin_state": "Up",
+          "oper_state": "Up"
+        },
+        "1/1/c6/1:234": {
+          "service_id": "400",
+          "ingress_qos": "1",
+          "egress_qos": "1",
+          "admin_state": "Up",
+          "oper_state": "Down"
+        },
+        "lag-21:400": {
+          "service_id": "76415001",
+          "ingress_qos": "10",
+          "egress_qos": "1",
+          "admin_state": "Up",
+          "oper_state": "Up"
+        },
+        "lag-22:400": {
+          "service_id": "76415002",
+          "ingress_qos": "10",
+          "egress_qos": "1",
+          "admin_state": "Up",
+          "oper_state": "Up"
+        }
+      }
+    },
+    {
+      "name": "SAPs with truncated QoS values (asterisk suffix) and esat/physical port IDs",
+      "input": "===============================================================================\nService Access Points\n===============================================================================\nPortId                          SvcId      Ing.  Ing.    Egr.  Egr.   Adm  Opr\n                                           QoS   Fltr    QoS   Fltr\n-------------------------------------------------------------------------------\nesat-1/1/48                     10         1     none    1     none   Up   Up\n8/2/9:0                         2148007979 1966* none    1     none   Up   Up\n8/2/10:0                        2148007979 1966* none    1     none   Up   Up\n-------------------------------------------------------------------------------\nNumber of SAPs : 3\n-------------------------------------------------------------------------------\n===============================================================================\n* indicates that the corresponding row element may have been truncated.\n",
+      "expected": {
+        "esat-1/1/48": {
+          "service_id": "10",
+          "ingress_qos": "1",
+          "egress_qos": "1",
+          "admin_state": "Up",
+          "oper_state": "Up"
+        },
+        "8/2/9:0": {
+          "service_id": "2148007979",
+          "ingress_qos": "1966*",
+          "egress_qos": "1",
+          "admin_state": "Up",
+          "oper_state": "Up"
+        },
+        "8/2/10:0": {
+          "service_id": "2148007979",
+          "ingress_qos": "1966*",
+          "egress_qos": "1",
+          "admin_state": "Up",
+          "oper_state": "Up"
+        }
+      }
+    }
+  ]
+}
