@@ -1,0 +1,72 @@
+{
+    "router_id": "1.1.1.1",
+    "virtual_router": "VR_HANDOFF",
+    "local_as": 65253,
+    "reject_default_route": false,
+    "redist_default_route": "allow",
+    "install_bgp_routes": true,
+    "graceful_restart": "supported",
+    "as_size": 2,
+    "local_member_as": 0,
+    "cluster_id": "0.0.0.0",
+    "default_local_preference": 100,
+    "always_compare_med": false,
+    "aggregate_regardless_med": true,
+    "deterministic_med_processing": true,
+    "accept_orf": false,
+    "accept_cisco_style_prefix": true,
+    "mp_bgp_enable": true,
+    "afi_safi_ipv4_unicast": true,
+    "rib_out_current": 46,
+    "rib_out_peak": 47,
+    "peers": {
+        "192.168.1.1": {
+            "neighbor_name": "DC-N9K-BGW01 - BLU 301",
+            "neighbor_as": 65253,
+            "state": "Established",
+            "address_family": "bgpAfiIpv4/unicast",
+            "accepted_pfx": 4,
+            "advertised_pfx": 4
+        },
+        "192.168.1.2": {
+            "neighbor_name": "DC-N9K-BGW02 - BLU 301",
+            "neighbor_as": 65301,
+            "state": "Established",
+            "address_family": "bgpAfiIpv4/unicast",
+            "accepted_pfx": 4,
+            "advertised_pfx": 4
+        },
+        "192.168.2.9": {
+            "neighbor_name": "DC-N9K-BGW01 - GRN 302",
+            "neighbor_as": 65253,
+            "state": "Established",
+            "address_family": "bgpAfiIpv4/unicast",
+            "accepted_pfx": 3,
+            "advertised_pfx": 4
+        },
+        "192.168.2.10": {
+            "neighbor_name": "DC-N9K-BGW02 - GRN 302",
+            "neighbor_as": 65302,
+            "state": "Established",
+            "address_family": "bgpAfiIpv4/unicast",
+            "accepted_pfx": 3,
+            "advertised_pfx": 4
+        },
+        "192.168.3.17": {
+            "neighbor_name": "DC-N9K-BGW01 - AMB 303",
+            "neighbor_as": 65253,
+            "state": "Established",
+            "address_family": "bgpAfiIpv4/unicast",
+            "accepted_pfx": 2,
+            "advertised_pfx": 3
+        },
+        "192.168.3.18": {
+            "neighbor_name": "DC-N9K-BGW02 - AMB 303",
+            "neighbor_as": 65303,
+            "state": "Established",
+            "address_family": "bgpAfiIpv4/unicast",
+            "accepted_pfx": 2,
+            "advertised_pfx": 3
+        }
+    }
+}
