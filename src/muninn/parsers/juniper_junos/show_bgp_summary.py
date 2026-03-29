@@ -12,7 +12,6 @@ from muninn.tags import ParserTag
 class RibPrefixEntry(TypedDict):
     """Schema for per-RIB prefix counts on an established peer."""
 
-    name: str
     active: int
     received: int
     accepted: int
@@ -40,7 +39,7 @@ class PeerEntry(TypedDict):
     flaps: int
     last_up_down: str
     state: str
-    ribs: NotRequired[list[RibPrefixEntry]]
+    ribs: NotRequired[dict[str, RibPrefixEntry]]
 
 
 class ShowBgpSummaryResult(TypedDict):
@@ -172,7 +171,6 @@ def _parse_peers(lines: list[str]) -> dict[str, PeerEntry]:
         if m := _RIB_LINE_RE.match(line):
             if current_peer_addr is not None and current_peer_addr in neighbors:
                 rib_entry: RibPrefixEntry = {
-                    "name": m.group("name"),
                     "active": int(m.group("active")),
                     "received": int(m.group("received")),
                     "accepted": int(m.group("accepted")),
@@ -180,8 +178,8 @@ def _parse_peers(lines: list[str]) -> dict[str, PeerEntry]:
                 }
                 peer = neighbors[current_peer_addr]
                 if "ribs" not in peer:
-                    peer["ribs"] = []
-                peer["ribs"].append(rib_entry)
+                    peer["ribs"] = {}
+                peer["ribs"][m.group("name")] = rib_entry
             continue
 
         # Check for peer line
