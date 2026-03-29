@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS, MAC_ADDRESS_COLON
 from muninn.registry import register
 from muninn.tags import ParserTag
 
@@ -14,7 +15,7 @@ class ArpEntry(TypedDict):
 
     hostname: str
     mac_address: str
-    hw_type: str
+    hw_type: NotRequired[str]
     interface: str
     permanent: NotRequired[bool]
 
@@ -27,8 +28,8 @@ ArpResult = dict[str, ArpEntry]
 # ? (10.0.0.1) at <incomplete> on eth0
 _ARP_LINE_RE = re.compile(
     r"^(?P<hostname>\S+)\s+"
-    r"\((?P<ip>[^)]+)\)\s+"
-    r"at\s+(?P<mac>\S+)"
+    rf"\((?P<ip>{IPV4_ADDRESS})\)\s+"
+    rf"at\s+(?P<mac>{MAC_ADDRESS_COLON}|<incomplete>)"
     r"(?:\s+\[(?P<hw_type>[^\]]+)\])?"
     r"\s+on\s+(?P<interface>\S+)"
     r"(?P<remainder>.*)"
@@ -88,9 +89,12 @@ class ArpAParser(BaseParser[ArpResult]):
             entry: ArpEntry = {
                 "hostname": match.group("hostname"),
                 "mac_address": mac_address,
-                "hw_type": match.group("hw_type") or "",
                 "interface": match.group("interface"),
             }
+
+            hw_type = match.group("hw_type")
+            if hw_type:
+                entry["hw_type"] = hw_type
 
             # Check for PERM flag in remainder
             remainder = match.group("remainder")
