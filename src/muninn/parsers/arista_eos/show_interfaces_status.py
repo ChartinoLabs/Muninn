@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
+from muninn.utils import canonical_interface_name
 
 
 class InterfaceStatusEntry(TypedDict):
@@ -80,7 +81,7 @@ class ShowInterfacesStatusParser(BaseParser[ShowInterfacesStatusResult]):
         if value is None:
             return None
         value = value.strip()
-        if not value or value == "--":
+        if not value or value in {"-", "--", "N/A", "n/a"}:
             return None
         return value
 
@@ -102,7 +103,7 @@ class ShowInterfacesStatusParser(BaseParser[ShowInterfacesStatusResult]):
             if not match:
                 return None
 
-        port = match.group("port")
+        port = canonical_interface_name(match.group("port"), os=OS.ARISTA_EOS)
         name_group = match.groupdict().get("name")
         name = cls._normalize_value(name_group)
         status = match.group("status")
