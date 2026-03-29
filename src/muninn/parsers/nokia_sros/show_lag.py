@@ -9,15 +9,15 @@ from muninn.registry import register
 from muninn.tags import ParserTag
 
 
-class LagEntry(TypedDict):
+class LagEntry(TypedDict, total=False):
     """Schema for a single LAG entry."""
 
-    admin_state: str
-    oper_state: str
-    weighted: str
-    threshold: int
-    up_count: int
-    mc_act_stdby: str
+    admin_state: str  # required
+    oper_state: str  # required
+    weighted: str  # required
+    threshold: int  # required
+    up_count: int  # required
+    mc_act_stdby: str  # present only when active/standby (omitted for N/A)
 
 
 # Top-level result is a dict keyed by LAG ID
@@ -102,14 +102,16 @@ class ShowLagParser(BaseParser[ShowLagResult]):
                 continue
 
             lag_id = match.group("lag_id")
+            mc_act_stdby = match.group("mc_act_stdby")
             entry: LagEntry = {
                 "admin_state": match.group("admin_state"),
                 "oper_state": match.group("oper_state"),
                 "weighted": match.group("weighted"),
                 "threshold": int(match.group("threshold")),
                 "up_count": int(match.group("up_count")),
-                "mc_act_stdby": match.group("mc_act_stdby"),
             }
+            if mc_act_stdby.upper() != "N/A":
+                entry["mc_act_stdby"] = mc_act_stdby
             result[lag_id] = entry
 
         if not result:
