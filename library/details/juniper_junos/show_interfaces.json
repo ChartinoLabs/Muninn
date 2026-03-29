@@ -1,0 +1,247 @@
+{
+  "os": "juniper_junos",
+  "command": "show interfaces",
+  "schema": {
+    "name": "ShowInterfacesResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PhysicalInterfaceEntry",
+            "fields": {
+              "admin_status": {
+                "type": "str",
+                "required": true
+              },
+              "link_status": {
+                "type": "str",
+                "required": true
+              },
+              "interface_index": {
+                "type": "int",
+                "required": false
+              },
+              "snmp_ifindex": {
+                "type": "int",
+                "required": false
+              },
+              "description": {
+                "type": "str",
+                "required": false
+              },
+              "link_level_type": {
+                "type": "str",
+                "required": false
+              },
+              "mtu": {
+                "type": "str",
+                "required": false
+              },
+              "speed": {
+                "type": "str",
+                "required": false
+              },
+              "mac_address": {
+                "type": "str",
+                "required": false
+              },
+              "hardware_address": {
+                "type": "str",
+                "required": false
+              },
+              "last_flapped": {
+                "type": "str",
+                "required": false
+              },
+              "input_rate_bps": {
+                "type": "int",
+                "required": false
+              },
+              "input_rate_pps": {
+                "type": "int",
+                "required": false
+              },
+              "output_rate_bps": {
+                "type": "int",
+                "required": false
+              },
+              "output_rate_pps": {
+                "type": "int",
+                "required": false
+              },
+              "logical_interfaces": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "LogicalInterfaceEntry",
+                    "fields": {
+                      "name": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "index": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "snmp_ifindex": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "description": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "flags": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "encapsulation": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "vlan_tag": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "input_packets": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "output_packets": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "mtu": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "protocol": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "addresses": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": false
+                      },
+                      "local_address": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "destination_prefix": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "broadcast_address": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple physical interfaces with one logical sub-interface",
+      "input": "Physical interface: ge-0/0/0, Enabled, Physical link is Up\n  Interface index: 134, SNMP ifIndex: 502\n  Description: Test\n  Link-level type: Ethernet, MTU: 1514, MRU: 0, LAN-PHY mode,\n  Link-mode: Half-duplex, Speed: 1000mbps, BPDU Error: None,\n  MAC-REWRITE Error: None, Loopback: Disabled, Source filtering: Disabled,\n  Flow control: Enabled, Auto-negotiation: Enabled, Remote fault: Online\n  Device flags   : Present Running\n  Interface flags: SNMP-Traps Internal: 0x4000\n  Link flags     : None\n  CoS queues     : 8 supported, 8 maximum usable queues\n  Current address: 00:0c:29:5e:2c:1a, Hardware address: 00:0c:29:5e:2c:1a\n  Last flapped   : 2016-02-09 13:37:59 UTC (23:39:35 ago)\n  Input rate     : 0 bps (0 pps)\n  Output rate    : 0 bps (0 pps)\n  Active alarms  : None\n  Active defects : None\n  Interface transmit statistics: Disabled\n\n  Logical interface ge-0/0/0.2036 (Index 74) (SNMP ifIndex 535)\n    Flags: Up SNMP-Traps 0x0 VLAN-Tag [ 0x8100.2036 ]  Encapsulation: ENET2\n    Input packets : 12439041\n    Output packets: 2552075\n    Security: Zone: Null\n    Protocol inet, MTU: 1500\n      Flags: Sendbcast-pkt-to-re, Sample-input, Sample-output\n      Addresses, Flags: Is-Preferred Is-Primary\n        Destination: 10.10.199.176/29, Local: 10.10.199.180, Broadcast: 10.10.199.183\n\nPhysical interface: gr-0/0/0, Enabled, Physical link is Up\n  Interface index: 139, SNMP ifIndex: 506\n  Type: GRE, Link-level type: GRE, MTU: Unlimited, Speed: 800mbps\n  Link flags     : Scheduler Keepalives DTE\n  Device flags   : Present Running\n  Interface flags: Point-To-Point\n  Input rate     : 0 bps (0 pps)\n  Output rate    : 0 bps (0 pps)\n\nPhysical interface: sp-0/0/0, Enabled, Physical link is Up\n  Interface index: 138, SNMP ifIndex: 515\n  Type: Adaptive-Services, Link-level type: Adaptive-Services, MTU: 9192, Speed: 800mbps\n  Device Flags   : Present Running\n  Interface flags: Point-To-Point SNMP-Traps Internal: 0x4000\n\n{master:0}\n",
+      "expected": {
+        "interfaces": {
+          "ge-0/0/0": {
+            "admin_status": "Enabled",
+            "link_status": "Up",
+            "interface_index": 134,
+            "snmp_ifindex": 502,
+            "description": "Test",
+            "link_level_type": "Ethernet",
+            "mtu": "1514",
+            "speed": "1000mbps",
+            "mac_address": "00:0c:29:5e:2c:1a",
+            "hardware_address": "00:0c:29:5e:2c:1a",
+            "last_flapped": "2016-02-09 13:37:59 UTC (23:39:35 ago)",
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0,
+            "logical_interfaces": {
+              "ge-0/0/0.2036": {
+                "name": "ge-0/0/0.2036",
+                "index": 74,
+                "snmp_ifindex": 535,
+                "flags": "Up SNMP-Traps 0x0",
+                "vlan_tag": "0x8100.2036",
+                "encapsulation": "ENET2",
+                "input_packets": 12439041,
+                "output_packets": 2552075,
+                "protocol": "inet",
+                "mtu": 1500,
+                "destination_prefix": "10.10.199.176/29",
+                "local_address": "10.10.199.180",
+                "broadcast_address": "10.10.199.183"
+              }
+            }
+          },
+          "gr-0/0/0": {
+            "admin_status": "Enabled",
+            "link_status": "Up",
+            "interface_index": 139,
+            "snmp_ifindex": 506,
+            "link_level_type": "GRE",
+            "mtu": "Unlimited",
+            "speed": "800mbps",
+            "input_rate_bps": 0,
+            "input_rate_pps": 0,
+            "output_rate_bps": 0,
+            "output_rate_pps": 0
+          },
+          "sp-0/0/0": {
+            "admin_status": "Enabled",
+            "link_status": "Up",
+            "interface_index": 138,
+            "snmp_ifindex": 515,
+            "link_level_type": "Adaptive-Services",
+            "mtu": "9192",
+            "speed": "800mbps"
+          }
+        }
+      }
+    },
+    {
+      "name": "Single 10G Ethernet interface with long description",
+      "input": "Physical interface: xe-0/1/0, Enabled, Physical link is Up\n  Interface index: 153, SNMP ifIndex: 564\n  Description: ### My description - remote host - remote location - feature codes - info here ###\n  Link-level type: Ethernet, MTU: 9114, MRU: 9122, LAN-PHY mode, Speed: 10Gbps, BPDU Error: None, Loop Detect PDU Error: None, MAC-REWRITE Error: None, Loopback: None, Source filtering: Disabled, Flow control: Enabled, Speed Configuration: 1G\n  Pad to minimum frame size: Disabled\n  Device flags   : Present Running\n  Interface flags: SNMP-Traps Internal: 0x4000\n  Link flags     : None\n  CoS queues     : 8 supported, 8 maximum usable queues\n  Schedulers     : 0\n  Current address: 0a:aa:aa:aa:aa:aa, Hardware address: 0a:aa:aa:aa:aa:aa\n  Last flapped   : 2022-07-28 21:30:59 GMT (43w0d 15:54 ago)\n  Input rate     : 648 bps (1 pps)\n  Output rate    : 968 bps (0 pps)\n  Active alarms  : None\n  Active defects : None\n  PCS statistics                      Seconds\n    Bit errors                             1\n    Errored blocks                         0\n  Interface transmit statistics: Disabled\n",
+      "expected": {
+        "interfaces": {
+          "xe-0/1/0": {
+            "admin_status": "Enabled",
+            "link_status": "Up",
+            "interface_index": 153,
+            "snmp_ifindex": 564,
+            "description": "### My description - remote host - remote location - feature codes - info here ###",
+            "link_level_type": "Ethernet",
+            "mtu": "9114",
+            "speed": "10Gbps",
+            "mac_address": "0a:aa:aa:aa:aa:aa",
+            "hardware_address": "0a:aa:aa:aa:aa:aa",
+            "last_flapped": "2022-07-28 21:30:59 GMT (43w0d 15:54 ago)",
+            "input_rate_bps": 648,
+            "input_rate_pps": 1,
+            "output_rate_bps": 968,
+            "output_rate_pps": 0
+          }
+        }
+      }
+    }
+  ]
+}
