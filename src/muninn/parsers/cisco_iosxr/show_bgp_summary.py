@@ -14,6 +14,7 @@ from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import SEPARATOR_DASH_RE
 from muninn.registry import register
 from muninn.tags import ParserTag
 
@@ -125,9 +126,6 @@ _NEIGHBOR_HEADER_RE = re.compile(r"^Neighbor\s+Spk\s+AS\s+MsgRcvd")
 # VRF header (for VRF-specific output)
 _VRF_HEADER_RE = re.compile(r"^VRF:\s*(\S+)")
 
-# Separator lines (dashes)
-_SEPARATOR_RE = re.compile(r"^-+$")
-
 # Warning banner lines we want to skip
 _WARNING_PREFIX = "Some configured"
 _WARNING_CONTINUATION_PREFIXES = (
@@ -144,7 +142,7 @@ def _is_noise_line(stripped: str) -> bool:
         return True
     if _TIMESTAMP_RE.match(stripped):
         return True
-    if _SEPARATOR_RE.match(stripped):
+    if SEPARATOR_DASH_RE.match(stripped):
         return True
     if stripped.endswith("#") or "#show " in stripped.lower():
         return True
