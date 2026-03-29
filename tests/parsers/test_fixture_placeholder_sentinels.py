@@ -52,6 +52,7 @@ _NONE_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset(
         "iosxe/show_switch_detail/002_single_switch/expected.json",
         "iosxe/show_switch_detail/003_unprovisioned_member/expected.json",
         "linux/ip_address_show/001_standard_linux/expected.json",
+        "linux/ip_link_show/001_standard_linux/expected.json",
         "nxos/show_interface_brief/001_basic/expected.json",
         "nxos/show_interface_capabilities/001_basic/expected.json",
         "nxos/show_ip_ospf_interface/001_broadcast_loopback_shamlink/expected.json",
