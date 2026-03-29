@@ -1,0 +1,175 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show ospf neighbor",
+  "schema": {
+    "name": "ShowOspfNeighborResult",
+    "fields": {
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "OspfProcessEntry",
+            "fields": {
+              "neighbors": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "name": "OspfNeighborEntry",
+                      "fields": {
+                        "priority": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "state": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "dead_time": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "address": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "role": {
+                          "type": "str",
+                          "required": false
+                        },
+                        "up_time": {
+                          "type": "str",
+                          "required": false
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple OSPF neighbors across interfaces with DR/BDR/point-to-point roles",
+      "input": "Mon Jan  2 16:12:20.544 UTC\n\n* Indicates MADJ interface\n# Indicates Neighbor awaiting BFD session up\n\nNeighbors for OSPF 1\n\nNeighbor ID     Pri   State           Dead Time   Address         Interface\n1.1.1.1         128   FULL/DR         00:00:39    10.1.2.1        GigabitEthernet0/0/0/1\n    Neighbor is up for 01:03:05\n2.2.2.2         1     FULL/BDR        00:00:36    10.1.2.2        GigabitEthernet0/0/0/1\n    Neighbor is up for 01:02:57\n4.4.4.4         1     FULL/DR         00:00:31    10.3.4.4        GigabitEthernet0/0/0/2\n    Neighbor is up for 01:04:39\n1.1.1.1         128   FULL/  -        00:00:31    10.1.3.1        GigabitEthernet0/0/0/3\n    Neighbor is up for 1w2d\n\nTotal neighbor count: 4\n",
+      "expected": {
+        "processes": {
+          "1": {
+            "neighbors": {
+              "GigabitEthernet0/0/0/1": {
+                "1.1.1.1": {
+                  "priority": 128,
+                  "state": "FULL",
+                  "dead_time": "00:00:39",
+                  "address": "10.1.2.1",
+                  "role": "DR",
+                  "up_time": "01:03:05"
+                },
+                "2.2.2.2": {
+                  "priority": 1,
+                  "state": "FULL",
+                  "dead_time": "00:00:36",
+                  "address": "10.1.2.2",
+                  "role": "BDR",
+                  "up_time": "01:02:57"
+                }
+              },
+              "GigabitEthernet0/0/0/2": {
+                "4.4.4.4": {
+                  "priority": 1,
+                  "state": "FULL",
+                  "dead_time": "00:00:31",
+                  "address": "10.3.4.4",
+                  "role": "DR",
+                  "up_time": "01:04:39"
+                }
+              },
+              "GigabitEthernet0/0/0/3": {
+                "1.1.1.1": {
+                  "priority": 128,
+                  "state": "FULL",
+                  "dead_time": "00:00:31",
+                  "address": "10.1.3.1",
+                  "up_time": "1w2d"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Single OSPF neighbor in INIT/DROTHER state on a sub-interface",
+      "input": "Wed Dec 21 08:55:54.022 UTC\n\n* Indicates MADJ interface\n# Indicates Neighbor awaiting BFD session up\n\nNeighbors for OSPF 500\n\nNeighbor ID     Pri   State           Dead Time   Address         Interface\n1.102.1.1       1     INIT/DROTHER    00:00:38    192.168.1.2     GigabitEthernet0/0/0/1.10\n\nTotal neighbor count: 1\n",
+      "expected": {
+        "processes": {
+          "500": {
+            "neighbors": {
+              "GigabitEthernet0/0/0/1.10": {
+                "1.102.1.1": {
+                  "priority": 1,
+                  "state": "INIT",
+                  "dead_time": "00:00:38",
+                  "address": "192.168.1.2",
+                  "role": "DROTHER"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Bundle-Ether interfaces with mixed EXSTART and FULL states",
+      "input": "Thu Nov 23 12:45:19.310 UTC\n\nIndicates MADJ interface\nIndicates Neighbor awaiting BFD session up\nNeighbors for OSPF 1\n\nNeighbor ID     Pri   State           Dead Time   Address         Interface\n10.0.0.13       1     EXSTART/BDR     00:00:39    10.13.14.1      Bundle-Ether1314.511\n    Neighbor is up for 00:00:38\n10.0.0.4        1     FULL/BDR        00:00:38    10.4.14.1       Bundle-Ether414\n    Neighbor is up for 2d01h\n10.0.0.13       1     FULL/BDR        00:00:34    10.13.14.5      Bundle-Ether1314.510\n    Neighbor is up for 17w1d\n\nTotal neighbor count: 3\n",
+      "expected": {
+        "processes": {
+          "1": {
+            "neighbors": {
+              "Bundle-Ether1314.511": {
+                "10.0.0.13": {
+                  "priority": 1,
+                  "state": "EXSTART",
+                  "dead_time": "00:00:39",
+                  "address": "10.13.14.1",
+                  "role": "BDR",
+                  "up_time": "00:00:38"
+                }
+              },
+              "Bundle-Ether414": {
+                "10.0.0.4": {
+                  "priority": 1,
+                  "state": "FULL",
+                  "dead_time": "00:00:38",
+                  "address": "10.4.14.1",
+                  "role": "BDR",
+                  "up_time": "2d01h"
+                }
+              },
+              "Bundle-Ether1314.510": {
+                "10.0.0.13": {
+                  "priority": 1,
+                  "state": "FULL",
+                  "dead_time": "00:00:34",
+                  "address": "10.13.14.5",
+                  "role": "BDR",
+                  "up_time": "17w1d"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
