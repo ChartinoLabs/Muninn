@@ -1,0 +1,307 @@
+{
+  "os": "arista_eos",
+  "command": "show ip route",
+  "schema": {
+    "name": "ShowIpRouteResult",
+    "fields": {
+      "vrf": {
+        "type": "str",
+        "required": true
+      },
+      "gateway_of_last_resort": {
+        "type": "str",
+        "required": false
+      },
+      "routes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RouteEntry",
+            "fields": {
+              "network": {
+                "type": "str",
+                "required": true
+              },
+              "mask": {
+                "type": "int",
+                "required": true
+              },
+              "protocol": {
+                "type": "str",
+                "required": true
+              },
+              "protocol_code": {
+                "type": "str",
+                "required": true
+              },
+              "type": {
+                "type": "str",
+                "required": false
+              },
+              "type_code": {
+                "type": "str",
+                "required": false
+              },
+              "next_hops": {
+                "type": {
+                  "type": "list",
+                  "items": {
+                    "name": "NextHopEntry",
+                    "fields": {
+                      "next_hop": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "outgoing_interface": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "admin_distance": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "metric": {
+                        "type": "int",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Mixed BGP, connected, and static routes with no gateway of last resort",
+      "input": "VRF: default\nCodes: C - connected, S - static, K - kernel,\n       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,\n       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,\n       N2 - OSPF NSSA external type2, B I - iBGP, B E - eBGP,\n       R - RIP, I - ISIS, A B - BGP Aggregate, A O - OSPF Summary,\n       NG - Nexthop Group Static Route\n\nGateway of last resort is not set\n\n B E    10.1.31.100/32 [200/0] via 192.168.17.5, Ethernet18\n B E    10.1.31.101/32 [200/0] via 192.168.17.5, Ethernet18\n C      10.1.31.102/32 is directly connected, Loopback100\n C      10.1.31.200/32 is directly connected, Loopback10\n B E    10.1.31.254/32 [200/0] via 192.168.17.5, Ethernet18\n C      10.63.255.8/30 is directly connected, Ethernet20\n B E    10.100.22.52/30 [200/0] via 192.168.17.5, Ethernet18\n S      10.100.22.56/30 [1/0] via 192.168.17.5, Ethernet18\n C      10.100.233.32/32 is directly connected, Loopback0\n B E    10.100.233.192/32 [200/0] via 10.63.255.10, Ethernet20\n",
+      "expected": {
+        "vrf": "default",
+        "routes": {
+          "10.1.31.100/32": {
+            "network": "10.1.31.100",
+            "mask": 32,
+            "protocol": "bgp",
+            "protocol_code": "B E",
+            "type_code": "E",
+            "type": "ebgp",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 0,
+                "next_hop": "192.168.17.5",
+                "outgoing_interface": "Ethernet18"
+              }
+            ]
+          },
+          "10.1.31.101/32": {
+            "network": "10.1.31.101",
+            "mask": 32,
+            "protocol": "bgp",
+            "protocol_code": "B E",
+            "type_code": "E",
+            "type": "ebgp",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 0,
+                "next_hop": "192.168.17.5",
+                "outgoing_interface": "Ethernet18"
+              }
+            ]
+          },
+          "10.1.31.102/32": {
+            "network": "10.1.31.102",
+            "mask": 32,
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "Loopback100"
+              }
+            ]
+          },
+          "10.1.31.200/32": {
+            "network": "10.1.31.200",
+            "mask": 32,
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "Loopback10"
+              }
+            ]
+          },
+          "10.1.31.254/32": {
+            "network": "10.1.31.254",
+            "mask": 32,
+            "protocol": "bgp",
+            "protocol_code": "B E",
+            "type_code": "E",
+            "type": "ebgp",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 0,
+                "next_hop": "192.168.17.5",
+                "outgoing_interface": "Ethernet18"
+              }
+            ]
+          },
+          "10.63.255.8/30": {
+            "network": "10.63.255.8",
+            "mask": 30,
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "Ethernet20"
+              }
+            ]
+          },
+          "10.100.22.52/30": {
+            "network": "10.100.22.52",
+            "mask": 30,
+            "protocol": "bgp",
+            "protocol_code": "B E",
+            "type_code": "E",
+            "type": "ebgp",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 0,
+                "next_hop": "192.168.17.5",
+                "outgoing_interface": "Ethernet18"
+              }
+            ]
+          },
+          "10.100.22.56/30": {
+            "network": "10.100.22.56",
+            "mask": 30,
+            "protocol": "static",
+            "protocol_code": "S",
+            "next_hops": [
+              {
+                "admin_distance": 1,
+                "metric": 0,
+                "next_hop": "192.168.17.5",
+                "outgoing_interface": "Ethernet18"
+              }
+            ]
+          },
+          "10.100.233.32/32": {
+            "network": "10.100.233.32",
+            "mask": 32,
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "Loopback0"
+              }
+            ]
+          },
+          "10.100.233.192/32": {
+            "network": "10.100.233.192",
+            "mask": 32,
+            "protocol": "bgp",
+            "protocol_code": "B E",
+            "type_code": "E",
+            "type": "ebgp",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 0,
+                "next_hop": "10.63.255.10",
+                "outgoing_interface": "Ethernet20"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "OSPF ECMP default route with gateway, iBGP ECMP, static, and connected routes",
+      "input": "VRF name: default\nWARNING: Some of the routes are not programmed in\nkernel, and they are marked with '%'.\nCodes: C - connected, S - static, K - kernel,\n       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,\n       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,\n       N2 - OSPF NSSA external type2, B I - iBGP, B E - eBGP,\n       R - RIP, I L1 - ISIS level 1, I L2 - ISIS level 2,\n       O3 - OSPFv3, A B - BGP Aggregate, A O - OSPF Summary,\n       NG - Nexthop Group Static Route, V - VXLAN Control Service\n\nGateway of last resort:\n O E1   0.0.0.0/0 [110/21] via 172.83.43.48, Vlan55\n                            via 172.83.43.50, Vlan65\n\n S      10.1.26.0/24 [1/0] via 142.54.229.92, Vlan2503\n B I    74.119.147.148/32 [200/0] via 199.229.255.31, Vlan70\n                                  via 199.229.255.35, Vlan71\n C      192.168.1.0/24 is directly connected, Vlan100\n",
+      "expected": {
+        "vrf": "default",
+        "routes": {
+          "0.0.0.0/0": {
+            "network": "0.0.0.0",
+            "mask": 0,
+            "protocol": "ospf",
+            "protocol_code": "O E1",
+            "type_code": "E1",
+            "type": "external-type-1",
+            "next_hops": [
+              {
+                "admin_distance": 110,
+                "metric": 21,
+                "next_hop": "172.83.43.48",
+                "outgoing_interface": "Vlan55"
+              },
+              {
+                "admin_distance": 110,
+                "metric": 21,
+                "next_hop": "172.83.43.50",
+                "outgoing_interface": "Vlan65"
+              }
+            ]
+          },
+          "10.1.26.0/24": {
+            "network": "10.1.26.0",
+            "mask": 24,
+            "protocol": "static",
+            "protocol_code": "S",
+            "next_hops": [
+              {
+                "admin_distance": 1,
+                "metric": 0,
+                "next_hop": "142.54.229.92",
+                "outgoing_interface": "Vlan2503"
+              }
+            ]
+          },
+          "74.119.147.148/32": {
+            "network": "74.119.147.148",
+            "mask": 32,
+            "protocol": "bgp",
+            "protocol_code": "B I",
+            "type_code": "I",
+            "type": "ibgp",
+            "next_hops": [
+              {
+                "admin_distance": 200,
+                "metric": 0,
+                "next_hop": "199.229.255.31",
+                "outgoing_interface": "Vlan70"
+              },
+              {
+                "admin_distance": 200,
+                "metric": 0,
+                "next_hop": "199.229.255.35",
+                "outgoing_interface": "Vlan71"
+              }
+            ]
+          },
+          "192.168.1.0/24": {
+            "network": "192.168.1.0",
+            "mask": 24,
+            "protocol": "connected",
+            "protocol_code": "C",
+            "next_hops": [
+              {
+                "outgoing_interface": "Vlan100"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
