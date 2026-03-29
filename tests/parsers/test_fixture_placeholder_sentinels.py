@@ -33,7 +33,13 @@ _PLACEHOLDER_EMPTY_STRING: Final[frozenset[str]] = frozenset({""})
 _HYPHEN_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset({})
 
 # Legacy fixtures where NA / N/A / n/a appear as CLI text (not always "null").
-_NA_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset({})
+_NA_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset(
+    {
+        # Nokia SROS uses "n/a" as a vendor-defined token for port_sap_id
+        # (no port/SAP association) and pfx_state (prefix state not applicable).
+        "nokia_sros/show_router_interface/001_mixed_interfaces/expected.json",
+    }
+)
 
 # Legacy fixtures where "none" / "None" / "NONE" appears as a meaningful enum value
 # (e.g. OSPF authentication type, interface reason) rather than a null placeholder.

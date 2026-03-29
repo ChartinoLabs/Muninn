@@ -15,9 +15,9 @@ class RoutingRouteEntry(TypedDict):
     virtual_router: str
     destination: str
     nexthop: str
-    metric: str
     flags: str
-    age: str
+    metric: NotRequired[str]
+    age: NotRequired[str]
     interface: NotRequired[str]
     next_as: NotRequired[str]
 
@@ -118,11 +118,13 @@ def _parse_route_line(
         "virtual_router": virtual_router,
         "destination": destination,
         "nexthop": nexthop,
-        "metric": metric,
         "flags": flags,
-        "age": age,
     }
 
+    if metric:
+        entry["metric"] = metric
+    if age:
+        entry["age"] = age
     if interface:
         entry["interface"] = interface
     if next_as:
