@@ -1,7 +1,7 @@
 """Parser for 'show router interface' command on Nokia SR OS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import ClassVar, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -17,8 +17,7 @@ class InterfaceEntry(TypedDict):
     oper_state_v6: str
     mode: str
     port_sap_id: str
-    ip_addresses: list[str]
-    pfx_states: NotRequired[list[str]]
+    ip_addresses: dict[str, str]
 
 
 # Top-level result is a dict keyed by interface name
@@ -117,7 +116,7 @@ class ShowRouterInterfaceParser(BaseParser[ShowRouterInterfaceResult]):
                     "oper_state_v6": iface_match.group("oper_v6"),
                     "mode": iface_match.group("mode"),
                     "port_sap_id": iface_match.group("port_sap"),
-                    "ip_addresses": [],
+                    "ip_addresses": {},
                 }
                 result[current_name] = entry
                 continue
@@ -126,11 +125,9 @@ class ShowRouterInterfaceParser(BaseParser[ShowRouterInterfaceResult]):
             ip_match = cls._IP_LINE.match(line)
             if ip_match and current_name is not None:
                 current_entry = result[current_name]
-                current_entry["ip_addresses"].append(ip_match.group("ip_address"))
-                pfx_state = ip_match.group("pfx_state")
-                if "pfx_states" not in current_entry:
-                    current_entry["pfx_states"] = []
-                current_entry["pfx_states"].append(pfx_state)
+                current_entry["ip_addresses"][ip_match.group("ip_address")] = (
+                    ip_match.group("pfx_state")
+                )
                 continue
 
         if not result:
