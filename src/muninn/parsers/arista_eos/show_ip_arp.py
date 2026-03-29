@@ -1,13 +1,14 @@
 """Parser for 'show ip arp' command on Arista EOS."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.patterns import IPV4_ADDRESS, MAC_ADDRESS
 from muninn.registry import register
 from muninn.tags import ParserTag
+from muninn.utils import canonical_interface_name
 
 
 class ArpEntry(TypedDict):
@@ -16,6 +17,7 @@ class ArpEntry(TypedDict):
     mac_address: str
     age: str
     interface: str
+    physical_interface: NotRequired[str]
 
 
 class ShowIpArpResult(TypedDict):
@@ -78,13 +80,31 @@ class ShowIpArpParser(BaseParser[ShowIpArpResult]):
                 address = match.group("address")
                 age = match.group("age")
                 mac_address = match.group("mac_address").lower()
-                interface = match.group("interface").strip()
+                raw_interface = match.group("interface").strip()
 
                 entry: ArpEntry = {
                     "mac_address": mac_address,
                     "age": age,
-                    "interface": interface,
+                    "interface": raw_interface,
                 }
+
+                # Arista EOS shows "Vlan101, Port-Channel2" when the ARP
+                # entry lives on an SVI with a known physical egress port.
+                # Split into logical interface + physical_interface.
+                # "Vlan1, not learned" means no physical egress is known.
+                if ", " in raw_interface:
+                    logical, qualifier = raw_interface.split(", ", 1)
+                    entry["interface"] = canonical_interface_name(
+                        logical, os=OS.ARISTA_EOS
+                    )
+                    if qualifier != "not learned":
+                        entry["physical_interface"] = canonical_interface_name(
+                            qualifier, os=OS.ARISTA_EOS
+                        )
+                else:
+                    entry["interface"] = canonical_interface_name(
+                        raw_interface, os=OS.ARISTA_EOS
+                    )
 
                 arp_entries[address] = entry
 
