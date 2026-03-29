@@ -1,0 +1,164 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show interfaces brief",
+  "schema": {
+    "name": "ShowInterfacesBriefResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceBriefEntry",
+            "fields": {
+              "interface_state": {
+                "type": "str",
+                "required": true
+              },
+              "line_protocol_state": {
+                "type": "str",
+                "required": true
+              },
+              "encapsulation_type": {
+                "type": "str",
+                "required": true
+              },
+              "mtu": {
+                "type": "int",
+                "required": true
+              },
+              "bandwidth_kbps": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "ASR9K with mixed interface types: Loopback, Null, Tunnel, Mgmt, FortyGigE, TenGigE",
+      "input": "\n               Intf       Intf        LineP              Encap  MTU        BW\n               Name       State       State               Type (byte)    (Kbps)\n--------------------------------------------------------------------------------\n                Lo5          up          up           Loopback  1500          0\n               Lo10          up          up           Loopback  1500          0\n                Nu0          up          up               Null  1500          0\n              tt300          up          up             TUNNEL  1500          0\n    Mg0/RSP0/CPU0/0          up          up               ARPA  1514    1000000\n    Mg0/RSP0/CPU0/1  admin-down  admin-down               ARPA  1514          0\n          Fo0/0/0/0          up          up               ARPA  9216   40000000\n          Te0/3/0/0          up          up               ARPA  9216   10000000\n          Te0/3/0/4  admin-down  admin-down               ARPA  1514   10000000\n          Fo0/7/0/0        down        down               ARPA  9216   40000000\n",
+      "expected": {
+        "interfaces": {
+          "Loopback5": {
+            "interface_state": "up",
+            "line_protocol_state": "up",
+            "encapsulation_type": "Loopback",
+            "mtu": 1500,
+            "bandwidth_kbps": 0
+          },
+          "Loopback10": {
+            "interface_state": "up",
+            "line_protocol_state": "up",
+            "encapsulation_type": "Loopback",
+            "mtu": 1500,
+            "bandwidth_kbps": 0
+          },
+          "Null0": {
+            "interface_state": "up",
+            "line_protocol_state": "up",
+            "encapsulation_type": "Null",
+            "mtu": 1500,
+            "bandwidth_kbps": 0
+          },
+          "tunnel-te300": {
+            "interface_state": "up",
+            "line_protocol_state": "up",
+            "encapsulation_type": "TUNNEL",
+            "mtu": 1500,
+            "bandwidth_kbps": 0
+          },
+          "MgmtEth0/RSP0/CPU0/0": {
+            "interface_state": "up",
+            "line_protocol_state": "up",
+            "encapsulation_type": "ARPA",
+            "mtu": 1514,
+            "bandwidth_kbps": 1000000
+          },
+          "MgmtEth0/RSP0/CPU0/1": {
+            "interface_state": "admin-down",
+            "line_protocol_state": "admin-down",
+            "encapsulation_type": "ARPA",
+            "mtu": 1514,
+            "bandwidth_kbps": 0
+          },
+          "FortyGigabitEthernet0/0/0/0": {
+            "interface_state": "up",
+            "line_protocol_state": "up",
+            "encapsulation_type": "ARPA",
+            "mtu": 9216,
+            "bandwidth_kbps": 40000000
+          },
+          "TenGigabitEthernet0/3/0/0": {
+            "interface_state": "up",
+            "line_protocol_state": "up",
+            "encapsulation_type": "ARPA",
+            "mtu": 9216,
+            "bandwidth_kbps": 10000000
+          },
+          "TenGigabitEthernet0/3/0/4": {
+            "interface_state": "admin-down",
+            "line_protocol_state": "admin-down",
+            "encapsulation_type": "ARPA",
+            "mtu": 1514,
+            "bandwidth_kbps": 10000000
+          },
+          "FortyGigabitEthernet0/7/0/0": {
+            "interface_state": "down",
+            "line_protocol_state": "down",
+            "encapsulation_type": "ARPA",
+            "mtu": 9216,
+            "bandwidth_kbps": 40000000
+          }
+        }
+      }
+    },
+    {
+      "name": "Small router with sub-interfaces, mixed up/down states",
+      "input": "\n               Intf       Intf        LineP              Encap  MTU        BW\n               Name       State       State               Type (byte)    (Kbps)\n--------------------------------------------------------------------------------\n                Lo0          up          up           Loopback  1500          0\n     Gi0/0/0/0.100          up          up            802.1Q  1518    1000000\n     Gi0/0/0/0.200          up        down            802.1Q  1518    1000000\n          Gi0/0/0/1          up          up               ARPA  1514    1000000\n          Gi0/0/0/2        down        down               ARPA  1514    1000000\n",
+      "expected": {
+        "interfaces": {
+          "Loopback0": {
+            "interface_state": "up",
+            "line_protocol_state": "up",
+            "encapsulation_type": "Loopback",
+            "mtu": 1500,
+            "bandwidth_kbps": 0
+          },
+          "GigabitEthernet0/0/0/0.100": {
+            "interface_state": "up",
+            "line_protocol_state": "up",
+            "encapsulation_type": "802.1Q",
+            "mtu": 1518,
+            "bandwidth_kbps": 1000000
+          },
+          "GigabitEthernet0/0/0/0.200": {
+            "interface_state": "up",
+            "line_protocol_state": "down",
+            "encapsulation_type": "802.1Q",
+            "mtu": 1518,
+            "bandwidth_kbps": 1000000
+          },
+          "GigabitEthernet0/0/0/1": {
+            "interface_state": "up",
+            "line_protocol_state": "up",
+            "encapsulation_type": "ARPA",
+            "mtu": 1514,
+            "bandwidth_kbps": 1000000
+          },
+          "GigabitEthernet0/0/0/2": {
+            "interface_state": "down",
+            "line_protocol_state": "down",
+            "encapsulation_type": "ARPA",
+            "mtu": 1514,
+            "bandwidth_kbps": 1000000
+          }
+        }
+      }
+    }
+  ]
+}
