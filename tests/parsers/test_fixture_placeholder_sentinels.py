@@ -1,6 +1,6 @@
 """Guardrails for CLI placeholder strings in ``expected.json`` fixtures.
 
-When the device prints obvious “no value” sentinels, Muninn generally prefers
+When the device prints obvious "no value" sentinels, Muninn generally prefers
 omitting the key (or using ``null`` if the schema uses optional fields) instead of
 carrying strings like ``-`` or ``---`` through to structured output.
 
@@ -25,12 +25,18 @@ JsonPath = tuple[str | int, ...]
 
 _PLACEHOLDER_HYPHENS: Final[frozenset[str]] = frozenset({"-", "---"})
 _PLACEHOLDER_NA_LIKE: Final[frozenset[str]] = frozenset({"NA", "N/A", "n/a"})
+_PLACEHOLDER_EMPTY_STRING: Final[frozenset[str]] = frozenset({""})
+
 
 # Legacy fixtures still using hyphen / em-dash placeholders as string *values*.
 _HYPHEN_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset({})
 
-# Legacy fixtures where NA / N/A / n/a appear as CLI text (not always “null”).
+# Legacy fixtures where NA / N/A / n/a appear as CLI text (not always "null").
 _NA_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset({})
+
+# Legacy fixtures that still use empty strings as values. Prefer omitting the key
+# (or using ``null`` if the schema uses optional fields) instead of ``""``.
+_EMPTY_STRING_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset({})
 
 PARSERS_TEST_DIR = Path(__file__).parent
 
@@ -131,7 +137,7 @@ def test_expected_json_avoids_na_like_placeholder_values(expected_path: Path) ->
 
     Many Cisco outputs use these tokens as *real* labels; exempt legacy files via
     ``_NA_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES``. Prefer omitting the key when the
-    token means “no value” rather than a vendor-defined enum.
+    token means "no value" rather than a vendor-defined enum.
     """
     rel = expected_path.relative_to(PARSERS_TEST_DIR).as_posix()
     data = json.loads(expected_path.read_text(encoding="utf-8"))
@@ -150,6 +156,41 @@ def test_expected_json_avoids_na_like_placeholder_values(expected_path: Path) ->
         f"{rel} uses NA/N/A-like placeholder string value(s). Prefer omitting the key "
         f"or modeling vendor-defined tokens explicitly; or add the file to "
         f"_NA_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES in "
+        f"test_fixture_placeholder_sentinels.py.\n"
+        f"{lines}{more}"
+    )
+    pytest.fail(msg)
+
+
+@pytest.mark.parametrize(
+    "expected_path",
+    _discover_expected_json_files(),
+    ids=lambda p: p.relative_to(PARSERS_TEST_DIR).as_posix(),
+)
+def test_expected_json_avoids_empty_string_values(expected_path: Path) -> None:
+    r"""Fail when a fixture uses ``""`` as a string value.
+
+    Empty strings are almost always a parser returning "no value" — prefer
+    omitting the key entirely. Exempt legacy files via
+    ``_EMPTY_STRING_EXEMPT_EXPECTED_FILES``.
+    """
+    rel = expected_path.relative_to(PARSERS_TEST_DIR).as_posix()
+    data = json.loads(expected_path.read_text(encoding="utf-8"))
+    violations = _string_leaf_violations(data, _PLACEHOLDER_EMPTY_STRING)
+    if rel in _EMPTY_STRING_EXEMPT_EXPECTED_FILES:
+        return
+    if not violations:
+        return
+    lines = "\n".join(
+        f"  - {_path_to_json_pointer(p)}: {value!r}" for p, value in violations[:50]
+    )
+    more = ""
+    if len(violations) > 50:
+        more = f"\n  ... and {len(violations) - 50} more"
+    msg = (
+        f"{rel} uses empty string value(s). Prefer omitting the key "
+        f'(or null) instead of "", or add the file to '
+        f"_EMPTY_STRING_EXEMPT_EXPECTED_FILES in "
         f"test_fixture_placeholder_sentinels.py.\n"
         f"{lines}{more}"
     )

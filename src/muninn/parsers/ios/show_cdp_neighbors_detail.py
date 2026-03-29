@@ -217,7 +217,7 @@ class ShowCdpNeighborsDetailParser(BaseParser[ShowCdpNeighborsDetailResult]):
             entry["duplex"] = duplex_match.group(1)
 
         vtp_match = cls._VTP_DOMAIN_PATTERN.search(block)
-        if vtp_match:
+        if vtp_match and vtp_match.group(1):
             entry["vtp_management_domain"] = vtp_match.group(1)
 
         mgmt_addresses = cls._extract_addresses(block, cls._MGMT_ADDR_HEADER)
