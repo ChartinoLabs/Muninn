@@ -177,6 +177,11 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         "juniper_junos/show_version/002_qfx5100/expected.json",
         "juniper_junos/show_version/003_srx_cluster/expected.json",
         "juniper_junos/show_version/004_ex4550_multi_fpc/expected.json",
+        # --- Linux ---
+        # next_hops uses list-of-dicts because ECMP routes have multiple
+        # next-hops with no natural unique key.
+        "linux/ip_route_show/001_mixed_routes/expected.json",
+        "linux/ip_route_show/002_linkdown_routes/expected.json",
     }
 )
 
