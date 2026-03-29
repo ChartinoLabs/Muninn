@@ -80,6 +80,10 @@ PARSERS_TEST_DIR = Path(__file__).parent
 # the schema instead.
 _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
     {
+        # --- Arista EOS ---
+        # next_hops is a list-of-dicts; no natural unique key for ECMP entries.
+        "arista_eos/show_ip_route/001_bgp_connected_mixed/expected.json",
+        "arista_eos/show_ip_route/002_ecmp_ospf_gateway/expected.json",
         # --- IOS ---
         "ios/show_crypto_session_detail/001_basic/expected.json",
         "ios/show_ip_eigrp_topology/001_basic/expected.json",
