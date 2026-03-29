@@ -1,0 +1,216 @@
+{
+  "os": "linux",
+  "command": "ip link show",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Standard Linux with VRF, bridge, and point-to-point interfaces",
+      "input": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n2: ens32: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000\n    link/ether 00:0c:29:56:07:1b brd ff:ff:ff:ff:ff:ff\n3: gpd0: <POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP> mtu 1400 qdisc fq_codel state UNKNOWN mode DEFAULT group default qlen 500\n    link/none\n4: br-218f5e637867: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default\n    link/ether 02:42:5d:d7:c2:c1 brd ff:ff:ff:ff:ff:ff\n5: vrf-blue: <NOARP,MASTER,UP,LOWER_UP> mtu 65575 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether ee:be:e9:28:70:69 brd ff:ff:ff:ff:ff:ff\n6: vrf-red: <NOARP,MASTER,UP,LOWER_UP> mtu 65575 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether d6:a6:dd:0d:d5:f9 brd ff:ff:ff:ff:ff:ff\n7: brblue: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master vrf-blue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/ether 66:37:23:9b:9e:e4 brd ff:ff:ff:ff:ff:ff\n8: brred: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master vrf-red state UNKNOWN mode DEFAULT group default qlen 1000\n    link/ether da:ca:17:97:f5:34 brd ff:ff:ff:ff:ff:ff\n",
+      "expected": {
+        "lo": {
+          "index": 1,
+          "name": "lo",
+          "flags": [
+            "LOOPBACK",
+            "UP",
+            "LOWER_UP"
+          ],
+          "mtu": 65536,
+          "state": "UNKNOWN",
+          "link_type": "loopback",
+          "qdisc": "noqueue",
+          "group": "default",
+          "qlen": 1000,
+          "mac_address": "00:00:00:00:00:00",
+          "broadcast_mac": "00:00:00:00:00:00"
+        },
+        "ens32": {
+          "index": 2,
+          "name": "ens32",
+          "flags": [
+            "BROADCAST",
+            "MULTICAST",
+            "UP",
+            "LOWER_UP"
+          ],
+          "mtu": 1500,
+          "state": "UP",
+          "link_type": "ether",
+          "qdisc": "fq_codel",
+          "group": "default",
+          "qlen": 1000,
+          "mac_address": "00:0c:29:56:07:1b",
+          "broadcast_mac": "ff:ff:ff:ff:ff:ff"
+        },
+        "gpd0": {
+          "index": 3,
+          "name": "gpd0",
+          "flags": [
+            "POINTOPOINT",
+            "MULTICAST",
+            "NOARP",
+            "UP",
+            "LOWER_UP"
+          ],
+          "mtu": 1400,
+          "state": "UNKNOWN",
+          "link_type": "none",
+          "qdisc": "fq_codel",
+          "group": "default",
+          "qlen": 500
+        },
+        "br-218f5e637867": {
+          "index": 4,
+          "name": "br-218f5e637867",
+          "flags": [
+            "NO-CARRIER",
+            "BROADCAST",
+            "MULTICAST",
+            "UP"
+          ],
+          "mtu": 1500,
+          "state": "DOWN",
+          "link_type": "ether",
+          "qdisc": "noqueue",
+          "group": "default",
+          "mac_address": "02:42:5d:d7:c2:c1",
+          "broadcast_mac": "ff:ff:ff:ff:ff:ff"
+        },
+        "vrf-blue": {
+          "index": 5,
+          "name": "vrf-blue",
+          "flags": [
+            "NOARP",
+            "MASTER",
+            "UP",
+            "LOWER_UP"
+          ],
+          "mtu": 65575,
+          "state": "UP",
+          "link_type": "ether",
+          "qdisc": "noqueue",
+          "group": "default",
+          "qlen": 1000,
+          "mac_address": "ee:be:e9:28:70:69",
+          "broadcast_mac": "ff:ff:ff:ff:ff:ff"
+        },
+        "vrf-red": {
+          "index": 6,
+          "name": "vrf-red",
+          "flags": [
+            "NOARP",
+            "MASTER",
+            "UP",
+            "LOWER_UP"
+          ],
+          "mtu": 65575,
+          "state": "UP",
+          "link_type": "ether",
+          "qdisc": "noqueue",
+          "group": "default",
+          "qlen": 1000,
+          "mac_address": "d6:a6:dd:0d:d5:f9",
+          "broadcast_mac": "ff:ff:ff:ff:ff:ff"
+        },
+        "brblue": {
+          "index": 7,
+          "name": "brblue",
+          "flags": [
+            "BROADCAST",
+            "MULTICAST",
+            "UP",
+            "LOWER_UP"
+          ],
+          "mtu": 1500,
+          "state": "UNKNOWN",
+          "link_type": "ether",
+          "qdisc": "noqueue",
+          "master": "vrf-blue",
+          "group": "default",
+          "qlen": 1000,
+          "mac_address": "66:37:23:9b:9e:e4",
+          "broadcast_mac": "ff:ff:ff:ff:ff:ff"
+        },
+        "brred": {
+          "index": 8,
+          "name": "brred",
+          "flags": [
+            "BROADCAST",
+            "MULTICAST",
+            "UP",
+            "LOWER_UP"
+          ],
+          "mtu": 1500,
+          "state": "UNKNOWN",
+          "link_type": "ether",
+          "qdisc": "noqueue",
+          "master": "vrf-red",
+          "group": "default",
+          "qlen": 1000,
+          "mac_address": "da:ca:17:97:f5:34",
+          "broadcast_mac": "ff:ff:ff:ff:ff:ff"
+        }
+      }
+    },
+    {
+      "name": "Linux with wireless interface in dormant mode and permaddr",
+      "input": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000\n    link/ether bb:bb:bb:bb:bb:bb brd ff:ff:ff:ff:ff:ff\n3: wlan0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc pfifo_fast state DOWN mode DORMANT group default qlen 1000\n    link/ether aa:aa:aa:aa:aa:aa brd ff:ff:ff:ff:ff:ff permaddr cc:cc:cc:cc:cc:cc\n",
+      "expected": {
+        "lo": {
+          "index": 1,
+          "name": "lo",
+          "flags": [
+            "LOOPBACK",
+            "UP",
+            "LOWER_UP"
+          ],
+          "mtu": 65536,
+          "state": "UNKNOWN",
+          "link_type": "loopback",
+          "qdisc": "noqueue",
+          "group": "default",
+          "qlen": 1000,
+          "mac_address": "00:00:00:00:00:00",
+          "broadcast_mac": "00:00:00:00:00:00"
+        },
+        "eth0": {
+          "index": 2,
+          "name": "eth0",
+          "flags": [
+            "BROADCAST",
+            "MULTICAST",
+            "UP",
+            "LOWER_UP"
+          ],
+          "mtu": 1500,
+          "state": "UP",
+          "link_type": "ether",
+          "qdisc": "mq",
+          "group": "default",
+          "qlen": 1000,
+          "mac_address": "bb:bb:bb:bb:bb:bb",
+          "broadcast_mac": "ff:ff:ff:ff:ff:ff"
+        },
+        "wlan0": {
+          "index": 3,
+          "name": "wlan0",
+          "flags": [
+            "NO-CARRIER",
+            "BROADCAST",
+            "MULTICAST",
+            "UP"
+          ],
+          "mtu": 1500,
+          "state": "DOWN",
+          "link_type": "ether",
+          "qdisc": "pfifo_fast",
+          "group": "default",
+          "qlen": 1000,
+          "mac_address": "aa:aa:aa:aa:aa:aa",
+          "broadcast_mac": "ff:ff:ff:ff:ff:ff",
+          "permaddr": "cc:cc:cc:cc:cc:cc"
+        }
+      }
+    }
+  ]
+}
