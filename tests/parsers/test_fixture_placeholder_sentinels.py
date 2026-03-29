@@ -33,7 +33,13 @@ _PLACEHOLDER_EMPTY_STRING: Final[frozenset[str]] = frozenset({""})
 _HYPHEN_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset({})
 
 # Legacy fixtures where NA / N/A / n/a appear as CLI text (not always "null").
-_NA_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset({})
+_NA_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset(
+    {
+        # Arista EOS "N/A" is a real age value for static/unlearned ARP entries.
+        "arista_eos/show_ip_arp/001_basic/expected.json",
+        "arista_eos/show_ip_arp/002_multi_vrf/expected.json",
+    }
+)
 
 # Legacy fixtures where "none" / "None" / "NONE" appears as a meaningful enum value
 # (e.g. OSPF authentication type, interface reason) rather than a null placeholder.
