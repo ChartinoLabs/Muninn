@@ -1,0 +1,115 @@
+{
+  "os": "paloalto_panos",
+  "command": "show arp all",
+  "schema": {
+    "name": "ShowArpAllResult",
+    "fields": {
+      "max_entries": {
+        "type": "int",
+        "required": true
+      },
+      "default_timeout": {
+        "type": "int",
+        "required": true
+      },
+      "total_entries": {
+        "type": "int",
+        "required": true
+      },
+      "total_entries_shown": {
+        "type": "int",
+        "required": true
+      },
+      "entries": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ArpEntry",
+            "fields": {
+              "interface": {
+                "type": "str",
+                "required": true
+              },
+              "ip_address": {
+                "type": "str",
+                "required": true
+              },
+              "mac_address": {
+                "type": "str",
+                "required": true
+              },
+              "port": {
+                "type": "str",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "ttl": {
+                "type": "int",
+                "required": true
+              },
+              "status_description": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic ARP table with complete and incomplete entries",
+      "input": "\nmaximum of entries supported :      1500\ndefault timeout:                    1800 seconds\ntotal ARP entries in table :        5\ntotal ARP entries shown :           5\nstatus: s - static, c - complete, e - expiring, i - incomplete\n\ninterface         ip address      hw address        port              status   ttl\n--------------------------------------------------------------------------------\nethernet1/1       172.25.1.254    08:30:6b:26:43:30 ethernet1/1         c      627\nvlan.1            172.25.2.195    00:50:00:00:07:00 ethernet1/2.110     c      1012\nvlan.1            172.25.2.196    00:50:00:00:08:00 ethernet1/2.111     c      1016\nvlan.1            172.25.2.197    (incomplete)      ethernet1/2.111     c      1016\n",
+      "expected": {
+        "max_entries": 1500,
+        "default_timeout": 1800,
+        "total_entries": 5,
+        "total_entries_shown": 5,
+        "entries": {
+          "172.25.1.254": {
+            "interface": "ethernet1/1",
+            "ip_address": "172.25.1.254",
+            "mac_address": "08:30:6b:26:43:30",
+            "port": "ethernet1/1",
+            "status": "c",
+            "ttl": 627,
+            "status_description": "complete"
+          },
+          "172.25.2.195": {
+            "interface": "vlan.1",
+            "ip_address": "172.25.2.195",
+            "mac_address": "00:50:00:00:07:00",
+            "port": "ethernet1/2.110",
+            "status": "c",
+            "ttl": 1012,
+            "status_description": "complete"
+          },
+          "172.25.2.196": {
+            "interface": "vlan.1",
+            "ip_address": "172.25.2.196",
+            "mac_address": "00:50:00:00:08:00",
+            "port": "ethernet1/2.111",
+            "status": "c",
+            "ttl": 1016,
+            "status_description": "complete"
+          },
+          "172.25.2.197": {
+            "interface": "vlan.1",
+            "ip_address": "172.25.2.197",
+            "mac_address": "incomplete",
+            "port": "ethernet1/2.111",
+            "status": "c",
+            "ttl": 1016,
+            "status_description": "complete"
+          }
+        }
+      }
+    }
+  ]
+}
