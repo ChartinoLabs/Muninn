@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import MAC_ADDRESS_COLON
 from muninn.registry import register
 from muninn.tags import ParserTag
 
@@ -101,8 +102,8 @@ class ShowInterfacesParser(BaseParser[ShowInterfacesResult]):
 
     # MAC / hardware address
     _MAC_ADDR = re.compile(
-        r"^\s+Current address:\s+(?P<mac>[0-9a-f:]+)"
-        r",\s+Hardware address:\s+(?P<hw>[0-9a-f:]+)"
+        rf"^\s+Current address:\s+(?P<mac>{MAC_ADDRESS_COLON})"
+        rf",\s+Hardware address:\s+(?P<hw>{MAC_ADDRESS_COLON})"
     )
 
     # Last flapped
