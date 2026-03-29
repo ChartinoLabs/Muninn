@@ -5,14 +5,9 @@ from typing import ClassVar, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS, MAC_ADDRESS_COLON
 from muninn.registry import register
 from muninn.tags import ParserTag
-
-# Colon-delimited MAC address pattern (aa:bb:cc:dd:ee:ff)
-_MAC_COLON = r"[0-9a-fA-F]{2}(?::[0-9a-fA-F]{2}){5}"
-
-# Dotted-decimal IPv4 address
-_IPV4 = r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}"
 
 
 class ArpEntry(TypedDict):
@@ -50,8 +45,8 @@ class ShowArpNoResolveParser(BaseParser[ShowArpNoResolveResult]):
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.ARP})
 
     _ARP_ENTRY = re.compile(
-        rf"^\s*(?P<mac>{_MAC_COLON})\s+"
-        rf"(?P<ip>{_IPV4})\s+"
+        rf"^\s*(?P<mac>{MAC_ADDRESS_COLON})\s+"
+        rf"(?P<ip>{IPV4_ADDRESS})\s+"
         r"(?P<interface>\S+)\s+"
         r"(?P<flags>\S+)\s*$",
     )
