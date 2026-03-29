@@ -35,6 +35,9 @@ _HYPHEN_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset({})
 # Legacy fixtures where NA / N/A / n/a appear as CLI text (not always "null").
 _NA_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset(
     {
+        # Arista EOS "N/A" is a real age value for static/unlearned ARP entries.
+        "arista_eos/show_ip_arp/001_basic/expected.json",
+        "arista_eos/show_ip_arp/002_multi_vrf/expected.json",
         # Nokia SROS uses "n/a" as a vendor-defined token for port_sap_id
         # (no port/SAP association) and pfx_state (prefix state not applicable).
         "nokia_sros/show_router_interface/001_mixed_interfaces/expected.json",

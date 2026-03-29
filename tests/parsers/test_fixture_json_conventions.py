@@ -80,6 +80,10 @@ PARSERS_TEST_DIR = Path(__file__).parent
 # the schema instead.
 _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
     {
+        # --- Arista EOS ---
+        # next_hops is a list-of-dicts; no natural unique key for ECMP entries.
+        "arista_eos/show_ip_route/001_bgp_connected_mixed/expected.json",
+        "arista_eos/show_ip_route/002_ecmp_ospf_gateway/expected.json",
         # --- IOS ---
         "ios/show_crypto_session_detail/001_basic/expected.json",
         "ios/show_ip_eigrp_topology/001_basic/expected.json",
@@ -145,6 +149,9 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         "iosxe/show_track/002_multiple_track_types/expected.json",
         "iosxe/show_version/001_c3850_stack/expected.json",
         "iosxe/show_version/003_c9300_switch/expected.json",
+        # --- Cisco IOS-XR ---
+        "cisco_iosxr/show_ip_route/001_ospf_ecmp_connected/expected.json",
+        "cisco_iosxr/show_ip_route/002_mixed_protocols_ecmp/expected.json",
         # --- NX-OS ---
         "nxos/show_bgp_all_dampening_flap-statistics/001_basic/expected.json",
         "nxos/show_bgp_vrf_all_all/001_basic/expected.json",
@@ -170,6 +177,11 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         "juniper_junos/show_version/002_qfx5100/expected.json",
         "juniper_junos/show_version/003_srx_cluster/expected.json",
         "juniper_junos/show_version/004_ex4550_multi_fpc/expected.json",
+        # --- Linux ---
+        # next_hops uses list-of-dicts because ECMP routes have multiple
+        # next-hops with no natural unique key.
+        "linux/ip_route_show/001_mixed_routes/expected.json",
+        "linux/ip_route_show/002_linkdown_routes/expected.json",
     }
 )
 

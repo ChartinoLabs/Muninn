@@ -1,0 +1,55 @@
+{
+    "default": {
+        "network": "default",
+        "next_hops": [
+            {
+                "nexthop_if": "enp0s25",
+                "nexthop_ip": "192.168.1.1",
+                "protocol": "dhcp",
+                "src": "192.168.1.19",
+                "metric": 100
+            }
+        ]
+    },
+    "192.168.1.0/24": {
+        "network": "192.168.1.0/24",
+        "next_hops": [
+            {
+                "nexthop_if": "enp0s25",
+                "protocol": "kernel",
+                "scope": "link",
+                "src": "192.168.1.19",
+                "metric": 100
+            }
+        ]
+    },
+    "192.168.88.0/24": {
+        "network": "192.168.88.0/24",
+        "next_hops": [
+            {
+                "nexthop_if": "br0",
+                "protocol": "kernel",
+                "scope": "link",
+                "src": "192.168.88.254",
+                "metric": 425,
+                "flags": [
+                    "linkdown"
+                ]
+            }
+        ]
+    },
+    "192.168.122.0/24": {
+        "network": "192.168.122.0/24",
+        "next_hops": [
+            {
+                "nexthop_if": "virbr0",
+                "protocol": "kernel",
+                "scope": "link",
+                "src": "192.168.122.1",
+                "flags": [
+                    "linkdown"
+                ]
+            }
+        ]
+    }
+}
