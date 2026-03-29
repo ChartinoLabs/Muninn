@@ -1,0 +1,377 @@
+{
+  "os": "juniper_junos",
+  "command": "show bgp summary",
+  "schema": {
+    "name": "ShowBgpSummaryResult",
+    "fields": {
+      "threading_mode": {
+        "type": "str",
+        "required": false
+      },
+      "groups": {
+        "type": "int",
+        "required": true
+      },
+      "peers": {
+        "type": "int",
+        "required": true
+      },
+      "down_peers": {
+        "type": "int",
+        "required": true
+      },
+      "tables": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "TableEntry",
+            "fields": {
+              "total_paths": {
+                "type": "int",
+                "required": true
+              },
+              "active_paths": {
+                "type": "int",
+                "required": true
+              },
+              "suppressed": {
+                "type": "int",
+                "required": true
+              },
+              "history": {
+                "type": "int",
+                "required": true
+              },
+              "damp_state": {
+                "type": "int",
+                "required": true
+              },
+              "pending": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PeerEntry",
+            "fields": {
+              "peer_as": {
+                "type": "int",
+                "required": true
+              },
+              "in_pkt": {
+                "type": "int",
+                "required": true
+              },
+              "out_pkt": {
+                "type": "int",
+                "required": true
+              },
+              "out_queue": {
+                "type": "int",
+                "required": true
+              },
+              "flaps": {
+                "type": "int",
+                "required": true
+              },
+              "last_up_down": {
+                "type": "str",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "ribs": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "RibPrefixEntry",
+                    "fields": {
+                      "active": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "received": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "accepted": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "damped": {
+                        "type": "int",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Mixed IPv4 and IPv6 peers with routing table summary, established and down peers",
+      "input": "Threading mode: BGP I/O\nGroups: 14 Peers: 19 Down peers: 15\nTable          Tot Paths  Act Paths Suppressed    History Damp State    Pending\ninet.0\n                    1366        682          0          0          0          0\ninet.3\n                       2          2          0          0          0          0\ninet6.0\n                       0          0          0          0          0          0\nPeer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...\n10.49.216.179         65171          0          0       0       0 29w5d 22:42:36 Connect\n10.169.14.240        65151     280414     221573       0     127 3w2d 4:19:15 Establ\n  inet.0: 682/684/684/0\n  inet.3: 2/2/2/0\n10.169.14.249        65151          0          0       0       0 29w5d 22:42:36 Active\n10.189.5.240          65171          0          0       0       0 29w5d 22:42:36 Connect\n10.189.5.253          65171     110832     172140       0      44 3w2d 4:18:45 Establ\n  inet.0: 0/682/682/0\n10.189.6.250          65181          0          0       0       0 29w5d 22:42:36 Active\n2001:db8:6be:89bb::1:140       65171          0          0       0       0 29w5d 22:42:36 Connect\n2001:db8:eb18:ca45::1       65151     218994     221571       0     133 3w2d 4:19:10 Establ\n  inet6.0: 0/0/0/0\n2001:db8:223c:ca45::c       65171     110861     110862       0      55 3w2d 4:27:54 Establ\n  inet6.0: 0/0/0/0\n2001:db8:5961:ca45::1       65181          0          0       0       0 29w5d 22:42:36 Connect\n",
+      "expected": {
+        "threading_mode": "BGP I/O",
+        "groups": 14,
+        "peers": 19,
+        "down_peers": 15,
+        "tables": {
+          "inet.0": {
+            "total_paths": 1366,
+            "active_paths": 682,
+            "suppressed": 0,
+            "history": 0,
+            "damp_state": 0,
+            "pending": 0
+          },
+          "inet.3": {
+            "total_paths": 2,
+            "active_paths": 2,
+            "suppressed": 0,
+            "history": 0,
+            "damp_state": 0,
+            "pending": 0
+          },
+          "inet6.0": {
+            "total_paths": 0,
+            "active_paths": 0,
+            "suppressed": 0,
+            "history": 0,
+            "damp_state": 0,
+            "pending": 0
+          }
+        },
+        "neighbors": {
+          "10.49.216.179": {
+            "peer_as": 65171,
+            "in_pkt": 0,
+            "out_pkt": 0,
+            "out_queue": 0,
+            "flaps": 0,
+            "last_up_down": "29w5d 22:42:36",
+            "state": "Connect"
+          },
+          "10.169.14.240": {
+            "peer_as": 65151,
+            "in_pkt": 280414,
+            "out_pkt": 221573,
+            "out_queue": 0,
+            "flaps": 127,
+            "last_up_down": "3w2d 4:19:15",
+            "state": "Establ",
+            "ribs": {
+              "inet.0": {
+                "active": 682,
+                "received": 684,
+                "accepted": 684,
+                "damped": 0
+              },
+              "inet.3": {
+                "active": 2,
+                "received": 2,
+                "accepted": 2,
+                "damped": 0
+              }
+            }
+          },
+          "10.169.14.249": {
+            "peer_as": 65151,
+            "in_pkt": 0,
+            "out_pkt": 0,
+            "out_queue": 0,
+            "flaps": 0,
+            "last_up_down": "29w5d 22:42:36",
+            "state": "Active"
+          },
+          "10.189.5.240": {
+            "peer_as": 65171,
+            "in_pkt": 0,
+            "out_pkt": 0,
+            "out_queue": 0,
+            "flaps": 0,
+            "last_up_down": "29w5d 22:42:36",
+            "state": "Connect"
+          },
+          "10.189.5.253": {
+            "peer_as": 65171,
+            "in_pkt": 110832,
+            "out_pkt": 172140,
+            "out_queue": 0,
+            "flaps": 44,
+            "last_up_down": "3w2d 4:18:45",
+            "state": "Establ",
+            "ribs": {
+              "inet.0": {
+                "active": 0,
+                "received": 682,
+                "accepted": 682,
+                "damped": 0
+              }
+            }
+          },
+          "10.189.6.250": {
+            "peer_as": 65181,
+            "in_pkt": 0,
+            "out_pkt": 0,
+            "out_queue": 0,
+            "flaps": 0,
+            "last_up_down": "29w5d 22:42:36",
+            "state": "Active"
+          },
+          "2001:db8:6be:89bb::1:140": {
+            "peer_as": 65171,
+            "in_pkt": 0,
+            "out_pkt": 0,
+            "out_queue": 0,
+            "flaps": 0,
+            "last_up_down": "29w5d 22:42:36",
+            "state": "Connect"
+          },
+          "2001:db8:eb18:ca45::1": {
+            "peer_as": 65151,
+            "in_pkt": 218994,
+            "out_pkt": 221571,
+            "out_queue": 0,
+            "flaps": 133,
+            "last_up_down": "3w2d 4:19:10",
+            "state": "Establ",
+            "ribs": {
+              "inet6.0": {
+                "active": 0,
+                "received": 0,
+                "accepted": 0,
+                "damped": 0
+              }
+            }
+          },
+          "2001:db8:223c:ca45::c": {
+            "peer_as": 65171,
+            "in_pkt": 110861,
+            "out_pkt": 110862,
+            "out_queue": 0,
+            "flaps": 55,
+            "last_up_down": "3w2d 4:27:54",
+            "state": "Establ",
+            "ribs": {
+              "inet6.0": {
+                "active": 0,
+                "received": 0,
+                "accepted": 0,
+                "damped": 0
+              }
+            }
+          },
+          "2001:db8:5961:ca45::1": {
+            "peer_as": 65181,
+            "in_pkt": 0,
+            "out_pkt": 0,
+            "out_queue": 0,
+            "flaps": 0,
+            "last_up_down": "29w5d 22:42:36",
+            "state": "Connect"
+          }
+        }
+      }
+    },
+    {
+      "name": "All established peers with RIB prefix details and no routing table summary",
+      "input": "Threading mode: BGP I/O\nGroups: 2 Peers: 4 Down peers: 0\nPeer                     AS      InPkt     OutPkt    OutQ   Flaps Last Up/Dwn State|#Active/Received/Accepted/Damped...\n192.0.2.254           64496    1165670    1238837       0       1 9w2d 5:23:37 Establ\n  wanTrusted.inet.0: 23/224/224/0\n192.0.2.252           64496     753373     783304       0      50 35w2d 3:57:43 Establ\n  wanTrusted.inet.0: 65/224/224/0\n198.51.100.100        64496     814804     865022       0      19 6w3d 13:02:17 Establ\n  wanTrusted.inet.0: 30/226/226/0\n198.51.100.200        64496     768547     816071       0      47 36w5d 12:18:32 Establ\n  wanUntrust.inet.0: 1/70/70/0\n",
+      "expected": {
+        "threading_mode": "BGP I/O",
+        "groups": 2,
+        "peers": 4,
+        "down_peers": 0,
+        "neighbors": {
+          "192.0.2.254": {
+            "peer_as": 64496,
+            "in_pkt": 1165670,
+            "out_pkt": 1238837,
+            "out_queue": 0,
+            "flaps": 1,
+            "last_up_down": "9w2d 5:23:37",
+            "state": "Establ",
+            "ribs": {
+              "wanTrusted.inet.0": {
+                "active": 23,
+                "received": 224,
+                "accepted": 224,
+                "damped": 0
+              }
+            }
+          },
+          "192.0.2.252": {
+            "peer_as": 64496,
+            "in_pkt": 753373,
+            "out_pkt": 783304,
+            "out_queue": 0,
+            "flaps": 50,
+            "last_up_down": "35w2d 3:57:43",
+            "state": "Establ",
+            "ribs": {
+              "wanTrusted.inet.0": {
+                "active": 65,
+                "received": 224,
+                "accepted": 224,
+                "damped": 0
+              }
+            }
+          },
+          "198.51.100.100": {
+            "peer_as": 64496,
+            "in_pkt": 814804,
+            "out_pkt": 865022,
+            "out_queue": 0,
+            "flaps": 19,
+            "last_up_down": "6w3d 13:02:17",
+            "state": "Establ",
+            "ribs": {
+              "wanTrusted.inet.0": {
+                "active": 30,
+                "received": 226,
+                "accepted": 226,
+                "damped": 0
+              }
+            }
+          },
+          "198.51.100.200": {
+            "peer_as": 64496,
+            "in_pkt": 768547,
+            "out_pkt": 816071,
+            "out_queue": 0,
+            "flaps": 47,
+            "last_up_down": "36w5d 12:18:32",
+            "state": "Establ",
+            "ribs": {
+              "wanUntrust.inet.0": {
+                "active": 1,
+                "received": 70,
+                "accepted": 70,
+                "damped": 0
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
