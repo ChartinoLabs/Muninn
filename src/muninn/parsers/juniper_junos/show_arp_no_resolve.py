@@ -1,7 +1,7 @@
 """Parser for 'show arp no-resolve' command on Juniper Junos."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -15,7 +15,7 @@ class ArpEntry(TypedDict):
 
     mac_address: str
     interface: str
-    flags: str
+    flags: NotRequired[str]
 
 
 class ShowArpNoResolveResult(TypedDict):
@@ -72,11 +72,14 @@ class ShowArpNoResolveParser(BaseParser[ShowArpNoResolveResult]):
                 continue
 
             ip_address = match.group("ip")
-            arp_entries[ip_address] = ArpEntry(
+            flags = match.group("flags")
+            entry = ArpEntry(
                 mac_address=match.group("mac").lower(),
                 interface=match.group("interface"),
-                flags=match.group("flags"),
             )
+            if flags.lower() != "none":
+                entry["flags"] = flags
+            arp_entries[ip_address] = entry
 
         if not arp_entries:
             msg = "No ARP entries found in output"
