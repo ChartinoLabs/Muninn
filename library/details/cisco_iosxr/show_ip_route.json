@@ -1,0 +1,318 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show ip route",
+  "schema": {
+    "name": "ShowIpRouteResult",
+    "fields": {
+      "routes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "Route",
+            "fields": {
+              "prefix": {
+                "type": "str",
+                "required": true
+              },
+              "mask": {
+                "type": "int",
+                "required": true
+              },
+              "protocol": {
+                "type": "str",
+                "required": true
+              },
+              "next_hops": {
+                "type": {
+                  "type": "list",
+                  "items": {
+                    "name": "NextHop",
+                    "fields": {
+                      "next_hop": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "distance": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "metric": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "uptime": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "interface": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "is_backup": {
+                        "type": "bool",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "OSPF routes with ECMP and FRR backup, static default, connected and local",
+      "input": "Mon Jan 29 19:00:32.892 UTC\n\nCodes: C - connected, S - static, R - RIP, B - BGP, (>) - Diversion path\n       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area\n       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2\n       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP\n       i - ISIS, L1 - IS-IS level-1, L2 - IS-IS level-2\n       ia - IS-IS inter area, su - IS-IS summary null, * - candidate default\n       U - per-user static route, o - ODR, L - local, G  - DAGR, l - LISP\n       A - access/subscriber, a - Application route\n       M - mobile route, r - RPL, (!) - FRR Backup path\n\nGateway of last resort is 172.16.1.1 to network 0.0.0.0\n\nS*   0.0.0.0/0 [1/0] via 172.16.1.1, 04:43:54\nO    1.1.1.1/32 [110/0] via 10.1.1.9, 04:43:27, GigabitEthernet0/0/0/0 (!)\n                [110/9164] via 10.1.1.34, 04:43:27, GigabitEthernet0/0/0/3\nO    1.1.1.3/32 [110/0] via 10.1.1.9, 04:43:21, GigabitEthernet0/0/0/0 (!)\n                [110/6564] via 10.1.1.34, 04:43:21, GigabitEthernet0/0/0/3\nL    1.1.2.6/32 is directly connected, 04:43:54, Loopback0\nC    10.1.1.4/30 is directly connected, 04:43:54, GigabitEthernet0/0/0/1\nL    10.1.1.6/32 is directly connected, 04:43:54, GigabitEthernet0/0/0/1\nC    10.1.1.8/30 is directly connected, 04:43:54, GigabitEthernet0/0/0/0\nL    10.1.1.10/32 is directly connected, 04:43:54, GigabitEthernet0/0/0/0\nC    172.16.1.0/24 is directly connected, 04:43:54, MgmtEth0/0/CPU0/0\nL    172.16.1.120/32 is directly connected, 04:43:54, MgmtEth0/0/CPU0/0\n",
+      "expected": {
+        "routes": {
+          "0.0.0.0/0": {
+            "prefix": "0.0.0.0",
+            "mask": 0,
+            "protocol": "S*",
+            "next_hops": [
+              {
+                "next_hop": "172.16.1.1",
+                "uptime": "04:43:54",
+                "is_backup": false,
+                "distance": 1,
+                "metric": 0
+              }
+            ]
+          },
+          "1.1.1.1/32": {
+            "prefix": "1.1.1.1",
+            "mask": 32,
+            "protocol": "O",
+            "next_hops": [
+              {
+                "next_hop": "10.1.1.9",
+                "uptime": "04:43:27",
+                "is_backup": true,
+                "distance": 110,
+                "metric": 0,
+                "interface": "GigabitEthernet0/0/0/0"
+              },
+              {
+                "next_hop": "10.1.1.34",
+                "uptime": "04:43:27",
+                "is_backup": false,
+                "distance": 110,
+                "metric": 9164,
+                "interface": "GigabitEthernet0/0/0/3"
+              }
+            ]
+          },
+          "1.1.1.3/32": {
+            "prefix": "1.1.1.3",
+            "mask": 32,
+            "protocol": "O",
+            "next_hops": [
+              {
+                "next_hop": "10.1.1.9",
+                "uptime": "04:43:21",
+                "is_backup": true,
+                "distance": 110,
+                "metric": 0,
+                "interface": "GigabitEthernet0/0/0/0"
+              },
+              {
+                "next_hop": "10.1.1.34",
+                "uptime": "04:43:21",
+                "is_backup": false,
+                "distance": 110,
+                "metric": 6564,
+                "interface": "GigabitEthernet0/0/0/3"
+              }
+            ]
+          },
+          "1.1.2.6/32": {
+            "prefix": "1.1.2.6",
+            "mask": 32,
+            "protocol": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "uptime": "04:43:54",
+                "is_backup": false,
+                "interface": "Loopback0"
+              }
+            ]
+          },
+          "10.1.1.4/30": {
+            "prefix": "10.1.1.4",
+            "mask": 30,
+            "protocol": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "uptime": "04:43:54",
+                "is_backup": false,
+                "interface": "GigabitEthernet0/0/0/1"
+              }
+            ]
+          },
+          "10.1.1.6/32": {
+            "prefix": "10.1.1.6",
+            "mask": 32,
+            "protocol": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "uptime": "04:43:54",
+                "is_backup": false,
+                "interface": "GigabitEthernet0/0/0/1"
+              }
+            ]
+          },
+          "10.1.1.8/30": {
+            "prefix": "10.1.1.8",
+            "mask": 30,
+            "protocol": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "uptime": "04:43:54",
+                "is_backup": false,
+                "interface": "GigabitEthernet0/0/0/0"
+              }
+            ]
+          },
+          "10.1.1.10/32": {
+            "prefix": "10.1.1.10",
+            "mask": 32,
+            "protocol": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "uptime": "04:43:54",
+                "is_backup": false,
+                "interface": "GigabitEthernet0/0/0/0"
+              }
+            ]
+          },
+          "172.16.1.0/24": {
+            "prefix": "172.16.1.0",
+            "mask": 24,
+            "protocol": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "uptime": "04:43:54",
+                "is_backup": false,
+                "interface": "MgmtEth0/0/CPU0/0"
+              }
+            ]
+          },
+          "172.16.1.120/32": {
+            "prefix": "172.16.1.120",
+            "mask": 32,
+            "protocol": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "uptime": "04:43:54",
+                "is_backup": false,
+                "interface": "MgmtEth0/0/CPU0/0"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "Mixed protocols with BGP, EIGRP external 4-way ECMP, and static default",
+      "input": "Tue May 22 22:32:30.765 UTC\n\nCodes: C - connected, S - static, R - RIP, B - BGP, (>) - Diversion path\n       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area\n       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2\n       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP\n       i - ISIS, L1 - IS-IS level-1, L2 - IS-IS level-2\n       ia - IS-IS inter area, su - IS-IS summary null, * - candidate default\n       U - per-user static route, o - ODR, L - local, G  - DAGR, l - LISP\n       A - access/subscriber, a - Application route\n       M - mobile route, r - RPL, (!) - FRR Backup path\n\nGateway of last resort is 10.72.0.1 to network 0.0.0.0\n\nS*   0.0.0.0/0 [1/0] via 10.72.0.1, 4d01h\nB    10.39.0.0/16 [20/0] via 192.168.50.1, 1w4d\nD EX 10.14.0.0/16 [170/153600] via 192.168.150.130, 14:56:35, TenGigE0/0/0/1.5\n                    [170/153600] via 192.168.150.134, 6d21h, TenGigE0/0/0/2.5\n                    [170/153600] via 192.168.150.138, 6d21h, TenGigE0/0/0/3.5\n                    [170/153600] via 192.168.150.142, 6d21h, TenGigE0/0/0/4.5\nB    10.15.0.0/16 [20/0] via 192.168.250.130, 1y03w\n",
+      "expected": {
+        "routes": {
+          "0.0.0.0/0": {
+            "prefix": "0.0.0.0",
+            "mask": 0,
+            "protocol": "S*",
+            "next_hops": [
+              {
+                "next_hop": "10.72.0.1",
+                "uptime": "4d01h",
+                "is_backup": false,
+                "distance": 1,
+                "metric": 0
+              }
+            ]
+          },
+          "10.39.0.0/16": {
+            "prefix": "10.39.0.0",
+            "mask": 16,
+            "protocol": "B",
+            "next_hops": [
+              {
+                "next_hop": "192.168.50.1",
+                "uptime": "1w4d",
+                "is_backup": false,
+                "distance": 20,
+                "metric": 0
+              }
+            ]
+          },
+          "10.14.0.0/16": {
+            "prefix": "10.14.0.0",
+            "mask": 16,
+            "protocol": "D EX",
+            "next_hops": [
+              {
+                "next_hop": "192.168.150.130",
+                "uptime": "14:56:35",
+                "is_backup": false,
+                "distance": 170,
+                "metric": 153600,
+                "interface": "TenGigE0/0/0/1.5"
+              },
+              {
+                "next_hop": "192.168.150.134",
+                "uptime": "6d21h",
+                "is_backup": false,
+                "distance": 170,
+                "metric": 153600,
+                "interface": "TenGigE0/0/0/2.5"
+              },
+              {
+                "next_hop": "192.168.150.138",
+                "uptime": "6d21h",
+                "is_backup": false,
+                "distance": 170,
+                "metric": 153600,
+                "interface": "TenGigE0/0/0/3.5"
+              },
+              {
+                "next_hop": "192.168.150.142",
+                "uptime": "6d21h",
+                "is_backup": false,
+                "distance": 170,
+                "metric": 153600,
+                "interface": "TenGigE0/0/0/4.5"
+              }
+            ]
+          },
+          "10.15.0.0/16": {
+            "prefix": "10.15.0.0",
+            "mask": 16,
+            "protocol": "B",
+            "next_hops": [
+              {
+                "next_hop": "192.168.250.130",
+                "uptime": "1y03w",
+                "is_backup": false,
+                "distance": 20,
+                "metric": 0
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
