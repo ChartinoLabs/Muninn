@@ -1,0 +1,115 @@
+{
+  "os": "juniper_junos",
+  "command": "show arp no-resolve",
+  "schema": {
+    "name": "ShowArpNoResolveResult",
+    "fields": {
+      "arp_entries": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ArpEntry",
+            "fields": {
+              "mac_address": {
+                "type": "str",
+                "required": true
+              },
+              "interface": {
+                "type": "str",
+                "required": true
+              },
+              "flags": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple ARP entries across various interfaces (fxp0, ge, em1)",
+      "input": "MAC Address       Address         Interface                Flags\n00:50:56:ff:ba:6f 10.1.0.1         fxp0.0                   none\n00:50:56:ff:8b:e0 10.1.0.201       fxp0.0                   none\n50:3d:e5:ff:2f:06 10.19.198.26    ge-0/0/2.0               none\n00:50:56:ff:92:04 10.55.0.1       ge-0/0/3.0               none\n00:50:56:ff:00:4b 10.169.14.121  ge-0/0/1.0               none\n00:50:56:ff:e0:4e 10.189.5.94     ge-0/0/0.0               none\n00:50:56:ff:c5:c3 172.16.64.16      em1.0                    none\nTotal entries: 7\n",
+      "expected": {
+        "arp_entries": {
+          "10.1.0.1": {
+            "mac_address": "00:50:56:ff:ba:6f",
+            "interface": "fxp0.0"
+          },
+          "10.1.0.201": {
+            "mac_address": "00:50:56:ff:8b:e0",
+            "interface": "fxp0.0"
+          },
+          "10.19.198.26": {
+            "mac_address": "50:3d:e5:ff:2f:06",
+            "interface": "ge-0/0/2.0"
+          },
+          "10.55.0.1": {
+            "mac_address": "00:50:56:ff:92:04",
+            "interface": "ge-0/0/3.0"
+          },
+          "10.169.14.121": {
+            "mac_address": "00:50:56:ff:00:4b",
+            "interface": "ge-0/0/1.0"
+          },
+          "10.189.5.94": {
+            "mac_address": "00:50:56:ff:e0:4e",
+            "interface": "ge-0/0/0.0"
+          },
+          "172.16.64.16": {
+            "mac_address": "00:50:56:ff:c5:c3",
+            "interface": "em1.0"
+          }
+        }
+      }
+    },
+    {
+      "name": "ARP entries on a single VLAN interface with master prompt",
+      "input": "MAC Address       Address         Interface     Flags\n00:00:00:00:00:04 10.1.100.130    vlan.20        none\n00:00:00:00:00:05 10.1.100.132    vlan.20        none\n00:00:00:00:00:08 10.1.100.72     vlan.20        none\n00:00:00:00:00:09 10.1.100.73     vlan.20        none\n00:00:00:00:00:0a 10.1.100.74     vlan.20        none\n00:00:00:00:00:0b 10.1.100.75     vlan.20        none\n00:00:00:00:00:0c 10.1.100.76     vlan.20        none\n00:00:00:00:11:11 10.1.111.11     vlan.20        none\n00:00:00:00:13:13 10.1.13.13      vlan.20        none\nTotal entries: 9\n\n{master:0}\n",
+      "expected": {
+        "arp_entries": {
+          "10.1.100.130": {
+            "mac_address": "00:00:00:00:00:04",
+            "interface": "vlan.20"
+          },
+          "10.1.100.132": {
+            "mac_address": "00:00:00:00:00:05",
+            "interface": "vlan.20"
+          },
+          "10.1.100.72": {
+            "mac_address": "00:00:00:00:00:08",
+            "interface": "vlan.20"
+          },
+          "10.1.100.73": {
+            "mac_address": "00:00:00:00:00:09",
+            "interface": "vlan.20"
+          },
+          "10.1.100.74": {
+            "mac_address": "00:00:00:00:00:0a",
+            "interface": "vlan.20"
+          },
+          "10.1.100.75": {
+            "mac_address": "00:00:00:00:00:0b",
+            "interface": "vlan.20"
+          },
+          "10.1.100.76": {
+            "mac_address": "00:00:00:00:00:0c",
+            "interface": "vlan.20"
+          },
+          "10.1.111.11": {
+            "mac_address": "00:00:00:00:11:11",
+            "interface": "vlan.20"
+          },
+          "10.1.13.13": {
+            "mac_address": "00:00:00:00:13:13",
+            "interface": "vlan.20"
+          }
+        }
+      }
+    }
+  ]
+}
