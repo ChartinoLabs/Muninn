@@ -1,0 +1,111 @@
+{
+  "os": "arista_eos",
+  "command": "show lldp neighbors",
+  "schema": {
+    "name": "ShowLldpNeighborsResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "LldpNeighborEntry",
+              "fields": {
+                "hold_time": {
+                  "type": "int",
+                  "required": true
+                },
+                "port_id": {
+                  "type": "str",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Mixed Ethernet and Management interfaces with varied neighbor types",
+      "input": "Last table change time   : 0:00:02 ago\nNumber of table inserts  : 2\nNumber of table deletes  : 0\nNumber of table drops    : 0\nNumber of table age-outs : 0\n\nPort       Neighbor Device ID             Neighbor Port ID           TTL\nEt1        localhost                      Ethernet1                  120\nEt2        localhost                      Ethernet2                  120\nEt3/1      tg104.sjc.aristanetworks.com   Ethernet3/2                120\nMa1/1      dc1-rack11-tor1.sjc            1/1                        120\n",
+      "expected": {
+        "neighbors": {
+          "Ethernet1": {
+            "localhost": {
+              "hold_time": 120,
+              "port_id": "Ethernet1"
+            }
+          },
+          "Ethernet2": {
+            "localhost": {
+              "hold_time": 120,
+              "port_id": "Ethernet2"
+            }
+          },
+          "Ethernet3/1": {
+            "tg104.sjc.aristanetworks.com": {
+              "hold_time": 120,
+              "port_id": "Ethernet3/2"
+            }
+          },
+          "Management1/1": {
+            "dc1-rack11-tor1.sjc": {
+              "hold_time": 120,
+              "port_id": "1/1"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Multiple Ethernet interfaces with single neighbor and dashed separator",
+      "input": "Last table change time   : 5 days, 8:24:38 ago\nNumber of table inserts  : 9\nNumber of table deletes  : 3\nNumber of table drops    : 0\nNumber of table age-outs : 3\nPort          Neighbor Device ID       Neighbor Port ID    TTL\n---------- ------------------------ ---------------------- ---\nEt2           arista2                  Ethernet2           120\nEt3           arista2                  Ethernet3           120\nEt4           arista2                  Ethernet4           120\nEt5           arista2                  Ethernet5           120\nEt6           arista2                  Ethernet6           120\nEt7           arista2                  Ethernet7           120\n",
+      "expected": {
+        "neighbors": {
+          "Ethernet2": {
+            "arista2": {
+              "hold_time": 120,
+              "port_id": "Ethernet2"
+            }
+          },
+          "Ethernet3": {
+            "arista2": {
+              "hold_time": 120,
+              "port_id": "Ethernet3"
+            }
+          },
+          "Ethernet4": {
+            "arista2": {
+              "hold_time": 120,
+              "port_id": "Ethernet4"
+            }
+          },
+          "Ethernet5": {
+            "arista2": {
+              "hold_time": 120,
+              "port_id": "Ethernet5"
+            }
+          },
+          "Ethernet6": {
+            "arista2": {
+              "hold_time": 120,
+              "port_id": "Ethernet6"
+            }
+          },
+          "Ethernet7": {
+            "arista2": {
+              "hold_time": 120,
+              "port_id": "Ethernet7"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
