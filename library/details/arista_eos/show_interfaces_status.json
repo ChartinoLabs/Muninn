@@ -1,0 +1,155 @@
+{
+  "os": "arista_eos",
+  "command": "show interfaces status",
+  "schema": {
+    "name": "ShowInterfacesStatusResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceStatusEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "duplex": {
+                "type": "str",
+                "required": true
+              },
+              "speed": {
+                "type": "str",
+                "required": true
+              },
+              "name": {
+                "type": "str",
+                "required": false
+              },
+              "vlan": {
+                "type": "str",
+                "required": false
+              },
+              "type": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Mixed interface statuses including connected, inactive, notconnect, errdisabled, and disabled",
+      "input": "Port       Name                   Status       Vlan        Duplex  Speed Type\nEt3/1/1    I am a 40G port !! Hi  connected    trunk       a-full  a-40G 40GBASE-CR4\nEt3/1/4                           inactive     1           unconf unconf 40GBASE-CR4\nEt3/2/1    PORTNAME               notconnect   trunk       a-full  a-10G 40GBASE-SR\nEt3/2/2    I am a 10G port        errdisabled  10          a-full  a-10G 40GBASE-SR\nEt3/2/4    - DISABLED routed (    disabled     routed      a-full  a-10G 40GBASE-SR\nEt3/2/5    -                      disabled     routed      a-full  a-10G 40GBASE-SR\n",
+      "expected": {
+        "interfaces": {
+          "Ethernet3/1/1": {
+            "status": "connected",
+            "duplex": "a-full",
+            "speed": "a-40G",
+            "name": "I am a 40G port !! Hi",
+            "vlan": "trunk",
+            "type": "40GBASE-CR4"
+          },
+          "Ethernet3/1/4": {
+            "status": "inactive",
+            "duplex": "unconf",
+            "speed": "unconf",
+            "vlan": "1",
+            "type": "40GBASE-CR4"
+          },
+          "Ethernet3/2/1": {
+            "status": "notconnect",
+            "duplex": "a-full",
+            "speed": "a-10G",
+            "name": "PORTNAME",
+            "vlan": "trunk",
+            "type": "40GBASE-SR"
+          },
+          "Ethernet3/2/2": {
+            "status": "errdisabled",
+            "duplex": "a-full",
+            "speed": "a-10G",
+            "name": "I am a 10G port",
+            "vlan": "10",
+            "type": "40GBASE-SR"
+          },
+          "Ethernet3/2/4": {
+            "status": "disabled",
+            "duplex": "a-full",
+            "speed": "a-10G",
+            "name": "- DISABLED routed (",
+            "vlan": "routed",
+            "type": "40GBASE-SR"
+          },
+          "Ethernet3/2/5": {
+            "status": "disabled",
+            "duplex": "a-full",
+            "speed": "a-10G",
+            "vlan": "routed",
+            "type": "40GBASE-SR"
+          }
+        }
+      }
+    },
+    {
+      "name": "Port-Channel, Management, and Ethernet interfaces with Flags column header",
+      "input": "Port       Name                   Status       Vlan     Duplex Speed  Type         Flags\nEt1        Cust: (SERV-XXXXX     disabled     1        auto   auto   1000BASE-T\nEt47       Cust: (SERV-XXXXX     disabled     1        auto   auto   1000BASE-T\nEt49       Core: drxx.yul01      notconnect   in Po49  full   10G    Not Present\nEt52       Core: drxx.yul01      connected    in Po49  full   10G    10GBASE-SR\nMa1                               notconnect   routed   a-half a-10M  10/100/1000\nPo49       Core: dr01-dr02.y     connected    trunk    full   20G    N/A\n",
+      "expected": {
+        "interfaces": {
+          "Ethernet1": {
+            "status": "disabled",
+            "duplex": "auto",
+            "speed": "auto",
+            "name": "Cust: (SERV-XXXXX",
+            "vlan": "1",
+            "type": "1000BASE-T"
+          },
+          "Ethernet47": {
+            "status": "disabled",
+            "duplex": "auto",
+            "speed": "auto",
+            "name": "Cust: (SERV-XXXXX",
+            "vlan": "1",
+            "type": "1000BASE-T"
+          },
+          "Ethernet49": {
+            "status": "notconnect",
+            "duplex": "full",
+            "speed": "10G",
+            "name": "Core: drxx.yul01",
+            "vlan": "in Po49",
+            "type": "Not Present"
+          },
+          "Ethernet52": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "10G",
+            "name": "Core: drxx.yul01",
+            "vlan": "in Po49",
+            "type": "10GBASE-SR"
+          },
+          "Management1": {
+            "status": "notconnect",
+            "duplex": "a-half",
+            "speed": "a-10M",
+            "vlan": "routed",
+            "type": "10/100/1000"
+          },
+          "Port-channel49": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "20G",
+            "name": "Core: dr01-dr02.y",
+            "vlan": "trunk"
+          }
+        }
+      }
+    }
+  ]
+}
