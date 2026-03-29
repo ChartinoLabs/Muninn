@@ -18,7 +18,7 @@ class VlanEntry(TypedDict):
     name: str
     status: str
     ports: list[str]
-    type: NotRequired[str]
+    type: str
     said: int
     mtu: int
     parent: NotRequired[int]
@@ -165,6 +165,7 @@ def _parse_vlan_line(line: str, lines: list[str], i: int) -> tuple[str, VlanEntr
         "name": name,
         "status": status,
         "ports": _normalize_ports(ports_str),
+        "type": "",
         "said": 0,
         "mtu": 0,
         "trans1": 0,

@@ -3,45 +3,50 @@
         "default": {
             "address_families": {
                 "VPNv4 Unicast": {
+                    "table_version": 23,
+                    "router_id": "10.186.101.1",
                     "route_distinguishers": {
                         "1:100": {
                             "rd_vrf": "vpn1",
                             "routes": {
-                                "10.16.0.0/8": {
-                                    "paths": [
-                                        {
-                                            "locprf": 100,
-                                            "metric": 0,
-                                            "next_hop": "10.186.0.2",
-                                            "origin": "?",
-                                            "path_type": "i",
-                                            "status_codes": "*>",
-                                            "weight": 0
-                                        }
-                                    ]
-                                },
-                                "10.16.1.0/24": {
-                                    "paths": [
-                                        {
-                                            "locprf": 100,
-                                            "metric": 4444,
-                                            "next_hop": "0.0.0.0",
-                                            "origin": "?",
-                                            "path_type": "r",
-                                            "status_codes": "*>",
-                                            "weight": 32768
-                                        }
-                                    ]
-                                },
                                 "10.4.1.0/24": {
                                     "paths": [
                                         {
-                                            "locprf": 100,
-                                            "next_hop": "0.0.0.0",
-                                            "origin": "i",
-                                            "path_type": "l",
                                             "status_codes": "*>",
-                                            "weight": 32768
+                                            "path_type": "l",
+                                            "next_hop": "0.0.0.0",
+                                            "locprf": 100,
+                                            "weight": 32768,
+                                            "as_path": "",
+                                            "origin": "i"
+                                        }
+                                    ]
+                                },
+                                "10.16.1.0/24": {
+                                    "paths": [
+                                        {
+                                            "status_codes": "*>",
+                                            "path_type": "r",
+                                            "next_hop": "0.0.0.0",
+                                            "metric": 4444,
+                                            "locprf": 100,
+                                            "weight": 32768,
+                                            "as_path": "",
+                                            "origin": "?"
+                                        }
+                                    ]
+                                },
+                                "10.16.0.0/8": {
+                                    "paths": [
+                                        {
+                                            "status_codes": "*>",
+                                            "path_type": "i",
+                                            "next_hop": "10.186.0.2",
+                                            "metric": 0,
+                                            "locprf": 100,
+                                            "weight": 0,
+                                            "as_path": "",
+                                            "origin": "?"
                                         }
                                     ]
                                 }
@@ -50,39 +55,41 @@
                         "2:100": {
                             "rd_vrf": "vpn2",
                             "routes": {
-                                "10.106.0.0/8": {
-                                    "paths": [
-                                        {
-                                            "locprf": 100,
-                                            "metric": 4444,
-                                            "next_hop": "0.0.0.0",
-                                            "origin": "?",
-                                            "path_type": "r",
-                                            "status_codes": "*>",
-                                            "weight": 32768
-                                        }
-                                    ]
-                                },
                                 "10.16.1.0/24": {
                                     "paths": [
                                         {
-                                            "locprf": 100,
-                                            "metric": 4444,
-                                            "next_hop": "0.0.0.0",
-                                            "origin": "?",
-                                            "path_type": "r",
                                             "status_codes": "*>",
-                                            "weight": 32768
+                                            "path_type": "r",
+                                            "next_hop": "0.0.0.0",
+                                            "metric": 4444,
+                                            "locprf": 100,
+                                            "weight": 32768,
+                                            "as_path": "",
+                                            "origin": "?"
+                                        }
+                                    ]
+                                },
+                                "10.106.0.0/8": {
+                                    "paths": [
+                                        {
+                                            "status_codes": "*>",
+                                            "path_type": "r",
+                                            "next_hop": "0.0.0.0",
+                                            "metric": 4444,
+                                            "locprf": 100,
+                                            "weight": 32768,
+                                            "as_path": "",
+                                            "origin": "?"
                                         }
                                     ]
                                 }
                             }
                         }
-                    },
-                    "router_id": "10.186.101.1",
-                    "table_version": 23
+                    }
                 },
                 "VPNv6 Unicast": {
+                    "table_version": 7,
+                    "router_id": "10.186.101.1",
                     "route_distinguishers": {
                         "1:100": {
                             "rd_vrf": "vpn1",
@@ -90,13 +97,14 @@
                                 "2001:11::1/128": {
                                     "paths": [
                                         {
-                                            "locprf": 100,
-                                            "metric": 0,
-                                            "next_hop": "0::",
-                                            "origin": "?",
-                                            "path_type": "r",
                                             "status_codes": "*>",
-                                            "weight": 32768
+                                            "path_type": "r",
+                                            "next_hop": "0::",
+                                            "metric": 0,
+                                            "locprf": 100,
+                                            "weight": 32768,
+                                            "as_path": "",
+                                            "origin": "?"
                                         }
                                     ]
                                 }
@@ -108,21 +116,20 @@
                                 "2001:11::1/128": {
                                     "paths": [
                                         {
-                                            "locprf": 100,
-                                            "metric": 0,
-                                            "next_hop": "0::",
-                                            "origin": "?",
-                                            "path_type": "r",
                                             "status_codes": "*>",
-                                            "weight": 32768
+                                            "path_type": "r",
+                                            "next_hop": "0::",
+                                            "metric": 0,
+                                            "locprf": 100,
+                                            "weight": 32768,
+                                            "as_path": "",
+                                            "origin": "?"
                                         }
                                     ]
                                 }
                             }
                         }
-                    },
-                    "router_id": "10.186.101.1",
-                    "table_version": 7
+                    }
                 }
             }
         }

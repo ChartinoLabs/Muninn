@@ -13,7 +13,7 @@ class InventoryItem(TypedDict):
     """Schema for a single inventory item."""
 
     name: str
-    description: NotRequired[str]
+    description: str
     pid: NotRequired[str]
     vid: NotRequired[str]
     serial_number: NotRequired[str]
@@ -80,9 +80,8 @@ class ShowInventoryParser(BaseParser[ShowInventoryResult]):
 
         item: InventoryItem = {
             "name": name,
+            "description": descr,
         }
-        if descr:
-            item["description"] = descr
         if pid:
             item["pid"] = pid
         if vid:

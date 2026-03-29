@@ -1,7 +1,7 @@
 """Parser for 'show arp all' command on Palo Alto PAN-OS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -21,7 +21,15 @@ class ArpEntry(TypedDict):
     status_description: NotRequired[str]
 
 
-ShowArpAllResult = dict[str, ArpEntry]
+class ShowArpAllResult(TypedDict):
+    """Schema for 'show arp all' parsed output."""
+
+    max_entries: int
+    default_timeout: int
+    total_entries: int
+    total_entries_shown: int
+    entries: dict[str, ArpEntry]
+
 
 # Map single-character status codes to human-readable descriptions
 _STATUS_MAP: dict[str, str] = {
@@ -55,6 +63,19 @@ class ShowArpAllParser(BaseParser[ShowArpAllResult]):
         r"(?P<ttl>\d+)\s*$"
     )
 
+    _HEADER_PATTERNS: ClassVar[dict[str, re.Pattern[str]]] = {
+        "max_entries": re.compile(
+            r"maximum of entries supported\s*:\s*(\d+)", re.IGNORECASE
+        ),
+        "default_timeout": re.compile(r"default timeout\s*:\s*(\d+)", re.IGNORECASE),
+        "total_entries": re.compile(
+            r"total ARP entries in table\s*:\s*(\d+)", re.IGNORECASE
+        ),
+        "total_entries_shown": re.compile(
+            r"total ARP entries shown\s*:\s*(\d+)", re.IGNORECASE
+        ),
+    }
+
     @classmethod
     def parse(cls, output: str) -> ShowArpAllResult:
         """Parse 'show arp all' output on PAN-OS.
@@ -63,15 +84,25 @@ class ShowArpAllParser(BaseParser[ShowArpAllResult]):
             output: Raw CLI output from command.
 
         Returns:
-            Dictionary keyed by IP address with ARP entry details.
+            Dictionary with header metadata and entries keyed by IP address.
 
         Raises:
             ValueError: If no valid ARP entries are found in the output.
         """
-        result: dict[str, ArpEntry] = {}
+        entries: dict[str, ArpEntry] = {}
+        header: dict[str, int] = {}
 
         for line in output.splitlines():
-            match = cls._ARP_LINE.match(line.strip())
+            stripped = line.strip()
+
+            # Try header patterns
+            for key, pattern in cls._HEADER_PATTERNS.items():
+                header_match = pattern.search(stripped)
+                if header_match:
+                    header[key] = int(header_match.group(1))
+                    break
+
+            match = cls._ARP_LINE.match(stripped)
             if not match:
                 continue
 
@@ -94,10 +125,16 @@ class ShowArpAllParser(BaseParser[ShowArpAllResult]):
             if description is not None:
                 entry["status_description"] = description
 
-            result[ip_address] = entry
+            entries[ip_address] = entry
 
-        if not result:
+        if not entries:
             msg = "No valid ARP entries found in output"
             raise ValueError(msg)
 
-        return cast(ShowArpAllResult, result)
+        return ShowArpAllResult(
+            max_entries=header.get("max_entries", 0),
+            default_timeout=header.get("default_timeout", 0),
+            total_entries=header.get("total_entries", 0),
+            total_entries_shown=header.get("total_entries_shown", 0),
+            entries=entries,
+        )
