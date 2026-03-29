@@ -25,6 +25,7 @@ JsonPath = tuple[str | int, ...]
 
 _PLACEHOLDER_HYPHENS: Final[frozenset[str]] = frozenset({"-", "---"})
 _PLACEHOLDER_NA_LIKE: Final[frozenset[str]] = frozenset({"NA", "N/A", "n/a"})
+_PLACEHOLDER_NONE_LIKE: Final[frozenset[str]] = frozenset({"none", "None", "NONE"})
 _PLACEHOLDER_EMPTY_STRING: Final[frozenset[str]] = frozenset({""})
 
 
@@ -33,6 +34,34 @@ _HYPHEN_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset({})
 
 # Legacy fixtures where NA / N/A / n/a appear as CLI text (not always "null").
 _NA_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset({})
+
+# Legacy fixtures where "none" / "None" / "NONE" appears as a meaningful enum value
+# (e.g. OSPF authentication type, interface reason) rather than a null placeholder.
+_NONE_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset(
+    {
+        "arista_eos/show_version/004_ceos_lab/expected.json",
+        "arista_eos/show_version/005_ceos_clab/expected.json",
+        "ios/show_crypto_session_detail/001_basic/expected.json",
+        "ios/show_license/001_basic/expected.json",
+        "ios/show_snmp_user/001_basic/expected.json",
+        "iosxe/show_netconf-yang_sessions/001_basic/expected.json",
+        "iosxe/show_redundancy/001_basic/expected.json",
+        "iosxe/show_redundancy/001_live_device/expected.json",
+        "iosxe/show_redundancy/002_no_standby/expected.json",
+        "iosxe/show_redundancy/003_asr1k/expected.json",
+        "iosxe/show_switch_detail/002_single_switch/expected.json",
+        "iosxe/show_switch_detail/003_unprovisioned_member/expected.json",
+        "linux/ip_address_show/001_standard_linux/expected.json",
+        "linux/ip_link_show/001_standard_linux/expected.json",
+        "nxos/show_interface_brief/001_basic/expected.json",
+        "nxos/show_interface_capabilities/001_basic/expected.json",
+        "nxos/show_ip_ospf_interface/001_broadcast_loopback_shamlink/expected.json",
+        "nxos/show_ip_ospf_interface/002_passive_bfd_md_auth/expected.json",
+        "nxos/show_ip_ospf_interface/003_combined_ip_process_line/expected.json",
+        "nxos/show_port-channel_summary/003_down_and_empty/expected.json",
+        "paloalto_panos/show_system_info/001_pa_vm_basic/expected.json",
+    }
+)
 
 # Legacy fixtures that still use empty strings as values. Prefer omitting the key
 # (or using ``null`` if the schema uses optional fields) instead of ``""``.
@@ -156,6 +185,43 @@ def test_expected_json_avoids_na_like_placeholder_values(expected_path: Path) ->
         f"{rel} uses NA/N/A-like placeholder string value(s). Prefer omitting the key "
         f"or modeling vendor-defined tokens explicitly; or add the file to "
         f"_NA_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES in "
+        f"test_fixture_placeholder_sentinels.py.\n"
+        f"{lines}{more}"
+    )
+    pytest.fail(msg)
+
+
+@pytest.mark.parametrize(
+    "expected_path",
+    _discover_expected_json_files(),
+    ids=lambda p: p.relative_to(PARSERS_TEST_DIR).as_posix(),
+)
+def test_expected_json_avoids_none_like_placeholder_values(
+    expected_path: Path,
+) -> None:
+    r"""Fail when a fixture uses ``none``, ``None``, or ``NONE`` as a string value.
+
+    Many devices print "none" as a meaningful enum (e.g. OSPF authentication type).
+    Exempt legacy files via ``_NONE_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES``.
+    Prefer omitting the key when the token means "no value".
+    """
+    rel = expected_path.relative_to(PARSERS_TEST_DIR).as_posix()
+    data = json.loads(expected_path.read_text(encoding="utf-8"))
+    violations = _string_leaf_violations(data, _PLACEHOLDER_NONE_LIKE)
+    if rel in _NONE_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES:
+        return
+    if not violations:
+        return
+    lines = "\n".join(
+        f"  - {_path_to_json_pointer(p)}: {value!r}" for p, value in violations[:50]
+    )
+    more = ""
+    if len(violations) > 50:
+        more = f"\n  ... and {len(violations) - 50} more"
+    msg = (
+        f"{rel} uses none-like placeholder string value(s). Prefer omitting the key "
+        f"(or null) instead of 'none'; or add the file to "
+        f"_NONE_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES in "
         f"test_fixture_placeholder_sentinels.py.\n"
         f"{lines}{more}"
     )
