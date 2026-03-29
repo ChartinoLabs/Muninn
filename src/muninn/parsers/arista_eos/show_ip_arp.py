@@ -16,7 +16,7 @@ class ArpEntry(TypedDict):
 
     mac_address: str
     age: str
-    interface: str
+    virtual_interface: NotRequired[str]
     physical_interface: NotRequired[str]
 
 
@@ -85,24 +85,27 @@ class ShowIpArpParser(BaseParser[ShowIpArpResult]):
                 entry: ArpEntry = {
                     "mac_address": mac_address,
                     "age": age,
-                    "interface": raw_interface,
                 }
 
                 # Arista EOS shows "Vlan101, Port-Channel2" when the ARP
                 # entry lives on an SVI with a known physical egress port.
-                # Split into logical interface + physical_interface.
+                # Split into virtual_interface + physical_interface.
                 # "Vlan1, not learned" means no physical egress is known.
                 if ", " in raw_interface:
-                    logical, qualifier = raw_interface.split(", ", 1)
-                    entry["interface"] = canonical_interface_name(
-                        logical, os=OS.ARISTA_EOS
+                    virtual, qualifier = raw_interface.split(", ", 1)
+                    entry["virtual_interface"] = canonical_interface_name(
+                        virtual, os=OS.ARISTA_EOS
                     )
                     if qualifier != "not learned":
                         entry["physical_interface"] = canonical_interface_name(
                             qualifier, os=OS.ARISTA_EOS
                         )
+                elif raw_interface.startswith("Vlan"):
+                    entry["virtual_interface"] = canonical_interface_name(
+                        raw_interface, os=OS.ARISTA_EOS
+                    )
                 else:
-                    entry["interface"] = canonical_interface_name(
+                    entry["physical_interface"] = canonical_interface_name(
                         raw_interface, os=OS.ARISTA_EOS
                     )
 
