@@ -5,6 +5,7 @@ from typing import ClassVar, TypeAlias, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import MAC_ADDRESS_COLON
 from muninn.registry import register
 from muninn.tags import ParserTag
 
@@ -41,7 +42,7 @@ class ShowInterfaceHardwareParser(BaseParser[ShowInterfaceHardwareResult]):
         r"^(?P<name>\S+)\s+"
         r"(?P<id>\d+)\s+"
         r"(?P<speed>(?:\[[^\]]*\]|[^\s/]+))/(?P<duplex>(?:\[[^\]]*\]|[^\s/]+))/(?P<state>\S+)\s+"
-        r"(?P<mac>[0-9a-fA-F]{2}(?::[0-9a-fA-F]{2}){5})\s*$"
+        rf"(?P<mac>{MAC_ADDRESS_COLON})\s*$"
     )
 
     # Header separator line
