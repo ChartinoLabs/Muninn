@@ -1,0 +1,234 @@
+{
+  "os": "nokia_sros",
+  "command": "show lag",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Multiple LAGs with mixed admin/oper states and MC active/standby roles",
+      "input": "\n===============================================================================\nLag Data\n===============================================================================\nLag-id         Adm     Opr     Weighted Threshold Up-Count MC Act/Stdby\n-------------------------------------------------------------------------------\n1              up      up      No       0         2        N/A\n2              up      up      No       0         2        N/A\n3              up      up      No       0         1        N/A\n4              down    down    No       0         0        N/A\n5              down    down    No       0         0        N/A\n10             down    down    No       0         0        N/A\n20             up      down    No       0         0        standby\n70             down    down    No       0         0        N/A\n80             up      down    No       0         0        N/A\n90             down    down    No       0         0        N/A\n100            up      up      No       0         1        N/A\n101            up      up      No       0         1        N/A\n102            up      up      No       0         1        N/A\n103            up      up      No       0         1        active\n104            up      up      No       0         1        N/A\n105            up      up      No       0         1        N/A\n106            up      up      No       0         1        N/A\n107            up      up      No       0         1        N/A\n108            up      up      No       0         1        N/A\n109            up      up      No       0         1        N/A\n110            up      up      No       0         1        active\n111            up      up      No       0         1        N/A\n112            up      up      No       0         1        N/A\n114            up      up      No       0         1        N/A\n115            up      up      No       0         1        N/A\n120            up      up      No       0         1        N/A\n124            down    down    No       0         0        N/A\n140            up      up      No       0         1        N/A\n150            down    down    No       0         0        N/A\n153            up      up      No       0         1        active\n180            down    down    No       0         0        N/A\n-------------------------------------------------------------------------------\nTotal Lag-ids: 31      Single Chassis: 27       MC Act: 3       MC Stdby: 1\n===============================================================================\n",
+      "expected": {
+        "1": {
+          "admin_state": "up",
+          "oper_state": "up",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 2
+        },
+        "2": {
+          "admin_state": "up",
+          "oper_state": "up",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 2
+        },
+        "3": {
+          "admin_state": "up",
+          "oper_state": "up",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 1
+        },
+        "4": {
+          "admin_state": "down",
+          "oper_state": "down",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 0
+        },
+        "5": {
+          "admin_state": "down",
+          "oper_state": "down",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 0
+        },
+        "10": {
+          "admin_state": "down",
+          "oper_state": "down",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 0
+        },
+        "20": {
+          "admin_state": "up",
+          "oper_state": "down",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 0,
+          "mc_act_stdby": "standby"
+        },
+        "70": {
+          "admin_state": "down",
+          "oper_state": "down",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 0
+        },
+        "80": {
+          "admin_state": "up",
+          "oper_state": "down",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 0
+        },
+        "90": {
+          "admin_state": "down",
+          "oper_state": "down",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 0
+        },
+        "100": {
+          "admin_state": "up",
+          "oper_state": "up",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 1
+        },
+        "101": {
+          "admin_state": "up",
+          "oper_state": "up",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 1
+        },
+        "102": {
+          "admin_state": "up",
+          "oper_state": "up",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 1
+        },
+        "103": {
+          "admin_state": "up",
+          "oper_state": "up",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 1,
+          "mc_act_stdby": "active"
+        },
+        "104": {
+          "admin_state": "up",
+          "oper_state": "up",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 1
+        },
+        "105": {
+          "admin_state": "up",
+          "oper_state": "up",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 1
+        },
+        "106": {
+          "admin_state": "up",
+          "oper_state": "up",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 1
+        },
+        "107": {
+          "admin_state": "up",
+          "oper_state": "up",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 1
+        },
+        "108": {
+          "admin_state": "up",
+          "oper_state": "up",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 1
+        },
+        "109": {
+          "admin_state": "up",
+          "oper_state": "up",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 1
+        },
+        "110": {
+          "admin_state": "up",
+          "oper_state": "up",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 1,
+          "mc_act_stdby": "active"
+        },
+        "111": {
+          "admin_state": "up",
+          "oper_state": "up",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 1
+        },
+        "112": {
+          "admin_state": "up",
+          "oper_state": "up",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 1
+        },
+        "114": {
+          "admin_state": "up",
+          "oper_state": "up",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 1
+        },
+        "115": {
+          "admin_state": "up",
+          "oper_state": "up",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 1
+        },
+        "120": {
+          "admin_state": "up",
+          "oper_state": "up",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 1
+        },
+        "124": {
+          "admin_state": "down",
+          "oper_state": "down",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 0
+        },
+        "140": {
+          "admin_state": "up",
+          "oper_state": "up",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 1
+        },
+        "150": {
+          "admin_state": "down",
+          "oper_state": "down",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 0
+        },
+        "153": {
+          "admin_state": "up",
+          "oper_state": "up",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 1,
+          "mc_act_stdby": "active"
+        },
+        "180": {
+          "admin_state": "down",
+          "oper_state": "down",
+          "weighted": "No",
+          "threshold": 0,
+          "up_count": 0
+        }
+      }
+    }
+  ]
+}
