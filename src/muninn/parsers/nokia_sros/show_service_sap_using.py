@@ -1,12 +1,14 @@
 """Parser for 'show service sap-using' command on Nokia SR OS."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
+
+_NULL_VALUES = frozenset({"none"})
 
 
 class SapEntry(TypedDict):
@@ -14,9 +16,9 @@ class SapEntry(TypedDict):
 
     service_id: str
     ingress_qos: str
-    ingress_filter: str
+    ingress_filter: NotRequired[str]
     egress_qos: str
-    egress_filter: str
+    egress_filter: NotRequired[str]
     admin_state: str
     oper_state: str
 
@@ -115,12 +117,19 @@ class ShowServiceSapUsingParser(BaseParser[ShowServiceSapUsingResult]):
             entry: SapEntry = {
                 "service_id": match.group("svc_id"),
                 "ingress_qos": match.group("ing_qos"),
-                "ingress_filter": match.group("ing_fltr"),
                 "egress_qos": match.group("egr_qos"),
-                "egress_filter": match.group("egr_fltr"),
                 "admin_state": match.group("admin"),
                 "oper_state": match.group("oper"),
             }
+
+            ing_fltr = match.group("ing_fltr")
+            if ing_fltr.lower() not in _NULL_VALUES:
+                entry["ingress_filter"] = ing_fltr
+
+            egr_fltr = match.group("egr_fltr")
+            if egr_fltr.lower() not in _NULL_VALUES:
+                entry["egress_filter"] = egr_fltr
+
             result[port_id] = entry
 
         if not result:
