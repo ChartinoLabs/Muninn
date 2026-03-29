@@ -1,0 +1,253 @@
+{
+  "os": "nokia_sros",
+  "command": "show router bgp summary family",
+  "schema": {
+    "name": "ShowRouterBgpSummaryFamilyResult",
+    "fields": {
+      "router_id": {
+        "type": "str",
+        "required": true
+      },
+      "autonomous_system": {
+        "type": "int",
+        "required": true
+      },
+      "local_as": {
+        "type": "int",
+        "required": true
+      },
+      "admin_state": {
+        "type": "str",
+        "required": true
+      },
+      "oper_state": {
+        "type": "str",
+        "required": true
+      },
+      "total_peer_groups": {
+        "type": "int",
+        "required": true
+      },
+      "total_peers": {
+        "type": "int",
+        "required": true
+      },
+      "total_vpn_peer_groups": {
+        "type": "int",
+        "required": true
+      },
+      "total_vpn_peers": {
+        "type": "int",
+        "required": true
+      },
+      "total_bgp_paths": {
+        "type": "int",
+        "required": true
+      },
+      "total_path_memory": {
+        "type": "int",
+        "required": true
+      },
+      "counters": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": "int"
+        },
+        "required": true
+      },
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "BgpNeighborEntry",
+            "fields": {
+              "autonomous_system": {
+                "type": "str",
+                "required": true
+              },
+              "packets_received": {
+                "type": "int",
+                "required": true
+              },
+              "packets_sent": {
+                "type": "int",
+                "required": true
+              },
+              "in_queue": {
+                "type": "int",
+                "required": true
+              },
+              "out_queue": {
+                "type": "int",
+                "required": true
+              },
+              "up_down": {
+                "type": "str",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": false
+              },
+              "routes_received": {
+                "type": "int",
+                "required": false
+              },
+              "routes_active": {
+                "type": "int",
+                "required": false
+              },
+              "routes_sent": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "BGP IPv4 family summary with established, connect, and active peers including truncation markers",
+      "input": "A:SRHERE01# show router \"Base\" bgp summary family ipv4\n===============================================================================\n BGP Router ID:192.0.2.11   AS:6848        Local AS:65535\n===============================================================================\nBGP Admin State         : Up          BGP Oper State              : Up\nTotal Peer Groups       : 6           Total Peers                 : 150\nTotal VPN Peer Groups   : 79          Total VPN Peers             : 207\nTotal BGP Paths         : 407944      Total Path Memory           : 160791243\n\nTotal IPv4 Remote Rts   : 1725031     Total IPv4 Rem. Active Rts  : 862201\nTotal IPv6 Remote Rts   : 0           Total IPv6 Rem. Active Rts  : 0\nTotal IPv4 Backup Rts   : 0           Total IPv6 Backup Rts       : 0\nTotal LblIpv4 Rem Rts   : 2844        Total LblIpv4 Rem. Act Rts  : 311\nTotal LblIpv6 Rem Rts   : 196896      Total LblIpv6 Rem. Act Rts  : 98446\nTotal LblIpv4 Bkp Rts   : 0           Total LblIpv6 Bkp Rts       : 0\nTotal Supressed Rts     : 0           Total Hist. Rts             : 0\nTotal Decay Rts         : 0\n\nTotal VPN-IPv4 Rem. Rts : 93000       Total VPN-IPv4 Rem. Act. Rts: 45689\nTotal VPN-IPv6 Rem. Rts : 0           Total VPN-IPv6 Rem. Act. Rts: 0\nTotal VPN-IPv4 Bkup Rts : 0           Total VPN-IPv6 Bkup Rts     : 0\nTotal VPN Local Rts     : 1147        Total VPN Supp. Rts         : 0\nTotal VPN Hist. Rts     : 0           Total VPN Decay Rts         : 0\n\nTotal MVPN-IPv4 Rem Rts : 0           Total MVPN-IPv4 Rem Act Rts : 0\nTotal MVPN-IPv6 Rem Rts : 0           Total MVPN-IPv6 Rem Act Rts : 0\nTotal MDT-SAFI Rem Rts  : 0           Total MDT-SAFI Rem Act Rts  : 0\nTotal McIPv4 Remote Rts : 0           Total McIPv4 Rem. Active Rts: 0\nTotal McIPv6 Remote Rts : 0           Total McIPv6 Rem. Active Rts: 0\nTotal McVpnIPv4 Rem Rts : 0           Total McVpnIPv4 Rem Act Rts : 0\nTotal McVpnIPv6 Rem Rts : 0           Total McVpnIPv6 Rem Act Rts : 0\n\nTotal EVPN Rem Rts      : 692         Total EVPN Rem Act Rts      : 338\nTotal L2-VPN Rem. Rts   : 0           Total L2VPN Rem. Act. Rts   : 0\nTotal MSPW Rem Rts      : 0           Total MSPW Rem Act Rts      : 0\nTotal RouteTgt Rem Rts  : 1546        Total RouteTgt Rem Act Rts  : 1546\nTotal FlowIpv4 Rem Rts  : 0           Total FlowIpv4 Rem Act Rts  : 0\nTotal FlowIpv6 Rem Rts  : 0           Total FlowIpv6 Rem Act Rts  : 0\nTotal Link State Rem Rts: 0           Total Link State Rem Act Rts: 0\nTotal SrPlcyIpv4 Rem Rts: 0           Total SrPlcyIpv4 Rem Act Rts: 0\n\n===============================================================================\nBGP IPv4 Summary\n===============================================================================\nLegend : D - Dynamic Neighbor\n===============================================================================\nNeighbor\n                   AS PktRcvd PktSent  InQ OutQ Up/Down   State|Recv/Actv/Sent\n-------------------------------------------------------------------------------\n192.0.2.118\n               42598*  228872  215409    0    0 25d10h18m 2/2/1\n192.0.2.110\n               42598   271035  249777    0    0 29d11h41m 1/1/1\n192.0.2.126\n               42598*       0       0    0    0 54d18h43m Connect\n192.0.2.254\n               42598*       0       0    0    0 36d13h37m Active\n192.0.2.103\n               65535  390698*  749512    0    0 54d18h40m 862440/627895/373\n192.0.2.104\n               65535  355316*  749512    0    0 54d18h40m 862439/234172/373\n-------------------------------------------------------------------------------\n* indicates that the corresponding row element may have been truncated.\n",
+      "expected": {
+        "router_id": "192.0.2.11",
+        "autonomous_system": 6848,
+        "local_as": 65535,
+        "admin_state": "Up",
+        "oper_state": "Up",
+        "total_peer_groups": 6,
+        "total_peers": 150,
+        "total_vpn_peer_groups": 79,
+        "total_vpn_peers": 207,
+        "total_bgp_paths": 407944,
+        "total_path_memory": 160791243,
+        "counters": {
+          "total_ipv4_remote_routes": 1725031,
+          "total_ipv4_remote_active_routes": 862201,
+          "total_ipv6_remote_routes": 0,
+          "total_ipv6_remote_active_routes": 0,
+          "total_ipv4_backup_routes": 0,
+          "total_ipv6_backup_routes": 0,
+          "total_labeled_ipv4_remote_routes": 2844,
+          "total_labeled_ipv4_remote_active_routes": 311,
+          "total_labeled_ipv6_remote_routes": 196896,
+          "total_labeled_ipv6_remote_active_routes": 98446,
+          "total_labeled_ipv4_backup_routes": 0,
+          "total_labeled_ipv6_backup_routes": 0,
+          "total_suppressed_routes": 0,
+          "total_history_routes": 0,
+          "total_decay_routes": 0,
+          "total_vpn_ipv4_remote_routes": 93000,
+          "total_vpn_ipv4_remote_active_routes": 45689,
+          "total_vpn_ipv6_remote_routes": 0,
+          "total_vpn_ipv6_remote_active_routes": 0,
+          "total_vpn_ipv4_backup_routes": 0,
+          "total_vpn_ipv6_backup_routes": 0,
+          "total_vpn_local_routes": 1147,
+          "total_vpn_suppressed_routes": 0,
+          "total_vpn_history_routes": 0,
+          "total_vpn_decay_routes": 0,
+          "total_mvpn_ipv4_remote_routes": 0,
+          "total_mvpn_ipv4_remote_active_routes": 0,
+          "total_mvpn_ipv6_remote_routes": 0,
+          "total_mvpn_ipv6_remote_active_routes": 0,
+          "total_mdt_safi_remote_routes": 0,
+          "total_mdt_safi_remote_active_routes": 0,
+          "total_multicast_ipv4_remote_routes": 0,
+          "total_multicast_ipv4_remote_active_routes": 0,
+          "total_multicast_ipv6_remote_routes": 0,
+          "total_multicast_ipv6_remote_active_routes": 0,
+          "total_multicast_vpn_ipv4_remote_routes": 0,
+          "total_multicast_vpn_ipv4_remote_active_routes": 0,
+          "total_multicast_vpn_ipv6_remote_routes": 0,
+          "total_multicast_vpn_ipv6_remote_active_routes": 0,
+          "total_evpn_remote_routes": 692,
+          "total_evpn_remote_active_routes": 338,
+          "total_l2vpn_remote_routes": 0,
+          "total_l2vpn_remote_active_routes": 0,
+          "total_mspw_remote_routes": 0,
+          "total_mspw_remote_active_routes": 0,
+          "total_route_target_remote_routes": 1546,
+          "total_route_target_remote_active_routes": 1546,
+          "total_flowspec_ipv4_remote_routes": 0,
+          "total_flowspec_ipv4_remote_active_routes": 0,
+          "total_flowspec_ipv6_remote_routes": 0,
+          "total_flowspec_ipv6_remote_active_routes": 0,
+          "total_link_state_remote_routes": 0,
+          "total_link_state_remote_active_routes": 0,
+          "total_sr_policy_ipv4_remote_routes": 0,
+          "total_sr_policy_ipv4_remote_active_routes": 0
+        },
+        "neighbors": {
+          "192.0.2.118": {
+            "autonomous_system": "42598",
+            "packets_received": 228872,
+            "packets_sent": 215409,
+            "in_queue": 0,
+            "out_queue": 0,
+            "up_down": "25d10h18m",
+            "routes_received": 2,
+            "routes_active": 2,
+            "routes_sent": 1
+          },
+          "192.0.2.110": {
+            "autonomous_system": "42598",
+            "packets_received": 271035,
+            "packets_sent": 249777,
+            "in_queue": 0,
+            "out_queue": 0,
+            "up_down": "29d11h41m",
+            "routes_received": 1,
+            "routes_active": 1,
+            "routes_sent": 1
+          },
+          "192.0.2.126": {
+            "autonomous_system": "42598",
+            "packets_received": 0,
+            "packets_sent": 0,
+            "in_queue": 0,
+            "out_queue": 0,
+            "up_down": "54d18h43m",
+            "state": "Connect"
+          },
+          "192.0.2.254": {
+            "autonomous_system": "42598",
+            "packets_received": 0,
+            "packets_sent": 0,
+            "in_queue": 0,
+            "out_queue": 0,
+            "up_down": "36d13h37m",
+            "state": "Active"
+          },
+          "192.0.2.103": {
+            "autonomous_system": "65535",
+            "packets_received": 390698,
+            "packets_sent": 749512,
+            "in_queue": 0,
+            "out_queue": 0,
+            "up_down": "54d18h40m",
+            "routes_received": 862440,
+            "routes_active": 627895,
+            "routes_sent": 373
+          },
+          "192.0.2.104": {
+            "autonomous_system": "65535",
+            "packets_received": 355316,
+            "packets_sent": 749512,
+            "in_queue": 0,
+            "out_queue": 0,
+            "up_down": "54d18h40m",
+            "routes_received": 862439,
+            "routes_active": 234172,
+            "routes_sent": 373
+          }
+        }
+      }
+    }
+  ]
+}
