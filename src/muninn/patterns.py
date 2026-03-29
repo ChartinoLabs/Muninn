@@ -33,7 +33,11 @@ IPV4_PREFIX_RE = re.compile(IPV4_PREFIX)
 # Matches a Cisco-style dotted MAC address, e.g. 0012.7fff.04d7.
 MAC_ADDRESS = r"[0-9a-fA-F]{4}\.[0-9a-fA-F]{4}\.[0-9a-fA-F]{4}"
 
+# Matches a colon-delimited MAC address, e.g. 00:50:56:ff:ba:6f.
+MAC_ADDRESS_COLON = r"[0-9a-fA-F]{2}(?::[0-9a-fA-F]{2}){5}"
+
 MAC_ADDRESS_RE = re.compile(MAC_ADDRESS)
+MAC_ADDRESS_COLON_RE = re.compile(MAC_ADDRESS_COLON)
 
 # ---------------------------------------------------------------------------
 # Table / section separator lines
