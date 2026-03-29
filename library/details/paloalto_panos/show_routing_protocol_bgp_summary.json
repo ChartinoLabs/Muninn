@@ -1,0 +1,203 @@
+{
+  "os": "paloalto_panos",
+  "command": "show routing protocol bgp summary",
+  "schema": {
+    "name": "ShowRoutingProtocolBgpSummaryResult",
+    "fields": {
+      "router_id": {
+        "type": "str",
+        "required": true
+      },
+      "virtual_router": {
+        "type": "str",
+        "required": true
+      },
+      "local_as": {
+        "type": "int",
+        "required": true
+      },
+      "reject_default_route": {
+        "type": "bool",
+        "required": true
+      },
+      "redist_default_route": {
+        "type": "str",
+        "required": true
+      },
+      "install_bgp_routes": {
+        "type": "bool",
+        "required": true
+      },
+      "graceful_restart": {
+        "type": "str",
+        "required": true
+      },
+      "as_size": {
+        "type": "int",
+        "required": true
+      },
+      "local_member_as": {
+        "type": "int",
+        "required": true
+      },
+      "cluster_id": {
+        "type": "str",
+        "required": true
+      },
+      "default_local_preference": {
+        "type": "int",
+        "required": true
+      },
+      "always_compare_med": {
+        "type": "bool",
+        "required": true
+      },
+      "aggregate_regardless_med": {
+        "type": "bool",
+        "required": true
+      },
+      "deterministic_med_processing": {
+        "type": "bool",
+        "required": true
+      },
+      "accept_orf": {
+        "type": "bool",
+        "required": true
+      },
+      "accept_cisco_style_prefix": {
+        "type": "bool",
+        "required": true
+      },
+      "mp_bgp_enable": {
+        "type": "bool",
+        "required": true
+      },
+      "afi_safi_ipv4_unicast": {
+        "type": "bool",
+        "required": true
+      },
+      "rib_out_current": {
+        "type": "int",
+        "required": true
+      },
+      "rib_out_peak": {
+        "type": "int",
+        "required": true
+      },
+      "peers": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "BgpNeighborEntry",
+            "fields": {
+              "neighbor_name": {
+                "type": "str",
+                "required": true
+              },
+              "neighbor_as": {
+                "type": "int",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "address_family": {
+                "type": "str",
+                "required": false
+              },
+              "accepted_pfx": {
+                "type": "int",
+                "required": false
+              },
+              "advertised_pfx": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "BGP summary with six peers across three VLANs, all Established",
+      "input": "  ==========\n  router id:                     1.1.1.1\n  virtual router:                VR_HANDOFF\n  reject default route:          no\n  redist default route:          allow\n  Install BGP routes:            yes\n  Graceful Restart:              supported\n  AS size:                       2\n  Local AS:                      65253\n  Local member AS:               0\n  Cluster id:                    0.0.0.0\n  Default local preference:      100\n  Always compare MED:            no\n  Aggregate regardless MED:      yes\n  Deterministic MED processing:  yes\n  Accept ORF:                    no\n  Accept CISCO style prefix:     yes\n  mp-bgp-enable:                 yes\n  afi-safi-ipv4-unicast:         yes\n  rib-out entries:               current 46, peak 47\n    peer DC-N9K-BGW01 - BLU 301: AS 65253, Established, IP 192.168.1.1\n      bgpAfiIpv4/unicast pfx:    Accepted pfx: 4, Advertised pfx: 4\n    peer DC-N9K-BGW02 - BLU 301: AS 65301, Established, IP 192.168.1.2\n      bgpAfiIpv4/unicast pfx:    Accepted pfx: 4, Advertised pfx: 4\n    peer DC-N9K-BGW01 - GRN 302: AS 65253, Established, IP 192.168.2.9\n      bgpAfiIpv4/unicast pfx:    Accepted pfx: 3, Advertised pfx: 4\n    peer DC-N9K-BGW02 - GRN 302: AS 65302, Established, IP 192.168.2.10\n      bgpAfiIpv4/unicast pfx:    Accepted pfx: 3, Advertised pfx: 4\n    peer DC-N9K-BGW01 - AMB 303: AS 65253, Established, IP 192.168.3.17\n      bgpAfiIpv4/unicast pfx:    Accepted pfx: 2, Advertised pfx: 3\n    peer DC-N9K-BGW02 - AMB 303: AS 65303, Established, IP 192.168.3.18\n      bgpAfiIpv4/unicast pfx:    Accepted pfx: 2, Advertised pfx: 3\n",
+      "expected": {
+        "router_id": "1.1.1.1",
+        "virtual_router": "VR_HANDOFF",
+        "local_as": 65253,
+        "reject_default_route": false,
+        "redist_default_route": "allow",
+        "install_bgp_routes": true,
+        "graceful_restart": "supported",
+        "as_size": 2,
+        "local_member_as": 0,
+        "cluster_id": "0.0.0.0",
+        "default_local_preference": 100,
+        "always_compare_med": false,
+        "aggregate_regardless_med": true,
+        "deterministic_med_processing": true,
+        "accept_orf": false,
+        "accept_cisco_style_prefix": true,
+        "mp_bgp_enable": true,
+        "afi_safi_ipv4_unicast": true,
+        "rib_out_current": 46,
+        "rib_out_peak": 47,
+        "peers": {
+          "192.168.1.1": {
+            "neighbor_name": "DC-N9K-BGW01 - BLU 301",
+            "neighbor_as": 65253,
+            "state": "Established",
+            "address_family": "bgpAfiIpv4/unicast",
+            "accepted_pfx": 4,
+            "advertised_pfx": 4
+          },
+          "192.168.1.2": {
+            "neighbor_name": "DC-N9K-BGW02 - BLU 301",
+            "neighbor_as": 65301,
+            "state": "Established",
+            "address_family": "bgpAfiIpv4/unicast",
+            "accepted_pfx": 4,
+            "advertised_pfx": 4
+          },
+          "192.168.2.9": {
+            "neighbor_name": "DC-N9K-BGW01 - GRN 302",
+            "neighbor_as": 65253,
+            "state": "Established",
+            "address_family": "bgpAfiIpv4/unicast",
+            "accepted_pfx": 3,
+            "advertised_pfx": 4
+          },
+          "192.168.2.10": {
+            "neighbor_name": "DC-N9K-BGW02 - GRN 302",
+            "neighbor_as": 65302,
+            "state": "Established",
+            "address_family": "bgpAfiIpv4/unicast",
+            "accepted_pfx": 3,
+            "advertised_pfx": 4
+          },
+          "192.168.3.17": {
+            "neighbor_name": "DC-N9K-BGW01 - AMB 303",
+            "neighbor_as": 65253,
+            "state": "Established",
+            "address_family": "bgpAfiIpv4/unicast",
+            "accepted_pfx": 2,
+            "advertised_pfx": 3
+          },
+          "192.168.3.18": {
+            "neighbor_name": "DC-N9K-BGW02 - AMB 303",
+            "neighbor_as": 65303,
+            "state": "Established",
+            "address_family": "bgpAfiIpv4/unicast",
+            "accepted_pfx": 2,
+            "advertised_pfx": 3
+          }
+        }
+      }
+    }
+  ]
+}
