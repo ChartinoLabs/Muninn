@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS, MAC_ADDRESS_COLON
 from muninn.registry import register
 from muninn.tags import ParserTag
 
@@ -56,8 +57,8 @@ class ShowArpAllParser(BaseParser[ShowArpAllResult]):
 
     _ARP_LINE = re.compile(
         r"^(?P<interface>\S+)\s+"
-        r"(?P<ip>\d{1,3}(?:\.\d{1,3}){3})\s+"
-        r"(?P<mac>(?:[0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}|\(incomplete\))\s+"
+        rf"(?P<ip>{IPV4_ADDRESS})\s+"
+        rf"(?P<mac>{MAC_ADDRESS_COLON}|\(incomplete\))\s+"
         r"(?P<port>\S+)\s+"
         r"(?P<status>\S+)\s+"
         r"(?P<ttl>\d+)\s*$"
