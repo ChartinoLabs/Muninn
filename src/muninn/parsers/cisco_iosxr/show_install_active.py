@@ -86,7 +86,7 @@ class ShowInstallActiveParser(BaseParser[ShowInstallActiveResult]):
         Raises:
             ValueError: If no node information can be parsed.
         """
-        result: dict[str, object] = {}
+        label: str | None = None
         nodes: dict[str, NodeInfo] = {}
         current_node: str | None = None
         in_packages = False
@@ -97,7 +97,7 @@ class ShowInstallActiveParser(BaseParser[ShowInstallActiveResult]):
                 continue
 
             if match := cls._LABEL.match(line):
-                result["label"] = match.group("label")
+                label = match.group("label")
                 continue
 
             if match := cls._NODE.match(line):
@@ -118,5 +118,7 @@ class ShowInstallActiveParser(BaseParser[ShowInstallActiveResult]):
             msg = "No node information found in output"
             raise ValueError(msg)
 
-        result["nodes"] = nodes
-        return ShowInstallActiveResult(**result)  # type: ignore[arg-type]
+        result = ShowInstallActiveResult(nodes=nodes)
+        if label is not None:
+            result["label"] = label
+        return result
