@@ -1,7 +1,7 @@
 """Parser for 'show arp' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -13,7 +13,7 @@ from muninn.tags import ParserTag
 class ArpEntry(TypedDict):
     """Schema for a single ARP entry."""
 
-    age: str | None
+    age: NotRequired[str]
     mac_address: str
     state: str
     type: str
@@ -73,13 +73,17 @@ class ShowArpParser(BaseParser[ShowArpResult]):
 
             address = match.group("address")
             raw_age = match.group("age")
-            arp_entries[address] = ArpEntry(
-                age=None if raw_age == "-" else raw_age,
-                mac_address=match.group("mac_address").lower(),
-                state=match.group("state"),
-                type=match.group("type"),
-                interface=match.group("interface"),
-            )
+
+            entry: ArpEntry = {
+                "mac_address": match.group("mac_address").lower(),
+                "state": match.group("state"),
+                "type": match.group("type"),
+                "interface": match.group("interface"),
+            }
+            if raw_age != "-":
+                entry["age"] = raw_age
+
+            arp_entries[address] = entry
 
         if not arp_entries:
             msg = "No ARP entries found in output"
