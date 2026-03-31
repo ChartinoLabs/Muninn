@@ -1,7 +1,7 @@
 """Parser for 'show system uptime' command on Juniper Junos."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -118,4 +118,4 @@ class ShowSystemUptimeParser(BaseParser[ShowSystemUptimeResult]):
             msg = f"Missing required fields: {', '.join(missing)}"
             raise ValueError(msg)
 
-        return ShowSystemUptimeResult(**result)  # type: ignore[typeddict-item]
+        return cast(ShowSystemUptimeResult, result)
