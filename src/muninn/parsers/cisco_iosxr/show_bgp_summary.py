@@ -10,7 +10,8 @@ structure when multiple AF blocks appear.
 """
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from collections.abc import Callable
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -267,20 +268,20 @@ def _parse_neighbors(lines: list[str]) -> dict[str, NeighborEntry]:
     return neighbors
 
 
-def _match_router_id(m: re.Match[str], fields: dict[str, object]) -> None:
+def _match_router_id(m: re.Match[str], fields: dict[str, Any]) -> None:
     """Store router identifier and local AS from a match."""
     fields["router_id"] = m.group(1)
     fields["local_as"] = m.group(2)
 
 
-def _match_table_id(m: re.Match[str], fields: dict[str, object]) -> None:
+def _match_table_id(m: re.Match[str], fields: dict[str, Any]) -> None:
     """Store table ID and optional RD version from a match."""
     fields["table_id"] = m.group(1)
     if m.group(2) is not None:
         fields["rd_version"] = int(m.group(2))
 
 
-def _match_nsr(m: re.Match[str], fields: dict[str, object]) -> None:
+def _match_nsr(m: re.Match[str], fields: dict[str, Any]) -> None:
     """Store NSR enabled/disabled flag from a match."""
     fields["nsr_enabled"] = m.group(1).lower() == "enabled"
 
@@ -299,14 +300,16 @@ _SIMPLE_MATCHERS: list[tuple[re.Pattern[str], str, int, type]] = [
     (_OPERATION_MODE_RE, "operation_mode", 1, str),
 ]
 
-_CUSTOM_MATCHERS: list[tuple[re.Pattern[str], object]] = [
+_CustomHandler = Callable[[re.Match[str], dict[str, Any]], None]
+
+_CUSTOM_MATCHERS: list[tuple[re.Pattern[str], _CustomHandler]] = [
     (_ROUTER_ID_RE, _match_router_id),
     (_TABLE_ID_RE, _match_table_id),
     (_NSR_RE, _match_nsr),
 ]
 
 
-def _match_header_line(stripped: str, fields: dict[str, object]) -> bool:
+def _match_header_line(stripped: str, fields: dict[str, Any]) -> bool:
     """Try to match a single header/metadata line and store results in *fields*.
 
     Returns True if the line was consumed by a pattern.
@@ -328,9 +331,9 @@ def _match_header_line(stripped: str, fields: dict[str, object]) -> bool:
     return False
 
 
-def _extract_header_fields(lines: list[str]) -> dict[str, object]:
+def _extract_header_fields(lines: list[str]) -> dict[str, Any]:
     """Extract all header/metadata fields from a block of lines."""
-    fields: dict[str, object] = {}
+    fields: dict[str, Any] = {}
     for line_raw in lines:
         stripped = line_raw.strip()
         if not stripped or _is_noise_line(stripped) or _is_warning_line(stripped):
@@ -382,7 +385,7 @@ def _parse_af_block(lines: list[str]) -> AddressFamilyEntry:
     )
     for key in optional_keys:
         if key in fields:
-            result[key] = fields[key]  # type — handled by TypedDict NotRequired
+            result[key] = fields[key]
 
     return result
 
