@@ -1,24 +1,19 @@
 """Parser for 'show chassis firmware' command on Juniper Junos."""
 
 import re
-from typing import ClassVar, TypedDict
+from typing import ClassVar
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
 
-
-class FirmwareVersions(TypedDict, total=False):
-    """Firmware versions for a chassis component.
-
-    Keys are firmware type names (e.g., ROM, O/S, U-Boot, loader, uboot)
-    and values are the corresponding version strings. Only types present
-    in the device output are included.
-    """
-
-    member: str
-
+# Firmware versions for a chassis component.
+# Keys are firmware type names (e.g., ROM, O/S, U-Boot, loader, uboot)
+# and values are the corresponding version strings. An optional "member"
+# key is present for multi-chassis output. Dynamic keys make TypedDict
+# unsuitable here.
+FirmwareVersions = dict[str, str]
 
 # The actual return type is a dict mapping part names to their firmware versions.
 # Each part maps firmware_type -> version, with an optional "member" key.
@@ -140,8 +135,8 @@ class ShowChassisFirmwareParser(BaseParser[ShowChassisFirmwareResult]):
     ) -> None:
         """Add a firmware entry to the result dict, merging by part name."""
         if part not in result:
-            entry = FirmwareVersions()
+            entry: FirmwareVersions = {}
             if member is not None:
                 entry["member"] = member
             result[part] = entry
-        result[part][fw_type] = version  # type: ignore[literal-required]
+        result[part][fw_type] = version
