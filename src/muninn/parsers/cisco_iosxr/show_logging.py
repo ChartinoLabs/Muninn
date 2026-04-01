@@ -1,7 +1,7 @@
 """Parser for 'show logging' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -198,4 +198,4 @@ class ShowLoggingParser(BaseParser[ShowLoggingResult]):
 
         result["log_entries"] = log_entries
 
-        return result  # type: ignore[return-value]
+        return cast(ShowLoggingResult, result)
