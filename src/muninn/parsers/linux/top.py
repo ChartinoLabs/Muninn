@@ -1,7 +1,8 @@
 """Parser for 'top' command on Linux."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from dataclasses import dataclass, field
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -64,7 +65,6 @@ class ProcessEntry(TypedDict):
     mem_percent: float
     time: str
     command: str
-    nice_raw: NotRequired[str]
 
 
 class TopResult(TypedDict):
@@ -82,6 +82,20 @@ class TopResult(TypedDict):
     swap: SwapSummary
     processes: dict[str, ProcessEntry]
 
+
+# -- Header TypedDict for intermediate parsing --
+
+
+class _HeaderInfo(TypedDict):
+    current_time: str
+    uptime: str
+    users: int
+    load_avg_1: float
+    load_avg_5: float
+    load_avg_15: float
+
+
+# -- Regex patterns --
 
 # top - 12:33:53 up  2:11,  5 users,  load average: 0.12, 0.40, 0.66
 _HEADER_RE = re.compile(
@@ -145,19 +159,22 @@ _PROCESS_RE = re.compile(
 )
 
 
-def _parse_header(line: str) -> dict[str, object] | None:
+# -- Line-level parsers --
+
+
+def _parse_header(line: str) -> _HeaderInfo | None:
     """Parse the top header line with uptime and load averages."""
     match = _HEADER_RE.search(line)
     if not match:
         return None
-    return {
-        "current_time": match.group("time"),
-        "uptime": match.group("uptime").strip(),
-        "users": int(match.group("users")),
-        "load_avg_1": float(match.group("la1")),
-        "load_avg_5": float(match.group("la5")),
-        "load_avg_15": float(match.group("la15")),
-    }
+    return _HeaderInfo(
+        current_time=match.group("time"),
+        uptime=match.group("uptime").strip(),
+        users=int(match.group("users")),
+        load_avg_1=float(match.group("la1")),
+        load_avg_5=float(match.group("la5")),
+        load_avg_15=float(match.group("la15")),
+    )
 
 
 def _parse_tasks(line: str) -> TasksSummary | None:
@@ -238,76 +255,88 @@ def _parse_process(line: str) -> tuple[str, ProcessEntry] | None:
     )
 
 
-# Summary section parsers in the order they appear in top output.
-# Each entry is (section_name, parser_function).
-_SUMMARY_PARSERS: list[tuple[str, object]] = [
-    ("header", _parse_header),
-    ("tasks", _parse_tasks),
-    ("cpu", _parse_cpu),
-    ("memory", _parse_memory),
-    ("swap", _parse_swap),
-]
+# -- Stateful parser --
 
 
-def _parse_summary_sections(
-    lines: list[str],
-) -> tuple[dict[str, object], dict[str, ProcessEntry]]:
-    """Parse summary header sections and process list from top output lines.
+@dataclass
+class _ParseState:
+    """Mutable accumulator for the line-by-line parsing loop."""
 
-    Returns:
-        Tuple of (summary_dict, processes_dict).
+    header: _HeaderInfo | None = None
+    tasks: TasksSummary | None = None
+    cpu: CpuSummary | None = None
+    memory: MemorySummary | None = None
+    swap: SwapSummary | None = None
+    processes: dict[str, ProcessEntry] = field(default_factory=dict)
 
-    Raises:
-        ValueError: If any required summary section is missing.
-    """
-    summary: dict[str, object] = {}
-    processes: dict[str, ProcessEntry] = {}
-    parser_idx = 0
+    def _try_summary(self, line: str) -> bool:
+        """Attempt to parse the next missing summary section. Returns True on match."""
+        if self.header is None:
+            self.header = _parse_header(line)
+            return self.header is not None
+        if self.tasks is None:
+            self.tasks = _parse_tasks(line)
+            return self.tasks is not None
+        if self.cpu is None:
+            self.cpu = _parse_cpu(line)
+            return self.cpu is not None
+        if self.memory is None:
+            self.memory = _parse_memory(line)
+            return self.memory is not None
+        if self.swap is None:
+            self.swap = _parse_swap(line)
+            return self.swap is not None
+        return False
 
-    for line in lines:
-        # Try the next expected summary parser
-        if parser_idx < len(_SUMMARY_PARSERS):
-            name, parser_fn = _SUMMARY_PARSERS[parser_idx]
-            result = parser_fn(line)  # type: ignore[operator]
-            if result is not None:
-                summary[name] = result
-                parser_idx += 1
-                continue
-
+    def handle_line(self, line: str) -> None:
+        """Dispatch a single line to the appropriate sub-parser."""
+        if self._try_summary(line):
+            return
         proc = _parse_process(line)
         if proc is not None:
             pid, entry = proc
-            processes[pid] = entry
+            self.processes[pid] = entry
 
-    # Validate all summary sections were found
-    for name, _ in _SUMMARY_PARSERS:
-        if name not in summary:
-            msg = f"No {name} section found in output"
+    def validate(self) -> None:
+        """Raise ValueError if any required summary section is missing."""
+        if self.header is None:
+            msg = "No top header line found in output"
+            raise ValueError(msg)
+        if self.tasks is None:
+            msg = "No tasks summary found in output"
+            raise ValueError(msg)
+        if self.cpu is None:
+            msg = "No CPU summary found in output"
+            raise ValueError(msg)
+        if self.memory is None:
+            msg = "No memory summary found in output"
+            raise ValueError(msg)
+        if self.swap is None:
+            msg = "No swap summary found in output"
             raise ValueError(msg)
 
-    return summary, processes
-
-
-def _build_result(
-    summary: dict[str, object], processes: dict[str, ProcessEntry]
-) -> TopResult:
-    """Assemble the final TopResult from parsed summary and processes."""
-    header = summary["header"]
-    # header is a plain dict from _parse_header
-    h = header  # type: ignore[assignment]
-    return TopResult(
-        current_time=str(h["current_time"]),  # type: ignore[index]
-        uptime=str(h["uptime"]),  # type: ignore[index]
-        users=int(str(h["users"])),  # type: ignore[index]
-        load_avg_1=float(str(h["load_avg_1"])),  # type: ignore[index]
-        load_avg_5=float(str(h["load_avg_5"])),  # type: ignore[index]
-        load_avg_15=float(str(h["load_avg_15"])),  # type: ignore[index]
-        tasks=summary["tasks"],  # type: ignore[arg-type]
-        cpu=summary["cpu"],  # type: ignore[arg-type]
-        memory=summary["memory"],  # type: ignore[arg-type]
-        swap=summary["swap"],  # type: ignore[arg-type]
-        processes=processes,
-    )
+    def to_result(self) -> TopResult:
+        """Build the final TopResult after validation."""
+        self.validate()
+        # After validate(), all fields are guaranteed non-None
+        assert self.header is not None  # noqa: S101
+        assert self.tasks is not None  # noqa: S101
+        assert self.cpu is not None  # noqa: S101
+        assert self.memory is not None  # noqa: S101
+        assert self.swap is not None  # noqa: S101
+        return TopResult(
+            current_time=self.header["current_time"],
+            uptime=self.header["uptime"],
+            users=self.header["users"],
+            load_avg_1=self.header["load_avg_1"],
+            load_avg_5=self.header["load_avg_5"],
+            load_avg_15=self.header["load_avg_15"],
+            tasks=self.tasks,
+            cpu=self.cpu,
+            memory=self.memory,
+            swap=self.swap,
+            processes=self.processes,
+        )
 
 
 @register(OS.LINUX, "top")
@@ -333,5 +362,7 @@ class TopParser(BaseParser[TopResult]):
         Raises:
             ValueError: If required sections cannot be parsed.
         """
-        summary, processes = _parse_summary_sections(output.splitlines())
-        return _build_result(summary, processes)
+        state = _ParseState()
+        for line in output.splitlines():
+            state.handle_line(line)
+        return state.to_result()
