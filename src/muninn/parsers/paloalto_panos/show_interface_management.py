@@ -1,7 +1,7 @@
 """Parser for 'show interface management' command on Palo Alto PAN-OS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -114,7 +114,7 @@ class ShowInterfaceManagementParser(BaseParser[ShowInterfaceManagementResult]):
         cls._parse_addressing(output, result)
         cls._parse_counters(output, result)
 
-        return result  # type: ignore[return-value]
+        return cast(ShowInterfaceManagementResult, result)
 
     @classmethod
     def _parse_link_status(cls, output: str, result: dict[str, object]) -> None:
