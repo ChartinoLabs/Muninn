@@ -116,20 +116,18 @@ _AS_PATH_RE = re.compile(
 )
 
 
-def _parse_route_attributes(text: str) -> dict[str, object]:
-    """Extract optional route attributes (metric, tag, MED, etc.) from text."""
-    attrs: dict[str, object] = {}
+def _apply_route_attributes(entry: RouteEntry, text: str) -> None:
+    """Extract and apply optional route attributes to a RouteEntry."""
     if m := _METRIC_RE.search(text):
-        attrs["metric"] = int(m.group("metric"))
+        entry["metric"] = int(m.group("metric"))
     if m := _TAG_RE.search(text):
-        attrs["tag"] = int(m.group("tag"))
+        entry["tag"] = int(m.group("tag"))
     if m := _MED_RE.search(text):
-        attrs["med"] = int(m.group("med"))
+        entry["med"] = int(m.group("med"))
     if m := _LOCALPREF_RE.search(text):
-        attrs["local_preference"] = int(m.group("localpref"))
+        entry["local_preference"] = int(m.group("localpref"))
     if m := _FROM_RE.search(text):
-        attrs["from_peer"] = m.group("from")
-    return attrs
+        entry["from_peer"] = m.group("from")
 
 
 def _build_route_entry(
@@ -150,9 +148,7 @@ def _build_route_entry(
     if pref2 is not None:
         entry["preference2"] = int(pref2)
 
-    attrs = _parse_route_attributes(attr_text)
-    for key, value in attrs.items():
-        entry[key] = value  # type: ignore[literal-required]
+    _apply_route_attributes(entry, attr_text)
 
     return entry
 
@@ -160,23 +156,20 @@ def _build_route_entry(
 def _parse_nexthop(line: str) -> NextHopEntry | None:
     """Try to parse a next-hop line, returning None if not a next-hop."""
     if m := _NEXTHOP_LOCAL_RE.match(line):
-        nh: NextHopEntry = {"selected": False, "local": True, "via": m.group("via")}
-        return nh
+        return NextHopEntry(selected=False, local=True, via=m.group("via"))
 
     if m := _NEXTHOP_TO_VIA_RE.match(line):
-        nh = {
-            "selected": m.group("selected") == ">",
-            "to": m.group("to"),
-            "via": m.group("via"),
-        }
-        return nh
+        return NextHopEntry(
+            selected=m.group("selected") == ">",
+            to=m.group("to"),
+            via=m.group("via"),
+        )
 
     if m := _NEXTHOP_VIA_RE.match(line):
-        nh = {
-            "selected": m.group("selected") == ">",
-            "via": m.group("via"),
-        }
-        return nh
+        return NextHopEntry(
+            selected=m.group("selected") == ">",
+            via=m.group("via"),
+        )
 
     return None
 
