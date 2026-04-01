@@ -1,7 +1,7 @@
 """Parser for 'show interface logical' command on Palo Alto PAN-OS."""
 
 import re
-from typing import ClassVar, NotRequired, TypeAlias, TypedDict, cast
+from typing import ClassVar, Literal, NotRequired, TypeAlias, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -54,10 +54,14 @@ def _should_skip(line: str) -> bool:
     return any(p.match(line) for p in _SKIP_PATTERNS)
 
 
-def _set_optional(entry: InterfaceLogicalEntry, key: str, value: str) -> None:
+def _set_optional(
+    entry: InterfaceLogicalEntry,
+    key: Literal["zone", "forwarding", "address"],
+    value: str,
+) -> None:
     """Set *key* on *entry* unless *value* is the N/A sentinel."""
     if value != _NA_SENTINEL:
-        entry[key] = value  # type: ignore[literal-required]
+        entry[key] = value
 
 
 def _extract_zone_and_forwarding(
