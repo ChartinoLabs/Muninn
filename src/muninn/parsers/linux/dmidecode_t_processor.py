@@ -1,7 +1,7 @@
 """Parser for 'dmidecode -t processor' command on Linux."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -109,9 +109,9 @@ def _try_collect_list_item(
         return False
     item = list_match.group("item").strip()
     if item:
-        field_list = entry.setdefault(current_list_field, [])
-        if isinstance(field_list, list):
-            field_list.append(item)
+        if current_list_field not in entry:
+            entry[current_list_field] = []
+        cast(list[str], entry[current_list_field]).append(item)
     return True
 
 
