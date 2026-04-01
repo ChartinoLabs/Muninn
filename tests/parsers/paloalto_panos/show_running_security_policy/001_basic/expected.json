@@ -1,0 +1,186 @@
+{
+    "Outside Web Server": {
+        "from_zone": [
+            "Trust"
+        ],
+        "source": [
+            "10.1.1.0/24"
+        ],
+        "to_zone": [
+            "Untrust"
+        ],
+        "destination": [
+            "200.10.10.10"
+        ],
+        "user": [
+            "any"
+        ],
+        "category": [
+            "any"
+        ],
+        "application_service": [
+            "any/tcp/any/8000",
+            "any/tcp/any/80",
+            "any/tcp/any/8080"
+        ],
+        "action": "allow",
+        "icmp_unreachable": false,
+        "terminal": true
+    },
+    "ICMP Any": {
+        "from_zone": [
+            "Trust"
+        ],
+        "source": [
+            "any"
+        ],
+        "to_zone": [
+            "Untrust"
+        ],
+        "destination": [
+            "any"
+        ],
+        "user": [
+            "any"
+        ],
+        "category": [
+            "any"
+        ],
+        "application_service": [
+            "icmp/icmp/any/any",
+            "ping/icmp/any/any"
+        ],
+        "action": "allow",
+        "icmp_unreachable": false,
+        "terminal": true
+    },
+    "DNS Outbound": {
+        "from_zone": [
+            "Trust"
+        ],
+        "source": [
+            "10.1.1.0/24"
+        ],
+        "to_zone": [
+            "Untrust"
+        ],
+        "destination": [
+            "8.8.8.8",
+            "8.8.4.4"
+        ],
+        "user": [
+            "any"
+        ],
+        "category": [
+            "any"
+        ],
+        "application_service": [
+            "dns/udp/any/53"
+        ],
+        "action": "allow",
+        "icmp_unreachable": false,
+        "terminal": true
+    },
+    "Inbound to DMZ Web": {
+        "from_zone": [
+            "Untrust"
+        ],
+        "source": [
+            "any"
+        ],
+        "to_zone": [
+            "DMZ"
+        ],
+        "destination": [
+            "200.10.10.100"
+        ],
+        "user": [
+            "any"
+        ],
+        "category": [
+            "any"
+        ],
+        "application_service": [
+            "any/tcp/any/8000",
+            "any/tcp/any/80",
+            "any/tcp/any/8080"
+        ],
+        "action": "allow",
+        "icmp_unreachable": false,
+        "terminal": true
+    },
+    "Inbound to DMZ Deny": {
+        "from_zone": [
+            "Untrust"
+        ],
+        "source": [
+            "any"
+        ],
+        "to_zone": [
+            "DMZ"
+        ],
+        "destination": [
+            "any"
+        ],
+        "user": [
+            "any"
+        ],
+        "category": [
+            "any"
+        ],
+        "application_service": [
+            "any/any/any/any"
+        ],
+        "action": "deny",
+        "icmp_unreachable": false,
+        "terminal": false
+    },
+    "intrazone-default": {
+        "from_zone": [
+            "any"
+        ],
+        "source": [
+            "any"
+        ],
+        "to_zone": [
+            "any"
+        ],
+        "destination": [
+            "any"
+        ],
+        "category": [
+            "any"
+        ],
+        "application_service": [
+            "any/any/any/any"
+        ],
+        "action": "allow",
+        "icmp_unreachable": false,
+        "terminal": true,
+        "rule_type": "intrazone"
+    },
+    "interzone-default": {
+        "from_zone": [
+            "any"
+        ],
+        "source": [
+            "any"
+        ],
+        "to_zone": [
+            "any"
+        ],
+        "destination": [
+            "any"
+        ],
+        "category": [
+            "any"
+        ],
+        "application_service": [
+            "any/any/any/any"
+        ],
+        "action": "deny",
+        "icmp_unreachable": false,
+        "terminal": true,
+        "rule_type": "interzone"
+    }
+}
