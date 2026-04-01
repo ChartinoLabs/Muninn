@@ -81,6 +81,8 @@ PARSERS_TEST_DIR = Path(__file__).parent
 _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
     {
         # --- Arista EOS ---
+        # paths is a list-of-dicts; no natural unique key for multiple BGP paths.
+        "arista_eos/show_ip_bgp/001_basic/expected.json",
         # next_hops is a list-of-dicts; no natural unique key for ECMP entries.
         "arista_eos/show_ip_route/001_bgp_connected_mixed/expected.json",
         "arista_eos/show_ip_route/002_ecmp_ospf_gateway/expected.json",
