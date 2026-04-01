@@ -316,25 +316,38 @@ class _ParseState:
             raise ValueError(msg)
 
     def to_result(self) -> TopResult:
-        """Build the final TopResult after validation."""
+        """Build the final TopResult after validation.
+
+        Raises:
+            ValueError: If any required summary section is missing.
+        """
         self.validate()
-        # After validate(), all fields are guaranteed non-None
-        assert self.header is not None  # noqa: S101
-        assert self.tasks is not None  # noqa: S101
-        assert self.cpu is not None  # noqa: S101
-        assert self.memory is not None  # noqa: S101
-        assert self.swap is not None  # noqa: S101
+        # validate() guarantees these are non-None; re-check for the type checker
+        header = self.header
+        tasks = self.tasks
+        cpu = self.cpu
+        memory = self.memory
+        swap = self.swap
+        if (
+            header is None
+            or tasks is None
+            or cpu is None
+            or memory is None
+            or swap is None
+        ):
+            msg = "Required section missing after validation"
+            raise ValueError(msg)
         return TopResult(
-            current_time=self.header["current_time"],
-            uptime=self.header["uptime"],
-            users=self.header["users"],
-            load_avg_1=self.header["load_avg_1"],
-            load_avg_5=self.header["load_avg_5"],
-            load_avg_15=self.header["load_avg_15"],
-            tasks=self.tasks,
-            cpu=self.cpu,
-            memory=self.memory,
-            swap=self.swap,
+            current_time=header["current_time"],
+            uptime=header["uptime"],
+            users=header["users"],
+            load_avg_1=header["load_avg_1"],
+            load_avg_5=header["load_avg_5"],
+            load_avg_15=header["load_avg_15"],
+            tasks=tasks,
+            cpu=cpu,
+            memory=memory,
+            swap=swap,
             processes=self.processes,
         )
 
