@@ -41,34 +41,142 @@ class WirelessInterfaceEntry(TypedDict):
 
 IwconfigResult = dict[str, WirelessInterfaceEntry]
 
-# Interface header: "wlan0     IEEE 802.11  ESSID:"My_home""
-# Also matches "wlan3     unassociated  Nickname:..."
-_IFACE_RE = re.compile(r"^(?P<name>\S+)\s+(?:IEEE\s+(?P<ieee>\S+)\s+|)")
-
-_ESSID_RE = re.compile(r'ESSID:"(?P<essid>[^"]+)"')
-_ESSID_OFF_RE = re.compile(r"ESSID:off/any")
-_NICKNAME_RE = re.compile(r'Nickname:"(?P<nickname>[^"]+)"')
-_MODE_RE = re.compile(r"Mode:(?P<mode>\S+)")
-_FREQ_RE = re.compile(r"Frequency[=:](?P<freq>[\d.]+)\s*GHz")
-_AP_RE = re.compile(r"Access Point:\s*(?P<ap>[0-9A-Fa-f:]{17}|Not-Associated)")
-_BITRATE_RE = re.compile(r"Bit Rate[=:](?P<rate>[\d.]+)\s*Mb/s")
-_TXPOWER_RE = re.compile(r"Tx-Power[=:](?P<power>\d+)\s*dBm")
-_RETRY_SHORT_RE = re.compile(r"Retry short limit:(?P<limit>\d+)")
-_RETRY_RE = re.compile(r"Retry:(?P<retry>\S+)")
-_RTS_RE = re.compile(r"RTS thr:(?P<rts>\S+)")
-_FRAG_RE = re.compile(r"Fragment thr:(?P<frag>\S+)")
-_ENCKEY_RE = re.compile(r"Encryption key:(?P<key>\S+)")
-_POWERMGMT_RE = re.compile(r"Power Management:(?P<pm>\S+)")
-_SENSITIVITY_RE = re.compile(r"Sensitivity:(?P<sens>\S+)")
-_LINK_QUALITY_RE = re.compile(r"Link Quality[=:](?P<lq>\S+)")
-_SIGNAL_LEVEL_RE = re.compile(r"Signal level[=:](?P<sl>\S+(?:\s+dBm)?)")
-_NOISE_LEVEL_RE = re.compile(r"Noise level[=:](?P<nl>\S+(?:\s+dBm)?)")
+_ESSID_RE = re.compile(r'ESSID:"(?P<val>[^"]+)"')
+_NICKNAME_RE = re.compile(r'Nickname:"(?P<val>[^"]+)"')
+_MODE_RE = re.compile(r"Mode:(?P<val>\S+)")
+_FREQ_RE = re.compile(r"Frequency[=:](?P<val>[\d.]+)\s*GHz")
+_AP_RE = re.compile(r"Access Point:\s*(?P<val>[0-9A-Fa-f:]{17}|Not-Associated)")
+_BITRATE_RE = re.compile(r"Bit Rate[=:](?P<val>[\d.]+)\s*Mb/s")
+_TXPOWER_RE = re.compile(r"Tx-Power[=:](?P<val>\d+)\s*dBm")
+_RETRY_SHORT_RE = re.compile(r"Retry short limit:(?P<val>\d+)")
+_RETRY_RE = re.compile(r"Retry:(?P<val>\S+)")
+_RTS_RE = re.compile(r"RTS thr:(?P<val>\S+)")
+_FRAG_RE = re.compile(r"Fragment thr:(?P<val>\S+)")
+_ENCKEY_RE = re.compile(r"Encryption key:(?P<val>\S+)")
+_POWERMGMT_RE = re.compile(r"Power Management:(?P<val>\S+)")
+_SENSITIVITY_RE = re.compile(r"Sensitivity:(?P<val>\S+)")
+_LINK_QUALITY_RE = re.compile(r"Link Quality[=:](?P<val>\S+)")
+_SIGNAL_LEVEL_RE = re.compile(r"Signal level[=:](?P<val>\S+(?:\s+dBm)?)")
+_NOISE_LEVEL_RE = re.compile(r"Noise level[=:](?P<val>\S+(?:\s+dBm)?)")
 _RX_NWID_RE = re.compile(r"Rx invalid nwid:(?P<val>\d+)")
 _RX_CRYPT_RE = re.compile(r"Rx invalid crypt:(?P<val>\d+)")
 _RX_FRAG_RE = re.compile(r"Rx invalid frag:(?P<val>\d+)")
 _TX_RETRIES_RE = re.compile(r"Tx excessive retries:(?P<val>\d+)")
 _INVALID_MISC_RE = re.compile(r"Invalid misc:(?P<val>\d+)")
 _MISSED_BEACON_RE = re.compile(r"Missed beacon:(?P<val>\d+)")
+_IEEE_RE = re.compile(r"IEEE\s+(?P<val>\S+)")
+
+
+def _parse_identity_fields(block: str, entry: WirelessInterfaceEntry) -> None:
+    """Extract IEEE standard, ESSID, nickname, and mode."""
+    m = _IEEE_RE.search(block)
+    if m:
+        entry["ieee_standard"] = m.group("val")
+
+    m = _ESSID_RE.search(block)
+    if m:
+        entry["essid"] = m.group("val")
+
+    m = _NICKNAME_RE.search(block)
+    if m:
+        entry["nickname"] = m.group("val")
+
+    m = _MODE_RE.search(block)
+    if m:
+        entry["mode"] = m.group("val")
+
+    m = _AP_RE.search(block)
+    if m:
+        entry["access_point"] = m.group("val")
+
+
+def _parse_config_fields(block: str, entry: WirelessInterfaceEntry) -> None:
+    """Extract encryption, power management, sensitivity, RTS/frag thresholds."""
+    m = _ENCKEY_RE.search(block)
+    if m:
+        entry["encryption_key"] = m.group("val")
+
+    m = _POWERMGMT_RE.search(block)
+    if m:
+        entry["power_management"] = m.group("val")
+
+    m = _SENSITIVITY_RE.search(block)
+    if m:
+        entry["sensitivity"] = m.group("val")
+
+    m = _RTS_RE.search(block)
+    if m:
+        entry["rts_thr"] = m.group("val")
+
+    m = _FRAG_RE.search(block)
+    if m:
+        entry["fragment_thr"] = m.group("val")
+
+
+def _parse_quality_fields(block: str, entry: WirelessInterfaceEntry) -> None:
+    """Extract link quality, signal level, and noise level."""
+    m = _LINK_QUALITY_RE.search(block)
+    if m:
+        entry["link_quality"] = m.group("val")
+
+    m = _SIGNAL_LEVEL_RE.search(block)
+    if m:
+        entry["signal_level"] = m.group("val")
+
+    m = _NOISE_LEVEL_RE.search(block)
+    if m:
+        entry["noise_level"] = m.group("val")
+
+
+def _parse_radio_fields(block: str, entry: WirelessInterfaceEntry) -> None:
+    """Extract frequency, bit rate, TX power, and retry settings."""
+    m = _FREQ_RE.search(block)
+    if m:
+        entry["frequency_ghz"] = float(m.group("val"))
+
+    m = _BITRATE_RE.search(block)
+    if m:
+        entry["bit_rate_mbps"] = float(m.group("val"))
+
+    m = _TXPOWER_RE.search(block)
+    if m:
+        entry["tx_power_dbm"] = int(m.group("val"))
+
+    # Retry: either "Retry short limit:N" or "Retry:off"
+    m = _RETRY_SHORT_RE.search(block)
+    if m:
+        entry["retry_short_limit"] = int(m.group("val"))
+    else:
+        m = _RETRY_RE.search(block)
+        if m:
+            entry["retry"] = m.group("val")
+
+
+def _parse_counters(block: str, entry: WirelessInterfaceEntry) -> None:
+    """Extract RX/TX error counters."""
+    m = _RX_NWID_RE.search(block)
+    if m:
+        entry["rx_invalid_nwid"] = int(m.group("val"))
+
+    m = _RX_CRYPT_RE.search(block)
+    if m:
+        entry["rx_invalid_crypt"] = int(m.group("val"))
+
+    m = _RX_FRAG_RE.search(block)
+    if m:
+        entry["rx_invalid_frag"] = int(m.group("val"))
+
+    m = _TX_RETRIES_RE.search(block)
+    if m:
+        entry["tx_excessive_retries"] = int(m.group("val"))
+
+    m = _INVALID_MISC_RE.search(block)
+    if m:
+        entry["invalid_misc"] = int(m.group("val"))
+
+    m = _MISSED_BEACON_RE.search(block)
+    if m:
+        entry["missed_beacon"] = int(m.group("val"))
 
 
 def _parse_interface_block(name: str, block: str) -> WirelessInterfaceEntry | None:
@@ -80,83 +188,12 @@ def _parse_interface_block(name: str, block: str) -> WirelessInterfaceEntry | No
         return None
 
     entry: WirelessInterfaceEntry = {"name": name}
-
-    # IEEE standard is on the header line
-    ieee_match = re.search(r"IEEE\s+(?P<ieee>\S+)", block)
-    if ieee_match:
-        entry["ieee_standard"] = ieee_match.group("ieee")
-
-    # Simple regex extractions
-    _extract_str(block, _ESSID_RE, "essid", entry)
-    _extract_str(block, _NICKNAME_RE, "nickname", entry)
-    _extract_str(block, _MODE_RE, "mode", entry)
-    _extract_str(block, _AP_RE, "access_point", entry)
-    _extract_str(block, _ENCKEY_RE, "encryption_key", entry)
-    _extract_str(block, _POWERMGMT_RE, "power_management", entry)
-    _extract_str(block, _SENSITIVITY_RE, "sensitivity", entry)
-    _extract_str(block, _RTS_RE, "rts_thr", entry)
-    _extract_str(block, _FRAG_RE, "fragment_thr", entry)
-    _extract_str(block, _LINK_QUALITY_RE, "link_quality", entry)
-    _extract_str(block, _SIGNAL_LEVEL_RE, "signal_level", entry)
-    _extract_str(block, _NOISE_LEVEL_RE, "noise_level", entry)
-
-    # Retry can be either "Retry short limit:N" or "Retry:off"
-    retry_short = _RETRY_SHORT_RE.search(block)
-    if retry_short:
-        entry["retry_short_limit"] = int(retry_short.group("limit"))
-    else:
-        retry = _RETRY_RE.search(block)
-        if retry:
-            entry["retry"] = retry.group("retry")
-
-    # Numeric fields
-    _extract_float(block, _FREQ_RE, "frequency_ghz", entry)
-    _extract_float(block, _BITRATE_RE, "bit_rate_mbps", entry)
-    _extract_int(block, _TXPOWER_RE, "tx_power_dbm", entry)
-    _extract_int(block, _RX_NWID_RE, "rx_invalid_nwid", entry)
-    _extract_int(block, _RX_CRYPT_RE, "rx_invalid_crypt", entry)
-    _extract_int(block, _RX_FRAG_RE, "rx_invalid_frag", entry)
-    _extract_int(block, _TX_RETRIES_RE, "tx_excessive_retries", entry)
-    _extract_int(block, _INVALID_MISC_RE, "invalid_misc", entry)
-    _extract_int(block, _MISSED_BEACON_RE, "missed_beacon", entry)
-
+    _parse_identity_fields(block, entry)
+    _parse_config_fields(block, entry)
+    _parse_quality_fields(block, entry)
+    _parse_radio_fields(block, entry)
+    _parse_counters(block, entry)
     return entry
-
-
-def _extract_str(
-    text: str,
-    pattern: re.Pattern[str],
-    key: str,
-    entry: WirelessInterfaceEntry,
-) -> None:
-    """Extract a string field from text using a regex pattern."""
-    match = pattern.search(text)
-    if match:
-        entry[key] = match.group(1)  # type: ignore[literal-required]
-
-
-def _extract_int(
-    text: str,
-    pattern: re.Pattern[str],
-    key: str,
-    entry: WirelessInterfaceEntry,
-) -> None:
-    """Extract an integer field from text using a regex pattern."""
-    match = pattern.search(text)
-    if match:
-        entry[key] = int(match.group(1))  # type: ignore[literal-required]
-
-
-def _extract_float(
-    text: str,
-    pattern: re.Pattern[str],
-    key: str,
-    entry: WirelessInterfaceEntry,
-) -> None:
-    """Extract a float field from text using a regex pattern."""
-    match = pattern.search(text)
-    if match:
-        entry[key] = float(match.group(1))  # type: ignore[literal-required]
 
 
 @register(OS.LINUX, "iwconfig")
