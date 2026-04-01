@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
+from muninn.utils import canonical_interface_name
 
 
 class InterfaceCounters(TypedDict):
@@ -424,7 +425,9 @@ class ShowInterfacesParser(BaseParser[ShowInterfacesResult]):
                         current_protocol_status,
                     )
 
-                current_name = match.group("name")
+                current_name = canonical_interface_name(
+                    match.group("name"), os=OS.ARISTA_EOS
+                )
                 current_status = match.group("status")
                 current_line_protocol = match.group("line_protocol")
                 current_protocol_status = match.group("protocol_status") or ""
