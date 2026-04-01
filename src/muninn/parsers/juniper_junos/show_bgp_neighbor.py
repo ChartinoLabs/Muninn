@@ -250,15 +250,6 @@ _MSG_COUNTS_RE = re.compile(
 # Output Queue[0]: 0
 _OUTPUT_QUEUE_RE = re.compile(r"Output Queue\[(?P<idx>\d+)\]:\s+(?P<depth>\d+)")
 
-# Table prefix counter field name mapping
-_TABLE_COUNTER_KEYS: dict[str, str] = {
-    "Active prefixes": "active_prefixes",
-    "Received prefixes": "received_prefixes",
-    "Accepted prefixes": "accepted_prefixes",
-    "Suppressed due to damping": "suppressed_due_to_damping",
-    "Advertised prefixes": "advertised_prefixes",
-}
-
 
 def _split_into_peer_blocks(output: str) -> list[list[str]]:
     """Split output into per-peer line blocks."""
@@ -332,48 +323,48 @@ def _parse_session_info(entry: BgpNeighborEntry, stripped: str) -> bool:
     return False
 
 
-def _parse_config_fields(entry: BgpNeighborEntry, stripped: str) -> bool:
-    """Parse export, options, holdtime, flaps, IDs, keepalive, BFD, interface.
+def _parse_policy_and_timers(entry: BgpNeighborEntry, stripped: str) -> bool:
+    """Parse export policies, options, holdtime, preference, and flaps.
 
     Returns True if the line was consumed.
     """
     if m := _EXPORT_RE.search(stripped):
         entry["export_policies"] = m.group(1).split()
         return True
-
     if m := _OPTIONS_RE.search(stripped):
         opts = m.group(1).strip()
         entry["options"] = opts.split() if opts else []
         return True
-
     if m := _HOLDTIME_PREF_RE.search(stripped):
         entry["holdtime"] = int(m.group("holdtime"))
         entry["preference"] = int(m.group("preference"))
         return True
-
     if m := _FLAPS_RE.search(stripped):
         entry["number_of_flaps"] = int(m.group("flaps"))
         return True
+    return False
 
+
+def _parse_id_and_interface(entry: BgpNeighborEntry, stripped: str) -> bool:
+    """Parse peer/local IDs, keepalive, BFD, and local interface.
+
+    Returns True if the line was consumed.
+    """
     if m := _PEER_LOCAL_ID_RE.search(stripped):
         entry["peer_id"] = m.group("peer_id")
         entry["local_id"] = m.group("local_id")
         entry["active_holdtime"] = int(m.group("active_holdtime"))
         return True
-
     if m := _KEEPALIVE_INDEX_RE.search(stripped):
         entry["keepalive_interval"] = int(m.group("keepalive"))
         entry["peer_index"] = int(m.group("peer_index"))
         return True
-
     if m := _BFD_RE.search(stripped):
         entry["bfd_status"] = m.group(1).strip()
         return True
-
     if m := _LOCAL_INTF_RE.search(stripped):
         entry["local_interface"] = m.group(1)
         return True
-
     return False
 
 
@@ -435,6 +426,26 @@ def _parse_capabilities(entry: BgpNeighborEntry, stripped: str) -> bool:
     return False
 
 
+def _apply_table_counter(table: TablePrefixes, key_raw: str, val: int) -> bool:
+    """Apply a table counter value by raw label name.
+
+    Returns True if the key was recognized.
+    """
+    if key_raw == "Active prefixes":
+        table["active_prefixes"] = val
+    elif key_raw == "Received prefixes":
+        table["received_prefixes"] = val
+    elif key_raw == "Accepted prefixes":
+        table["accepted_prefixes"] = val
+    elif key_raw == "Suppressed due to damping":
+        table["suppressed_due_to_damping"] = val
+    elif key_raw == "Advertised prefixes":
+        table["advertised_prefixes"] = val
+    else:
+        return False
+    return True
+
+
 def _parse_table_block(
     lines: list[str], start_idx: int
 ) -> tuple[str | None, TablePrefixes | None, int]:
@@ -475,10 +486,9 @@ def _parse_table_block(
             continue
 
         if cm := _TABLE_COUNTER_RE.match(line):
-            key_raw = cm.group("key").strip()
-            if key_raw in _TABLE_COUNTER_KEYS:
-                mapped = _TABLE_COUNTER_KEYS[key_raw]
-                table[mapped] = int(cm.group("val"))  # type: ignore[literal-required]
+            key = cm.group("key").strip()
+            val = int(cm.group("val"))
+            if _apply_table_counter(table, key, val):
                 idx += 1
                 continue
 
@@ -544,7 +554,9 @@ def _try_parse_text_line(entry: BgpNeighborEntry, stripped: str) -> bool:
     """
     if _parse_session_info(entry, stripped):
         return True
-    if _parse_config_fields(entry, stripped):
+    if _parse_policy_and_timers(entry, stripped):
+        return True
+    if _parse_id_and_interface(entry, stripped):
         return True
     if _parse_nlri_fields(entry, stripped):
         return True
