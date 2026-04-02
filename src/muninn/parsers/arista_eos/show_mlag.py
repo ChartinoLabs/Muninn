@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
+from muninn.utils import canonical_interface_name
 
 
 class MlagPortsInfo(TypedDict):
@@ -52,13 +53,14 @@ class ShowMlagParser(BaseParser[ShowMlagResult]):
     _KV_PATTERN = re.compile(r"^(?P<key>[\w\s-]+?)\s*:\s*(?P<value>.+)$")
 
     # Combined map from CLI labels to (section, field_name) pairs.
-    # Section is "str" for string fields, "int" for port counter fields.
+    # Section is "str" for string fields, "intf" for interface fields,
+    # "int" for port counter fields.
     _FIELD_MAP: ClassVar[dict[str, tuple[str, str]]] = {
         # Configuration
         "domain-id": ("str", "domain_id"),
-        "local-interface": ("str", "local_interface"),
+        "local-interface": ("intf", "local_interface"),
         "peer-address": ("str", "peer_address"),
-        "peer-link": ("str", "peer_link"),
+        "peer-link": ("intf", "peer_link"),
         # Status
         "state": ("str", "state"),
         "negotiation status": ("str", "negotiation_status"),
@@ -109,6 +111,8 @@ class ShowMlagParser(BaseParser[ShowMlagResult]):
             kind, field_name = entry
             if kind == "int":
                 ports[field_name] = int(value)
+            elif kind == "intf":
+                result[field_name] = canonical_interface_name(value, os=OS.ARISTA_EOS)
             else:
                 result[field_name] = value
 
