@@ -87,13 +87,13 @@ class ShowIpHelperAddressParser(BaseParser[ShowIpHelperAddressResult]):
         line: str,
         stripped: str,
         interfaces: dict[str, HelperAddressEntry],
-        state: dict[str, object],
+        state: dict[str, str | bool | None],
     ) -> None:
         """Parse a single line inside an interface block.
 
         Mutates *interfaces* and *state* (current_intf, in_servers) in place.
         """
-        current_intf: str = state["current_intf"]  # type: ignore[assignment]
+        current_intf = cast(str, state["current_intf"])
 
         # New interface boundary
         match = cls._INTERFACE.match(stripped)
@@ -150,7 +150,10 @@ class ShowIpHelperAddressParser(BaseParser[ShowIpHelperAddressResult]):
             "global_smart_relay": None,
         }
         interfaces: dict[str, HelperAddressEntry] = {}
-        state: dict[str, object] = {"current_intf": None, "in_servers": False}
+        state: dict[str, str | bool | None] = {
+            "current_intf": None,
+            "in_servers": False,
+        }
 
         for line in output.splitlines():
             stripped = line.strip()
