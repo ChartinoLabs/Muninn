@@ -1,7 +1,7 @@
 """Parser for 'show controllers fabric fia errors egress location' on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, TypedDict
+from typing import ClassVar, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -67,7 +67,7 @@ class ShowControllersFabricFiaErrorsEgressLocationParser(
         Raises:
             ValueError: If no FIA blocks are found in the output.
         """
-        result: ShowControllersFabricFiaErrorsEgressLocationResult = {}
+        result: dict[str, dict[str, object]] = {}
         current_fia: str | None = None
         current_entry: dict[str, object] = {}
 
@@ -78,7 +78,7 @@ class ShowControllersFabricFiaErrorsEgressLocationParser(
 
             if match := _FIA_HEADER.search(stripped):
                 if current_fia is not None:
-                    result[current_fia] = FiaErrorCounters(**current_entry)  # type: ignore[arg-type]
+                    result[current_fia] = current_entry
                 current_fia = match.group("fia")
                 current_entry = {}
                 continue
@@ -87,10 +87,10 @@ class ShowControllersFabricFiaErrorsEgressLocationParser(
 
         # Flush last FIA block
         if current_fia is not None:
-            result[current_fia] = FiaErrorCounters(**current_entry)  # type: ignore[arg-type]
+            result[current_fia] = current_entry
 
         if not result:
             msg = "No FIA blocks found in output"
             raise ValueError(msg)
 
-        return result
+        return cast(ShowControllersFabricFiaErrorsEgressLocationResult, result)
