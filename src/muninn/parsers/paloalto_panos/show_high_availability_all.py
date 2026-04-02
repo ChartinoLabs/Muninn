@@ -1,6 +1,7 @@
 """Parser for 'show high-availability all' command on Palo Alto PAN-OS."""
 
 import re
+from collections.abc import Mapping
 from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
@@ -417,7 +418,7 @@ class _ParseState:
 def _attach_if_nonempty(
     parent: dict[str, object],
     key: str,
-    child: dict[str, object],
+    child: Mapping[str, object],
 ) -> None:
     """Attach child dict to parent under key only if child is non-empty."""
     if child:
