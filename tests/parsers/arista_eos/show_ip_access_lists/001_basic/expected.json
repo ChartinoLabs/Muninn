@@ -1,0 +1,111 @@
+{
+    "access_lists": {
+        "TEST_1": {
+            "entries": {
+                "10": {
+                    "action": "permit",
+                    "protocol": "ip",
+                    "source": "host 10.0.0.1",
+                    "destination": "10.0.0.0/24"
+                }
+            }
+        },
+        "default-control-plane-acl": {
+            "entries": {
+                "10": {
+                    "action": "permit",
+                    "protocol": "icmp",
+                    "source": "any",
+                    "destination": "any"
+                },
+                "20": {
+                    "action": "permit",
+                    "protocol": "ip",
+                    "source": "any",
+                    "destination": "any",
+                    "tracked": true
+                },
+                "30": {
+                    "action": "permit",
+                    "protocol": "udp",
+                    "source": "any",
+                    "destination": "any",
+                    "destination_ports": "eq bfd",
+                    "ttl": "eq 255"
+                },
+                "50": {
+                    "action": "permit",
+                    "protocol": "tcp",
+                    "source": "any",
+                    "destination": "any",
+                    "destination_ports": "eq ssh telnet www snmp bgp https msdp"
+                },
+                "60": {
+                    "action": "permit",
+                    "protocol": "udp",
+                    "source": "any",
+                    "destination": "any",
+                    "destination_ports": "eq bootps bootpc snmp rip ntp"
+                },
+                "70": {
+                    "action": "permit",
+                    "protocol": "tcp",
+                    "source": "any",
+                    "destination": "any",
+                    "destination_ports": "range 5900 5910"
+                }
+            },
+            "readonly": true,
+            "statistics_per_entry": true
+        },
+        "test2": {
+            "entries": {
+                "10": {
+                    "action": "permit",
+                    "protocol": "ip",
+                    "source": "1.1.1.0/30",
+                    "destination": "any",
+                    "fragments": true,
+                    "log": true
+                },
+                "20": {
+                    "action": "permit",
+                    "protocol": "tcp",
+                    "source": "111.11.11.0/24",
+                    "destination": "10.0.0.0/24",
+                    "source_ports": "eq www z39-50",
+                    "tcp_flags": "urg",
+                    "ttl": "eq 30"
+                }
+            }
+        },
+        "test3": {
+            "entries": {
+                "10": {
+                    "action": "permit",
+                    "protocol": "tcp",
+                    "source": "any",
+                    "destination": "any",
+                    "source_ports": "range www ups",
+                    "tcp_flags": "ack"
+                },
+                "20": {
+                    "action": "permit",
+                    "protocol": "tcp",
+                    "source": "any",
+                    "destination": "host 10.10.10.10",
+                    "source_ports": "eq www ups telnet time tunnel uucp vmnet",
+                    "tcp_flags": "ack"
+                },
+                "30": {
+                    "action": "permit",
+                    "protocol": "tcp",
+                    "source": "any",
+                    "destination": "any",
+                    "source_ports": "eq www ups telnet vmnet",
+                    "log": true
+                }
+            }
+        }
+    }
+}
