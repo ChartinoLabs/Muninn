@@ -1,0 +1,25 @@
+{
+  "os": "paloalto_panos",
+  "command": "debug swm status",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Basic software manager status with three partitions",
+      "input": "\nPartition         State             Version\n--------------------------------------------------------------------------------\nsysroot0          RUNNING-ACTIVE    9.0.5.xfr\nsysroot1          PENDING-CHANGE    9.1.2\nmaint             READY             9.1.2\n",
+      "expected": {
+        "sysroot0": {
+          "state": "RUNNING-ACTIVE",
+          "version": "9.0.5.xfr"
+        },
+        "sysroot1": {
+          "state": "PENDING-CHANGE",
+          "version": "9.1.2"
+        },
+        "maint": {
+          "state": "READY",
+          "version": "9.1.2"
+        }
+      }
+    }
+  ]
+}
