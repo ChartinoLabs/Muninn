@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
+from muninn.utils import canonical_interface_name
 
 
 class PimNeighborEntry(TypedDict):
@@ -72,7 +73,9 @@ class ShowPimIpv4NeighborParser(BaseParser[ShowPimIpv4NeighborResult]):
                 neighbor_addr = neighbor_match.group("neighbor")
                 result[neighbor_addr] = PimNeighborEntry(
                     vrf=current_vrf,
-                    interface=neighbor_match.group("interface"),
+                    interface=canonical_interface_name(
+                        neighbor_match.group("interface"), os=OS.ARISTA_EOS
+                    ),
                     uptime=neighbor_match.group("uptime"),
                     expires=neighbor_match.group("expires"),
                     mode=neighbor_match.group("mode"),
