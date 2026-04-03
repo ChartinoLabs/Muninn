@@ -1,7 +1,7 @@
 """Parser for 'show snmp community' command on Arista EOS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -78,7 +78,7 @@ class ShowSnmpCommunityParser(BaseParser[dict[str, SnmpCommunityEntry]]):
 
             if match := cls._COMMUNITY_NAME.match(stripped):
                 if current_name is not None:
-                    result[current_name] = SnmpCommunityEntry(**current_entry)  # type: ignore[arg-type]
+                    result[current_name] = cast(SnmpCommunityEntry, current_entry)
                 current_name = match.group("name")
                 current_entry = {}
                 continue
@@ -87,6 +87,6 @@ class ShowSnmpCommunityParser(BaseParser[dict[str, SnmpCommunityEntry]]):
 
         # Save last entry
         if current_name is not None:
-            result[current_name] = SnmpCommunityEntry(**current_entry)  # type: ignore[arg-type]
+            result[current_name] = cast(SnmpCommunityEntry, current_entry)
 
         return result
