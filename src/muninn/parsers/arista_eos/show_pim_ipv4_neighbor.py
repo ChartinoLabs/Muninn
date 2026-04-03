@@ -13,7 +13,6 @@ from muninn.utils import canonical_interface_name
 class PimNeighborEntry(TypedDict):
     """Schema for a single PIM neighbor entry."""
 
-    vrf: str
     interface: str
     uptime: str
     expires: str
@@ -21,14 +20,14 @@ class PimNeighborEntry(TypedDict):
     transport: str
 
 
-ShowPimIpv4NeighborResult = dict[str, PimNeighborEntry]
+ShowPimIpv4NeighborResult = dict[str, dict[str, PimNeighborEntry]]
 
 
 @register(OS.ARISTA_EOS, "show pim ipv4 neighbor")
 class ShowPimIpv4NeighborParser(BaseParser[ShowPimIpv4NeighborResult]):
     """Parser for 'show pim ipv4 neighbor' command on Arista EOS.
 
-    Returns a dict-of-dicts keyed by neighbor IP address.
+    Returns a nested dict keyed by VRF name, then neighbor IP address.
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.MULTICAST})
@@ -53,7 +52,7 @@ class ShowPimIpv4NeighborParser(BaseParser[ShowPimIpv4NeighborResult]):
             output: Raw CLI output from command.
 
         Returns:
-            Dict keyed by neighbor address with PIM neighbor details.
+            Nested dict keyed by VRF name, then neighbor IP address.
         """
         result: ShowPimIpv4NeighborResult = {}
         current_vrf = "default"
@@ -71,8 +70,9 @@ class ShowPimIpv4NeighborParser(BaseParser[ShowPimIpv4NeighborResult]):
             neighbor_match = cls._NEIGHBOR_LINE.match(stripped)
             if neighbor_match:
                 neighbor_addr = neighbor_match.group("neighbor")
-                result[neighbor_addr] = PimNeighborEntry(
-                    vrf=current_vrf,
+                if current_vrf not in result:
+                    result[current_vrf] = {}
+                result[current_vrf][neighbor_addr] = PimNeighborEntry(
                     interface=canonical_interface_name(
                         neighbor_match.group("interface"), os=OS.ARISTA_EOS
                     ),
