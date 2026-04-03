@@ -1,0 +1,57 @@
+{
+  "os": "juniper_junos",
+  "command": "show lldp neighbors",
+  "schema": {
+    "name": "ShowLldpNeighborsResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "LldpNeighborEntry",
+            "fields": {
+              "parent_interface": {
+                "type": "str",
+                "required": false
+              },
+              "chassis_id": {
+                "type": "str",
+                "required": true
+              },
+              "port_info": {
+                "type": "str",
+                "required": true
+              },
+              "system_name": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Two LLDP neighbors on ge interfaces with no parent interface",
+      "input": "Local Interface    Parent Interface    Chassis Id          Port info          System Name\nge-0/0/1           -                   2c:6b:f5:a1:c2:c0   ge-0/0/1           vmx2\nge-0/0/0           -                   2c:6b:f5:a2:08:c0   ge-0/0/0           vmx3\n",
+      "expected": {
+        "neighbors": {
+          "ge-0/0/1": {
+            "chassis_id": "2c:6b:f5:a1:c2:c0",
+            "port_info": "ge-0/0/1",
+            "system_name": "vmx2"
+          },
+          "ge-0/0/0": {
+            "chassis_id": "2c:6b:f5:a2:08:c0",
+            "port_info": "ge-0/0/0",
+            "system_name": "vmx3"
+          }
+        }
+      }
+    }
+  ]
+}
