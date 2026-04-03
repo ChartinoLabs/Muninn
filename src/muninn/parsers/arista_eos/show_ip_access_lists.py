@@ -168,17 +168,6 @@ def _parse_trailing_options(
         result["tcp_flags"] = " ".join(tcp_flags)
 
 
-_OPTIONAL_ENTRY_KEYS = (
-    "source_ports",
-    "destination_ports",
-    "fragments",
-    "log",
-    "tracked",
-    "tcp_flags",
-    "ttl",
-)
-
-
 def _parse_acl_entry_rest(protocol: str, rest: str) -> dict[str, object]:
     """Parse the source/destination/options portion of an ACL entry line."""
     tokens = rest.split()
@@ -204,19 +193,27 @@ def _parse_acl_entry_rest(protocol: str, rest: str) -> dict[str, object]:
 def _build_acl_entry(action: str, protocol: str, rest: str) -> AclEntry:
     """Build a typed AclEntry from parsed components."""
     parsed = _parse_acl_entry_rest(protocol, rest)
-    entry = cast(
-        AclEntry,
-        {
-            "action": action,
-            "protocol": protocol,
-            "source": parsed["source"],
-            "destination": parsed["destination"],
-        },
-    )
+    entry: AclEntry = {
+        "action": action,
+        "protocol": protocol,
+        "source": str(parsed["source"]),
+        "destination": str(parsed["destination"]),
+    }
 
-    for key in _OPTIONAL_ENTRY_KEYS:
-        if key in parsed:
-            entry[key] = parsed[key]  # type: ignore[literal-required]
+    if "source_ports" in parsed:
+        entry["source_ports"] = str(parsed["source_ports"])
+    if "destination_ports" in parsed:
+        entry["destination_ports"] = str(parsed["destination_ports"])
+    if "fragments" in parsed:
+        entry["fragments"] = bool(parsed["fragments"])
+    if "log" in parsed:
+        entry["log"] = bool(parsed["log"])
+    if "tracked" in parsed:
+        entry["tracked"] = bool(parsed["tracked"])
+    if "tcp_flags" in parsed:
+        entry["tcp_flags"] = str(parsed["tcp_flags"])
+    if "ttl" in parsed:
+        entry["ttl"] = str(parsed["ttl"])
 
     return entry
 
