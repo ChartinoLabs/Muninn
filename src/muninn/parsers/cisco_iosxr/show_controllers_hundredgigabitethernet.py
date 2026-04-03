@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
+from muninn.utils import canonical_interface_name
 
 
 class LaneDomInfo(TypedDict):
@@ -356,12 +357,13 @@ class ShowControllersHundredGigabitEthernetParser(
             msg = "No interface blocks found in output"
             raise ValueError(msg)
 
-        for idx, (intf_name, start) in enumerate(block_starts):
+        for idx, (raw_name, start) in enumerate(block_starts):
             if idx + 1 < len(block_starts):
                 end = block_starts[idx + 1][1]
             else:
                 end = len(lines)
             block_lines = lines[start:end]
+            intf_name = canonical_interface_name(raw_name)
             result[intf_name] = cls._parse_interface_block(block_lines)
 
         return result
