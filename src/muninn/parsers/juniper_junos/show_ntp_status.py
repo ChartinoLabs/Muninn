@@ -1,7 +1,7 @@
 """Parser for 'show ntp status' command on Juniper Junos."""
 
 import re
-from typing import ClassVar, TypedDict
+from typing import ClassVar, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -193,4 +193,6 @@ class ShowNtpStatusParser(BaseParser[ShowNtpStatusResult]):
             cls._parse_kv_line(stripped, result)
 
         cls._validate(result, status_parsed)
-        return ShowNtpStatusResult(**result)  # type: ignore[typeddict-item]
+        # The dict is built dynamically from parsed output; _validate() ensures
+        # all required fields are present before we reach this point.
+        return cast(ShowNtpStatusResult, result)
