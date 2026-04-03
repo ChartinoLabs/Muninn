@@ -103,7 +103,7 @@ def _parse_flow_entry(stripped: str, flow_types: dict[str, FlowTypeEntry]) -> bo
 
 def _parse_statistics_line(
     stripped: str,
-    statistics: StatisticsEntry,
+    statistics: dict[str, int],
 ) -> bool:
     """Try to parse a statistics line and update *statistics*.
 
@@ -112,7 +112,7 @@ def _parse_statistics_line(
     for pattern, key in _STAT_PATTERNS:
         m = pattern.match(stripped)
         if m:
-            statistics[key] = int(m.group("val"))  # type: ignore[literal-required]
+            statistics[key] = int(m.group("val"))
             return True
     return False
 
@@ -181,7 +181,7 @@ class ShowLptsPifibHardwarePoliceLocationParser(
         node, burst_ms = cls._parse_header(lines)
 
         flow_types: dict[str, FlowTypeEntry] = {}
-        statistics: StatisticsEntry = {
+        statistics: dict[str, int] = {
             "packets_accepted_by_deleted_entries": 0,
             "packets_dropped_by_deleted_entries": 0,
             "run_out_of_statistics_counter_errors": 0,
@@ -208,6 +208,6 @@ class ShowLptsPifibHardwarePoliceLocationParser(
         }
 
         if has_statistics:
-            result["statistics"] = statistics
+            result["statistics"] = cast(StatisticsEntry, statistics)
 
         return cast(ShowLptsPifibHardwarePoliceLocationResult, result)
