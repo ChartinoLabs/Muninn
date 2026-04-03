@@ -1,7 +1,7 @@
 """Parser for 'show ted database extensive' command on Juniper Junos."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -186,11 +186,11 @@ def _collect_bw_values(
     if bw_target == "available":
         available = link.get("available_bw_bps")
         if isinstance(available, list):
-            available.extend(bw_vals)
+            cast(list[str], available).extend(bw_vals)
     elif bw_target == "max_lsp" and current_iscd is not None:
         max_lsp = current_iscd.get("maximum_lsp_bw_bps")
         if isinstance(max_lsp, list):
-            max_lsp.extend(bw_vals)
+            cast(list[str], max_lsp).extend(bw_vals)
 
 
 def _parse_link_attributes(
@@ -244,7 +244,7 @@ def _parse_link_section_header(
 
     if m := _ISCD_HEADER.match(stripped):
         new_iscd: dict[str, object] = {}
-        iscd_dict[m.group("index")] = new_iscd  # type: ignore[assignment]
+        iscd_dict[m.group("index")] = cast(ISCDEntry, new_iscd)
         return new_iscd, ""
 
     if stripped.startswith("Maximum LSP BW"):
@@ -348,7 +348,7 @@ def _parse_link_block(
         )
 
     _finalize_link(link, iscd_dict, adj_sids)
-    return to_addr, LinkEntry(**link), idx  # type: ignore[arg-type]
+    return to_addr, cast(LinkEntry, link), idx
 
 
 def _is_prefix_section_boundary(line: str, stripped: str) -> bool:
@@ -404,7 +404,7 @@ def _parse_prefixes(
 
         if m := _PREFIX_LINE.match(lines[idx]):
             current = {}
-            prefixes[m.group("prefix")] = current  # type: ignore[assignment]
+            prefixes[m.group("prefix")] = cast(PrefixEntry, current)
             in_prefix_sid = False
             idx += 1
             continue
@@ -602,7 +602,7 @@ class ShowTedDatabaseExtensiveParser(
             idx += 1
 
             idx = _parse_node_body(lines, idx, node)
-            result[node_id] = NodeEntry(**node)  # type: ignore[arg-type]
+            result[node_id] = cast(NodeEntry, node)
 
         if not result:
             msg = "No TED nodes found in output"
