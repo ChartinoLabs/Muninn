@@ -1,7 +1,7 @@
 """Parser for 'show controllers HundredGigabitEthernet' on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -325,7 +325,7 @@ class ShowControllersHundredGigabitEthernetParser(
             if not cls._parse_state_fields(line, result):
                 cls._dispatch_section(line, lines, i, result)
 
-        return result  # type: ignore[return-value]
+        return cast(InterfaceControllerResult, result)
 
     @classmethod
     def parse(
