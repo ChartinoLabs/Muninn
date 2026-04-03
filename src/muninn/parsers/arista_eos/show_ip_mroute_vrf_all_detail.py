@@ -262,8 +262,9 @@ def _process_line(
 def _flush_source(state: dict[str, object]) -> None:
     """Flush the current source entry into the groups dict."""
     source_match = state["source_match"]
-    group = state["group"]
-    if source_match is not None and group is not None:
+    group_raw = state["group"]
+    if source_match is not None and group_raw is not None:
+        group = cast(str, group_raw)
         groups = cast(dict[str, GroupEntry], state["groups"])
         source_key = cast(re.Match[str], source_match).group("source")
         entry = _build_source_entry(
