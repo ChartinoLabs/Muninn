@@ -1,7 +1,7 @@
 """Parser for 'show ppm transmissions protocol bfd detail' command on Juniper Junos."""
 
 import re
-from typing import ClassVar, TypedDict
+from typing import ClassVar, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -71,7 +71,7 @@ class ShowPpmTransmissionsProtocolBfdDetailParser(
     ) -> None:
         """Store a completed entry in the result dict."""
         if dest is not None and entry:
-            result[dest] = PpmBfdTransmissionEntry(**entry)  # type: ignore[arg-type]
+            result[dest] = cast(PpmBfdTransmissionEntry, entry)
 
     @classmethod
     def parse(cls, output: str) -> dict[str, PpmBfdTransmissionEntry]:
