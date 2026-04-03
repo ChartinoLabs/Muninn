@@ -1,7 +1,8 @@
 """Parser for 'show chassis cluster interfaces' command on Juniper Junos."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from collections.abc import Callable
+from typing import Any, ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -142,7 +143,7 @@ class ShowChassisClusterInterfacesParser(
         monitored_interfaces: dict[str, MonitoredInterface] = {}
 
         # Map section keys to their parse functions and data dicts
-        dispatch: dict[str, tuple[classmethod, dict]] = {  # type: ignore[type-arg]
+        dispatch: dict[str, tuple[Callable[..., Any], dict[str, Any]]] = {
             "control": (cls._parse_control_line, control_interfaces),
             "fabric": (cls._parse_fabric_line, fabric_interfaces),
             "reth": (cls._parse_reth_line, reth_interfaces),
