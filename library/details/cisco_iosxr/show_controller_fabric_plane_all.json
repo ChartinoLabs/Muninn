@@ -1,0 +1,49 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show controller fabric plane all",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Basic fabric plane status with six planes, one in DN state",
+      "input": "Sun Feb  25 06:32:34.404 UTC\n\nPlane Admin Plane    up->dn  up->mcast\nId    State State    counter   counter\n--------------------------------------\n0     UP    UP             0         0\n1     UP    UP             0         0\n2     UP    DN             0         0\n3     UP    UP             0         0\n4     UP    UP             0         0\n5     UP    UP             0         0\n",
+      "expected": {
+        "0": {
+          "admin_state": "UP",
+          "plane_state": "UP",
+          "up_to_dn_counter": 0,
+          "up_to_mcast_counter": 0
+        },
+        "1": {
+          "admin_state": "UP",
+          "plane_state": "UP",
+          "up_to_dn_counter": 0,
+          "up_to_mcast_counter": 0
+        },
+        "2": {
+          "admin_state": "UP",
+          "plane_state": "DN",
+          "up_to_dn_counter": 0,
+          "up_to_mcast_counter": 0
+        },
+        "3": {
+          "admin_state": "UP",
+          "plane_state": "UP",
+          "up_to_dn_counter": 0,
+          "up_to_mcast_counter": 0
+        },
+        "4": {
+          "admin_state": "UP",
+          "plane_state": "UP",
+          "up_to_dn_counter": 0,
+          "up_to_mcast_counter": 0
+        },
+        "5": {
+          "admin_state": "UP",
+          "plane_state": "UP",
+          "up_to_dn_counter": 0,
+          "up_to_mcast_counter": 0
+        }
+      }
+    }
+  ]
+}
