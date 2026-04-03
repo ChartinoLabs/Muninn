@@ -1,0 +1,53 @@
+{
+  "os": "juniper_junos",
+  "command": "show ldp neighbor",
+  "schema": {
+    "name": "ShowLdpNeighborResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "LdpNeighborEntry",
+            "fields": {
+              "address": {
+                "type": "str",
+                "required": true
+              },
+              "interface": {
+                "type": "str",
+                "required": true
+              },
+              "label_space_id": {
+                "type": "str",
+                "required": true
+              },
+              "hold_time": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Single LDP neighbor on ge-0/0/0.0",
+      "input": "\n          show ldp neighbor\n        Address                             Interface       Label space ID     Hold time\n        10.169.14.158                      ge-0/0/0.0      10.34.2.250:0       14\n",
+      "expected": {
+        "neighbors": {
+          "10.169.14.158": {
+            "address": "10.169.14.158",
+            "interface": "ge-0/0/0.0",
+            "label_space_id": "10.34.2.250:0",
+            "hold_time": 14
+          }
+        }
+      }
+    }
+  ]
+}
