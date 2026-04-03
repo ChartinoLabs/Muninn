@@ -90,7 +90,7 @@ class ShowInterfacesTransceiverDetailParser(
         line: str,
         section_value_key: str,
         section_threshold_key: str,
-        interfaces: dict[str, TransceiverEntry],
+        interfaces: dict[str, dict[str, object]],
     ) -> None:
         """Parse a single data row and merge into the interfaces dict."""
         match = cls._DATA_PATTERN.match(line)
@@ -100,11 +100,11 @@ class ShowInterfacesTransceiverDetailParser(
         port = canonical_interface_name(match.group("port"), os=OS.ARISTA_EOS)
 
         if port not in interfaces:
-            interfaces[port] = TransceiverEntry()
+            interfaces[port] = {}
 
         entry = interfaces[port]
-        entry[section_value_key] = float(match.group("value"))  # type: ignore[literal-required]
-        entry[section_threshold_key] = ThresholdInfo(  # type: ignore[literal-required]
+        entry[section_value_key] = float(match.group("value"))
+        entry[section_threshold_key] = ThresholdInfo(
             high_alarm=float(match.group("high_alarm")),
             high_warning=float(match.group("high_warn")),
             low_alarm=float(match.group("low_alarm")),
@@ -124,7 +124,7 @@ class ShowInterfacesTransceiverDetailParser(
         Raises:
             ValueError: If no transceiver data found in output.
         """
-        interfaces: dict[str, TransceiverEntry] = {}
+        interfaces: dict[str, dict[str, object]] = {}
         current_section: tuple[str, str] | None = None
 
         for line in output.splitlines():
@@ -156,7 +156,6 @@ class ShowInterfacesTransceiverDetailParser(
             msg = "No transceiver data found in output"
             raise ValueError(msg)
 
-        return cast(
-            ShowInterfacesTransceiverDetailResult,
-            {"interfaces": interfaces},
+        return ShowInterfacesTransceiverDetailResult(
+            interfaces={k: cast(TransceiverEntry, v) for k, v in interfaces.items()},
         )
