@@ -1,0 +1,23 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show rsvp neighbors",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Single global neighbor with two interface neighbors",
+      "input": "Global Neighbor: 10.100.100.120\n  Interface Neighbor   Interface\n  -------------------- ------------\n  10.100.100.141       FortyGigE0/0/1/0\n  10.100.100.145       FortyGigE0/1/1/0\n",
+      "expected": {
+        "10.100.100.120": {
+          "interfaces": {
+            "FortyGigabitEthernet0/0/1/0": {
+              "interface_neighbor": "10.100.100.141"
+            },
+            "FortyGigabitEthernet0/1/1/0": {
+              "interface_neighbor": "10.100.100.145"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
