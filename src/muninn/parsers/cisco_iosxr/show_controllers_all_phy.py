@@ -1,7 +1,7 @@
 """Parser for 'show controllers all phy' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -204,15 +204,24 @@ class ShowControllersAllPhyParser(BaseParser[ShowControllersAllPhyResult]):
     def _parse_diagnostics(cls, line: str, entry: dict[str, object]) -> bool:
         """Parse module-level and lane-level diagnostic lines."""
         if match := cls._MODULE_TEMP.match(line):
-            diag = entry.setdefault("module_diagnostics", {})
+            diag = cast(
+                dict[str, float],
+                entry.setdefault("module_diagnostics", {}),
+            )
             diag["temperature_c"] = float(match.group("value"))
             return True
         if match := cls._MODULE_VOLTAGE.match(line):
-            diag = entry.setdefault("module_diagnostics", {})
+            diag = cast(
+                dict[str, float],
+                entry.setdefault("module_diagnostics", {}),
+            )
             diag["voltage_v"] = float(match.group("value"))
             return True
         if match := cls._LANE_DATA.match(line):
-            lanes = entry.setdefault("lanes", {})
+            lanes = cast(
+                dict[str, LaneDiagnostics],
+                entry.setdefault("lanes", {}),
+            )
             lane_id = match.group("lane")
             lane_entry: LaneDiagnostics = {
                 "bias_ma": float(match.group("bias")),
@@ -238,7 +247,7 @@ class ShowControllersAllPhyParser(BaseParser[ShowControllersAllPhyResult]):
         Raises:
             ValueError: If no interface data is found in the output.
         """
-        result: ShowControllersAllPhyResult = {}
+        result: dict[str, dict[str, object]] = {}
         current_entry: dict[str, object] | None = None
 
         for line in output.splitlines():
@@ -248,7 +257,9 @@ class ShowControllersAllPhyParser(BaseParser[ShowControllersAllPhyResult]):
 
             if match := cls._INTERFACE_HEADER.match(line):
                 current_entry = {}
-                result[match.group("interface")] = current_entry  # type: ignore[assignment]
+                interface_name = match.group("interface")
+                if interface_name is not None:
+                    result[interface_name] = current_entry
                 continue
 
             if current_entry is None:
@@ -261,4 +272,4 @@ class ShowControllersAllPhyParser(BaseParser[ShowControllersAllPhyResult]):
             msg = "No interface PHY data found in output"
             raise ValueError(msg)
 
-        return result
+        return cast(ShowControllersAllPhyResult, result)
