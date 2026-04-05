@@ -1,0 +1,54 @@
+{
+  "os": "linux",
+  "command": "route",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Basic route output with default and connected routes",
+      "input": "Kernel IP routing table\nDestination     Gateway         Genmask         Flags Metric Ref    Use Iface\ndefault         _gateway        0.0.0.0         UG    600    0        0 wlo1\n172.17.0.0      0.0.0.0         255.255.0.0     U     0      0        0 docker0\n192.168.1.0     0.0.0.0         255.255.255.0   U     600    0        0 wlo1\n192.168.122.0   0.0.0.0         255.255.255.0   U     0      0        0 virbr0\n10.10.0.0       0.0.0.0         255.255.255.0   U     0      0        0 eth1-05\n",
+      "expected": {
+        "default": {
+          "gateway": "_gateway",
+          "genmask": "0.0.0.0",
+          "flags": "UG",
+          "metric": 600,
+          "ref": 0,
+          "use": 0,
+          "interface": "wlo1"
+        },
+        "172.17.0.0": {
+          "genmask": "255.255.0.0",
+          "flags": "U",
+          "metric": 0,
+          "ref": 0,
+          "use": 0,
+          "interface": "docker0"
+        },
+        "192.168.1.0": {
+          "genmask": "255.255.255.0",
+          "flags": "U",
+          "metric": 600,
+          "ref": 0,
+          "use": 0,
+          "interface": "wlo1"
+        },
+        "192.168.122.0": {
+          "genmask": "255.255.255.0",
+          "flags": "U",
+          "metric": 0,
+          "ref": 0,
+          "use": 0,
+          "interface": "virbr0"
+        },
+        "10.10.0.0": {
+          "genmask": "255.255.255.0",
+          "flags": "U",
+          "metric": 0,
+          "ref": 0,
+          "use": 0,
+          "interface": "eth1-05"
+        }
+      }
+    }
+  ]
+}
