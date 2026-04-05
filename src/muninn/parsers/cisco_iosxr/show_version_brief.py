@@ -11,6 +11,13 @@ from muninn.tags import ParserTag
 from .show_version import UptimeInfo
 
 
+class StorageDevice(TypedDict):
+    """Schema for a storage device entry."""
+
+    size: str
+    sector_size: NotRequired[int]
+
+
 class ShowVersionBriefResult(TypedDict):
     """Schema for 'show version brief' parsed output on IOS-XR."""
 
@@ -20,8 +27,13 @@ class ShowVersionBriefResult(TypedDict):
     uptime: NotRequired[UptimeInfo]
     image_file: NotRequired[str]
     chassis: str
+    chassis_detail: NotRequired[str]
     processor: NotRequired[str]
+    processor_speed: NotRequired[str]
     memory: NotRequired[str]
+    nvram: NotRequired[str]
+    interfaces: NotRequired[dict[str, int]]
+    storage: NotRequired[dict[str, StorageDevice]]
 
 
 @register(OS.CISCO_IOSXR, "show version brief")
@@ -64,6 +76,32 @@ class ShowVersionBriefParser(BaseParser[ShowVersionBriefResult]):
     _CHASSIS_WITH_MEMORY = re.compile(
         r"^cisco\s+(?P<chassis>.+?)\s+\((?P<processor>[^)]+)\)\s+processor"
         r"\s+with\s+(?P<memory>\S+\s+\S+)\s+of\s+memory",
+        re.I,
+    )
+
+    _PROCESSOR_SPEED = re.compile(
+        r"^(?P<processor>.+?)\s+(?:at|@)\s+(?P<speed>\d+\S*Hz)",
+        re.I,
+    )
+
+    _CHASSIS_DETAIL = re.compile(
+        r"^(?P<detail>(?:ASR|CRS|NCS|IOS XRv|Cisco)\s+.*(?:Chassis|Slot).*)$",
+        re.I,
+    )
+
+    _INTERFACE_COUNT = re.compile(
+        r"^(?P<count>\d+)\s+(?P<type>.+?)(?:\s+interface\(s\))?\s*$",
+        re.I,
+    )
+
+    _NVRAM = re.compile(
+        r"^(?P<size>\S+)\s+bytes of non-volatile configuration memory",
+        re.I,
+    )
+
+    _STORAGE = re.compile(
+        r"^(?P<size>\S+)\s+bytes of\s+(?P<device>.+?)"
+        r"(?:\s+\(Sector size\s+(?P<sector>\d+)\s+bytes\))?\s*\.\s*$",
         re.I,
     )
 
@@ -124,7 +162,7 @@ class ShowVersionBriefParser(BaseParser[ShowVersionBriefResult]):
 
     @classmethod
     def _parse_hardware(cls, line: str, result: dict[str, object]) -> bool:
-        """Parse image file and chassis lines."""
+        """Parse image file, chassis, interfaces, and storage lines."""
         if match := cls._IMAGE_FILE.match(line):
             result["image_file"] = match.group("file")
             return True
@@ -135,6 +173,31 @@ class ShowVersionBriefParser(BaseParser[ShowVersionBriefResult]):
             if processor:
                 result["processor"] = processor
             result["memory"] = match.group("memory")
+            return True
+
+        if match := cls._PROCESSOR_SPEED.match(line):
+            result["processor_speed"] = match.group("speed")
+            return True
+
+        if match := cls._CHASSIS_DETAIL.match(line):
+            result["chassis_detail"] = match.group("detail").strip()
+            return True
+
+        if match := cls._NVRAM.match(line):
+            result["nvram"] = match.group("size") + " bytes"
+            return True
+
+        if match := cls._STORAGE.match(line):
+            storage = cast(dict[str, StorageDevice], result.setdefault("storage", {}))
+            device: StorageDevice = {"size": match.group("size") + " bytes"}
+            if match.group("sector"):
+                device["sector_size"] = int(match.group("sector"))
+            storage[match.group("device")] = device
+            return True
+
+        if match := cls._INTERFACE_COUNT.match(line):
+            interfaces = cast(dict[str, int], result.setdefault("interfaces", {}))
+            interfaces[match.group("type").strip()] = int(match.group("count"))
             return True
 
         return False
