@@ -1,0 +1,106 @@
+{
+  "os": "cisco_iosxr",
+  "command": "ping",
+  "schema": {
+    "name": "PingResult",
+    "fields": {
+      "packets_sent": {
+        "type": "int",
+        "required": true
+      },
+      "packets_received": {
+        "type": "int",
+        "required": true
+      },
+      "success_rate_percent": {
+        "type": "int",
+        "required": true
+      },
+      "packet_data": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PingPacketData",
+            "fields": {
+              "result": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "rtt_min_ms": {
+        "type": "int",
+        "required": false
+      },
+      "rtt_avg_ms": {
+        "type": "int",
+        "required": false
+      },
+      "rtt_max_ms": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic successful ping with 100% success rate and RTT statistics",
+      "input": "Fri Dec 22 17:30:39.512 BRA\nType escape sequence to abort.\nSending 5, 100-byte ICMP Echos to 10.191.129.114, timeout is 2 seconds:\n!!!!!\nSuccess rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms\n",
+      "expected": {
+        "success_rate_percent": 100,
+        "packets_received": 5,
+        "packets_sent": 5,
+        "packet_data": {
+          "1": {
+            "result": "successful"
+          },
+          "2": {
+            "result": "successful"
+          },
+          "3": {
+            "result": "successful"
+          },
+          "4": {
+            "result": "successful"
+          },
+          "5": {
+            "result": "successful"
+          }
+        },
+        "rtt_min_ms": 1,
+        "rtt_avg_ms": 1,
+        "rtt_max_ms": 1
+      }
+    },
+    {
+      "name": "Ping with 0% success rate and no RTT statistics",
+      "input": "Fri Nov 17 16:29:18.710 BRA\nType escape sequence to abort.\nSending 5, 100-byte ICMP Echos to 10.27.18.2, timeout is 2 seconds:\n.....\nSuccess rate is 0 percent (0/5)\n",
+      "expected": {
+        "success_rate_percent": 0,
+        "packets_received": 0,
+        "packets_sent": 5,
+        "packet_data": {
+          "1": {
+            "result": "failed"
+          },
+          "2": {
+            "result": "failed"
+          },
+          "3": {
+            "result": "failed"
+          },
+          "4": {
+            "result": "failed"
+          },
+          "5": {
+            "result": "failed"
+          }
+        }
+      }
+    }
+  ]
+}
