@@ -1,0 +1,22 @@
+{
+  "os": "juniper_junos",
+  "command": "show ppm transmissions protocol bfd detail",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Single BFD transmission entry with distributed and replicated status",
+      "input": "show ppm transmissions protocol bfd detail\nDestination: 10.49.194.102, Protocol: BFD, Transmission interval: 300\nDistributed: TRUE, Distribution handle: 6918, Distribution address: fpc9\nIFL-index: 783\nReplicated\n",
+      "expected": {
+        "10.49.194.102": {
+          "protocol": "BFD",
+          "transmission_interval": 300,
+          "distributed": true,
+          "distribution_handle": 6918,
+          "distribution_address": "fpc9",
+          "ifl_index": 783,
+          "replicated": true
+        }
+      }
+    }
+  ]
+}
