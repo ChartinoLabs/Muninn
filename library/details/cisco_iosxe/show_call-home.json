@@ -1,0 +1,226 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show call-home",
+  "schema": {
+    "name": "ShowCallHomeResult",
+    "fields": {
+      "settings": {
+        "type": {
+          "name": "CallHomeSettings",
+          "fields": {
+            "call_home_feature": {
+              "type": "str",
+              "required": false
+            },
+            "call_home_messages_from_address": {
+              "type": "str",
+              "required": false
+            },
+            "call_home_messages_reply_to_address": {
+              "type": "str",
+              "required": false
+            },
+            "vrf_for_call_home_messages": {
+              "type": "str",
+              "required": false
+            },
+            "contact_persons_email_address": {
+              "type": "str",
+              "required": false
+            },
+            "contact_persons_phone_number": {
+              "type": "str",
+              "required": false
+            },
+            "street_address": {
+              "type": "str",
+              "required": false
+            },
+            "customer_id": {
+              "type": "str",
+              "required": false
+            },
+            "contract_id": {
+              "type": "str",
+              "required": false
+            },
+            "site_id": {
+              "type": "str",
+              "required": false
+            },
+            "source_ip_address": {
+              "type": "str",
+              "required": false
+            },
+            "source_interface": {
+              "type": "str",
+              "required": false
+            },
+            "mail_server": {
+              "type": "str",
+              "required": false
+            },
+            "http_proxy": {
+              "type": "str",
+              "required": false
+            },
+            "http_secure": {
+              "type": {
+                "name": "HttpSecureSettings",
+                "fields": {
+                  "server_identity_check": {
+                    "type": "str",
+                    "required": false
+                  }
+                }
+              },
+              "required": false
+            },
+            "http_resolve_hostname": {
+              "type": "str",
+              "required": false
+            },
+            "diagnostic_signature": {
+              "type": "str",
+              "required": false
+            },
+            "smart_licensing_messages": {
+              "type": "str",
+              "required": false
+            },
+            "aaa_authorization": {
+              "type": "str",
+              "required": false
+            },
+            "aaa_authorization_username": {
+              "type": "str",
+              "required": false
+            },
+            "data_privacy": {
+              "type": "str",
+              "required": false
+            },
+            "syslog_throttling": {
+              "type": "str",
+              "required": false
+            },
+            "rate_limit": {
+              "type": "str",
+              "required": false
+            },
+            "snapshot_command": {
+              "type": "str",
+              "required": false
+            }
+          }
+        },
+        "required": true
+      },
+      "alert_groups": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "AlertGroup",
+            "fields": {
+              "state": {
+                "type": {
+                  "type": "literal",
+                  "values": [
+                    "enable",
+                    "disable"
+                  ]
+                },
+                "required": true
+              },
+              "description": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "profiles": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "Profile",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Default call-home configuration on a freshly-booted CSR1000v with only the built-in CiscoTAC-1 profile present.",
+      "input": "Current call home settings:\n    call home feature : disable\n    call home message's from address: Not yet set up\n    call home message's reply-to address: Not yet set up\n\n    vrf for call-home messages: Not yet set up\n\n    contact person's email address: Not yet set up\n\n    contact person's phone number: Not yet set up\n    street address: Not yet set up\n    customer ID: Not yet set up\n    contract ID: Not yet set up\n    site ID: Not yet set up\n\n    source ip address: Not yet set up\n    source interface: Not yet set up\n    Mail-server: Not yet set up\n    http proxy: Not yet set up\n    http secure:\n      server identity check: enabled\n    http resolve-hostname: default\n\n    Diagnostic signature: enabled\n    Profile: CiscoTAC-1 (status: INACTIVE)\n\n    Smart licensing messages: disabled\n\n    aaa-authorization: disable\n    aaa-authorization username: callhome (default)\n    data-privacy: normal\n    syslog throttling: enable\n\n    Rate-limit: 20 message(s) per minute\n\n    Snapshot command: Not yet set up\n\nAvailable alert groups:\n    Keyword                  State   Description\n    ------------------------ ------- -------------------------------\n    configuration            Enable  configuration info\n    crash                    Enable  crash and traceback info\n    inventory                Enable  inventory info\n    snapshot                 Enable  snapshot info\n    syslog                   Enable  syslog info\n\nProfiles:\n    Profile Name: CiscoTAC-1\n",
+      "expected": {
+        "settings": {
+          "call_home_feature": "disable",
+          "call_home_messages_from_address": "Not yet set up",
+          "call_home_messages_reply_to_address": "Not yet set up",
+          "vrf_for_call_home_messages": "Not yet set up",
+          "contact_persons_email_address": "Not yet set up",
+          "contact_persons_phone_number": "Not yet set up",
+          "street_address": "Not yet set up",
+          "customer_id": "Not yet set up",
+          "contract_id": "Not yet set up",
+          "site_id": "Not yet set up",
+          "source_ip_address": "Not yet set up",
+          "source_interface": "Not yet set up",
+          "mail_server": "Not yet set up",
+          "http_proxy": "Not yet set up",
+          "http_secure": {
+            "server_identity_check": "enabled"
+          },
+          "http_resolve_hostname": "default",
+          "diagnostic_signature": "enabled",
+          "smart_licensing_messages": "disabled",
+          "aaa_authorization": "disable",
+          "aaa_authorization_username": "callhome (default)",
+          "data_privacy": "normal",
+          "syslog_throttling": "enable",
+          "rate_limit": "20 message(s) per minute",
+          "snapshot_command": "Not yet set up"
+        },
+        "alert_groups": {
+          "configuration": {
+            "state": "enable",
+            "description": "configuration info"
+          },
+          "crash": {
+            "state": "enable",
+            "description": "crash and traceback info"
+          },
+          "inventory": {
+            "state": "enable",
+            "description": "inventory info"
+          },
+          "snapshot": {
+            "state": "enable",
+            "description": "snapshot info"
+          },
+          "syslog": {
+            "state": "enable",
+            "description": "syslog info"
+          }
+        },
+        "profiles": {
+          "CiscoTAC-1": {
+            "status": "INACTIVE"
+          }
+        }
+      }
+    }
+  ]
+}

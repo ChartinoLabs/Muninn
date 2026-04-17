@@ -1,0 +1,164 @@
+{
+  "os": "cisco_ios",
+  "command": "show call-home",
+  "schema": {
+    "name": "ShowCallHomeResult",
+    "fields": {
+      "settings": {
+        "type": {
+          "name": "CallHomeSettings",
+          "fields": {
+            "call_home_feature": {
+              "type": "str",
+              "required": false
+            },
+            "call_home_messages_from_address": {
+              "type": "str",
+              "required": false
+            },
+            "call_home_messages_reply_to_address": {
+              "type": "str",
+              "required": false
+            },
+            "vrf_for_call_home_messages": {
+              "type": "str",
+              "required": false
+            },
+            "contact_persons_email_address": {
+              "type": "str",
+              "required": false
+            },
+            "contact_persons_phone_number": {
+              "type": "str",
+              "required": false
+            },
+            "street_address": {
+              "type": "str",
+              "required": false
+            },
+            "customer_id": {
+              "type": "str",
+              "required": false
+            },
+            "contract_id": {
+              "type": "str",
+              "required": false
+            },
+            "site_id": {
+              "type": "str",
+              "required": false
+            },
+            "source_ip_address": {
+              "type": "str",
+              "required": false
+            },
+            "source_interface": {
+              "type": "str",
+              "required": false
+            },
+            "mail_server": {
+              "type": "str",
+              "required": false
+            },
+            "http_proxy": {
+              "type": "str",
+              "required": false
+            },
+            "http_secure": {
+              "type": {
+                "name": "HttpSecureSettings",
+                "fields": {
+                  "server_identity_check": {
+                    "type": "str",
+                    "required": false
+                  }
+                }
+              },
+              "required": false
+            },
+            "http_resolve_hostname": {
+              "type": "str",
+              "required": false
+            },
+            "diagnostic_signature": {
+              "type": "str",
+              "required": false
+            },
+            "smart_licensing_messages": {
+              "type": "str",
+              "required": false
+            },
+            "aaa_authorization": {
+              "type": "str",
+              "required": false
+            },
+            "aaa_authorization_username": {
+              "type": "str",
+              "required": false
+            },
+            "data_privacy": {
+              "type": "str",
+              "required": false
+            },
+            "syslog_throttling": {
+              "type": "str",
+              "required": false
+            },
+            "rate_limit": {
+              "type": "str",
+              "required": false
+            },
+            "snapshot_command": {
+              "type": "str",
+              "required": false
+            }
+          }
+        },
+        "required": true
+      },
+      "alert_groups": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "AlertGroup",
+            "fields": {
+              "state": {
+                "type": {
+                  "type": "literal",
+                  "values": [
+                    "enable",
+                    "disable"
+                  ]
+                },
+                "required": true
+              },
+              "description": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "profiles": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "Profile",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}
