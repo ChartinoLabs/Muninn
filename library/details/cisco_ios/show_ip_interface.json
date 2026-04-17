@@ -1,0 +1,195 @@
+{
+  "os": "cisco_ios",
+  "command": "show ip interface",
+  "schema": {
+    "name": "ShowIpInterfaceResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "line_protocol": {
+                "type": "str",
+                "required": true
+              },
+              "vrf": {
+                "type": "str",
+                "required": false
+              },
+              "ip_address": {
+                "type": "str",
+                "required": false
+              },
+              "prefix_length": {
+                "type": "int",
+                "required": false
+              },
+              "broadcast_address": {
+                "type": "str",
+                "required": false
+              },
+              "address_determined_by": {
+                "type": "str",
+                "required": false
+              },
+              "mtu": {
+                "type": "int",
+                "required": false
+              },
+              "helper_addresses": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": true
+              },
+              "directed_broadcast_forwarding": {
+                "type": "bool",
+                "required": false
+              },
+              "multicast_groups": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": true
+              },
+              "outgoing_common_access_list": {
+                "type": "str",
+                "required": false
+              },
+              "outgoing_access_list": {
+                "type": "str",
+                "required": false
+              },
+              "inbound_common_access_list": {
+                "type": "str",
+                "required": false
+              },
+              "inbound_access_list": {
+                "type": "str",
+                "required": false
+              },
+              "proxy_arp": {
+                "type": "bool",
+                "required": false
+              },
+              "local_proxy_arp": {
+                "type": "bool",
+                "required": false
+              },
+              "security_level": {
+                "type": "str",
+                "required": false
+              },
+              "split_horizon": {
+                "type": "bool",
+                "required": false
+              },
+              "icmp_redirects": {
+                "type": "str",
+                "required": false
+              },
+              "icmp_unreachables": {
+                "type": "str",
+                "required": false
+              },
+              "icmp_mask_replies": {
+                "type": "str",
+                "required": false
+              },
+              "ip_fast_switching": {
+                "type": "bool",
+                "required": false
+              },
+              "ip_flow_switching": {
+                "type": "bool",
+                "required": false
+              },
+              "ip_cef_switching": {
+                "type": "bool",
+                "required": false
+              },
+              "ip_multicast_fast_switching": {
+                "type": "bool",
+                "required": false
+              },
+              "ip_multicast_distributed_fast_switching": {
+                "type": "bool",
+                "required": false
+              },
+              "router_discovery": {
+                "type": "bool",
+                "required": false
+              },
+              "ip_output_packet_accounting": {
+                "type": "bool",
+                "required": false
+              },
+              "ip_access_violation_accounting": {
+                "type": "bool",
+                "required": false
+              },
+              "tcp_ip_header_compression": {
+                "type": "bool",
+                "required": false
+              },
+              "rtp_ip_header_compression": {
+                "type": "bool",
+                "required": false
+              },
+              "probe_proxy_name_replies": {
+                "type": "bool",
+                "required": false
+              },
+              "policy_routing": {
+                "type": "bool",
+                "required": false
+              },
+              "network_address_translation": {
+                "type": "bool",
+                "required": false
+              },
+              "bgp_policy_mapping": {
+                "type": "bool",
+                "required": false
+              },
+              "input_features": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": true
+              },
+              "ipv4_wccp_redirect_outbound": {
+                "type": "bool",
+                "required": false
+              },
+              "ipv4_wccp_redirect_inbound": {
+                "type": "bool",
+                "required": false
+              },
+              "ipv4_wccp_redirect_exclude": {
+                "type": "bool",
+                "required": false
+              },
+              "ip_clear_dont_fragment": {
+                "type": "bool",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}
