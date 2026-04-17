@@ -16,6 +16,7 @@ class InterfaceEntry(TypedDict):
 
     status: str
     line_protocol: str
+    vrf: NotRequired[str]
     ip_address: NotRequired[str]
     prefix_length: NotRequired[int]
     broadcast_address: NotRequired[str]
@@ -99,6 +100,9 @@ _DIRECTED_BCAST_RE = re.compile(
 _MULTICAST_GROUPS_RE = re.compile(
     r"^\s*Multicast reserved groups joined:\s*(?P<groups>.*)$"
 )
+
+# '  VPN Routing/Forwarding "RED"'
+_VRF_RE = re.compile(r'^\s*VPN Routing/Forwarding\s+"(?P<vrf>[^"]+)"\s*$')
 
 # ACL lines: "  Outgoing access list is not set" / "... is FOO"
 _ACL_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
@@ -313,6 +317,11 @@ class ShowIpInterfaceParser(BaseParser[ShowIpInterfaceResult]):
             groups = m.group("groups").strip()
             if groups:
                 entry["multicast_groups"].extend(groups.split())
+            return True
+
+        m = _VRF_RE.match(line)
+        if m:
+            entry["vrf"] = m.group("vrf")
             return True
 
         m = _SECURITY_LEVEL_RE.match(line)
