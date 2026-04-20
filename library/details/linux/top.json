@@ -1,0 +1,354 @@
+{
+  "os": "linux",
+  "command": "top",
+  "schema": {
+    "name": "TopResult",
+    "fields": {
+      "current_time": {
+        "type": "str",
+        "required": true
+      },
+      "uptime": {
+        "type": "str",
+        "required": true
+      },
+      "users": {
+        "type": "int",
+        "required": true
+      },
+      "load_avg_1": {
+        "type": "float",
+        "required": true
+      },
+      "load_avg_5": {
+        "type": "float",
+        "required": true
+      },
+      "load_avg_15": {
+        "type": "float",
+        "required": true
+      },
+      "tasks": {
+        "type": {
+          "name": "TasksSummary",
+          "fields": {
+            "total": {
+              "type": "int",
+              "required": true
+            },
+            "running": {
+              "type": "int",
+              "required": true
+            },
+            "sleeping": {
+              "type": "int",
+              "required": true
+            },
+            "stopped": {
+              "type": "int",
+              "required": true
+            },
+            "zombie": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "cpu": {
+        "type": {
+          "name": "CpuSummary",
+          "fields": {
+            "user": {
+              "type": "float",
+              "required": true
+            },
+            "system": {
+              "type": "float",
+              "required": true
+            },
+            "nice": {
+              "type": "float",
+              "required": true
+            },
+            "idle": {
+              "type": "float",
+              "required": true
+            },
+            "io_wait": {
+              "type": "float",
+              "required": true
+            },
+            "hardware_irq": {
+              "type": "float",
+              "required": true
+            },
+            "software_irq": {
+              "type": "float",
+              "required": true
+            },
+            "steal": {
+              "type": "float",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "memory": {
+        "type": {
+          "name": "MemorySummary",
+          "fields": {
+            "total": {
+              "type": "float",
+              "required": true
+            },
+            "free": {
+              "type": "float",
+              "required": true
+            },
+            "used": {
+              "type": "float",
+              "required": true
+            },
+            "buff_cache": {
+              "type": "float",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "swap": {
+        "type": {
+          "name": "SwapSummary",
+          "fields": {
+            "total": {
+              "type": "float",
+              "required": true
+            },
+            "free": {
+              "type": "float",
+              "required": true
+            },
+            "used": {
+              "type": "float",
+              "required": true
+            },
+            "avail_mem": {
+              "type": "float",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ProcessEntry",
+            "fields": {
+              "user": {
+                "type": "str",
+                "required": true
+              },
+              "priority": {
+                "type": "str",
+                "required": true
+              },
+              "nice": {
+                "type": "int",
+                "required": true
+              },
+              "virtual_mem": {
+                "type": "str",
+                "required": true
+              },
+              "resident_mem": {
+                "type": "int",
+                "required": true
+              },
+              "shared_mem": {
+                "type": "int",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "cpu_percent": {
+                "type": "float",
+                "required": true
+              },
+              "mem_percent": {
+                "type": "float",
+                "required": true
+              },
+              "time": {
+                "type": "str",
+                "required": true
+              },
+              "command": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic top output with summary header and process list",
+      "input": "top - 12:33:53 up  2:11,  5 users,  load average: 0.12, 0.40, 0.66\nTasks: 200 total,   1 running, 189 sleeping,   5 stopped,   5 zombie\n%Cpu(s): 12.5 us, 12.5 sy,  0.0 ni, 62.5 id, 12.5 wa,  0.0 hi,  0.0 si,  0.0 st\nMiB Mem :   7809.9 total,   4753.7 free,   2052.9 used,   1126.5 buff/cache\nMiB Swap:    512.0 total,    512.0 free,      0.0 used.   5757.0 avail Mem\n\n    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND\n  19516 admin     20   0   28.7g 880836  52224 S  12.5  11.0   6:51.26 node\n  30427 admin     20   0   11708   4864   2816 R   6.2   0.1   0:00.03 top\n      1 root      20   0  168332  11152   8400 S   0.0   0.1   0:01.14 systemd\n      4 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-rcu_g\n    395 systemd+  20   0   90708   6784   5888 S   0.0   0.1   0:00.18 systemd-timesyn\n    397 root       0 -20       0      0      0 I   0.0   0.0   0:00.68 kworker/u13:1-brcmf_wq/mmc1:0001:1\n    402 root     -51   0       0      0      0 S   0.0   0.0   0:00.00 irq/41-vc4 hdmi hpd connected\n  30343 admin     20   0    5200   1408   1408 S   0.0   0.0   0:00.00 sleep\n",
+      "expected": {
+        "current_time": "12:33:53",
+        "uptime": "2:11",
+        "users": 5,
+        "load_avg_1": 0.12,
+        "load_avg_5": 0.4,
+        "load_avg_15": 0.66,
+        "tasks": {
+          "total": 200,
+          "running": 1,
+          "sleeping": 189,
+          "stopped": 5,
+          "zombie": 5
+        },
+        "cpu": {
+          "user": 12.5,
+          "system": 12.5,
+          "nice": 0.0,
+          "idle": 62.5,
+          "io_wait": 12.5,
+          "hardware_irq": 0.0,
+          "software_irq": 0.0,
+          "steal": 0.0
+        },
+        "memory": {
+          "total": 7809.9,
+          "free": 4753.7,
+          "used": 2052.9,
+          "buff_cache": 1126.5
+        },
+        "swap": {
+          "total": 512.0,
+          "free": 512.0,
+          "used": 0.0,
+          "avail_mem": 5757.0
+        },
+        "processes": {
+          "19516": {
+            "user": "admin",
+            "priority": "20",
+            "nice": 0,
+            "virtual_mem": "28.7g",
+            "resident_mem": 880836,
+            "shared_mem": 52224,
+            "status": "S",
+            "cpu_percent": 12.5,
+            "mem_percent": 11.0,
+            "time": "6:51.26",
+            "command": "node"
+          },
+          "30427": {
+            "user": "admin",
+            "priority": "20",
+            "nice": 0,
+            "virtual_mem": "11708",
+            "resident_mem": 4864,
+            "shared_mem": 2816,
+            "status": "R",
+            "cpu_percent": 6.2,
+            "mem_percent": 0.1,
+            "time": "0:00.03",
+            "command": "top"
+          },
+          "1": {
+            "user": "root",
+            "priority": "20",
+            "nice": 0,
+            "virtual_mem": "168332",
+            "resident_mem": 11152,
+            "shared_mem": 8400,
+            "status": "S",
+            "cpu_percent": 0.0,
+            "mem_percent": 0.1,
+            "time": "0:01.14",
+            "command": "systemd"
+          },
+          "4": {
+            "user": "root",
+            "priority": "0",
+            "nice": -20,
+            "virtual_mem": "0",
+            "resident_mem": 0,
+            "shared_mem": 0,
+            "status": "I",
+            "cpu_percent": 0.0,
+            "mem_percent": 0.0,
+            "time": "0:00.00",
+            "command": "kworker/R-rcu_g"
+          },
+          "395": {
+            "user": "systemd+",
+            "priority": "20",
+            "nice": 0,
+            "virtual_mem": "90708",
+            "resident_mem": 6784,
+            "shared_mem": 5888,
+            "status": "S",
+            "cpu_percent": 0.0,
+            "mem_percent": 0.1,
+            "time": "0:00.18",
+            "command": "systemd-timesyn"
+          },
+          "397": {
+            "user": "root",
+            "priority": "0",
+            "nice": -20,
+            "virtual_mem": "0",
+            "resident_mem": 0,
+            "shared_mem": 0,
+            "status": "I",
+            "cpu_percent": 0.0,
+            "mem_percent": 0.0,
+            "time": "0:00.68",
+            "command": "kworker/u13:1-brcmf_wq/mmc1:0001:1"
+          },
+          "402": {
+            "user": "root",
+            "priority": "-51",
+            "nice": 0,
+            "virtual_mem": "0",
+            "resident_mem": 0,
+            "shared_mem": 0,
+            "status": "S",
+            "cpu_percent": 0.0,
+            "mem_percent": 0.0,
+            "time": "0:00.00",
+            "command": "irq/41-vc4 hdmi hpd connected"
+          },
+          "30343": {
+            "user": "admin",
+            "priority": "20",
+            "nice": 0,
+            "virtual_mem": "5200",
+            "resident_mem": 1408,
+            "shared_mem": 1408,
+            "status": "S",
+            "cpu_percent": 0.0,
+            "mem_percent": 0.0,
+            "time": "0:00.00",
+            "command": "sleep"
+          }
+        }
+      }
+    }
+  ]
+}
