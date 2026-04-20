@@ -1,7 +1,7 @@
 """Parser for 'dmidecode -t memory' command on Linux."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -150,19 +150,19 @@ def _build_physical_memory_array(kv: dict[str, str]) -> PhysicalMemoryArray:
 
 def _build_memory_device(kv: dict[str, str]) -> MemoryDevice:
     """Build a MemoryDevice from parsed key-value pairs."""
-    device: MemoryDevice = {"locator": kv["Locator"]}
+    device: dict[str, Any] = {"locator": kv["Locator"]}
 
     for dmi_key, output_key in _DEVICE_STRING_FIELDS:
         if dmi_key in kv:
-            device[output_key] = kv[dmi_key]  # type: ignore[literal-required]
+            device[output_key] = kv[dmi_key]
 
     _set_width_fields(kv, device)
     _set_numeric_fields(kv, device)
 
-    return device
+    return cast(MemoryDevice, device)
 
 
-def _set_width_fields(kv: dict[str, str], device: MemoryDevice) -> None:
+def _set_width_fields(kv: dict[str, str], device: dict[str, Any]) -> None:
     """Set total_width_bits and data_width_bits on device if present."""
     for dmi_key, output_key in (
         ("Total Width", "total_width_bits"),
@@ -171,10 +171,10 @@ def _set_width_fields(kv: dict[str, str], device: MemoryDevice) -> None:
         if dmi_key in kv:
             width = _extract_width(kv[dmi_key])
             if width is not None:
-                device[output_key] = width  # type: ignore[literal-required]
+                device[output_key] = width
 
 
-def _set_numeric_fields(kv: dict[str, str], device: MemoryDevice) -> None:
+def _set_numeric_fields(kv: dict[str, str], device: dict[str, Any]) -> None:
     """Set size_mb, speed_mhz, and rank on device if present."""
     if "Size" in kv:
         size = _extract_numeric(kv["Size"])
