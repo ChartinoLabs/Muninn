@@ -1,0 +1,181 @@
+{
+  "os": "linux",
+  "command": "dmidecode -t system",
+  "schema": {
+    "name": "DmidecodeSystemResult",
+    "fields": {
+      "manufacturer": {
+        "type": "str",
+        "required": false
+      },
+      "product_name": {
+        "type": "str",
+        "required": false
+      },
+      "version": {
+        "type": "str",
+        "required": false
+      },
+      "serial_number": {
+        "type": "str",
+        "required": false
+      },
+      "uuid": {
+        "type": "str",
+        "required": false
+      },
+      "wake_up_type": {
+        "type": "str",
+        "required": false
+      },
+      "sku_number": {
+        "type": "str",
+        "required": false
+      },
+      "family": {
+        "type": "str",
+        "required": false
+      },
+      "system_configuration_options": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": false
+      },
+      "system_event_log": {
+        "type": {
+          "name": "SystemEventLogEntry",
+          "fields": {
+            "area_length": {
+              "type": "str",
+              "required": true
+            },
+            "header_start_offset": {
+              "type": "str",
+              "required": true
+            },
+            "header_length": {
+              "type": "str",
+              "required": true
+            },
+            "data_start_offset": {
+              "type": "str",
+              "required": true
+            },
+            "access_method": {
+              "type": "str",
+              "required": true
+            },
+            "access_address": {
+              "type": "str",
+              "required": true
+            },
+            "status": {
+              "type": "str",
+              "required": true
+            },
+            "change_token": {
+              "type": "str",
+              "required": true
+            },
+            "header_format": {
+              "type": "str",
+              "required": true
+            }
+          }
+        },
+        "required": false
+      },
+      "system_reset": {
+        "type": {
+          "name": "SystemResetEntry",
+          "fields": {
+            "status": {
+              "type": "str",
+              "required": true
+            },
+            "watchdog_timer": {
+              "type": "str",
+              "required": true
+            },
+            "boot_option": {
+              "type": "str",
+              "required": true
+            },
+            "boot_option_on_limit": {
+              "type": "str",
+              "required": true
+            },
+            "reset_count": {
+              "type": "str",
+              "required": false
+            },
+            "reset_limit": {
+              "type": "str",
+              "required": false
+            },
+            "timer_interval": {
+              "type": "str",
+              "required": false
+            },
+            "timeout": {
+              "type": "str",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "system_boot_info": {
+        "type": {
+          "name": "SystemBootInfoEntry",
+          "fields": {
+            "status": {
+              "type": "str",
+              "required": true
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic dmidecode system output with all sections",
+      "input": "# dmidecode 1.11\nSMBIOS 1.1 present.\n\nHandle 0x0001, DMI type 1, 11 bytes\nSystem Information\n\tManufacturer: HP\n\tProduct Name: ProG4 Deepseek G6\n\tVersion:\n\tSerial Number: AA111100AA\n\tUUID: 1111AA1A-AA1A-11A1-1AAA-A1111AAAA1AA\n\tWake-up Type: Power Switch\n\tSKU Number: 000000-000\n\tFamily: Not Specified\n\nHandle 0x0011, DMI type 12, 1 bytes\nSystem Configuration Options\n\tOption 1: Jumper settings can be described here.\n\nHandle 0x0011, DMI type 11, 11 bytes\nSystem Event Log\n\tArea Length: 32 bytes\n\tHeader Start Offset: 0x0000\n\tHeader Length: 32 bytes\n\tData Start Offset: 0x0010\n\tAccess Method: General-purpose non-volatile data functions\n\tAccess Address: 0x0000\n\tStatus: Valid, Not Full\n\tChange Token: 0x0000001D\n\tHeader Format: Type 1\n\tSupported Log Type Descriptors: 3\n\tDescriptor 1: POST error\n\tData Format 1: POST results bitmap\n\tDescriptor 2: Single-bit ECC memory error\n\tData Format 2: Multiple-event\n\tDescriptor 3: Multi-bit ECC memory error\n\tData Format 3: Multiple-event\n\nHandle 0x001A, DMI type 23, 13 bytes\nSystem Reset\n\tStatus: Enabled\n\tWatchdog Timer: Present\n\tBoot Option: Do Not Reboot\n\tBoot Option On Limit: Do Not Reboot\n\tReset Count: Unknown\n\tReset Limit: Unknown\n\tTimer Interval: Unknown\n\tTimeout: Unknown\n\nHandle 0x001A, DMI type 32, 20 bytes\nSystem Boot Information\n\tStatus: No errors detected\n",
+      "expected": {
+        "manufacturer": "HP",
+        "product_name": "ProG4 Deepseek G6",
+        "serial_number": "AA111100AA",
+        "uuid": "1111AA1A-AA1A-11A1-1AAA-A1111AAAA1AA",
+        "wake_up_type": "Power Switch",
+        "sku_number": "000000-000",
+        "system_configuration_options": [
+          "Jumper settings can be described here."
+        ],
+        "system_event_log": {
+          "area_length": "32 bytes",
+          "header_start_offset": "0x0000",
+          "header_length": "32 bytes",
+          "data_start_offset": "0x0010",
+          "access_method": "General-purpose non-volatile data functions",
+          "access_address": "0x0000",
+          "status": "Valid, Not Full",
+          "change_token": "0x0000001D",
+          "header_format": "Type 1"
+        },
+        "system_reset": {
+          "status": "Enabled",
+          "watchdog_timer": "Present",
+          "boot_option": "Do Not Reboot",
+          "boot_option_on_limit": "Do Not Reboot"
+        },
+        "system_boot_info": {
+          "status": "No errors detected"
+        }
+      }
+    }
+  ]
+}
