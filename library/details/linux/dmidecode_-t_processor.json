@@ -1,0 +1,86 @@
+{
+  "os": "linux",
+  "command": "dmidecode -t processor",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Single processor socket with flags and characteristics",
+      "input": "# dmidecode 1.1\nSMBIOS 1.1 present.\n\nHandle 0x0004, DMI type 4, 42 bytes\nProcessor Information\n\tSocket Designation: CPU 1\n\tType: Central Processor\n\tFamily: Core 2 Quad\n\tManufacturer: AMD\n\tID: AA AA AA AA AA AA AA AA\n\tSignature: Type 0, Family 1, Model 2, Stepping 3\n\tFlags:\n\t\tFPU (Floating-point unit on-chip)\n\t\tVME (Virtual mode extension)\n\t\tDE (Debugging extension)\n\t\tPSE (Page size extension)\n\t\tTSC (Time stamp counter)\n\t\tMSR (Model specific registers)\n\t\tPAE (Physical address extension)\n\t\tMCE (Machine check exception)\n\t\tCX8 (CMPXCHG8 instruction supported)\n\t\tAPIC (On-chip APIC hardware supported)\n\t\tSEP (Fast system call)\n\t\tMTRR (Memory type range registers)\n\t\tPGE (Page global enable)\n\t\tMCA (Machine check architecture)\n\t\tCMOV (Conditional move instruction supported)\n\t\tPAT (Page attribute table)\n\t\tPSE-36 (36-bit page size extension)\n\t\tCLFSH (CLFLUSH instruction supported)\n\t\tDS (Debug store)\n\t\tACPI (ACPI supported)\n\t\tMMX (MMX technology supported)\n\t\tFXSR (FXSAVE and FXSTOR instructions supported)\n\t\tSSE (Streaming SIMD extensions)\n\t\tSSE2 (Streaming SIMD extensions 2)\n\t\tSS (Self-snoop)\n\t\tHTT (Multi-threading)\n\t\tTM (Thermal monitor supported)\n\t\tPBE (Pending break enabled)\n\tVersion: Intel(R) AAAA(R) CPU           A1111  @ 1.10GHz\n\tVoltage: 1.2 V\n\tExternal Clock: 133 MHz\n\tMax Speed: 1100 MHz\n\tCurrent Speed: 1100 MHz\n\tStatus: Populated, Enabled\n\tUpgrade: Slot 1\n\tL1 Cache Handle: 0x0001\n\tL2 Cache Handle: 0x0002\n\tL3 Cache Handle: 0x0003\n\tSerial Number: Not Specified\n\tAsset Tag: Not Specified\n\tPart Number: Not Specified\n\tCore Count: 1\n\tCore Enabled: 1\n\tThread Count: 1\n\tCharacteristics:\n\t\t128-bit capable\n",
+      "expected": {
+        "CPU 1": {
+          "type": "Central Processor",
+          "family": "Core 2 Quad",
+          "manufacturer": "AMD",
+          "id": "AA AA AA AA AA AA AA AA",
+          "signature": "Type 0, Family 1, Model 2, Stepping 3",
+          "version": "Intel(R) AAAA(R) CPU           A1111  @ 1.10GHz",
+          "voltage": "1.2 V",
+          "external_clock": "133 MHz",
+          "max_speed": "1100 MHz",
+          "current_speed": "1100 MHz",
+          "status": "Populated, Enabled",
+          "upgrade": "Slot 1",
+          "l1_cache_handle": "0x0001",
+          "l2_cache_handle": "0x0002",
+          "l3_cache_handle": "0x0003",
+          "core_count": 1,
+          "core_enabled": 1,
+          "thread_count": 1,
+          "flags": [
+            "FPU (Floating-point unit on-chip)",
+            "VME (Virtual mode extension)",
+            "DE (Debugging extension)",
+            "PSE (Page size extension)",
+            "TSC (Time stamp counter)",
+            "MSR (Model specific registers)",
+            "PAE (Physical address extension)",
+            "MCE (Machine check exception)",
+            "CX8 (CMPXCHG8 instruction supported)",
+            "APIC (On-chip APIC hardware supported)",
+            "SEP (Fast system call)",
+            "MTRR (Memory type range registers)",
+            "PGE (Page global enable)",
+            "MCA (Machine check architecture)",
+            "CMOV (Conditional move instruction supported)",
+            "PAT (Page attribute table)",
+            "PSE-36 (36-bit page size extension)",
+            "CLFSH (CLFLUSH instruction supported)",
+            "DS (Debug store)",
+            "ACPI (ACPI supported)",
+            "MMX (MMX technology supported)",
+            "FXSR (FXSAVE and FXSTOR instructions supported)",
+            "SSE (Streaming SIMD extensions)",
+            "SSE2 (Streaming SIMD extensions 2)",
+            "SS (Self-snoop)",
+            "HTT (Multi-threading)",
+            "TM (Thermal monitor supported)",
+            "PBE (Pending break enabled)"
+          ],
+          "characteristics": [
+            "128-bit capable"
+          ]
+        }
+      }
+    },
+    {
+      "name": "dmidecode 3.5 output from a QEMU/KVM virtual machine (single CPU socket, 4 cores, SMBIOS 2.8)",
+      "input": "# dmidecode 3.5\nGetting SMBIOS data from sysfs.\nSMBIOS 2.8 present.\n\nHandle 0x0400, DMI type 4, 42 bytes\nProcessor Information\n\tSocket Designation: CPU 0\n\tType: Central Processor\n\tFamily: Other\n\tManufacturer: QEMU\n\tID: C1 06 08 00 FF FB 8B 0F\n\tVersion: pc-i440fx-6.1\n\tVoltage: Unknown\n\tExternal Clock: Unknown\n\tMax Speed: 2000 MHz\n\tCurrent Speed: 2000 MHz\n\tStatus: Populated, Enabled\n\tUpgrade: Other\n\tL1 Cache Handle: Not Provided\n\tL2 Cache Handle: Not Provided\n\tL3 Cache Handle: Not Provided\n\tSerial Number: Not Specified\n\tAsset Tag: Not Specified\n\tPart Number: Not Specified\n\tCore Count: 4\n\tCore Enabled: 4\n\tThread Count: 1\n\tCharacteristics: None\n",
+      "expected": {
+        "CPU 0": {
+          "type": "Central Processor",
+          "family": "Other",
+          "manufacturer": "QEMU",
+          "id": "C1 06 08 00 FF FB 8B 0F",
+          "version": "pc-i440fx-6.1",
+          "max_speed": "2000 MHz",
+          "current_speed": "2000 MHz",
+          "status": "Populated, Enabled",
+          "upgrade": "Other",
+          "core_count": 4,
+          "core_enabled": 4,
+          "thread_count": 1
+        }
+      }
+    }
+  ]
+}
