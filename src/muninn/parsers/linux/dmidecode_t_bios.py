@@ -1,7 +1,7 @@
 """Parser for 'dmidecode -t bios' command on Linux."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -10,11 +10,16 @@ from muninn.tags import ParserTag
 
 
 class DmidecodeBiosResult(TypedDict):
-    """Schema for 'dmidecode -t bios' parsed output."""
+    """Schema for 'dmidecode -t bios' parsed output.
 
-    vendor: str
-    version: str
-    release_date: str
+    All fields are NotRequired because dmidecode may report placeholder
+    values ("Not Specified", "Not Available", "Unknown") for any of
+    them, in which case the parser omits the key.
+    """
+
+    vendor: NotRequired[str]
+    version: NotRequired[str]
+    release_date: NotRequired[str]
     address: NotRequired[str]
     runtime_size: NotRequired[str]
     rom_size: NotRequired[str]
@@ -130,4 +135,4 @@ class DmidecodeBiosParser(BaseParser[DmidecodeBiosResult]):
             msg = "No BIOS information found in output"
             raise ValueError(msg)
 
-        return DmidecodeBiosResult(**result)  # type: ignore[typeddict-item]
+        return cast(DmidecodeBiosResult, result)
