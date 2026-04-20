@@ -16,17 +16,24 @@ class VrfEntry(TypedDict):
     table_id: int
 
 
-IpVrfShowResult = dict[str, VrfEntry]
+class IpVrfShowResult(TypedDict):
+    """Top-level schema for 'ip vrf show' output."""
+
+    vrfs: dict[str, VrfEntry]
+
 
 _VRF_LINE_RE = re.compile(r"^(?P<name>\S+)\s+(?P<table_id>\d+)\s*$")
+_NO_VRF_SENTINEL = "No VRF has been configured"
 
 
 @register(OS.LINUX, "ip vrf show")
 class IpVrfShowParser(BaseParser[IpVrfShowResult]):
     """Parser for 'ip vrf show' command on Linux.
 
-    Parses VRF information into a dict-of-dicts keyed by VRF name.
-    Each entry contains the VRF name and its associated routing table ID.
+    Parses VRF information into a top-level dict with a 'vrfs' key, which
+    maps to a dict-of-dicts keyed by VRF name. Each entry contains the VRF
+    name and its associated routing table ID. The 'vrfs' dict is empty when
+    no VRFs are configured on the host.
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset(
@@ -43,22 +50,27 @@ class IpVrfShowParser(BaseParser[IpVrfShowResult]):
             output: Raw CLI output from command.
 
         Returns:
-            Dict of VRF entries keyed by VRF name.
+            Dict with a 'vrfs' key mapping to VRF entries keyed by VRF name.
+            The 'vrfs' dict is empty when no VRFs are configured.
 
         Raises:
-            ValueError: If no VRFs can be parsed from the output.
+            ValueError: If the output cannot be recognized as 'ip vrf show'
+                output (no data rows and no 'no VRFs' sentinel).
         """
-        result: dict[str, VrfEntry] = {}
+        vrfs: dict[str, VrfEntry] = {}
+
+        if _NO_VRF_SENTINEL in output:
+            return cast(IpVrfShowResult, {"vrfs": vrfs})
 
         for line in output.splitlines():
             match = _VRF_LINE_RE.match(line.strip())
             if match:
                 name = match.group("name")
                 table_id = int(match.group("table_id"))
-                result[name] = VrfEntry(name=name, table_id=table_id)
+                vrfs[name] = VrfEntry(name=name, table_id=table_id)
 
-        if not result:
+        if not vrfs:
             msg = "No VRFs found in output"
             raise ValueError(msg)
 
-        return cast(IpVrfShowResult, result)
+        return cast(IpVrfShowResult, {"vrfs": vrfs})
