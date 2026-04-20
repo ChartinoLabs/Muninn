@@ -1,0 +1,54 @@
+{
+  "os": "linux",
+  "command": "ip vrf show",
+  "schema": {
+    "name": "IpVrfShowResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfEntry",
+            "fields": {
+              "name": {
+                "type": "str",
+                "required": true
+              },
+              "table_id": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic ip vrf show output with two VRFs",
+      "input": "Name              Table\n-----------------------\nvrf-blue            10\nvrf-red             20\n",
+      "expected": {
+        "vrfs": {
+          "vrf-blue": {
+            "name": "vrf-blue",
+            "table_id": 10
+          },
+          "vrf-red": {
+            "name": "vrf-red",
+            "table_id": 20
+          }
+        }
+      }
+    },
+    {
+      "name": "ip vrf show output when no VRFs are configured on the host",
+      "input": "Name              Table\n-----------------------\nNo VRF has been configured\n",
+      "expected": {
+        "vrfs": {}
+      }
+    }
+  ]
+}
