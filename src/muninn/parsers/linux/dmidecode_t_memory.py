@@ -16,6 +16,7 @@ _OMIT_VALUES = frozenset(
         "Unknown",
         "No Module Installed",
         "Reserved",
+        "None",
     }
 )
 
