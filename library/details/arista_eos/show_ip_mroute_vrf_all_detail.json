@@ -1,0 +1,245 @@
+{
+  "os": "arista_eos",
+  "command": "show ip mroute vrf all detail",
+  "schema": {
+    "name": "ShowIpMrouteVrfAllDetailResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfEntry",
+            "fields": {
+              "groups": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "GroupEntry",
+                    "fields": {
+                      "sources": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "SourceEntry",
+                            "fields": {
+                              "uptime": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "flags": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "incoming_interface": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "upstream_joined_state": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "upstream_rpt_joined_state": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "rp": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "rpf_route": {
+                                "type": {
+                                  "name": "RpfRouteInfo",
+                                  "fields": {
+                                    "route_type": {
+                                      "type": "str",
+                                      "required": true
+                                    },
+                                    "prefix": {
+                                      "type": "str",
+                                      "required": true
+                                    },
+                                    "ad": {
+                                      "type": "int",
+                                      "required": true
+                                    },
+                                    "metric": {
+                                      "type": "int",
+                                      "required": true
+                                    },
+                                    "next_hop": {
+                                      "type": "str",
+                                      "required": true
+                                    }
+                                  }
+                                },
+                                "required": false
+                              },
+                              "outgoing_interfaces": {
+                                "type": {
+                                  "type": "list",
+                                  "items": "str"
+                                },
+                                "required": false
+                              },
+                              "interfaces_not_in_oil": {
+                                "type": {
+                                  "type": "dict",
+                                  "key": "str",
+                                  "value": {
+                                    "name": "NotInOilEntry",
+                                    "fields": {
+                                      "reason": {
+                                        "type": "str",
+                                        "required": true
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": false
+                              }
+                            }
+                          }
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple VRFs with PIM sparse-mode entries including RPF routes and OIL exclusions",
+      "input": "VRF:default\nPIM Bidirectional Mode Multicast Routing Table\nRPF route: U - From unicast routing table\n           M - From multicast routing table\nPIM Sparse Mode Multicast Routing Table\nFlags: E - Entry forwarding on the RPT, J - Joining to the SPT\n    R - RPT bit is set, S - SPT bit is set, L - Source is attached\n    W - Wildcard entry, X - External component interest\n    I - SG Include Join alert rcvd, P - Programmed in hardware\n    H - Joining SPT due to policy, D - Joining SPT due to protocol\n    Z - Entry marked for deletion, C - Learned from a DR via a register\n    A - Learned via Anycast RP Router, M - Learned via MSDP\n    N - May notify MSDP, K - Keepalive timer not running\n    T - Switching Incoming Interface, B - Learned via Border Router\n    V - Source is reachable via Evpn Tenant Domain\n    F - Learned via MVPN\nRPF route: U - From unicast routing table\n           M - From multicast routing table\n* - Interface has EVPN information available in the 'detail' command output\n224.0.1.129\n  169.254.132.172, 118d18h, flags: PE\n    Incoming interface: Null\n    Upstream joined state: upNotJoined\n    Upstream RPT joined state: upRptNotJoined\n    State summarization macros:\n      Could register (S,G): False\n      Register stop (S,G): True\n      Join desired (S,G): False\n      Prune desired (S,G,Rpt): False\n      No interfaces in immediate olist (S,G): True\n      No interfaces in inherited olist (S,G): True\n224.0.23.192\n  0.0.0.0, 38d14h, RP 204.14.0.136, flags: W\n    Incoming interface: Register\n    Outgoing interface list:\n      Ethernet2/1\n      Ethernet2/2\n    Upstream joined state: upJoined\n    Upstream RPT joined state: upRptNotJoined\n    State summarization macros:\n      Join desired (*,G): True\n      Join desired (*,*,RP): False\n      RPT join desired (*,G): True\n      No interfaces in immediate olist (*,G): False\n      No interfaces in immediate olist (*,*,G): True\n  192.26.98.17, 8:57:21, flags: PE\n    Incoming interface: Register\n    Outgoing interface list:\n      Ethernet2/1\n    Upstream joined state: upNotJoined\n    Upstream RPT joined state: upRptNotPruned\n    State summarization macros:\n      Could register (S,G): False\n      Register stop (S,G): False\n      Join desired (S,G): False\n      Prune desired (S,G,Rpt): False\n      No interfaces in immediate olist (S,G): True\n      No interfaces in inherited olist (S,G): False\n  192.168.98.17, 8:57:21, flags: SP\n    Incoming interface: Ethernet10\n    RPF route: [U] 192.168.98.0/27 [20/0] via 10.100.10.6\n    Outgoing interface list:\n      Ethernet2/1\n    Upstream joined state: upNotJoined\n    Upstream RPT joined state: upRptNotPruned\n    State summarization macros:\n      Could register (S,G): False\n      Register stop (S,G): True\n      Join desired (S,G): True\n      Prune desired (S,G,Rpt): False\n      No interfaces in immediate olist (S,G): False\n      No interfaces in inherited olist (S,G): False\n224.0.23.190\n  0.0.0.0, 38d14h, RP 204.14.0.136, flags: W\n    Incoming interface: Register\n    Outgoing interface list:\n      Ethernet0/1\n    Upstream joined state: upJoined\n    Upstream RPT joined state: upRptNotJoined\n    State summarization macros:\n      Join desired (*,G): True\n      Join desired (*,*,RP): False\n      RPT join desired (*,G): True\n      No interfaces in immediate olist (*,G): False\n      No interfaces in immediate olist (*,*,G): True\n  10.205.227.165, 38d14h, flags: SBNP\n    Incoming interface: Ethernet32\n    Outgoing interface list:\n      Ethernet2/1\n    Interfaces not in OIL:\n      Ethernet0/1: Not DR, RPT Pruned\n    Upstream joined state: upJoined\n    Upstream RPT joined state: upRptNotPruned\n    State summarization macros:\n      Could register (S,G): True\n      Register stop (S,G): True\n      Join desired (S,G): True\n      Prune desired (S,G,Rpt): False\n      No interfaces in immediate olist (S,G): False\n      No interfaces in inherited olist (S,G): False\n  10.205.227.166, 18d7h, RP 204.14.0.136, flags: SBNP\n    Incoming interface: Ethernet32\n    Outgoing interface list:\n      Ethernet0/1\n      Ethernet2/1\n    Upstream joined state: upJoined\n    Upstream RPT joined state: upRptNotPruned\n    State summarization macros:\n      Could register (S,G): True\n      Register stop (S,G): True\n      Join desired (S,G): True\n      Prune desired (S,G,Rpt): False\n      No interfaces in immediate olist (S,G): False\n      No interfaces in inherited olist (S,G): False\nVRF:FOO\nPIM Bidirectional Mode Multicast Routing Table\nRPF route: U - From unicast routing table\n           M - From multicast routing table\nPIM Sparse Mode Multicast Routing Table\nFlags: E - Entry forwarding on the RPT, J - Joining to the SPT\n    R - RPT bit is set, S - SPT bit is set, L - Source is attached\n    W - Wildcard entry, X - External component interest\n    I - SG Include Join alert rcvd, P - Programmed in hardware\n    H - Joining SPT due to policy, D - Joining SPT due to protocol\n    Z - Entry marked for deletion, C - Learned from a DR via a register\n    A - Learned via Anycast RP Router, M - Learned via MSDP\n    N - May notify MSDP, K - Keepalive timer not running\n    T - Switching Incoming Interface, B - Learned via Border Router\n    V - Source is reachable via Evpn Tenant Domain\n    F - Learned via MVPN\nRPF route: U - From unicast routing table\n           M - From multicast routing table\n224.0.1.130\n  169.254.132.173, 1d18h, flags: PE\n    Incoming interface: Null\n    Upstream joined state: upNotJoined\n    Upstream RPT joined state: upRptNotJoined\n    State summarization macros:\n      Could register (S,G): False\n      Register stop (S,G): True\n      Join desired (S,G): False\n      Prune desired (S,G,Rpt): False\n      No interfaces in immediate olist (S,G): True\n      No interfaces in inherited olist (S,G): True\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "groups": {
+              "224.0.1.129": {
+                "sources": {
+                  "169.254.132.172": {
+                    "uptime": "118d18h",
+                    "flags": "PE",
+                    "incoming_interface": "Null",
+                    "upstream_joined_state": "upNotJoined",
+                    "upstream_rpt_joined_state": "upRptNotJoined"
+                  }
+                }
+              },
+              "224.0.23.192": {
+                "sources": {
+                  "0.0.0.0": {
+                    "uptime": "38d14h",
+                    "flags": "W",
+                    "rp": "204.14.0.136",
+                    "incoming_interface": "Register",
+                    "upstream_joined_state": "upJoined",
+                    "upstream_rpt_joined_state": "upRptNotJoined",
+                    "outgoing_interfaces": [
+                      "Ethernet2/1",
+                      "Ethernet2/2"
+                    ]
+                  },
+                  "192.26.98.17": {
+                    "uptime": "8:57:21",
+                    "flags": "PE",
+                    "incoming_interface": "Register",
+                    "upstream_joined_state": "upNotJoined",
+                    "upstream_rpt_joined_state": "upRptNotPruned",
+                    "outgoing_interfaces": [
+                      "Ethernet2/1"
+                    ]
+                  },
+                  "192.168.98.17": {
+                    "uptime": "8:57:21",
+                    "flags": "SP",
+                    "incoming_interface": "Ethernet10",
+                    "rpf_route": {
+                      "route_type": "U",
+                      "prefix": "192.168.98.0/27",
+                      "ad": 20,
+                      "metric": 0,
+                      "next_hop": "10.100.10.6"
+                    },
+                    "upstream_joined_state": "upNotJoined",
+                    "upstream_rpt_joined_state": "upRptNotPruned",
+                    "outgoing_interfaces": [
+                      "Ethernet2/1"
+                    ]
+                  }
+                }
+              },
+              "224.0.23.190": {
+                "sources": {
+                  "0.0.0.0": {
+                    "uptime": "38d14h",
+                    "flags": "W",
+                    "rp": "204.14.0.136",
+                    "incoming_interface": "Register",
+                    "upstream_joined_state": "upJoined",
+                    "upstream_rpt_joined_state": "upRptNotJoined",
+                    "outgoing_interfaces": [
+                      "Ethernet0/1"
+                    ]
+                  },
+                  "10.205.227.165": {
+                    "uptime": "38d14h",
+                    "flags": "SBNP",
+                    "incoming_interface": "Ethernet32",
+                    "upstream_joined_state": "upJoined",
+                    "upstream_rpt_joined_state": "upRptNotPruned",
+                    "outgoing_interfaces": [
+                      "Ethernet2/1"
+                    ],
+                    "interfaces_not_in_oil": {
+                      "Ethernet0/1": {
+                        "reason": "Not DR, RPT Pruned"
+                      }
+                    }
+                  },
+                  "10.205.227.166": {
+                    "uptime": "18d7h",
+                    "flags": "SBNP",
+                    "rp": "204.14.0.136",
+                    "incoming_interface": "Ethernet32",
+                    "upstream_joined_state": "upJoined",
+                    "upstream_rpt_joined_state": "upRptNotPruned",
+                    "outgoing_interfaces": [
+                      "Ethernet0/1",
+                      "Ethernet2/1"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "FOO": {
+            "groups": {
+              "224.0.1.130": {
+                "sources": {
+                  "169.254.132.173": {
+                    "uptime": "1d18h",
+                    "flags": "PE",
+                    "incoming_interface": "Null",
+                    "upstream_joined_state": "upNotJoined",
+                    "upstream_rpt_joined_state": "upRptNotJoined"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
