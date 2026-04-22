@@ -1,0 +1,128 @@
+{
+  "os": "arista_eos",
+  "command": "dir",
+  "schema": {
+    "name": "DirResult",
+    "fields": {
+      "directory": {
+        "type": "str",
+        "required": true
+      },
+      "files": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "FileEntry",
+            "fields": {
+              "permissions": {
+                "type": "str",
+                "required": true
+              },
+              "size": {
+                "type": "int",
+                "required": true
+              },
+              "date": {
+                "type": "str",
+                "required": true
+              },
+              "type": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_bytes": {
+        "type": "int",
+        "required": true
+      },
+      "free_bytes": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic flash directory listing with files and directories",
+      "input": "Directory of flash:/\n\n       -rwx   591941836            Aug 2  2017  EOS-4.18.3.1F.swi\n       -rwx   609823300           Feb 14 02:03  EOS-4.19.5M.swi\n       -rwx          29           Aug 23  2017  boot-config\n       drwx        4096           Aug 23  2017  debug\n       -rwx           0           Apr 15  2017  enable3px\n       -rwx          19           Apr 15  2017  enable3px.key\n       -rwx          31           Apr 15  2017  kickstart-config\n       drwx        4096            Apr 3 10:29  persist\n       drwx        4096           Apr 15  2017  schedule\n       -rwx       20530           Jan 18 22:46  startup-config\n       -rwx          13           Aug 23  2017  zerotouch-config\n\n3519041536 bytes total (1725112320 bytes free)\n",
+      "expected": {
+        "directory": "flash:/",
+        "files": {
+          "EOS-4.18.3.1F.swi": {
+            "permissions": "-rwx",
+            "size": 591941836,
+            "date": "Aug 2  2017",
+            "type": "file"
+          },
+          "EOS-4.19.5M.swi": {
+            "permissions": "-rwx",
+            "size": 609823300,
+            "date": "Feb 14 02:03",
+            "type": "file"
+          },
+          "boot-config": {
+            "permissions": "-rwx",
+            "size": 29,
+            "date": "Aug 23  2017",
+            "type": "file"
+          },
+          "debug": {
+            "permissions": "drwx",
+            "size": 4096,
+            "date": "Aug 23  2017",
+            "type": "directory"
+          },
+          "enable3px": {
+            "permissions": "-rwx",
+            "size": 0,
+            "date": "Apr 15  2017",
+            "type": "file"
+          },
+          "enable3px.key": {
+            "permissions": "-rwx",
+            "size": 19,
+            "date": "Apr 15  2017",
+            "type": "file"
+          },
+          "kickstart-config": {
+            "permissions": "-rwx",
+            "size": 31,
+            "date": "Apr 15  2017",
+            "type": "file"
+          },
+          "persist": {
+            "permissions": "drwx",
+            "size": 4096,
+            "date": "Apr 3 10:29",
+            "type": "directory"
+          },
+          "schedule": {
+            "permissions": "drwx",
+            "size": 4096,
+            "date": "Apr 15  2017",
+            "type": "directory"
+          },
+          "startup-config": {
+            "permissions": "-rwx",
+            "size": 20530,
+            "date": "Jan 18 22:46",
+            "type": "file"
+          },
+          "zerotouch-config": {
+            "permissions": "-rwx",
+            "size": 13,
+            "date": "Aug 23  2017",
+            "type": "file"
+          }
+        },
+        "total_bytes": 3519041536,
+        "free_bytes": 1725112320
+      }
+    }
+  ]
+}
