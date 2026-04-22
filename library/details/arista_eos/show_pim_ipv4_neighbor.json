@@ -1,0 +1,43 @@
+{
+  "os": "arista_eos",
+  "command": "show pim ipv4 neighbor",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Basic PIM IPv4 neighbors across various interface types",
+      "input": "PIM Neighbor Table for default VRF\nNeighbor Address  Interface             Uptime    Expires   Mode    Transport\n192.0.2.2         Ethernet20/1          02:26:03  00:00:16  sparse  datagram\n192.0.2.4         Port-Channel1.10      02:25:25  00:01:25  sparse  datagram\n192.0.2.6         Vlan100               02:04:47  00:01:32  sparse  datagram\n192.0.2.8         Vlan200               02:04:47  00:01:35  sparse  datagram\n",
+      "expected": {
+        "default": {
+          "192.0.2.2": {
+            "interface": "Ethernet20/1",
+            "uptime": "02:26:03",
+            "expires": "00:00:16",
+            "mode": "sparse",
+            "transport": "datagram"
+          },
+          "192.0.2.4": {
+            "interface": "Port-channel1.10",
+            "uptime": "02:25:25",
+            "expires": "00:01:25",
+            "mode": "sparse",
+            "transport": "datagram"
+          },
+          "192.0.2.6": {
+            "interface": "Vlan100",
+            "uptime": "02:04:47",
+            "expires": "00:01:32",
+            "mode": "sparse",
+            "transport": "datagram"
+          },
+          "192.0.2.8": {
+            "interface": "Vlan200",
+            "uptime": "02:04:47",
+            "expires": "00:01:35",
+            "mode": "sparse",
+            "transport": "datagram"
+          }
+        }
+      }
+    }
+  ]
+}
