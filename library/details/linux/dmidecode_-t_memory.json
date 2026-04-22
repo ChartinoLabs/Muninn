@@ -1,0 +1,203 @@
+{
+  "os": "linux",
+  "command": "dmidecode -t memory",
+  "schema": {
+    "name": "DmidecodeMemoryResult",
+    "fields": {
+      "physical_memory_arrays": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PhysicalMemoryArray",
+            "fields": {
+              "location": {
+                "type": "str",
+                "required": true
+              },
+              "use": {
+                "type": "str",
+                "required": true
+              },
+              "error_correction_type": {
+                "type": "str",
+                "required": false
+              },
+              "maximum_capacity": {
+                "type": "str",
+                "required": true
+              },
+              "number_of_devices": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "memory_devices": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "MemoryDevice",
+            "fields": {
+              "array_handle": {
+                "type": "str",
+                "required": false
+              },
+              "error_information_handle": {
+                "type": "str",
+                "required": false
+              },
+              "total_width_bits": {
+                "type": "int",
+                "required": false
+              },
+              "data_width_bits": {
+                "type": "int",
+                "required": false
+              },
+              "size_mb": {
+                "type": "int",
+                "required": false
+              },
+              "form_factor": {
+                "type": "str",
+                "required": false
+              },
+              "set": {
+                "type": "str",
+                "required": false
+              },
+              "locator": {
+                "type": "str",
+                "required": true
+              },
+              "bank_locator": {
+                "type": "str",
+                "required": false
+              },
+              "type": {
+                "type": "str",
+                "required": false
+              },
+              "type_detail": {
+                "type": "str",
+                "required": false
+              },
+              "speed_mhz": {
+                "type": "int",
+                "required": false
+              },
+              "manufacturer": {
+                "type": "str",
+                "required": false
+              },
+              "serial_number": {
+                "type": "str",
+                "required": false
+              },
+              "asset_tag": {
+                "type": "str",
+                "required": false
+              },
+              "part_number": {
+                "type": "str",
+                "required": false
+              },
+              "rank": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Physical memory array with one populated DIMM and three empty slots",
+      "input": "# dmidecode 1.11\nSMBIOS 1.1 present.\n\nHandle 0x001A, DMI type 11, 11 bytes\nPhysical Memory Array\n\tLocation: System Board Or Motherboard\n\tUse: System Memory\n\tError Correction Type: Multi-bit ECC\n\tMaximum Capacity: 16 GB\n\tError Information Handle: Not Provided\n\tNumber Of Devices: 4\n\nHandle 0x001A, DMI type 11, 11 bytes\nMemory Device\n\tArray Handle: 0x001A\n\tError Information Handle: No Error\n\tTotal Width: 10 bits\n\tData Width: 10 bits\n\tSize: 1111 MB\n\tForm Factor: DIMM\n\tSet: 1\n\tLocator: DIMM1A\n\tBank Locator: Not Specified\n\tType: DDR2\n\tType Detail: Synchronous\n\tSpeed: 1111 MHz\n\tManufacturer: Not Specified\n\tSerial Number: Not Specified\n\tAsset Tag: Not Specified\n\tPart Number: Not Specified\n\tRank: Unknown\n\nHandle 0x001A, DMI type 11, 11 bytes\nMemory Device\n\tArray Handle: 0x001A\n\tError Information Handle: No Error\n\tTotal Width: Unknown\n\tData Width: Unknown\n\tSize: No Module Installed\n\tForm Factor: DIMM\n\tSet: 1\n\tLocator: DIMM1C\n\tBank Locator: Not Specified\n\tType: Reserved\n\tType Detail: Synchronous\n\tSpeed: Unknown\n\tManufacturer: Not Specified\n\tSerial Number: Not Specified\n\tAsset Tag: Not Specified\n\tPart Number: Not Specified\n\tRank: Unknown\n\nHandle 0x001A, DMI type 11, 11 bytes\nMemory Device\n\tArray Handle: 0x001A\n\tError Information Handle: No Error\n\tTotal Width: Unknown\n\tData Width: Unknown\n\tSize: No Module Installed\n\tForm Factor: DIMM\n\tSet: 1\n\tLocator: DIMM1B\n\tBank Locator: Not Specified\n\tType: Reserved\n\tType Detail: Synchronous\n\tSpeed: Unknown\n\tManufacturer: Not Specified\n\tSerial Number: Not Specified\n\tAsset Tag: Not Specified\n\tPart Number: Not Specified\n\tRank: Unknown\n\nHandle 0x001A, DMI type 11, 11 bytes\nMemory Device\n\tArray Handle: 0x001A\n\tError Information Handle: No Error\n\tTotal Width: Unknown\n\tData Width: Unknown\n\tSize: No Module Installed\n\tForm Factor: DIMM\n\tSet: 1\n\tLocator: DIMM1D\n\tBank Locator: Not Specified\n\tType: Reserved\n\tType Detail: Synchronous\n\tSpeed: Unknown\n\tManufacturer: Not Specified\n\tSerial Number: Not Specified\n\tAsset Tag: Not Specified\n\tPart Number: Not Specified\n\tRank: Unknown\n",
+      "expected": {
+        "physical_memory_arrays": {
+          "System Board Or Motherboard": {
+            "location": "System Board Or Motherboard",
+            "use": "System Memory",
+            "maximum_capacity": "16 GB",
+            "number_of_devices": 4,
+            "error_correction_type": "Multi-bit ECC"
+          }
+        },
+        "memory_devices": {
+          "DIMM1A": {
+            "locator": "DIMM1A",
+            "array_handle": "0x001A",
+            "error_information_handle": "No Error",
+            "total_width_bits": 10,
+            "data_width_bits": 10,
+            "size_mb": 1111,
+            "form_factor": "DIMM",
+            "set": "1",
+            "type": "DDR2",
+            "type_detail": "Synchronous",
+            "speed_mhz": 1111
+          },
+          "DIMM1C": {
+            "locator": "DIMM1C",
+            "array_handle": "0x001A",
+            "error_information_handle": "No Error",
+            "form_factor": "DIMM",
+            "set": "1",
+            "type_detail": "Synchronous"
+          },
+          "DIMM1B": {
+            "locator": "DIMM1B",
+            "array_handle": "0x001A",
+            "error_information_handle": "No Error",
+            "form_factor": "DIMM",
+            "set": "1",
+            "type_detail": "Synchronous"
+          },
+          "DIMM1D": {
+            "locator": "DIMM1D",
+            "array_handle": "0x001A",
+            "error_information_handle": "No Error",
+            "form_factor": "DIMM",
+            "set": "1",
+            "type_detail": "Synchronous"
+          }
+        }
+      }
+    },
+    {
+      "name": "dmidecode 3.5 -t memory output from a QEMU/KVM VM (1 array, 1 DIMM, many Unknown/Not Specified fields)",
+      "input": "# dmidecode 3.5\nGetting SMBIOS data from sysfs.\nSMBIOS 2.8 present.\n\nHandle 0x1000, DMI type 16, 23 bytes\nPhysical Memory Array\n\tLocation: Other\n\tUse: System Memory\n\tError Correction Type: Multi-bit ECC\n\tMaximum Capacity: 16 GB\n\tError Information Handle: Not Provided\n\tNumber Of Devices: 1\n\nHandle 0x1100, DMI type 17, 40 bytes\nMemory Device\n\tArray Handle: 0x1000\n\tError Information Handle: Not Provided\n\tTotal Width: Unknown\n\tData Width: Unknown\n\tSize: 16 GB\n\tForm Factor: DIMM\n\tSet: None\n\tLocator: DIMM 0\n\tBank Locator: Not Specified\n\tType: RAM\n\tType Detail: Other\n\tSpeed: Unknown\n\tManufacturer: QEMU\n\tSerial Number: Not Specified\n\tAsset Tag: Not Specified\n\tPart Number: Not Specified\n\tRank: Unknown\n\tConfigured Memory Speed: Unknown\n\tMinimum Voltage: Unknown\n\tMaximum Voltage: Unknown\n\tConfigured Voltage: Unknown\n",
+      "expected": {
+        "physical_memory_arrays": {
+          "Other": {
+            "location": "Other",
+            "use": "System Memory",
+            "maximum_capacity": "16 GB",
+            "number_of_devices": 1,
+            "error_correction_type": "Multi-bit ECC"
+          }
+        },
+        "memory_devices": {
+          "DIMM 0": {
+            "locator": "DIMM 0",
+            "array_handle": "0x1000",
+            "form_factor": "DIMM",
+            "type": "RAM",
+            "type_detail": "Other",
+            "manufacturer": "QEMU",
+            "size_mb": 16384
+          }
+        }
+      }
+    }
+  ]
+}
