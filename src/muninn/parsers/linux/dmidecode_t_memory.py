@@ -29,6 +29,18 @@ _KV_RE = re.compile(r"^\t(?P<key>[^:]+):\s+(?P<value>.+)$")
 # Pattern to extract numeric value and unit (e.g. "1111 MB", "1111 MHz")
 _NUMERIC_UNIT_RE = re.compile(r"^(?P<number>\d+)\s+\S+$")
 
+# Pattern to extract size value and unit (e.g. "16 GB", "1111 MB", "512 kB")
+_SIZE_RE = re.compile(r"^(?P<number>\d+)\s+(?P<unit>bytes|kB|MB|GB|TB)$")
+
+# Multipliers to convert a dmidecode Size unit to MB.
+_SIZE_UNIT_TO_MB: dict[str, float] = {
+    "bytes": 1 / (1024 * 1024),
+    "kB": 1 / 1024,
+    "MB": 1,
+    "GB": 1024,
+    "TB": 1024 * 1024,
+}
+
 # Pattern for width fields (e.g. "10 bits")
 _WIDTH_RE = re.compile(r"^(?P<width>\d+)\s+bits$")
 
@@ -112,6 +124,16 @@ def _extract_numeric(raw: str) -> int | None:
     return int(match.group("number")) if match else None
 
 
+def _extract_size_mb(raw: str) -> int | None:
+    """Extract size in MB from a dmidecode Size value (e.g. '16 GB')."""
+    match = _SIZE_RE.match(raw)
+    if not match:
+        return None
+    number = int(match.group("number"))
+    unit = match.group("unit")
+    return int(number * _SIZE_UNIT_TO_MB[unit])
+
+
 def _split_sections(output: str) -> list[tuple[str, list[str]]]:
     """Split dmidecode output into (section_type, lines) pairs."""
     sections: list[tuple[str, list[str]]] = []
@@ -178,7 +200,7 @@ def _set_width_fields(kv: dict[str, str], device: dict[str, Any]) -> None:
 def _set_numeric_fields(kv: dict[str, str], device: dict[str, Any]) -> None:
     """Set size_mb, speed_mhz, and rank on device if present."""
     if "Size" in kv:
-        size = _extract_numeric(kv["Size"])
+        size = _extract_size_mb(kv["Size"])
         if size is not None:
             device["size_mb"] = size
 
