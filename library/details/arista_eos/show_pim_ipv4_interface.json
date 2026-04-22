@@ -1,0 +1,53 @@
+{
+  "os": "arista_eos",
+  "command": "show pim ipv4 interface",
+  "schema": null,
+  "examples": [
+    {
+      "name": "PIM IPv4 interfaces with Ethernet, Port-channel, and Vlan types",
+      "input": "Address       Interface             Mode    Neighbor  Hello  DR   DR Address    PktsQed  PktsDropped\n                                            Count     Intvl  Pri\n192.0.2.1     Ethernet20/1          sparse  1         5      1    192.0.2.2     0        0\n192.0.2.3     Port-Channel1.10      sparse  1         30     1    192.0.2.4     28       0\n192.0.2.5     Vlan100               sparse  1         30     1    192.0.2.6     0        0\n192.0.2.7     Vlan200               sparse  1         30     1    192.0.2.8     0        0\n",
+      "expected": {
+        "Ethernet20/1": {
+          "address": "192.0.2.1",
+          "mode": "sparse",
+          "neighbor_count": 1,
+          "hello_interval": 5,
+          "dr_priority": 1,
+          "dr_address": "192.0.2.2",
+          "packets_queued": 0,
+          "packets_dropped": 0
+        },
+        "Port-channel1.10": {
+          "address": "192.0.2.3",
+          "mode": "sparse",
+          "neighbor_count": 1,
+          "hello_interval": 30,
+          "dr_priority": 1,
+          "dr_address": "192.0.2.4",
+          "packets_queued": 28,
+          "packets_dropped": 0
+        },
+        "Vlan100": {
+          "address": "192.0.2.5",
+          "mode": "sparse",
+          "neighbor_count": 1,
+          "hello_interval": 30,
+          "dr_priority": 1,
+          "dr_address": "192.0.2.6",
+          "packets_queued": 0,
+          "packets_dropped": 0
+        },
+        "Vlan200": {
+          "address": "192.0.2.7",
+          "mode": "sparse",
+          "neighbor_count": 1,
+          "hello_interval": 30,
+          "dr_priority": 1,
+          "dr_address": "192.0.2.8",
+          "packets_queued": 0,
+          "packets_dropped": 0
+        }
+      }
+    }
+  ]
+}
