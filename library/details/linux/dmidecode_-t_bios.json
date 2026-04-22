@@ -1,0 +1,102 @@
+{
+  "os": "linux",
+  "command": "dmidecode -t bios",
+  "schema": {
+    "name": "DmidecodeBiosResult",
+    "fields": {
+      "vendor": {
+        "type": "str",
+        "required": false
+      },
+      "version": {
+        "type": "str",
+        "required": false
+      },
+      "release_date": {
+        "type": "str",
+        "required": false
+      },
+      "address": {
+        "type": "str",
+        "required": false
+      },
+      "runtime_size": {
+        "type": "str",
+        "required": false
+      },
+      "rom_size": {
+        "type": "str",
+        "required": false
+      },
+      "characteristics": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": false
+      },
+      "bios_revision": {
+        "type": "str",
+        "required": false
+      },
+      "firmware_revision": {
+        "type": "str",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic BIOS information from a Dell server",
+      "input": "# dmidecode 1.12\nSMBIOS 1.1 present.\n\nHandle 0x0000, DMI type 0, 24 bytes\nBIOS Information\n\tVendor: Dell\n\tVersion: O11\n\tRelease Date: 01/11/1011\n\tAddress: 0xA1110\n\tRuntime Size: 111111 bytes\n\tROM Size: 2048 kB\n\tCharacteristics:\n\t\tPCI is supported\n\t\tPNP is supported\n\t\tAPM is supported\n\t\tBIOS is upgradeable\n\t\tBIOS shadowing is allowed\n\t\tESCD support is available\n\t\tBoot from CD is supported\n\t\tSelectable boot is supported\n\t\tBIOS ROM is socketed\n\t\tEDD is supported\n\t\tPrint screen service is supported (int 5h)\n\t\t8042 keyboard services are supported (int 9h)\n\t\tSerial services are supported (int 14h)\n\t\tPrinter services are supported (int 17h)\n\t\tCGA/mono video services are supported (int 10h)\n\t\tACPI is supported\n\t\tUSB legacy is supported\n\t\tSmart battery is supported\n\t\tBIOS boot specification is supported\n\t\tFunction key-initiated network boot is supported\n\t\tTargeted content distribution is supported\n",
+      "expected": {
+        "vendor": "Dell",
+        "version": "O11",
+        "release_date": "01/11/1011",
+        "address": "0xA1110",
+        "runtime_size": "111111 bytes",
+        "rom_size": "2048 kB",
+        "characteristics": [
+          "PCI is supported",
+          "PNP is supported",
+          "APM is supported",
+          "BIOS is upgradeable",
+          "BIOS shadowing is allowed",
+          "ESCD support is available",
+          "Boot from CD is supported",
+          "Selectable boot is supported",
+          "BIOS ROM is socketed",
+          "EDD is supported",
+          "Print screen service is supported (int 5h)",
+          "8042 keyboard services are supported (int 9h)",
+          "Serial services are supported (int 14h)",
+          "Printer services are supported (int 17h)",
+          "CGA/mono video services are supported (int 10h)",
+          "ACPI is supported",
+          "USB legacy is supported",
+          "Smart battery is supported",
+          "BIOS boot specification is supported",
+          "Function key-initiated network boot is supported",
+          "Targeted content distribution is supported"
+        ]
+      }
+    },
+    {
+      "name": "dmidecode 3.5 -t bios output from a QEMU/KVM virtual machine running SeaBIOS",
+      "input": "# dmidecode 3.5\nGetting SMBIOS data from sysfs.\nSMBIOS 2.8 present.\n\nHandle 0x0000, DMI type 0, 24 bytes\nBIOS Information\n\tVendor: SeaBIOS\n\tVersion: rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org\n\tRelease Date: 04/01/2014\n\tAddress: 0xE8000\n\tRuntime Size: 96 kB\n\tROM Size: 64 kB\n\tCharacteristics:\n\t\tBIOS characteristics not supported\n\t\tTargeted content distribution is supported\n\tBIOS Revision: 0.0\n",
+      "expected": {
+        "vendor": "SeaBIOS",
+        "version": "rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org",
+        "release_date": "04/01/2014",
+        "address": "0xE8000",
+        "runtime_size": "96 kB",
+        "rom_size": "64 kB",
+        "bios_revision": "0.0",
+        "characteristics": [
+          "BIOS characteristics not supported",
+          "Targeted content distribution is supported"
+        ]
+      }
+    }
+  ]
+}
