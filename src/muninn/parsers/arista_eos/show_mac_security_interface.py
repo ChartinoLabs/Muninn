@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
+from muninn.utils import canonical_interface_name
 
 _CONTROLLED_PORT_TRUE = "True"
 
@@ -45,7 +46,8 @@ class ShowMacSecurityInterfaceParser(
     @classmethod
     def _parse_row(cls, match: re.Match[str]) -> tuple[str, MacSecurityInterfaceEntry]:
         """Extract interface name and entry from a regex match."""
-        return match.group("interface"), cast(
+        interface = canonical_interface_name(match.group("interface"), os=OS.ARISTA_EOS)
+        return interface, cast(
             MacSecurityInterfaceEntry,
             {
                 "sci": match.group("sci"),
