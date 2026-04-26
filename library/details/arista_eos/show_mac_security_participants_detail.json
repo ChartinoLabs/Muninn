@@ -1,0 +1,147 @@
+{
+  "os": "arista_eos",
+  "command": "show mac security participants detail",
+  "schema": {
+    "name": "ShowMacSecurityParticipantsDetailResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "MacsecParticipantEntry",
+              "fields": {
+                "message_id": {
+                  "type": "str",
+                  "required": false
+                },
+                "elected_self": {
+                  "type": "bool",
+                  "required": true
+                },
+                "success": {
+                  "type": "bool",
+                  "required": true
+                },
+                "principal": {
+                  "type": "bool",
+                  "required": true
+                },
+                "default": {
+                  "type": "bool",
+                  "required": true
+                },
+                "key_server_sci": {
+                  "type": "str",
+                  "required": false
+                },
+                "sak_transmit": {
+                  "type": "bool",
+                  "required": true
+                },
+                "llpn_exhaustion": {
+                  "type": "int",
+                  "required": true
+                },
+                "distributed_key_identifier": {
+                  "type": "str",
+                  "required": false
+                },
+                "live_peer_list": {
+                  "type": {
+                    "type": "list",
+                    "items": "str"
+                  },
+                  "required": true
+                },
+                "potential_peer_list": {
+                  "type": {
+                    "type": "list",
+                    "items": "str"
+                  },
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "MACsec participants detail across two interfaces with two CKNs each",
+      "input": "Interface: Ethernet4/15/1\n    CKN: cd1df125ffbd3027abe6068fcbfdchanged91af15c274998046ca547\n      Message ID: changed0975adf202e94acf2\n      Elected self: True\n      Success: True\n      Principal: False\n      Default: True\n      KeyServer SCI: 28:00:3a:69:06:cc::999\n      SAK transmit: False\n      LLPN exhaustion: 0\n      Distributed key identifier: None\n      Live peer list: ['changed0fd8d6b694b42be37f5']\n      Potential peer list: []\n\n    CKN: e9cae93c91ef6c62afbb9fffd2fa32380achangede0f6348a8a6e1bb205be4d\n      Message ID: changed77f1f42e246ef05b\n      Elected self: True\n      Success: True\n      Principal: True\n      Default: False\n      KeyServer SCI: 28:1b:22:69:36:cc::333\n      SAK transmit: True\n      LLPN exhaustion: 0\n      Distributed key identifier: changed2577f1f42e246ef05b:46\n      Live peer list: ['changed4341200ff8e76821da']\n      Potential peer list: []\n\nInterface: Ethernet5/13/1\n    CKN: cd1df125ffbd3027abe6068fcbfd31f0changed58e91af15c274998046ca547\n      Message ID: 1860e9c0c1d2b4877fa78b77\n      Elected self: True\n      Success: True\n      Principal: False\n      Default: True\n      KeyServer SCI: 28:22:1b:69:32:d4::111\n      SAK transmit: False\n      LLPN exhaustion: 0\n      Distributed key identifier: None\n      Live peer list: ['2071783e6e9b09640a2eee89']\n      Potential peer list: []\n\n    CKN: e9cae93c91ef6c62afbb9fffd2fa323changedd6e0f6348a8a6e1bb205be4d\n      Message ID: changedf1e9662b5a94eac3\n      Elected self: True\n      Success: True\n      Principal: True\n      Default: False\n      KeyServer SCI: 28:11:3a:69:32:d4::111\n      SAK transmit: True\n      LLPN exhaustion: 0\n      Distributed key identifier: dec1a8dchanged5a94eac3:46\n      Live peer list: ['changedbe5869ab7cb6fa2c5cb1c']\n      Potential peer list: []\n",
+      "expected": {
+        "interfaces": {
+          "Ethernet4/15/1": {
+            "cd1df125ffbd3027abe6068fcbfdchanged91af15c274998046ca547": {
+              "message_id": "changed0975adf202e94acf2",
+              "elected_self": true,
+              "success": true,
+              "principal": false,
+              "default": true,
+              "key_server_sci": "28:00:3a:69:06:cc::999",
+              "sak_transmit": false,
+              "llpn_exhaustion": 0,
+              "live_peer_list": [
+                "changed0fd8d6b694b42be37f5"
+              ],
+              "potential_peer_list": []
+            },
+            "e9cae93c91ef6c62afbb9fffd2fa32380achangede0f6348a8a6e1bb205be4d": {
+              "message_id": "changed77f1f42e246ef05b",
+              "elected_self": true,
+              "success": true,
+              "principal": true,
+              "default": false,
+              "key_server_sci": "28:1b:22:69:36:cc::333",
+              "sak_transmit": true,
+              "llpn_exhaustion": 0,
+              "distributed_key_identifier": "changed2577f1f42e246ef05b:46",
+              "live_peer_list": [
+                "changed4341200ff8e76821da"
+              ],
+              "potential_peer_list": []
+            }
+          },
+          "Ethernet5/13/1": {
+            "cd1df125ffbd3027abe6068fcbfd31f0changed58e91af15c274998046ca547": {
+              "message_id": "1860e9c0c1d2b4877fa78b77",
+              "elected_self": true,
+              "success": true,
+              "principal": false,
+              "default": true,
+              "key_server_sci": "28:22:1b:69:32:d4::111",
+              "sak_transmit": false,
+              "llpn_exhaustion": 0,
+              "live_peer_list": [
+                "2071783e6e9b09640a2eee89"
+              ],
+              "potential_peer_list": []
+            },
+            "e9cae93c91ef6c62afbb9fffd2fa323changedd6e0f6348a8a6e1bb205be4d": {
+              "message_id": "changedf1e9662b5a94eac3",
+              "elected_self": true,
+              "success": true,
+              "principal": true,
+              "default": false,
+              "key_server_sci": "28:11:3a:69:32:d4::111",
+              "sak_transmit": true,
+              "llpn_exhaustion": 0,
+              "distributed_key_identifier": "dec1a8dchanged5a94eac3:46",
+              "live_peer_list": [
+                "changedbe5869ab7cb6fa2c5cb1c"
+              ],
+              "potential_peer_list": []
+            }
+          }
+        }
+      }
+    }
+  ]
+}
