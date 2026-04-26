@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
+from muninn.utils import canonical_interface_name
 
 
 class MkaCountersEntry(TypedDict):
@@ -62,10 +63,9 @@ class ShowMacSecurityMkaCountersParser(
             if not match:
                 continue
 
-            interface = match.group("interface")
-            # Skip the header line (starts with "Interface")
-            if interface == "Interface":
-                continue
+            interface = canonical_interface_name(
+                match.group("interface"), os=OS.ARISTA_EOS
+            )
 
             result[interface] = MkaCountersEntry(
                 rx_success=int(match.group("rx_success")),
