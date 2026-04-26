@@ -7,17 +7,18 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
+from muninn.utils import canonical_interface_name
 
 
 class MacsecParticipantEntry(TypedDict):
     """Schema for a single MACsec participant (CKN) entry."""
 
-    message_id: str
+    message_id: NotRequired[str]
     elected_self: bool
     success: bool
     principal: bool
     default: bool
-    key_server_sci: str
+    key_server_sci: NotRequired[str]
     sak_transmit: bool
     llpn_exhaustion: int
     distributed_key_identifier: NotRequired[str]
@@ -160,7 +161,9 @@ class ShowMacSecurityParticipantsDetailParser(
                 continue
 
             if match := cls._INTERFACE.match(line):
-                current_interface = match.group("interface")
+                current_interface = canonical_interface_name(
+                    match.group("interface"), os=OS.ARISTA_EOS
+                )
                 interfaces[current_interface] = {}
                 current_ckn = None
                 continue
