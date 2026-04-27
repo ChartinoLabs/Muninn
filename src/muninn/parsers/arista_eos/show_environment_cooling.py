@@ -18,12 +18,21 @@ class FanEntry(TypedDict):
 
 
 class ShowEnvironmentCoolingResult(TypedDict):
-    """Schema for 'show environment cooling' parsed output on Arista EOS."""
+    """Schema for 'show environment cooling' parsed output on Arista EOS.
+
+    Note: keys in `fans` mirror the device output. Inserted PSU fans appear
+    as ``PowerSupply{N}/{slot}`` (e.g. ``PowerSupply1/1``) while not-inserted
+    PSU bays appear as just ``PowerSupply{N}`` with no trailing slot.
+    """
 
     system_status: str
     ambient_temperature_celsius: int
     airflow: str
     fans: dict[str, FanEntry]
+
+
+_PERCENT_OR_NA = r"\d+%|N/A"
+_FAN_STATUS = r"Ok|Not Inserted|Failed|Unknown"
 
 
 @register(OS.ARISTA_EOS, "show environment cooling")
@@ -41,9 +50,9 @@ class ShowEnvironmentCoolingParser(BaseParser[ShowEnvironmentCoolingResult]):
     _AIRFLOW = re.compile(r"^Airflow:\s*(?P<airflow>.+)$")
     _FAN_LINE = re.compile(
         r"^(?P<fan>\S+)\s+"
-        r"(?P<status>Ok|Not Inserted|.+?)\s+"
-        r"(?P<configured>\d+%|N/A)\s+"
-        r"(?P<actual>\d+%|N/A)$"
+        rf"(?P<status>{_FAN_STATUS})\s+"
+        rf"(?P<configured>{_PERCENT_OR_NA})\s+"
+        rf"(?P<actual>{_PERCENT_OR_NA})$"
     )
 
     @classmethod
@@ -120,7 +129,7 @@ class ShowEnvironmentCoolingParser(BaseParser[ShowEnvironmentCoolingResult]):
         result["fans"] = fans
 
         required = ["system_status", "ambient_temperature_celsius", "airflow", "fans"]
-        missing = [f for f in required if not result.get(f)]
+        missing = [f for f in required if f not in result]
         if missing:
             msg = f"Missing required fields: {', '.join(missing)}"
             raise ValueError(msg)
