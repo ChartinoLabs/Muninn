@@ -1,0 +1,204 @@
+{
+  "os": "arista_eos",
+  "command": "show environment temperature",
+  "schema": {
+    "name": "ShowEnvironmentTemperatureResult",
+    "fields": {
+      "system_status": {
+        "type": "str",
+        "required": true
+      },
+      "sensors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "TemperatureSensorEntry",
+              "fields": {
+                "description": {
+                  "type": "str",
+                  "required": true
+                },
+                "temperature_celsius": {
+                  "type": "float",
+                  "required": true
+                },
+                "setpoint_nominal_celsius": {
+                  "type": "int",
+                  "required": true
+                },
+                "setpoint_celsius": {
+                  "type": "float",
+                  "required": true
+                },
+                "alert_limit_celsius": {
+                  "type": "float",
+                  "required": true
+                },
+                "critical_limit_celsius": {
+                  "type": "float",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multi-slot temperature sensors across supervisor, linecards, and fabric modules",
+      "input": "System temperature status is: Ok\n\nSupervisor 1:\n                                                                 Alert  Critical\n                                               Temp    Setpoint  Limit     Limit\nSensor  Description                             (C)         (C)    (C)       (C)\n------- ----------------------------------- ------- ----------- ------ ---------\n1       Digital Temperature Sensor on cpu0     36.0   (65) 63.8     95       105\n2       Digital Temperature Sensor on cpu1     36.0   (65) 63.8     95       105\n3       Digital Temperature Sensor on cpu2     36.0   (65) 63.8     95       105\n\nLinecard 3:\n                                                                 Alert  Critical\n                                               Temp    Setpoint  Limit     Limit\nSensor  Description                             (C)         (C)    (C)       (C)\n------- ----------------------------------- ------- ----------- ------ ---------\n6       Outlet sensor                          50.8   (85) 83.8     95       105\n7       Inlet sensor                           59.2   (75) 73.8     90       100\n8       Board sensor                           62.0   (95) 93.8    105       110\n\nLinecard 4:\n                                                                 Alert  Critical\n                                               Temp    Setpoint  Limit     Limit\nSensor  Description                             (C)         (C)    (C)       (C)\n------- ----------------------------------- ------- ----------- ------ ---------\n5       Outlet sensor                          41.2   (80) 78.8     90       100\n6       Inlet sensor                           43.8   (65) 63.8     75        85\n7       Board sensor                           49.0   (85) 83.8     95       105\n9       Board sensor                           45.0   (85) 83.8     95       105\n\nLinecard 5:\n                                                                 Alert  Critical\n                                               Temp    Setpoint  Limit     Limit\nSensor  Description                             (C)         (C)    (C)       (C)\n------- ----------------------------------- ------- ----------- ------ ---------\n5       Outlet sensor                          39.5   (80) 78.8     90       100\n6       Inlet sensor                           39.0   (65) 63.8     75        85\n\nLinecard 6:\n                                                                 Alert  Critical\n                                               Temp    Setpoint  Limit     Limit\nSensor  Description                             (C)         (C)    (C)       (C)\n------- ----------------------------------- ------- ----------- ------ ---------\n1       Outlet sensor                          32.5   (80) 78.8     90       100\n2       Inlet sensor                           29.2   (65) 63.8     70        85\n\nFabric 1:\n                                                                 Alert  Critical\n                                               Temp    Setpoint  Limit     Limit\nSensor  Description                             (C)         (C)    (C)       (C)\n------- ----------------------------------- ------- ----------- ------ ---------\n13      ADT (Fan controller) 1                 32.8   (85) 83.8     95       105\n14      Fan side sensor                        32.0   (85) 83.8     95       105\n",
+      "expected": {
+        "system_status": "Ok",
+        "sensors": {
+          "Supervisor 1": {
+            "1": {
+              "description": "Digital Temperature Sensor on cpu0",
+              "temperature_celsius": 36.0,
+              "setpoint_nominal_celsius": 65,
+              "setpoint_celsius": 63.8,
+              "alert_limit_celsius": 95.0,
+              "critical_limit_celsius": 105.0
+            },
+            "2": {
+              "description": "Digital Temperature Sensor on cpu1",
+              "temperature_celsius": 36.0,
+              "setpoint_nominal_celsius": 65,
+              "setpoint_celsius": 63.8,
+              "alert_limit_celsius": 95.0,
+              "critical_limit_celsius": 105.0
+            },
+            "3": {
+              "description": "Digital Temperature Sensor on cpu2",
+              "temperature_celsius": 36.0,
+              "setpoint_nominal_celsius": 65,
+              "setpoint_celsius": 63.8,
+              "alert_limit_celsius": 95.0,
+              "critical_limit_celsius": 105.0
+            }
+          },
+          "Linecard 3": {
+            "6": {
+              "description": "Outlet sensor",
+              "temperature_celsius": 50.8,
+              "setpoint_nominal_celsius": 85,
+              "setpoint_celsius": 83.8,
+              "alert_limit_celsius": 95.0,
+              "critical_limit_celsius": 105.0
+            },
+            "7": {
+              "description": "Inlet sensor",
+              "temperature_celsius": 59.2,
+              "setpoint_nominal_celsius": 75,
+              "setpoint_celsius": 73.8,
+              "alert_limit_celsius": 90.0,
+              "critical_limit_celsius": 100.0
+            },
+            "8": {
+              "description": "Board sensor",
+              "temperature_celsius": 62.0,
+              "setpoint_nominal_celsius": 95,
+              "setpoint_celsius": 93.8,
+              "alert_limit_celsius": 105.0,
+              "critical_limit_celsius": 110.0
+            }
+          },
+          "Linecard 4": {
+            "5": {
+              "description": "Outlet sensor",
+              "temperature_celsius": 41.2,
+              "setpoint_nominal_celsius": 80,
+              "setpoint_celsius": 78.8,
+              "alert_limit_celsius": 90.0,
+              "critical_limit_celsius": 100.0
+            },
+            "6": {
+              "description": "Inlet sensor",
+              "temperature_celsius": 43.8,
+              "setpoint_nominal_celsius": 65,
+              "setpoint_celsius": 63.8,
+              "alert_limit_celsius": 75.0,
+              "critical_limit_celsius": 85.0
+            },
+            "7": {
+              "description": "Board sensor",
+              "temperature_celsius": 49.0,
+              "setpoint_nominal_celsius": 85,
+              "setpoint_celsius": 83.8,
+              "alert_limit_celsius": 95.0,
+              "critical_limit_celsius": 105.0
+            },
+            "9": {
+              "description": "Board sensor",
+              "temperature_celsius": 45.0,
+              "setpoint_nominal_celsius": 85,
+              "setpoint_celsius": 83.8,
+              "alert_limit_celsius": 95.0,
+              "critical_limit_celsius": 105.0
+            }
+          },
+          "Linecard 5": {
+            "5": {
+              "description": "Outlet sensor",
+              "temperature_celsius": 39.5,
+              "setpoint_nominal_celsius": 80,
+              "setpoint_celsius": 78.8,
+              "alert_limit_celsius": 90.0,
+              "critical_limit_celsius": 100.0
+            },
+            "6": {
+              "description": "Inlet sensor",
+              "temperature_celsius": 39.0,
+              "setpoint_nominal_celsius": 65,
+              "setpoint_celsius": 63.8,
+              "alert_limit_celsius": 75.0,
+              "critical_limit_celsius": 85.0
+            }
+          },
+          "Linecard 6": {
+            "1": {
+              "description": "Outlet sensor",
+              "temperature_celsius": 32.5,
+              "setpoint_nominal_celsius": 80,
+              "setpoint_celsius": 78.8,
+              "alert_limit_celsius": 90.0,
+              "critical_limit_celsius": 100.0
+            },
+            "2": {
+              "description": "Inlet sensor",
+              "temperature_celsius": 29.2,
+              "setpoint_nominal_celsius": 65,
+              "setpoint_celsius": 63.8,
+              "alert_limit_celsius": 70.0,
+              "critical_limit_celsius": 85.0
+            }
+          },
+          "Fabric 1": {
+            "13": {
+              "description": "ADT (Fan controller) 1",
+              "temperature_celsius": 32.8,
+              "setpoint_nominal_celsius": 85,
+              "setpoint_celsius": 83.8,
+              "alert_limit_celsius": 95.0,
+              "critical_limit_celsius": 105.0
+            },
+            "14": {
+              "description": "Fan side sensor",
+              "temperature_celsius": 32.0,
+              "setpoint_nominal_celsius": 85,
+              "setpoint_celsius": 83.8,
+              "alert_limit_celsius": 95.0,
+              "critical_limit_celsius": 105.0
+            }
+          }
+        }
+      }
+    }
+  ]
+}
