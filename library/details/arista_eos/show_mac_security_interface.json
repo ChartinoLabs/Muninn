@@ -1,0 +1,53 @@
+{
+  "os": "arista_eos",
+  "command": "show mac security interface",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Multiple interfaces with MACsec enabled and controlled ports",
+      "input": "Interface       SCI                       Controlled Port      Key in Use\nEthernet4/15/1  ch:99:3h:69:76:cc::661    True                 changed77f1j42e246kf05b:45\nEthernet5/13/1  ch:99:3h:69:72:d4::803    True                 changedf1e9j62b5a9keac3:45\nEthernet5/14/1  ch:99:3h:69:72:d8::807    True                 changeda62bjb9cdadk246e:45\nEthernet5/16/1  ch:99:3h:69:72:e0::815    True                 changede693j033b28k810e:56\nEthernet5/17/1  ch:99:3h:69:72:e4::819    True                 changed5778j794bf3k611c:45\nEthernet5/18/1  ch:99:3h:69:72:e8::823    True                 changed532dj3307f2k610e:45\nEthernet5/19/1  ch:99:3h:69:72:ec::827    True                 changed046bjdb206eka327:45\nEthernet5/20/1  ch:99:3h:69:72:f0::831    True                 changedd888jc35359kbd0c:39\n",
+      "expected": {
+        "Ethernet4/15/1": {
+          "sci": "ch:99:3h:69:76:cc::661",
+          "controlled_port": true,
+          "key_in_use": "changed77f1j42e246kf05b:45"
+        },
+        "Ethernet5/13/1": {
+          "sci": "ch:99:3h:69:72:d4::803",
+          "controlled_port": true,
+          "key_in_use": "changedf1e9j62b5a9keac3:45"
+        },
+        "Ethernet5/14/1": {
+          "sci": "ch:99:3h:69:72:d8::807",
+          "controlled_port": true,
+          "key_in_use": "changeda62bjb9cdadk246e:45"
+        },
+        "Ethernet5/16/1": {
+          "sci": "ch:99:3h:69:72:e0::815",
+          "controlled_port": true,
+          "key_in_use": "changede693j033b28k810e:56"
+        },
+        "Ethernet5/17/1": {
+          "sci": "ch:99:3h:69:72:e4::819",
+          "controlled_port": true,
+          "key_in_use": "changed5778j794bf3k611c:45"
+        },
+        "Ethernet5/18/1": {
+          "sci": "ch:99:3h:69:72:e8::823",
+          "controlled_port": true,
+          "key_in_use": "changed532dj3307f2k610e:45"
+        },
+        "Ethernet5/19/1": {
+          "sci": "ch:99:3h:69:72:ec::827",
+          "controlled_port": true,
+          "key_in_use": "changed046bjdb206eka327:45"
+        },
+        "Ethernet5/20/1": {
+          "sci": "ch:99:3h:69:72:f0::831",
+          "controlled_port": true,
+          "key_in_use": "changedd888jc35359kbd0c:39"
+        }
+      }
+    }
+  ]
+}
