@@ -1,0 +1,268 @@
+{
+  "os": "arista_eos",
+  "command": "show interfaces transceiver detail",
+  "schema": {
+    "name": "ShowInterfacesTransceiverDetailResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "TransceiverEntry",
+            "fields": {
+              "temperature_celsius": {
+                "type": "float",
+                "required": false
+              },
+              "temperature_thresholds": {
+                "type": {
+                  "name": "ThresholdInfo",
+                  "fields": {
+                    "high_alarm": {
+                      "type": "float",
+                      "required": true
+                    },
+                    "high_warning": {
+                      "type": "float",
+                      "required": true
+                    },
+                    "low_alarm": {
+                      "type": "float",
+                      "required": true
+                    },
+                    "low_warning": {
+                      "type": "float",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "voltage_volts": {
+                "type": "float",
+                "required": false
+              },
+              "voltage_thresholds": {
+                "type": {
+                  "type": "ref",
+                  "name": "ThresholdInfo"
+                },
+                "required": false
+              },
+              "current_ma": {
+                "type": "float",
+                "required": false
+              },
+              "current_thresholds": {
+                "type": {
+                  "type": "ref",
+                  "name": "ThresholdInfo"
+                },
+                "required": false
+              },
+              "tx_power_dbm": {
+                "type": "float",
+                "required": false
+              },
+              "tx_power_thresholds": {
+                "type": {
+                  "type": "ref",
+                  "name": "ThresholdInfo"
+                },
+                "required": false
+              },
+              "rx_power_dbm": {
+                "type": "float",
+                "required": false
+              },
+              "rx_power_thresholds": {
+                "type": {
+                  "type": "ref",
+                  "name": "ThresholdInfo"
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Transceiver detail with temperature, voltage, current, TX/RX power across multiple lanes",
+      "input": "mA: milliamperes, dBm: decibels (milliwatts), NA or N/A: not applicable.\n++ : high alarm, +  : high warning, -  : low warning, -- : low alarm.\nA2D readouts (if they differ), are reported in parentheses.\nThe threshold values are calibrated.\n                         High Alarm  High Warn   Low Alarm   Low Warn\n           Temperature   Threshold   Threshold   Threshold   Threshold\nPort       (Celsius)     (Celsius)   (Celsius)   (Celsius)   (Celsius)\n-------    ------------  ----------  ----------  ----------  ----------\nEt6/1      27.48         80.00       75.00       -5.00       0.00\nEt6/2      27.48         80.00       75.00       -5.00       0.00\nEt6/3      27.48         80.00       75.00       -5.00       0.00\nEt6/4      27.48         80.00       75.00       -5.00       0.00\n                         High Alarm  High Warn   Low Alarm   Low Warn\n           Voltage       Threshold   Threshold   Threshold   Threshold\nPort       (Volts)       (Volts)     (Volts)     (Volts)     (Volts)\n-------    ------------  ----------  ----------  ----------  ----------\nEt6/1      3.30          3.60        3.50        3.00        3.10\nEt6/2      3.30          3.60        3.50        3.00        3.10\nEt6/3      3.30          3.60        3.50        3.00        3.10\nEt6/4      3.30          3.60        3.50        3.00        3.10\n                         High Alarm  High Warn   Low Alarm   Low Warn\n           Current       Threshold   Threshold   Threshold   Threshold\nPort       (mA)          (mA)        (mA)        (mA)        (mA)\n-------    ------------  ----------  ----------  ----------  ----------\nEt29/1     21.90         38.30       37.35       0.00        0.00\nEt29/2     21.90         38.30       37.35       0.00        0.00\nEt29/3     21.90         38.30       37.35       0.00        0.00\nEt29/4     21.90         38.30       37.35       0.00        0.00\n                         High Alarm  High Warn   Low Alarm   Low Warn\n           Tx Power      Threshold   Threshold   Threshold   Threshold\nPort       (dBm)         (dBm)       (dBm)       (dBm)       (dBm)\n-------    ------------  ----------  ----------  ----------  ----------\nEt6/1      -2.39         4.40        3.40        -9.60       -8.60\nEt6/2      -2.33         4.40        3.40        -9.60       -8.60\nEt6/3      -0.78         4.40        3.40        -9.60       -8.60\nEt6/4      -0.93         4.40        3.40        -9.60       -8.60\n                         High Alarm  High Warn   Low Alarm   Low Warn\n           Rx Power      Threshold   Threshold   Threshold   Threshold\nPort       (dBm)         (dBm)       (dBm)       (dBm)       (dBm)\n-------    ------------  ----------  ----------  ----------  ----------\nEt6/1      -0.90         4.40        3.40        -11.50      -10.50\nEt6/2      -0.94         4.40        3.40        -11.50      -10.50\nEt6/3      -1.00         4.40        3.40        -11.50      -10.50\nEt6/4      -0.83         4.40        3.40        -11.50      -10.50\nEt7/1      -1.15         4.40        3.40        -11.50      -10.50\n",
+      "expected": {
+        "interfaces": {
+          "Ethernet6/1": {
+            "temperature_celsius": 27.48,
+            "temperature_thresholds": {
+              "high_alarm": 80.0,
+              "high_warning": 75.0,
+              "low_alarm": -5.0,
+              "low_warning": 0.0
+            },
+            "voltage_volts": 3.3,
+            "voltage_thresholds": {
+              "high_alarm": 3.6,
+              "high_warning": 3.5,
+              "low_alarm": 3.0,
+              "low_warning": 3.1
+            },
+            "tx_power_dbm": -2.39,
+            "tx_power_thresholds": {
+              "high_alarm": 4.4,
+              "high_warning": 3.4,
+              "low_alarm": -9.6,
+              "low_warning": -8.6
+            },
+            "rx_power_dbm": -0.9,
+            "rx_power_thresholds": {
+              "high_alarm": 4.4,
+              "high_warning": 3.4,
+              "low_alarm": -11.5,
+              "low_warning": -10.5
+            }
+          },
+          "Ethernet6/2": {
+            "temperature_celsius": 27.48,
+            "temperature_thresholds": {
+              "high_alarm": 80.0,
+              "high_warning": 75.0,
+              "low_alarm": -5.0,
+              "low_warning": 0.0
+            },
+            "voltage_volts": 3.3,
+            "voltage_thresholds": {
+              "high_alarm": 3.6,
+              "high_warning": 3.5,
+              "low_alarm": 3.0,
+              "low_warning": 3.1
+            },
+            "tx_power_dbm": -2.33,
+            "tx_power_thresholds": {
+              "high_alarm": 4.4,
+              "high_warning": 3.4,
+              "low_alarm": -9.6,
+              "low_warning": -8.6
+            },
+            "rx_power_dbm": -0.94,
+            "rx_power_thresholds": {
+              "high_alarm": 4.4,
+              "high_warning": 3.4,
+              "low_alarm": -11.5,
+              "low_warning": -10.5
+            }
+          },
+          "Ethernet6/3": {
+            "temperature_celsius": 27.48,
+            "temperature_thresholds": {
+              "high_alarm": 80.0,
+              "high_warning": 75.0,
+              "low_alarm": -5.0,
+              "low_warning": 0.0
+            },
+            "voltage_volts": 3.3,
+            "voltage_thresholds": {
+              "high_alarm": 3.6,
+              "high_warning": 3.5,
+              "low_alarm": 3.0,
+              "low_warning": 3.1
+            },
+            "tx_power_dbm": -0.78,
+            "tx_power_thresholds": {
+              "high_alarm": 4.4,
+              "high_warning": 3.4,
+              "low_alarm": -9.6,
+              "low_warning": -8.6
+            },
+            "rx_power_dbm": -1.0,
+            "rx_power_thresholds": {
+              "high_alarm": 4.4,
+              "high_warning": 3.4,
+              "low_alarm": -11.5,
+              "low_warning": -10.5
+            }
+          },
+          "Ethernet6/4": {
+            "temperature_celsius": 27.48,
+            "temperature_thresholds": {
+              "high_alarm": 80.0,
+              "high_warning": 75.0,
+              "low_alarm": -5.0,
+              "low_warning": 0.0
+            },
+            "voltage_volts": 3.3,
+            "voltage_thresholds": {
+              "high_alarm": 3.6,
+              "high_warning": 3.5,
+              "low_alarm": 3.0,
+              "low_warning": 3.1
+            },
+            "tx_power_dbm": -0.93,
+            "tx_power_thresholds": {
+              "high_alarm": 4.4,
+              "high_warning": 3.4,
+              "low_alarm": -9.6,
+              "low_warning": -8.6
+            },
+            "rx_power_dbm": -0.83,
+            "rx_power_thresholds": {
+              "high_alarm": 4.4,
+              "high_warning": 3.4,
+              "low_alarm": -11.5,
+              "low_warning": -10.5
+            }
+          },
+          "Ethernet29/1": {
+            "current_ma": 21.9,
+            "current_thresholds": {
+              "high_alarm": 38.3,
+              "high_warning": 37.35,
+              "low_alarm": 0.0,
+              "low_warning": 0.0
+            }
+          },
+          "Ethernet29/2": {
+            "current_ma": 21.9,
+            "current_thresholds": {
+              "high_alarm": 38.3,
+              "high_warning": 37.35,
+              "low_alarm": 0.0,
+              "low_warning": 0.0
+            }
+          },
+          "Ethernet29/3": {
+            "current_ma": 21.9,
+            "current_thresholds": {
+              "high_alarm": 38.3,
+              "high_warning": 37.35,
+              "low_alarm": 0.0,
+              "low_warning": 0.0
+            }
+          },
+          "Ethernet29/4": {
+            "current_ma": 21.9,
+            "current_thresholds": {
+              "high_alarm": 38.3,
+              "high_warning": 37.35,
+              "low_alarm": 0.0,
+              "low_warning": 0.0
+            }
+          },
+          "Ethernet7/1": {
+            "rx_power_dbm": -1.15,
+            "rx_power_thresholds": {
+              "high_alarm": 4.4,
+              "high_warning": 3.4,
+              "low_alarm": -11.5,
+              "low_warning": -10.5
+            }
+          }
+        }
+      }
+    }
+  ]
+}
