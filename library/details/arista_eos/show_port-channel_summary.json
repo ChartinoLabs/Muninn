@@ -1,0 +1,356 @@
+{
+  "os": "arista_eos",
+  "command": "show port-channel summary",
+  "schema": {
+    "name": "ShowPortChannelSummaryResult",
+    "fields": {
+      "port_channels": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PortChannelEntry",
+            "fields": {
+              "group": {
+                "type": "int",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "protocol": {
+                "type": "str",
+                "required": true
+              },
+              "protocol_flags": {
+                "type": "str",
+                "required": true
+              },
+              "members": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "PortChannelMember",
+                    "fields": {
+                      "flags": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple port-channels with LACP, mixed member counts and wrapped lines",
+      "input": "Flags\n-------------------------- ----------------------------- -------------------------\n   a - LACP Active            p - LACP Passive           * - static fallback\n   F - Fallback enabled       f - Fallback configured    ^ - individual fallback\n   U - In Use                 D - Down\n   + - In-Sync                - - Out-of-Sync            i - incompatible with agg\n   P - bundled in Po          s - suspended              G - Aggregable\n   I - Individual             S - ShortTimeout           w - wait for agg\n\nNumber of channels in use: 1\nNumber of aggregators: 1\n\n   Port-Channel       Protocol     Ports\n------------------ --------------- --------------------------------\n   Po105(D)           LACP(aF*)    Et5(D)\n   Po106(D)           LACP(aF*)    Et6(D)\n   Po107(D)           LACP(aF*)    Et7(D)\n   Po108(D)           LACP(aF*)    Et8(D)\n   Po109(D)           LACP(aF*)    Et9(D)\n   Po110(D)           LACP(aF*)    Et10(D)\n   Po111(D)           LACP(aF*)    Et11(D)\n   Po112(D)           LACP(aF*)    Et12(D)\n   Po113(D)           LACP(aF*)    Et13(D)\n   Po114(D)           LACP(aF*)    Et14(D)\n   Po115(D)           LACP(aF*)    Et15(D)\n   Po116(D)           LACP(aF*)    Et16(D) Et17(D)\n   Po118(D)           LACP(aF*)    Et18(D) Et19(D) Et20(D)\n   Po121(D)           LACP(aF*)    Et21(D) Et22(D) Et23(D) Et24(D)\n   Po125(D)           LACP(aF*)    Et25(D) Et26(D) Et27(D) Et28(D)\n                                   Et29(D)\n   Po130(D)           LACP(aF*)    Et30(D) Et31(D) Et32(D) Et33(D)\n                                   Et34(D) Et35(D)\n   Po136(D)           LACP(aF*)    Et36(D) Et37(D) Et38(D) Et39(D)\n                                   Et40(D) Et41(D) Et42(D)\n   Po146(D)           LACP(aF*)    Et43(D) Et44(D) Et45(D) Et46(D)\n                                   Et47(D) Et48(D) Et49(D) Et50(D)\n   Po2000(U)          LACP(a)      Et54/1(PG+)\n",
+      "expected": {
+        "port_channels": {
+          "Port-channel105": {
+            "group": 105,
+            "status": "down",
+            "protocol": "LACP",
+            "protocol_flags": "aF*",
+            "members": {
+              "Ethernet5": {
+                "flags": "D"
+              }
+            }
+          },
+          "Port-channel106": {
+            "group": 106,
+            "status": "down",
+            "protocol": "LACP",
+            "protocol_flags": "aF*",
+            "members": {
+              "Ethernet6": {
+                "flags": "D"
+              }
+            }
+          },
+          "Port-channel107": {
+            "group": 107,
+            "status": "down",
+            "protocol": "LACP",
+            "protocol_flags": "aF*",
+            "members": {
+              "Ethernet7": {
+                "flags": "D"
+              }
+            }
+          },
+          "Port-channel108": {
+            "group": 108,
+            "status": "down",
+            "protocol": "LACP",
+            "protocol_flags": "aF*",
+            "members": {
+              "Ethernet8": {
+                "flags": "D"
+              }
+            }
+          },
+          "Port-channel109": {
+            "group": 109,
+            "status": "down",
+            "protocol": "LACP",
+            "protocol_flags": "aF*",
+            "members": {
+              "Ethernet9": {
+                "flags": "D"
+              }
+            }
+          },
+          "Port-channel110": {
+            "group": 110,
+            "status": "down",
+            "protocol": "LACP",
+            "protocol_flags": "aF*",
+            "members": {
+              "Ethernet10": {
+                "flags": "D"
+              }
+            }
+          },
+          "Port-channel111": {
+            "group": 111,
+            "status": "down",
+            "protocol": "LACP",
+            "protocol_flags": "aF*",
+            "members": {
+              "Ethernet11": {
+                "flags": "D"
+              }
+            }
+          },
+          "Port-channel112": {
+            "group": 112,
+            "status": "down",
+            "protocol": "LACP",
+            "protocol_flags": "aF*",
+            "members": {
+              "Ethernet12": {
+                "flags": "D"
+              }
+            }
+          },
+          "Port-channel113": {
+            "group": 113,
+            "status": "down",
+            "protocol": "LACP",
+            "protocol_flags": "aF*",
+            "members": {
+              "Ethernet13": {
+                "flags": "D"
+              }
+            }
+          },
+          "Port-channel114": {
+            "group": 114,
+            "status": "down",
+            "protocol": "LACP",
+            "protocol_flags": "aF*",
+            "members": {
+              "Ethernet14": {
+                "flags": "D"
+              }
+            }
+          },
+          "Port-channel115": {
+            "group": 115,
+            "status": "down",
+            "protocol": "LACP",
+            "protocol_flags": "aF*",
+            "members": {
+              "Ethernet15": {
+                "flags": "D"
+              }
+            }
+          },
+          "Port-channel116": {
+            "group": 116,
+            "status": "down",
+            "protocol": "LACP",
+            "protocol_flags": "aF*",
+            "members": {
+              "Ethernet16": {
+                "flags": "D"
+              },
+              "Ethernet17": {
+                "flags": "D"
+              }
+            }
+          },
+          "Port-channel118": {
+            "group": 118,
+            "status": "down",
+            "protocol": "LACP",
+            "protocol_flags": "aF*",
+            "members": {
+              "Ethernet18": {
+                "flags": "D"
+              },
+              "Ethernet19": {
+                "flags": "D"
+              },
+              "Ethernet20": {
+                "flags": "D"
+              }
+            }
+          },
+          "Port-channel121": {
+            "group": 121,
+            "status": "down",
+            "protocol": "LACP",
+            "protocol_flags": "aF*",
+            "members": {
+              "Ethernet21": {
+                "flags": "D"
+              },
+              "Ethernet22": {
+                "flags": "D"
+              },
+              "Ethernet23": {
+                "flags": "D"
+              },
+              "Ethernet24": {
+                "flags": "D"
+              }
+            }
+          },
+          "Port-channel125": {
+            "group": 125,
+            "status": "down",
+            "protocol": "LACP",
+            "protocol_flags": "aF*",
+            "members": {
+              "Ethernet25": {
+                "flags": "D"
+              },
+              "Ethernet26": {
+                "flags": "D"
+              },
+              "Ethernet27": {
+                "flags": "D"
+              },
+              "Ethernet28": {
+                "flags": "D"
+              },
+              "Ethernet29": {
+                "flags": "D"
+              }
+            }
+          },
+          "Port-channel130": {
+            "group": 130,
+            "status": "down",
+            "protocol": "LACP",
+            "protocol_flags": "aF*",
+            "members": {
+              "Ethernet30": {
+                "flags": "D"
+              },
+              "Ethernet31": {
+                "flags": "D"
+              },
+              "Ethernet32": {
+                "flags": "D"
+              },
+              "Ethernet33": {
+                "flags": "D"
+              },
+              "Ethernet34": {
+                "flags": "D"
+              },
+              "Ethernet35": {
+                "flags": "D"
+              }
+            }
+          },
+          "Port-channel136": {
+            "group": 136,
+            "status": "down",
+            "protocol": "LACP",
+            "protocol_flags": "aF*",
+            "members": {
+              "Ethernet36": {
+                "flags": "D"
+              },
+              "Ethernet37": {
+                "flags": "D"
+              },
+              "Ethernet38": {
+                "flags": "D"
+              },
+              "Ethernet39": {
+                "flags": "D"
+              },
+              "Ethernet40": {
+                "flags": "D"
+              },
+              "Ethernet41": {
+                "flags": "D"
+              },
+              "Ethernet42": {
+                "flags": "D"
+              }
+            }
+          },
+          "Port-channel146": {
+            "group": 146,
+            "status": "down",
+            "protocol": "LACP",
+            "protocol_flags": "aF*",
+            "members": {
+              "Ethernet43": {
+                "flags": "D"
+              },
+              "Ethernet44": {
+                "flags": "D"
+              },
+              "Ethernet45": {
+                "flags": "D"
+              },
+              "Ethernet46": {
+                "flags": "D"
+              },
+              "Ethernet47": {
+                "flags": "D"
+              },
+              "Ethernet48": {
+                "flags": "D"
+              },
+              "Ethernet49": {
+                "flags": "D"
+              },
+              "Ethernet50": {
+                "flags": "D"
+              }
+            }
+          },
+          "Port-channel2000": {
+            "group": 2000,
+            "status": "up",
+            "protocol": "LACP",
+            "protocol_flags": "a",
+            "members": {
+              "Ethernet54/1": {
+                "flags": "PG+"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
