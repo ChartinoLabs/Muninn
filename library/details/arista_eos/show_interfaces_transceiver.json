@@ -1,0 +1,86 @@
+{
+  "os": "arista_eos",
+  "command": "show interfaces transceiver",
+  "schema": {
+    "name": "ShowInterfacesTransceiverResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "TransceiverEntry",
+            "fields": {
+              "temperature_c": {
+                "type": "float",
+                "required": false
+              },
+              "voltage_v": {
+                "type": "float",
+                "required": false
+              },
+              "current_ma": {
+                "type": "float",
+                "required": false
+              },
+              "tx_power_dbm": {
+                "type": "float",
+                "required": false
+              },
+              "rx_power_dbm": {
+                "type": "float",
+                "required": false
+              },
+              "last_update": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic transceiver output with mixed N/A and valid readings",
+      "input": "If device is externally calibrated, only calibrated values are printed.\nN/A: not applicable, Tx: transmit, Rx: receive.\nmA: milliamperes, dBm: decibels (milliwatts).\n                               Bias      Optical   Optical\n          Temp       Voltage   Current   Tx Power  Rx Power\nPort      (Celsius)  (Volts)   (mA)      (dBm)     (dBm)     Last Update\n-----     ---------  --------  --------  --------  --------  -------------------\nEt3/1/1    27.92      3.23      19.94     N/A      -2.39     0:00:06 ago\nEt3/17/1   35.61      3.21      36.64    1.51      -0.10     0:00:03 ago\nEt3/17/2   35.61      3.21      36.94    -0.20     -0.20     0:00:03 ago\nEt3/17/3   35.61      3.21      37.42    1.65      -0.72     0:00:03 ago\nEt5/29/1   N/A        N/A       N/A       N/A       N/A      N/A\n",
+      "expected": {
+        "interfaces": {
+          "Ethernet3/1/1": {
+            "temperature_c": 27.92,
+            "voltage_v": 3.23,
+            "current_ma": 19.94,
+            "rx_power_dbm": -2.39,
+            "last_update": "0:00:06 ago"
+          },
+          "Ethernet3/17/1": {
+            "temperature_c": 35.61,
+            "voltage_v": 3.21,
+            "current_ma": 36.64,
+            "tx_power_dbm": 1.51,
+            "rx_power_dbm": -0.1,
+            "last_update": "0:00:03 ago"
+          },
+          "Ethernet3/17/2": {
+            "temperature_c": 35.61,
+            "voltage_v": 3.21,
+            "current_ma": 36.94,
+            "tx_power_dbm": -0.2,
+            "rx_power_dbm": -0.2,
+            "last_update": "0:00:03 ago"
+          },
+          "Ethernet3/17/3": {
+            "temperature_c": 35.61,
+            "voltage_v": 3.21,
+            "current_ma": 37.42,
+            "tx_power_dbm": 1.65,
+            "rx_power_dbm": -0.72,
+            "last_update": "0:00:03 ago"
+          }
+        }
+      }
+    }
+  ]
+}
