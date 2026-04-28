@@ -1,10 +1,11 @@
 """Parser for 'show ip ospf summary' command on Arista EOS."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 from muninn.tags import ParserTag
 
@@ -28,17 +29,15 @@ class OspfInstanceInfo(TypedDict):
 
     router_id: str
     vrf: str
-    role: str
-    time_since_last_spf_seconds: int
-    max_lsas: int
-    total_lsas: int
-    type5_external_lsas: int
+    role: NotRequired[str]
+    time_since_last_spf_seconds: NotRequired[int]
+    max_lsas: NotRequired[int]
+    total_lsas: NotRequired[int]
+    type5_external_lsas: NotRequired[int]
     areas: dict[str, OspfAreaInfo]
 
 
 ShowIpOspfSummaryResult = dict[str, OspfInstanceInfo]
-
-_DEFAULT_ROLE = "internal"
 
 
 @register(OS.ARISTA_EOS, "show ip ospf summary")
@@ -54,9 +53,13 @@ class ShowIpOspfSummaryParser(BaseParser[ShowIpOspfSummaryResult]):
     )
 
     _INSTANCE_HEADER = re.compile(
-        r"^OSPF instance (?P<instance>\d+) with ID (?P<router_id>\S+),"
+        r"^OSPF instance (?P<instance>\d+) with ID (?P<router_id>"
+        + IPV4_ADDRESS
+        + r"),"
         r"\s+VRF (?P<vrf>\S+?)(?:,\s*(?P<role>\S+))?$"
     )
+
+    _AREA_HEADER = re.compile(r"^ID\s+Type\s+Intf\s+Nbrs")
 
     _TIME_SINCE_SPF = re.compile(r"^Time since last SPF:\s*(?P<seconds>\d+)\s*s$")
 
@@ -67,7 +70,7 @@ class ShowIpOspfSummaryParser(BaseParser[ShowIpOspfSummaryResult]):
     _TYPE5_EXT = re.compile(r"^Type-5 Ext LSAs:\s*(?P<count>\d+)$")
 
     _AREA_LINE = re.compile(
-        r"^(?P<area_id>\d+\.\d+\.\d+\.\d+)\s+"
+        r"^(?P<area_id>" + IPV4_ADDRESS + r")\s+"
         r"(?P<type>\S+)\s+"
         r"(?P<intf>\d+)\s+"
         r"(?P<nbrs>\d+)\s+"
@@ -89,21 +92,21 @@ class ShowIpOspfSummaryParser(BaseParser[ShowIpOspfSummaryResult]):
         match = cls._INSTANCE_HEADER.match(line)
         if not match:
             return None
-        role = match.group("role") or _DEFAULT_ROLE
-        info = cast(
-            OspfInstanceInfo,
-            {
-                "router_id": match.group("router_id"),
-                "vrf": match.group("vrf"),
-                "role": role,
-                "areas": {},
-            },
-        )
+        info: OspfInstanceInfo = {
+            "router_id": match.group("router_id"),
+            "vrf": match.group("vrf"),
+            "areas": {},
+        }
+        if role := match.group("role"):
+            info["role"] = role
         return match.group("instance"), info
 
     @classmethod
     def _parse_instance_detail(cls, line: str, inst: OspfInstanceInfo) -> None:
         """Parse SPF timing, LSA counts, and area lines into an instance dict."""
+        if cls._AREA_HEADER.match(line):
+            return
+
         if match := cls._TIME_SINCE_SPF.match(line):
             inst["time_since_last_spf_seconds"] = int(match.group("seconds"))
             return
