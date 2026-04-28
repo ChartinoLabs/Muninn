@@ -1,0 +1,97 @@
+{
+  "os": "arista_eos",
+  "command": "show mlag",
+  "schema": {
+    "name": "ShowMlagResult",
+    "fields": {
+      "domain_id": {
+        "type": "str",
+        "required": true
+      },
+      "local_interface": {
+        "type": "str",
+        "required": true
+      },
+      "peer_address": {
+        "type": "str",
+        "required": true
+      },
+      "peer_link": {
+        "type": "str",
+        "required": true
+      },
+      "state": {
+        "type": "str",
+        "required": true
+      },
+      "negotiation_status": {
+        "type": "str",
+        "required": true
+      },
+      "peer_link_status": {
+        "type": "str",
+        "required": true
+      },
+      "local_interface_status": {
+        "type": "str",
+        "required": true
+      },
+      "system_id": {
+        "type": "str",
+        "required": true
+      },
+      "ports": {
+        "type": {
+          "name": "MlagPortsInfo",
+          "fields": {
+            "disabled": {
+              "type": "int",
+              "required": true
+            },
+            "configured": {
+              "type": "int",
+              "required": true
+            },
+            "inactive": {
+              "type": "int",
+              "required": true
+            },
+            "active_partial": {
+              "type": "int",
+              "required": true
+            },
+            "active_full": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic MLAG configuration and status with inactive state",
+      "input": "MLAG Configuration:\ndomain-id           :          mlagDomain\nlocal-interface     :            Vlan4094\npeer-address        :            10.0.0.2\npeer-link           :      Port-Channel10\n\nMLAG Status:\nstate               :            Inactive\nnegotiation status  :          Connecting\npeer-link status    :      Lowerlayerdown\nlocal-int status    :                  Up\nsystem-id           :   00:00:00:00:00:00\n\nMLAG Ports:\nDisabled            :                   0\nConfigured          :                   0\nInactive            :                   0\nActive-partial      :                   0\nActive-full         :                   0\n",
+      "expected": {
+        "domain_id": "mlagDomain",
+        "local_interface": "Vlan4094",
+        "peer_address": "10.0.0.2",
+        "peer_link": "Port-channel10",
+        "state": "Inactive",
+        "negotiation_status": "Connecting",
+        "peer_link_status": "Lowerlayerdown",
+        "local_interface_status": "Up",
+        "system_id": "00:00:00:00:00:00",
+        "ports": {
+          "disabled": 0,
+          "configured": 0,
+          "inactive": 0,
+          "active_partial": 0,
+          "active_full": 0
+        }
+      }
+    }
+  ]
+}
