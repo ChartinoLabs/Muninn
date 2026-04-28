@@ -1,0 +1,387 @@
+{
+  "os": "arista_eos",
+  "command": "show lldp neighbors detail",
+  "schema": {
+    "name": "ShowLldpNeighborsDetailResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "type": "dict",
+              "key": "str",
+              "value": {
+                "name": "LldpNeighborDetailEntry",
+                "fields": {
+                  "chassis_id": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "port_id": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "port_description": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "system_name": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "system_description": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "ttl": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "system_capabilities": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "enabled_capabilities": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "management_addresses": {
+                    "type": {
+                      "type": "list",
+                      "items": "str"
+                    },
+                    "required": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple interfaces with varied neighbor types including multi-neighbor interfaces",
+      "input": "Interface Ethernet1 detected 1 LLDP neighbors:\n\n  Neighbor 2cc2.6081.eaf9/\"Ethernet1\", age 12 seconds\n  Discovered 0:01:11 ago; Last changed 0:01:11 ago\n  - Chassis ID type: MAC address (4)\n    Chassis ID     : 2cc2.6081.eaf9\n  - Port ID type: Interface name (5)\n    Port ID     : \"Ethernet1\"\n  - Time To Live: 120 seconds\n  - System Name: \"spine2.company.com\"\n  - System Description: \"Arista Networks EOS version 4.15.2F running on an Arista Networks vEOS\"\n  - System Capabilities : Bridge, Router\n    Enabled Capabilities: Bridge, Router\n  - Management Address Subtype: Ethernet\n    Management Address        : 2cc2.6081.eaf9\n    Interface Number Subtype  : Unknown (1)\n    Interface Number          : 0\n    OID String                :\n  - IEEE802.1 Port VLAN ID: 1\n  - IEEE802.1/IEEE802.3 Link Aggregation\n    Link Aggregation Status: Capable, Disabled (0x01)\n    Port ID                : 0\n  - IEEE802.3 Maximum Frame Size: 9236 bytes\n\nInterface Ethernet2 detected 1 LLDP neighbors:\n\n  Neighbor 2cc2.6081.eaf9/\"Ethernet2\", age 12 seconds\n  Discovered 0:01:11 ago; Last changed 0:01:11 ago\n  - Chassis ID type: MAC address (4)\n    Chassis ID     : 2cc2.6081.eaf9\n  - Port ID type: Interface name (5)\n    Port ID     : \"Ethernet2\"\n  - Time To Live: 120 seconds\n  - System Name: \"spine2.company.com\"\n  - System Description: \"Arista Networks EOS version 4.15.2F running on an Arista Networks vEOS\"\n  - System Capabilities : Bridge, Router\n    Enabled Capabilities: Bridge, Router\n  - Management Address Subtype: Ethernet\n    Management Address        : 2cc2.6081.eaf9\n    Interface Number Subtype  : Unknown (1)\n    Interface Number          : 0\n    OID String                :\n  - IEEE802.1 Port VLAN ID: 1\n  - IEEE802.1/IEEE802.3 Link Aggregation\n    Link Aggregation Status: Capable, Disabled (0x01)\n    Port ID                : 0\n  - IEEE802.3 Maximum Frame Size: 9236 bytes\n\nInterface Ethernet3 detected 1 LLDP neighbors:\n\n  Neighbor 2cc2.6081.eaf9/\"Ethernet3\", age 12 seconds\n  Discovered 0:01:11 ago; Last changed 0:01:11 ago\n  - Chassis ID type: MAC address (4)\n    Chassis ID     : 2cc2.6081.eaf9\n  - Port ID type: Interface name (5)\n    Port ID     : \"Ethernet3\"\n  - Time To Live: 120 seconds\n  - System Name: \"spine2.company.com\"\n  - System Description: \"Arista Networks EOS version 4.15.2F running on an Arista Networks vEOS\"\n  - System Capabilities : Bridge, Router\n    Enabled Capabilities: Bridge, Router\n  - Management Address Subtype: Ethernet\n    Management Address        : 2cc2.6081.eaf9\n    Interface Number Subtype  : Unknown (1)\n    Interface Number          : 0\n    OID String                :\n  - IEEE802.1 Port VLAN ID: 1\n  - IEEE802.1/IEEE802.3 Link Aggregation\n    Link Aggregation Status: Capable, Disabled (0x01)\n    Port ID                : 0\n  - IEEE802.3 Maximum Frame Size: 9236 bytes\n\nInterface Ethernet4 detected 1 LLDP neighbors:\n\n  Neighbor 2cc2.6081.eaf9/\"Ethernet4\", age 12 seconds\n  Discovered 0:01:11 ago; Last changed 0:01:11 ago\n  - Chassis ID type: MAC address (4)\n    Chassis ID     : 2cc2.6081.eaf9\n  - Port ID type: Interface name (5)\n    Port ID     : \"Ethernet4\"\n  - Time To Live: 120 seconds\n  - System Name: \"spine2.company.com\"\n  - System Description: \"Arista Networks EOS version 4.15.2F running on an Arista Networks vEOS\"\n  - System Capabilities : Bridge, Router\n    Enabled Capabilities: Bridge, Router\n  - Management Address Subtype: Ethernet\n    Management Address        : 2cc2.6081.eaf9\n    Interface Number Subtype  : Unknown (1)\n    Interface Number          : 0\n    OID String                :\n  - IEEE802.1 Port VLAN ID: 1\n  - IEEE802.1/IEEE802.3 Link Aggregation\n    Link Aggregation Status: Capable, Disabled (0x01)\n    Port ID                : 0\n  - IEEE802.3 Maximum Frame Size: 9236 bytes\n\nInterface Ethernet5 detected 0 LLDP neighbors:\n\nInterface Ethernet6 detected 0 LLDP neighbors:\n\nInterface Ethernet7 detected 0 LLDP neighbors:\n\nInterface Management1 detected 2 LLDP neighbors:\n\n  Neighbor 0005.8671.4ec0/\"fxp0\", age 27 seconds\n  Discovered 0:02:21 ago; Last changed 0:02:21 ago\n  - Chassis ID type: MAC address (4)\n    Chassis ID     : 0005.8671.4ec0\n  - Port ID type: Interface name (5)\n    Port ID     : \"fxp0\"\n  - Time To Live: 120 seconds\n  - Port Description: \"fxp0\"\n  - System Name: \"vmx1\"\n  - System Description: \"Juniper Networks, Inc. vmx internet router, kernel JUNOS 15.1F4.15, Build date: 2015-12-23 19:22:55 UTC Copyright (c) 1996-2015 Juniper Networks, Inc.\"\n  - System Capabilities : Bridge, Router\n    Enabled Capabilities: Bridge, Router\n  - Management Address Subtype: IPv4\n    Management Address        : 10.0.0.31\n    Interface Number Subtype  : ifIndex (2)\n    Interface Number          : 1\n    OID String                : 0.1.3.6.1.2.1.31.1.1.1.1.1\n  - IEEE802.1/IEEE802.3 Link Aggregation\n    Link Aggregation Status: Capable, Disabled (0x01)\n    Port ID                : 0\n  - IEEE802.3 MAC/PHY Configuration/Status\n    Auto-negotiation       : Supported, Disabled\n                             10BASE-T (half-duplex)\n                             10BASE-T (full-duplex)\n                             100BASE-TX (half-duplex)\n                             100BASE-TX (full-duplex)\n                             1000BASE-X (half-duplex)\n                             1000BASE-X (full-duplex)\n                             1000BASE-T (full-duplex)\n    Operational MAU Type   : Unknown\n  - IEEE802.3 Maximum Frame Size: 1514 bytes\n\n  Neighbor 2cc2.6081.eaf9/\"Management1\", age 17 seconds\n  Discovered 0:01:17 ago; Last changed 0:01:17 ago\n  - Chassis ID type: MAC address (4)\n    Chassis ID     : 2cc2.6081.eaf9\n  - Port ID type: Interface name (5)\n    Port ID     : \"Management1\"\n  - Time To Live: 120 seconds\n  - System Name: \"spine2.company.com\"\n  - System Description: \"Arista Networks EOS version 4.15.2F running on an Arista Networks vEOS\"\n  - System Capabilities : Bridge, Router\n    Enabled Capabilities: Bridge, Router\n  - Management Address Subtype: Ethernet\n    Management Address        : 2cc2.6081.eaf9\n    Interface Number Subtype  : Unknown (1)\n    Interface Number          : 0\n    OID String                :\n  - IEEE802.1 Port VLAN ID: 0\n  - IEEE802.1/IEEE802.3 Link Aggregation\n    Link Aggregation Status: Not Capable (0x00)\n    Port ID                : 0\n  - IEEE802.3 Maximum Frame Size: 1518 bytes\n\nInterface Ethernet8 detected 3 LLDP neighbors:\n\n  Neighbor 0050.56eb.3ef3/Management1, age 4 seconds\n  Discovered 34 days, 19:40:42 ago; Last changed 34 days, 19:40:42 ago\n    - Chassis ID type: MAC address (4)\n      Chassis ID     : 0050.56eb.3ef3\n    - Port ID type: Interface name (5)\n      Port ID     : \"Management1\"\n    - Time To Live: 120 seconds\n    - System Name: \"cvx\"\n    - System Description: \"Arista Networks EOS version 4.15.5M running on an Arista Networks CVX\"\n    - System Capabilities : Bridge, Router\n      Enabled Capabilities: Bridge\n    - Management Address Subtype: IPv4 (1)\n      Management Address        : 172.16.2.141\n      Interface Number Subtype  : ifIndex (2)\n      Interface Number          : 999001\n      OID String                :\n    - IEEE802.1 Port VLAN ID: 0\n    - IEEE802.1/IEEE802.3 Link Aggregation\n      Link Aggregation Status: Not Capable (0x00)\n      Port ID                : 0\n    - IEEE802.3 Maximum Frame Size: 1518 bytes\n\n  Neighbor 0050.568b.67c8/Ethernet1, age 29 seconds\n  Discovered 34 days, 19:40:24 ago; Last changed 34 days, 19:40:24 ago\n    - Chassis ID type: MAC address (4)\n      Chassis ID     : 0050.568b.67c8\n    - Port ID type: Interface name (5)\n      Port ID     : \"Ethernet1\"\n    - Time To Live: 120 seconds\n    - System Name: \"cvx-client-1\"\n    - System Description: \"Arista Networks EOS version 4.15.5M running on an Arista Networks CVX\"\n    - System Capabilities : Bridge, Router\n      Enabled Capabilities: Bridge\n    - Management Address Subtype: IPv4 (1)\n      Management Address        : 172.16.2.142\n      Interface Number Subtype  : ifIndex (2)\n      Interface Number          : 999001\n      OID String                :\n    - IEEE802.1 Port VLAN ID: 1\n    - IEEE802.1/IEEE802.3 Link Aggregation\n      Link Aggregation Status: Capable, Disabled (0x01)\n      Port ID                : 0\n    - IEEE802.3 Maximum Frame Size: 9236 bytes\n\n  Neighbor 0050.568b.67c8/Management1, age 30 seconds\n  Discovered 34 days, 19:40:22 ago; Last changed 34 days, 19:40:22 ago\n    - Chassis ID type: MAC address (4)\n      Chassis ID     : 0050.568b.67c8\n    - Port ID type: Interface name (5)\n      Port ID     : \"Management1\"\n    - Time To Live: 120 seconds\n    - System Name: \"cvx-client-1\"\n    - System Description: \"Arista Networks EOS version 4.15.5M running on an Arista Networks CVX\"\n    - System Capabilities : Bridge, Router\n      Enabled Capabilities: Bridge\n    - Management Address Subtype: IPv4 (1)\n      Management Address        : 172.16.2.142\n      Interface Number Subtype  : ifIndex (2)\n      Interface Number          : 999001\n      OID String                :\n    - IEEE802.1 Port VLAN ID: 0\n    - IEEE802.1/IEEE802.3 Link Aggregation\n      Link Aggregation Status: Not Capable (0x00)\n      Port ID                : 0\n    - IEEE802.3 Maximum Frame Size: 1518 bytes\n\nInterface Ethernet9 detected 1 LLDP neighbors:\n\n  Neighbor 7c0e.cecb.659b/Eth1/23, age 29 seconds\n  Discovered 11 days, 1:32:12 ago; Last changed 11 days, 1:32:12 ago\n    - Chassis ID type: MAC address (4)\n      Chassis ID     : 7c0e.cecb.659b\n    - Port ID type: Locally assigned (7)\n      Port ID     : \"Eth1/23\"\n    - Time To Live: 120 seconds\n    - Port Description: \"topology/pod-1/paths-101/pathep-[AVS_Policy_Group]\"\n    - System Name: \"Leaf1.cliqr.com\"\n    - System Description: \"topology/pod-1/node-101\"\n    - System Capabilities : Bridge, Router\n      Enabled Capabilities: Bridge, Router\n    - Management Address Subtype: Ethernet (6)\n      Management Address        : 7c0e.cecb.659b\n      Interface Number Subtype  : ifIndex (2)\n      Interface Number          : 83886080\n      OID String                :\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 201):\n          01\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 202):\n          01\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 203):\n          00 00 00 65\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 205):\n          00 01\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 206):\n          41 43 49 20 46 61 62 72 69 63 31\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 207):\n          01 0a 00 00 01 34 61 36 39 62 63 37 61 2d 63 61\n          36 64 2d 31 31 65 35 2d 38 39 32 61 2d 38 39 35\n          66 31 37 62 38 35 61 39 64 02 0a 00 00 02 37 38\n          66 64 30 30 64 32 2d 63 61 37 33 2d 31 31 65 35\n          2d 39 34 39 63 2d 38 64 33 35 34 65 39 30 32 31\n          38 38 03 0a 00 00 03 38 61 31 65 64 39 32 63 2d\n          63 61 36 38 2d 31 31 65 35 2d 61 66 37 66 2d 31\n          64 65 39 36 64 38 65 36 64 32 62\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 208):\n          0a 00 c8 5f\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 210):\n          6e 39 30 30 30 2d 31 31 2e 32 28 32 67 29\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 212):\n          53 41 4c 31 38 33 37 30 4e 5a 41\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 214):\n          4e 39 4b 2d 43 39 33 39 36 54 58\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 215):\n          4c 65 61 66 31\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 216):\n          00 00\n\nInterface Ethernet10 detected 1 LLDP neighbors:\n\n  Neighbor 7c0e.cecb.659c/Eth1/24, age 29 seconds\n  Discovered 11 days, 1:32:12 ago; Last changed 11 days, 1:32:12 ago\n    - Chassis ID type: MAC address (4)\n      Chassis ID     : 7c0e.cecb.659c\n    - Port ID type: Locally assigned (7)\n      Port ID     : \"Eth1/24\"\n    - Time To Live: 120 seconds\n    - Port Description: \"topology/pod-1/paths-101/pathep-[AVS_Policy_Group]\"\n    - System Name: \"Leaf1.cliqr.com\"\n    - System Description: \"topology/pod-1/node-101\"\n    - System Capabilities : Bridge, Router\n      Enabled Capabilities: Bridge, Router\n    - Management Address Subtype: Ethernet (6)\n      Management Address        : 7c0e.cecb.659c\n      Interface Number Subtype  : ifIndex (2)\n      Interface Number          : 83886080\n      OID String                :\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 201):\n          01\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 202):\n          01\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 203):\n          00 00 00 65\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 205):\n          00 01\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 206):\n          41 43 49 20 46 61 62 72 69 63 31\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 207):\n          01 0a 00 00 01 34 61 36 39 62 63 37 61 2d 63 61\n          36 64 2d 31 31 65 35 2d 38 39 32 61 2d 38 39 35\n          66 31 37 62 38 35 61 39 64 02 0a 00 00 02 37 38\n          66 64 30 30 64 32 2d 63 61 37 33 2d 31 31 65 35\n          2d 39 34 39 63 2d 38 64 33 35 34 65 39 30 32 31\n          38 38 03 0a 00 00 03 38 61 31 65 64 39 32 63 2d\n          63 61 36 38 2d 31 31 65 35 2d 61 66 37 66 2d 31\n          64 65 39 36 64 38 65 36 64 32 62\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 208):\n          0a 00 c8 5f\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 210):\n          6e 39 30 30 30 2d 31 31 2e 32 28 32 67 29\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 212):\n          53 41 4c 31 38 33 37 30 4e 5a 41\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 214):\n          4e 39 4b 2d 43 39 33 39 36 54 58\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 215):\n          4c 65 61 66 31\n    - Unknown organizationally-defined TLV (OUI 00-01-42, subtype 216):\n          00 00\n\nInterface Ethernet11 detected 0 LLDP neighbors:\n\nInterface Ethernet12 detected 0 LLDP neighbors:\n\nInterface Ethernet13 detected 0 LLDP neighbors:\n\nInterface Ethernet14 detected 0 LLDP neighbors:\n\nInterface Ethernet15 detected 0 LLDP neighbors:\n\nInterface Ethernet16 detected 0 LLDP neighbors:\n\nInterface Ethernet17 detected 0 LLDP neighbors:\n\nInterface Ethernet18 detected 0 LLDP neighbors:\n\nInterface Ethernet19 detected 0 LLDP neighbors:\n\nInterface Ethernet20 detected 0 LLDP neighbors:\n\nInterface Ethernet21 detected 0 LLDP neighbors:\n\nInterface Ethernet22 detected 0 LLDP neighbors:\n\nInterface Ethernet23 detected 1 LLDP neighbors:\n\n  Neighbor 3c8a.b089.9898/527, age 21 seconds\n  Discovered 19 days, 18:20:22 ago; Last changed 19 days, 18:20:22 ago\n    - Chassis ID type: MAC address (4)\n      Chassis ID     : 3c8a.b089.9898\n    - Port ID type: Locally assigned (7)\n      Port ID     : \"527\"\n    - Time To Live: 120 seconds\n    - Port Description: \"ge-1/1/1\"\n    - System Name: \"MX\"\n    - System Description: \"Juniper Networks, Inc. mx5-t internet router, kernel JUNOS 14.2R5.8, Build date: 2015-11-25 01:57:41 UTC Copyright (c) 1996-2015 Juniper Networks, Inc.\"\n    - System Capabilities : Bridge, Router\n      Enabled Capabilities: Bridge, Router\n    - IEEE802.1/IEEE802.3 Link Aggregation\n      Link Aggregation Status: Capable, Disabled (0x01)\n      Port ID                : 0\n    - IEEE802.3 MAC/PHY Configuration/Status\n      Auto-negotiation       : Supported, Enabled\n      Advertised Capabilities: Asymmetric and Symmetric PAUSE\n                               10BASE-T (half-duplex)\n                               10BASE-T (full-duplex)\n                               100BASE-TX (half-duplex)\n                               100BASE-TX (full-duplex)\n                               1000BASE-X (half-duplex)\n                               1000BASE-X (full-duplex)\n                               1000BASE-T (full-duplex)\n      Operational MAU Type   : Unknown (0)\n    - IEEE802.3 Maximum Frame Size: 1514 bytes\n\nInterface Ethernet24 detected 0 LLDP neighbors:\n\nInterface Ethernet25 detected 0 LLDP neighbors:\n\nInterface Ethernet26 detected 0 LLDP neighbors:\n\nInterface Ethernet27 detected 0 LLDP neighbors:\n\nInterface Ethernet28 detected 0 LLDP neighbors:\n\nInterface Ethernet29 detected 0 LLDP neighbors:\n\nInterface Ethernet30 detected 0 LLDP neighbors:\n\nInterface Ethernet31 detected 0 LLDP neighbors:\n\nInterface Ethernet32 detected 0 LLDP neighbors:\n\nInterface Ethernet33 detected 4 LLDP neighbors:\n\n  Neighbor 0050.560b.66ea/Management1, age 29 seconds\n  Discovered 33 days, 23:34:56 ago; Last changed 33 days, 23:34:56 ago\n    - Chassis ID type: MAC address (4)\n      Chassis ID     : 0050.560b.66ea\n    - Port ID type: Interface name (5)\n      Port ID     : \"Management1\"\n    - Time To Live: 120 seconds\n    - System Name: \"cvx-client-2\"\n    - System Description: \"Arista Networks EOS version 4.15.5M running on an Arista Networks CVX\"\n    - System Capabilities : Bridge, Router\n      Enabled Capabilities: Bridge\n    - Management Address Subtype: IPv4 (1)\n      Management Address        : 172.16.2.143\n      Interface Number Subtype  : ifIndex (2)\n      Interface Number          : 999001\n      OID String                :\n    - IEEE802.1 Port VLAN ID: 0\n    - IEEE802.1/IEEE802.3 Link Aggregation\n      Link Aggregation Status: Not Capable (0x00)\n      Port ID                : 0\n    - IEEE802.3 Maximum Frame Size: 1518 bytes\n\n  Neighbor 0050.560b.66ea/Ethernet1, age 29 seconds\n  Discovered 33 days, 23:34:56 ago; Last changed 33 days, 23:34:56 ago\n    - Chassis ID type: MAC address (4)\n      Chassis ID     : 0050.560b.66ea\n    - Port ID type: Interface name (5)\n      Port ID     : \"Ethernet1\"\n    - Time To Live: 120 seconds\n    - System Name: \"cvx-client-2\"\n    - System Description: \"Arista Networks EOS version 4.15.5M running on an Arista Networks CVX\"\n    - System Capabilities : Bridge, Router\n      Enabled Capabilities: Bridge\n    - Management Address Subtype: IPv4 (1)\n      Management Address        : 172.16.2.143\n      Interface Number Subtype  : ifIndex (2)\n      Interface Number          : 999001\n      OID String                :\n    - IEEE802.1 Port VLAN ID: 1\n    - IEEE802.1/IEEE802.3 Link Aggregation\n      Link Aggregation Status: Capable, Disabled (0x01)\n      Port ID                : 0\n    - IEEE802.3 Maximum Frame Size: 9236 bytes\n\n  Neighbor 0050.56ac.4cd9/0050.56ac.4cd9, age 29 seconds\n  Discovered 33 days, 23:34:56 ago; Last changed 13:58:03 ago\n    - Chassis ID type: MAC address (4)\n      Chassis ID     : 0050.56ac.4cd9\n    - Port ID type: MAC address (3)\n      Port ID     : 0050.56ac.4cd9\n    - Time To Live: 120 seconds\n    - Port Description: \"ens192\"\n    - System Name: \"aci-compute\"\n    - System Description: \"Red Hat Enterprise Linux Linux 3.10.0-327.13.1.el7.x86_64 #1 SMP Mon Feb 29 13:22:02 EST 2016 x86_64\"\n    - System Capabilities : Bridge, WLAN Access Point, Router, Station Only\n      Enabled Capabilities: Router, Station Only\n    - Management Address Subtype: IPv4 (1)\n      Management Address        : 172.16.2.222\n      Interface Number Subtype  : ifIndex (2)\n      Interface Number          : 2\n      OID String                :\n    - Management Address Subtype: IPv6 (2)\n      Management Address        : fe80::250:56ff:feac:4cd9\n      Interface Number Subtype  : ifIndex (2)\n      Interface Number          : 2\n      OID String                :\n    - IEEE802.1/IEEE802.3 Link Aggregation\n      Link Aggregation Status: Capable, Disabled (0x01)\n      Port ID                : 0\n    - IEEE802.3 MAC/PHY Configuration/Status\n      Auto-negotiation       : Not Supported\n      Advertised Capabilities: None\n      Operational MAU Type   : 10GBASE-R (33)\n\n  Neighbor 0050.56ac.4e29/0050.56ac.4e29, age 29 seconds\n  Discovered 5 days, 19:11:29 ago; Last changed 5 days, 19:01:28 ago\n    - Chassis ID type: MAC address (4)\n      Chassis ID     : 0050.56ac.4e29\n    - Port ID type: MAC address (3)\n      Port ID     : 0050.56ac.4e29\n    - Time To Live: 120 seconds\n    - Port Description: \"ens192\"\n    - System Name: \"aci-control\"\n    - System Description: \"Red Hat Enterprise Linux Linux 3.10.0-327.13.1.el7.x86_64 #1 SMP Mon Feb 29 13:22:02 EST 2016 x86_64\"\n    - System Capabilities : Bridge, WLAN Access Point, Router, Station Only\n      Enabled Capabilities: Router, Station Only\n    - Management Address Subtype: IPv4 (1)\n      Management Address        : 172.16.2.221\n      Interface Number Subtype  : ifIndex (2)\n      Interface Number          : 2\n      OID String                :\n    - Management Address Subtype: IPv6 (2)\n      Management Address        : fe80::250:56ff:feac:4e29\n      Interface Number Subtype  : ifIndex (2)\n      Interface Number          : 2\n      OID String                :\n    - IEEE802.1/IEEE802.3 Link Aggregation\n      Link Aggregation Status: Capable, Disabled (0x01)\n      Port ID                : 0\n    - IEEE802.3 MAC/PHY Configuration/Status\n      Auto-negotiation       : Not Supported\n      Advertised Capabilities: None\n      Operational MAU Type   : 10GBASE-R (33)\n\nInterface Ethernet34 detected 0 LLDP neighbors:\n\nInterface Ethernet35 detected 0 LLDP neighbors:\n\nInterface Ethernet36 detected 0 LLDP neighbors:\n\nInterface Ethernet37 detected 0 LLDP neighbors:\n\nInterface Ethernet38 detected 0 LLDP neighbors:\n\nInterface Ethernet39 detected 0 LLDP neighbors:\n\nInterface Ethernet40 detected 0 LLDP neighbors:\n\nInterface Ethernet41 detected 0 LLDP neighbors:\n\nInterface Ethernet42 detected 0 LLDP neighbors:\n\nInterface Ethernet43 detected 0 LLDP neighbors:\n\nInterface Ethernet44 detected 0 LLDP neighbors:\n\nInterface Ethernet45 detected 0 LLDP neighbors:\n\nInterface Ethernet46 detected 0 LLDP neighbors:\n\nInterface Ethernet47 detected 0 LLDP neighbors:\n\nInterface Ethernet48 detected 0 LLDP neighbors:\n\nInterface Ethernet49/1 detected 1 LLDP neighbors:\n\n  Neighbor 001c.737d.77fb/Ethernet49/1, age 19 seconds\n  Discovered 117 days, 19:38:50 ago; Last changed 33 days, 3:31:32 ago\n    - Chassis ID type: MAC address (4)\n      Chassis ID     : 001c.737d.77fb\n    - Port ID type: Interface name (5)\n      Port ID     : \"Ethernet49/1\"\n    - Time To Live: 120 seconds\n    - Port Description: \"\" To R4-Arista-L2-SDNLAB -DC1\"\"\n    - System Name: \"R4-Arista-L3-SDNLAB-SW1\"\n    - System Description: \"Arista Networks EOS version 4.15.0FXA running on an Arista Networks DCS-7050SX-64\"\n    - System Capabilities : Bridge, Router\n      Enabled Capabilities: Bridge, Router\n    - Management Address Subtype: IPv4 (1)\n      Management Address        : 2.2.2.2\n      Interface Number Subtype  : ifIndex (2)\n      Interface Number          : 5000000\n      OID String                :\n    - IEEE802.1 Port VLAN ID: 1\n    - IEEE802.1/IEEE802.3 Link Aggregation\n      Link Aggregation Status: Capable, Enabled (0x03)\n      Port ID                : 1000010\n    - IEEE802.3 Maximum Frame Size: 9236 bytes\n\nInterface Ethernet49/2 detected 0 LLDP neighbors:\n\nInterface Ethernet49/3 detected 0 LLDP neighbors:\n\nInterface Ethernet49/4 detected 0 LLDP neighbors:\n\nInterface Ethernet50/1 detected 0 LLDP neighbors:\n\nInterface Ethernet50/2 detected 0 LLDP neighbors:\n\nInterface Ethernet50/3 detected 0 LLDP neighbors:\n\nInterface Ethernet50/4 detected 0 LLDP neighbors:\n\nInterface Ethernet51/1 detected 1 LLDP neighbors:\n\n  Neighbor 001c.737d.745f/Ethernet49/1, age 28 seconds\n  Discovered 117 days, 15:20:04 ago; Last changed 61 days, 23:05:42 ago\n    - Chassis ID type: MAC address (4)\n      Chassis ID     : 001c.737d.745f\n    - Port ID type: Interface name (5)\n      Port ID     : \"Ethernet49/1\"\n    - Time To Live: 120 seconds\n    - Port Description: \"\"Connected to DC1-AristaL2SW-R4\"\"\n    - System Name: \"R4-Arista-L3-SDNLAB-SW2\"\n    - System Description: \"Arista Networks EOS version 4.15.0FXA running on an Arista Networks DCS-7050SX-64\"\n    - System Capabilities : Bridge, Router\n      Enabled Capabilities: Bridge, Router\n    - Management Address Subtype: IPv4 (1)\n      Management Address        : 172.16.1.3\n      Interface Number Subtype  : ifIndex (2)\n      Interface Number          : 2000201\n      OID String                :\n    - IEEE802.1 Port VLAN ID: 1\n    - IEEE802.1/IEEE802.3 Link Aggregation\n      Link Aggregation Status: Capable, Enabled (0x03)\n      Port ID                : 1000010\n    - IEEE802.3 Maximum Frame Size: 9236 bytes\n\nInterface Ethernet51/2 detected 0 LLDP neighbors:\n\nInterface Ethernet51/3 detected 0 LLDP neighbors:\n\nInterface Ethernet51/4 detected 0 LLDP neighbors:\n\nInterface Ethernet52/1 detected 1 LLDP neighbors:\n\n  Neighbor 001c.737d.745f/Ethernet50/1, age 28 seconds\n  Discovered 117 days, 18:25:48 ago; Last changed 61 days, 23:03:48 ago\n    - Chassis ID type: MAC address (4)\n      Chassis ID     : 001c.737d.745f\n    - Port ID type: Interface name (5)\n      Port ID     : \"Ethernet50/1\"\n    - Time To Live: 120 seconds\n    - Port Description: \"\"Connected to DC1-AristaL2SW-R4\"\"\n    - System Name: \"R4-Arista-L3-SDNLAB-SW2\"\n    - System Description: \"Arista Networks EOS version 4.15.0FXA running on an Arista Networks DCS-7050SX-64\"\n    - System Capabilities : Bridge, Router\n      Enabled Capabilities: Bridge, Router\n    - Management Address Subtype: IPv4 (1)\n      Management Address        : 172.16.1.3\n      Interface Number Subtype  : ifIndex (2)\n      Interface Number          : 2000201\n      OID String                :\n    - IEEE802.1 Port VLAN ID: 1\n    - IEEE802.1/IEEE802.3 Link Aggregation\n      Link Aggregation Status: Capable, Enabled (0x03)\n      Port ID                : 1000010\n    - IEEE802.3 Maximum Frame Size: 9236 bytes\n\nInterface Ethernet52/2 detected 0 LLDP neighbors:\n\nInterface Ethernet52/3 detected 0 LLDP neighbors:\n\nInterface Ethernet52/4 detected 0 LLDP neighbors:\n\nInterface Management1 detected 1 LLDP neighbors:\n\n  Neighbor 0cca.01c0.e8e1/\"Management1\", age 2 seconds\n  Discovered 1:11:08 ago; Last changed 1:11:08 ago\n  - Chassis ID type: MAC address (4)\n    Chassis ID     : 0cca.01c0.e8e1\n  - Port ID type: Interface name(5)\n    Port ID     : \"Management1\"\n  - Time To Live: 120 seconds\n  - System Name: \"test-host.domain.com\"\n  - System Capabilities : Bridge, Router\n    Enabled Capabilities: Bridge\n  - Management Address Subtype: IPv4\n    Management Address        : 172.16.208.5\n    Interface Number Subtype  : ifIndex (2)\n    Interface Number          : 999001\n    OID String                :\n  - IEEE802.1 Port VLAN ID: 0\n  - IEEE802.1/IEEE802.3 Link Aggregation\n    Link Aggregation Status: Not Capable (0x00)\n    Port ID                : 0\n  - IEEE802.3 Maximum Frame Size: 1518 bytes\n",
+      "expected": {
+        "neighbors": {
+          "Ethernet1": {
+            "2cc2.6081.eaf9": {
+              "Ethernet1": {
+                "chassis_id": "2cc2.6081.eaf9",
+                "port_id": "Ethernet1",
+                "ttl": 120,
+                "system_name": "spine2.company.com",
+                "system_description": "Arista Networks EOS version 4.15.2F running on an Arista Networks vEOS",
+                "system_capabilities": "Bridge, Router",
+                "enabled_capabilities": "Bridge, Router",
+                "management_addresses": [
+                  "2cc2.6081.eaf9"
+                ]
+              }
+            }
+          },
+          "Ethernet2": {
+            "2cc2.6081.eaf9": {
+              "Ethernet2": {
+                "chassis_id": "2cc2.6081.eaf9",
+                "port_id": "Ethernet2",
+                "ttl": 120,
+                "system_name": "spine2.company.com",
+                "system_description": "Arista Networks EOS version 4.15.2F running on an Arista Networks vEOS",
+                "system_capabilities": "Bridge, Router",
+                "enabled_capabilities": "Bridge, Router",
+                "management_addresses": [
+                  "2cc2.6081.eaf9"
+                ]
+              }
+            }
+          },
+          "Ethernet3": {
+            "2cc2.6081.eaf9": {
+              "Ethernet3": {
+                "chassis_id": "2cc2.6081.eaf9",
+                "port_id": "Ethernet3",
+                "ttl": 120,
+                "system_name": "spine2.company.com",
+                "system_description": "Arista Networks EOS version 4.15.2F running on an Arista Networks vEOS",
+                "system_capabilities": "Bridge, Router",
+                "enabled_capabilities": "Bridge, Router",
+                "management_addresses": [
+                  "2cc2.6081.eaf9"
+                ]
+              }
+            }
+          },
+          "Ethernet4": {
+            "2cc2.6081.eaf9": {
+              "Ethernet4": {
+                "chassis_id": "2cc2.6081.eaf9",
+                "port_id": "Ethernet4",
+                "ttl": 120,
+                "system_name": "spine2.company.com",
+                "system_description": "Arista Networks EOS version 4.15.2F running on an Arista Networks vEOS",
+                "system_capabilities": "Bridge, Router",
+                "enabled_capabilities": "Bridge, Router",
+                "management_addresses": [
+                  "2cc2.6081.eaf9"
+                ]
+              }
+            }
+          },
+          "Management1": {
+            "0005.8671.4ec0": {
+              "fxp0": {
+                "chassis_id": "0005.8671.4ec0",
+                "port_id": "fxp0",
+                "ttl": 120,
+                "port_description": "fxp0",
+                "system_name": "vmx1",
+                "system_description": "Juniper Networks, Inc. vmx internet router, kernel JUNOS 15.1F4.15, Build date: 2015-12-23 19:22:55 UTC Copyright (c) 1996-2015 Juniper Networks, Inc.",
+                "system_capabilities": "Bridge, Router",
+                "enabled_capabilities": "Bridge, Router",
+                "management_addresses": [
+                  "10.0.0.31"
+                ]
+              }
+            },
+            "2cc2.6081.eaf9": {
+              "Management1": {
+                "chassis_id": "2cc2.6081.eaf9",
+                "port_id": "Management1",
+                "ttl": 120,
+                "system_name": "spine2.company.com",
+                "system_description": "Arista Networks EOS version 4.15.2F running on an Arista Networks vEOS",
+                "system_capabilities": "Bridge, Router",
+                "enabled_capabilities": "Bridge, Router",
+                "management_addresses": [
+                  "2cc2.6081.eaf9"
+                ]
+              }
+            },
+            "0cca.01c0.e8e1": {
+              "Management1": {
+                "chassis_id": "0cca.01c0.e8e1",
+                "port_id": "Management1",
+                "ttl": 120,
+                "system_name": "test-host.domain.com",
+                "system_capabilities": "Bridge, Router",
+                "enabled_capabilities": "Bridge",
+                "management_addresses": [
+                  "172.16.208.5"
+                ]
+              }
+            }
+          },
+          "Ethernet8": {
+            "0050.56eb.3ef3": {
+              "Management1": {
+                "chassis_id": "0050.56eb.3ef3",
+                "port_id": "Management1",
+                "ttl": 120,
+                "system_name": "cvx",
+                "system_description": "Arista Networks EOS version 4.15.5M running on an Arista Networks CVX",
+                "system_capabilities": "Bridge, Router",
+                "enabled_capabilities": "Bridge",
+                "management_addresses": [
+                  "172.16.2.141"
+                ]
+              }
+            },
+            "0050.568b.67c8": {
+              "Ethernet1": {
+                "chassis_id": "0050.568b.67c8",
+                "port_id": "Ethernet1",
+                "ttl": 120,
+                "system_name": "cvx-client-1",
+                "system_description": "Arista Networks EOS version 4.15.5M running on an Arista Networks CVX",
+                "system_capabilities": "Bridge, Router",
+                "enabled_capabilities": "Bridge",
+                "management_addresses": [
+                  "172.16.2.142"
+                ]
+              },
+              "Management1": {
+                "chassis_id": "0050.568b.67c8",
+                "port_id": "Management1",
+                "ttl": 120,
+                "system_name": "cvx-client-1",
+                "system_description": "Arista Networks EOS version 4.15.5M running on an Arista Networks CVX",
+                "system_capabilities": "Bridge, Router",
+                "enabled_capabilities": "Bridge",
+                "management_addresses": [
+                  "172.16.2.142"
+                ]
+              }
+            }
+          },
+          "Ethernet9": {
+            "7c0e.cecb.659b": {
+              "Ethernet1/23": {
+                "chassis_id": "7c0e.cecb.659b",
+                "port_id": "Ethernet1/23",
+                "ttl": 120,
+                "port_description": "topology/pod-1/paths-101/pathep-[AVS_Policy_Group]",
+                "system_name": "Leaf1.cliqr.com",
+                "system_description": "topology/pod-1/node-101",
+                "system_capabilities": "Bridge, Router",
+                "enabled_capabilities": "Bridge, Router",
+                "management_addresses": [
+                  "7c0e.cecb.659b"
+                ]
+              }
+            }
+          },
+          "Ethernet10": {
+            "7c0e.cecb.659c": {
+              "Ethernet1/24": {
+                "chassis_id": "7c0e.cecb.659c",
+                "port_id": "Ethernet1/24",
+                "ttl": 120,
+                "port_description": "topology/pod-1/paths-101/pathep-[AVS_Policy_Group]",
+                "system_name": "Leaf1.cliqr.com",
+                "system_description": "topology/pod-1/node-101",
+                "system_capabilities": "Bridge, Router",
+                "enabled_capabilities": "Bridge, Router",
+                "management_addresses": [
+                  "7c0e.cecb.659c"
+                ]
+              }
+            }
+          },
+          "Ethernet23": {
+            "3c8a.b089.9898": {
+              "527": {
+                "chassis_id": "3c8a.b089.9898",
+                "port_id": "527",
+                "ttl": 120,
+                "port_description": "ge-1/1/1",
+                "system_name": "MX",
+                "system_description": "Juniper Networks, Inc. mx5-t internet router, kernel JUNOS 14.2R5.8, Build date: 2015-11-25 01:57:41 UTC Copyright (c) 1996-2015 Juniper Networks, Inc.",
+                "system_capabilities": "Bridge, Router",
+                "enabled_capabilities": "Bridge, Router"
+              }
+            }
+          },
+          "Ethernet33": {
+            "0050.560b.66ea": {
+              "Management1": {
+                "chassis_id": "0050.560b.66ea",
+                "port_id": "Management1",
+                "ttl": 120,
+                "system_name": "cvx-client-2",
+                "system_description": "Arista Networks EOS version 4.15.5M running on an Arista Networks CVX",
+                "system_capabilities": "Bridge, Router",
+                "enabled_capabilities": "Bridge",
+                "management_addresses": [
+                  "172.16.2.143"
+                ]
+              },
+              "Ethernet1": {
+                "chassis_id": "0050.560b.66ea",
+                "port_id": "Ethernet1",
+                "ttl": 120,
+                "system_name": "cvx-client-2",
+                "system_description": "Arista Networks EOS version 4.15.5M running on an Arista Networks CVX",
+                "system_capabilities": "Bridge, Router",
+                "enabled_capabilities": "Bridge",
+                "management_addresses": [
+                  "172.16.2.143"
+                ]
+              }
+            },
+            "0050.56ac.4cd9": {
+              "0050.56ac.4cd9": {
+                "chassis_id": "0050.56ac.4cd9",
+                "port_id": "0050.56ac.4cd9",
+                "ttl": 120,
+                "port_description": "ens192",
+                "system_name": "aci-compute",
+                "system_description": "Red Hat Enterprise Linux Linux 3.10.0-327.13.1.el7.x86_64 #1 SMP Mon Feb 29 13:22:02 EST 2016 x86_64",
+                "system_capabilities": "Bridge, WLAN Access Point, Router, Station Only",
+                "enabled_capabilities": "Router, Station Only",
+                "management_addresses": [
+                  "172.16.2.222",
+                  "fe80::250:56ff:feac:4cd9"
+                ]
+              }
+            },
+            "0050.56ac.4e29": {
+              "0050.56ac.4e29": {
+                "chassis_id": "0050.56ac.4e29",
+                "port_id": "0050.56ac.4e29",
+                "ttl": 120,
+                "port_description": "ens192",
+                "system_name": "aci-control",
+                "system_description": "Red Hat Enterprise Linux Linux 3.10.0-327.13.1.el7.x86_64 #1 SMP Mon Feb 29 13:22:02 EST 2016 x86_64",
+                "system_capabilities": "Bridge, WLAN Access Point, Router, Station Only",
+                "enabled_capabilities": "Router, Station Only",
+                "management_addresses": [
+                  "172.16.2.221",
+                  "fe80::250:56ff:feac:4e29"
+                ]
+              }
+            }
+          },
+          "Ethernet49/1": {
+            "001c.737d.77fb": {
+              "Ethernet49/1": {
+                "chassis_id": "001c.737d.77fb",
+                "port_id": "Ethernet49/1",
+                "ttl": 120,
+                "port_description": "\" To R4-Arista-L2-SDNLAB -DC1\"",
+                "system_name": "R4-Arista-L3-SDNLAB-SW1",
+                "system_description": "Arista Networks EOS version 4.15.0FXA running on an Arista Networks DCS-7050SX-64",
+                "system_capabilities": "Bridge, Router",
+                "enabled_capabilities": "Bridge, Router",
+                "management_addresses": [
+                  "2.2.2.2"
+                ]
+              }
+            }
+          },
+          "Ethernet51/1": {
+            "001c.737d.745f": {
+              "Ethernet49/1": {
+                "chassis_id": "001c.737d.745f",
+                "port_id": "Ethernet49/1",
+                "ttl": 120,
+                "port_description": "\"Connected to DC1-AristaL2SW-R4\"",
+                "system_name": "R4-Arista-L3-SDNLAB-SW2",
+                "system_description": "Arista Networks EOS version 4.15.0FXA running on an Arista Networks DCS-7050SX-64",
+                "system_capabilities": "Bridge, Router",
+                "enabled_capabilities": "Bridge, Router",
+                "management_addresses": [
+                  "172.16.1.3"
+                ]
+              }
+            }
+          },
+          "Ethernet52/1": {
+            "001c.737d.745f": {
+              "Ethernet50/1": {
+                "chassis_id": "001c.737d.745f",
+                "port_id": "Ethernet50/1",
+                "ttl": 120,
+                "port_description": "\"Connected to DC1-AristaL2SW-R4\"",
+                "system_name": "R4-Arista-L3-SDNLAB-SW2",
+                "system_description": "Arista Networks EOS version 4.15.0FXA running on an Arista Networks DCS-7050SX-64",
+                "system_capabilities": "Bridge, Router",
+                "enabled_capabilities": "Bridge, Router",
+                "management_addresses": [
+                  "172.16.1.3"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
