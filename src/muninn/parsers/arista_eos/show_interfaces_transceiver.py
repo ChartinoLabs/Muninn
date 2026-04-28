@@ -18,6 +18,7 @@ class TransceiverEntry(TypedDict):
     current_ma: NotRequired[float]
     tx_power_dbm: NotRequired[float]
     rx_power_dbm: NotRequired[float]
+    last_update: NotRequired[str]
 
 
 class ShowInterfacesTransceiverResult(TypedDict):
@@ -118,6 +119,13 @@ class ShowInterfacesTransceiverParser(
                 val = _parse_float(match.group(group_name))
                 if val is not None:
                     _d[key] = val
+
+            last_update = match.group("last_update").strip()
+            if last_update not in _SKIP_VALUES:
+                _d["last_update"] = last_update
+
+            if not entry:
+                continue
 
             interfaces[port] = entry
 
