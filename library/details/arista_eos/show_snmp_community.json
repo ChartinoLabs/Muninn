@@ -1,0 +1,31 @@
+{
+  "os": "arista_eos",
+  "command": "show snmp community",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Multiple SNMP communities with various access types and access lists",
+      "input": "Community name: TEST\nCommunity access: read-only\n\nCommunity name: TEST_AGAIN\nCommunity access: read-only\nCommunity view: TEST (non-existent)\n\nCommunity name: TEST_ONE_MORE\nCommunity access: read-only\nAccess list: TEST_ACL (non-existent)\n\nCommunity name: TEST_ONE_MORE_TIME\nCommunity access: read-write\nIPv6 access list: IPV6_ACL (non-existent)\n\nCommunity name: public\nCommunity access: read-only\n",
+      "expected": {
+        "TEST": {
+          "access": "read-only"
+        },
+        "TEST_AGAIN": {
+          "access": "read-only",
+          "community_view": "TEST"
+        },
+        "TEST_ONE_MORE": {
+          "access": "read-only",
+          "access_list": "TEST_ACL"
+        },
+        "TEST_ONE_MORE_TIME": {
+          "access": "read-write",
+          "ipv6_access_list": "IPV6_ACL"
+        },
+        "public": {
+          "access": "read-only"
+        }
+      }
+    }
+  ]
+}
