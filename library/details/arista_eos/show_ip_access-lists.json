@@ -1,0 +1,360 @@
+{
+  "os": "arista_eos",
+  "command": "show ip access-lists",
+  "schema": {
+    "name": "ShowIpAccessListsResult",
+    "fields": {
+      "access_lists": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "AccessList",
+            "fields": {
+              "entries": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "AclEntry",
+                    "fields": {
+                      "sequence": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "action": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "line": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "parsed": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": "<class 'object'>"
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              },
+              "readonly": {
+                "type": "bool",
+                "required": false
+              },
+              "statistics_per_entry": {
+                "type": "bool",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple ACLs with various protocols, ports, and options",
+      "input": "IP Access List TEST_1\n        10 permit ip host 10.0.0.1 10.0.0.0/24\n\nIP Access List default-control-plane-acl [readonly]\n        statistics per-entry\n        10 permit icmp any any\n        20 permit ip any any tracked\n        30 permit udp any any eq bfd ttl eq 255\n        50 permit tcp any any eq ssh telnet www snmp bgp https msdp\n        60 permit udp any any eq bootps bootpc snmp rip ntp\n        70 permit tcp any any range 5900 5910\n\nIP Access List test2\n        10 permit ip 1.1.1.0/30 any fragments log\n        20 permit tcp 111.11.11.0/24 eq www z39-50 10.0.0.0/24 urg ttl eq 30\n\nIP Access List test3\n        10 permit tcp any range www ups any ack\n        20 permit tcp any eq www ups telnet time tunnel uucp vmnet host 10.10.10.10 ack\n        30 permit tcp any eq www ups telnet vmnet any log\n",
+      "expected": {
+        "access_lists": {
+          "TEST_1": {
+            "entries": {
+              "10": {
+                "sequence": 10,
+                "action": "permit",
+                "line": "permit ip host 10.0.0.1 10.0.0.0/24",
+                "parsed": {
+                  "protocol": "ip",
+                  "source": {
+                    "kind": "host",
+                    "value": "10.0.0.1"
+                  },
+                  "destination": {
+                    "kind": "prefix",
+                    "value": "10.0.0.0/24"
+                  }
+                }
+              }
+            }
+          },
+          "default-control-plane-acl": {
+            "entries": {
+              "10": {
+                "sequence": 10,
+                "action": "permit",
+                "line": "permit icmp any any",
+                "parsed": {
+                  "protocol": "icmp",
+                  "source": {
+                    "kind": "any"
+                  },
+                  "destination": {
+                    "kind": "any"
+                  }
+                }
+              },
+              "20": {
+                "sequence": 20,
+                "action": "permit",
+                "line": "permit ip any any tracked",
+                "parsed": {
+                  "protocol": "ip",
+                  "source": {
+                    "kind": "any"
+                  },
+                  "destination": {
+                    "kind": "any"
+                  },
+                  "tracked": true
+                }
+              },
+              "30": {
+                "sequence": 30,
+                "action": "permit",
+                "line": "permit udp any any eq bfd ttl eq 255",
+                "parsed": {
+                  "protocol": "udp",
+                  "source": {
+                    "kind": "any"
+                  },
+                  "destination": {
+                    "kind": "any"
+                  },
+                  "destination_port": {
+                    "operator": "eq",
+                    "ports": [
+                      "bfd"
+                    ]
+                  },
+                  "ttl": {
+                    "operator": "eq",
+                    "value": 255
+                  }
+                }
+              },
+              "50": {
+                "sequence": 50,
+                "action": "permit",
+                "line": "permit tcp any any eq ssh telnet www snmp bgp https msdp",
+                "parsed": {
+                  "protocol": "tcp",
+                  "source": {
+                    "kind": "any"
+                  },
+                  "destination": {
+                    "kind": "any"
+                  },
+                  "destination_port": {
+                    "operator": "eq",
+                    "ports": [
+                      "ssh",
+                      "telnet",
+                      "www",
+                      "snmp",
+                      "bgp",
+                      "https",
+                      "msdp"
+                    ]
+                  }
+                }
+              },
+              "60": {
+                "sequence": 60,
+                "action": "permit",
+                "line": "permit udp any any eq bootps bootpc snmp rip ntp",
+                "parsed": {
+                  "protocol": "udp",
+                  "source": {
+                    "kind": "any"
+                  },
+                  "destination": {
+                    "kind": "any"
+                  },
+                  "destination_port": {
+                    "operator": "eq",
+                    "ports": [
+                      "bootps",
+                      "bootpc",
+                      "snmp",
+                      "rip",
+                      "ntp"
+                    ]
+                  }
+                }
+              },
+              "70": {
+                "sequence": 70,
+                "action": "permit",
+                "line": "permit tcp any any range 5900 5910",
+                "parsed": {
+                  "protocol": "tcp",
+                  "source": {
+                    "kind": "any"
+                  },
+                  "destination": {
+                    "kind": "any"
+                  },
+                  "destination_port": {
+                    "operator": "range",
+                    "ports": [
+                      "5900",
+                      "5910"
+                    ]
+                  }
+                }
+              }
+            },
+            "readonly": true,
+            "statistics_per_entry": true
+          },
+          "test2": {
+            "entries": {
+              "10": {
+                "sequence": 10,
+                "action": "permit",
+                "line": "permit ip 1.1.1.0/30 any fragments log",
+                "parsed": {
+                  "protocol": "ip",
+                  "source": {
+                    "kind": "prefix",
+                    "value": "1.1.1.0/30"
+                  },
+                  "destination": {
+                    "kind": "any"
+                  },
+                  "fragments": true,
+                  "log": true
+                }
+              },
+              "20": {
+                "sequence": 20,
+                "action": "permit",
+                "line": "permit tcp 111.11.11.0/24 eq www z39-50 10.0.0.0/24 urg ttl eq 30",
+                "parsed": {
+                  "protocol": "tcp",
+                  "source": {
+                    "kind": "prefix",
+                    "value": "111.11.11.0/24"
+                  },
+                  "source_port": {
+                    "operator": "eq",
+                    "ports": [
+                      "www",
+                      "z39-50"
+                    ]
+                  },
+                  "destination": {
+                    "kind": "prefix",
+                    "value": "10.0.0.0/24"
+                  },
+                  "tcp_flags": {
+                    "flags": {
+                      "urg": "include"
+                    }
+                  },
+                  "ttl": {
+                    "operator": "eq",
+                    "value": 30
+                  }
+                }
+              }
+            }
+          },
+          "test3": {
+            "entries": {
+              "10": {
+                "sequence": 10,
+                "action": "permit",
+                "line": "permit tcp any range www ups any ack",
+                "parsed": {
+                  "protocol": "tcp",
+                  "source": {
+                    "kind": "any"
+                  },
+                  "source_port": {
+                    "operator": "range",
+                    "ports": [
+                      "www",
+                      "ups"
+                    ]
+                  },
+                  "destination": {
+                    "kind": "any"
+                  },
+                  "tcp_flags": {
+                    "flags": {
+                      "ack": "include"
+                    }
+                  }
+                }
+              },
+              "20": {
+                "sequence": 20,
+                "action": "permit",
+                "line": "permit tcp any eq www ups telnet time tunnel uucp vmnet host 10.10.10.10 ack",
+                "parsed": {
+                  "protocol": "tcp",
+                  "source": {
+                    "kind": "any"
+                  },
+                  "source_port": {
+                    "operator": "eq",
+                    "ports": [
+                      "www",
+                      "ups",
+                      "telnet",
+                      "time",
+                      "tunnel",
+                      "uucp",
+                      "vmnet"
+                    ]
+                  },
+                  "destination": {
+                    "kind": "host",
+                    "value": "10.10.10.10"
+                  },
+                  "tcp_flags": {
+                    "flags": {
+                      "ack": "include"
+                    }
+                  }
+                }
+              },
+              "30": {
+                "sequence": 30,
+                "action": "permit",
+                "line": "permit tcp any eq www ups telnet vmnet any log",
+                "parsed": {
+                  "protocol": "tcp",
+                  "source": {
+                    "kind": "any"
+                  },
+                  "source_port": {
+                    "operator": "eq",
+                    "ports": [
+                      "www",
+                      "ups",
+                      "telnet",
+                      "vmnet"
+                    ]
+                  },
+                  "destination": {
+                    "kind": "any"
+                  },
+                  "log": true
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
