@@ -1,36 +1,34 @@
 """Parser for 'show ip access-lists' command on Arista EOS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 from muninn.tags import ParserTag
 
+AddressSpec = dict[str, object]
+PortSpec = dict[str, object]
+AclParsedFields = dict[str, object]
+
 
 class AclEntry(TypedDict):
-    """Schema for a single ACL entry (rule)."""
+    """Schema for a single ACL entry (ACE)."""
 
+    sequence: int
     action: str
-    protocol: str
-    source: str
-    source_ports: NotRequired[str]
-    destination: str
-    destination_ports: NotRequired[str]
-    fragments: NotRequired[bool]
-    log: NotRequired[bool]
-    tracked: NotRequired[bool]
-    tcp_flags: NotRequired[str]
-    ttl: NotRequired[str]
+    line: str
+    parsed: AclParsedFields
 
 
 class AccessList(TypedDict):
     """Schema for a single IP access list."""
 
+    entries: dict[str, AclEntry]
     readonly: NotRequired[bool]
     statistics_per_entry: NotRequired[bool]
-    entries: dict[str, AclEntry]
 
 
 class ShowIpAccessListsResult(TypedDict):
@@ -40,182 +38,148 @@ class ShowIpAccessListsResult(TypedDict):
 
 
 _ACL_HEADER = re.compile(
-    r"^IP Access List\s+(?P<name>\S+)"
-    r"(?:\s+\[(?P<readonly>readonly)\])?\s*$"
+    r"^IP Access List\s+(?P<name>\S+)(?:\s+\[(?P<readonly>readonly)\])?\s*$"
 )
 
 _STATISTICS_PER_ENTRY = re.compile(r"^\s+statistics per-entry\s*$")
 
-# ACL entry line: sequence action protocol <rest>
 _ACL_ENTRY = re.compile(
-    r"^\s+(?P<seq>\d+)\s+(?P<action>permit|deny)\s+(?P<protocol>\S+)\s+"
-    r"(?P<rest>.+)$"
+    r"^\s+(?P<sequence>\d+)\s+(?P<action>permit|deny)\s+(?P<rest>.+)$"
 )
 
+_IPV4_ADDRESS_START_RE = re.compile(rf"^{IPV4_ADDRESS}")
 
-def _parse_address_and_ports(tokens: list[str]) -> tuple[str, str | None, list[str]]:
-    """Parse an address (with optional ports) from a token list.
+_PORT_OPERATORS = frozenset({"eq", "neq", "lt", "gt", "range"})
 
-    Returns (address_str, ports_str_or_none, remaining_tokens).
-    """
-    if not tokens:
-        msg = "Expected address tokens but got empty list"
-        raise ValueError(msg)
-
-    # "any"
-    if tokens[0] == "any":
-        addr = "any"
-        tokens = tokens[1:]
-    # "host x.x.x.x"
-    elif tokens[0] == "host":
-        addr = f"host {tokens[1]}"
-        tokens = tokens[2:]
-    # "x.x.x.x/prefix"
-    elif "/" in tokens[0]:
-        addr = tokens[0]
-        tokens = tokens[1:]
-    # "x.x.x.x mask" (shouldn't appear in EOS but handle defensively)
-    else:
-        addr = tokens[0]
-        tokens = tokens[1:]
-
-    # Check for port operator (eq, range, neq, gt, lt)
-    ports = None
-    if tokens and tokens[0] in ("eq", "range", "neq", "gt", "lt"):
-        operator = tokens[0]
-        tokens = tokens[1:]
-        port_values: list[str] = []
-        if operator == "range":
-            # range takes exactly two values
-            port_values = tokens[:2]
-            tokens = tokens[2:]
-        else:
-            # eq/neq/gt/lt: consume port names until we hit a keyword or address
-            while tokens and not _is_address_or_keyword(tokens[0]):
-                port_values.append(tokens[0])
-                tokens = tokens[1:]
-        ports = f"{operator} {' '.join(port_values)}"
-
-    return addr, ports, tokens
-
-
-# Tokens that signal end of a port list (start of destination or trailing option)
-_TRAILING_KEYWORDS = frozenset(
-    {
-        "any",
-        "host",
-        "log",
-        "fragments",
-        "tracked",
-        "ack",
-        "fin",
-        "psh",
-        "rst",
-        "syn",
-        "urg",
-        "ttl",
-        "established",
-    }
-)
-
-
-def _is_address_or_keyword(token: str) -> bool:
-    """Return True if token looks like an address start or trailing keyword."""
-    if token in _TRAILING_KEYWORDS:
-        return True
-    # IP address or CIDR
-    if re.match(r"^\d+\.\d+\.\d+\.\d+", token):
-        return True
-    return False
-
-
-_TCP_FLAG_TOKENS = frozenset(
-    {
-        "ack",
-        "fin",
-        "psh",
-        "rst",
-        "syn",
-        "urg",
-        "established",
-    }
-)
-
+_TCP_FLAG_TOKENS = frozenset({"ack", "fin", "psh", "rst", "syn", "urg", "established"})
 
 _BOOLEAN_OPTIONS = frozenset({"fragments", "log", "tracked"})
 
+_ADDRESS_KEYWORDS = frozenset({"any", "host"})
 
-def _parse_trailing_options(
-    tokens: list[str],
-    result: dict[str, object],
-) -> None:
-    """Parse trailing ACL entry options (flags, log, ttl, etc.) in place."""
-    tcp_flags: list[str] = []
+_TRAILING_KEYWORDS = _ADDRESS_KEYWORDS | _BOOLEAN_OPTIONS | _TCP_FLAG_TOKENS | {"ttl"}
 
-    while tokens:
-        token = tokens.pop(0)
 
+def _is_address_or_keyword(token: str) -> bool:
+    """Return True if token starts a new address or trailing modifier."""
+    if token in _TRAILING_KEYWORDS:
+        return True
+    return bool(_IPV4_ADDRESS_START_RE.match(token))
+
+
+def _parse_address(tokens: list[str], index: int) -> tuple[AddressSpec, int]:
+    """Parse an address specification at ``tokens[index]``."""
+    if index >= len(tokens):
+        return {"kind": "unknown"}, index
+
+    token = tokens[index]
+    if token == "any":  # nosec B105
+        return {"kind": "any"}, index + 1
+    if token == "host" and index + 1 < len(tokens):  # nosec B105
+        return {"kind": "host", "value": tokens[index + 1]}, index + 2
+    if "/" in token:
+        return {"kind": "prefix", "value": token}, index + 1
+    return {"kind": "address", "value": token}, index + 1
+
+
+def _parse_port_spec(tokens: list[str], index: int) -> tuple[PortSpec | None, int]:
+    """Parse a port clause if present, consuming all port values."""
+    if index >= len(tokens):
+        return None, index
+
+    operator = tokens[index]
+    if operator not in _PORT_OPERATORS:
+        return None, index
+
+    next_index = index + 1
+    if operator == "range":
+        ports = tokens[next_index : next_index + 2]
+        return {"operator": operator, "ports": ports}, next_index + 2
+
+    ports: list[str] = []
+    while next_index < len(tokens) and not _is_address_or_keyword(tokens[next_index]):
+        ports.append(tokens[next_index])
+        next_index += 1
+    return {"operator": operator, "ports": ports}, next_index
+
+
+def _parse_trailing_modifiers(parsed: AclParsedFields, tokens: list[str]) -> None:
+    """Parse trailing ACE modifiers (booleans, TCP flags, ttl) in place."""
+    tcp_flags: dict[str, str] = {}
+    extras: list[str] = []
+    index = 0
+
+    while index < len(tokens):
+        token = tokens[index]
         if token in _BOOLEAN_OPTIONS:
-            result[token] = True
-        elif token == "ttl" and tokens and tokens[0] == "eq":  # nosec B105
-            tokens.pop(0)  # consume "eq"
-            if tokens:
-                result["ttl"] = f"eq {tokens.pop(0)}"
-        elif token in _TCP_FLAG_TOKENS:
-            tcp_flags.append(token)
+            parsed[token] = True
+            index += 1
+            continue
+        if token in _TCP_FLAG_TOKENS:
+            tcp_flags[token] = "include"
+            index += 1
+            continue
+        if token == "ttl":  # nosec B105
+            index = _consume_ttl(parsed, tokens, index)
+            continue
+        extras.append(token)
+        index += 1
 
     if tcp_flags:
-        result["tcp_flags"] = " ".join(tcp_flags)
+        parsed["tcp_flags"] = {"flags": tcp_flags}
+    if extras:
+        parsed["extra"] = extras
 
 
-def _parse_acl_entry_rest(protocol: str, rest: str) -> dict[str, object]:
-    """Parse the source/destination/options portion of an ACL entry line."""
+def _consume_ttl(parsed: AclParsedFields, tokens: list[str], index: int) -> int:
+    """Consume a ``ttl <op> <value>`` clause."""
+    if index + 2 < len(tokens) and tokens[index + 1] in _PORT_OPERATORS:
+        parsed["ttl"] = {
+            "operator": tokens[index + 1],
+            "value": int(tokens[index + 2]),
+        }
+        return index + 3
+    if index + 1 < len(tokens):
+        parsed["ttl"] = {"value": int(tokens[index + 1])}
+        return index + 2
+    return index + 1
+
+
+def _parse_ace_body(rest: str) -> AclParsedFields:
+    """Parse the protocol/source/destination/options portion of an ACE."""
     tokens = rest.split()
-    result: dict[str, object] = {}
+    if not tokens:
+        return {}
 
-    # Parse source
-    source, source_ports, tokens = _parse_address_and_ports(tokens)
-    result["source"] = source
-    if source_ports:
-        result["source_ports"] = source_ports
+    parsed: AclParsedFields = {"protocol": tokens[0]}
+    index = 1
 
-    # Parse destination
-    dest, dest_ports, tokens = _parse_address_and_ports(tokens)
-    result["destination"] = dest
-    if dest_ports:
-        result["destination_ports"] = dest_ports
+    source, index = _parse_address(tokens, index)
+    parsed["source"] = source
 
-    _parse_trailing_options(tokens, result)
+    source_port, index = _parse_port_spec(tokens, index)
+    if source_port is not None:
+        parsed["source_port"] = source_port
 
-    return result
+    destination, index = _parse_address(tokens, index)
+    parsed["destination"] = destination
+
+    destination_port, index = _parse_port_spec(tokens, index)
+    if destination_port is not None:
+        parsed["destination_port"] = destination_port
+
+    _parse_trailing_modifiers(parsed, tokens[index:])
+    return parsed
 
 
-def _build_acl_entry(action: str, protocol: str, rest: str) -> AclEntry:
-    """Build a typed AclEntry from parsed components."""
-    parsed = _parse_acl_entry_rest(protocol, rest)
-    entry: AclEntry = {
+def _build_entry(sequence: int, action: str, rest: str) -> AclEntry:
+    """Build a typed AclEntry from a raw ACE line."""
+    return {
+        "sequence": sequence,
         "action": action,
-        "protocol": protocol,
-        "source": str(parsed["source"]),
-        "destination": str(parsed["destination"]),
+        "line": f"{action} {rest}",
+        "parsed": _parse_ace_body(rest),
     }
-
-    if "source_ports" in parsed:
-        entry["source_ports"] = str(parsed["source_ports"])
-    if "destination_ports" in parsed:
-        entry["destination_ports"] = str(parsed["destination_ports"])
-    if "fragments" in parsed:
-        entry["fragments"] = bool(parsed["fragments"])
-    if "log" in parsed:
-        entry["log"] = bool(parsed["log"])
-    if "tracked" in parsed:
-        entry["tracked"] = bool(parsed["tracked"])
-    if "tcp_flags" in parsed:
-        entry["tcp_flags"] = str(parsed["tcp_flags"])
-    if "ttl" in parsed:
-        entry["ttl"] = str(parsed["ttl"])
-
-    return entry
 
 
 @register(OS.ARISTA_EOS, "show ip access-lists")
@@ -244,34 +208,29 @@ class ShowIpAccessListsParser(BaseParser[ShowIpAccessListsResult]):
         """
         access_lists: dict[str, AccessList] = {}
         current_acl: AccessList | None = None
-        current_name: str | None = None
 
         for line in output.splitlines():
-            # ACL header
             header_match = _ACL_HEADER.match(line)
             if header_match:
-                current_name = header_match.group("name")
-                current_acl = cast(AccessList, {"entries": {}})
+                current_acl = {"entries": {}}
                 if header_match.group("readonly"):
                     current_acl["readonly"] = True
-                access_lists[current_name] = current_acl
+                access_lists[header_match.group("name")] = current_acl
                 continue
 
             if current_acl is None:
                 continue
 
-            # Statistics per-entry
             if _STATISTICS_PER_ENTRY.match(line):
                 current_acl["statistics_per_entry"] = True
                 continue
 
-            # ACL entry
             entry_match = _ACL_ENTRY.match(line)
             if entry_match:
-                seq = entry_match.group("seq")
-                current_acl["entries"][seq] = _build_acl_entry(
+                sequence = int(entry_match.group("sequence"))
+                current_acl["entries"][str(sequence)] = _build_entry(
+                    sequence,
                     entry_match.group("action"),
-                    entry_match.group("protocol"),
                     entry_match.group("rest"),
                 )
 
@@ -279,4 +238,4 @@ class ShowIpAccessListsParser(BaseParser[ShowIpAccessListsResult]):
             msg = "No access lists found in output"
             raise ValueError(msg)
 
-        return cast(ShowIpAccessListsResult, {"access_lists": access_lists})
+        return {"access_lists": access_lists}
