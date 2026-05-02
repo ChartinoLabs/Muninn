@@ -13,6 +13,9 @@ _IOS_FOUR_HUNDRED_GIGE_PATTERN = re.compile(
     r"^(?P<prefix>Fou)(?P<suffix>\d.*)$",
     re.IGNORECASE,
 )
+_IOS_FIVE_GIGE_PATTERN = re.compile(
+    r"^Fi(?P<suffix>\d.*)$",
+)
 
 # IOS-XR abbreviated prefixes that netutils does not expand.
 _IOSXR_PREFIX_MAP: dict[str, str] = {
@@ -60,6 +63,10 @@ def canonical_interface_name(name: str, *, os: OS | None = None) -> str:
         match = _IOS_FOUR_HUNDRED_GIGE_PATTERN.match(name)
         if match:
             name = f"FourHundredGigabitEthernet{match.group('suffix')}"
+        else:
+            match = _IOS_FIVE_GIGE_PATTERN.match(name)
+            if match:
+                name = f"FiveGigabitEthernet{match.group('suffix')}"
 
     if os is OS.CISCO_IOSXR:
         match = _IOSXR_PREFIX_PATTERN.match(name)
