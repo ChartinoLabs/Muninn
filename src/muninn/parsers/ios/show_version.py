@@ -25,6 +25,8 @@ class LicenseEntry(TypedDict):
     level: str
     type: NotRequired[str]
     next_reload_level: NotRequired[str]
+    air_level: NotRequired[str]
+    air_next_reload_level: NotRequired[str]
 
 
 class SwitchStackEntry(TypedDict):
@@ -72,8 +74,8 @@ class ShowVersionResult(TypedDict):
 # Version line: multiple formats
 _VERSION_RE = re.compile(r"Version\s+(\S+?)(?:,|\s|$)")
 
-# Image type from software line, e.g. "(C3750E-UNIVERSALK9-M)"
-_IMAGE_TYPE_RE = re.compile(r"\(([A-Za-z0-9][A-Za-z0-9_-]+-[A-Za-z0-9]+)\)")
+# Image type from software line, e.g. "(C3750E-UNIVERSALK9-M)" or "(CAT9K_IOSXE)"
+_IMAGE_TYPE_RE = re.compile(r"\(([A-Za-z0-9]+[_-][A-Za-z0-9_-]+)\)")
 
 # Compiled line
 _COMPILED_RE = re.compile(r"^Compiled\s+(.+)$")
@@ -123,17 +125,41 @@ _NVRAM_RE = re.compile(
     r"^(\d+)K\s+bytes\s+of\s+(?:flash-simulated\s+)?non-volatile\s+configuration\s+memory"
 )
 
-# License level
-_LICENSE_LEVEL_RE = re.compile(r"^License Level:\s+(.+?)\s*$")
+# License level (may include "Type: ..." on the same line for Cat4507RE)
+_LICENSE_LEVEL_RE = re.compile(r"^License Level:\s+(\S+)")
 
 # License type
 _LICENSE_TYPE_RE = re.compile(r"^License Type:\s+(.+?)\s*$")
 
-# Next reload license level
-_LICENSE_NEXT_RE = re.compile(r"^Next reload license Level:\s+(.+?)\s*$")
+# Next reload/reboot license level
+_LICENSE_NEXT_RE = re.compile(r"^Next re(?:load|boot) license Level:\s+(.+?)\s*$")
 
-# Technology package license table row (C3850 style)
-_TECH_PKG_RE = re.compile(r"^(\S+k9)\s+(Permanent|Evaluation|RightToUse)\s+(\S+k9)\s*$")
+# Combined "License Level: X   Type: Y" on one line (Cat4507RE style)
+_LICENSE_COMBINED_RE = re.compile(
+    r"^License Level:\s+(\S+)\s+Type:\s+(.+?)\s*$"
+)
+
+# AIR License Level (C9300 Smart License)
+_AIR_LICENSE_RE = re.compile(r"^AIR License Level:\s+(.+?)\s*$")
+
+# Next reload AIR license level (C9300)
+_AIR_LICENSE_NEXT_RE = re.compile(r"^Next reload AIR license Level:\s+(.+?)\s*$")
+
+# Technology package license table row: 3-column C3850 style
+# e.g. "ipservicesk9        Permanent        ipservicesk9"
+_TECH_PKG_3COL_RE = re.compile(
+    r"^(\S+)\s+(Permanent|Evaluation|RightToUse|Smart License"
+    r"|Subscription Smart License)\s+(\S+)\s*$"
+)
+
+# Technology package license table row: 4-column ISR/C3945/C1900 style
+# e.g. "appxk9           appxk9           RightToUse       appxk9"
+_TECH_PKG_4COL_RE = re.compile(
+    r"^(\S+)\s+(\S+)\s+(Permanent|Evaluation|RightToUse|None)\s+(\S+)\s*$"
+)
+
+# Valid package name: alphanumeric with hyphens/underscores (no special chars)
+_PKG_NAME_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]*$")
 
 # Base ethernet MAC address
 _MAC_RE = re.compile(r"^Base [Ee]thernet MAC [Aa]ddress\s*:\s*([0-9A-Fa-f:.-]+)")
@@ -281,8 +307,53 @@ def _parse_interfaces(line: str, result: dict) -> bool:
     return False
 
 
+def _parse_tech_pkg_tab_row(line: str, result: dict) -> bool:
+    """Parse a tab-separated technology package table row (C9300 style).
+
+    C9300 format uses tabs between columns and multi-word type values:
+        network-advantage   \\tSmart License                 \\t network-advantage
+        dna-advantage       \\tSubscription Smart License    \\t dna-advantage
+
+    Only the first matched row populates the license fields. Returns True if
+    the line contained a tab and was parsed as a table row.
+    """
+    if "\t" not in line:
+        return False
+    parts = [p.strip() for p in line.split("\t") if p.strip()]
+    if len(parts) != 3:
+        return False
+    current, lic_type, next_reboot = parts
+    # Validate: current/next_reboot should be single-word package names,
+    # and lic_type should not be a header keyword.
+    if " " in current or " " in next_reboot:
+        return False
+    if current.lower().startswith("technology") or current.startswith("---"):
+        return False
+    # Package names consist of alphanumeric chars, hyphens, and underscores.
+    # Reject lines where values contain other characters (e.g. "Device#").
+    if not _PKG_NAME_RE.match(current) or not _PKG_NAME_RE.match(next_reboot):
+        return False
+    if "license" not in result:
+        result["license"] = {}
+    # Only populate from the first data row (primary license).
+    if "level" not in result["license"]:
+        result["license"]["level"] = current
+        result["license"]["type"] = lic_type
+        result["license"]["next_reload_level"] = next_reboot
+    return True
+
+
 def _parse_license_fields(line: str, result: dict) -> bool:
     """Parse license-related lines. Returns True if matched."""
+    # Combined format: "License Level: entservices   Type: Permanent" (Cat4507RE)
+    m = _LICENSE_COMBINED_RE.match(line)
+    if m:
+        if "license" not in result:
+            result["license"] = {}
+        result["license"]["level"] = m.group(1)
+        result["license"]["type"] = m.group(2)
+        return True
+
     m = _LICENSE_LEVEL_RE.match(line)
     if m:
         if "license" not in result:
@@ -304,13 +375,47 @@ def _parse_license_fields(line: str, result: dict) -> bool:
         result["license"]["next_reload_level"] = m.group(1)
         return True
 
-    m = _TECH_PKG_RE.match(line)
+    # AIR License Level (C9300 Smart License)
+    m = _AIR_LICENSE_RE.match(line)
+    if m:
+        if "license" not in result:
+            result["license"] = {}
+        result["license"].setdefault("air_level", m.group(1))
+        return True
+
+    m = _AIR_LICENSE_NEXT_RE.match(line)
+    if m:
+        if "license" not in result:
+            result["license"] = {}
+        result["license"].setdefault("air_next_reload_level", m.group(1))
+        return True
+
+    # Tab-separated technology package table row (C9300 style)
+    if _parse_tech_pkg_tab_row(line, result):
+        return True
+
+    # 3-column technology package table row (C3850 style):
+    # current  type  next_reboot
+    m = _TECH_PKG_3COL_RE.match(line)
     if m:
         if "license" not in result:
             result["license"] = {}
         result["license"]["level"] = m.group(1)
         result["license"]["type"] = m.group(2)
         result["license"]["next_reload_level"] = m.group(3)
+        return True
+
+    # 4-column technology package table row (ISR4451/C3945/C1900 style):
+    # technology  current  type  next_reboot
+    m = _TECH_PKG_4COL_RE.match(line)
+    if m:
+        if "license" not in result:
+            result["license"] = {}
+        # Only populate from the first non-None row.
+        if "level" not in result["license"] and m.group(2) != "None":
+            result["license"]["level"] = m.group(2)
+            result["license"]["type"] = m.group(3)
+            result["license"]["next_reload_level"] = m.group(4)
         return True
 
     return False
