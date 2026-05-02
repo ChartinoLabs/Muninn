@@ -25,6 +25,8 @@ class LicenseEntry(TypedDict):
     level: str
     type: NotRequired[str]
     next_reload_level: NotRequired[str]
+    air_level: NotRequired[str]
+    air_next_reload_level: NotRequired[str]
 
 
 class SwitchStackEntry(TypedDict):
@@ -72,8 +74,8 @@ class ShowVersionResult(TypedDict):
 # Version line: multiple formats
 _VERSION_RE = re.compile(r"Version\s+(\S+?)(?:,|\s|$)")
 
-# Image type from software line, e.g. "(C3750E-UNIVERSALK9-M)"
-_IMAGE_TYPE_RE = re.compile(r"\(([A-Za-z0-9][A-Za-z0-9_-]+-[A-Za-z0-9]+)\)")
+# Image type from software line, e.g. "(C3750E-UNIVERSALK9-M)" or "(CAT9K_IOSXE)"
+_IMAGE_TYPE_RE = re.compile(r"\(([A-Za-z0-9]+[_-][A-Za-z0-9_-]+)\)")
 
 # Compiled line
 _COMPILED_RE = re.compile(r"^Compiled\s+(.+)$")
@@ -123,17 +125,39 @@ _NVRAM_RE = re.compile(
     r"^(\d+)K\s+bytes\s+of\s+(?:flash-simulated\s+)?non-volatile\s+configuration\s+memory"
 )
 
-# License level
-_LICENSE_LEVEL_RE = re.compile(r"^License Level:\s+(.+?)\s*$")
+# License level (may include "Type: ..." on the same line for Cat4507RE)
+_LICENSE_LEVEL_RE = re.compile(r"^License Level:\s+(\S+)")
 
 # License type
 _LICENSE_TYPE_RE = re.compile(r"^License Type:\s+(.+?)\s*$")
 
-# Next reload license level
-_LICENSE_NEXT_RE = re.compile(r"^Next reload license Level:\s+(.+?)\s*$")
+# Next reload/reboot license level
+_LICENSE_NEXT_RE = re.compile(r"^Next re(?:load|boot) license Level:\s+(.+?)\s*$")
 
-# Technology package license table row (C3850 style)
-_TECH_PKG_RE = re.compile(r"^(\S+k9)\s+(Permanent|Evaluation|RightToUse)\s+(\S+k9)\s*$")
+# Combined "License Level: X   Type: Y" on one line (Cat4507RE style)
+_LICENSE_COMBINED_RE = re.compile(r"^License Level:\s+(\S+)\s+Type:\s+(.+?)\s*$")
+
+# AIR License Level (C9300 Smart License)
+_AIR_LICENSE_RE = re.compile(r"^AIR License Level:\s+(.+?)\s*$")
+
+# Next reload AIR license level (C9300)
+_AIR_LICENSE_NEXT_RE = re.compile(r"^Next reload AIR license Level:\s+(.+?)\s*$")
+
+# Technology package license table row: 3-column C3850 style
+# e.g. "ipservicesk9        Permanent        ipservicesk9"
+_TECH_PKG_3COL_RE = re.compile(
+    r"^(\S+)\s+(Permanent|Evaluation|RightToUse|Smart License"
+    r"|Subscription Smart License)\s+(\S+)\s*$"
+)
+
+# Technology package license table row: 4-column ISR/C3945/C1900 style
+# e.g. "appxk9           appxk9           RightToUse       appxk9"
+_TECH_PKG_4COL_RE = re.compile(
+    r"^(\S+)\s+(\S+)\s+(Permanent|Evaluation|RightToUse|None)\s+(\S+)\s*$"
+)
+
+# Valid package name: alphanumeric with hyphens/underscores (no special chars)
+_PKG_NAME_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]*$")
 
 # Base ethernet MAC address
 _MAC_RE = re.compile(r"^Base [Ee]thernet MAC [Aa]ddress\s*:\s*([0-9A-Fa-f:.-]+)")
@@ -281,36 +305,91 @@ def _parse_interfaces(line: str, result: dict) -> bool:
     return False
 
 
+def _is_valid_pkg_name(name: str) -> bool:
+    """Return True if *name* looks like a technology package identifier."""
+    return bool(
+        _PKG_NAME_RE.match(name)
+        and " " not in name
+        and not name.lower().startswith("technology")
+        and not name.startswith("---")
+    )
+
+
+def _parse_tech_pkg_tab_row(line: str, result: dict) -> bool:
+    r"""Parse a tab-separated technology package table row (C9300 style).
+
+    C9300 format uses tabs between columns and multi-word type values:
+        network-advantage   \tSmart License                 \t network-advantage
+        dna-advantage       \tSubscription Smart License    \t dna-advantage
+
+    Only the first matched row populates the license fields. Returns True if
+    the line contained a tab and was parsed as a table row.
+    """
+    if "\t" not in line:
+        return False
+    parts = [p.strip() for p in line.split("\t") if p.strip()]
+    if len(parts) != 3:
+        return False
+    current, lic_type, next_reboot = parts
+    if not _is_valid_pkg_name(current) or not _is_valid_pkg_name(next_reboot):
+        return False
+    lic = _ensure_license(result)
+    if "level" not in lic:
+        lic["level"] = current
+        lic["type"] = lic_type
+        lic["next_reload_level"] = next_reboot
+    return True
+
+
+def _ensure_license(result: dict) -> dict:
+    """Return the license sub-dict, creating it if absent."""
+    if "license" not in result:
+        result["license"] = {}
+    return result["license"]
+
+
+_LICENSE_SINGLE_FIELD_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
+    (_LICENSE_LEVEL_RE, "level"),
+    (_LICENSE_TYPE_RE, "type"),
+    (_LICENSE_NEXT_RE, "next_reload_level"),
+    (_AIR_LICENSE_RE, "air_level"),
+    (_AIR_LICENSE_NEXT_RE, "air_next_reload_level"),
+)
+
+
 def _parse_license_fields(line: str, result: dict) -> bool:
     """Parse license-related lines. Returns True if matched."""
-    m = _LICENSE_LEVEL_RE.match(line)
+    m = _LICENSE_COMBINED_RE.match(line)
     if m:
-        if "license" not in result:
-            result["license"] = {}
-        result["license"]["level"] = m.group(1)
+        lic = _ensure_license(result)
+        lic["level"] = m.group(1)
+        lic["type"] = m.group(2)
         return True
 
-    m = _LICENSE_TYPE_RE.match(line)
-    if m:
-        if "license" not in result:
-            result["license"] = {}
-        result["license"]["type"] = m.group(1)
+    for pattern, key in _LICENSE_SINGLE_FIELD_PATTERNS:
+        m = pattern.match(line)
+        if m:
+            _ensure_license(result).setdefault(key, m.group(1))
+            return True
+
+    if _parse_tech_pkg_tab_row(line, result):
         return True
 
-    m = _LICENSE_NEXT_RE.match(line)
+    m = _TECH_PKG_3COL_RE.match(line)
     if m:
-        if "license" not in result:
-            result["license"] = {}
-        result["license"]["next_reload_level"] = m.group(1)
+        lic = _ensure_license(result)
+        lic["level"] = m.group(1)
+        lic["type"] = m.group(2)
+        lic["next_reload_level"] = m.group(3)
         return True
 
-    m = _TECH_PKG_RE.match(line)
+    m = _TECH_PKG_4COL_RE.match(line)
     if m:
-        if "license" not in result:
-            result["license"] = {}
-        result["license"]["level"] = m.group(1)
-        result["license"]["type"] = m.group(2)
-        result["license"]["next_reload_level"] = m.group(3)
+        lic = _ensure_license(result)
+        if "level" not in lic and m.group(2) != "None":
+            lic["level"] = m.group(2)
+            lic["type"] = m.group(3)
+            lic["next_reload_level"] = m.group(4)
         return True
 
     return False
