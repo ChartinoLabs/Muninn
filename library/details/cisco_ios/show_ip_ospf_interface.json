@@ -948,6 +948,130 @@
           }
         }
       }
+    },
+    {
+      "name": "BFD-enabled broadcast interfaces with loopback, C8300 IOS-XE output",
+      "input": "GigabitEthernet0/0/2 is up, line protocol is up\n  Internet Address 10.0.4.1/30, Interface ID 9, Area 0\n  Attached via Network Statement\n  Process ID 1, Router ID 192.0.2.2, Network Type BROADCAST, Cost: 1\n  Topology-MTID    Cost    Disabled    Shutdown      Topology Name\n        0           1         no          no            Base\n  Transmit Delay is 1 sec, State BDR, Priority 1, BFD enabled\n  Designated Router (ID) 192.0.2.4, Interface address 10.0.4.2\n  Backup Designated router (ID) 192.0.2.2, Interface address 10.0.4.1\n  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5\n    oob-resync timeout 40\n    Hello due in 00:00:08\n  Supports Link-local Signaling (LLS)\n  Cisco NSF helper support enabled\n  IETF NSF helper support enabled\n  Can be protected by per-prefix Loop-Free FastReroute\n  Can be used for per-prefix Loop-Free FastReroute repair paths\n  Not Protected by per-prefix TI-LFA\n  Index 1/2/2, flood queue length 0\n  Next 0x0(0)/0x0(0)/0x0(0)\n  Last flood scan length is 1, maximum is 1\n  Last flood scan time is 0 msec, maximum is 1 msec\n  Neighbor Count is 1, Adjacent neighbor count is 1\n    Adjacent with neighbor 192.0.2.4  (Designated Router)\n  Suppress hello for 0 neighbor(s)\nGigabitEthernet0/0/1 is down, line protocol is down\n  Internet Address 10.0.1.2/30, Interface ID 8, Area 0\n  Attached via Network Statement\n  Process ID 1, Router ID 192.0.2.2, Network Type BROADCAST, Cost: 1\n  Topology-MTID    Cost    Disabled    Shutdown      Topology Name\n        0           1         no          no            Base\n  Transmit Delay is 1 sec, State DOWN, Priority 1, BFD enabled\n  No designated router on this network\n  No backup designated router on this network\n  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5\n    oob-resync timeout 40\n  Supports Link-local Signaling (LLS)\n  Cisco NSF helper support enabled\n  IETF NSF helper support enabled\n  Can be protected by per-prefix Loop-Free FastReroute\n  Can be used for per-prefix Loop-Free FastReroute repair paths\n  Not Protected by per-prefix TI-LFA\nLoopback0 is up, line protocol is up\n  Internet Address 192.0.2.2/32, Interface ID 16, Area 0\n  Attached via Network Statement\n  Process ID 1, Router ID 192.0.2.2, Network Type LOOPBACK, Cost: 1\n  Topology-MTID    Cost    Disabled    Shutdown      Topology Name\n        0           1         no          no            Base\n  Loopback interface is treated as a stub Host\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet0/0/2": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "10.0.4.1/30",
+            "interface_id": 9,
+            "area": "0.0.0.0",
+            "attached_via": "Network Statement",
+            "process_id": 1,
+            "router_id": "192.0.2.2",
+            "network_type": "BROADCAST",
+            "cost": 1,
+            "topology": {
+              "0": {
+                "cost": 1,
+                "disabled": false,
+                "shutdown": false,
+                "name": "Base"
+              }
+            },
+            "transmit_delay": 1,
+            "state": "BDR",
+            "priority": 1,
+            "bfd_enabled": true,
+            "dr_router_id": "192.0.2.4",
+            "dr_address": "10.0.4.2",
+            "bdr_router_id": "192.0.2.2",
+            "bdr_address": "10.0.4.1",
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "oob_resync_timeout": 40,
+            "hello_due_in": "00:00:08",
+            "lls": true,
+            "graceful_restart": {
+              "cisco_nsf": true,
+              "ietf_nsf": true
+            },
+            "ipfrr_protected": true,
+            "ipfrr_candidate": true,
+            "ti_lfa_protected": false,
+            "flood_stats": {
+              "index": "1/2/2",
+              "queue_length": 0,
+              "last_scan_length": 1,
+              "max_scan_length": 1,
+              "last_scan_time_msec": 0,
+              "max_scan_time_msec": 1
+            },
+            "neighbor_count": 1,
+            "adjacent_neighbor_count": 1,
+            "neighbors": {
+              "192.0.2.4": {
+                "role": "Designated Router"
+              }
+            },
+            "suppress_hello_count": 0
+          },
+          "GigabitEthernet0/0/1": {
+            "status": "down",
+            "line_protocol": "down",
+            "ip_address": "10.0.1.2/30",
+            "interface_id": 8,
+            "area": "0.0.0.0",
+            "attached_via": "Network Statement",
+            "process_id": 1,
+            "router_id": "192.0.2.2",
+            "network_type": "BROADCAST",
+            "cost": 1,
+            "topology": {
+              "0": {
+                "cost": 1,
+                "disabled": false,
+                "shutdown": false,
+                "name": "Base"
+              }
+            },
+            "transmit_delay": 1,
+            "state": "DOWN",
+            "priority": 1,
+            "bfd_enabled": true,
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "wait_interval": 40,
+            "retransmit_interval": 5,
+            "oob_resync_timeout": 40,
+            "lls": true,
+            "graceful_restart": {
+              "cisco_nsf": true,
+              "ietf_nsf": true
+            },
+            "ipfrr_protected": true,
+            "ipfrr_candidate": true,
+            "ti_lfa_protected": false
+          },
+          "Loopback0": {
+            "status": "up",
+            "line_protocol": "up",
+            "ip_address": "192.0.2.2/32",
+            "interface_id": 16,
+            "area": "0.0.0.0",
+            "attached_via": "Network Statement",
+            "process_id": 1,
+            "router_id": "192.0.2.2",
+            "network_type": "LOOPBACK",
+            "cost": 1,
+            "topology": {
+              "0": {
+                "cost": 1,
+                "disabled": false,
+                "shutdown": false,
+                "name": "Base"
+              }
+            },
+            "stub_host": true
+          }
+        }
+      }
     }
   ]
 }
