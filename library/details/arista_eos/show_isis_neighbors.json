@@ -1,0 +1,85 @@
+{
+  "os": "arista_eos",
+  "command": "show isis neighbors",
+  "schema": {
+    "name": "ShowIsisNeighborsResult",
+    "fields": {
+      "instances": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "type": "dict",
+              "key": "str",
+              "value": {
+                "name": "IsisNeighborEntry",
+                "fields": {
+                  "vrf": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "neighbor_type": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "snpa": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "state": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "hold_time": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "circuit_id": {
+                    "type": "str",
+                    "required": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic IS-IS neighbors with two L2 adjacencies on a single instance",
+      "input": "\nInstance  VRF      System Id            Type Interface       SNPA              State Hold time   Circuit Id\n1         default  3333.3333.3333       L2   Ethernet2       50:0:0:3:0:3      UP    30          4444.4444.4444.0e\n1         default  2222.2222.2222       L2   Ethernet3       50:0:0:2:0:2      UP    30          0F\n",
+      "expected": {
+        "instances": {
+          "1": {
+            "3333.3333.3333": {
+              "Ethernet2": {
+                "vrf": "default",
+                "neighbor_type": "L2",
+                "snpa": "50:0:0:3:0:3",
+                "state": "UP",
+                "hold_time": 30,
+                "circuit_id": "4444.4444.4444.0e"
+              }
+            },
+            "2222.2222.2222": {
+              "Ethernet3": {
+                "vrf": "default",
+                "neighbor_type": "L2",
+                "snpa": "50:0:0:2:0:2",
+                "state": "UP",
+                "hold_time": 30,
+                "circuit_id": "0F"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
