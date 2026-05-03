@@ -2,13 +2,13 @@
     "vrfs": {
         "default": {
             "router_id": "10.103.1.1",
-            "local_as": "103",
+            "local_as": 103,
             "routes": {
                 "10.103.1.0/24": {
                     "paths": [
                         {
                             "status_codes": "*>",
-                            "origin": "i",
+                            "origin": "igp",
                             "metric": 1,
                             "local_pref": 0
                         }
@@ -18,7 +18,7 @@
                     "paths": [
                         {
                             "status_codes": "*>",
-                            "origin": "i",
+                            "origin": "igp",
                             "metric": 1,
                             "local_pref": 0
                         }
@@ -28,7 +28,7 @@
                     "paths": [
                         {
                             "status_codes": "*>",
-                            "origin": "i",
+                            "origin": "igp",
                             "metric": 1,
                             "local_pref": 0
                         }
@@ -38,7 +38,7 @@
                     "paths": [
                         {
                             "status_codes": "*>",
-                            "origin": "i",
+                            "origin": "igp",
                             "metric": 1,
                             "local_pref": 0
                         }
@@ -48,7 +48,7 @@
                     "paths": [
                         {
                             "status_codes": "*#",
-                            "origin": "i",
+                            "origin": "igp",
                             "next_hop": "10.10.10.20",
                             "metric": 0,
                             "local_pref": 100,
@@ -61,7 +61,7 @@
                     "paths": [
                         {
                             "status_codes": "*#",
-                            "origin": "i",
+                            "origin": "igp",
                             "next_hop": "10.10.10.20",
                             "metric": 0,
                             "local_pref": 100,
@@ -74,7 +74,7 @@
                     "paths": [
                         {
                             "status_codes": "*#",
-                            "origin": "i",
+                            "origin": "igp",
                             "next_hop": "10.10.10.20",
                             "metric": 0,
                             "local_pref": 100,
@@ -87,7 +87,7 @@
                     "paths": [
                         {
                             "status_codes": "*#",
-                            "origin": "i",
+                            "origin": "igp",
                             "next_hop": "10.10.10.20",
                             "metric": 0,
                             "local_pref": 100,
@@ -100,13 +100,14 @@
         },
         "INTERNET": {
             "router_id": "172.26.159.40",
-            "local_as": "62222.4003",
+            "local_as": 4077784995,
+            "local_as_asdot": "62222.4003",
             "routes": {
                 "10.9.41.96/29": {
                     "paths": [
                         {
                             "status_codes": "*>",
-                            "origin": "?",
+                            "origin": "incomplete",
                             "next_hop": "172.26.159.6",
                             "metric": 0,
                             "local_pref": 5000,
