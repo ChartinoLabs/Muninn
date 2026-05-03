@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
+from muninn.utils import canonical_interface_name
 
 
 class IsisNeighborEntry(TypedDict):
@@ -86,7 +87,9 @@ class ShowIsisNeighborsParser(BaseParser[ShowIsisNeighborsResult]):
 
             instance = match.group("instance")
             system_id = match.group("system_id")
-            interface = match.group("interface")
+            interface = canonical_interface_name(
+                match.group("interface"), os=OS.ARISTA_EOS
+            )
 
             entry = IsisNeighborEntry(
                 vrf=match.group("vrf"),
