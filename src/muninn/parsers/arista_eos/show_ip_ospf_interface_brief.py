@@ -5,6 +5,7 @@ from typing import ClassVar, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS, IPV4_PREFIX
 from muninn.registry import register
 from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
@@ -48,8 +49,8 @@ class ShowIpOspfInterfaceBriefParser(
         r"^\s*(?P<interface>\S+)\s+"
         r"(?P<instance>\d+)\s+"
         r"(?P<vrf>\S+)\s+"
-        r"(?P<area>\d+\.\d+\.\d+\.\d+)\s+"
-        r"(?P<ip_address>\S+)\s+"
+        rf"(?P<area>{IPV4_ADDRESS})\s+"
+        rf"(?P<ip_address>{IPV4_PREFIX})\s+"
         r"(?P<cost>\d+)\s+"
         r"(?P<state>\S+)\s+"
         r"(?P<nbrs>\d+)\s*$"
