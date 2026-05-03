@@ -1,0 +1,485 @@
+{
+  "os": "arista_eos",
+  "command": "show ip bgp detail",
+  "schema": {
+    "name": "ShowIpBgpDetailResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "BgpVrfEntry",
+            "fields": {
+              "router_id": {
+                "type": "str",
+                "required": true
+              },
+              "local_as": {
+                "type": "int",
+                "required": true
+              },
+              "prefixes": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "BgpPrefixEntry",
+                    "fields": {
+                      "path_count": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "paths": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "BgpPathEntry",
+                            "fields": {
+                              "as_path": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "next_hop": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "peer": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "router_id": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "origin": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "metric": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "local_preference": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "igp_metric": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "weight": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "received": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "flags": {
+                                "type": {
+                                  "type": "list",
+                                  "items": "str"
+                                },
+                                "required": true
+                              },
+                              "best_path": {
+                                "type": "bool",
+                                "required": true
+                              },
+                              "communities": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "extended_communities": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "rx_path_id": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "rx_safi": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "contributing_routes": {
+                                "type": {
+                                  "type": "dict",
+                                  "key": "str",
+                                  "value": {
+                                    "name": "ContributingRoute",
+                                    "fields": {
+                                      "proto": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "origin": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "as_path": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "communities": {
+                                        "type": "str",
+                                        "required": false
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": false
+                              }
+                            }
+                          }
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multi-VRF BGP detail with multiple paths, communities, and aggregated routes",
+      "input": "BGP routing table information for VRF default\nRouter identifier 10.103.1.1, local AS number 103\nBGP routing table entry for 10.103.1.0/24\n Paths: 2 available\n  6333 623566 42669611124 4266644366 4266643244\n    10.10.23.2 from 10.10.23.2 (10.10.1.1)\n      Origin INCOMPLETE, metric 0, localpref 100, IGP metric 1, weight 0, received 19d16h ago, valid, external, best\n      Community: internet 10050:200 10222:10010 3223:0 1000:17044\n      Rx SAFI: Unicast\n  6333 623566 42669.611124 4266644366 4266643244\n    10.10.25.2 from 10.10.25.2 (10.10.1.1)\n      Origin INCOMPLETE, metric 0, localpref 100, IGP metric 1, weight 0, received 21:13:51 ago, valid, internal\n      Community: 10050:200 10222:10010 3223:0 1000:17055\n      Rx SAFI: Unicast\nBGP routing table entry for 10.104.1.0/24\n Paths: 1 available\n  6333 623566 42669611124 {432556}\n    10.10.11.2 from 10.10.11.2 (10.10.11.1)\n      Origin IGP, metric 0, localpref 200, IGP metric 1, weight 0, received 19:13:51 ago, valid, internal, best\n      Community: 10050:300 10222:10010 3223:0 1000:17066\n      Extended Community: Route-Target-AS:1234:12\n      Rx SAFI: Unicast\nBGP routing table entry for 10.105.1.0/24\n Paths: 2 available\n  6333 623566 42669611124 {432556}\n    10.10.11.2 from 10.10.11.2 (10.10.11.1)\n      Origin IGP, metric 0, localpref 300, IGP metric 1, weight 0, received 13:43:11 ago, valid, internal, best, atomic-aggregate\n      Community: 10050:300 10222:10010 3223:0 1000:17077\n      Rx SAFI: Unicast\n      4 Contributing routes:\n        10.105.1.59/32     Proto: Connected     Origin: IGP          AS Path: Local\n        10.105.1.6/32      Proto: Connected     Origin: IGP          AS Path: Local\n        10.105.1.29/32     Proto: BGP           Origin: IGP          AS Path: 3245.235\n          Community: 999:10 347:234 1240:155\n        10.105.1.28/32     Proto: BGP           Origin: IGP          AS Path: 3245.235\n          Community: 999:10 347:234 1240:155\n  Local (aggregated by 2345223 10.10.11.3)\n    10.10.11.3 from 10.10.11.3 (10.10.11.1)\n      Origin IGP, metric 0, localpref 200, IGP metric 1, weight 0, received 19:34:12 ago, valid, internal, atomic-aggregate\n      Community: 10050:300 10222:10010 3223:0 1000:17088\n      Rx SAFI: Unicast\nBGP routing table entry for 10.105.100.0\n Paths: 2 available\n  6333 623566 42669611124 {432556}\n    10.10.11.2 from 10.10.11.2 (10.10.11.1)\n      Origin IGP, metric 0, localpref 300, IGP metric 1, weight 0, received 13:43:11 ago, valid, internal, best, atomic-aggregate\n      Community: 10050:300 10222:10010 3223:0 1000:17077\n      Rx SAFI: Unicast\n      4 Contributing routes:\n        10.105.1.59/32     Proto: Connected     Origin: IGP          AS Path: Local\n        10.105.1.6/32      Proto: Connected     Origin: IGP          AS Path: Local\n        10.105.1.29/32     Proto: BGP           Origin: IGP          AS Path: 3245.235\n          Community: 999:10 347:234 1240:155\n        10.105.1.28/32     Proto: BGP           Origin: IGP          AS Path: 3245.235\n          Community: 999:10 347:234 1240:155\n  Local (aggregated by 2345223 10.10.11.3)\n    10.10.11.3 from 10.10.11.3 (10.10.11.1)\n      Origin IGP, metric 0, localpref 200, IGP metric 1, weight 0, received 19:34:12 ago, valid, internal, atomic-aggregate\n      Community: 10050:300 10222:10010 3223:0 1000:17088\n      Rx SAFI: Unicast\nBGP routing table entry for 10.106.1.0/24\n Paths: 1 available\n  Local\n    10.10.12.2 from 10.10.12.2 (10.10.12.1)\n      Origin INCOMPLETE, metric 0, localpref 200, IGP metric 1, weight 0, received 19:34:12 ago, valid, external, best\n      Community: 10050:300 10222:10010 3223:0 1000:17099\n      Rx SAFI: Unicast\nBGP routing table entry for 10.107.1.0/24\n Paths: 1 available\n  Local (Received from a RR-client)\n    10.10.13.2 from 10.10.13.2 (10.10.13.1)\n      Origin IGP, metric 0, localpref 250, IGP metric 1, weight 0, received 19:34:12 ago, valid, internal, best\n      Community: no-export\n      Rx path id: 0x1\n      Rx SAFI: Unicast\nBGP routing table information for VRF CLOUD\nRouter identifier 10.105.1.1, local AS number 105\nBGP routing table entry for 10.105.1.0/24\n Paths: 1 available\n  6111 6211566 42669611124 4266644366 4266643244\n    10.99.1.2 from 10.105.6.2 (10.15.1.1)\n      Origin INCOMPLETE, metric 0, localpref 200, IGP metric 1, weight 0, received 13d11h ago, valid, external, best\n      Community: internet 10050:200 10222:10010 3223:0 1000:17044\n      Rx SAFI: Unicast\nBGP routing table entry for 10.106.1.0/24\n Paths: 1 available\n  6111 6211566 42669611124 4266644366 4266643244\n    10.99.1.3 from 10.105.6.3 (10.15.1.2)\n      Origin INCOMPLETE, metric 0, localpref 100, IGP metric 1, weight 0, received 13d11h ago, valid, external, backup\n      Community: internet 10050:200 10222:10010 3223:0 1000:17044\n      Rx SAFI: Unicast\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "router_id": "10.103.1.1",
+            "local_as": 103,
+            "prefixes": {
+              "10.103.1.0/24": {
+                "path_count": 2,
+                "paths": {
+                  "10.10.23.2": {
+                    "as_path": "6333 623566 42669611124 4266644366 4266643244",
+                    "next_hop": "10.10.23.2",
+                    "peer": "10.10.23.2",
+                    "router_id": "10.10.1.1",
+                    "origin": "INCOMPLETE",
+                    "metric": 0,
+                    "local_preference": 100,
+                    "igp_metric": 1,
+                    "weight": 0,
+                    "received": "19d16h",
+                    "flags": [
+                      "valid",
+                      "external",
+                      "best"
+                    ],
+                    "best_path": true,
+                    "communities": "internet 10050:200 10222:10010 3223:0 1000:17044",
+                    "rx_safi": "Unicast"
+                  },
+                  "10.10.25.2": {
+                    "as_path": "6333 623566 42669.611124 4266644366 4266643244",
+                    "next_hop": "10.10.25.2",
+                    "peer": "10.10.25.2",
+                    "router_id": "10.10.1.1",
+                    "origin": "INCOMPLETE",
+                    "metric": 0,
+                    "local_preference": 100,
+                    "igp_metric": 1,
+                    "weight": 0,
+                    "received": "21:13:51",
+                    "flags": [
+                      "valid",
+                      "internal"
+                    ],
+                    "best_path": false,
+                    "communities": "10050:200 10222:10010 3223:0 1000:17055",
+                    "rx_safi": "Unicast"
+                  }
+                }
+              },
+              "10.104.1.0/24": {
+                "path_count": 1,
+                "paths": {
+                  "10.10.11.2": {
+                    "as_path": "6333 623566 42669611124 {432556}",
+                    "next_hop": "10.10.11.2",
+                    "peer": "10.10.11.2",
+                    "router_id": "10.10.11.1",
+                    "origin": "IGP",
+                    "metric": 0,
+                    "local_preference": 200,
+                    "igp_metric": 1,
+                    "weight": 0,
+                    "received": "19:13:51",
+                    "flags": [
+                      "valid",
+                      "internal",
+                      "best"
+                    ],
+                    "best_path": true,
+                    "communities": "10050:300 10222:10010 3223:0 1000:17066",
+                    "extended_communities": "Route-Target-AS:1234:12",
+                    "rx_safi": "Unicast"
+                  }
+                }
+              },
+              "10.105.1.0/24": {
+                "path_count": 2,
+                "paths": {
+                  "10.10.11.2": {
+                    "as_path": "6333 623566 42669611124 {432556}",
+                    "next_hop": "10.10.11.2",
+                    "peer": "10.10.11.2",
+                    "router_id": "10.10.11.1",
+                    "origin": "IGP",
+                    "metric": 0,
+                    "local_preference": 300,
+                    "igp_metric": 1,
+                    "weight": 0,
+                    "received": "13:43:11",
+                    "flags": [
+                      "valid",
+                      "internal",
+                      "best",
+                      "atomic-aggregate"
+                    ],
+                    "best_path": true,
+                    "communities": "10050:300 10222:10010 3223:0 1000:17077",
+                    "rx_safi": "Unicast",
+                    "contributing_routes": {
+                      "10.105.1.59/32": {
+                        "proto": "Connected",
+                        "origin": "IGP",
+                        "as_path": "Local"
+                      },
+                      "10.105.1.6/32": {
+                        "proto": "Connected",
+                        "origin": "IGP",
+                        "as_path": "Local"
+                      },
+                      "10.105.1.29/32": {
+                        "proto": "BGP",
+                        "origin": "IGP",
+                        "as_path": "3245.235",
+                        "communities": "999:10 347:234 1240:155"
+                      },
+                      "10.105.1.28/32": {
+                        "proto": "BGP",
+                        "origin": "IGP",
+                        "as_path": "3245.235",
+                        "communities": "999:10 347:234 1240:155"
+                      }
+                    }
+                  },
+                  "10.10.11.3": {
+                    "as_path": "Local",
+                    "next_hop": "10.10.11.3",
+                    "peer": "10.10.11.3",
+                    "router_id": "10.10.11.1",
+                    "origin": "IGP",
+                    "metric": 0,
+                    "local_preference": 200,
+                    "igp_metric": 1,
+                    "weight": 0,
+                    "received": "19:34:12",
+                    "flags": [
+                      "valid",
+                      "internal",
+                      "atomic-aggregate"
+                    ],
+                    "best_path": false,
+                    "communities": "10050:300 10222:10010 3223:0 1000:17088",
+                    "rx_safi": "Unicast"
+                  }
+                }
+              },
+              "10.105.100.0": {
+                "path_count": 2,
+                "paths": {
+                  "10.10.11.2": {
+                    "as_path": "6333 623566 42669611124 {432556}",
+                    "next_hop": "10.10.11.2",
+                    "peer": "10.10.11.2",
+                    "router_id": "10.10.11.1",
+                    "origin": "IGP",
+                    "metric": 0,
+                    "local_preference": 300,
+                    "igp_metric": 1,
+                    "weight": 0,
+                    "received": "13:43:11",
+                    "flags": [
+                      "valid",
+                      "internal",
+                      "best",
+                      "atomic-aggregate"
+                    ],
+                    "best_path": true,
+                    "communities": "10050:300 10222:10010 3223:0 1000:17077",
+                    "rx_safi": "Unicast",
+                    "contributing_routes": {
+                      "10.105.1.59/32": {
+                        "proto": "Connected",
+                        "origin": "IGP",
+                        "as_path": "Local"
+                      },
+                      "10.105.1.6/32": {
+                        "proto": "Connected",
+                        "origin": "IGP",
+                        "as_path": "Local"
+                      },
+                      "10.105.1.29/32": {
+                        "proto": "BGP",
+                        "origin": "IGP",
+                        "as_path": "3245.235",
+                        "communities": "999:10 347:234 1240:155"
+                      },
+                      "10.105.1.28/32": {
+                        "proto": "BGP",
+                        "origin": "IGP",
+                        "as_path": "3245.235",
+                        "communities": "999:10 347:234 1240:155"
+                      }
+                    }
+                  },
+                  "10.10.11.3": {
+                    "as_path": "Local",
+                    "next_hop": "10.10.11.3",
+                    "peer": "10.10.11.3",
+                    "router_id": "10.10.11.1",
+                    "origin": "IGP",
+                    "metric": 0,
+                    "local_preference": 200,
+                    "igp_metric": 1,
+                    "weight": 0,
+                    "received": "19:34:12",
+                    "flags": [
+                      "valid",
+                      "internal",
+                      "atomic-aggregate"
+                    ],
+                    "best_path": false,
+                    "communities": "10050:300 10222:10010 3223:0 1000:17088",
+                    "rx_safi": "Unicast"
+                  }
+                }
+              },
+              "10.106.1.0/24": {
+                "path_count": 1,
+                "paths": {
+                  "10.10.12.2": {
+                    "as_path": "Local",
+                    "next_hop": "10.10.12.2",
+                    "peer": "10.10.12.2",
+                    "router_id": "10.10.12.1",
+                    "origin": "INCOMPLETE",
+                    "metric": 0,
+                    "local_preference": 200,
+                    "igp_metric": 1,
+                    "weight": 0,
+                    "received": "19:34:12",
+                    "flags": [
+                      "valid",
+                      "external",
+                      "best"
+                    ],
+                    "best_path": true,
+                    "communities": "10050:300 10222:10010 3223:0 1000:17099",
+                    "rx_safi": "Unicast"
+                  }
+                }
+              },
+              "10.107.1.0/24": {
+                "path_count": 1,
+                "paths": {
+                  "10.10.13.2#0x1": {
+                    "as_path": "Local",
+                    "next_hop": "10.10.13.2",
+                    "peer": "10.10.13.2",
+                    "router_id": "10.10.13.1",
+                    "origin": "IGP",
+                    "metric": 0,
+                    "local_preference": 250,
+                    "igp_metric": 1,
+                    "weight": 0,
+                    "received": "19:34:12",
+                    "flags": [
+                      "valid",
+                      "internal",
+                      "best"
+                    ],
+                    "best_path": true,
+                    "communities": "no-export",
+                    "rx_path_id": "0x1",
+                    "rx_safi": "Unicast"
+                  }
+                }
+              }
+            }
+          },
+          "CLOUD": {
+            "router_id": "10.105.1.1",
+            "local_as": 105,
+            "prefixes": {
+              "10.105.1.0/24": {
+                "path_count": 1,
+                "paths": {
+                  "10.99.1.2": {
+                    "as_path": "6111 6211566 42669611124 4266644366 4266643244",
+                    "next_hop": "10.99.1.2",
+                    "peer": "10.105.6.2",
+                    "router_id": "10.15.1.1",
+                    "origin": "INCOMPLETE",
+                    "metric": 0,
+                    "local_preference": 200,
+                    "igp_metric": 1,
+                    "weight": 0,
+                    "received": "13d11h",
+                    "flags": [
+                      "valid",
+                      "external",
+                      "best"
+                    ],
+                    "best_path": true,
+                    "communities": "internet 10050:200 10222:10010 3223:0 1000:17044",
+                    "rx_safi": "Unicast"
+                  }
+                }
+              },
+              "10.106.1.0/24": {
+                "path_count": 1,
+                "paths": {
+                  "10.99.1.3": {
+                    "as_path": "6111 6211566 42669611124 4266644366 4266643244",
+                    "next_hop": "10.99.1.3",
+                    "peer": "10.105.6.3",
+                    "router_id": "10.15.1.2",
+                    "origin": "INCOMPLETE",
+                    "metric": 0,
+                    "local_preference": 100,
+                    "igp_metric": 1,
+                    "weight": 0,
+                    "received": "13d11h",
+                    "flags": [
+                      "valid",
+                      "external",
+                      "backup"
+                    ],
+                    "best_path": false,
+                    "communities": "internet 10050:200 10222:10010 3223:0 1000:17044",
+                    "rx_safi": "Unicast"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
