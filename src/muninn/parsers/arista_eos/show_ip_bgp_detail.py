@@ -5,8 +5,18 @@ from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS, IPV4_PREFIX
 from muninn.registry import register
 from muninn.tags import ParserTag
+
+
+class ContributingRoute(TypedDict):
+    """Schema for a single contributing route under an aggregated path."""
+
+    proto: str
+    origin: str
+    as_path: str
+    communities: NotRequired[str]
 
 
 class BgpPathEntry(TypedDict):
@@ -22,12 +32,13 @@ class BgpPathEntry(TypedDict):
     igp_metric: int
     weight: int
     received: str
-    flags: str
+    flags: list[str]
     best_path: bool
     communities: NotRequired[str]
     extended_communities: NotRequired[str]
     rx_path_id: NotRequired[str]
     rx_safi: NotRequired[str]
+    contributing_routes: NotRequired[dict[str, ContributingRoute]]
 
 
 class BgpPrefixEntry(TypedDict):
@@ -57,10 +68,12 @@ _VRF_HEADER_RE = re.compile(
     r"^BGP routing table information for VRF\s+(?P<vrf>\S+)\s*$"
 )
 _ROUTER_ID_RE = re.compile(
-    r"^Router identifier\s+(?P<router_id>\S+),\s+"
+    rf"^Router identifier\s+(?P<router_id>{IPV4_ADDRESS}),\s+"
     r"local AS number\s+(?P<local_as>\d+)\s*$"
 )
-_PREFIX_RE = re.compile(r"^BGP routing table entry for\s+(?P<prefix>\S+)\s*$")
+_PREFIX_RE = re.compile(
+    rf"^BGP routing table entry for\s+(?P<prefix>{IPV4_PREFIX}|{IPV4_ADDRESS})\s*$"
+)
 _PATHS_COUNT_RE = re.compile(r"^\s*Paths:\s+(?P<count>\d+)\s+available\s*$")
 _ORIGIN_LINE_RE = re.compile(
     r"^\s+Origin\s+(?P<origin>\S+),\s+"
@@ -72,7 +85,8 @@ _ORIGIN_LINE_RE = re.compile(
     r"(?P<flags>.+?)\s*$"
 )
 _NEXT_HOP_RE = re.compile(
-    r"^\s+(?P<next_hop>\S+)\s+from\s+(?P<peer>\S+)\s+\((?P<router_id>\S+)\)\s*$"
+    rf"^\s+(?P<next_hop>{IPV4_ADDRESS})\s+from\s+(?P<peer>{IPV4_ADDRESS})\s+"
+    rf"\((?P<router_id>{IPV4_ADDRESS})\)\s*$"
 )
 _COMMUNITY_RE = re.compile(r"^\s+Community:\s+(?P<communities>.+?)\s*$")
 _EXT_COMMUNITY_RE = re.compile(
@@ -81,14 +95,22 @@ _EXT_COMMUNITY_RE = re.compile(
 _RX_PATH_ID_RE = re.compile(r"^\s+Rx path id:\s+(?P<rx_path_id>\S+)\s*$")
 _RX_SAFI_RE = re.compile(r"^\s+Rx SAFI:\s+(?P<rx_safi>\S+)\s*$")
 _CONTRIBUTING_ROUTES_RE = re.compile(r"^\s+\d+\s+Contributing routes:")
+_CONTRIBUTING_ROUTE_RE = re.compile(
+    rf"^\s{{8}}(?P<prefix>{IPV4_PREFIX}|{IPV4_ADDRESS})\s+"
+    r"Proto:\s+(?P<proto>\S+)\s+"
+    r"Origin:\s+(?P<origin>\S+)\s+"
+    r"AS Path:\s+(?P<as_path>.+?)\s*$"
+)
+_CONTRIBUTING_ROUTE_COMMUNITY_RE = re.compile(
+    r"^\s{10}Community:\s+(?P<communities>.+?)\s*$"
+)
 # AS path line: indented line that is not a known attribute line
 _AS_PATH_LINE_RE = re.compile(r"^  (?P<as_path>\S.*)$")
 
 
-def _is_best_path(flags: str) -> bool:
-    """Determine if a path is the best path from the flags string."""
-    flag_parts = [f.strip().rstrip(",") for f in flags.split(",")]
-    return "best" in flag_parts
+def _split_flags(flags: str) -> list[str]:
+    """Split a comma-separated flags string into a list of trimmed flags."""
+    return [f.strip() for f in flags.split(",") if f.strip()]
 
 
 class _PathAccumulator:
@@ -111,6 +133,7 @@ class _PathAccumulator:
         "ext_communities",
         "rx_path_id",
         "rx_safi",
+        "contributing_routes",
     )
 
     def __init__(self) -> None:
@@ -124,12 +147,13 @@ class _PathAccumulator:
         self.igp_metric: int = 0
         self.weight: int = 0
         self.received: str = ""
-        self.flags: str = ""
+        self.flags: list[str] = []
         self.best_path: bool = False
         self.communities: str | None = None
         self.ext_communities: str | None = None
         self.rx_path_id: str | None = None
         self.rx_safi: str | None = None
+        self.contributing_routes: dict[str, ContributingRoute] = {}
 
     def to_entry(self) -> BgpPathEntry:
         """Build a BgpPathEntry from accumulated state."""
@@ -148,14 +172,17 @@ class _PathAccumulator:
             "best_path": self.best_path,
         }
         _d = cast(dict[str, Any], entry)
-        if self.communities is not None:
-            _d["communities"] = self.communities
-        if self.ext_communities is not None:
-            _d["extended_communities"] = self.ext_communities
-        if self.rx_path_id is not None:
-            _d["rx_path_id"] = self.rx_path_id
-        if self.rx_safi is not None:
-            _d["rx_safi"] = self.rx_safi
+        optional: dict[str, Any] = {
+            "communities": self.communities,
+            "extended_communities": self.ext_communities,
+            "rx_path_id": self.rx_path_id,
+            "rx_safi": self.rx_safi,
+        }
+        for k, v in optional.items():
+            if v is not None:
+                _d[k] = v
+        if self.contributing_routes:
+            _d["contributing_routes"] = self.contributing_routes
         return entry
 
 
@@ -170,9 +197,8 @@ def _try_parse_origin(line: str, acc: _PathAccumulator) -> bool:
     acc.igp_metric = int(m.group("igp_metric"))
     acc.weight = int(m.group("weight"))
     acc.received = m.group("received")
-    raw_flags = m.group("flags")
-    acc.flags = raw_flags.strip()
-    acc.best_path = _is_best_path(raw_flags)
+    acc.flags = _split_flags(m.group("flags"))
+    acc.best_path = "best" in acc.flags
     return True
 
 
@@ -237,7 +263,7 @@ def _extract_as_path(raw_as: str) -> str:
 def _try_start_new_path(
     line: str,
     acc: _PathAccumulator | None,
-    paths: list[BgpPathEntry],
+    paths: list[_PathAccumulator],
 ) -> _PathAccumulator | None:
     """Try to detect an AS path line that starts a new path block.
 
@@ -249,55 +275,109 @@ def _try_start_new_path(
 
     # Flush previous path if it has a next hop
     if acc is not None and acc.next_hop is not None:
-        paths.append(acc.to_entry())
+        paths.append(acc)
 
     new_acc = _PathAccumulator()
     new_acc.as_path = _extract_as_path(m.group("as_path").strip())
     return new_acc
 
 
-def _filter_contributing_routes(lines: list[str]) -> list[str]:
-    """Remove contributing routes sections from path lines."""
-    filtered: list[str] = []
-    skip = False
-    for line in lines:
-        if _CONTRIBUTING_ROUTES_RE.match(line):
-            skip = True
+def _parse_contributing_block(
+    lines: list[str], start: int
+) -> tuple[dict[str, ContributingRoute], int]:
+    """Parse a contributing routes block starting at lines[start].
+
+    Returns (parsed routes, index of first line past the block).
+    """
+    routes: dict[str, ContributingRoute] = {}
+    i = start
+    last_prefix: str | None = None
+    while i < len(lines):
+        line = lines[i]
+        if not line.startswith("        "):
+            break
+        m = _CONTRIBUTING_ROUTE_RE.match(line)
+        if m:
+            prefix = m.group("prefix")
+            route: ContributingRoute = {
+                "proto": m.group("proto"),
+                "origin": m.group("origin"),
+                "as_path": m.group("as_path").strip(),
+            }
+            routes[prefix] = route
+            last_prefix = prefix
+            i += 1
             continue
-        if skip:
-            if line.startswith("        "):
-                continue
-            skip = False
-        filtered.append(line)
-    return filtered
+        cm = _CONTRIBUTING_ROUTE_COMMUNITY_RE.match(line)
+        if cm and last_prefix is not None:
+            cast(dict[str, Any], routes[last_prefix])["communities"] = cm.group(
+                "communities"
+            )
+            i += 1
+            continue
+        # Indented line that doesn't match a contributing-route shape — stop.
+        break
+    return routes, i
 
 
-def _parse_path_lines(lines: list[str]) -> list[BgpPathEntry]:
-    """Parse path lines for a single prefix into a list of BgpPathEntry dicts."""
-    paths: list[BgpPathEntry] = []
+def _parse_path_lines(lines: list[str]) -> list[_PathAccumulator]:
+    """Parse path lines for a single prefix into accumulators."""
+    paths: list[_PathAccumulator] = []
     acc: _PathAccumulator | None = None
-    filtered = _filter_contributing_routes(lines)
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        if _CONTRIBUTING_ROUTES_RE.match(line):
+            if acc is not None:
+                routes, next_i = _parse_contributing_block(lines, i + 1)
+                acc.contributing_routes = routes
+                i = next_i
+            else:
+                i += 1
+            continue
 
-    for line in filtered:
         new_acc = _try_start_new_path(line, acc, paths)
         if new_acc is not None:
             acc = new_acc
+            i += 1
             continue
 
         if acc is None:
+            i += 1
             continue
 
         if _try_parse_next_hop(line, acc):
+            i += 1
             continue
         if _try_parse_origin(line, acc):
+            i += 1
             continue
         _try_parse_attributes(line, acc)
+        i += 1
 
-    # Flush last path
     if acc is not None and acc.next_hop is not None:
-        paths.append(acc.to_entry())
+        paths.append(acc)
 
     return paths
+
+
+def _build_path_key(acc: _PathAccumulator, used: set[str]) -> str:
+    """Build a unique natural key for a path entry.
+
+    Prefers next_hop, falls back to next_hop+rx_path_id when collisions exist.
+    """
+    base = acc.next_hop or ""
+    if acc.rx_path_id is not None:
+        candidate = f"{base}#{acc.rx_path_id}"
+    else:
+        candidate = base
+    if candidate not in used:
+        return candidate
+    # Fall back to numeric suffix to guarantee uniqueness without losing data.
+    n = 2
+    while f"{candidate}#{n}" in used:
+        n += 1
+    return f"{candidate}#{n}"
 
 
 @register(OS.ARISTA_EOS, "show ip bgp detail")
@@ -337,7 +417,6 @@ class ShowIpBgpDetailParser(BaseParser["ShowIpBgpDetailResult"]):
             if not stripped:
                 continue
 
-            # VRF header
             m = _VRF_HEADER_RE.match(stripped)
             if m:
                 _flush_prefix(
@@ -356,14 +435,12 @@ class ShowIpBgpDetailParser(BaseParser["ShowIpBgpDetailResult"]):
                 path_lines = []
                 continue
 
-            # Router identifier line
             m = _ROUTER_ID_RE.match(stripped)
             if m:
                 current_router_id = m.group("router_id")
                 current_local_as = int(m.group("local_as"))
                 continue
 
-            # New prefix entry
             m = _PREFIX_RE.match(stripped)
             if m:
                 _flush_prefix(
@@ -380,17 +457,14 @@ class ShowIpBgpDetailParser(BaseParser["ShowIpBgpDetailResult"]):
                 path_lines = []
                 continue
 
-            # Path count
             m = _PATHS_COUNT_RE.match(line)
             if m:
                 current_path_count = int(m.group("count"))
                 continue
 
-            # Accumulate path lines (preserve original indentation)
             if current_prefix is not None:
                 path_lines.append(line)
 
-        # Flush last prefix
         _flush_prefix(
             vrfs,
             current_vrf,
@@ -428,10 +502,13 @@ def _flush_prefix(
             "prefixes": {},
         }
 
-    parsed_paths = _parse_path_lines(lines)
+    parsed = _parse_path_lines(lines)
     paths_dict: dict[str, BgpPathEntry] = {}
-    for idx, path_entry in enumerate(parsed_paths, start=1):
-        paths_dict[str(idx)] = path_entry
+    used_keys: set[str] = set()
+    for acc in parsed:
+        key = _build_path_key(acc, used_keys)
+        used_keys.add(key)
+        paths_dict[key] = acc.to_entry()
 
     if paths_dict:
         vrfs[vrf_name]["prefixes"][prefix] = {
