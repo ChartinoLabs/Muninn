@@ -6,14 +6,18 @@ from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 from muninn.tags import ParserTag
 
 
 class LSAEntry(TypedDict):
-    """Schema for a single LSA entry."""
+    """Schema for a single LSA entry.
 
-    advertising_router: str
+    The advertising router is not stored on the entry itself because it
+    is already used as the innermost dict key.
+    """
+
     age: str
     sequence: str
     checksum: str
@@ -32,6 +36,7 @@ class ShowIpOspfDatabaseResult(TypedDict):
 
     router_id: str
     process_id: int
+    vrf: NotRequired[str]
     areas: dict[str, dict[str, dict[str, dict[str, LSAEntry]]]]
     external_lsas: NotRequired[dict[str, dict[str, LSAEntry]]]
 
@@ -53,6 +58,7 @@ class _ParseState:
 
     router_id: str | None = None
     process_id: int | None = None
+    vrf: str | None = None
     areas: dict[str, dict[str, dict[str, dict[str, LSAEntry]]]] = field(
         default_factory=dict
     )
@@ -75,8 +81,9 @@ class ShowIpOspfDatabaseParser(BaseParser[ShowIpOspfDatabaseResult]):
     )
 
     _HEADER = re.compile(
-        r"OSPF Router with ID\((?P<router_id>\S+)\)"
+        rf"OSPF Router with ID\((?P<router_id>{IPV4_ADDRESS})\)"
         r"\s+\(Process ID (?P<process_id>\d+)\)"
+        r"(?:\s+\(VRF (?P<vrf>\S+)\))?"
     )
     _AREA_LSA_TYPE = re.compile(
         r"^\s*(?P<lsa_type>Router Link States"
@@ -90,8 +97,8 @@ class ShowIpOspfDatabaseParser(BaseParser[ShowIpOspfDatabaseResult]):
         r"^\s*(?P<lsa_type>Type-5 AS External Link States)\s*$"
     )
     _LSA_ENTRY = re.compile(
-        r"^(?P<link_id>\d+\.\d+\.\d+\.\d+)\s+"
-        r"(?P<adv_router>\d+\.\d+\.\d+\.\d+)\s+"
+        rf"^(?P<link_id>{IPV4_ADDRESS})\s+"
+        rf"(?P<adv_router>{IPV4_ADDRESS})\s+"
         r"(?P<age>\S+)\s+"
         r"(?P<seq>0x\S+)\s+"
         r"(?P<checksum>0x\S+)"
@@ -106,7 +113,6 @@ class ShowIpOspfDatabaseParser(BaseParser[ShowIpOspfDatabaseResult]):
     ) -> LSAEntry:
         """Build an LSAEntry dict from a regex match."""
         entry = LSAEntry(
-            advertising_router=match.group("adv_router"),
             age=match.group("age"),
             sequence=match.group("seq"),
             checksum=match.group("checksum"),
@@ -146,10 +152,10 @@ class ShowIpOspfDatabaseParser(BaseParser[ShowIpOspfDatabaseResult]):
         cls,
         entry: LSAEntry,
         link_id: str,
+        adv_router: str,
         state: _ParseState,
     ) -> None:
         """Insert a parsed LSA entry into the appropriate collection."""
-        adv_router = entry["advertising_router"]
         if state.is_external:
             state.external_lsas.setdefault(link_id, {})
             state.external_lsas[link_id][adv_router] = entry
@@ -174,7 +180,12 @@ class ShowIpOspfDatabaseParser(BaseParser[ShowIpOspfDatabaseResult]):
         entry_match = cls._LSA_ENTRY.match(stripped)
         if entry_match:
             entry = cls._build_lsa_entry(entry_match, state.current_lsa_type_key)
-            cls._store_lsa_entry(entry, entry_match.group("link_id"), state)
+            cls._store_lsa_entry(
+                entry,
+                entry_match.group("link_id"),
+                entry_match.group("adv_router"),
+                state,
+            )
 
     @classmethod
     def _build_result(cls, state: _ParseState) -> ShowIpOspfDatabaseResult:
@@ -188,6 +199,8 @@ class ShowIpOspfDatabaseParser(BaseParser[ShowIpOspfDatabaseResult]):
             process_id=state.process_id,
             areas=state.areas,
         )
+        if state.vrf is not None:
+            result["vrf"] = state.vrf
         if state.external_lsas:
             result["external_lsas"] = state.external_lsas
         return result
@@ -213,6 +226,7 @@ class ShowIpOspfDatabaseParser(BaseParser[ShowIpOspfDatabaseResult]):
                 if header_match:
                     state.router_id = header_match.group("router_id")
                     state.process_id = int(header_match.group("process_id"))
+                    state.vrf = header_match.group("vrf")
                 continue
 
             cls._process_line(line, state)
