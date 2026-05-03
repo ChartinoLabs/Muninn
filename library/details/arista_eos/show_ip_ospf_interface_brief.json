@@ -1,0 +1,122 @@
+{
+  "os": "arista_eos",
+  "command": "show ip ospf interface brief",
+  "schema": {
+    "name": "ShowIpOspfInterfaceBriefResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "OspfInterfaceEntry",
+            "fields": {
+              "instance": {
+                "type": "int",
+                "required": true
+              },
+              "vrf": {
+                "type": "str",
+                "required": true
+              },
+              "area": {
+                "type": "str",
+                "required": true
+              },
+              "ip_address": {
+                "type": "str",
+                "required": true
+              },
+              "cost": {
+                "type": "int",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "neighbor_count": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple OSPF interfaces across default and non-default VRFs with mixed states",
+      "input": "   Interface    Instance VRF        Area            IP Address         Cost  State      Nbrs\n   Lo0          1        default    0.0.0.10        192.0.2.1/32       10    DR         0\n   Vl100        1        default    0.0.0.10        192.0.2.1/32       10    DR         0\n   Vl200        1        default    0.0.0.10        192.0.2.1/32       10    DR         0\n   Et10         1        default    0.0.0.10        192.0.2.1/32       10    DR         0\n   Et20/1       1        default    0.0.0.10        192.0.2.1/32       50    P2P        1\n   Et20/1.10    2        mgmtVrf    0.0.0.0         192.0.2.1/32       10    P2P        1\n   Po1.10       2        mgmtVrf    0.0.0.0         192.0.2.1/32       10    P2P        1\n",
+      "expected": {
+        "interfaces": {
+          "Loopback0": {
+            "instance": 1,
+            "vrf": "default",
+            "area": "0.0.0.10",
+            "ip_address": "192.0.2.1/32",
+            "cost": 10,
+            "state": "DR",
+            "neighbor_count": 0
+          },
+          "Vlan100": {
+            "instance": 1,
+            "vrf": "default",
+            "area": "0.0.0.10",
+            "ip_address": "192.0.2.1/32",
+            "cost": 10,
+            "state": "DR",
+            "neighbor_count": 0
+          },
+          "Vlan200": {
+            "instance": 1,
+            "vrf": "default",
+            "area": "0.0.0.10",
+            "ip_address": "192.0.2.1/32",
+            "cost": 10,
+            "state": "DR",
+            "neighbor_count": 0
+          },
+          "Ethernet10": {
+            "instance": 1,
+            "vrf": "default",
+            "area": "0.0.0.10",
+            "ip_address": "192.0.2.1/32",
+            "cost": 10,
+            "state": "DR",
+            "neighbor_count": 0
+          },
+          "Ethernet20/1": {
+            "instance": 1,
+            "vrf": "default",
+            "area": "0.0.0.10",
+            "ip_address": "192.0.2.1/32",
+            "cost": 50,
+            "state": "P2P",
+            "neighbor_count": 1
+          },
+          "Ethernet20/1.10": {
+            "instance": 2,
+            "vrf": "mgmtVrf",
+            "area": "0.0.0.0",
+            "ip_address": "192.0.2.1/32",
+            "cost": 10,
+            "state": "P2P",
+            "neighbor_count": 1
+          },
+          "Port-channel1.10": {
+            "instance": 2,
+            "vrf": "mgmtVrf",
+            "area": "0.0.0.0",
+            "ip_address": "192.0.2.1/32",
+            "cost": 10,
+            "state": "P2P",
+            "neighbor_count": 1
+          }
+        }
+      }
+    }
+  ]
+}
