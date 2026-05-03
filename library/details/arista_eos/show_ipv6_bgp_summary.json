@@ -1,0 +1,237 @@
+{
+  "os": "arista_eos",
+  "command": "show ipv6 bgp summary",
+  "schema": {
+    "name": "ShowIpv6BgpSummaryResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfEntry",
+            "fields": {
+              "router_id": {
+                "type": "str",
+                "required": true
+              },
+              "local_as": {
+                "type": "str",
+                "required": true
+              },
+              "neighbors": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "NeighborEntry",
+                    "fields": {
+                      "version": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "remote_as": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "msg_rcvd": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "msg_sent": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "in_queue": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "out_queue": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "up_down": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "state": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "prefix_received": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "prefix_accepted": {
+                        "type": "int",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic IPv6 BGP summary with two eBGP/iBGP neighbors",
+      "input": "BGP router identifier 10.26.0.22, local AS number 65533\nNeighbor         V  AS      MsgRcvd   MsgSent  InQ OutQ  Up/Down State/PfxRcd\n2001:DB8:ff11::1    4  65534       187       191    0    0 02:49:40 7\n2001:DB8:ff12::2     4  65533       184       191    0    0 02:59:41 7\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "router_id": "10.26.0.22",
+            "local_as": "65533",
+            "neighbors": {
+              "2001:DB8:ff11::1": {
+                "version": 4,
+                "remote_as": "65534",
+                "msg_rcvd": 187,
+                "msg_sent": 191,
+                "in_queue": 0,
+                "out_queue": 0,
+                "up_down": "02:49:40",
+                "prefix_received": 7
+              },
+              "2001:DB8:ff12::2": {
+                "version": 4,
+                "remote_as": "65533",
+                "msg_rcvd": 184,
+                "msg_sent": 191,
+                "in_queue": 0,
+                "out_queue": 0,
+                "up_down": "02:59:41",
+                "prefix_received": 7
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Single-VRF banner form with split State PfxRcd PfxAcc columns and non-Established states",
+      "input": "BGP summary information for VRF default\nRouter identifier 10.0.65.72, local AS number 64911\nNeighbor Status Codes: m - Under maintenance\n  Neighbor         V  AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State  PfxRcd PfxAcc\n  2001:DB8:ffff::1      4  65292              0         0    0    0   79d05h Active\n  2001:DB8:fff1::1     4  64832              0         0    0    0   79d05h Idle(NoIf)\n  2001:DB8:fff2::1     4  64833         114056    118481    0    0   79d05h Estab  1      1\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "router_id": "10.0.65.72",
+            "local_as": "64911",
+            "neighbors": {
+              "2001:DB8:ffff::1": {
+                "version": 4,
+                "remote_as": "65292",
+                "msg_rcvd": 0,
+                "msg_sent": 0,
+                "in_queue": 0,
+                "out_queue": 0,
+                "up_down": "79d05h",
+                "state": "Active"
+              },
+              "2001:DB8:fff1::1": {
+                "version": 4,
+                "remote_as": "64832",
+                "msg_rcvd": 0,
+                "msg_sent": 0,
+                "in_queue": 0,
+                "out_queue": 0,
+                "up_down": "79d05h",
+                "state": "Idle(NoIf)"
+              },
+              "2001:DB8:fff2::1": {
+                "version": 4,
+                "remote_as": "64833",
+                "msg_rcvd": 114056,
+                "msg_sent": 118481,
+                "in_queue": 0,
+                "out_queue": 0,
+                "up_down": "79d05h",
+                "state": "Estab",
+                "prefix_received": 1,
+                "prefix_accepted": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Multi-VRF output with three separate VRF sections (RED, WHITE, BLUE)",
+      "input": "BGP summary information for VRF RED\nRouter identifier 192.168.1.1, local AS number 645001\nNeighbor Status Codes: m - Under maintenance\n  Neighbor         V  AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State  PfxRcd PfxAcc\n  2001:DB8:c0de:ff::1      4  65002        1753556   1761743    0    0   40d23h Estab  7      4\nBGP summary information for VRF WHITE\nRouter identifier 192.168.2.1, local AS number 65011\nNeighbor Status Codes: m - Under maintenance\n  Neighbor         V  AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State  PfxRcd PfxAcc\n  2001:DB8:c0de:ff1::1      4  65012        7405942   7406081    0    0  270d13h Estab  7      5\nBGP summary information for VRF BLUE\nRouter identifier 192.168.3.1, local AS number 65021\nNeighbor Status Codes: m - Under maintenance\n  Neighbor         V  AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State  PfxRcd PfxAcc\n  2001:DB8:c0de:ff2::1      4  65022        1171721   1171752    0    0   67d19h Estab  25     25\n  2001:DB8:c0de:ff3::1      4  65023          97651     97643    0    0   40d23h Estab  18     18\n",
+      "expected": {
+        "vrfs": {
+          "RED": {
+            "router_id": "192.168.1.1",
+            "local_as": "645001",
+            "neighbors": {
+              "2001:DB8:c0de:ff::1": {
+                "version": 4,
+                "remote_as": "65002",
+                "msg_rcvd": 1753556,
+                "msg_sent": 1761743,
+                "in_queue": 0,
+                "out_queue": 0,
+                "up_down": "40d23h",
+                "state": "Estab",
+                "prefix_received": 7,
+                "prefix_accepted": 4
+              }
+            }
+          },
+          "WHITE": {
+            "router_id": "192.168.2.1",
+            "local_as": "65011",
+            "neighbors": {
+              "2001:DB8:c0de:ff1::1": {
+                "version": 4,
+                "remote_as": "65012",
+                "msg_rcvd": 7405942,
+                "msg_sent": 7406081,
+                "in_queue": 0,
+                "out_queue": 0,
+                "up_down": "270d13h",
+                "state": "Estab",
+                "prefix_received": 7,
+                "prefix_accepted": 5
+              }
+            }
+          },
+          "BLUE": {
+            "router_id": "192.168.3.1",
+            "local_as": "65021",
+            "neighbors": {
+              "2001:DB8:c0de:ff2::1": {
+                "version": 4,
+                "remote_as": "65022",
+                "msg_rcvd": 1171721,
+                "msg_sent": 1171752,
+                "in_queue": 0,
+                "out_queue": 0,
+                "up_down": "67d19h",
+                "state": "Estab",
+                "prefix_received": 25,
+                "prefix_accepted": 25
+              },
+              "2001:DB8:c0de:ff3::1": {
+                "version": 4,
+                "remote_as": "65023",
+                "msg_rcvd": 97651,
+                "msg_sent": 97643,
+                "in_queue": 0,
+                "out_queue": 0,
+                "up_down": "40d23h",
+                "state": "Estab",
+                "prefix_received": 18,
+                "prefix_accepted": 18
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
