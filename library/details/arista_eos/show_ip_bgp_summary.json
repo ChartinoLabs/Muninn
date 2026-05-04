@@ -1,0 +1,193 @@
+{
+  "os": "arista_eos",
+  "command": "show ip bgp summary",
+  "schema": {
+    "name": "ShowIpBgpSummaryResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfEntry",
+            "fields": {
+              "router_id": {
+                "type": "str",
+                "required": true
+              },
+              "local_as": {
+                "type": "int",
+                "required": true
+              },
+              "neighbors": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "NeighborEntry",
+                    "fields": {
+                      "bgp_version": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "remote_as": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "msg_rcvd": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "msg_sent": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "in_queue": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "out_queue": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "up_down": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "state": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "prefixes_received": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "prefixes_accepted": {
+                        "type": "int",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic BGP summary with two neighbors in established state",
+      "input": "BGP router identifier 10.26.0.22, local AS number 65533\nNeighbor         V  AS      MsgRcvd   MsgSent  InQ OutQ  Up/Down State/PfxRcd\n10.17.254.78    4  65534       187       191    0    0 02:49:40 7\n10.17.254.2     4  65533       184       191    0    0 02:59:41 7\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "router_id": "10.26.0.22",
+            "local_as": 65533,
+            "neighbors": {
+              "10.17.254.78": {
+                "bgp_version": 4,
+                "remote_as": 65534,
+                "msg_rcvd": 187,
+                "msg_sent": 191,
+                "in_queue": 0,
+                "out_queue": 0,
+                "up_down": "02:49:40",
+                "state": "Established",
+                "prefixes_received": 7
+              },
+              "10.17.254.2": {
+                "bgp_version": 4,
+                "remote_as": 65533,
+                "msg_rcvd": 184,
+                "msg_sent": 191,
+                "in_queue": 0,
+                "out_queue": 0,
+                "up_down": "02:59:41",
+                "state": "Established",
+                "prefixes_received": 7
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Multi-VRF BGP summary using the modern \"BGP summary information for VRF X\" header layout with separate State / PfxRcd / PfxAcc columns",
+      "input": "BGP summary information for VRF RED\nRouter identifier 192.168.1.1, local AS number 645001\nNeighbor Status Codes: m - Under maintenance\n  Neighbor         V  AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State  PfxRcd PfxAcc\n  192.168.1.2      4  65002        1753556   1761743    0    0   40d23h Estab  7      4\nBGP summary information for VRF WHITE\nRouter identifier 192.168.2.1, local AS number 65011\nNeighbor Status Codes: m - Under maintenance\n  Neighbor         V  AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State  PfxRcd PfxAcc\n  192.168.2.2      4  65012        7405942   7406081    0    0  270d13h Estab  7      5\nBGP summary information for VRF BLUE\nRouter identifier 192.168.3.1, local AS number 65021\nNeighbor Status Codes: m - Under maintenance\n  Neighbor         V  AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State  PfxRcd PfxAcc\n  192.168.3.2      4  65022        1171721   1171752    0    0   67d19h Estab  25     25\n  192.168.3.3      4  65023          97651     97643    0    0   40d23h Estab  18     18\n",
+      "expected": {
+        "vrfs": {
+          "RED": {
+            "router_id": "192.168.1.1",
+            "local_as": 645001,
+            "neighbors": {
+              "192.168.1.2": {
+                "bgp_version": 4,
+                "remote_as": 65002,
+                "msg_rcvd": 1753556,
+                "msg_sent": 1761743,
+                "in_queue": 0,
+                "out_queue": 0,
+                "up_down": "40d23h",
+                "state": "Established",
+                "prefixes_received": 7,
+                "prefixes_accepted": 4
+              }
+            }
+          },
+          "WHITE": {
+            "router_id": "192.168.2.1",
+            "local_as": 65011,
+            "neighbors": {
+              "192.168.2.2": {
+                "bgp_version": 4,
+                "remote_as": 65012,
+                "msg_rcvd": 7405942,
+                "msg_sent": 7406081,
+                "in_queue": 0,
+                "out_queue": 0,
+                "up_down": "270d13h",
+                "state": "Established",
+                "prefixes_received": 7,
+                "prefixes_accepted": 5
+              }
+            }
+          },
+          "BLUE": {
+            "router_id": "192.168.3.1",
+            "local_as": 65021,
+            "neighbors": {
+              "192.168.3.2": {
+                "bgp_version": 4,
+                "remote_as": 65022,
+                "msg_rcvd": 1171721,
+                "msg_sent": 1171752,
+                "in_queue": 0,
+                "out_queue": 0,
+                "up_down": "67d19h",
+                "state": "Established",
+                "prefixes_received": 25,
+                "prefixes_accepted": 25
+              },
+              "192.168.3.3": {
+                "bgp_version": 4,
+                "remote_as": 65023,
+                "msg_rcvd": 97651,
+                "msg_sent": 97643,
+                "in_queue": 0,
+                "out_queue": 0,
+                "up_down": "40d23h",
+                "state": "Established",
+                "prefixes_received": 18,
+                "prefixes_accepted": 18
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
