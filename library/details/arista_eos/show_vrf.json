@@ -1,0 +1,86 @@
+{
+  "os": "arista_eos",
+  "command": "show vrf",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Multiple VRFs with varying RD, state, and interface counts",
+      "input": "  Vrf          RD                   Protocols      State             Interfaces\n------------ -------------------- -------------- ------------------- -----------------------------\n  blue         10.125.253.15:1      ipv4,ipv6      v4:no routing,    Vlan1006, Vlan2230, Vlan2231,\n                                                   v6:no routing     Vlan2232, Vlan2233, Vlan2234,\n                                                                     Vlan2235, Vlan2236, Vlan2237,\n                                                                     Vlan2238, Vlan2239, Vlan2240\n  green         <not set>           ipv4,ipv6      v4:routing,       Vlan1015, Vlan1016, Vlan1017,\n                                                   v6:no routing     Vlan1018, Vlan1019, Vlan1020,\n                                                                     Vlan1021\n  yellow        10.125.253.15:4     ipv4,ipv6      v4:routing,       Vlan1009\n                                                   v6:no routing\n  red           10.125.253.15:6     ipv4,ipv6      v4:routing,\n                                                   v6:no routing\n  black         999:999             ipv4,ipv6      v4:no routing     Management1\n",
+      "expected": {
+        "blue": {
+          "rd": "10.125.253.15:1",
+          "protocols": [
+            "ipv4",
+            "ipv6"
+          ],
+          "ipv4_state": "no routing",
+          "ipv6_state": "no routing",
+          "interfaces": [
+            "Vlan1006",
+            "Vlan2230",
+            "Vlan2231",
+            "Vlan2232",
+            "Vlan2233",
+            "Vlan2234",
+            "Vlan2235",
+            "Vlan2236",
+            "Vlan2237",
+            "Vlan2238",
+            "Vlan2239",
+            "Vlan2240"
+          ]
+        },
+        "green": {
+          "protocols": [
+            "ipv4",
+            "ipv6"
+          ],
+          "ipv4_state": "routing",
+          "ipv6_state": "no routing",
+          "interfaces": [
+            "Vlan1015",
+            "Vlan1016",
+            "Vlan1017",
+            "Vlan1018",
+            "Vlan1019",
+            "Vlan1020",
+            "Vlan1021"
+          ]
+        },
+        "yellow": {
+          "rd": "10.125.253.15:4",
+          "protocols": [
+            "ipv4",
+            "ipv6"
+          ],
+          "ipv4_state": "routing",
+          "ipv6_state": "no routing",
+          "interfaces": [
+            "Vlan1009"
+          ]
+        },
+        "red": {
+          "rd": "10.125.253.15:6",
+          "protocols": [
+            "ipv4",
+            "ipv6"
+          ],
+          "ipv4_state": "routing",
+          "ipv6_state": "no routing",
+          "interfaces": []
+        },
+        "black": {
+          "rd": "999:999",
+          "protocols": [
+            "ipv4",
+            "ipv6"
+          ],
+          "ipv4_state": "no routing",
+          "interfaces": [
+            "Management1"
+          ]
+        }
+      }
+    }
+  ]
+}
