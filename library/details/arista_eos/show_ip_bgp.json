@@ -1,0 +1,283 @@
+{
+  "os": "arista_eos",
+  "command": "show ip bgp",
+  "schema": {
+    "name": "ShowIpBgpResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfEntry",
+            "fields": {
+              "router_id": {
+                "type": "str",
+                "required": true
+              },
+              "local_as": {
+                "type": "int",
+                "required": true
+              },
+              "local_as_asdot": {
+                "type": "str",
+                "required": false
+              },
+              "routes": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "RouteEntry",
+                    "fields": {
+                      "paths": {
+                        "type": {
+                          "type": "list",
+                          "items": {
+                            "name": "PathEntry",
+                            "fields": {
+                              "status_codes": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "next_hop": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "metric": {
+                                "type": "int",
+                                "required": false
+                              },
+                              "local_pref": {
+                                "type": "int",
+                                "required": false
+                              },
+                              "weight": {
+                                "type": "int",
+                                "required": false
+                              },
+                              "as_path": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "origin": {
+                                "type": "str",
+                                "required": true
+                              }
+                            }
+                          }
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multi-VRF BGP table with locally originated and eBGP-learned routes",
+      "input": "BGP routing table information for VRF default\nRouter identifier 10.103.1.1, local AS number 103\nRoute status codes: s - suppressed, * - valid, > - active, # - not installed, E - ECMP head, e - ECMP\n                    S - Stale, c - Contributing to ECMP, b - backup\nOrigin codes: i - IGP, e - EGP, ? - incomplete\nAS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop\n\n       Network             Next Hop         Metric  LocPref Weight Path\n * >   10.103.1.0/24       -                1       0       -       i\n * >   10.103.2.0/24       -                1       0       -       i\n * >   10.103.3.0/24       -                1       0       -       i\n * >   10.103.4.0/24       -                1       0       -       i\n * #   10.104.1.0/24       10.10.10.20      0       100     0       104 i\n * #   10.104.2.0/24       10.10.10.20      0       100     0       104 i\n * #   10.104.3.0/24       10.10.10.20      0       100     0       104 i\n * #   10.104.4.0/24       10.10.10.20      0       100     0       104 i\nBGP routing table information for VRF INTERNET\nRouter identifier 172.26.159.40, local AS number 62222.4003\nRoute status codes: s - suppressed, * - valid, > - active, # - not installed, E - ECMP head, e - ECMP\n                    S - Stale, c - Contributing to ECMP, b - backup, L - labeled-unicast\nOrigin codes: i - IGP, e - EGP, ? - incomplete\nAS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop\n\n         Network                Next Hop            Metric  LocPref Weight  Path\n * >     10.9.41.96/29          172.26.159.6          0       5000    0       62222.4002 ?\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "router_id": "10.103.1.1",
+            "local_as": 103,
+            "routes": {
+              "10.103.1.0/24": {
+                "paths": [
+                  {
+                    "status_codes": "*>",
+                    "origin": "igp",
+                    "metric": 1,
+                    "local_pref": 0
+                  }
+                ]
+              },
+              "10.103.2.0/24": {
+                "paths": [
+                  {
+                    "status_codes": "*>",
+                    "origin": "igp",
+                    "metric": 1,
+                    "local_pref": 0
+                  }
+                ]
+              },
+              "10.103.3.0/24": {
+                "paths": [
+                  {
+                    "status_codes": "*>",
+                    "origin": "igp",
+                    "metric": 1,
+                    "local_pref": 0
+                  }
+                ]
+              },
+              "10.103.4.0/24": {
+                "paths": [
+                  {
+                    "status_codes": "*>",
+                    "origin": "igp",
+                    "metric": 1,
+                    "local_pref": 0
+                  }
+                ]
+              },
+              "10.104.1.0/24": {
+                "paths": [
+                  {
+                    "status_codes": "*#",
+                    "origin": "igp",
+                    "next_hop": "10.10.10.20",
+                    "metric": 0,
+                    "local_pref": 100,
+                    "weight": 0,
+                    "as_path": "104"
+                  }
+                ]
+              },
+              "10.104.2.0/24": {
+                "paths": [
+                  {
+                    "status_codes": "*#",
+                    "origin": "igp",
+                    "next_hop": "10.10.10.20",
+                    "metric": 0,
+                    "local_pref": 100,
+                    "weight": 0,
+                    "as_path": "104"
+                  }
+                ]
+              },
+              "10.104.3.0/24": {
+                "paths": [
+                  {
+                    "status_codes": "*#",
+                    "origin": "igp",
+                    "next_hop": "10.10.10.20",
+                    "metric": 0,
+                    "local_pref": 100,
+                    "weight": 0,
+                    "as_path": "104"
+                  }
+                ]
+              },
+              "10.104.4.0/24": {
+                "paths": [
+                  {
+                    "status_codes": "*#",
+                    "origin": "igp",
+                    "next_hop": "10.10.10.20",
+                    "metric": 0,
+                    "local_pref": 100,
+                    "weight": 0,
+                    "as_path": "104"
+                  }
+                ]
+              }
+            }
+          },
+          "INTERNET": {
+            "router_id": "172.26.159.40",
+            "local_as": 4077784995,
+            "local_as_asdot": "62222.4003",
+            "routes": {
+              "10.9.41.96/29": {
+                "paths": [
+                  {
+                    "status_codes": "*>",
+                    "origin": "incomplete",
+                    "next_hop": "172.26.159.6",
+                    "metric": 0,
+                    "local_pref": 5000,
+                    "weight": 0,
+                    "as_path": "62222.4002"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Multipath BGP routes with ECMP, multi-AS-hop paths, and 3-character status code rows",
+      "input": "BGP routing table information for VRF default\nRouter identifier 10.0.0.1, local AS number 65000\nRoute status codes: s - suppressed, * - valid, > - active, # - not installed, E - ECMP head, e - ECMP\n                    S - Stale, c - Contributing to ECMP, b - backup\nOrigin codes: i - IGP, e - EGP, ? - incomplete\nAS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop\n\n       Network             Next Hop         Metric  LocPref Weight Path\n * E   10.20.30.0/24       10.0.0.5         0       100     0       65100 i\n * e   10.20.30.0/24       10.0.0.6         0       100     0       65100 i\n * >   10.40.50.0/24       10.0.0.7         0       100     0       65200 65300 i\n *     10.40.50.0/24       10.0.0.8         0       100     0       65200 65300 i\n s * > 10.99.99.0/24       10.0.0.9         50      200     0       65400 e\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "router_id": "10.0.0.1",
+            "local_as": 65000,
+            "routes": {
+              "10.20.30.0/24": {
+                "paths": [
+                  {
+                    "status_codes": "*E",
+                    "origin": "igp",
+                    "next_hop": "10.0.0.5",
+                    "metric": 0,
+                    "local_pref": 100,
+                    "weight": 0,
+                    "as_path": "65100"
+                  },
+                  {
+                    "status_codes": "*e",
+                    "origin": "igp",
+                    "next_hop": "10.0.0.6",
+                    "metric": 0,
+                    "local_pref": 100,
+                    "weight": 0,
+                    "as_path": "65100"
+                  }
+                ]
+              },
+              "10.40.50.0/24": {
+                "paths": [
+                  {
+                    "status_codes": "*>",
+                    "origin": "igp",
+                    "next_hop": "10.0.0.7",
+                    "metric": 0,
+                    "local_pref": 100,
+                    "weight": 0,
+                    "as_path": "65200 65300"
+                  },
+                  {
+                    "status_codes": "*",
+                    "origin": "igp",
+                    "next_hop": "10.0.0.8",
+                    "metric": 0,
+                    "local_pref": 100,
+                    "weight": 0,
+                    "as_path": "65200 65300"
+                  }
+                ]
+              },
+              "10.99.99.0/24": {
+                "paths": [
+                  {
+                    "status_codes": "s*>",
+                    "origin": "egp",
+                    "next_hop": "10.0.0.9",
+                    "metric": 50,
+                    "local_pref": 200,
+                    "weight": 0,
+                    "as_path": "65400"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
