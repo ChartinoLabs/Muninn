@@ -5,8 +5,10 @@ from typing import ClassVar, NamedTuple, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import SEPARATOR_DASH_SPACE_RE
 from muninn.registry import register
 from muninn.tags import ParserTag
+from muninn.utils import canonical_interface_name
 
 # Minimum number of columns expected in the header separator.
 _MIN_COLUMNS = 5
@@ -20,7 +22,7 @@ class VrfEntry(TypedDict):
 
     rd: NotRequired[str]
     protocols: list[str]
-    ipv4_state: str
+    ipv4_state: NotRequired[str]
     ipv6_state: NotRequired[str]
     interfaces: list[str]
 
@@ -65,7 +67,11 @@ def _parse_interfaces_text(text: str) -> list[str]:
     """Split a comma-separated interface string into a clean list."""
     if not text.strip():
         return []
-    return [iface.strip() for iface in text.split(",") if iface.strip()]
+    return [
+        canonical_interface_name(iface.strip(), os=OS.ARISTA_EOS)
+        for iface in text.split(",")
+        if iface.strip()
+    ]
 
 
 def _parse_state_tokens(tokens: list[str]) -> dict[str, str]:
@@ -145,8 +151,6 @@ class ShowVrfParser(BaseParser[ShowVrfResult]):
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.VRF})
 
-    _HEADER_SEP = re.compile(r"^-{3,}")
-
     @classmethod
     def parse(cls, output: str) -> ShowVrfResult:
         """Parse 'show vrf' output on Arista EOS.
@@ -170,7 +174,7 @@ class ShowVrfParser(BaseParser[ShowVrfResult]):
     def _find_header(cls, lines: list[str]) -> tuple[int, list[tuple[int, int]]]:
         """Locate the separator line and derive column boundaries."""
         for i, line in enumerate(lines):
-            if cls._HEADER_SEP.match(line.strip()):
+            if line.strip() and SEPARATOR_DASH_SPACE_RE.fullmatch(line):
                 columns = _find_column_boundaries(line)
                 if len(columns) >= _MIN_COLUMNS:
                     return i, columns
