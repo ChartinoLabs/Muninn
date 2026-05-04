@@ -1,0 +1,52 @@
+{
+  "os": "arista_eos",
+  "command": "show reload cause",
+  "schema": {
+    "name": "ShowReloadCauseResult",
+    "fields": {
+      "causes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ReloadCauseEntry",
+            "fields": {
+              "cause": {
+                "type": "str",
+                "required": true
+              },
+              "reload_time": {
+                "type": "str",
+                "required": false
+              },
+              "recommended_action": {
+                "type": "str",
+                "required": false
+              },
+              "debugging_information": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic reload cause with power loss",
+      "input": "Reload Cause 1:\n-------------------\nThe system rebooted due to a Power Loss\n\nReload Time:\n------------\nReload occurred at Fri Feb 23 14:18:49 2018 UTC.\n\nRecommended Action:\n-------------------\nNo action necessary.\n\nDebugging Information:\n----------------------\nNone available.\n",
+      "expected": {
+        "causes": {
+          "1": {
+            "cause": "The system rebooted due to a Power Loss",
+            "reload_time": "Fri Feb 23 14:18:49 2018 UTC",
+            "recommended_action": "No action necessary."
+          }
+        }
+      }
+    }
+  ]
+}
