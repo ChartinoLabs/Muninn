@@ -45,6 +45,11 @@ _NETUTILS_PASSTHROUGH_OSES = frozenset(
 )
 
 
+def _is_nxos_native_passthrough(name: str) -> bool:
+    name_lower = name.lower()
+    return any(name_lower.startswith(p) for p in _NXOS_PASSTHROUGH_PREFIXES)
+
+
 def _apply_prefix_map(
     name: str,
     pattern: re.Pattern[str],
@@ -61,6 +66,16 @@ def _apply_prefix_map(
     if match:
         canonical = prefix_map[match.group("prefix").lower()]
         return f"{canonical}{match.group('suffix')}"
+    return name
+
+
+def _rewrite_ios_gige(name: str) -> str:
+    match = _IOS_FOUR_HUNDRED_GIGE_PATTERN.match(name)
+    if match:
+        return f"FourHundredGigabitEthernet{match.group('suffix')}"
+    match = _IOS_FIVE_GIGE_PATTERN.match(name)
+    if match:
+        return f"FiveGigabitEthernet{match.group('suffix')}"
     return name
 
 
@@ -82,27 +97,16 @@ def canonical_interface_name(name: str, *, os: OS | None = None) -> str:
     if os in _NETUTILS_PASSTHROUGH_OSES:
         return name
 
-    if os is OS.CISCO_NXOS:
-        name_lower = name.lower()
-        for prefix in _NXOS_PASSTHROUGH_PREFIXES:
-            if name_lower.startswith(prefix):
-                return name
+    if os is OS.CISCO_NXOS and _is_nxos_native_passthrough(name):
+        return name
 
     if os in {OS.CISCO_IOS, OS.CISCO_IOSXE}:
-        match = _IOS_FOUR_HUNDRED_GIGE_PATTERN.match(name)
-        if match:
-            name = f"FourHundredGigabitEthernet{match.group('suffix')}"
-        else:
-            match = _IOS_FIVE_GIGE_PATTERN.match(name)
-            if match:
-                name = f"FiveGigabitEthernet{match.group('suffix')}"
-
-    if os is OS.ARISTA_EOS:
+        name = _rewrite_ios_gige(name)
+    elif os is OS.CISCO_IOSXR:
+        name = _apply_prefix_map(name, _IOSXR_PREFIX_PATTERN, _IOSXR_PREFIX_MAP)
+    elif os is OS.ARISTA_EOS:
         name = _apply_prefix_map(
             name, _ARISTA_EOS_PREFIX_PATTERN, _ARISTA_EOS_PREFIX_MAP
         )
-
-    if os is OS.CISCO_IOSXR:
-        name = _apply_prefix_map(name, _IOSXR_PREFIX_PATTERN, _IOSXR_PREFIX_MAP)
 
     return _upstream_canonical(name)
