@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS, IPV4_PREFIX, MAC_ADDRESS
 from muninn.registry import register
 from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
@@ -44,9 +45,9 @@ class InterfaceEntry(TypedDict):
 
     status: str
     line_protocol: str
-    protocol_status: str
-    hardware_type: str
-    mtu: int
+    protocol_status: NotRequired[str]
+    hardware_type: NotRequired[str]
+    mtu: NotRequired[int]
     mac_address: NotRequired[str]
     bia: NotRequired[str]
     description: NotRequired[str]
@@ -57,10 +58,16 @@ class InterfaceEntry(TypedDict):
     auto_negotiation: NotRequired[str]
     counters: NotRequired[InterfaceCounters]
     link_status_changes: NotRequired[int]
+    uptime_seconds: NotRequired[int]
+    last_counter_clear: NotRequired[str]
+    active_members: NotRequired[int]
+    fallback_mode: NotRequired[str]
     input_rate_bps: NotRequired[int]
     output_rate_bps: NotRequired[int]
     input_rate_pps: NotRequired[int]
     output_rate_pps: NotRequired[int]
+    input_rate_utilization_pct: NotRequired[float]
+    output_rate_utilization_pct: NotRequired[float]
 
 
 class ShowInterfacesResult(TypedDict):
@@ -93,11 +100,13 @@ class ShowInterfacesParser(BaseParser[ShowInterfacesResult]):
     # -- Interface property patterns --
     _HARDWARE = re.compile(
         r"Hardware\s+is\s+(?P<hw_type>[^,]+)"
-        r"(?:,\s+address\s+is\s+(?P<mac>\S+)"
-        r"(?:\s+\(bia\s+(?P<bia>\S+)\))?)?"
+        rf"(?:,\s+address\s+is\s+(?P<mac>{MAC_ADDRESS})"
+        rf"(?:\s+\(bia\s+(?P<bia>{MAC_ADDRESS})\))?)?"
     )
     _DESCRIPTION = re.compile(r"Description:\s+(?P<desc>.+)")
-    _IP_ADDRESS = re.compile(r"Internet\s+address\s+is\s+(?P<ip>\S+)")
+    _IP_ADDRESS = re.compile(
+        rf"Internet\s+address\s+is\s+(?P<ip>{IPV4_PREFIX}|{IPV4_ADDRESS})"
+    )
     _MTU_BW = re.compile(
         r"(?:IP|Ethernet)\s+MTU\s+(?P<mtu>\d+)\s+bytes"
         r"(?:\s*,\s*BW\s+(?P<bw>\d+)\s+kbit)?"
@@ -111,16 +120,28 @@ class ShowInterfacesParser(BaseParser[ShowInterfacesResult]):
         r"(?P<count>\d+)\s+link\s+status\s+changes?"
         r"\s+since\s+last\s+clear"
     )
+    _UPTIME = re.compile(r"^(?:Up|Down)\s+\d")
+    _UPTIME_PARTS = re.compile(
+        r"(?P<value>\d+)\s+(?P<unit>weeks?|days?|hours?|minutes?|seconds?)"
+    )
+    _LAST_CLEAR = re.compile(
+        r'Last\s+clearing\s+of\s+"show\s+interface"\s+counters\s+(?P<value>.+?)\s*$'
+    )
+    _ACTIVE_MEMBERS = re.compile(
+        r"Active\s+members\s+in\s+this\s+channel:\s+(?P<count>\d+)"
+    )
+    _FALLBACK_MODE = re.compile(r"Fallback\s+mode\s+is:\s+(?P<mode>\S+)")
 
     # -- Rate patterns --
     _INPUT_RATE = re.compile(
         r"5\s+minutes\s+input\s+rate\s+(?P<bps>\d+)\s+bps\s+"
-        r"[^,]+,\s+(?P<pps>\d+)\s+packets?/sec"
+        r"\((?:(?P<pct>[\d.]+)%|-)\s+with\s+framing\s+overhead\)"
+        r",\s+(?P<pps>\d+)\s+packets?/sec"
     )
     _OUTPUT_RATE = re.compile(
-        r"5\s+minutes\s+output\s+rate\s+"
-        r"(?P<bps>\d+)\s+bps\s+"
-        r"[^,]+,\s+(?P<pps>\d+)\s+packets?/sec"
+        r"5\s+minutes\s+output\s+rate\s+(?P<bps>\d+)\s+bps\s+"
+        r"\((?:(?P<pct>[\d.]+)%|-)\s+with\s+framing\s+overhead\)"
+        r",\s+(?P<pps>\d+)\s+packets?/sec"
     )
 
     # -- Counter patterns --
@@ -167,6 +188,30 @@ class ShowInterfacesParser(BaseParser[ShowInterfacesResult]):
         r"(?P<discards>\d+)\s+output\s+discards"
     )
     _PAUSE_OUTPUT = re.compile(r"(?P<pause>\d+)\s+PAUSE\s+output")
+
+    _UPTIME_UNIT_SECONDS: ClassVar[dict[str, int]] = {
+        "week": 604800,
+        "day": 86400,
+        "hour": 3600,
+        "minute": 60,
+        "second": 1,
+    }
+
+    @classmethod
+    def _parse_uptime_seconds(cls, line: str) -> int | None:
+        """Convert a free-form 'Up/Down X days, Y hours, ...' line into seconds."""
+        if not cls._UPTIME.match(line):
+            return None
+        total = 0
+        matched_any = False
+        for part in cls._UPTIME_PARTS.finditer(line):
+            unit = part.group("unit").rstrip("s")
+            multiplier = cls._UPTIME_UNIT_SECONDS.get(unit)
+            if multiplier is None:
+                continue
+            total += int(part.group("value")) * multiplier
+            matched_any = True
+        return total if matched_any else None
 
     @classmethod
     def _parse_hardware(
@@ -222,6 +267,36 @@ class ShowInterfacesParser(BaseParser[ShowInterfacesResult]):
         return False
 
     @classmethod
+    def _parse_state_meta(
+        cls,
+        line: str,
+        entry: dict[str, object],
+    ) -> bool:
+        """Parse uptime, last counter clear, and Port-Channel meta fields.
+
+        Returns True if the line matched a state metadata pattern.
+        """
+        if (uptime := cls._parse_uptime_seconds(line)) is not None:
+            entry["uptime_seconds"] = uptime
+            return True
+
+        if match := cls._LAST_CLEAR.search(line):
+            value = match.group("value").strip()
+            # Strip trailing "ago" so "0:15:31 ago" -> "0:15:31"; "never" stays "never".
+            entry["last_counter_clear"] = re.sub(r"\s+ago$", "", value)
+            return True
+
+        if match := cls._ACTIVE_MEMBERS.search(line):
+            entry["active_members"] = int(match.group("count"))
+            return True
+
+        if match := cls._FALLBACK_MODE.search(line):
+            entry["fallback_mode"] = match.group("mode")
+            return True
+
+        return False
+
+    @classmethod
     def _parse_rates(
         cls,
         line: str,
@@ -238,11 +313,15 @@ class ShowInterfacesParser(BaseParser[ShowInterfacesResult]):
         if match := cls._INPUT_RATE.search(line):
             entry["input_rate_bps"] = int(match.group("bps"))
             entry["input_rate_pps"] = int(match.group("pps"))
+            if (pct := match.group("pct")) is not None:
+                entry["input_rate_utilization_pct"] = float(pct)
             return True
 
         if match := cls._OUTPUT_RATE.search(line):
             entry["output_rate_bps"] = int(match.group("bps"))
             entry["output_rate_pps"] = int(match.group("pps"))
+            if (pct := match.group("pct")) is not None:
+                entry["output_rate_utilization_pct"] = float(pct)
             return True
 
         return False
@@ -359,7 +438,7 @@ class ShowInterfacesParser(BaseParser[ShowInterfacesResult]):
             lines: Indented detail lines for this interface.
             status: Admin status from header line.
             line_protocol: Line protocol state.
-            protocol_status: Protocol status in parentheses.
+            protocol_status: Protocol status in parentheses; empty when absent.
 
         Returns:
             Populated InterfaceEntry.
@@ -367,26 +446,31 @@ class ShowInterfacesParser(BaseParser[ShowInterfacesResult]):
         entry: dict[str, object] = {
             "status": status,
             "line_protocol": line_protocol,
-            "protocol_status": protocol_status,
         }
+        if protocol_status:
+            entry["protocol_status"] = protocol_status
         counters: dict[str, int] = {}
+        entry_dispatchers = (
+            cls._parse_hardware,
+            cls._parse_link_info,
+            cls._parse_state_meta,
+            cls._parse_rates,
+        )
+        counter_dispatchers = (
+            cls._parse_counters,
+            cls._parse_input_errors,
+            cls._parse_output_errors,
+        )
 
         for raw_line in lines:
             line = raw_line.strip()
             if not line:
                 continue
-
-            if cls._parse_hardware(line, entry):
+            if any(d(line, entry) for d in entry_dispatchers):
                 continue
-            if cls._parse_link_info(line, entry):
-                continue
-            if cls._parse_rates(line, entry):
-                continue
-            if cls._parse_counters(line, counters):
-                continue
-            if cls._parse_input_errors(line, counters):
-                continue
-            cls._parse_output_errors(line, counters)
+            for dispatch in counter_dispatchers:
+                if dispatch(line, counters):
+                    break
 
         if counters:
             entry["counters"] = counters
