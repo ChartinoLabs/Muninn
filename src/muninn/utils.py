@@ -31,6 +31,12 @@ _NETUTILS_PASSTHROUGH_OSES = frozenset(
     {OS.JUNIPER_JUNOS, OS.NOKIA_SROS, OS.PALOALTO_PANOS, OS.LINUX}
 )
 
+# Arista EOS spells VLAN SVIs as ``Vlan<id>``, but netutils' default mapping
+# expands the ``Vl`` abbreviation to ``VLAN`` (all caps).  Override so that
+# ``Vl4094`` canonicalizes to ``Vlan4094``, matching the convention used by
+# other EOS parsers (e.g. show ip arp).
+_ARISTA_EOS_INTERFACE_OVERRIDES: dict[str, str] = {"Vl": "Vlan"}
+
 
 def canonical_interface_name(name: str, *, os: OS | None = None) -> str:
     """Return the canonical form of an interface name.
@@ -66,5 +72,8 @@ def canonical_interface_name(name: str, *, os: OS | None = None) -> str:
         if match:
             canonical_prefix = _IOSXR_PREFIX_MAP[match.group("prefix").lower()]
             name = f"{canonical_prefix}{match.group('suffix')}"
+
+    if os is OS.ARISTA_EOS:
+        return _upstream_canonical(name, addl_name_map=_ARISTA_EOS_INTERFACE_OVERRIDES)
 
     return _upstream_canonical(name)
