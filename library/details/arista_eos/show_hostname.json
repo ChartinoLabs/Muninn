@@ -1,0 +1,27 @@
+{
+  "os": "arista_eos",
+  "command": "show hostname",
+  "schema": {
+    "name": "ShowHostnameResult",
+    "fields": {
+      "hostname": {
+        "type": "str",
+        "required": true
+      },
+      "fqdn": {
+        "type": "str",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show hostname with FQDN configured",
+      "input": "eos-spine1#show hostname\nHostname: spine1\nFQDN:     spine1.company.com\n",
+      "expected": {
+        "hostname": "spine1",
+        "fqdn": "spine1.company.com"
+      }
+    }
+  ]
+}
