@@ -1,0 +1,67 @@
+{
+    "vrfs": {
+        "default": {
+            "router_id": "10.0.0.1",
+            "local_as": 65000,
+            "routes": {
+                "10.20.30.0/24": {
+                    "paths": [
+                        {
+                            "status_codes": "*E",
+                            "origin": "igp",
+                            "next_hop": "10.0.0.5",
+                            "metric": 0,
+                            "local_pref": 100,
+                            "weight": 0,
+                            "as_path": "65100"
+                        },
+                        {
+                            "status_codes": "*e",
+                            "origin": "igp",
+                            "next_hop": "10.0.0.6",
+                            "metric": 0,
+                            "local_pref": 100,
+                            "weight": 0,
+                            "as_path": "65100"
+                        }
+                    ]
+                },
+                "10.40.50.0/24": {
+                    "paths": [
+                        {
+                            "status_codes": "*>",
+                            "origin": "igp",
+                            "next_hop": "10.0.0.7",
+                            "metric": 0,
+                            "local_pref": 100,
+                            "weight": 0,
+                            "as_path": "65200 65300"
+                        },
+                        {
+                            "status_codes": "*",
+                            "origin": "igp",
+                            "next_hop": "10.0.0.8",
+                            "metric": 0,
+                            "local_pref": 100,
+                            "weight": 0,
+                            "as_path": "65200 65300"
+                        }
+                    ]
+                },
+                "10.99.99.0/24": {
+                    "paths": [
+                        {
+                            "status_codes": "s*>",
+                            "origin": "egp",
+                            "next_hop": "10.0.0.9",
+                            "metric": 50,
+                            "local_pref": 200,
+                            "weight": 0,
+                            "as_path": "65400"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

@@ -43,7 +43,7 @@ class ShowLldpNeighborsParser(BaseParser[ShowLldpNeighborsResult]):
     # Capability codes are single uppercase letters separated by commas (R, B, T, etc.)
     _NEIGHBOR_PATTERN = re.compile(
         r"^(?P<device_id>.+?)\s+"
-        r"(?P<local_intf>(?:Gi|Fa|Te|Fo|Hu|Et|Po|Vl|Lo|Tu|Se|Mg)\S+)\s+"
+        r"(?P<local_intf>(?:Gi|Fa|Te|Fo|Fi|Hu|Et|Po|Vl|Lo|Tu|Se|Mg)\S+)\s+"
         r"(?P<hold_time>\d+)\s+"
         r"(?:(?P<capability>[A-Z,]+)\s+)?"
         r"(?P<port_id>\S+)$"
@@ -52,7 +52,7 @@ class ShowLldpNeighborsParser(BaseParser[ShowLldpNeighborsResult]):
     # Pattern for wrapped long device names (no space between device_id and local_intf)
     # long_name_swt.josh-vGi0/2          120        R               Gi0/0
     _WRAPPED_NEIGHBOR_PATTERN = re.compile(
-        r"^(?P<device_id>.+?)(?P<local_intf>(?:Gi|Fa|Te|Fo|Hu|Et|Po|Vl|Lo|Tu|Se|Mg)\S+)\s+"
+        r"^(?P<device_id>.+?)(?P<local_intf>(?:Gi|Fa|Te|Fo|Fi|Hu|Et|Po|Vl|Lo|Tu|Se|Mg)\S+)\s+"
         r"(?P<hold_time>\d+)\s+"
         r"(?:(?P<capability>[A-Z,]+)\s+)?"
         r"(?P<port_id>\S+)$"
@@ -64,7 +64,7 @@ class ShowLldpNeighborsParser(BaseParser[ShowLldpNeighborsResult]):
     # Pattern to detect if port_id looks like an interface
     _INTERFACE_PATTERN = re.compile(
         r"^(?:Gi(?:g(?:abit)?)?|Fa(?:s(?:t)?)?|Eth?|Te(?:n)?|Fo(?:r(?:ty)?)?|"
-        r"Hu(?:n(?:dred)?)?|mgmt|Lo|Vlan|Po|Tu|Se|nve)(?:Ethernet)?\d",
+        r"Fi(?:ve)?|Hu(?:n(?:dred)?)?|mgmt|Lo|Vlan|Po|Tu|Se|nve)(?:Ethernet)?\d",
         re.IGNORECASE,
     )
 

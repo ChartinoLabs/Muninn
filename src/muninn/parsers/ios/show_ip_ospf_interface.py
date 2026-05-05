@@ -139,7 +139,8 @@ _ATTACHED_RE = re.compile(r"^\s*Attached via (.+?)\s*$")
 # --- State and DR/BDR ---
 _STATE_RE = re.compile(
     r"^\s*Transmit Delay is (\d+) sec,\s*State (\S+)"
-    r"(?:,\s*Priority (\d+))?\s*$"
+    r"(?:,\s*Priority (\d+))?"
+    r"(?:,\s*(BFD enabled))?\s*$"
 )
 _DR_RE = re.compile(
     r"^\s*Designated Router \(ID\) (\S+),\s*Interface address (\S+)\s*$"
@@ -309,6 +310,8 @@ def _parse_state_dr(lines: list[str], entry: dict) -> None:
             entry["state"] = m.group(2)
             if m.group(3) is not None:
                 entry["priority"] = int(m.group(3))
+            if m.group(4) is not None:
+                entry["bfd_enabled"] = True
             continue
 
         m = _DR_RE.match(line)

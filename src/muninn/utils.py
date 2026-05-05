@@ -13,6 +13,9 @@ _IOS_FOUR_HUNDRED_GIGE_PATTERN = re.compile(
     r"^(?P<prefix>Fou)(?P<suffix>\d.*)$",
     re.IGNORECASE,
 )
+_IOS_FIVE_GIGE_PATTERN = re.compile(
+    r"^Fi(?P<suffix>\d.*)$",
+)
 
 # IOS-XR abbreviated prefixes that netutils does not expand.
 _IOSXR_PREFIX_MAP: dict[str, str] = {
@@ -25,17 +28,21 @@ _IOSXR_PREFIX_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
+# Arista EOS abbreviated prefixes that netutils expands incorrectly.
+# netutils maps "Vl" -> "VLAN" but Arista's canonical form is "Vlan".
+_ARISTA_EOS_PREFIX_MAP: dict[str, str] = {
+    "vl": "Vlan",
+}
+_ARISTA_EOS_PREFIX_PATTERN = re.compile(
+    r"^(?P<prefix>" + "|".join(_ARISTA_EOS_PREFIX_MAP) + r")(?P<suffix>\d.*)$",
+    re.IGNORECASE,
+)
+
 # Platforms where netutils canonicalization is incorrect — these use their
 # own naming conventions (e.g. lo0, eth0, ge-0/0/0) that must not be rewritten.
 _NETUTILS_PASSTHROUGH_OSES = frozenset(
     {OS.JUNIPER_JUNOS, OS.NOKIA_SROS, OS.PALOALTO_PANOS, OS.LINUX}
 )
-
-# Arista EOS spells VLAN SVIs as ``Vlan<id>``, but netutils' default mapping
-# expands the ``Vl`` abbreviation to ``VLAN`` (all caps).  Override so that
-# ``Vl4094`` canonicalizes to ``Vlan4094``, matching the convention used by
-# other EOS parsers (e.g. show ip arp).
-_ARISTA_EOS_INTERFACE_OVERRIDES: dict[str, str] = {"Vl": "Vlan"}
 
 
 def _is_nxos_native_passthrough(name: str) -> bool:
@@ -43,18 +50,32 @@ def _is_nxos_native_passthrough(name: str) -> bool:
     return any(name_lower.startswith(p) for p in _NXOS_PASSTHROUGH_PREFIXES)
 
 
-def _rewrite_ios_four_hundred_gige(name: str) -> str:
-    match = _IOS_FOUR_HUNDRED_GIGE_PATTERN.match(name)
+def _apply_prefix_map(
+    name: str,
+    pattern: re.Pattern[str],
+    prefix_map: dict[str, str],
+) -> str:
+    """Rewrite an interface name using a prefix lookup table.
+
+    If *name* matches *pattern*, the captured ``prefix`` group is
+    looked up (case-insensitively) in *prefix_map* and the name is
+    rebuilt as ``<canonical_prefix><suffix>``.  Otherwise *name* is
+    returned unchanged.
+    """
+    match = pattern.match(name)
     if match:
-        return f"FourHundredGigabitEthernet{match.group('suffix')}"
+        canonical = prefix_map[match.group("prefix").lower()]
+        return f"{canonical}{match.group('suffix')}"
     return name
 
 
-def _rewrite_iosxr_prefix(name: str) -> str:
-    match = _IOSXR_PREFIX_PATTERN.match(name)
+def _rewrite_ios_gige(name: str) -> str:
+    match = _IOS_FOUR_HUNDRED_GIGE_PATTERN.match(name)
     if match:
-        canonical_prefix = _IOSXR_PREFIX_MAP[match.group("prefix").lower()]
-        return f"{canonical_prefix}{match.group('suffix')}"
+        return f"FourHundredGigabitEthernet{match.group('suffix')}"
+    match = _IOS_FIVE_GIGE_PATTERN.match(name)
+    if match:
+        return f"FiveGigabitEthernet{match.group('suffix')}"
     return name
 
 
@@ -80,11 +101,12 @@ def canonical_interface_name(name: str, *, os: OS | None = None) -> str:
         return name
 
     if os in {OS.CISCO_IOS, OS.CISCO_IOSXE}:
-        name = _rewrite_ios_four_hundred_gige(name)
+        name = _rewrite_ios_gige(name)
     elif os is OS.CISCO_IOSXR:
-        name = _rewrite_iosxr_prefix(name)
-
-    if os is OS.ARISTA_EOS:
-        return _upstream_canonical(name, addl_name_map=_ARISTA_EOS_INTERFACE_OVERRIDES)
+        name = _apply_prefix_map(name, _IOSXR_PREFIX_PATTERN, _IOSXR_PREFIX_MAP)
+    elif os is OS.ARISTA_EOS:
+        name = _apply_prefix_map(
+            name, _ARISTA_EOS_PREFIX_PATTERN, _ARISTA_EOS_PREFIX_MAP
+        )
 
     return _upstream_canonical(name)
