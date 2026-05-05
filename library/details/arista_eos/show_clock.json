@@ -1,0 +1,47 @@
+{
+  "os": "arista_eos",
+  "command": "show clock",
+  "schema": {
+    "name": "ShowClockResult",
+    "fields": {
+      "time": {
+        "type": "str",
+        "required": true
+      },
+      "timezone": {
+        "type": "str",
+        "required": true
+      },
+      "day_of_week": {
+        "type": "str",
+        "required": true
+      },
+      "month": {
+        "type": "str",
+        "required": true
+      },
+      "day": {
+        "type": "int",
+        "required": true
+      },
+      "year": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic clock output with US/Central timezone",
+      "input": "Mon Jan 14 18:42:49 2013\ntimezone is US/Central\n",
+      "expected": {
+        "time": "18:42:49",
+        "timezone": "US/Central",
+        "day_of_week": "Mon",
+        "month": "Jan",
+        "day": 14,
+        "year": 2013
+      }
+    }
+  ]
+}
