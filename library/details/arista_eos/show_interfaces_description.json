@@ -1,0 +1,140 @@
+{
+  "os": "arista_eos",
+  "command": "show interfaces description",
+  "schema": {
+    "name": "ShowInterfacesDescriptionResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceDescriptionEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "protocol": {
+                "type": "str",
+                "required": true
+              },
+              "description": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Mixed interface types with various statuses and optional descriptions",
+      "input": "Interface                      Status         Protocol           Description\nEt1                            admin down     down               ThiS iS a TeSt DeScriPtiON\nEt2                            up             up                 ThiS iS a TeSt DeScriPtiON\nEt3                            up             up                 ThiS iS a TeSt DeScriPtiON\nEt4                            up             up                 ThiS iS a TeSt DeScriPtiON\nEt5                            admin down     down               ThiS iS a TeSt DeScriPtiON\nEt6                            admin down     down               ThiS iS a TeSt DeScriPtiON\nEt7                            admin down     down               ThiS iS a TeSt DeScriPtiON\nEt8                            admin down     down               ThiS iS a TeSt DeScriPtiON\nEt9                            up             up                 ThiS iS a TeSt DeScriPtiON\nEt9.999                        down           lowerlayerdown\nEt10                           up             up                 ThiS iS a TeSt DeScriPtiON\nEt11                           up             up                 ThiS iS a TeSt DeScriPtiON\nEt12                           up             up                 ThiS iS a TeSt DeScriPtiON\nEt13                           down           notpresent         This IS a TesT DeScrIption\nEt14                           down           notpresent\nMa1                            down           down               Management\nPo1                            up             up                 MLAG peer link\nPo101                          up             up                 ServerRAD\nTu8                            down           unknown\nVl4094                         up             up                 MLAG local int\n",
+      "expected": {
+        "interfaces": {
+          "Ethernet1": {
+            "status": "admin down",
+            "protocol": "down",
+            "description": "ThiS iS a TeSt DeScriPtiON"
+          },
+          "Ethernet2": {
+            "status": "up",
+            "protocol": "up",
+            "description": "ThiS iS a TeSt DeScriPtiON"
+          },
+          "Ethernet3": {
+            "status": "up",
+            "protocol": "up",
+            "description": "ThiS iS a TeSt DeScriPtiON"
+          },
+          "Ethernet4": {
+            "status": "up",
+            "protocol": "up",
+            "description": "ThiS iS a TeSt DeScriPtiON"
+          },
+          "Ethernet5": {
+            "status": "admin down",
+            "protocol": "down",
+            "description": "ThiS iS a TeSt DeScriPtiON"
+          },
+          "Ethernet6": {
+            "status": "admin down",
+            "protocol": "down",
+            "description": "ThiS iS a TeSt DeScriPtiON"
+          },
+          "Ethernet7": {
+            "status": "admin down",
+            "protocol": "down",
+            "description": "ThiS iS a TeSt DeScriPtiON"
+          },
+          "Ethernet8": {
+            "status": "admin down",
+            "protocol": "down",
+            "description": "ThiS iS a TeSt DeScriPtiON"
+          },
+          "Ethernet9": {
+            "status": "up",
+            "protocol": "up",
+            "description": "ThiS iS a TeSt DeScriPtiON"
+          },
+          "Ethernet9.999": {
+            "status": "down",
+            "protocol": "lowerlayerdown"
+          },
+          "Ethernet10": {
+            "status": "up",
+            "protocol": "up",
+            "description": "ThiS iS a TeSt DeScriPtiON"
+          },
+          "Ethernet11": {
+            "status": "up",
+            "protocol": "up",
+            "description": "ThiS iS a TeSt DeScriPtiON"
+          },
+          "Ethernet12": {
+            "status": "up",
+            "protocol": "up",
+            "description": "ThiS iS a TeSt DeScriPtiON"
+          },
+          "Ethernet13": {
+            "status": "down",
+            "protocol": "notpresent",
+            "description": "This IS a TesT DeScrIption"
+          },
+          "Ethernet14": {
+            "status": "down",
+            "protocol": "notpresent"
+          },
+          "Management1": {
+            "status": "down",
+            "protocol": "down",
+            "description": "Management"
+          },
+          "Port-channel1": {
+            "status": "up",
+            "protocol": "up",
+            "description": "MLAG peer link"
+          },
+          "Port-channel101": {
+            "status": "up",
+            "protocol": "up",
+            "description": "ServerRAD"
+          },
+          "Tunnel8": {
+            "status": "down",
+            "protocol": "unknown"
+          },
+          "Vlan4094": {
+            "status": "up",
+            "protocol": "up",
+            "description": "MLAG local int"
+          }
+        }
+      }
+    }
+  ]
+}
