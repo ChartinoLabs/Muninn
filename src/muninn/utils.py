@@ -38,6 +38,26 @@ _NETUTILS_PASSTHROUGH_OSES = frozenset(
 _ARISTA_EOS_INTERFACE_OVERRIDES: dict[str, str] = {"Vl": "Vlan"}
 
 
+def _is_nxos_native_passthrough(name: str) -> bool:
+    name_lower = name.lower()
+    return any(name_lower.startswith(p) for p in _NXOS_PASSTHROUGH_PREFIXES)
+
+
+def _rewrite_ios_four_hundred_gige(name: str) -> str:
+    match = _IOS_FOUR_HUNDRED_GIGE_PATTERN.match(name)
+    if match:
+        return f"FourHundredGigabitEthernet{match.group('suffix')}"
+    return name
+
+
+def _rewrite_iosxr_prefix(name: str) -> str:
+    match = _IOSXR_PREFIX_PATTERN.match(name)
+    if match:
+        canonical_prefix = _IOSXR_PREFIX_MAP[match.group("prefix").lower()]
+        return f"{canonical_prefix}{match.group('suffix')}"
+    return name
+
+
 def canonical_interface_name(name: str, *, os: OS | None = None) -> str:
     """Return the canonical form of an interface name.
 
@@ -56,22 +76,13 @@ def canonical_interface_name(name: str, *, os: OS | None = None) -> str:
     if os in _NETUTILS_PASSTHROUGH_OSES:
         return name
 
-    if os is OS.CISCO_NXOS:
-        name_lower = name.lower()
-        for prefix in _NXOS_PASSTHROUGH_PREFIXES:
-            if name_lower.startswith(prefix):
-                return name
+    if os is OS.CISCO_NXOS and _is_nxos_native_passthrough(name):
+        return name
 
     if os in {OS.CISCO_IOS, OS.CISCO_IOSXE}:
-        match = _IOS_FOUR_HUNDRED_GIGE_PATTERN.match(name)
-        if match:
-            name = f"FourHundredGigabitEthernet{match.group('suffix')}"
-
-    if os is OS.CISCO_IOSXR:
-        match = _IOSXR_PREFIX_PATTERN.match(name)
-        if match:
-            canonical_prefix = _IOSXR_PREFIX_MAP[match.group("prefix").lower()]
-            name = f"{canonical_prefix}{match.group('suffix')}"
+        name = _rewrite_ios_four_hundred_gige(name)
+    elif os is OS.CISCO_IOSXR:
+        name = _rewrite_iosxr_prefix(name)
 
     if os is OS.ARISTA_EOS:
         return _upstream_canonical(name, addl_name_map=_ARISTA_EOS_INTERFACE_OVERRIDES)
