@@ -16,8 +16,8 @@ class ShowClockResult(TypedDict):
     timezone: str
     day_of_week: str
     month: str
-    day: str
-    year: str
+    day: int
+    year: int
 
 
 @register(OS.ARISTA_EOS, "show clock")
@@ -86,6 +86,6 @@ class ShowClockParser(BaseParser[ShowClockResult]):
             timezone=timezone_value,
             day_of_week=datetime_match.group("day_of_week"),
             month=datetime_match.group("month"),
-            day=datetime_match.group("day"),
-            year=datetime_match.group("year"),
+            day=int(datetime_match.group("day")),
+            year=int(datetime_match.group("year")),
         )
