@@ -1,0 +1,498 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip ospf",
+  "schema": {
+    "name": "ShowIpOspfResult",
+    "fields": {
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "OspfProcessEntry",
+            "fields": {
+              "router_id": {
+                "type": "str",
+                "required": true
+              },
+              "vrf": {
+                "type": "str",
+                "required": false
+              },
+              "domain_id": {
+                "type": "str",
+                "required": false
+              },
+              "domain_id_type": {
+                "type": "str",
+                "required": false
+              },
+              "is_abr": {
+                "type": "bool",
+                "required": false
+              },
+              "is_asbr": {
+                "type": "bool",
+                "required": false
+              },
+              "bfd_enabled": {
+                "type": "bool",
+                "required": false
+              },
+              "reference_bandwidth_mbps": {
+                "type": "int",
+                "required": false
+              },
+              "spf_timers": {
+                "type": {
+                  "name": "SpfTimers",
+                  "fields": {
+                    "initial_delay_ms": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "min_hold_ms": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "max_wait_ms": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "lsa_throttle": {
+                "type": {
+                  "name": "LsaThrottle",
+                  "fields": {
+                    "initial_delay_ms": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "min_hold_ms": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "max_wait_ms": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "min_arrival_ms": {
+                      "type": "int",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "lsa_group_pacing_secs": {
+                "type": "int",
+                "required": false
+              },
+              "interface_flood_pacing_timer_ms": {
+                "type": "int",
+                "required": false
+              },
+              "retransmission_pacing_timer_ms": {
+                "type": "int",
+                "required": false
+              },
+              "incremental_spf_enabled": {
+                "type": "bool",
+                "required": false
+              },
+              "per_prefix_distribution_enabled": {
+                "type": "bool",
+                "required": false
+              },
+              "event_log_enabled": {
+                "type": "bool",
+                "required": false
+              },
+              "event_log_max_events": {
+                "type": "int",
+                "required": false
+              },
+              "event_log_mode": {
+                "type": "str",
+                "required": false
+              },
+              "num_external_lsa": {
+                "type": "int",
+                "required": false
+              },
+              "external_lsa_checksum": {
+                "type": "str",
+                "required": false
+              },
+              "num_opaque_as_lsa": {
+                "type": "int",
+                "required": false
+              },
+              "opaque_as_lsa_checksum": {
+                "type": "str",
+                "required": false
+              },
+              "num_dcbitless_external_opaque_as_lsa": {
+                "type": "int",
+                "required": false
+              },
+              "num_donotage_external_opaque_as_lsa": {
+                "type": "int",
+                "required": false
+              },
+              "num_areas": {
+                "type": "int",
+                "required": false
+              },
+              "num_normal_areas": {
+                "type": "int",
+                "required": false
+              },
+              "num_stub_areas": {
+                "type": "int",
+                "required": false
+              },
+              "num_nssa_areas": {
+                "type": "int",
+                "required": false
+              },
+              "num_transit_capable_areas": {
+                "type": "int",
+                "required": false
+              },
+              "external_flood_list_length": {
+                "type": "int",
+                "required": false
+              },
+              "nsf_ietf_helper": {
+                "type": "bool",
+                "required": false
+              },
+              "nsf_cisco_helper": {
+                "type": "bool",
+                "required": false
+              },
+              "adjacency_limit_initial": {
+                "type": "int",
+                "required": false
+              },
+              "adjacency_limit_max": {
+                "type": "int",
+                "required": false
+              },
+              "max_lsa_allowed": {
+                "type": "int",
+                "required": false
+              },
+              "current_non_self_lsa": {
+                "type": "int",
+                "required": false
+              },
+              "max_lsa_warning_threshold_pct": {
+                "type": "int",
+                "required": false
+              },
+              "max_lsa_ignore_time_mins": {
+                "type": "int",
+                "required": false
+              },
+              "max_lsa_reset_time_mins": {
+                "type": "int",
+                "required": false
+              },
+              "max_lsa_ignore_count_allowed": {
+                "type": "int",
+                "required": false
+              },
+              "max_lsa_current_ignore_count": {
+                "type": "int",
+                "required": false
+              },
+              "areas": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "AreaEntry",
+                    "fields": {
+                      "area_type": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "num_interfaces": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "num_loopback_interfaces": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "authentication": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "spf_last_executed": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "spf_executions": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "num_lsa": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "lsa_checksum_sum": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "num_opaque_link_lsa": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "opaque_link_lsa_checksum": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "num_dcbitless_lsa": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "num_indication_lsa": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "num_donotage_lsa": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "flood_list_length": {
+                        "type": "int",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multi-process OSPF with VRF RED and BLUE (C8300 live device)",
+      "input": " Routing Process \"ospf 1\" with ID 192.0.2.2\n Start time: 00:33:53.020, Time elapsed: 5d14h\n Supports only single TOS(TOS0) routes\n Supports opaque LSA\n Supports Link-local Signaling (LLS)\n Supports area transit capability\n Supports NSSA (compatible with RFC 3101)\n Supports Database Exchange Summary List Optimization (RFC 5243)\n Maximum number of non self-generated LSA allowed 50000\n    Current number of non self-generated LSA 4\n    Threshold for warning message 75%\n    Ignore-time 5 minutes, reset-time 10 minutes\n    Ignore-count allowed 5, current ignore-count 0\n Event-log enabled, Maximum number of events: 1000, Mode: cyclic\n Router is not originating router-LSAs with maximum metric\n Initial SPF schedule delay 50 msecs\n Minimum hold time between two consecutive SPFs 200 msecs\n Maximum wait time between two consecutive SPFs 5000 msecs\n Incremental-SPF disabled\n Per-prefix-distribution disabled\n Initial LSA throttle delay 50 msecs\n Minimum hold time for LSA throttle 200 msecs\n Maximum wait time for LSA throttle 5000 msecs\n Minimum LSA arrival 100 msecs\n LSA group pacing timer 240 secs\n Interface flood pacing timer 33 msecs\n Retransmission pacing timer 66 msecs\n EXCHANGE/LOADING adjacency limit: initial 300, process maximum 300\n Number of external LSA 0. Checksum Sum 0x000000\n Number of opaque AS LSA 0. Checksum Sum 0x000000\n Number of DCbitless external and opaque AS LSA 0\n Number of DoNotAge external and opaque AS LSA 0\n Number of areas in this router is 1. 1 normal 0 stub 0 nssa\n Number of areas transit capable is 0\n External flood list length 0\n IETF NSF helper support enabled\n Cisco NSF helper support enabled\n BFD is enabled\n Reference bandwidth unit is 100 mbps\n    Area BACKBONE(0)\n        Number of interfaces in this area is 3 (1 loopback)\n\tArea has no authentication\n\tSPF algorithm last executed 4d20h ago\n\tSPF algorithm executed 65 times\n\tArea ranges are\n\tNumber of LSA 5. Checksum Sum 0x01E6B0\n\tNumber of opaque link LSA 0. Checksum Sum 0x000000\n\tNumber of DCbitless LSA 0\n\tNumber of indication LSA 0\n\tNumber of DoNotAge LSA 0\n\tFlood list length 0\n\n Routing Process \"ospf 20\" with ID 203.0.113.2\n   Domain ID type 0x0005, value 0.0.0.20\n Start time: 00:33:53.699, Time elapsed: 5d14h\n Supports only single TOS(TOS0) routes\n Supports opaque LSA\n Supports Link-local Signaling (LLS)\n Supports area transit capability\n Supports NSSA (compatible with RFC 3101)\n Supports Database Exchange Summary List Optimization (RFC 5243)\n Connected to MPLS VPN Superbackbone, VRF BLUE\n Maximum number of non self-generated LSA allowed 50000\n    Current number of non self-generated LSA 4\n    Threshold for warning message 75%\n    Ignore-time 5 minutes, reset-time 10 minutes\n    Ignore-count allowed 5, current ignore-count 0\n Event-log disabled\n It is an area border router\n Router is not originating router-LSAs with maximum metric\n Initial SPF schedule delay 50 msecs\n Minimum hold time between two consecutive SPFs 200 msecs\n Maximum wait time between two consecutive SPFs 5000 msecs\n Incremental-SPF disabled\n Per-prefix-distribution disabled\n Initial LSA throttle delay 50 msecs\n Minimum hold time for LSA throttle 200 msecs\n Maximum wait time for LSA throttle 5000 msecs\n Minimum LSA arrival 100 msecs\n LSA group pacing timer 240 secs\n Interface flood pacing timer 33 msecs\n Retransmission pacing timer 66 msecs\n EXCHANGE/LOADING adjacency limit: initial 300, process maximum 300\n Number of external LSA 0. Checksum Sum 0x000000\n Number of opaque AS LSA 0. Checksum Sum 0x000000\n Number of DCbitless external and opaque AS LSA 0\n Number of DoNotAge external and opaque AS LSA 0\n Number of areas in this router is 1. 1 normal 0 stub 0 nssa\n Number of areas transit capable is 0\n External flood list length 0\n IETF NSF helper support enabled\n Cisco NSF helper support enabled\n BFD is enabled\n Reference bandwidth unit is 100 mbps\n    Area BACKBONE(0)\n        Number of interfaces in this area is 3 (1 loopback)\n\tArea has no authentication\n\tSPF algorithm last executed 4d20h ago\n\tSPF algorithm executed 65 times\n\tArea ranges are\n\tNumber of LSA 5. Checksum Sum 0x01B8E9\n\tNumber of opaque link LSA 0. Checksum Sum 0x000000\n\tNumber of DCbitless LSA 0\n\tNumber of indication LSA 0\n\tNumber of DoNotAge LSA 0\n\tFlood list length 0\n\n Routing Process \"ospf 10\" with ID 198.51.100.2\n   Domain ID type 0x0005, value 0.0.0.10\n Start time: 00:33:53.359, Time elapsed: 5d14h\n Supports only single TOS(TOS0) routes\n Supports opaque LSA\n Supports Link-local Signaling (LLS)\n Supports area transit capability\n Supports NSSA (compatible with RFC 3101)\n Supports Database Exchange Summary List Optimization (RFC 5243)\n Connected to MPLS VPN Superbackbone, VRF RED\n Maximum number of non self-generated LSA allowed 50000\n    Current number of non self-generated LSA 4\n    Threshold for warning message 75%\n    Ignore-time 5 minutes, reset-time 10 minutes\n    Ignore-count allowed 5, current ignore-count 0\n Event-log disabled\n It is an area border router\n Router is not originating router-LSAs with maximum metric\n Initial SPF schedule delay 50 msecs\n Minimum hold time between two consecutive SPFs 200 msecs\n Maximum wait time between two consecutive SPFs 5000 msecs\n Incremental-SPF disabled\n Per-prefix-distribution disabled\n Initial LSA throttle delay 50 msecs\n Minimum hold time for LSA throttle 200 msecs\n Maximum wait time for LSA throttle 5000 msecs\n Minimum LSA arrival 100 msecs\n LSA group pacing timer 240 secs\n Interface flood pacing timer 33 msecs\n Retransmission pacing timer 66 msecs\n EXCHANGE/LOADING adjacency limit: initial 300, process maximum 300\n Number of external LSA 0. Checksum Sum 0x000000\n Number of opaque AS LSA 0. Checksum Sum 0x000000\n Number of DCbitless external and opaque AS LSA 0\n Number of DoNotAge external and opaque AS LSA 0\n Number of areas in this router is 1. 1 normal 0 stub 0 nssa\n Number of areas transit capable is 0\n External flood list length 0\n IETF NSF helper support enabled\n Cisco NSF helper support enabled\n BFD is enabled\n Reference bandwidth unit is 100 mbps\n    Area BACKBONE(0)\n        Number of interfaces in this area is 3 (1 loopback)\n\tArea has no authentication\n\tSPF algorithm last executed 4d20h ago\n\tSPF algorithm executed 67 times\n\tArea ranges are\n\tNumber of LSA 5. Checksum Sum 0x02C64C\n\tNumber of opaque link LSA 0. Checksum Sum 0x000000\n\tNumber of DCbitless LSA 0\n\tNumber of indication LSA 0\n\tNumber of DoNotAge LSA 0\n\tFlood list length 0\n",
+      "expected": {
+        "processes": {
+          "1": {
+            "router_id": "192.0.2.2",
+            "areas": {
+              "0": {
+                "area_type": "backbone",
+                "num_interfaces": 3,
+                "num_loopback_interfaces": 1,
+                "authentication": "no authentication",
+                "spf_last_executed": "4d20h",
+                "spf_executions": 65,
+                "num_lsa": 5,
+                "lsa_checksum_sum": "0x01E6B0",
+                "num_opaque_link_lsa": 0,
+                "opaque_link_lsa_checksum": "0x000000",
+                "num_dcbitless_lsa": 0,
+                "num_indication_lsa": 0,
+                "num_donotage_lsa": 0,
+                "flood_list_length": 0
+              }
+            },
+            "max_lsa_allowed": 50000,
+            "current_non_self_lsa": 4,
+            "max_lsa_warning_threshold_pct": 75,
+            "max_lsa_ignore_time_mins": 5,
+            "max_lsa_reset_time_mins": 10,
+            "max_lsa_ignore_count_allowed": 5,
+            "max_lsa_current_ignore_count": 0,
+            "event_log_enabled": true,
+            "event_log_max_events": 1000,
+            "event_log_mode": "cyclic",
+            "incremental_spf_enabled": false,
+            "per_prefix_distribution_enabled": false,
+            "lsa_group_pacing_secs": 240,
+            "interface_flood_pacing_timer_ms": 33,
+            "retransmission_pacing_timer_ms": 66,
+            "adjacency_limit_initial": 300,
+            "adjacency_limit_max": 300,
+            "num_external_lsa": 0,
+            "external_lsa_checksum": "0x000000",
+            "num_opaque_as_lsa": 0,
+            "opaque_as_lsa_checksum": "0x000000",
+            "num_dcbitless_external_opaque_as_lsa": 0,
+            "num_donotage_external_opaque_as_lsa": 0,
+            "num_areas": 1,
+            "num_normal_areas": 1,
+            "num_stub_areas": 0,
+            "num_nssa_areas": 0,
+            "num_transit_capable_areas": 0,
+            "external_flood_list_length": 0,
+            "nsf_ietf_helper": true,
+            "nsf_cisco_helper": true,
+            "bfd_enabled": true,
+            "reference_bandwidth_mbps": 100,
+            "spf_timers": {
+              "initial_delay_ms": 50,
+              "min_hold_ms": 200,
+              "max_wait_ms": 5000
+            },
+            "lsa_throttle": {
+              "initial_delay_ms": 50,
+              "min_hold_ms": 200,
+              "max_wait_ms": 5000,
+              "min_arrival_ms": 100
+            }
+          },
+          "20": {
+            "router_id": "203.0.113.2",
+            "areas": {
+              "0": {
+                "area_type": "backbone",
+                "num_interfaces": 3,
+                "num_loopback_interfaces": 1,
+                "authentication": "no authentication",
+                "spf_last_executed": "4d20h",
+                "spf_executions": 65,
+                "num_lsa": 5,
+                "lsa_checksum_sum": "0x01B8E9",
+                "num_opaque_link_lsa": 0,
+                "opaque_link_lsa_checksum": "0x000000",
+                "num_dcbitless_lsa": 0,
+                "num_indication_lsa": 0,
+                "num_donotage_lsa": 0,
+                "flood_list_length": 0
+              }
+            },
+            "domain_id": "0.0.0.20",
+            "domain_id_type": "0x0005",
+            "vrf": "BLUE",
+            "max_lsa_allowed": 50000,
+            "current_non_self_lsa": 4,
+            "max_lsa_warning_threshold_pct": 75,
+            "max_lsa_ignore_time_mins": 5,
+            "max_lsa_reset_time_mins": 10,
+            "max_lsa_ignore_count_allowed": 5,
+            "max_lsa_current_ignore_count": 0,
+            "event_log_enabled": false,
+            "is_abr": true,
+            "incremental_spf_enabled": false,
+            "per_prefix_distribution_enabled": false,
+            "lsa_group_pacing_secs": 240,
+            "interface_flood_pacing_timer_ms": 33,
+            "retransmission_pacing_timer_ms": 66,
+            "adjacency_limit_initial": 300,
+            "adjacency_limit_max": 300,
+            "num_external_lsa": 0,
+            "external_lsa_checksum": "0x000000",
+            "num_opaque_as_lsa": 0,
+            "opaque_as_lsa_checksum": "0x000000",
+            "num_dcbitless_external_opaque_as_lsa": 0,
+            "num_donotage_external_opaque_as_lsa": 0,
+            "num_areas": 1,
+            "num_normal_areas": 1,
+            "num_stub_areas": 0,
+            "num_nssa_areas": 0,
+            "num_transit_capable_areas": 0,
+            "external_flood_list_length": 0,
+            "nsf_ietf_helper": true,
+            "nsf_cisco_helper": true,
+            "bfd_enabled": true,
+            "reference_bandwidth_mbps": 100,
+            "spf_timers": {
+              "initial_delay_ms": 50,
+              "min_hold_ms": 200,
+              "max_wait_ms": 5000
+            },
+            "lsa_throttle": {
+              "initial_delay_ms": 50,
+              "min_hold_ms": 200,
+              "max_wait_ms": 5000,
+              "min_arrival_ms": 100
+            }
+          },
+          "10": {
+            "router_id": "198.51.100.2",
+            "areas": {
+              "0": {
+                "area_type": "backbone",
+                "num_interfaces": 3,
+                "num_loopback_interfaces": 1,
+                "authentication": "no authentication",
+                "spf_last_executed": "4d20h",
+                "spf_executions": 67,
+                "num_lsa": 5,
+                "lsa_checksum_sum": "0x02C64C",
+                "num_opaque_link_lsa": 0,
+                "opaque_link_lsa_checksum": "0x000000",
+                "num_dcbitless_lsa": 0,
+                "num_indication_lsa": 0,
+                "num_donotage_lsa": 0,
+                "flood_list_length": 0
+              }
+            },
+            "domain_id": "0.0.0.10",
+            "domain_id_type": "0x0005",
+            "vrf": "RED",
+            "max_lsa_allowed": 50000,
+            "current_non_self_lsa": 4,
+            "max_lsa_warning_threshold_pct": 75,
+            "max_lsa_ignore_time_mins": 5,
+            "max_lsa_reset_time_mins": 10,
+            "max_lsa_ignore_count_allowed": 5,
+            "max_lsa_current_ignore_count": 0,
+            "event_log_enabled": false,
+            "is_abr": true,
+            "incremental_spf_enabled": false,
+            "per_prefix_distribution_enabled": false,
+            "lsa_group_pacing_secs": 240,
+            "interface_flood_pacing_timer_ms": 33,
+            "retransmission_pacing_timer_ms": 66,
+            "adjacency_limit_initial": 300,
+            "adjacency_limit_max": 300,
+            "num_external_lsa": 0,
+            "external_lsa_checksum": "0x000000",
+            "num_opaque_as_lsa": 0,
+            "opaque_as_lsa_checksum": "0x000000",
+            "num_dcbitless_external_opaque_as_lsa": 0,
+            "num_donotage_external_opaque_as_lsa": 0,
+            "num_areas": 1,
+            "num_normal_areas": 1,
+            "num_stub_areas": 0,
+            "num_nssa_areas": 0,
+            "num_transit_capable_areas": 0,
+            "external_flood_list_length": 0,
+            "nsf_ietf_helper": true,
+            "nsf_cisco_helper": true,
+            "bfd_enabled": true,
+            "reference_bandwidth_mbps": 100,
+            "spf_timers": {
+              "initial_delay_ms": 50,
+              "min_hold_ms": 200,
+              "max_wait_ms": 5000
+            },
+            "lsa_throttle": {
+              "initial_delay_ms": 50,
+              "min_hold_ms": 200,
+              "max_wait_ms": 5000,
+              "min_arrival_ms": 100
+            }
+          }
+        }
+      }
+    }
+  ]
+}
