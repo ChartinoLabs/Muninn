@@ -1,40 +1,42 @@
 """Parser for 'show mac address-table' command on Arista EOS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, Literal, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import MAC_ADDRESS
 from muninn.registry import register
 from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
-class MacEntry(TypedDict):
-    """Schema for a single MAC address table entry."""
+class MacTableRow(TypedDict):
+    """One row under ``mac_table[vlan_key][mac_key]``.
 
-    entry_type: str
-    interface: str
+    ``kind`` discriminates unicast vs multicast; ``ports`` is always a list
+    (single-element for unicast). ``moves`` and ``last_move`` only appear on
+    dynamic unicast entries.
+    """
+
+    kind: Literal["unicast", "multicast"]
+    type: str
+    ports: list[str]
     moves: NotRequired[int]
     last_move: NotRequired[str]
-
-
-class MulticastMacEntry(TypedDict):
-    """Schema for a single multicast MAC address table entry."""
-
-    entry_type: str
-    interfaces: list[str]
 
 
 class ShowMacAddressTableResult(TypedDict):
     """Schema for 'show mac address-table' parsed output on Arista EOS.
 
-    Unicast entries are keyed by VLAN ID (str), then by MAC address.
-    Multicast entries follow the same structure but use a list of interfaces.
+    Entries are keyed by VLAN ID (str) then MAC address. Unicast and
+    multicast entries share the same shape and live in the same map, with
+    ``kind`` distinguishing them — matching the IOS / IOS-XE sibling parser.
     """
 
-    unicast: dict[str, dict[str, MacEntry]]
-    multicast: dict[str, dict[str, MulticastMacEntry]]
+    mac_table: dict[str, dict[str, MacTableRow]]
+    total_unicast_mac_addresses: NotRequired[int]
+    total_multicast_mac_addresses: NotRequired[int]
 
 
 @register(OS.ARISTA_EOS, "show mac address-table")
@@ -58,7 +60,7 @@ class ShowMacAddressTableParser(BaseParser[ShowMacAddressTableResult]):
     # Unicast entry: Vlan  MAC  Type  Port  [Moves  Last Move]
     _UNICAST_ENTRY = re.compile(
         r"^\s*(?P<vlan>\d+)\s+"
-        r"(?P<mac>[0-9a-fA-F]{4}\.[0-9a-fA-F]{4}\.[0-9a-fA-F]{4})\s+"
+        rf"(?P<mac>{MAC_ADDRESS})\s+"
         r"(?P<type>\S+)\s+"
         r"(?P<port>\S+)"
         r"(?:\s+(?P<moves>\d+)\s+(?P<last_move>.+\s+ago))?\s*$"
@@ -77,7 +79,9 @@ class ShowMacAddressTableParser(BaseParser[ShowMacAddressTableResult]):
     # Lines to skip
     _SEPARATOR_LINE = re.compile(r"^-+$")
     _HEADER_LINE = re.compile(r"^\s*Vlan\s+mac\s+Address", re.I)
-    _TOTAL_LINE = re.compile(r"^Total\s+mac\s+Addresses", re.I)
+    _TOTAL_LINE = re.compile(
+        r"^Total\s+mac\s+Addresses[^:]*:\s*(?P<count>\d+)\s*$", re.I
+    )
 
     @classmethod
     def _is_skip_line(cls, line: str) -> bool:
@@ -87,49 +91,47 @@ class ShowMacAddressTableParser(BaseParser[ShowMacAddressTableResult]):
             not stripped
             or cls._SEPARATOR_LINE.match(stripped) is not None
             or cls._HEADER_LINE.match(stripped) is not None
-            or cls._TOTAL_LINE.match(stripped) is not None
             or cls._UNICAST_HEADER.search(stripped) is not None
             or cls._MULTICAST_HEADER.search(stripped) is not None
         )
 
     @classmethod
     def _parse_unicast_line(
-        cls, line: str, table: dict[str, dict[str, MacEntry]]
+        cls, line: str, table: dict[str, dict[str, MacTableRow]]
     ) -> None:
         """Parse a single unicast MAC address table line."""
         match = cls._UNICAST_ENTRY.match(line)
         if not match:
             return
-        entry: MacEntry = {
-            "entry_type": match.group("type").upper(),
-            "interface": canonical_interface_name(
-                match.group("port"), os=OS.ARISTA_EOS
-            ),
+        row: MacTableRow = {
+            "kind": "unicast",
+            "type": match.group("type").lower(),
+            "ports": [canonical_interface_name(match.group("port"), os=OS.ARISTA_EOS)],
         }
         if match.group("moves") is not None:
-            entry["moves"] = int(match.group("moves"))
+            row["moves"] = int(match.group("moves"))
         if match.group("last_move") is not None:
-            entry["last_move"] = match.group("last_move").strip()
-        table.setdefault(match.group("vlan"), {})[match.group("mac")] = entry
+            row["last_move"] = match.group("last_move").strip()
+        table.setdefault(match.group("vlan"), {})[match.group("mac").lower()] = row
 
     @classmethod
     def _parse_multicast_line(
-        cls, line: str, table: dict[str, dict[str, MulticastMacEntry]]
+        cls, line: str, table: dict[str, dict[str, MacTableRow]]
     ) -> None:
         """Parse a single multicast MAC address table line."""
         match = cls._MULTICAST_ENTRY.match(line)
         if not match:
             return
-        interfaces = [
+        ports = [
             canonical_interface_name(p, os=OS.ARISTA_EOS)
             for p in match.group("ports").strip().split()
         ]
-        table.setdefault(match.group("vlan"), {})[match.group("mac")] = (
-            MulticastMacEntry(
-                entry_type=match.group("type").upper(),
-                interfaces=interfaces,
-            )
-        )
+        row: MacTableRow = {
+            "kind": "multicast",
+            "type": match.group("type").lower(),
+            "ports": ports,
+        }
+        table.setdefault(match.group("vlan"), {})[match.group("mac").lower()] = row
 
     @classmethod
     def parse(cls, output: str) -> ShowMacAddressTableResult:
@@ -139,24 +141,40 @@ class ShowMacAddressTableParser(BaseParser[ShowMacAddressTableResult]):
             output: Raw CLI output from command.
 
         Returns:
-            Parsed MAC address table with unicast and multicast sections.
+            Parsed MAC address table with unicast and multicast entries
+            merged under ``mac_table`` keyed by VLAN then MAC, plus
+            optional per-section totals from the footer summaries.
         """
-        unicast: dict[str, dict[str, MacEntry]] = {}
-        multicast: dict[str, dict[str, MulticastMacEntry]] = {}
-        section = "unicast"
+        mac_table: dict[str, dict[str, MacTableRow]] = {}
+        section: Literal["unicast", "multicast"] = "unicast"
+        total_unicast: int | None = None
+        total_multicast: int | None = None
 
         for line in output.splitlines():
             if cls._MULTICAST_HEADER.search(line):
                 section = "multicast"
                 continue
+
+            total_match = cls._TOTAL_LINE.match(line.strip())
+            if total_match:
+                count = int(total_match.group("count"))
+                if section == "unicast":
+                    total_unicast = count
+                else:
+                    total_multicast = count
+                continue
+
             if cls._is_skip_line(line):
                 continue
-            if section == "unicast":
-                cls._parse_unicast_line(line, unicast)
-            else:
-                cls._parse_multicast_line(line, multicast)
 
-        return ShowMacAddressTableResult(
-            unicast=unicast,
-            multicast=multicast,
-        )
+            if section == "unicast":
+                cls._parse_unicast_line(line, mac_table)
+            else:
+                cls._parse_multicast_line(line, mac_table)
+
+        result: ShowMacAddressTableResult = {"mac_table": mac_table}
+        if total_unicast is not None:
+            result["total_unicast_mac_addresses"] = total_unicast
+        if total_multicast is not None:
+            result["total_multicast_mac_addresses"] = total_multicast
+        return result
