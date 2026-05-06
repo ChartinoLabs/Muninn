@@ -1,0 +1,227 @@
+{
+  "os": "arista_eos",
+  "command": "show inventory",
+  "schema": {
+    "name": "ShowInventoryResult",
+    "fields": {
+      "system": {
+        "type": {
+          "name": "SystemInfo",
+          "fields": {
+            "description": {
+              "type": "str",
+              "required": true
+            },
+            "hardware_version": {
+              "type": "str",
+              "required": true
+            },
+            "serial_number": {
+              "type": "str",
+              "required": true
+            },
+            "manufacturing_date": {
+              "type": "str",
+              "required": false
+            }
+          }
+        },
+        "required": true
+      },
+      "totals": {
+        "type": {
+          "name": "InventoryTotals",
+          "fields": {
+            "power_supply_slots": {
+              "type": "int",
+              "required": false
+            },
+            "fan_modules": {
+              "type": "int",
+              "required": false
+            },
+            "ports": {
+              "type": "int",
+              "required": false
+            },
+            "transceiver_slots": {
+              "type": "int",
+              "required": false
+            }
+          }
+        },
+        "required": true
+      },
+      "power_supplies": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PowerSupplyEntry",
+            "fields": {
+              "model": {
+                "type": "str",
+                "required": true
+              },
+              "serial_number": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "fan_modules": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "FanModuleEntry",
+            "fields": {
+              "num_fans": {
+                "type": "int",
+                "required": true
+              },
+              "model": {
+                "type": "str",
+                "required": true
+              },
+              "serial_number": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "ports": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PortSummaryEntry",
+            "fields": {
+              "count": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "transceivers": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "TransceiverEntry",
+            "fields": {
+              "manufacturer": {
+                "type": "str",
+                "required": true
+              },
+              "model": {
+                "type": "str",
+                "required": true
+              },
+              "serial_number": {
+                "type": "str",
+                "required": false
+              },
+              "revision": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Physical DCS-7150S switch with power supplies, fans, and transceivers",
+      "input": "System information\n DCS-7150S-52-CL 52-port SFP+ 10GigE 1RU + Clock\n 02.00 JPE13120702 2013-03-27\nSystem has 2 power supply slots\n Slot Model Serial Number\n ---- ---------------- ----------------\n 1 PWR-460AC-F K192KU00241CZ\n 2 PWR-460AC-F K192L200751CZ\nSystem has 4 fan modules\n Module Number of Fans Model Serial Number\n ------- --------------- ---------------- ----------------\n 1 1 FAN-7000-F N/A\n 2 1 FAN-7000-F N/A\n 3 1 FAN-7000-F N/A\n 4 1 FAN-7000-F N/A\nSystem has 53 ports\n Type Count\n ---------------- ----\n Management 1\n Switched 52\nSystem has 52 transceiver slots\n Port Manufacturer Model Serial Number Rev\n ---- ---------------- ---------------- ---------------- ----\n 1 Arista Networks SFP-10G-SR XCW1225FD753 0002\n 2 Arista Networks SFP-10G-SR XCW1225FD753 0002\n 51 Arista Networks SFP-10G-SR XCW1225FD753 0002\n 52 Arista Networks SFP-10G-SR XCW1225FD753 0002\n",
+      "expected": {
+        "system": {
+          "description": "DCS-7150S-52-CL 52-port SFP+ 10GigE 1RU + Clock",
+          "hardware_version": "02.00",
+          "serial_number": "JPE13120702",
+          "manufacturing_date": "2013-03-27"
+        },
+        "totals": {
+          "power_supply_slots": 2,
+          "fan_modules": 4,
+          "ports": 53,
+          "transceiver_slots": 52
+        },
+        "power_supplies": {
+          "1": {
+            "model": "PWR-460AC-F",
+            "serial_number": "K192KU00241CZ"
+          },
+          "2": {
+            "model": "PWR-460AC-F",
+            "serial_number": "K192L200751CZ"
+          }
+        },
+        "fan_modules": {
+          "1": {
+            "num_fans": 1,
+            "model": "FAN-7000-F"
+          },
+          "2": {
+            "num_fans": 1,
+            "model": "FAN-7000-F"
+          },
+          "3": {
+            "num_fans": 1,
+            "model": "FAN-7000-F"
+          },
+          "4": {
+            "num_fans": 1,
+            "model": "FAN-7000-F"
+          }
+        },
+        "ports": {
+          "Management": {
+            "count": 1
+          },
+          "Switched": {
+            "count": 52
+          }
+        },
+        "transceivers": {
+          "1": {
+            "manufacturer": "Arista Networks",
+            "model": "SFP-10G-SR",
+            "serial_number": "XCW1225FD753",
+            "revision": "0002"
+          },
+          "2": {
+            "manufacturer": "Arista Networks",
+            "model": "SFP-10G-SR",
+            "serial_number": "XCW1225FD753",
+            "revision": "0002"
+          },
+          "51": {
+            "manufacturer": "Arista Networks",
+            "model": "SFP-10G-SR",
+            "serial_number": "XCW1225FD753",
+            "revision": "0002"
+          },
+          "52": {
+            "manufacturer": "Arista Networks",
+            "model": "SFP-10G-SR",
+            "serial_number": "XCW1225FD753",
+            "revision": "0002"
+          }
+        }
+      }
+    }
+  ]
+}
