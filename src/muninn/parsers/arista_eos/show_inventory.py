@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import SEPARATOR_DASH_SPACE_RE
 from muninn.registry import register
 from muninn.tags import ParserTag
 
@@ -48,10 +49,25 @@ class TransceiverEntry(TypedDict):
     revision: NotRequired[str]
 
 
+class InventoryTotals(TypedDict):
+    """Schema for chassis-wide slot/port totals reported in section headers.
+
+    These reflect the total slot capacity declared by the device (e.g.
+    ``System has 52 transceiver slots``) and may exceed the number of
+    populated entries when slots are empty.
+    """
+
+    power_supply_slots: NotRequired[int]
+    fan_modules: NotRequired[int]
+    ports: NotRequired[int]
+    transceiver_slots: NotRequired[int]
+
+
 class ShowInventoryResult(TypedDict):
     """Schema for 'show inventory' parsed output on Arista EOS."""
 
     system: SystemInfo
+    totals: InventoryTotals
     power_supplies: dict[str, PowerSupplyEntry]
     fan_modules: dict[str, FanModuleEntry]
     ports: dict[str, PortSummaryEntry]
@@ -127,8 +143,8 @@ class ShowInventoryParser(BaseParser[ShowInventoryResult]):
     # from end since manufacturer can contain spaces.
     _TRANSCEIVER_ROW = re.compile(r"^\s*(?P<port>\d+)\s+(?P<rest>.+)$")
 
-    # Separator line (dashes)
-    _SEPARATOR = re.compile(r"^\s*[-]+(\s+[-]+)*\s*$")
+    # Separator line (dashes/whitespace) shared across all section tables.
+    _SEPARATOR = SEPARATOR_DASH_SPACE_RE
 
     @classmethod
     def _parse_transceiver_row(cls, row: str) -> tuple[str, TransceiverEntry] | None:
@@ -350,6 +366,7 @@ class ShowInventoryParser(BaseParser[ShowInventoryResult]):
         idx = 0
 
         system: SystemInfo | None = None
+        totals: InventoryTotals = {}
         power_supplies: dict[str, PowerSupplyEntry] = {}
         fan_modules: dict[str, FanModuleEntry] = {}
         ports: dict[str, PortSummaryEntry] = {}
@@ -365,19 +382,23 @@ class ShowInventoryParser(BaseParser[ShowInventoryResult]):
             if cls._SYSTEM_INFO_HEADER.match(stripped):
                 idx += 1
                 system, idx = cls._parse_system_info(lines, idx)
-            elif cls._POWER_SUPPLY_HEADER.match(stripped):
+            elif psu_match := cls._POWER_SUPPLY_HEADER.match(stripped):
+                totals["power_supply_slots"] = int(psu_match.group("count"))
                 idx += 1
                 data_lines, idx = cls._parse_table_rows(lines, idx)
                 power_supplies = cls._parse_power_supplies(data_lines)
-            elif cls._FAN_MODULE_HEADER.match(stripped):
+            elif fan_match := cls._FAN_MODULE_HEADER.match(stripped):
+                totals["fan_modules"] = int(fan_match.group("count"))
                 idx += 1
                 data_lines, idx = cls._parse_table_rows(lines, idx)
                 fan_modules = cls._parse_fan_modules(data_lines)
-            elif cls._PORT_HEADER.match(stripped):
+            elif port_match := cls._PORT_HEADER.match(stripped):
+                totals["ports"] = int(port_match.group("count"))
                 idx += 1
                 data_lines, idx = cls._parse_table_rows(lines, idx)
                 ports = cls._parse_ports(data_lines)
-            elif cls._TRANSCEIVER_HEADER.match(stripped):
+            elif xcvr_match := cls._TRANSCEIVER_HEADER.match(stripped):
+                totals["transceiver_slots"] = int(xcvr_match.group("count"))
                 idx += 1
                 data_lines, idx = cls._parse_table_rows(lines, idx)
                 transceivers = cls._parse_transceivers(data_lines)
@@ -390,6 +411,7 @@ class ShowInventoryParser(BaseParser[ShowInventoryResult]):
 
         return ShowInventoryResult(
             system=system,
+            totals=totals,
             power_supplies=power_supplies,
             fan_modules=fan_modules,
             ports=ports,
