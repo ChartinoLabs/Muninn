@@ -1,0 +1,80 @@
+{
+  "os": "cisco_iosxe",
+  "command": "ping",
+  "schema": {
+    "name": "PingResult",
+    "fields": {
+      "packets_sent": {
+        "type": "int",
+        "required": true
+      },
+      "packets_received": {
+        "type": "int",
+        "required": true
+      },
+      "success_rate_percent": {
+        "type": "int",
+        "required": true
+      },
+      "packet_data": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PingPacketData",
+            "fields": {
+              "result": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "rtt_min_ms": {
+        "type": "int",
+        "required": false
+      },
+      "rtt_avg_ms": {
+        "type": "int",
+        "required": false
+      },
+      "rtt_max_ms": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Successful ping to OSPF neighbor loopback (C8300 live device)",
+      "input": "Type escape sequence to abort.\nSending 5, 100-byte ICMP Echos to 192.0.2.3, timeout is 2 seconds:\n!!!!!\nSuccess rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms\n",
+      "expected": {
+        "packets_sent": 5,
+        "packets_received": 5,
+        "success_rate_percent": 100,
+        "packet_data": {
+          "1": {
+            "result": "successful"
+          },
+          "2": {
+            "result": "successful"
+          },
+          "3": {
+            "result": "successful"
+          },
+          "4": {
+            "result": "successful"
+          },
+          "5": {
+            "result": "successful"
+          }
+        },
+        "rtt_min_ms": 1,
+        "rtt_avg_ms": 1,
+        "rtt_max_ms": 1
+      }
+    }
+  ]
+}
