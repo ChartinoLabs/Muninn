@@ -1,0 +1,391 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show controllers all phy",
+  "schema": {
+    "name": "ShowControllersAllPhyResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ControllerPhyEntry",
+            "fields": {
+              "xcvr_type": {
+                "type": "str",
+                "required": false
+              },
+              "power_class": {
+                "type": "str",
+                "required": false
+              },
+              "connector_type": {
+                "type": "str",
+                "required": false
+              },
+              "ethernet_compliance": {
+                "type": "str",
+                "required": false
+              },
+              "encoding": {
+                "type": "str",
+                "required": false
+              },
+              "nominal_bitrate_mbps": {
+                "type": "int",
+                "required": false
+              },
+              "length_smf_km": {
+                "type": "int",
+                "required": false
+              },
+              "length_om3_m": {
+                "type": "int",
+                "required": false
+              },
+              "length_om2_m": {
+                "type": "int",
+                "required": false
+              },
+              "length_om1_m": {
+                "type": "int",
+                "required": false
+              },
+              "length_copper_m": {
+                "type": "int",
+                "required": false
+              },
+              "device_tech": {
+                "type": "str",
+                "required": false
+              },
+              "vendor_name": {
+                "type": "str",
+                "required": false
+              },
+              "vendor_oui": {
+                "type": "str",
+                "required": false
+              },
+              "vendor_part_number": {
+                "type": "str",
+                "required": false
+              },
+              "vendor_revision": {
+                "type": "str",
+                "required": false
+              },
+              "vendor_serial_number": {
+                "type": "str",
+                "required": false
+              },
+              "wavelength_nm": {
+                "type": "float",
+                "required": false
+              },
+              "wavelength_tolerance_nm": {
+                "type": "float",
+                "required": false
+              },
+              "date_code": {
+                "type": "str",
+                "required": false
+              },
+              "diagnostic_monitoring_type": {
+                "type": "str",
+                "required": false
+              },
+              "options": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              },
+              "clei_code": {
+                "type": "str",
+                "required": false
+              },
+              "cisco_part_number": {
+                "type": "str",
+                "required": false
+              },
+              "cisco_part_version": {
+                "type": "str",
+                "required": false
+              },
+              "product_id": {
+                "type": "str",
+                "required": false
+              },
+              "module_diagnostics": {
+                "type": {
+                  "name": "ModuleDiagnostics",
+                  "fields": {
+                    "temperature_c": {
+                      "type": "float",
+                      "required": false
+                    },
+                    "voltage_v": {
+                      "type": "float",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "module_thresholds": {
+                "type": {
+                  "name": "ModuleThresholds",
+                  "fields": {
+                    "temperature_c": {
+                      "type": {
+                        "name": "ThresholdSet",
+                        "fields": {
+                          "alarm_high": {
+                            "type": "float",
+                            "required": false
+                          },
+                          "warning_high": {
+                            "type": "float",
+                            "required": false
+                          },
+                          "warning_low": {
+                            "type": "float",
+                            "required": false
+                          },
+                          "alarm_low": {
+                            "type": "float",
+                            "required": false
+                          }
+                        }
+                      },
+                      "required": false
+                    },
+                    "voltage_v": {
+                      "type": {
+                        "type": "ref",
+                        "name": "ThresholdSet"
+                      },
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "lanes": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "LaneDiagnostics",
+                    "fields": {
+                      "temperature_c": {
+                        "type": "float",
+                        "required": false
+                      },
+                      "bias_ma": {
+                        "type": "float",
+                        "required": false
+                      },
+                      "tx_power_mw": {
+                        "type": "float",
+                        "required": false
+                      },
+                      "tx_power_dbm": {
+                        "type": "float",
+                        "required": false
+                      },
+                      "rx_power_mw": {
+                        "type": "float",
+                        "required": false
+                      },
+                      "rx_power_dbm": {
+                        "type": "float",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "lane_thresholds": {
+                "type": {
+                  "name": "LaneThresholds",
+                  "fields": {
+                    "bias_ma": {
+                      "type": {
+                        "type": "ref",
+                        "name": "ThresholdSet"
+                      },
+                      "required": false
+                    },
+                    "tx_power_mw": {
+                      "type": {
+                        "type": "ref",
+                        "name": "ThresholdSet"
+                      },
+                      "required": false
+                    },
+                    "tx_power_dbm": {
+                      "type": {
+                        "type": "ref",
+                        "name": "ThresholdSet"
+                      },
+                      "required": false
+                    },
+                    "rx_power_mw": {
+                      "type": {
+                        "type": "ref",
+                        "name": "ThresholdSet"
+                      },
+                      "required": false
+                    },
+                    "rx_power_dbm": {
+                      "type": {
+                        "type": "ref",
+                        "name": "ThresholdSet"
+                      },
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "QSFP+ 40G-SR4 transceiver with per-lane optical diagnostics",
+      "input": "Tue Mar  7 16:51:31.347 EST\nPHY data for interface: FortyGigE0/1/1/0\n\nQSFP EEPROM port: 0\n        Xcvr Type: QSFP+\n        Ext Type: 1.5W, CLEI,\n        Connector Type: MPO\n        Ethernet Compliance Codes: 40GBASE-SR4,\n        Encoding: 64B66B,\n        BR, nominal: 10300 Mbps\n        Length SMF: 0KM, OM3: 100M, OM2: 30M, OM1: 0M, Copper: 0M\n        Device Tech: 850 nm VCSEL, No wavelength control, Uncooled transmitter device, Pin detector, Transmitter not tunable,\n        Vendor Name: CISCO\n        Vendor OUI: 00.17.6a\n        Vendor Part Number: AFBR-79EIPZ-CS2   (rev.: 03)\n        Wavelength: 850.030 nm\n        Wavelength Tolerance: 10.030 nm\n        Vendor Serial Number: AVP1812S4QL\n        Date Code (yy/mm/dd): 14/03/22  lot code:\n        Diagnostic Monitoring Type: Average Power,\n        Enhanced Options: No Rate Selection, No Application Select,\n        Extended Module Codes:\n        Options: Rx Squ Dis, Rx Op Dis cap, Tx Squ Dis, Tx Squelch, Page 02, Page 01, Tx_Disable, Tx_Fault, Pave, Tx LOS,\n        L-Tx/Rx LOS:\n        L-Tx Fault:\n        Module DDM: Voltage, Temperature,\nMSA Data (Lower Memory)\n0x0000: 0d 00 00 00 00 00 00 00 : 00 00 00 00 00 00 00 00\n0x0010: 00 00 00 00 00 00 1a 89 : 00 00 7f 19 00 00 00 00\n0x0020: 00 00 16 d5 14 2c 1b 1b : 17 25 0d 25 0c 9a 0c 0a\n0x0030: 0b f1 17 95 18 74 18 70 : 19 5a 00 00 00 00 00 00\n0x0040: 00 00 00 00 00 00 00 00 : 00 00 00 00 00 00 00 00\n0x0050: 00 00 00 00 00 00 00 00 : 00 00 00 00 00 00 00 00\n0x0060: 00 00 00 00 00 00 00 f0 : f0 00 18 00 00 00 00 00\n0x0070: 00 00 00 00 00 03 03 00 : 00 00 00 00 00 00 00 03\n\n\nMSA Data (Upper Memory Page 00)\n0x0080: 0d 10 0c 04 00 00 00 00 : 00 00 00 05 67 00 00 32\n0x0090: 1e 00 00 00 43 49 53 43 : 4f 20 20 20 20 20 20 20\n0x00a0: 20 20 20 20 00 00 17 6a : 41 46 42 52 2d 37 39 45\n0x00b0: 49 50 5a 2d 43 53 32 20 : 30 33 42 68 07 d0 46 6a\n0x00c0: 00 00 0f de 41 56 50 31 : 38 31 32 53 34 51 4c 20\n0x00d0: 20 20 20 20 31 34 30 33 : 32 32 20 20 0a 00 00 da\n0x00e0: 00 00 06 6a de 2e ae 68 : 0e ce 79 e7 a5 0f 93 fe\n0x00f0: 61 45 b8 00 00 00 00 00 : 00 00 00 00 7e 57 7d cc\n\n        CLEI Code: COUIA9JCAB\n        Part Number: 10-2672-02 (ver.: V02 )\n        Product Id: QSFP-40G-SR4\nMSA Data (Upper Memory Page 02)\n0x0100: 43 4f 55 49 41 39 4a 43 : 41 42 31 30 2d 32 36 37\n0x0110: 32 2d 30 32 56 30 32 20 : 01 00 00 00 00 00 00 00\n0x0120: 00 81 00 00 00 00 00 00 : 00 00 00 00 00 00 00 00\n0x0130: 00 00 00 00 00 00 00 00 : 00 00 00 00 00 00 aa aa\n0x0140: 51 53 46 50 2d 34 30 47 : 2d 53 52 34 20 20 20 20\n0x0150: 20 20 20 20 00 00 00 00 : 00 00 00 00 00 00 00 18\n0x0160: 36 34 31 33 34 34 31 37 : 00 9e 00 00 00 00 00 00\n0x0170: 00 00 00 00 00 00 00 00 : 00 00 00 00 00 00 00 00\n\n        Module\n        Thresholds:                   Alarm High          Warning High          Warning Low          Alarm Low\n              Temperature:            +75.000 C             +70.000 C              +0.000 C              -5.000 C\n                  Voltage:           3.630 Volt            3.465 Volt            3.100 Volt            2.970 Volt\n\n        Temperature: +26.535 C\n        Voltage: 3.254 Volt\n\n        Lanes\n        Thresholds:                   Alarm High          Warning High          Warning Low          Alarm Low\n                     Bias:         10.000 mAmps           9.500 mAmps           1.000 mAmps           0.500 mAmps\n           Transmit Power:  1.58480 mW (1.99974 dBm)   0.79430 mW (-1.00015 dBm)   0.17370 mW (-7.60200 dBm)   0.06910 mW (-11.60522 dBm)\n            Receive Power:  2.18770 mW (3.39988 dBm)   1.73780 mW (2.40000 dBm)   0.11220 mW (-9.50007 dBm)   0.04460 mW (-13.50665 dBm)\n\n                 Lane            Temp            Bias                   Tx Power                   Rx Power\n                    0             N/A     6.730 mAmps   0.60370 mW (-2.19179 dBm)   0.58450 mW (-2.33215 dBm)\n                    1             N/A     6.452 mAmps   0.62600 mW (-2.03426 dBm)   0.51640 mW (-2.87014 dBm)\n                    2             N/A     6.164 mAmps   0.62560 mW (-2.03703 dBm)   0.69390 mW (-1.58703 dBm)\n                    3             N/A     6.114 mAmps   0.64900 mW (-1.87755 dBm)   0.59250 mW (-2.27312 dBm)\nMSA Data (Upper Memory Page 03)\n0x0180: 4b 00 fb 00 46 00 00 00 : 00 00 00 00 00 00 00 00\n0x0190: 8d cc 74 04 87 5a 79 18 : 00 00 00 00 00 00 00 00\n0x01a0: 00 00 00 00 00 00 00 00 : 00 00 00 00 00 00 00 00\n0x01b0: 55 75 01 be 43 e2 04 62 : 13 88 00 fa 12 8e 01 f4\n0x01c0: 3d e8 02 b3 1f 07 06 c9 : 00 00 00 00 00 00 00 00\n0x01d0: 00 00 00 00 00 00 00 00 : 00 00 00 00 00 00 00 00\n0x01e0: 00 00 00 00 00 00 00 00 : 00 00 00 00 33 33 77 77\n0x01f0: 00 00 ff ff ff ff ff ff : 00 00 00 00 00 00 00 00\n",
+      "expected": {
+        "interfaces": {
+          "FortyGigabitEthernet0/1/1/0": {
+            "xcvr_type": "QSFP+",
+            "power_class": "1.5W",
+            "connector_type": "MPO",
+            "ethernet_compliance": "40GBASE-SR4",
+            "encoding": "64B66B",
+            "nominal_bitrate_mbps": 10300,
+            "length_smf_km": 0,
+            "length_om3_m": 100,
+            "length_om2_m": 30,
+            "length_om1_m": 0,
+            "length_copper_m": 0,
+            "device_tech": "850 nm VCSEL, No wavelength control, Uncooled transmitter device, Pin detector, Transmitter not tunable",
+            "vendor_name": "CISCO",
+            "vendor_oui": "00.17.6a",
+            "vendor_part_number": "AFBR-79EIPZ-CS2",
+            "vendor_revision": "03",
+            "wavelength_nm": 850.03,
+            "wavelength_tolerance_nm": 10.03,
+            "vendor_serial_number": "AVP1812S4QL",
+            "date_code": "14/03/22",
+            "diagnostic_monitoring_type": "Average Power",
+            "options": [
+              "Rx Squ Dis",
+              "Rx Op Dis cap",
+              "Tx Squ Dis",
+              "Tx Squelch",
+              "Page 02",
+              "Page 01",
+              "Tx_Disable",
+              "Tx_Fault",
+              "Pave",
+              "Tx LOS"
+            ],
+            "clei_code": "COUIA9JCAB",
+            "cisco_part_number": "10-2672-02",
+            "cisco_part_version": "V02",
+            "product_id": "QSFP-40G-SR4",
+            "module_thresholds": {
+              "temperature_c": {
+                "alarm_high": 75.0,
+                "warning_high": 70.0,
+                "warning_low": 0.0,
+                "alarm_low": -5.0
+              },
+              "voltage_v": {
+                "alarm_high": 3.63,
+                "warning_high": 3.465,
+                "warning_low": 3.1,
+                "alarm_low": 2.97
+              }
+            },
+            "module_diagnostics": {
+              "temperature_c": 26.535,
+              "voltage_v": 3.254
+            },
+            "lane_thresholds": {
+              "bias_ma": {
+                "alarm_high": 10.0,
+                "warning_high": 9.5,
+                "warning_low": 1.0,
+                "alarm_low": 0.5
+              },
+              "tx_power_mw": {
+                "alarm_high": 1.5848,
+                "warning_high": 0.7943,
+                "warning_low": 0.1737,
+                "alarm_low": 0.0691
+              },
+              "tx_power_dbm": {
+                "alarm_high": 1.99974,
+                "warning_high": -1.00015,
+                "warning_low": -7.602,
+                "alarm_low": -11.60522
+              },
+              "rx_power_mw": {
+                "alarm_high": 2.1877,
+                "warning_high": 1.7378,
+                "warning_low": 0.1122,
+                "alarm_low": 0.0446
+              },
+              "rx_power_dbm": {
+                "alarm_high": 3.39988,
+                "warning_high": 2.4,
+                "warning_low": -9.50007,
+                "alarm_low": -13.50665
+              }
+            },
+            "lanes": {
+              "0": {
+                "bias_ma": 6.73,
+                "tx_power_mw": 0.6037,
+                "tx_power_dbm": -2.19179,
+                "rx_power_mw": 0.5845,
+                "rx_power_dbm": -2.33215
+              },
+              "1": {
+                "bias_ma": 6.452,
+                "tx_power_mw": 0.626,
+                "tx_power_dbm": -2.03426,
+                "rx_power_mw": 0.5164,
+                "rx_power_dbm": -2.87014
+              },
+              "2": {
+                "bias_ma": 6.164,
+                "tx_power_mw": 0.6256,
+                "tx_power_dbm": -2.03703,
+                "rx_power_mw": 0.6939,
+                "rx_power_dbm": -1.58703
+              },
+              "3": {
+                "bias_ma": 6.114,
+                "tx_power_mw": 0.649,
+                "tx_power_dbm": -1.87755,
+                "rx_power_mw": 0.5925,
+                "rx_power_dbm": -2.27312
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
