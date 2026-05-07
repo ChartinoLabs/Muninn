@@ -1,0 +1,50 @@
+{
+  "os": "cisco_iosxe",
+  "command": "ping <destination>",
+  "schema": {
+    "name": "PingResult",
+    "fields": {
+      "packets_sent": {
+        "type": "int",
+        "required": true
+      },
+      "packets_received": {
+        "type": "int",
+        "required": true
+      },
+      "success_rate_percent": {
+        "type": "int",
+        "required": true
+      },
+      "packet_data": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PingPacketData",
+            "fields": {
+              "result": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "rtt_min_ms": {
+        "type": "int",
+        "required": false
+      },
+      "rtt_avg_ms": {
+        "type": "int",
+        "required": false
+      },
+      "rtt_max_ms": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": []
+}
