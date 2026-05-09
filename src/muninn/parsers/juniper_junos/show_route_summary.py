@@ -27,13 +27,30 @@ class RoutingTableEntry(TypedDict):
     protocols: dict[str, ProtocolEntry]
 
 
-class HighwaterMark(TypedDict):
-    """Schema for highwater mark statistics."""
+class HighwaterEntry(TypedDict):
+    """Schema for a single highwater mark statistic.
 
-    rib_unique_destination_routes: int
-    rib_routes: int
-    fib_routes: int
-    vrf_type_routing_instances: NotRequired[int]
+    Captures the all-time peak value, the timestamp at which it was
+    observed, and (when present) the time-averaged watermark.
+    """
+
+    value: int
+    at: str
+    time_averaged: NotRequired[int]
+
+
+class HighwaterMark(TypedDict):
+    """Schema for highwater mark statistics.
+
+    Each field is ``NotRequired`` because Junos may omit individual
+    rows depending on platform / release, and the parser writes each
+    key only when its line is present in the device output.
+    """
+
+    rib_unique_destination_routes: NotRequired[HighwaterEntry]
+    rib_routes: NotRequired[HighwaterEntry]
+    fib_routes: NotRequired[HighwaterEntry]
+    vrf_type_routing_instances: NotRequired[HighwaterEntry]
 
 
 class ShowRouteSummaryResult(TypedDict):
@@ -43,23 +60,30 @@ class ShowRouteSummaryResult(TypedDict):
     route summaries with protocol breakdowns.
     """
 
-    autonomous_system: int
+    autonomous_system: int | str
     router_id: str
     highwater_mark: HighwaterMark
     tables: dict[str, RoutingTableEntry]
 
 
 # --- Header patterns ---
-_AS_RE = re.compile(r"^Autonomous system number:\s+(?P<as>\d+)\s*$")
+# AS may appear as plain integer or asdot notation (e.g. ``65000.100``).
+_AS_RE = re.compile(r"^Autonomous system number:\s+(?P<as>\S+)\s*$")
 _ROUTER_ID_RE = re.compile(r"^Router ID:\s+(?P<id>\S+)\s*$")
 
 # --- Highwater mark patterns ---
-_HW_RIB_DEST_RE = re.compile(
-    r"^\s*RIB unique destination routes:\s+(?P<val>\d+)\s+at\s+"
+# Each line has the form:
+#   "<label>: <value> at <YYYY-MM-DD HH:MM:SS>[ / <averaged>]"
+# The averaged watermark is present on most rows but absent on rows
+# such as ``VRF type routing instances`` in some releases.
+_HW_TAIL = (
+    r"(?P<val>\d+)\s+at\s+(?P<at>\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})"
+    r"(?:\s+/\s+(?P<avg>\d+))?\s*$"
 )
-_HW_RIB_ROUTES_RE = re.compile(r"^\s*RIB routes\s*:\s+(?P<val>\d+)\s+at\s+")
-_HW_FIB_ROUTES_RE = re.compile(r"^\s*FIB routes\s*:\s+(?P<val>\d+)\s+at\s+")
-_HW_VRF_RE = re.compile(r"^\s*VRF type routing instances\s*:\s+(?P<val>\d+)\s+at\s+")
+_HW_RIB_DEST_RE = re.compile(r"^\s*RIB unique destination routes:\s+" + _HW_TAIL)
+_HW_RIB_ROUTES_RE = re.compile(r"^\s*RIB routes\s*:\s+" + _HW_TAIL)
+_HW_FIB_ROUTES_RE = re.compile(r"^\s*FIB routes\s*:\s+" + _HW_TAIL)
+_HW_VRF_RE = re.compile(r"^\s*VRF type routing instances\s*:\s+" + _HW_TAIL)
 
 # --- Routing table header ---
 # e.g. "inet.0: 993427 destinations, 8574425 routes (992253 active, ...)"
@@ -76,19 +100,31 @@ _PROTO_RE = re.compile(
 )
 
 
+def _build_hw_entry(m: re.Match[str]) -> HighwaterEntry:
+    """Build a HighwaterEntry from a matched highwater line."""
+    entry: HighwaterEntry = {
+        "value": int(m.group("val")),
+        "at": m.group("at"),
+    }
+    avg = m.groupdict().get("avg")
+    if avg is not None:
+        entry["time_averaged"] = int(avg)
+    return entry
+
+
 def _parse_highwater(lines: list[str]) -> HighwaterMark:
     """Parse the highwater mark section from output lines."""
-    hw: dict[str, int] = {}
+    hw: dict[str, HighwaterEntry] = {}
 
     for line in lines:
         if m := _HW_RIB_DEST_RE.match(line):
-            hw["rib_unique_destination_routes"] = int(m.group("val"))
+            hw["rib_unique_destination_routes"] = _build_hw_entry(m)
         elif m := _HW_RIB_ROUTES_RE.match(line):
-            hw["rib_routes"] = int(m.group("val"))
+            hw["rib_routes"] = _build_hw_entry(m)
         elif m := _HW_FIB_ROUTES_RE.match(line):
-            hw["fib_routes"] = int(m.group("val"))
+            hw["fib_routes"] = _build_hw_entry(m)
         elif m := _HW_VRF_RE.match(line):
-            hw["vrf_type_routing_instances"] = int(m.group("val"))
+            hw["vrf_type_routing_instances"] = _build_hw_entry(m)
 
     return cast(HighwaterMark, hw)
 
@@ -146,14 +182,16 @@ class ShowRouteSummaryParser(BaseParser["ShowRouteSummaryResult"]):
         """
         lines = output.splitlines()
 
-        autonomous_system: int | None = None
+        autonomous_system: int | str | None = None
         router_id: str | None = None
 
         for line in lines:
             stripped = line.strip()
 
             if m := _AS_RE.match(stripped):
-                autonomous_system = int(m.group("as"))
+                raw_as = m.group("as")
+                # Preserve asdot notation as a string; otherwise emit int.
+                autonomous_system = int(raw_as) if raw_as.isdigit() else raw_as
                 continue
 
             if m := _ROUTER_ID_RE.match(stripped):
