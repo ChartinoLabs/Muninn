@@ -26,6 +26,10 @@ class ShowSystemUptimeResult(TypedDict):
     last_configured_ago: str
     last_configured_by: NotRequired[str]
     uptime: str
+    users: int
+    load_average_1m: float
+    load_average_5m: float
+    load_average_15m: float
 
 
 _TS = r"\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}\s+\S+"
@@ -49,7 +53,14 @@ class ShowSystemUptimeParser(BaseParser[ShowSystemUptimeResult]):
     _LAST_CONFIGURED = re.compile(
         rf"^Last configured:\s+{_TS_AGO}" r"(?:\s+by\s+(?P<user>\S+))?"
     )
-    _UPTIME = re.compile(r"^\s*\d+:\d{2}[AP]M\s+up\s+(?P<uptime>.+?),\s+\d+\s+users?,")
+    _UPTIME = re.compile(
+        r"^\s*\d+:\d{2}[AP]M\s+up\s+(?P<uptime>.+?),"
+        r"\s+(?P<users>\d+)\s+users?,"
+        r"\s+load averages?:\s+"
+        r"(?P<load1>\d+\.\d+),\s+"
+        r"(?P<load5>\d+\.\d+),\s+"
+        r"(?P<load15>\d+\.\d+)"
+    )
 
     _REQUIRED_FIELDS = (
         "current_time",
@@ -60,10 +71,14 @@ class ShowSystemUptimeParser(BaseParser[ShowSystemUptimeResult]):
         "last_configured_at",
         "last_configured_ago",
         "uptime",
+        "users",
+        "load_average_1m",
+        "load_average_5m",
+        "load_average_15m",
     )
 
     @classmethod
-    def _parse_timestamp_line(cls, line: str, result: dict[str, str]) -> bool:
+    def _parse_timestamp_line(cls, line: str, result: dict[str, object]) -> bool:
         """Try to match a timestamp+ago line and store its fields."""
         patterns = (
             (cls._SYSTEM_BOOTED, "system_booted"),
@@ -82,7 +97,7 @@ class ShowSystemUptimeParser(BaseParser[ShowSystemUptimeResult]):
         return False
 
     @classmethod
-    def _parse_line(cls, line: str, result: dict[str, str]) -> None:
+    def _parse_line(cls, line: str, result: dict[str, object]) -> None:
         """Parse a single line, updating result in place."""
         if match := cls._CURRENT_TIME.match(line):
             result["current_time"] = match.group("time")
@@ -92,6 +107,10 @@ class ShowSystemUptimeParser(BaseParser[ShowSystemUptimeResult]):
             pass
         elif match := cls._UPTIME.match(line):
             result["uptime"] = match.group("uptime")
+            result["users"] = int(match.group("users"))
+            result["load_average_1m"] = float(match.group("load1"))
+            result["load_average_5m"] = float(match.group("load5"))
+            result["load_average_15m"] = float(match.group("load15"))
 
     @classmethod
     def parse(cls, output: str) -> ShowSystemUptimeResult:
@@ -106,7 +125,7 @@ class ShowSystemUptimeParser(BaseParser[ShowSystemUptimeResult]):
         Raises:
             ValueError: If required fields cannot be parsed.
         """
-        result: dict[str, str] = {}
+        result: dict[str, object] = {}
 
         for line in output.splitlines():
             stripped = line.strip()
