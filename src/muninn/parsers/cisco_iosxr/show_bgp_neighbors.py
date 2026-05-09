@@ -37,13 +37,14 @@ class AddressFamilyDetail(TypedDict):
 class NeighborDetail(TypedDict):
     """Schema for a single BGP neighbor in the detailed output."""
 
-    remote_as: int
-    local_as: int
+    remote_as: str
+    local_as: str
     link_type: str
     router_id: str
     state: str
     description: NotRequired[str]
     up_time: NotRequired[str]
+    cluster_id: NotRequired[str]
     hold_time: int
     keepalive_interval: int
     messages_received: int
@@ -68,9 +69,10 @@ ShowBgpNeighborsResult = dict[str, NeighborDetail]
 # ---------------------------------------------------------------------------
 
 _NEIGHBOR_HEADER_RE = re.compile(r"^BGP neighbor is (\S+)")
-_REMOTE_AS_RE = re.compile(r"Remote AS (\d+), local AS (\d+), (internal|external) link")
+_REMOTE_AS_RE = re.compile(r"Remote AS (\S+), local AS (\S+), (internal|external) link")
 _DESCRIPTION_RE = re.compile(r"Description:\s+(.+?)\s*$")
 _ROUTER_ID_RE = re.compile(r"Remote router ID (\S+)")
+_CLUSTER_ID_RE = re.compile(r"^Cluster ID (\S+)")
 _STATE_RE = re.compile(r"BGP state = (\S+?)(?:,\s*up for (.+))?$")
 _HOLD_TIME_RE = re.compile(r"Hold time is (\d+), keepalive interval is (\d+) seconds")
 _RECEIVED_RE = re.compile(r"Received (\d+) messages, (\d+) notifications, \d+ in queue")
@@ -171,8 +173,8 @@ def _split_af_sections(
 
 
 def _match_remote_as(m: re.Match[str], fields: dict) -> None:
-    fields["remote_as"] = int(m.group(1))
-    fields["local_as"] = int(m.group(2))
+    fields["remote_as"] = m.group(1)
+    fields["local_as"] = m.group(2)
     fields["link_type"] = m.group(3)
 
 
@@ -234,6 +236,7 @@ _HEADER_MATCHERS: list[tuple[re.Pattern[str], _MatchHandler]] = [
 _SIMPLE_HEADER_MATCHERS: list[tuple[re.Pattern[str], str, int, type]] = [
     (_DESCRIPTION_RE, "description", 1, str),
     (_ROUTER_ID_RE, "router_id", 1, str),
+    (_CLUSTER_ID_RE, "cluster_id", 1, str),
 ]
 
 
@@ -291,6 +294,8 @@ def _build_neighbor_entry(
         result["description"] = header["description"]
     if "up_time" in header:
         result["up_time"] = header["up_time"]
+    if "cluster_id" in header:
+        result["cluster_id"] = header["cluster_id"]
     if "last_reset" in header:
         result["last_reset"] = header["last_reset"]
     if "last_reset_reason" in header:
