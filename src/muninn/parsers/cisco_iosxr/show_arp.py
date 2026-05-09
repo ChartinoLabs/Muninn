@@ -8,6 +8,7 @@ from muninn.parser import BaseParser
 from muninn.patterns import IPV4_ADDRESS, MAC_ADDRESS
 from muninn.registry import register
 from muninn.tags import ParserTag
+from muninn.utils import canonical_interface_name
 
 
 class ArpEntry(TypedDict):
@@ -78,7 +79,9 @@ class ShowArpParser(BaseParser[ShowArpResult]):
                 "mac_address": match.group("mac_address").lower(),
                 "state": match.group("state"),
                 "type": match.group("type"),
-                "interface": match.group("interface"),
+                "interface": canonical_interface_name(
+                    match.group("interface"), os=OS.CISCO_IOSXR
+                ),
             }
             if raw_age != "-":
                 entry["age"] = raw_age
