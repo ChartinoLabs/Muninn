@@ -56,6 +56,9 @@ _PACKET_RESULT_MAP = {
 }
 
 
+@register(OS.CISCO_IOSXE, r"ping (?P<destination>\S+)")
+@register(OS.CISCO_IOSXE, "ping")
+@register(OS.CISCO_IOS, r"ping (?P<destination>\S+)")
 @register(OS.CISCO_IOS, "ping")
 class PingParser(BaseParser["PingResult"]):
     """Parser for 'ping' command.

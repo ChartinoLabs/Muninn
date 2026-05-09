@@ -1,0 +1,22 @@
+{
+    "NAT default": {
+        "nat_type": "ipv4",
+        "from_zone": "Trust",
+        "source": "10.1.1.0/24",
+        "to_zone": "Untrust",
+        "destination": "any",
+        "service": "any/any/any",
+        "translate_to": "src: ethernet1/1 200.10.10.1 (dynamic-ip-and-port) (pool idx: 2)",
+        "terminal": false
+    },
+    "Inbound-NAT-to-DMZ-Server1": {
+        "nat_type": "ipv4",
+        "from_zone": "Untrust",
+        "source": "any",
+        "to_zone": "Untrust",
+        "destination": "200.10.10.100",
+        "service": "any/any/any",
+        "translate_to": "dst: 10.1.2.10",
+        "terminal": false
+    }
+}

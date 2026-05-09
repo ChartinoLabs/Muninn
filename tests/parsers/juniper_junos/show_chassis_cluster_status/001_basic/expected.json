@@ -1,0 +1,56 @@
+{
+    "cluster_id": 1,
+    "redundancy_groups": {
+        "0": {
+            "failover_count": 1,
+            "nodes": {
+                "node0": {
+                    "priority": 100,
+                    "status": "primary",
+                    "preempt": false,
+                    "manual_failover": false
+                },
+                "node1": {
+                    "priority": 0,
+                    "status": "lost"
+                }
+            }
+        },
+        "1": {
+            "failover_count": 1,
+            "nodes": {
+                "node0": {
+                    "priority": 0,
+                    "status": "primary",
+                    "preempt": false,
+                    "manual_failover": false,
+                    "monitor_failures": [
+                        "CS"
+                    ]
+                },
+                "node1": {
+                    "priority": 0,
+                    "status": "lost"
+                }
+            }
+        },
+        "3": {
+            "failover_count": 1,
+            "nodes": {
+                "node0": {
+                    "priority": 0,
+                    "status": "primary",
+                    "preempt": false,
+                    "manual_failover": false,
+                    "monitor_failures": [
+                        "CS"
+                    ]
+                },
+                "node1": {
+                    "priority": 0,
+                    "status": "lost"
+                }
+            }
+        }
+    }
+}
