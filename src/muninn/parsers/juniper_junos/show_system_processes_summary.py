@@ -58,6 +58,7 @@ class ShowSystemProcessesSummaryResult(TypedDict):
     load_average_5min: float
     load_average_15min: float
     uptime: str
+    current_time: str
     processes: ProcessCounts
     cpu: CpuUsage
     memory: MemoryUsage
@@ -104,7 +105,8 @@ class ShowSystemProcessesSummaryParser(
         r"last pid:\s*(?P<last_pid>\d+);\s*"
         r"load averages:\s*(?P<load1>[\d.]+),\s*"
         r"(?P<load5>[\d.]+),\s*(?P<load15>[\d.]+)\s+"
-        r"up\s+(?P<uptime>\S+)",
+        r"up\s+(?P<uptime>\S+)\s+"
+        r"(?P<current_time>\d{2}:\d{2}:\d{2})",
     )
 
     _THREADS_PATTERN = re.compile(
@@ -196,6 +198,7 @@ class ShowSystemProcessesSummaryParser(
             load_average_5min=float(header.group("load5")),
             load_average_15min=float(header.group("load15")),
             uptime=header.group("uptime"),
+            current_time=header.group("current_time"),
             processes=ProcessCounts(
                 total=int(threads.group("total")),
                 running=int(threads.group("running")),
