@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
+from muninn.utils import canonical_interface_name
 
 
 class InterfaceCounters(TypedDict):
@@ -335,7 +336,9 @@ class ShowInterfacesParser(BaseParser[ShowInterfacesResult]):
                     )
                     interfaces[current_name] = cast(InterfaceEntry, current_entry)
 
-                current_name = match.group("name")
+                current_name = canonical_interface_name(
+                    match.group("name"), os=OS.CISCO_IOSXR
+                )
                 current_entry = {
                     "interface_state": match.group("state"),
                     "line_protocol_state": match.group("protocol"),
