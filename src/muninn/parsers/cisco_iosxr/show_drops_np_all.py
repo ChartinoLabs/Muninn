@@ -39,7 +39,7 @@ class ShowDropsNpAllParser(BaseParser[ShowDropsNpAllResult]):
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.PLATFORM})
 
-    _NODE_PATTERN = re.compile(r"Node:\s+(?P<node>\S+)")
+    _NODE_PATTERN = re.compile(r"Node:\s+(?P<node>\S+?):?\s*$")
     _NP_HEADER_PATTERN = re.compile(r"^NP\s+(?P<np_id>\d+)\s+Drops:")
     _COUNTER_PATTERN = re.compile(r"^(?P<name>[A-Z][A-Z0-9_]+)\s+(?P<packets>\d+)\s*$")
 
