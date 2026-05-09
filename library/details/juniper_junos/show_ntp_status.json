@@ -1,0 +1,132 @@
+{
+  "os": "juniper_junos",
+  "command": "show ntp status",
+  "schema": {
+    "name": "ShowNtpStatusResult",
+    "fields": {
+      "status": {
+        "type": "str",
+        "required": true
+      },
+      "leap": {
+        "type": "str",
+        "required": true
+      },
+      "sync": {
+        "type": "str",
+        "required": true
+      },
+      "events": {
+        "type": "int",
+        "required": true
+      },
+      "event_description": {
+        "type": "str",
+        "required": true
+      },
+      "stratum": {
+        "type": "int",
+        "required": true
+      },
+      "refid": {
+        "type": "str",
+        "required": true
+      },
+      "version": {
+        "type": "str",
+        "required": false
+      },
+      "processor": {
+        "type": "str",
+        "required": false
+      },
+      "system": {
+        "type": "str",
+        "required": false
+      },
+      "leap_indicator": {
+        "type": "int",
+        "required": false
+      },
+      "precision": {
+        "type": "int",
+        "required": false
+      },
+      "rootdelay": {
+        "type": "float",
+        "required": false
+      },
+      "rootdispersion": {
+        "type": "float",
+        "required": false
+      },
+      "peer": {
+        "type": "int",
+        "required": false
+      },
+      "reftime": {
+        "type": "str",
+        "required": false
+      },
+      "poll": {
+        "type": "int",
+        "required": false
+      },
+      "clock": {
+        "type": "str",
+        "required": false
+      },
+      "state": {
+        "type": "int",
+        "required": false
+      },
+      "offset": {
+        "type": "float",
+        "required": false
+      },
+      "frequency": {
+        "type": "float",
+        "required": false
+      },
+      "jitter": {
+        "type": "float",
+        "required": false
+      },
+      "stability": {
+        "type": "float",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic NTP status output from vMX router synchronized to upstream NTP peer",
+      "input": "    root@junos_vmx1> show ntp status\n    status=0644 leap_none, sync_ntp, 4 events, event_peer/strat_chg,\n    version=\"ntpd 4.2.0-a Tue Dec 19 21:12:44  2017 (1)\", processor=\"amd64\",\n    system=\"FreeBSDJNPR-11.0-20171206.f4cad52_buil\", leap=00, stratum=2,\n    precision=-23, rootdelay=1.434, rootdispersion=82.589, peer=22765,\n    refid=172.16.229.65,\n    reftime=df981acf.bfa97435  Thu, Nov 15 2018 11:18:23.748, poll=6,\n    clock=df981ae8.eb6e7ee8  Thu, Nov 15 2018 11:18:48.919, state=4,\n    offset=67.812, frequency=4.968, jitter=12.270, stability=0.890\n",
+      "expected": {
+        "status": "0644",
+        "leap": "leap_none",
+        "sync": "sync_ntp",
+        "events": 4,
+        "event_description": "event_peer/strat_chg",
+        "version": "ntpd 4.2.0-a Tue Dec 19 21:12:44  2017 (1)",
+        "processor": "amd64",
+        "system": "FreeBSDJNPR-11.0-20171206.f4cad52_buil",
+        "leap_indicator": 0,
+        "stratum": 2,
+        "precision": -23,
+        "rootdelay": 1.434,
+        "rootdispersion": 82.589,
+        "peer": 22765,
+        "refid": "172.16.229.65",
+        "reftime": "df981acf.bfa97435  Thu, Nov 15 2018 11:18:23.748",
+        "poll": 6,
+        "clock": "df981ae8.eb6e7ee8  Thu, Nov 15 2018 11:18:48.919",
+        "state": 4,
+        "offset": 67.812,
+        "frequency": 4.968,
+        "jitter": 12.27,
+        "stability": 0.89
+      }
+    }
+  ]
+}

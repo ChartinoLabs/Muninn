@@ -1,0 +1,57 @@
+{
+  "os": "juniper_junos",
+  "command": "show task replication",
+  "schema": {
+    "name": "ShowTaskReplicationResult",
+    "fields": {
+      "stateful_replication": {
+        "type": "str",
+        "required": true
+      },
+      "re_mode": {
+        "type": "str",
+        "required": true
+      },
+      "protocols": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ProtocolSyncEntry",
+            "fields": {
+              "synchronization_status": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Dual-RE system with stateful replication enabled and all protocols synced",
+      "input": "        Stateful Replication: Enabled\n        RE mode: Master\n\n    Protocol                Synchronization Status\n    OSPF3                   Complete\n    BGP                     Complete\n    MPLS                    Complete\n    LDP                     Complete\n",
+      "expected": {
+        "stateful_replication": "Enabled",
+        "re_mode": "Master",
+        "protocols": {
+          "OSPF3": {
+            "synchronization_status": "Complete"
+          },
+          "BGP": {
+            "synchronization_status": "Complete"
+          },
+          "MPLS": {
+            "synchronization_status": "Complete"
+          },
+          "LDP": {
+            "synchronization_status": "Complete"
+          }
+        }
+      }
+    }
+  ]
+}

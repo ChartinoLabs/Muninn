@@ -1,0 +1,432 @@
+{
+  "os": "juniper_junos",
+  "command": "show ted database extensive",
+  "schema": {
+    "name": "ShowTedDatabaseExtensiveResult",
+    "fields": {
+      "summary": {
+        "type": {
+          "name": "TedSummary",
+          "fields": {
+            "isis_nodes": {
+              "type": "int",
+              "required": true
+            },
+            "inet_nodes": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": false
+      },
+      "nodes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "NodeEntry",
+            "fields": {
+              "node_type": {
+                "type": "str",
+                "required": false
+              },
+              "age_secs": {
+                "type": "int",
+                "required": true
+              },
+              "link_in": {
+                "type": "int",
+                "required": true
+              },
+              "link_out": {
+                "type": "int",
+                "required": true
+              },
+              "protocol": {
+                "type": "str",
+                "required": false
+              },
+              "links": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "LinkEntry",
+                    "fields": {
+                      "local_address": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "remote_address": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "local_interface_index": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "remote_interface_index": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "color": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "color_name": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "metric": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "static_bw_bps": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "reservable_bw_bps": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "available_bw_bps": {
+                        "type": {
+                          "type": "list",
+                          "items": "int"
+                        },
+                        "required": false
+                      },
+                      "iscd": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "ISCDEntry",
+                            "fields": {
+                              "switching_type": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "encoding_type": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "maximum_lsp_bw_bps": {
+                                "type": {
+                                  "type": "list",
+                                  "items": "int"
+                                },
+                                "required": false
+                              }
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "adjacency_sids": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "AdjacencySID",
+                            "fields": {
+                              "address_family": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "flags": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "weight": {
+                                "type": "int",
+                                "required": true
+                              }
+                            }
+                          }
+                        },
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "prefixes": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "PrefixEntry",
+                    "fields": {
+                      "flags": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "prefix_sid": {
+                        "type": {
+                          "name": "PrefixSID",
+                          "fields": {
+                            "sid": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "flags": {
+                              "type": "str",
+                              "required": true
+                            },
+                            "algorithm": {
+                              "type": "int",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "srgb_blocks": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "SRGBBlock",
+                    "fields": {
+                      "range": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "flags": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "spring_algorithms": {
+                "type": {
+                  "type": "list",
+                  "items": "int"
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "TED database with router and network nodes, SPRING capabilities, and adjacency SIDs",
+      "input": "\n        show ted database extensive\n        TED database: 0 ISIS nodes 6 INET nodes\n        NodeID: 10.4.1.1\n          Type: Rtr, Age: 1024 secs, LinkIn: 0, LinkOut: 1\n          Protocol: OSPF(0.0.0.4)\n            To: 172.16.1.1, Local: 10.4.0.2, Remote: 10.4.0.1\n              Local interface index: 0, Remote interface index: 0\n              Color: 0 <none>\n              Metric: 1\n              Static BW: 2000Mbps\n              Reservable BW: 0bps\n              Available BW [priority] bps:\n                  [0] 10bps         [1] 10bps        [2] 0bps        [3] 0bps\n                  [4] 10bps         [5] 0bps        [6] 0bps        [7] 0bps\n              Interface Switching Capability Descriptor(1):\n                Switching type: Packet\n                Encoding type: Packet\n                Maximum LSP BW [priority] bps:\n                  [0] 0bps         [1] 0bps        [2] 0bps        [3] 0bps\n                  [4] 0bps         [5] 0bps        [6] 0bps        [7] 0bps\n              P2P Adjacency-SID:\n                IPV4, SID: 12345, Flags: 0x24, Weight: 0\n           Prefixes:\n             10.4.1.1/32\n              Flags: 0x60\n              Prefix-SID:\n                SID: 1234, Flags: 0x00, Algo: 0\n           SPRING-Capabilities:\n             SRGB block [Start: 12000, Range: 3000, Flags: 0x00]\n           SPRING-Algorithms:\n             Algo: 0\n             Algo: 1\n        NodeID: 10.16.2.2-1\n          Type: Net, Age: 1024 secs, LinkIn: 0, LinkOut: 2\n          Protocol: OSPF(0.0.0.4)\n            To: 10.16.2.34, Local: 0.0.0.0, Remote: 0.0.0.0\n              Local interface index: 0, Remote interface index: 0\n              Metric: 0\n              Interface Switching Capability Descriptor(1):\n                Switching type: Packet\n                Encoding type: Packet\n                Maximum LSP BW [priority] bps:\n                  [0] 0bps         [1] 0bps        [2] 0bps        [3] 0bps\n                  [4] 0bps         [5] 0bps        [6] 1000bps        [7] 0bps\n            To: 10.16.2.42, Local: 0.0.0.0, Remote: 0.0.0.0\n              Local interface index: 0, Remote interface index: 0\n              Metric: 0\n              Interface Switching Capability Descriptor(1):\n                Switching type: Packet\n                Encoding type: Packet\n                Maximum LSP BW [priority] bps:\n                  [0] 0bps         [1] 0bps        [2] 0bps        [3] 0bps\n                  [4] 0bps         [5] 0bps        [6] 0bps        [7] 0bps\n        NodeID: 172.16.1.4-1\n          Type: Net, Age: 2048 secs, LinkIn: 0, LinkOut: 2\n          Protocol: OSPF(0.0.0.4)\n            To: 172.16.85.48, Local: 0.0.0.0, Remote: 0.0.0.0\n              Local interface index: 0, Remote interface index: 0\n              Metric: 0\n              Interface Switching Capability Descriptor(1):\n                Switching type: Packet\n                Encoding type: Packet\n                Maximum LSP BW [priority] bps:\n                  [0] 0bps         [1] 0bps        [2] 0bps        [3] 0bps\n                  [4] 0bps         [5] 0bps        [6] 0bps        [7] 0bps\n            To: 172.16.85.52, Local: 0.0.0.0, Remote: 0.0.0.0\n              Local interface index: 0, Remote interface index: 0\n              Metric: 0\n              Interface Switching Capability Descriptor(1):\n                Switching type: Packet\n                Encoding type: Packet\n                Maximum LSP BW [priority] bps:\n                  [0] 0bps         [1] 0bps        [2] 0bps        [3] 0bps\n                  [4] 0bps         [5] 0bps        [6] 0bps        [7] 0bps\n        NodeID: 10.36.3.3\n          Type: ---, Age: 3440 secs, LinkIn: 1, LinkOut: 0\n        NodeID: 10.64.4.4\n          Type: ---, Age: 2560 secs, LinkIn: 1, LinkOut: 0\n",
+      "expected": {
+        "summary": {
+          "isis_nodes": 0,
+          "inet_nodes": 6
+        },
+        "nodes": {
+          "10.4.1.1": {
+            "age_secs": 1024,
+            "link_in": 0,
+            "link_out": 1,
+            "node_type": "Rtr",
+            "protocol": "OSPF(0.0.0.4)",
+            "prefixes": {
+              "10.4.1.1/32": {
+                "flags": "0x60",
+                "prefix_sid": {
+                  "sid": 1234,
+                  "flags": "0x00",
+                  "algorithm": 0
+                }
+              }
+            },
+            "srgb_blocks": {
+              "12000": {
+                "range": 3000,
+                "flags": "0x00"
+              }
+            },
+            "spring_algorithms": [
+              0,
+              1
+            ],
+            "links": {
+              "172.16.1.1": {
+                "local_address": "10.4.0.2",
+                "remote_address": "10.4.0.1",
+                "local_interface_index": 0,
+                "remote_interface_index": 0,
+                "color": 0,
+                "metric": 1,
+                "static_bw_bps": 2000000000,
+                "reservable_bw_bps": 0,
+                "available_bw_bps": [
+                  10,
+                  10,
+                  0,
+                  0,
+                  10,
+                  0,
+                  0,
+                  0
+                ],
+                "iscd": {
+                  "1": {
+                    "switching_type": "Packet",
+                    "encoding_type": "Packet",
+                    "maximum_lsp_bw_bps": [
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                "adjacency_sids": {
+                  "12345": {
+                    "address_family": "IPV4",
+                    "flags": "0x24",
+                    "weight": 0
+                  }
+                }
+              }
+            }
+          },
+          "10.16.2.2-1": {
+            "age_secs": 1024,
+            "link_in": 0,
+            "link_out": 2,
+            "node_type": "Net",
+            "protocol": "OSPF(0.0.0.4)",
+            "links": {
+              "10.16.2.34": {
+                "local_address": "0.0.0.0",
+                "remote_address": "0.0.0.0",
+                "local_interface_index": 0,
+                "remote_interface_index": 0,
+                "metric": 0,
+                "iscd": {
+                  "1": {
+                    "switching_type": "Packet",
+                    "encoding_type": "Packet",
+                    "maximum_lsp_bw_bps": [
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      1000,
+                      0
+                    ]
+                  }
+                }
+              },
+              "10.16.2.42": {
+                "local_address": "0.0.0.0",
+                "remote_address": "0.0.0.0",
+                "local_interface_index": 0,
+                "remote_interface_index": 0,
+                "metric": 0,
+                "iscd": {
+                  "1": {
+                    "switching_type": "Packet",
+                    "encoding_type": "Packet",
+                    "maximum_lsp_bw_bps": [
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "172.16.1.4-1": {
+            "age_secs": 2048,
+            "link_in": 0,
+            "link_out": 2,
+            "node_type": "Net",
+            "protocol": "OSPF(0.0.0.4)",
+            "links": {
+              "172.16.85.48": {
+                "local_address": "0.0.0.0",
+                "remote_address": "0.0.0.0",
+                "local_interface_index": 0,
+                "remote_interface_index": 0,
+                "metric": 0,
+                "iscd": {
+                  "1": {
+                    "switching_type": "Packet",
+                    "encoding_type": "Packet",
+                    "maximum_lsp_bw_bps": [
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                }
+              },
+              "172.16.85.52": {
+                "local_address": "0.0.0.0",
+                "remote_address": "0.0.0.0",
+                "local_interface_index": 0,
+                "remote_interface_index": 0,
+                "metric": 0,
+                "iscd": {
+                  "1": {
+                    "switching_type": "Packet",
+                    "encoding_type": "Packet",
+                    "maximum_lsp_bw_bps": [
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "10.36.3.3": {
+            "age_secs": 3440,
+            "link_in": 1,
+            "link_out": 0
+          },
+          "10.64.4.4": {
+            "age_secs": 2560,
+            "link_in": 1,
+            "link_out": 0
+          }
+        }
+      }
+    }
+  ]
+}

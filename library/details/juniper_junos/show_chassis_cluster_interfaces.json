@@ -1,0 +1,221 @@
+{
+  "os": "juniper_junos",
+  "command": "show chassis cluster interfaces",
+  "schema": {
+    "name": "ShowChassisClusterInterfacesResult",
+    "fields": {
+      "control_link_status": {
+        "type": "str",
+        "required": true
+      },
+      "control_interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ControlInterface",
+            "fields": {
+              "index": {
+                "type": "int",
+                "required": true
+              },
+              "monitored_status": {
+                "type": "str",
+                "required": true
+              },
+              "internal_sa": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "fabric_link_status": {
+        "type": "str",
+        "required": true
+      },
+      "fabric_interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "FabricInterface",
+            "fields": {
+              "child_interface": {
+                "type": "str",
+                "required": true
+              },
+              "status_physical": {
+                "type": "str",
+                "required": true
+              },
+              "status_monitored": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "redundant_ethernet_interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RedundantEthernetInterface",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "redundancy_group": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "redundant_pseudo_interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RedundantPseudoInterface",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "redundancy_group": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "monitored_interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "MonitoredInterface",
+            "fields": {
+              "weight": {
+                "type": "int",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "redundancy_group": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "SRX cluster with control/fabric links, reth interfaces, and interface monitoring",
+      "input": "Control link status: Up\n\nControl interfaces:\n    Index   Interface   Monitored-Status   Internal-SA\n    0       em0         Up                 Disabled\n    1       em1         Down               Disabled\n\nFabric link status: Up\n\nFabric interfaces:\n    Name    Child-interface    Status\n                               (Physical/Monitored)\n    fab0    ge-0/1/0           Up / Down\n    fab1    ge-6/1/0           Up / Down\n\nRedundant-ethernet Information:\n    Name         Status      Redundancy-group\n    reth0        Up          1\n    reth1        Up          2\n    reth2        Down        Not configured\n    reth3        Down        Not configured\n    reth4        Down        Not configured\n    reth5        Down        Not configured\n    reth6        Down        Not configured\n    reth7        Down        Not configured\n    reth8        Down        Not configured\n    reth9        Down        Not configured\n    reth10       Down        Not configured\n    reth11       Down        Not configured\n\nRedundant-pseudo-interface Information:\n    Name        Status       Redundancy-group\n     lo0          Up               1\n\nInterface Monitoring:\n    Interface         Weight    Status    Redundancy-group\n    ge-0/1/9          100       Up        1\n    ge-7/1/9          100       Up        2\n",
+      "expected": {
+        "control_link_status": "Up",
+        "control_interfaces": {
+          "em0": {
+            "index": 0,
+            "monitored_status": "Up",
+            "internal_sa": "Disabled"
+          },
+          "em1": {
+            "index": 1,
+            "monitored_status": "Down",
+            "internal_sa": "Disabled"
+          }
+        },
+        "fabric_link_status": "Up",
+        "fabric_interfaces": {
+          "fab0": {
+            "child_interface": "ge-0/1/0",
+            "status_physical": "Up",
+            "status_monitored": "Down"
+          },
+          "fab1": {
+            "child_interface": "ge-6/1/0",
+            "status_physical": "Up",
+            "status_monitored": "Down"
+          }
+        },
+        "redundant_ethernet_interfaces": {
+          "reth0": {
+            "status": "Up",
+            "redundancy_group": 1
+          },
+          "reth1": {
+            "status": "Up",
+            "redundancy_group": 2
+          },
+          "reth2": {
+            "status": "Down"
+          },
+          "reth3": {
+            "status": "Down"
+          },
+          "reth4": {
+            "status": "Down"
+          },
+          "reth5": {
+            "status": "Down"
+          },
+          "reth6": {
+            "status": "Down"
+          },
+          "reth7": {
+            "status": "Down"
+          },
+          "reth8": {
+            "status": "Down"
+          },
+          "reth9": {
+            "status": "Down"
+          },
+          "reth10": {
+            "status": "Down"
+          },
+          "reth11": {
+            "status": "Down"
+          }
+        },
+        "redundant_pseudo_interfaces": {
+          "lo0": {
+            "status": "Up",
+            "redundancy_group": 1
+          }
+        },
+        "monitored_interfaces": {
+          "ge-0/1/9": {
+            "weight": 100,
+            "status": "Up",
+            "redundancy_group": 1
+          },
+          "ge-7/1/9": {
+            "weight": 100,
+            "status": "Up",
+            "redundancy_group": 2
+          }
+        }
+      }
+    }
+  ]
+}

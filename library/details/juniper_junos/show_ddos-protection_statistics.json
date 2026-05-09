@@ -1,0 +1,87 @@
+{
+  "os": "juniper_junos",
+  "command": "show ddos-protection statistics",
+  "schema": {
+    "name": "ShowDdosProtectionStatisticsResult",
+    "fields": {
+      "policing_on_routing_engine": {
+        "type": "bool",
+        "required": true
+      },
+      "policing_on_fpc": {
+        "type": "bool",
+        "required": true
+      },
+      "flow_detection": {
+        "type": "bool",
+        "required": true
+      },
+      "logging": {
+        "type": "bool",
+        "required": true
+      },
+      "policer_violation_report_rate": {
+        "type": "int",
+        "required": true
+      },
+      "flow_report_rate": {
+        "type": "int",
+        "required": true
+      },
+      "default_flow_detection_mode": {
+        "type": "str",
+        "required": true
+      },
+      "default_flow_level_detection_mode": {
+        "type": "str",
+        "required": true
+      },
+      "default_flow_level_control_mode": {
+        "type": "str",
+        "required": true
+      },
+      "currently_violated_packet_types": {
+        "type": "int",
+        "required": true
+      },
+      "packet_types_have_seen_violations": {
+        "type": "int",
+        "required": true
+      },
+      "total_violation_counts": {
+        "type": "int",
+        "required": true
+      },
+      "currently_tracked_flows": {
+        "type": "int",
+        "required": true
+      },
+      "total_detected_flows": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic DDoS protection statistics with no active violations",
+      "input": "show ddos-protection statistics\nDDOS protection global statistics:\nPolicing on routing engine:         Yes\nPolicing on FPC:                    Yes\nFlow detection:                     No\nLogging:                            Yes\nPolicer violation report rate:      100\nFlow report rate:                   100\nDefault flow detection mode         Automatic\nDefault flow level detection mode   Automatic\nDefault flow level control mode     Drop\nCurrently violated packet types:    0\nPacket types have seen violations:  0\nTotal violation counts:             0\nCurrently tracked flows:            0\nTotal detected flows:               0\n",
+      "expected": {
+        "policing_on_routing_engine": true,
+        "policing_on_fpc": true,
+        "flow_detection": false,
+        "logging": true,
+        "policer_violation_report_rate": 100,
+        "flow_report_rate": 100,
+        "default_flow_detection_mode": "Automatic",
+        "default_flow_level_detection_mode": "Automatic",
+        "default_flow_level_control_mode": "Drop",
+        "currently_violated_packet_types": 0,
+        "packet_types_have_seen_violations": 0,
+        "total_violation_counts": 0,
+        "currently_tracked_flows": 0,
+        "total_detected_flows": 0
+      }
+    }
+  ]
+}

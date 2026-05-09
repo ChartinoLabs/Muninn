@@ -1,0 +1,425 @@
+{
+  "os": "juniper_junos",
+  "command": "show security policies hit-count",
+  "schema": {
+    "name": "ShowSecurityPoliciesHitCountResult",
+    "fields": {
+      "logical_systems": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "LogicalSystemPolicies",
+            "fields": {
+              "policies": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "type": "dict",
+                      "key": "str",
+                      "value": {
+                        "name": "PolicyHitCount",
+                        "fields": {
+                          "index": {
+                            "type": "int",
+                            "required": true
+                          },
+                          "hit_count": {
+                            "type": "int",
+                            "required": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": true
+              },
+              "policy_count": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple logical systems with policies across various zones",
+      "input": "Logical system: root-logical-system\n Index   From zone        To zone           Name           Policy count\n 1       junos-global     junos-global      GLOBAL-PERMIT-TRACE-IN 78\n 2       junos-global     junos-global      GLOBAL-PERMIT-RADIUS-IN 0\n 3       junos-global     junos-global      GLOBAL-PERMIT-NTP-IN 0\n 4       junos-global     junos-global      GLOBAL-PERMIT-ICMP-IN 3504\n 5       junos-global     junos-global      GLOBAL-PERMIT-SNMP-IN 1\n 6       junos-global     junos-global      DEFAULT-DENY   4567302\n 7       junos-global     junos-global      GLOBAL-PERMIT-DNS-IN 0\n 8       junos-global     junos-global      GLOBAL-PERMIT-TELEMETRY-IN 0\n 9       junos-global     junos-global      GLOBAL-PERMIT-SSH-IN 0\n 10      junos-global     junos-global      GLOBAL-PERMIT-KNOWN-WIDE 337917\n 11      untrust          TEST-STRICT        STRICT-PERMIT-OPENGEAR-IN 0\n 12      untrust          TEST-STRICT        STRICT-PERMIT-SSH-IN 445265\n 13      untrust          TEST-STRICT        STRICT-PERMIT-SNMP-IN 287972350\n 14      untrust          TEST-STRICT        STRICT-PERMIT-TELEMETRY-IN 0\n 15      untrust          TEST-STRICT        STRICT-PERMIT-NETCONF-IN 523\n 16      untrust          TEST-STRICT        STRICT-PERMIT-SSH-CORE-IN 782267\n 17      untrust          TEST-STRICT        STRICT-PERMIT-SSH-PDUs-IN 333\n 18      untrust          TEST-STRICT        STRICT-PERMIT-SSH-TEST-FW-IN 91441\n 19      untrust          TEST-STRICT        STRICT-PERMIT-ICMP-IN 24426998\n 20      untrust          TEST-STRICT        STRICT-PERMIT-TRACE-IN 1196\n 21      untrust          TEST-STRICT        STRICT-PERMIT-RADIUS-IN 0\n 22      untrust          TEST-STRICT        STRICT-PERMIT-NTP-IN 117709\n 23      untrust          TEST-STRICT        STRICT-PERMIT-TEST-IPSEC-GRE-IN 0\n 24      untrust          TEST-STRICT        STRICT-PERMIT-SSH-NSO-CORE-IN 223809\n 25      untrust          TEST-STRICT        STRICT-PERMIT-DNS-IN 0\n 26      untrust          TEST-DCN           DCN-PERMIT-MONITORING-IN 475804\n 27      untrust          TEST-DCN           DCN-PERMIT-SNMP-IN 32808\n 28      untrust          TEST-DCN           DCN-PERMIT-DNS-IN 0\n 29      untrust          TEST-DCN           DCN-PERMIT-NTP-IN 0\n 30      untrust          TEST-DCN           DCN-PERMIT-ICMP-IN 1129854\n 31      untrust          TEST-DCN           DCN-PERMIT-ONE-CONTROL-IN 0\n 32      untrust          TEST-DCN           DCN-PERMIT-MCP-IN 5305845\n 33      untrust          TEST-DCN           DCN-PERMIT-RADIUS-IN 0\n 34      untrust          TEST-DCN           DCN-PERMIT-PNC-IN 0\n 35      untrust          TEST-DCN           DCN-PERMIT-TRACE-IN 592\n 36      untrust          TEST-DCN           DCN-PERMIT-SSH-IN 77474\n 37      untrust          TEST-OPTICAL       OPTICAL-PERMIT-KNOWN-RDP-IN 0\n 38      untrust          TEST-OPTICAL       OPTICAL-BLOCK-RDP-IN 7636\n 39      untrust          TEST-OPTICAL       OPTICAL-BLOCK-TELNET-IN 51210\n 40      untrust          TEST-OPTICAL       OPTICAL-PERMIT-KNOWN-TELNET-IN 1\n 41      untrust          TEST-OPTICAL       OPTICAL-BLOCK-IDRAC-IN 2167\n 42      untrust          TEST-OPTICAL       OPTICAL-PERMIT-IDRAC-IN 6528\n 43      untrust          TEST-OPTICAL       OPTICAL-BLOCK-SSH-IN 10886\n 44      untrust          TEST-OPTICAL       OPTICAL-PERMIT-SSH-IN 36221\n 45      untrust          TEST-OPTICAL       OPTICAL-BLOCK-OTHER-NTP-IN 253\n 46      untrust          TEST-OPTICAL       OPTICAL-PERMIT-KNOWN-NTP-IN 0\n 47      untrust          TEST-OPTICAL       OPTICAL-BLOCK-OTHER-DNS-IN 10292\n 48      untrust          TEST-OPTICAL       OPTICAL-PERMIT-DNS-IN 0\n 49      TEST-STRICT       untrust           STRICT-PERMIT-NTP-OUT 4468672\n 50      TEST-STRICT       untrust           All_TEST-STRICT_COMMODITY-INTERNET 14599527\n 51      TEST-STRICT       untrust           STRICT-PERMIT-SNMP-OUT 0\n 52      TEST-STRICT       untrust           STRICT-BLOCK-SNMP-OUT 0\n 53      TEST-STRICT       untrust           STRICT-PERMIT-TELEMETRY-OUT 4038240\n 54      TEST-STRICT       untrust           STRICT-PERMIT-SYSLOG-OUT 125964123\n 55      TEST-STRICT       untrust           STRICT-BLOCK-SYSLOG-OUT 205620273\n 56      TEST-STRICT       untrust           STRICT-PERMIT-DNS-OUT 27\n 57      TEST-STRICT       untrust           STRICT-BLOCK-DNS-OUT 160995\n 58      TEST-STRICT       untrust           STRICT-BLOCK-NTP-OUT 38040\n 59      TEST-STRICT       untrust           STRICT-PERMIT-RADIUS-OUT 1699379\n 60      TEST-STRICT       untrust           STRICT-BLOCK-RADIUS-OUT 0\n 61      TEST-STRICT       TEST-STRICT        STRICT-INTRA-ZONE-PERMIT 118930\n 62      TEST-STRICT       TEST-OPTICAL       STRICT-TO-OPTICAL-PERMIT-TELEMETRY 0\n 63      TEST-STRICT       TEST-OPTICAL       STRICT-TO-OPTICAL-PERMIT-ICMP 0\n 64      TEST-DCN          untrust           DCN-PERMIT-MCP-OUT 81375\n 65      TEST-DCN          untrust           DCN-PERMIT-WAVESERVERS-TEST-TRAPS-OUT 0\n 66      TEST-DCN          untrust           DCN-PERMIT-RADIUS-OUT 158601\n 67      TEST-DCN          untrust           DCN-DEFAULT-DENY-OUT 43959\n 68      TEST-DCN          untrust           DCN-PERMIT-SYSLOG-OUT 13650\n 69      TEST-DCN          untrust           DCN-PERMIT-NTP-OUT 204\n 70      TEST-DCN          TEST-DCN           DCN-INTRA-ZONE-PERMIT 0\n 71      TEST-OPTICAL      untrust           OPTICAL-DEFAULT-DENY-OUT 0\n 72      TEST-OPTICAL      untrust           OPTICAL-PERMIT-DNS-OUT 7552861\n 73      TEST-OPTICAL      untrust           OPTICAL-BLOCK-OTHER-NTP-OUT 0\n 74      TEST-OPTICAL      untrust           OPTICAL-PERMIT-NTP-OUT 1222475\n 75      TEST-OPTICAL      untrust           OPTICAL-BLOCK-OTHER-DNS-OUT 2256\n 76      TEST-OPTICAL      TEST-OPTICAL       OPTICAL-INTRA-ZONE-PERMIT 0\n\nNumber of policy: 76\n\nLogical system: root-logical-system2\n Index   From zone        To zone           Name           Policy count\n 1       junos-global     junos-global      GLOBAL-PERMIT-TRACE-IN 78\n 2       junos-global     junos-global      GLOBAL-PERMIT-RADIUS-IN 0\n 3       junos-global     junos-global      GLOBAL-PERMIT-NTP-IN 0\n\nNumber of policy: 3\n",
+      "expected": {
+        "logical_systems": {
+          "root-logical-system": {
+            "policies": {
+              "junos-global": {
+                "junos-global": {
+                  "GLOBAL-PERMIT-TRACE-IN": {
+                    "index": 1,
+                    "hit_count": 78
+                  },
+                  "GLOBAL-PERMIT-RADIUS-IN": {
+                    "index": 2,
+                    "hit_count": 0
+                  },
+                  "GLOBAL-PERMIT-NTP-IN": {
+                    "index": 3,
+                    "hit_count": 0
+                  },
+                  "GLOBAL-PERMIT-ICMP-IN": {
+                    "index": 4,
+                    "hit_count": 3504
+                  },
+                  "GLOBAL-PERMIT-SNMP-IN": {
+                    "index": 5,
+                    "hit_count": 1
+                  },
+                  "DEFAULT-DENY": {
+                    "index": 6,
+                    "hit_count": 4567302
+                  },
+                  "GLOBAL-PERMIT-DNS-IN": {
+                    "index": 7,
+                    "hit_count": 0
+                  },
+                  "GLOBAL-PERMIT-TELEMETRY-IN": {
+                    "index": 8,
+                    "hit_count": 0
+                  },
+                  "GLOBAL-PERMIT-SSH-IN": {
+                    "index": 9,
+                    "hit_count": 0
+                  },
+                  "GLOBAL-PERMIT-KNOWN-WIDE": {
+                    "index": 10,
+                    "hit_count": 337917
+                  }
+                }
+              },
+              "untrust": {
+                "TEST-STRICT": {
+                  "STRICT-PERMIT-OPENGEAR-IN": {
+                    "index": 11,
+                    "hit_count": 0
+                  },
+                  "STRICT-PERMIT-SSH-IN": {
+                    "index": 12,
+                    "hit_count": 445265
+                  },
+                  "STRICT-PERMIT-SNMP-IN": {
+                    "index": 13,
+                    "hit_count": 287972350
+                  },
+                  "STRICT-PERMIT-TELEMETRY-IN": {
+                    "index": 14,
+                    "hit_count": 0
+                  },
+                  "STRICT-PERMIT-NETCONF-IN": {
+                    "index": 15,
+                    "hit_count": 523
+                  },
+                  "STRICT-PERMIT-SSH-CORE-IN": {
+                    "index": 16,
+                    "hit_count": 782267
+                  },
+                  "STRICT-PERMIT-SSH-PDUs-IN": {
+                    "index": 17,
+                    "hit_count": 333
+                  },
+                  "STRICT-PERMIT-SSH-TEST-FW-IN": {
+                    "index": 18,
+                    "hit_count": 91441
+                  },
+                  "STRICT-PERMIT-ICMP-IN": {
+                    "index": 19,
+                    "hit_count": 24426998
+                  },
+                  "STRICT-PERMIT-TRACE-IN": {
+                    "index": 20,
+                    "hit_count": 1196
+                  },
+                  "STRICT-PERMIT-RADIUS-IN": {
+                    "index": 21,
+                    "hit_count": 0
+                  },
+                  "STRICT-PERMIT-NTP-IN": {
+                    "index": 22,
+                    "hit_count": 117709
+                  },
+                  "STRICT-PERMIT-TEST-IPSEC-GRE-IN": {
+                    "index": 23,
+                    "hit_count": 0
+                  },
+                  "STRICT-PERMIT-SSH-NSO-CORE-IN": {
+                    "index": 24,
+                    "hit_count": 223809
+                  },
+                  "STRICT-PERMIT-DNS-IN": {
+                    "index": 25,
+                    "hit_count": 0
+                  }
+                },
+                "TEST-DCN": {
+                  "DCN-PERMIT-MONITORING-IN": {
+                    "index": 26,
+                    "hit_count": 475804
+                  },
+                  "DCN-PERMIT-SNMP-IN": {
+                    "index": 27,
+                    "hit_count": 32808
+                  },
+                  "DCN-PERMIT-DNS-IN": {
+                    "index": 28,
+                    "hit_count": 0
+                  },
+                  "DCN-PERMIT-NTP-IN": {
+                    "index": 29,
+                    "hit_count": 0
+                  },
+                  "DCN-PERMIT-ICMP-IN": {
+                    "index": 30,
+                    "hit_count": 1129854
+                  },
+                  "DCN-PERMIT-ONE-CONTROL-IN": {
+                    "index": 31,
+                    "hit_count": 0
+                  },
+                  "DCN-PERMIT-MCP-IN": {
+                    "index": 32,
+                    "hit_count": 5305845
+                  },
+                  "DCN-PERMIT-RADIUS-IN": {
+                    "index": 33,
+                    "hit_count": 0
+                  },
+                  "DCN-PERMIT-PNC-IN": {
+                    "index": 34,
+                    "hit_count": 0
+                  },
+                  "DCN-PERMIT-TRACE-IN": {
+                    "index": 35,
+                    "hit_count": 592
+                  },
+                  "DCN-PERMIT-SSH-IN": {
+                    "index": 36,
+                    "hit_count": 77474
+                  }
+                },
+                "TEST-OPTICAL": {
+                  "OPTICAL-PERMIT-KNOWN-RDP-IN": {
+                    "index": 37,
+                    "hit_count": 0
+                  },
+                  "OPTICAL-BLOCK-RDP-IN": {
+                    "index": 38,
+                    "hit_count": 7636
+                  },
+                  "OPTICAL-BLOCK-TELNET-IN": {
+                    "index": 39,
+                    "hit_count": 51210
+                  },
+                  "OPTICAL-PERMIT-KNOWN-TELNET-IN": {
+                    "index": 40,
+                    "hit_count": 1
+                  },
+                  "OPTICAL-BLOCK-IDRAC-IN": {
+                    "index": 41,
+                    "hit_count": 2167
+                  },
+                  "OPTICAL-PERMIT-IDRAC-IN": {
+                    "index": 42,
+                    "hit_count": 6528
+                  },
+                  "OPTICAL-BLOCK-SSH-IN": {
+                    "index": 43,
+                    "hit_count": 10886
+                  },
+                  "OPTICAL-PERMIT-SSH-IN": {
+                    "index": 44,
+                    "hit_count": 36221
+                  },
+                  "OPTICAL-BLOCK-OTHER-NTP-IN": {
+                    "index": 45,
+                    "hit_count": 253
+                  },
+                  "OPTICAL-PERMIT-KNOWN-NTP-IN": {
+                    "index": 46,
+                    "hit_count": 0
+                  },
+                  "OPTICAL-BLOCK-OTHER-DNS-IN": {
+                    "index": 47,
+                    "hit_count": 10292
+                  },
+                  "OPTICAL-PERMIT-DNS-IN": {
+                    "index": 48,
+                    "hit_count": 0
+                  }
+                }
+              },
+              "TEST-STRICT": {
+                "untrust": {
+                  "STRICT-PERMIT-NTP-OUT": {
+                    "index": 49,
+                    "hit_count": 4468672
+                  },
+                  "All_TEST-STRICT_COMMODITY-INTERNET": {
+                    "index": 50,
+                    "hit_count": 14599527
+                  },
+                  "STRICT-PERMIT-SNMP-OUT": {
+                    "index": 51,
+                    "hit_count": 0
+                  },
+                  "STRICT-BLOCK-SNMP-OUT": {
+                    "index": 52,
+                    "hit_count": 0
+                  },
+                  "STRICT-PERMIT-TELEMETRY-OUT": {
+                    "index": 53,
+                    "hit_count": 4038240
+                  },
+                  "STRICT-PERMIT-SYSLOG-OUT": {
+                    "index": 54,
+                    "hit_count": 125964123
+                  },
+                  "STRICT-BLOCK-SYSLOG-OUT": {
+                    "index": 55,
+                    "hit_count": 205620273
+                  },
+                  "STRICT-PERMIT-DNS-OUT": {
+                    "index": 56,
+                    "hit_count": 27
+                  },
+                  "STRICT-BLOCK-DNS-OUT": {
+                    "index": 57,
+                    "hit_count": 160995
+                  },
+                  "STRICT-BLOCK-NTP-OUT": {
+                    "index": 58,
+                    "hit_count": 38040
+                  },
+                  "STRICT-PERMIT-RADIUS-OUT": {
+                    "index": 59,
+                    "hit_count": 1699379
+                  },
+                  "STRICT-BLOCK-RADIUS-OUT": {
+                    "index": 60,
+                    "hit_count": 0
+                  }
+                },
+                "TEST-STRICT": {
+                  "STRICT-INTRA-ZONE-PERMIT": {
+                    "index": 61,
+                    "hit_count": 118930
+                  }
+                },
+                "TEST-OPTICAL": {
+                  "STRICT-TO-OPTICAL-PERMIT-TELEMETRY": {
+                    "index": 62,
+                    "hit_count": 0
+                  },
+                  "STRICT-TO-OPTICAL-PERMIT-ICMP": {
+                    "index": 63,
+                    "hit_count": 0
+                  }
+                }
+              },
+              "TEST-DCN": {
+                "untrust": {
+                  "DCN-PERMIT-MCP-OUT": {
+                    "index": 64,
+                    "hit_count": 81375
+                  },
+                  "DCN-PERMIT-WAVESERVERS-TEST-TRAPS-OUT": {
+                    "index": 65,
+                    "hit_count": 0
+                  },
+                  "DCN-PERMIT-RADIUS-OUT": {
+                    "index": 66,
+                    "hit_count": 158601
+                  },
+                  "DCN-DEFAULT-DENY-OUT": {
+                    "index": 67,
+                    "hit_count": 43959
+                  },
+                  "DCN-PERMIT-SYSLOG-OUT": {
+                    "index": 68,
+                    "hit_count": 13650
+                  },
+                  "DCN-PERMIT-NTP-OUT": {
+                    "index": 69,
+                    "hit_count": 204
+                  }
+                },
+                "TEST-DCN": {
+                  "DCN-INTRA-ZONE-PERMIT": {
+                    "index": 70,
+                    "hit_count": 0
+                  }
+                }
+              },
+              "TEST-OPTICAL": {
+                "untrust": {
+                  "OPTICAL-DEFAULT-DENY-OUT": {
+                    "index": 71,
+                    "hit_count": 0
+                  },
+                  "OPTICAL-PERMIT-DNS-OUT": {
+                    "index": 72,
+                    "hit_count": 7552861
+                  },
+                  "OPTICAL-BLOCK-OTHER-NTP-OUT": {
+                    "index": 73,
+                    "hit_count": 0
+                  },
+                  "OPTICAL-PERMIT-NTP-OUT": {
+                    "index": 74,
+                    "hit_count": 1222475
+                  },
+                  "OPTICAL-BLOCK-OTHER-DNS-OUT": {
+                    "index": 75,
+                    "hit_count": 2256
+                  }
+                },
+                "TEST-OPTICAL": {
+                  "OPTICAL-INTRA-ZONE-PERMIT": {
+                    "index": 76,
+                    "hit_count": 0
+                  }
+                }
+              }
+            },
+            "policy_count": 76
+          },
+          "root-logical-system2": {
+            "policies": {
+              "junos-global": {
+                "junos-global": {
+                  "GLOBAL-PERMIT-TRACE-IN": {
+                    "index": 1,
+                    "hit_count": 78
+                  },
+                  "GLOBAL-PERMIT-RADIUS-IN": {
+                    "index": 2,
+                    "hit_count": 0
+                  },
+                  "GLOBAL-PERMIT-NTP-IN": {
+                    "index": 3,
+                    "hit_count": 0
+                  }
+                }
+              }
+            },
+            "policy_count": 3
+          }
+        }
+      }
+    }
+  ]
+}
