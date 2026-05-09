@@ -8,18 +8,21 @@ from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
 
+_KBYTES_PER_BYTE = 1024
+
 
 class FileEntry(TypedDict):
     """Schema for a single file or directory entry."""
 
     permissions: str
     links: int
-    size: int
+    size_bytes: int
     date: str
     name: str
-    inode: NotRequired[int]
+    inode: int
     owner: NotRequired[str]
     group: NotRequired[str]
+    symlink_target: NotRequired[str]
 
 
 class DirResult(TypedDict):
@@ -27,8 +30,8 @@ class DirResult(TypedDict):
 
     directory: str
     files: dict[str, FileEntry]
-    total_kbytes: int
-    free_kbytes: int
+    total_bytes: int
+    free_bytes: int
 
 
 _DIRECTORY_HEADER = re.compile(r"^Directory\s+of\s+(?P<directory>\S+)\s*$")
@@ -47,9 +50,11 @@ _FILE_ENTRY = re.compile(
     r"(?:(?P<owner>\S+)\s+(?P<group>\S+)\s+)?"
     r"(?P<size>\d+)\s+"
     r"(?P<date>\w{3}\s+\d{1,2}\s+[\d:]+(?:\s+\d{4})?)\s+"
-    r"(?P<name>\S+(?:\s+->\s+\S+)?)\s*$"
+    r"(?P<name>\S+)(?:\s+->\s+(?P<symlink_target>\S+))?\s*$"
 )
 
+# IOS-XR reports filesystem totals in kbytes; we normalize to bytes for
+# parity with the IOS-XE sibling parser.
 _SUMMARY = re.compile(
     r"^(?P<total>\d+)\s+kbytes\s+total\s+"
     r"\((?P<free>\d+)\s+kbytes\s+free\)\s*$"
@@ -61,7 +66,7 @@ def _build_file_entry(match: re.Match[str]) -> FileEntry:
     entry = FileEntry(
         permissions=match.group("permissions"),
         links=int(match.group("links")),
-        size=int(match.group("size")),
+        size_bytes=int(match.group("size")),
         date=match.group("date"),
         name=match.group("name"),
         inode=int(match.group("inode")),
@@ -70,6 +75,8 @@ def _build_file_entry(match: re.Match[str]) -> FileEntry:
         entry["owner"] = match.group("owner")
     if match.group("group"):
         entry["group"] = match.group("group")
+    if match.group("symlink_target"):
+        entry["symlink_target"] = match.group("symlink_target")
     return entry
 
 
@@ -103,13 +110,13 @@ class DirParser(BaseParser[DirResult]):
         """
         directory = _extract_directory(output)
         files = _extract_files(output)
-        total_kbytes, free_kbytes = _extract_summary(output)
+        total_bytes, free_bytes = _extract_summary(output)
 
         return DirResult(
             directory=directory,
             files=files,
-            total_kbytes=total_kbytes,
-            free_kbytes=free_kbytes,
+            total_bytes=total_bytes,
+            free_bytes=free_bytes,
         )
 
 
@@ -135,10 +142,12 @@ def _extract_files(output: str) -> dict[str, FileEntry]:
 
 
 def _extract_summary(output: str) -> tuple[int, int]:
-    """Extract total and free kbytes from the summary line."""
+    """Extract total and free space, converting from kbytes to bytes."""
     for line in output.splitlines():
         match = _SUMMARY.match(line.strip())
         if match:
-            return int(match.group("total")), int(match.group("free"))
+            total_bytes = int(match.group("total")) * _KBYTES_PER_BYTE
+            free_bytes = int(match.group("free")) * _KBYTES_PER_BYTE
+            return total_bytes, free_bytes
     msg = "No summary line found in output"
     raise ValueError(msg)
