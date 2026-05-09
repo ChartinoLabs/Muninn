@@ -1,0 +1,37 @@
+{
+  "os": "juniper_junos",
+  "command": "show system configuration database usage",
+  "schema": {
+    "name": "ShowSystemConfigurationDatabaseUsageResult",
+    "fields": {
+      "maximum_size_mb": {
+        "type": "float",
+        "required": true
+      },
+      "current_size_mb": {
+        "type": "float",
+        "required": true
+      },
+      "actual_usage_mb": {
+        "type": "float",
+        "required": true
+      },
+      "available_space_mb": {
+        "type": "float",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic configuration database usage output",
+      "input": "Maximum size of the database: 1301.99 MB\nCurrent database size on disk: 4.00 MB\nActual database usage: 3.92 MB\nAvailable database space: 1298.07 MB\n\n{master}\n",
+      "expected": {
+        "maximum_size_mb": 1301.99,
+        "current_size_mb": 4.0,
+        "actual_usage_mb": 3.92,
+        "available_space_mb": 1298.07
+      }
+    }
+  ]
+}

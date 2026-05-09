@@ -1,0 +1,85 @@
+{
+  "os": "juniper_junos",
+  "command": "show isis adjacency",
+  "schema": {
+    "name": "ShowIsisAdjacencyResult",
+    "fields": {
+      "adjacencies": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "type": "dict",
+              "key": "str",
+              "value": {
+                "name": "IsisAdjacencyEntry",
+                "fields": {
+                  "state": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "hold_time": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "snpa": {
+                    "type": "str",
+                    "required": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple IS-IS adjacencies across two interfaces with mixed levels",
+      "input": "Interface             System         L State        Hold (secs) SNPA\nge-0/0/2.0            CSR2           1  Up                   22  50:0:0:2:0:1\nge-0/0/2.0            CSR2           2  Up                   25  50:0:0:2:0:1\nge-0/0/2.0            XRv3           1  Up                    8  50:0:0:3:0:2\nge-0/0/2.0            XRv3           2  Up                    8  50:0:0:3:0:2\nge-0/0/3.0            XRv3           3  Up                   25\n\n{master:0}\n",
+      "expected": {
+        "adjacencies": {
+          "ge-0/0/2.0": {
+            "CSR2": {
+              "1": {
+                "state": "Up",
+                "hold_time": 22,
+                "snpa": "50:0:0:2:0:1"
+              },
+              "2": {
+                "state": "Up",
+                "hold_time": 25,
+                "snpa": "50:0:0:2:0:1"
+              }
+            },
+            "XRv3": {
+              "1": {
+                "state": "Up",
+                "hold_time": 8,
+                "snpa": "50:0:0:3:0:2"
+              },
+              "2": {
+                "state": "Up",
+                "hold_time": 8,
+                "snpa": "50:0:0:3:0:2"
+              }
+            }
+          },
+          "ge-0/0/3.0": {
+            "XRv3": {
+              "3": {
+                "state": "Up",
+                "hold_time": 25
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

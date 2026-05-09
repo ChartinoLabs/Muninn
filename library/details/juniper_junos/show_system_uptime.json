@@ -1,0 +1,87 @@
+{
+  "os": "juniper_junos",
+  "command": "show system uptime",
+  "schema": {
+    "name": "ShowSystemUptimeResult",
+    "fields": {
+      "current_time": {
+        "type": "str",
+        "required": true
+      },
+      "time_source": {
+        "type": "str",
+        "required": false
+      },
+      "system_booted_at": {
+        "type": "str",
+        "required": true
+      },
+      "system_booted_ago": {
+        "type": "str",
+        "required": true
+      },
+      "protocols_started_at": {
+        "type": "str",
+        "required": true
+      },
+      "protocols_started_ago": {
+        "type": "str",
+        "required": true
+      },
+      "last_configured_at": {
+        "type": "str",
+        "required": true
+      },
+      "last_configured_ago": {
+        "type": "str",
+        "required": true
+      },
+      "last_configured_by": {
+        "type": "str",
+        "required": false
+      },
+      "uptime": {
+        "type": "str",
+        "required": true
+      },
+      "users": {
+        "type": "int",
+        "required": true
+      },
+      "load_average_1m": {
+        "type": "float",
+        "required": true
+      },
+      "load_average_5m": {
+        "type": "float",
+        "required": true
+      },
+      "load_average_15m": {
+        "type": "float",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic system uptime output with NTP clock source",
+      "input": "Current time: 2021-08-31 08:48:11 MSK\nTime Source:  NTP CLOCK\nSystem booted: 2021-03-29 13:32:05 MSK (22w0d 19:16 ago)\nProtocols started: 2021-03-29 13:37:11 MSK (22w0d 19:11 ago)\nLast configured: 2021-07-13 16:35:35 MSK (6w6d 16:12 ago) by admin\n 8:48AM  up 154 days, 19:16, 2 users, load averages: 0.04, 0.04, 0.01\n",
+      "expected": {
+        "current_time": "2021-08-31 08:48:11 MSK",
+        "time_source": "NTP CLOCK",
+        "system_booted_at": "2021-03-29 13:32:05 MSK",
+        "system_booted_ago": "22w0d 19:16 ago",
+        "protocols_started_at": "2021-03-29 13:37:11 MSK",
+        "protocols_started_ago": "22w0d 19:11 ago",
+        "last_configured_at": "2021-07-13 16:35:35 MSK",
+        "last_configured_ago": "6w6d 16:12 ago",
+        "last_configured_by": "admin",
+        "uptime": "154 days, 19:16",
+        "users": 2,
+        "load_average_1m": 0.04,
+        "load_average_5m": 0.04,
+        "load_average_15m": 0.01
+      }
+    }
+  ]
+}

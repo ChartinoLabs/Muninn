@@ -1,0 +1,84 @@
+{
+  "os": "juniper_junos",
+  "command": "show ipv6 neighbors",
+  "schema": {
+    "name": "ShowIpv6NeighborsResult",
+    "fields": {
+      "ipv6_neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "Ipv6NeighborEntry",
+            "fields": {
+              "mac_address": {
+                "type": "str",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "expire_seconds": {
+                "type": "int",
+                "required": true
+              },
+              "is_router": {
+                "type": "bool",
+                "required": true
+              },
+              "is_secure": {
+                "type": "bool",
+                "required": true
+              },
+              "interface": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_entries": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic IPv6 neighbor table with multiple entries across interfaces",
+      "input": "\n        show ipv6 neighbors\n        IPv6 Address                  Linklayer Address  State       Exp   Rtr  Secure  Interface\n        2001:db8:eb18:6337::1           00:50:56:ff:00:4b  reachable   28    yes  no      ge-0/0/1.0\n        fe80::250:56ff:feff:e04e      00:50:56:ff:e0:4e  delay       4     yes  no      ge-0/0/0.0\n        fe80::250:56ff:feff:4b      00:50:56:ff:00:4b  reachable   43    yes  no      ge-0/0/1.0\n        Total entries: 3\n",
+      "expected": {
+        "ipv6_neighbors": {
+          "2001:db8:eb18:6337::1": {
+            "mac_address": "00:50:56:ff:00:4b",
+            "state": "reachable",
+            "expire_seconds": 28,
+            "is_router": true,
+            "is_secure": false,
+            "interface": "ge-0/0/1.0"
+          },
+          "fe80::250:56ff:feff:e04e": {
+            "mac_address": "00:50:56:ff:e0:4e",
+            "state": "delay",
+            "expire_seconds": 4,
+            "is_router": true,
+            "is_secure": false,
+            "interface": "ge-0/0/0.0"
+          },
+          "fe80::250:56ff:feff:4b": {
+            "mac_address": "00:50:56:ff:00:4b",
+            "state": "reachable",
+            "expire_seconds": 43,
+            "is_router": true,
+            "is_secure": false,
+            "interface": "ge-0/0/1.0"
+          }
+        },
+        "total_entries": 3
+      }
+    }
+  ]
+}

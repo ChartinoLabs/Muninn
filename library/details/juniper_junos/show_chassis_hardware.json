@@ -1,0 +1,142 @@
+{
+  "os": "juniper_junos",
+  "command": "show chassis hardware",
+  "schema": null,
+  "examples": [
+    {
+      "name": "MX10-T chassis with multiple FPCs, MICs, PICs, and transceivers",
+      "input": "Hardware inventory:\nItem             Version  Part number  Serial number     Description\nChassis                                A1111             MX10-T\nMidplane         REV 08   711-038213   XXXX2118          MX10-T\nPEM 0            Rev 05   740-028288   AJ00000           AC Power Entry Module\nPEM 1            Rev 05   740-028288   AJ00001           AC Power Entry Module\nRouting Engine            BUILTIN      BUILTIN           Routing Engine\nTFEB 0                    BUILTIN      BUILTIN           Forwarding Engine Processor\n  QXM 0          REV 05   711-028408   ABCB4000          MPC QXM\nFPC 0                     BUILTIN      BUILTIN           MPC BUILTIN\n  MIC 0                   BUILTIN      BUILTIN           4x 10GE XFP\n    PIC 0                 BUILTIN      BUILTIN           4x 10GE XFP\n      Xcvr 0     REV 01   740-011571   USASR24490        XFP-10G-SR\nFPC 1                     BUILTIN      BUILTIN           MPC BUILTIN\n  MIC 0          REV 30   750-028380   CALW4921          3D 2x 10GE XFP\n    PIC 0                 BUILTIN      BUILTIN           1x 10GE XFP\n      Xcvr 0     REV 01   740-011607   A1JACT3           XFP-10G-LR\n    PIC 1                 BUILTIN      BUILTIN           1x 10GE XFP\n      Xcvr 0     REV 01   740-011607   A1KBPNC           XFP-10G-LR\n  MIC 1          REV 20   750-028380   ABCC2190          3D 2x 10GE XFP\n    PIC 2                 BUILTIN      BUILTIN           1x 10GE XFP\n      Xcvr 0              NON-JNPR     CC37BK0PQ         XFP-10G-SR\n    PIC 3                 BUILTIN      BUILTIN           1x 10GE XFP\n      Xcvr 0     REV 01   740-014279   EOXH27560005      XFP-10G-LR\n      Xcvr 1     REV 01   740-014279   XXXXXXXXXXXX      XFP-10G-LR\nFan Tray                                                 Fan Tray\n",
+      "expected": {
+        "Chassis": {
+          "serial_number": "A1111",
+          "description": "MX10-T"
+        },
+        "Midplane": {
+          "version": "REV 08",
+          "part_number": "711-038213",
+          "serial_number": "XXXX2118",
+          "description": "MX10-T"
+        },
+        "PEM 0": {
+          "version": "Rev 05",
+          "part_number": "740-028288",
+          "serial_number": "AJ00000",
+          "description": "AC Power Entry Module"
+        },
+        "PEM 1": {
+          "version": "Rev 05",
+          "part_number": "740-028288",
+          "serial_number": "AJ00001",
+          "description": "AC Power Entry Module"
+        },
+        "Routing Engine": {
+          "description": "Routing Engine"
+        },
+        "TFEB 0": {
+          "description": "Forwarding Engine Processor",
+          "children": {
+            "QXM 0": {
+              "version": "REV 05",
+              "part_number": "711-028408",
+              "serial_number": "ABCB4000",
+              "description": "MPC QXM"
+            }
+          }
+        },
+        "FPC 0": {
+          "description": "MPC BUILTIN",
+          "children": {
+            "MIC 0": {
+              "description": "4x 10GE XFP",
+              "children": {
+                "PIC 0": {
+                  "description": "4x 10GE XFP",
+                  "children": {
+                    "Xcvr 0": {
+                      "version": "REV 01",
+                      "part_number": "740-011571",
+                      "serial_number": "USASR24490",
+                      "description": "XFP-10G-SR"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "FPC 1": {
+          "description": "MPC BUILTIN",
+          "children": {
+            "MIC 0": {
+              "version": "REV 30",
+              "part_number": "750-028380",
+              "serial_number": "CALW4921",
+              "description": "3D 2x 10GE XFP",
+              "children": {
+                "PIC 0": {
+                  "description": "1x 10GE XFP",
+                  "children": {
+                    "Xcvr 0": {
+                      "version": "REV 01",
+                      "part_number": "740-011607",
+                      "serial_number": "A1JACT3",
+                      "description": "XFP-10G-LR"
+                    }
+                  }
+                },
+                "PIC 1": {
+                  "description": "1x 10GE XFP",
+                  "children": {
+                    "Xcvr 0": {
+                      "version": "REV 01",
+                      "part_number": "740-011607",
+                      "serial_number": "A1KBPNC",
+                      "description": "XFP-10G-LR"
+                    }
+                  }
+                }
+              }
+            },
+            "MIC 1": {
+              "version": "REV 20",
+              "part_number": "750-028380",
+              "serial_number": "ABCC2190",
+              "description": "3D 2x 10GE XFP",
+              "children": {
+                "PIC 2": {
+                  "description": "1x 10GE XFP",
+                  "children": {
+                    "Xcvr 0": {
+                      "serial_number": "CC37BK0PQ",
+                      "description": "XFP-10G-SR"
+                    }
+                  }
+                },
+                "PIC 3": {
+                  "description": "1x 10GE XFP",
+                  "children": {
+                    "Xcvr 0": {
+                      "version": "REV 01",
+                      "part_number": "740-014279",
+                      "serial_number": "EOXH27560005",
+                      "description": "XFP-10G-LR"
+                    },
+                    "Xcvr 1": {
+                      "version": "REV 01",
+                      "part_number": "740-014279",
+                      "serial_number": "XXXXXXXXXXXX",
+                      "description": "XFP-10G-LR"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "Fan Tray": {
+          "description": "Fan Tray"
+        }
+      }
+    }
+  ]
+}

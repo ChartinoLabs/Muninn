@@ -1,0 +1,172 @@
+{
+  "os": "juniper_junos",
+  "command": "show system processes brief",
+  "schema": {
+    "name": "ShowSystemProcessesBriefResult",
+    "fields": {
+      "last_pid": {
+        "type": "int",
+        "required": true
+      },
+      "load_avg_1min": {
+        "type": "float",
+        "required": true
+      },
+      "load_avg_5min": {
+        "type": "float",
+        "required": true
+      },
+      "load_avg_15min": {
+        "type": "float",
+        "required": true
+      },
+      "uptime": {
+        "type": "str",
+        "required": true
+      },
+      "time": {
+        "type": "str",
+        "required": true
+      },
+      "processes": {
+        "type": {
+          "name": "ProcessStates",
+          "fields": {
+            "total": {
+              "type": "int",
+              "required": true
+            },
+            "running": {
+              "type": "int",
+              "required": true
+            },
+            "sleeping": {
+              "type": "int",
+              "required": true
+            },
+            "zombie": {
+              "type": "int",
+              "required": true
+            },
+            "waiting": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "cpu": {
+        "type": {
+          "name": "CpuUsage",
+          "fields": {
+            "user": {
+              "type": "float",
+              "required": true
+            },
+            "nice": {
+              "type": "float",
+              "required": true
+            },
+            "system": {
+              "type": "float",
+              "required": true
+            },
+            "interrupt": {
+              "type": "float",
+              "required": true
+            },
+            "idle": {
+              "type": "float",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "memory": {
+        "type": {
+          "name": "MemoryStats",
+          "fields": {
+            "active_mb": {
+              "type": "int",
+              "required": true
+            },
+            "inactive_mb": {
+              "type": "int",
+              "required": true
+            },
+            "wired_mb": {
+              "type": "int",
+              "required": true
+            },
+            "buf_mb": {
+              "type": "int",
+              "required": true
+            },
+            "free_mb": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "swap": {
+        "type": {
+          "name": "SwapStats",
+          "fields": {
+            "total_mb": {
+              "type": "int",
+              "required": true
+            },
+            "free_mb": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Classic show system processes brief output",
+      "input": "last pid: 98312;  load averages:  1.72,  1.70,  1.70  up 87+21:25:46    15:51:17\n302 processes: 5 running, 295 sleeping, 1 zombie, 1 waiting\nCPU: 14.7% user,  0.0% nice,  4.2% system,  0.2% interrupt, 80.9% idle\nMem: 3532M Active, 33G Inact, 2458M Wired, 1046M Buf, 55G Free\nSwap: 12G Total, 12G Free\n",
+      "expected": {
+        "last_pid": 98312,
+        "load_avg_1min": 1.72,
+        "load_avg_5min": 1.7,
+        "load_avg_15min": 1.7,
+        "uptime": "87+21:25:46",
+        "time": "15:51:17",
+        "processes": {
+          "total": 302,
+          "running": 5,
+          "sleeping": 295,
+          "zombie": 1,
+          "waiting": 1
+        },
+        "cpu": {
+          "user": 14.7,
+          "nice": 0.0,
+          "system": 4.2,
+          "interrupt": 0.2,
+          "idle": 80.9
+        },
+        "memory": {
+          "active_mb": 3532,
+          "inactive_mb": 33792,
+          "wired_mb": 2458,
+          "buf_mb": 1046,
+          "free_mb": 56320
+        },
+        "swap": {
+          "total_mb": 12288,
+          "free_mb": 12288
+        }
+      }
+    }
+  ]
+}
