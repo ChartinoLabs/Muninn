@@ -156,6 +156,8 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         # --- Cisco IOS-XR ---
         "cisco_iosxr/show_ip_route/001_ospf_ecmp_connected/expected.json",
         "cisco_iosxr/show_ip_route/002_mixed_protocols_ecmp/expected.json",
+        # log_entries uses list-of-dicts; no natural unique key for syslog messages.
+        "cisco_iosxr/show_logging/001_basic/expected.json",
         # --- NX-OS ---
         "nxos/show_bgp_all_dampening_flap-statistics/001_basic/expected.json",
         "nxos/show_bgp_vrf_all_all/001_basic/expected.json",
