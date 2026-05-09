@@ -21,8 +21,21 @@ class LicenseEntry(TypedDict):
     auth_code: NotRequired[str]
 
 
-# Dict keyed by license feature name, values are LicenseEntry dicts.
-RequestLicenseInfoResult = dict[str, LicenseEntry]
+class RequestLicenseInfoResult(TypedDict):
+    """Schema for 'request license info' parsed output."""
+
+    licenses: dict[str, LicenseEntry]
+    current_date: NotRequired[str]
+
+
+# Required keys that every license entry must populate before being emitted.
+_REQUIRED_LICENSE_FIELDS: tuple[str, ...] = (
+    "description",
+    "serial",
+    "issued",
+    "expires",
+    "expired",
+)
 
 
 @register(OS.PALOALTO_PANOS, "request license info")
@@ -31,13 +44,16 @@ class RequestLicenseInfoParser(BaseParser[RequestLicenseInfoResult]):
 
     Parses license entries into a dict-of-dicts keyed by feature name.
     Each entry contains the license description, serial, dates, expiry
-    status, and optionally a base license and auth code.
+    status, and optionally a base license and auth code. The current
+    PDT date emitted at the top of the output is captured under
+    ``current_date`` when present.
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
     _ENTRY_HEADER = re.compile(r"^License entry:\s*$")
-    _KV_LINE = re.compile(r"^(?P<key>[A-Za-z ]+?):\s+(?P<value>.+)$")
+    _CURRENT_DATE = re.compile(r"^Current PDT Date:\s+(?P<value>.+)$")
+    _KV_LINE = re.compile(r"^(?P<key>[A-Za-z][A-Za-z ?]*?):\s+(?P<value>.+)$")
 
     _KEY_MAP: ClassVar[dict[str, str]] = {
         "Feature": "feature",
@@ -58,59 +74,74 @@ class RequestLicenseInfoParser(BaseParser[RequestLicenseInfoResult]):
             output: Raw CLI output from command.
 
         Returns:
-            Dict keyed by license feature name.
+            Dict with ``licenses`` keyed by feature name and an optional
+            ``current_date`` capture timestamp.
 
         Raises:
             ValueError: If no license entries are found.
         """
-        result: RequestLicenseInfoResult = {}
+        licenses: dict[str, LicenseEntry] = {}
         current: dict[str, str] = {}
+        current_date: str | None = None
 
         for line in output.splitlines():
             stripped = line.strip()
 
+            date_match = cls._CURRENT_DATE.match(stripped)
+            if date_match:
+                current_date = date_match.group("value").strip()
+                continue
+
             if cls._ENTRY_HEADER.match(stripped):
-                cls._flush_entry(current, result)
+                cls._flush_entry(current, licenses)
                 current = {}
                 continue
 
             match = cls._KV_LINE.match(stripped)
             if match:
-                raw_key = match.group("key")
-                # Handle "Expired?" which contains a non-alpha char
-                if stripped.startswith("Expired?"):
-                    raw_key = "Expired?"
+                raw_key = match.group("key").strip()
                 mapped = cls._KEY_MAP.get(raw_key)
                 if mapped is not None:
                     current[mapped] = match.group("value").strip()
 
         # Flush the last entry
-        cls._flush_entry(current, result)
+        cls._flush_entry(current, licenses)
 
-        if not result:
+        if not licenses:
             msg = "No license entries found in output"
             raise ValueError(msg)
 
+        result: RequestLicenseInfoResult = {"licenses": licenses}
+        if current_date is not None:
+            result["current_date"] = current_date
         return result
 
     @classmethod
     def _flush_entry(
         cls,
         current: dict[str, str],
-        result: RequestLicenseInfoResult,
+        licenses: dict[str, LicenseEntry],
     ) -> None:
-        """Validate and add a completed entry to the result dict."""
-        if not current or "feature" not in current:
+        """Validate and add a completed entry to the licenses dict.
+
+        Entries missing the feature name or any required field are
+        silently skipped — emitting placeholder strings for missing
+        required fields would violate the parser's schema contract.
+        """
+        if "feature" not in current:
             return
 
-        feature = current.pop("feature")
-        entry = LicenseEntry(
-            description=current.get("description", ""),
-            serial=current.get("serial", ""),
-            issued=current.get("issued", ""),
-            expires=current.get("expires", ""),
-            expired=current.get("expired", "").lower() == "yes",
-        )
+        if any(field not in current for field in _REQUIRED_LICENSE_FIELDS):
+            return
+
+        feature = current["feature"]
+        entry: LicenseEntry = {
+            "description": current["description"],
+            "serial": current["serial"],
+            "issued": current["issued"],
+            "expires": current["expires"],
+            "expired": current["expired"].lower() == "yes",
+        }
 
         if "base_license" in current:
             entry["base_license"] = current["base_license"]
@@ -118,4 +149,4 @@ class RequestLicenseInfoParser(BaseParser[RequestLicenseInfoResult]):
         if "auth_code" in current:
             entry["auth_code"] = current["auth_code"]
 
-        result[feature] = entry
+        licenses[feature] = entry
