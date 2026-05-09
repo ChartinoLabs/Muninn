@@ -1,7 +1,7 @@
 """Parser for 'show ntp status' command on Juniper Junos."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -14,31 +14,44 @@ class ShowNtpStatusResult(TypedDict):
 
     Captures NTP daemon status information including synchronization state,
     stratum, reference clock, and timing statistics from Juniper Junos devices.
+
+    Notes on units (per ntpd / ntpq readvar conventions):
+
+    - ``offset`` and ``jitter`` are in milliseconds.
+    - ``frequency`` and ``stability`` are in parts-per-million (ppm).
+    - ``rootdelay`` and ``rootdispersion`` are in milliseconds.
+    - ``precision`` is the log2 of the local-clock precision in seconds
+      (e.g. ``-23`` => 2**-23 seconds ~= 119 ns).
     """
 
+    # Required: extracted from the ``status=`` header line, which the
+    # parser guarantees is present (raises if missing).
     status: str
     leap: str
     sync: str
     events: int
     event_description: str
-    version: str
-    processor: str
-    system: str
-    leap_indicator: int
+    # Required: validated post-parse via ``_REQUIRED_FIELDS``.
     stratum: int
-    precision: int
-    rootdelay: float
-    rootdispersion: float
-    peer: int
     refid: str
-    reftime: str
-    poll: int
-    clock: str
-    state: int
-    offset: float
-    frequency: float
-    jitter: float
-    stability: float
+    # Optional: extracted from the body key=value lines. Some fields can
+    # be absent depending on ntpd version, sync state, or platform.
+    version: NotRequired[str]
+    processor: NotRequired[str]
+    system: NotRequired[str]
+    leap_indicator: NotRequired[int]
+    precision: NotRequired[int]
+    rootdelay: NotRequired[float]
+    rootdispersion: NotRequired[float]
+    peer: NotRequired[int]
+    reftime: NotRequired[str]
+    poll: NotRequired[int]
+    clock: NotRequired[str]
+    state: NotRequired[int]
+    offset: NotRequired[float]
+    frequency: NotRequired[float]
+    jitter: NotRequired[float]
+    stability: NotRequired[float]
 
 
 # Pattern for the first status line:
