@@ -1,7 +1,7 @@
 """Parser for 'show mpls ldp neighbor brief' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, TypedDict
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -34,7 +34,7 @@ class LdpNeighborEntry(TypedDict):
     """Schema for a single LDP neighbor entry."""
 
     graceful_restart: bool
-    nsr: bool | None
+    nsr: NotRequired[bool]
     up_time: str
     discovery: LdpNeighborDiscovery
     addresses: LdpNeighborAddresses
@@ -70,7 +70,8 @@ def _parse_nsr(value: str) -> bool | None:
     """Convert the NSR column value to a boolean or None.
 
     Returns:
-        True if NSR is enabled, False if disabled, None if not applicable.
+        True if NSR is enabled, False if disabled, None when the device
+        reports the value as ``N/A`` (not applicable for this peer).
     """
     if value == _NSR_TRUE:
         return True
@@ -115,23 +116,26 @@ class ShowMplsLdpNeighborBriefParser(
                 continue
 
             peer = match.group("peer")
-            result[peer] = LdpNeighborEntry(
-                graceful_restart=match.group("gr") == _GR_TRUE,
-                nsr=_parse_nsr(match.group("nsr")),
-                up_time=match.group("up_time"),
-                discovery=LdpNeighborDiscovery(
+            entry: LdpNeighborEntry = {
+                "graceful_restart": match.group("gr") == _GR_TRUE,
+                "up_time": match.group("up_time"),
+                "discovery": LdpNeighborDiscovery(
                     ipv4=int(match.group("disc_ipv4")),
                     ipv6=int(match.group("disc_ipv6")),
                 ),
-                addresses=LdpNeighborAddresses(
+                "addresses": LdpNeighborAddresses(
                     ipv4=int(match.group("addr_ipv4")),
                     ipv6=int(match.group("addr_ipv6")),
                 ),
-                labels=LdpNeighborLabels(
+                "labels": LdpNeighborLabels(
                     ipv4=int(match.group("lbl_ipv4")),
                     ipv6=int(match.group("lbl_ipv6")),
                 ),
-            )
+            }
+            nsr_value = _parse_nsr(match.group("nsr"))
+            if nsr_value is not None:
+                entry["nsr"] = nsr_value
+            result[peer] = entry
 
         if not result:
             msg = "No LDP neighbors found in output"
