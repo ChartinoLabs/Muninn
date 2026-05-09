@@ -1,7 +1,7 @@
 """Parser for 'test security-policy-match' command on Palo Alto PAN-OS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -63,11 +63,22 @@ _LIST_FIELDS: frozenset[str] = frozenset(
 )
 
 
-@register(OS.PALOALTO_PANOS, "test security-policy-match")
+@register(
+    OS.PALOALTO_PANOS,
+    r"test security-policy-match (?P<arguments>.+)",
+)
 class TestSecurityPolicyMatchParser(
     BaseParser[SecurityPolicyMatchResult],
 ):
     """Parser for 'test security-policy-match' on Palo Alto PAN-OS.
+
+    The PAN-OS ``test security-policy-match`` command requires variable
+    arguments such as ``from``, ``to``, ``source``, ``destination``,
+    and ``protocol`` to evaluate against the policy. The registered
+    pattern captures everything after the verb so any concrete
+    invocation routes to this parser; the arguments themselves are
+    not consumed because all match details come from the device
+    output.
 
     Parses matched security policy rules into a dictionary keyed by
     rule name, with each value containing the rule's match criteria
@@ -158,7 +169,7 @@ class TestSecurityPolicyMatchParser(
                 continue
 
             if line.strip() == "}" and current_name is not None:
-                result[current_name] = current_entry  # type: ignore[assignment]
+                result[current_name] = cast("SecurityPolicyMatchEntry", current_entry)
                 current_name = None
                 current_entry = {}
                 continue
