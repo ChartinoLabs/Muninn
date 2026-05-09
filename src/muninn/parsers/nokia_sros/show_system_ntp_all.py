@@ -68,7 +68,7 @@ class ShowSystemNtpAllParser(BaseParser[ShowSystemNtpAllResult]):
         r"(?P<ref_id>\S+)\s+"
         r"(?P<stratum>\d+|-)\s+"
         r"(?P<type>\S+)\s+"
-        r"(?P<auth>\S+)\s+"
+        r"(?:\S+)\s+"
         r"(?P<poll>\d+)\s+"
         r"(?P<reach>\S+)\s+"
         r"(?P<offset>-?\d+\.\d+)\s*$"
