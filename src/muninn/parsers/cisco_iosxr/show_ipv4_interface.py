@@ -35,6 +35,7 @@ class IPv4InterfaceEntry(TypedDict, total=False):
     multicast_groups: list[str]
     outgoing_access_list: str
     inbound_access_list: str
+    inbound_common_access_list: str
     helper_address: str
 
 
@@ -108,7 +109,7 @@ class ShowIPv4InterfaceParser(BaseParser[ShowIPv4InterfaceResult]):
     )
 
     _IN_ACL = re.compile(
-        r"^\s+Inbound\s+(?:common\s+)?access\s+list\s+is\s+(?P<common>.+?),"
+        r"^\s+Inbound\s+common\s+access\s+list\s+is\s+(?P<common>.+?),"
         r"\s+access\s+list\s+is\s+(?P<acl>.+)$",
         re.IGNORECASE,
     )
@@ -296,6 +297,9 @@ class ShowIPv4InterfaceParser(BaseParser[ShowIPv4InterfaceResult]):
             return True
         m = cls._IN_ACL.match(line)
         if m:
+            common_value = m.group("common").strip()
+            if common_value.lower() != cls._NOT_SET:
+                entry["inbound_common_access_list"] = common_value
             acl_value = m.group("acl").strip()
             if acl_value.lower() != cls._NOT_SET:
                 entry["inbound_access_list"] = acl_value
