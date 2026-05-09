@@ -1,7 +1,7 @@
 """Parser for 'show lldp neighbors' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -15,17 +15,18 @@ class LldpNeighborEntry(TypedDict):
 
     device_id: str
     hold_time: int
-    capability: str
+    capabilities: NotRequired[str]
     port_id: str
 
 
 class ShowLldpNeighborsResult(TypedDict):
     """Schema for 'show lldp neighbors' parsed output on Cisco IOS-XR.
 
-    Keyed by local interface name (canonical form).
+    Keyed by local interface name (canonical form), then device ID.
     """
 
     neighbors: dict[str, dict[str, LldpNeighborEntry]]
+    total_entries: NotRequired[int]
 
 
 # IOS-XR LLDP neighbor table format:
@@ -40,17 +41,23 @@ _SKIP_PATTERNS = re.compile(
     r"|^-{3,}"
     r"|^Capability\s+codes:"
     r"|^\s+\("
-    r"|^Total\s+entries"
     r"|^\w{3}\s+\w{3}\s+\d+",
     re.IGNORECASE,
 )
 
+# Capture the trailing "Total entries displayed: N" footer.
+_TOTAL_PATTERN = re.compile(
+    r"^Total\s+entries\s+displayed:\s*(?P<total>\d+)\s*$",
+    re.IGNORECASE,
+)
+
 # IOS-XR local interface abbreviations: Gi, Te, Hu, Fo, Be, Lo, Mg, Nu, TenGigE, etc.
+# Capability is optional - some neighbors may not advertise capabilities.
 _NEIGHBOR_PATTERN = re.compile(
     r"^(?P<device_id>\S+)\s+"
     r"(?P<local_intf>\S+)\s+"
     r"(?P<hold_time>\d+)\s+"
-    r"(?P<capability>\S+)\s+"
+    r"(?:(?P<capability>[A-Za-z,]+)\s+)?"
     r"(?P<port_id>\S+)\s*$"
 )
 
@@ -90,8 +97,14 @@ class ShowLldpNeighborsParser(BaseParser[ShowLldpNeighborsResult]):
             ValueError: If no LLDP neighbors are found in the output.
         """
         neighbors: dict[str, dict[str, LldpNeighborEntry]] = {}
+        total_entries: int | None = None
 
         for line in output.splitlines():
+            total_match = _TOTAL_PATTERN.match(line)
+            if total_match:
+                total_entries = int(total_match.group("total"))
+                continue
+
             if _SKIP_PATTERNS.match(line):
                 continue
 
@@ -110,9 +123,10 @@ class ShowLldpNeighborsParser(BaseParser[ShowLldpNeighborsResult]):
             entry: LldpNeighborEntry = {
                 "device_id": device_id,
                 "hold_time": hold_time,
-                "capability": capability,
                 "port_id": port_id,
             }
+            if capability:
+                entry["capabilities"] = capability
 
             if local_intf not in neighbors:
                 neighbors[local_intf] = {}
@@ -122,4 +136,7 @@ class ShowLldpNeighborsParser(BaseParser[ShowLldpNeighborsResult]):
             msg = "No LLDP neighbors found in output"
             raise ValueError(msg)
 
-        return cast(ShowLldpNeighborsResult, {"neighbors": neighbors})
+        result: ShowLldpNeighborsResult = {"neighbors": neighbors}
+        if total_entries is not None:
+            result["total_entries"] = total_entries
+        return result
