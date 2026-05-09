@@ -1,23 +1,31 @@
 """Parser for 'show chassis firmware' command on Juniper Junos."""
 
 import re
-from typing import ClassVar
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
 
-# Firmware versions for a chassis component.
-# Keys are firmware type names (e.g., ROM, O/S, U-Boot, loader, uboot)
-# and values are the corresponding version strings. An optional "member"
-# key is present for multi-chassis output. Dynamic keys make TypedDict
-# unsuitable here.
-FirmwareVersions = dict[str, str]
 
-# The actual return type is a dict mapping part names to their firmware versions.
-# Each part maps firmware_type -> version, with an optional "member" key.
-ShowChassisFirmwareResult = dict[str, FirmwareVersions]
+class FirmwareEntry(TypedDict):
+    """Schema for a single chassis component's firmware information.
+
+    ``firmware`` maps firmware type names (e.g., ``ROM``, ``O/S``,
+    ``U-Boot``, ``loader``) to their reported version strings.
+    ``member`` identifies the multi-chassis member (e.g., ``lcc0-re0``)
+    when the output came from a multi-chassis context, and is absent
+    for single-chassis output.
+    """
+
+    member: NotRequired[str]
+    firmware: dict[str, str]
+
+
+# Top-level result is a dict keyed by part name (e.g. ``FPC 0``,
+# ``Routing Engine 1``) mapping to its firmware entry.
+ShowChassisFirmwareResult = dict[str, FirmwareEntry]
 
 
 @register(OS.JUNIPER_JUNOS, "show chassis firmware")
@@ -26,8 +34,8 @@ class ShowChassisFirmwareParser(BaseParser[ShowChassisFirmwareResult]):
 
     Handles single-chassis and multi-chassis (TX Matrix, LCC) output.
     Returns a dict keyed by part name (e.g., ``FPC 0``, ``Routing Engine 1``)
-    where each value contains firmware type/version pairs and an optional
-    ``member`` field for multi-chassis output.
+    where each value contains a ``firmware`` mapping of firmware type to
+    version, and an optional ``member`` field for multi-chassis output.
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.INVENTORY})
@@ -135,8 +143,8 @@ class ShowChassisFirmwareParser(BaseParser[ShowChassisFirmwareResult]):
     ) -> None:
         """Add a firmware entry to the result dict, merging by part name."""
         if part not in result:
-            entry: FirmwareVersions = {}
+            entry: FirmwareEntry = {"firmware": {}}
             if member is not None:
                 entry["member"] = member
             result[part] = entry
-        result[part][fw_type] = version
+        result[part]["firmware"][fw_type] = version
