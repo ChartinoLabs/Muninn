@@ -1,0 +1,83 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show ip interface brief",
+  "schema": {
+    "name": "ShowIpInterfaceBriefResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "IpInterfaceBriefEntry",
+            "fields": {
+              "ip_address": {
+                "type": "str",
+                "required": true
+              },
+              "interface_status": {
+                "type": "str",
+                "required": true
+              },
+              "protocol_status": {
+                "type": "str",
+                "required": true
+              },
+              "vrf_name": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Mixed GigabitEthernet and TenGigE interfaces with subinterfaces and multiple VRFs",
+      "input": "Interface                      IP-Address      Status          Protocol Vrf-Name\nGigabitEthernet0/0/1/18        unassigned      Shutdown        Down     default\nGigabitEthernet0/0/1/19        unassigned      Up              Up       default\nGigabitEthernet0/0/1/19.2003   10.79.255.0     Up              Up       WAG:OOB\nTenGigE0/0/2/0                 unassigned      Up              Up       default\nTenGigE0/0/2/0.2396            10.79.255.96    Up              Up       WAG:123\nTenGigE0/0/2/0.2397            10.79.255.80    Up              Up       WAG:ABC\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet0/0/1/18": {
+            "ip_address": "unassigned",
+            "interface_status": "Shutdown",
+            "protocol_status": "Down",
+            "vrf_name": "default"
+          },
+          "GigabitEthernet0/0/1/19": {
+            "ip_address": "unassigned",
+            "interface_status": "Up",
+            "protocol_status": "Up",
+            "vrf_name": "default"
+          },
+          "GigabitEthernet0/0/1/19.2003": {
+            "ip_address": "10.79.255.0",
+            "interface_status": "Up",
+            "protocol_status": "Up",
+            "vrf_name": "WAG:OOB"
+          },
+          "TenGigE0/0/2/0": {
+            "ip_address": "unassigned",
+            "interface_status": "Up",
+            "protocol_status": "Up",
+            "vrf_name": "default"
+          },
+          "TenGigE0/0/2/0.2396": {
+            "ip_address": "10.79.255.96",
+            "interface_status": "Up",
+            "protocol_status": "Up",
+            "vrf_name": "WAG:123"
+          },
+          "TenGigE0/0/2/0.2397": {
+            "ip_address": "10.79.255.80",
+            "interface_status": "Up",
+            "protocol_status": "Up",
+            "vrf_name": "WAG:ABC"
+          }
+        }
+      }
+    }
+  ]
+}
