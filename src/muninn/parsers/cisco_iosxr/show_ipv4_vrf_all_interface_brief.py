@@ -16,16 +16,15 @@ class Ipv4VrfInterfaceBriefEntry(TypedDict):
     ip_address: str
     interface_status: str
     protocol_status: str
-    vrf_name: str
 
 
 class ShowIpv4VrfAllInterfaceBriefResult(TypedDict):
     """Schema for 'show ipv4 vrf all interface brief' parsed output.
 
-    Dict-of-dicts keyed by interface name.
+    Outer dict keys are VRF names; inner dicts are keyed by interface name.
     """
 
-    interfaces: dict[str, Ipv4VrfInterfaceBriefEntry]
+    vrfs: dict[str, dict[str, Ipv4VrfInterfaceBriefEntry]]
 
 
 @register(OS.CISCO_IOSXR, "show ipv4 vrf all interface brief")
@@ -34,9 +33,9 @@ class ShowIpv4VrfAllInterfaceBriefParser(
 ):
     """Parser for 'show ipv4 vrf all interface brief' command on Cisco IOS-XR.
 
-    Parses the tabular output into a dict-of-dicts keyed by interface name.
-    Each entry contains the IP address, interface status, protocol status,
-    and VRF name.
+    Parses the tabular output into a nested dict keyed first by VRF name and
+    then by interface name. Each entry contains the IP address and the
+    interface and protocol status.
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset(
@@ -48,7 +47,8 @@ class ShowIpv4VrfAllInterfaceBriefParser(
 
     # Matches data lines in the interface brief table.
     # Columns: Interface  IP-Address  Status  Protocol  Vrf-Name
-    # VRF names prefixed with ** indicate the default/global VRF on some platforms.
+    # VRF names may be prefixed with ``**`` on IOS-XR; the marker is
+    # stripped from the VRF name.
     _INTF_LINE = re.compile(
         r"^\s*(?P<interface>\S+)"
         r"\s+(?P<ip_address>\d+\.\d+\.\d+\.\d+)"
@@ -66,12 +66,13 @@ class ShowIpv4VrfAllInterfaceBriefParser(
             output: Raw CLI output from command.
 
         Returns:
-            Parsed interface brief information keyed by interface name.
+            Parsed interface brief information keyed by VRF name and then
+            by interface name.
 
         Raises:
             ValueError: If no interface entries can be parsed from the output.
         """
-        interfaces: dict[str, Ipv4VrfInterfaceBriefEntry] = {}
+        vrfs: dict[str, dict[str, Ipv4VrfInterfaceBriefEntry]] = {}
 
         for line in output.splitlines():
             match = cls._INTF_LINE.match(line)
@@ -83,12 +84,12 @@ class ShowIpv4VrfAllInterfaceBriefParser(
                 ip_address=match.group("ip_address"),
                 interface_status=match.group("status"),
                 protocol_status=match.group("protocol"),
-                vrf_name=match.group("vrf"),
             )
-            interfaces[name] = entry
+            vrf_name = match.group("vrf")
+            vrfs.setdefault(vrf_name, {})[name] = entry
 
-        if not interfaces:
+        if not vrfs:
             msg = "No interface entries found in output"
             raise ValueError(msg)
 
-        return cast(ShowIpv4VrfAllInterfaceBriefResult, {"interfaces": interfaces})
+        return cast(ShowIpv4VrfAllInterfaceBriefResult, {"vrfs": vrfs})
