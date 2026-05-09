@@ -19,7 +19,6 @@ class Ipv6NeighborEntry(TypedDict):
     is_router: bool
     is_secure: bool
     interface: str
-    flags: NotRequired[str]
 
 
 class ShowIpv6NeighborsResult(TypedDict):
@@ -29,6 +28,7 @@ class ShowIpv6NeighborsResult(TypedDict):
     """
 
     ipv6_neighbors: dict[str, Ipv6NeighborEntry]
+    total_entries: NotRequired[int]
 
 
 @register(OS.JUNIPER_JUNOS, "show ipv6 neighbors")
@@ -56,6 +56,7 @@ class ShowIpv6NeighborsParser(BaseParser[ShowIpv6NeighborsResult]):
         r"(?P<secure>yes|no)\s+"
         r"(?P<interface>\S+)\s*$",
     )
+    _TOTAL_ENTRIES = re.compile(r"^\s*Total entries:\s*(?P<count>\d+)\s*$")
 
     @classmethod
     def parse(cls, output: str) -> ShowIpv6NeighborsResult:
@@ -71,25 +72,34 @@ class ShowIpv6NeighborsParser(BaseParser[ShowIpv6NeighborsResult]):
             ValueError: If no neighbor entries are found in the output.
         """
         neighbors: dict[str, Ipv6NeighborEntry] = {}
+        total_entries: int | None = None
 
         for line in output.splitlines():
             match = cls._NEIGHBOR_ENTRY.match(line)
-            if not match:
+            if match:
+                ipv6_address = match.group("ipv6")
+                entry = Ipv6NeighborEntry(
+                    mac_address=match.group("mac").lower(),
+                    state=match.group("state"),
+                    expire_seconds=int(match.group("expire")),
+                    is_router=match.group("router") == "yes",
+                    is_secure=match.group("secure") == "yes",
+                    interface=match.group("interface"),
+                )
+                neighbors[ipv6_address] = entry
                 continue
 
-            ipv6_address = match.group("ipv6")
-            entry = Ipv6NeighborEntry(
-                mac_address=match.group("mac").lower(),
-                state=match.group("state"),
-                expire_seconds=int(match.group("expire")),
-                is_router=match.group("router") == "yes",
-                is_secure=match.group("secure") == "yes",
-                interface=match.group("interface"),
-            )
-            neighbors[ipv6_address] = entry
+            total_match = cls._TOTAL_ENTRIES.match(line)
+            if total_match:
+                total_entries = int(total_match.group("count"))
 
         if not neighbors:
             msg = "No IPv6 neighbor entries found in output"
             raise ValueError(msg)
 
-        return cast(ShowIpv6NeighborsResult, {"ipv6_neighbors": neighbors})
+        result: ShowIpv6NeighborsResult = cast(
+            ShowIpv6NeighborsResult, {"ipv6_neighbors": neighbors}
+        )
+        if total_entries is not None:
+            result["total_entries"] = total_entries
+        return result
