@@ -315,10 +315,12 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
   var table = document.getElementById("catalog-table");
 
   var currentParsers = [];
+  var parsersByKey = {};
   var sortCol = "command";
   var sortDir = "asc";
   var detailCache = {};
   var expandedKey = null;
+  var searchDebounce = null;
 
   // Display names declared on each OperatingSystem class in src/muninn/os.py
   // are emitted into newer catalog entries as `os_display_name`. For older
@@ -395,8 +397,10 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
       .then(function (parsers) {
         currentParsers = parsers;
         osDisplayNames = {};
+        parsersByKey = {};
         parsers.forEach(function (p) {
           if (p.os_display_name) osDisplayNames[p.os] = p.os_display_name;
+          parsersByKey[parserKey(p)] = p;
         });
         rebuildFilters();
         render();
@@ -466,6 +470,7 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
     var key = parserKey(p);
     var tr = document.createElement("tr");
     tr.className = "catalog-row";
+    tr.dataset.parserKey = key;
     if (expandedKey === key) tr.classList.add("expanded");
 
     var tdExpand = document.createElement("td");
@@ -492,10 +497,6 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
     });
     tr.appendChild(tdTags);
 
-    tr.addEventListener("click", function () {
-      toggleDetail(p, tr);
-    });
-
     return tr;
   }
 
@@ -521,25 +522,47 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
       return sortDir === "asc" ? cmp : -cmp;
     });
 
-    while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
+    // Preserve any existing expanded detail row so we don't re-render its
+    // (potentially large) panel on every keystroke / filter / sort.
+    var preservedDetailRow = null;
+    if (expandedKey !== null) {
+      preservedDetailRow = tbody.querySelector("tr.detail-row");
+      if (preservedDetailRow) tbody.removeChild(preservedDetailRow);
+    }
+
+    var expandedStillVisible = false;
+    var fragment = document.createDocumentFragment();
 
     filtered.forEach(function (p) {
+      var key = parserKey(p);
       var row = createRow(p);
-      tbody.appendChild(row);
+      fragment.appendChild(row);
 
-      // Re-insert expanded detail row if this parser is expanded
-      if (expandedKey === parserKey(p)) {
-        var detailRow = createDetailRow();
-        tbody.appendChild(detailRow);
-        var panel = detailRow.querySelector(".detail-panel");
-        var data = detailCache[parserKey(p)];
-        if (data) {
-          renderDetailContent(panel, data);
+      if (expandedKey === key) {
+        expandedStillVisible = true;
+        if (preservedDetailRow) {
+          fragment.appendChild(preservedDetailRow);
         } else {
-          loadDetail(p, panel);
+          var detailRow = createDetailRow();
+          fragment.appendChild(detailRow);
+          var panel = detailRow.querySelector(".detail-panel");
+          var data = detailCache[key];
+          if (data) {
+            renderDetailContent(panel, data);
+          } else {
+            loadDetail(p, panel);
+          }
         }
       }
     });
+
+    while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
+    tbody.appendChild(fragment);
+
+    // Expanded parser was filtered out — drop the expanded state.
+    if (expandedKey !== null && !expandedStillVisible) {
+      expandedKey = null;
+    }
 
     stats.textContent = "Showing " + filtered.length + " of " + currentParsers.length + " parsers";
     empty.style.display = filtered.length === 0 ? "block" : "none";
@@ -874,9 +897,26 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
 
   // --- Event listeners ---
 
-  search.addEventListener("input", render);
+  // Debounce search input so we don't rebuild the table on every keystroke.
+  search.addEventListener("input", function () {
+    if (searchDebounce !== null) clearTimeout(searchDebounce);
+    searchDebounce = setTimeout(function () {
+      searchDebounce = null;
+      render();
+    }, 150);
+  });
   osFilter.addEventListener("change", render);
   tagFilter.addEventListener("change", render);
+
+  // Single delegated click handler for all catalog rows, instead of attaching
+  // one per row at render time.
+  tbody.addEventListener("click", function (e) {
+    var row = e.target.closest("tr.catalog-row");
+    if (!row || !tbody.contains(row)) return;
+    var key = row.dataset.parserKey;
+    var p = parsersByKey[key];
+    if (p) toggleDetail(p, row);
+  });
 
   table.querySelectorAll("th[data-sort]").forEach(function (th) {
     th.addEventListener("click", function () {
