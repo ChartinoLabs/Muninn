@@ -12,9 +12,13 @@ from muninn.utils import canonical_interface_name
 
 
 class Ipv6NeighborEntry(TypedDict):
-    """Schema for a single IPv6 neighbor (NDP) entry."""
+    """Schema for a single IPv6 neighbor (NDP) entry.
 
-    age: str
+    The ``age_minutes`` field reflects the IOS-XR ``Age`` column, which
+    represents time since last reachability confirmation in minutes.
+    """
+
+    age_minutes: int
     link_layer_address: str
     state: str
     interface: str
@@ -84,7 +88,7 @@ class ShowIpv6NeighborsParser(BaseParser["ShowIpv6NeighborsResult"]):
             interface = canonical_interface_name(interface_raw, os=OS.CISCO_IOSXR)
 
             entry: Ipv6NeighborEntry = {
-                "age": match.group("age"),
+                "age_minutes": int(match.group("age")),
                 "link_layer_address": match.group("link_layer_address").lower(),
                 "state": match.group("state").upper(),
                 "interface": interface,
