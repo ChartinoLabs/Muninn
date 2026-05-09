@@ -9,7 +9,7 @@ Output is keyed by canonical local interface name.
 """
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, Literal, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -157,24 +157,21 @@ def _collect_management_addresses(
     return addrs, idx
 
 
-_FieldTransform = str | type[int]
-
-# Table-driven single-line field specs: (pattern, field_name, transform).
-# str.strip for string fields, int for integer fields, _normalize_capabilities
-# for capability fields.
+# Table-driven single-line field specs: (pattern, field_name, is_int).
+# is_int=True converts the captured value to int; otherwise it is kept as a string.
 _SINGLE_LINE_FIELDS: tuple[
-    tuple[re.Pattern[str], str, _FieldTransform],
+    tuple[re.Pattern[str], str, bool],
     ...,
 ] = (
-    (_LOCAL_INTF_RE, "local_intf", str),
-    (_CHASSIS_ID_RE, "chassis_id", str),
-    (_PORT_ID_RE, "port_id", str),
-    (_PORT_DESC_RE, "port_description", str),
-    (_SYS_NAME_RE, "system_name", str),
-    (_TIME_REMAINING_RE, "time_remaining", int),
-    (_HOLD_TIME_RE, "hold_time", int),
-    (_AGE_RE, "age", int),
-    (_PEER_MAC_RE, "peer_mac_address", str),
+    (_LOCAL_INTF_RE, "local_intf", False),
+    (_CHASSIS_ID_RE, "chassis_id", False),
+    (_PORT_ID_RE, "port_id", False),
+    (_PORT_DESC_RE, "port_description", False),
+    (_SYS_NAME_RE, "system_name", False),
+    (_TIME_REMAINING_RE, "time_remaining", True),
+    (_HOLD_TIME_RE, "hold_time", True),
+    (_AGE_RE, "age", True),
+    (_PEER_MAC_RE, "peer_mac_address", False),
 )
 
 
@@ -183,11 +180,11 @@ def _try_match_single_line(
     fields: dict[str, str | int | list[str] | None],
 ) -> bool:
     """Try table-driven single-line patterns. Returns True if matched."""
-    for pattern, key, transform in _SINGLE_LINE_FIELDS:
+    for pattern, key, is_int in _SINGLE_LINE_FIELDS:
         m = pattern.match(stripped)
         if m:
             raw = m.group("v").strip()
-            fields[key] = int(raw) if transform is int else raw
+            fields[key] = int(raw) if is_int else raw
             return True
 
     # Capability fields need normalization
@@ -233,8 +230,17 @@ def _parse_block_line(
     return idx + 1
 
 
+_OptionalStrField = Literal[
+    "port_description",
+    "system_name",
+    "system_description",
+    "system_capabilities",
+    "enabled_capabilities",
+    "peer_mac_address",
+]
+
 # Optional string fields to copy from parsed fields into the entry.
-_OPTIONAL_STR_KEYS: tuple[str, ...] = (
+_OPTIONAL_STR_KEYS: tuple[_OptionalStrField, ...] = (
     "port_description",
     "system_name",
     "system_description",
@@ -280,7 +286,7 @@ def _build_entry(
     for key in _OPTIONAL_STR_KEYS:
         val = fields.get(key)
         if val is not None:
-            entry[key] = str(val)  # type: ignore[literal-required]
+            entry[key] = str(val)
 
     age = fields.get("age")
     if age is not None:
@@ -288,7 +294,7 @@ def _build_entry(
 
     mgmt = fields.get("management_addresses")
     if mgmt:
-        entry["management_addresses"] = list(mgmt)  # type: ignore[arg-type]
+        entry["management_addresses"] = cast(list[str], mgmt)
 
     return canonical_local, entry
 
