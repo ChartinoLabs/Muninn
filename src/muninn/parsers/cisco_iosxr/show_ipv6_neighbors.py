@@ -12,29 +12,32 @@ from muninn.utils import canonical_interface_name
 
 
 class Ipv6NeighborEntry(TypedDict):
-    """Schema for a single IPv6 neighbor (NDP) entry."""
+    """Schema for a single IPv6 neighbor (NDP) entry on a given interface."""
 
-    age: str
+    age: int
     link_layer_address: str
     state: str
-    interface: str
     location: NotRequired[str]
 
 
 class ShowIpv6NeighborsResult(TypedDict):
     """Schema for 'show ipv6 neighbors' parsed output on IOS-XR.
 
-    Keyed by IPv6 address. Multicast adjacency entries (``[Mcast adjacency]``)
-    are excluded because they lack a meaningful unique key and represent
-    internal platform state rather than real neighbor relationships.
+    Keyed by IPv6 address, then by canonical interface name. The nested
+    interface key is required because IPv6 link-local addresses
+    (``fe80::/10``) commonly appear on multiple interfaces and a flat
+    dict keyed solely by IPv6 address would silently overwrite entries.
+
+    Multicast adjacency entries (``[Mcast adjacency]``) are excluded
+    because they lack a meaningful unique key and represent internal
+    platform state rather than real neighbor relationships.
     """
 
-    neighbors: dict[str, Ipv6NeighborEntry]
+    neighbors: dict[str, dict[str, Ipv6NeighborEntry]]
 
 
 # IPv6 neighbor table row pattern for IOS-XR.
 # Columns: IPv6 Address, Age, Link-layer Addr, State, Interface, Location.
-# Age can be a number (seconds) or ``-`` for multicast adjacencies.
 _NEIGHBOR_PATTERN = re.compile(
     r"^(?P<ipv6_address>\S+)\s+"
     r"(?P<age>\d+)\s+"
@@ -50,7 +53,8 @@ class ShowIpv6NeighborsParser(BaseParser["ShowIpv6NeighborsResult"]):
     """Parser for 'show ipv6 neighbors' on Cisco IOS-XR.
 
     Parses the IPv6 neighbor discovery (NDP) table. Entries are keyed
-    by IPv6 address. Multicast adjacency rows are skipped.
+    by IPv6 address, then by canonical interface name. Multicast
+    adjacency rows are skipped.
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.ARP})
@@ -63,12 +67,12 @@ class ShowIpv6NeighborsParser(BaseParser["ShowIpv6NeighborsResult"]):
             output: Raw CLI output from command.
 
         Returns:
-            Parsed neighbor entries keyed by IPv6 address.
+            Parsed neighbor entries keyed by IPv6 address and interface.
 
         Raises:
             ValueError: If no neighbor entries found in output.
         """
-        neighbors: dict[str, Ipv6NeighborEntry] = {}
+        neighbors: dict[str, dict[str, Ipv6NeighborEntry]] = {}
 
         for line in output.splitlines():
             stripped = line.strip()
@@ -80,21 +84,23 @@ class ShowIpv6NeighborsParser(BaseParser["ShowIpv6NeighborsResult"]):
                 continue
 
             ipv6_address = match.group("ipv6_address")
-            interface_raw = match.group("interface")
-            interface = canonical_interface_name(interface_raw, os=OS.CISCO_IOSXR)
+            interface = canonical_interface_name(
+                match.group("interface"), os=OS.CISCO_IOSXR
+            )
 
             entry: Ipv6NeighborEntry = {
-                "age": match.group("age"),
+                "age": int(match.group("age")),
                 "link_layer_address": match.group("link_layer_address").lower(),
                 "state": match.group("state").upper(),
-                "interface": interface,
             }
 
             location = match.group("location")
             if location:
                 entry["location"] = location
 
-            neighbors[ipv6_address] = entry
+            if ipv6_address not in neighbors:
+                neighbors[ipv6_address] = {}
+            neighbors[ipv6_address][interface] = entry
 
         if not neighbors:
             msg = "No IPv6 neighbor entries found in output"
