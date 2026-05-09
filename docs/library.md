@@ -133,6 +133,12 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
   }
   tr.catalog-row {
     cursor: pointer;
+    /* Isolate per-row layout/style work so hover and class toggles on one
+       row don't ripple through the other 300+ rows. */
+    contain: layout style;
+  }
+  tr.detail-row {
+    contain: layout style;
   }
   tr.catalog-row:hover td {
     background: var(--md-code-bg-color);
@@ -178,6 +184,9 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
     background: var(--md-code-bg-color);
     overflow: hidden;
     min-width: 0;
+    /* Isolate layout/style/paint work so expanding a row doesn't trigger
+       a reflow of the surrounding 300+ rows or restyle the whole table. */
+    contain: layout style paint;
   }
   .detail-panel h4 {
     margin: 0 0 0.5rem;
@@ -195,6 +204,8 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
     border: 1px solid var(--md-default-fg-color--lightest);
     border-radius: 4px;
     overflow-x: auto;
+    overflow-y: auto;
+    max-height: 400px;
     margin-bottom: 1rem;
   }
   .schema-field-name {
@@ -817,6 +828,56 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
 
   // --- Example rendering ---
 
+  // Build the per-example content (CLI output + parsed JSON view-toggle).
+  // The parsed JSON is only stringified on first click, since example
+  // fixtures can be hundreds of KB and synchronously injecting that into
+  // the DOM forces a layout pass that visibly lags the browser.
+  function buildExamplePaneContent(pane, ex) {
+    var viewBar = document.createElement("div");
+    viewBar.className = "example-view-bar";
+
+    var cliBtn = document.createElement("button");
+    cliBtn.className = "example-view-btn active";
+    cliBtn.textContent = "CLI Output";
+    viewBar.appendChild(cliBtn);
+
+    var parsedBtn = document.createElement("button");
+    parsedBtn.className = "example-view-btn";
+    parsedBtn.textContent = "Parsed Result";
+    viewBar.appendChild(parsedBtn);
+
+    pane.appendChild(viewBar);
+
+    var cliPre = document.createElement("pre");
+    cliPre.className = "example-pre";
+    cliPre.textContent = ex.input;
+    pane.appendChild(cliPre);
+
+    var parsedPre = document.createElement("pre");
+    parsedPre.className = "example-pre";
+    parsedPre.style.display = "none";
+    pane.appendChild(parsedPre);
+    var parsedFilled = false;
+
+    cliBtn.addEventListener("click", function () {
+      cliBtn.classList.add("active");
+      parsedBtn.classList.remove("active");
+      cliPre.style.display = "";
+      parsedPre.style.display = "none";
+    });
+
+    parsedBtn.addEventListener("click", function () {
+      if (!parsedFilled) {
+        parsedPre.textContent = JSON.stringify(ex.expected, null, 2);
+        parsedFilled = true;
+      }
+      parsedBtn.classList.add("active");
+      cliBtn.classList.remove("active");
+      parsedPre.style.display = "";
+      cliPre.style.display = "none";
+    });
+  }
+
   function renderExamples(examples) {
     var container = document.createElement("div");
     container.className = "example-tabs";
@@ -826,6 +887,7 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
     container.appendChild(bar);
 
     var panes = [];
+    var built = [];
 
     examples.forEach(function (ex, idx) {
       var btn = document.createElement("button");
@@ -837,6 +899,10 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
           b.classList.remove("active");
         });
         btn.classList.add("active");
+        if (!built[idx]) {
+          buildExamplePaneContent(panes[idx], ex);
+          built[idx] = true;
+        }
         panes.forEach(function (pane, j) {
           pane.classList.toggle("active", j === idx);
         });
@@ -845,48 +911,11 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
 
       var pane = document.createElement("div");
       pane.className = "example-content";
-      if (idx === 0) pane.classList.add("active");
-
-      // View toggle: CLI Output / Parsed Result
-      var viewBar = document.createElement("div");
-      viewBar.className = "example-view-bar";
-
-      var cliBtn = document.createElement("button");
-      cliBtn.className = "example-view-btn active";
-      cliBtn.textContent = "CLI Output";
-      viewBar.appendChild(cliBtn);
-
-      var parsedBtn = document.createElement("button");
-      parsedBtn.className = "example-view-btn";
-      parsedBtn.textContent = "Parsed Result";
-      viewBar.appendChild(parsedBtn);
-
-      pane.appendChild(viewBar);
-
-      var cliPre = document.createElement("pre");
-      cliPre.className = "example-pre";
-      cliPre.textContent = ex.input;
-      pane.appendChild(cliPre);
-
-      var parsedPre = document.createElement("pre");
-      parsedPre.className = "example-pre";
-      parsedPre.style.display = "none";
-      parsedPre.textContent = JSON.stringify(ex.expected, null, 2);
-      pane.appendChild(parsedPre);
-
-      cliBtn.addEventListener("click", function () {
-        cliBtn.classList.add("active");
-        parsedBtn.classList.remove("active");
-        cliPre.style.display = "";
-        parsedPre.style.display = "none";
-      });
-
-      parsedBtn.addEventListener("click", function () {
-        parsedBtn.classList.add("active");
-        cliBtn.classList.remove("active");
-        parsedPre.style.display = "";
-        cliPre.style.display = "none";
-      });
+      if (idx === 0) {
+        pane.classList.add("active");
+        buildExamplePaneContent(pane, ex);
+        built[idx] = true;
+      }
 
       container.appendChild(pane);
       panes.push(pane);
