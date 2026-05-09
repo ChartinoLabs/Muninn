@@ -16,7 +16,6 @@ _DEFAULT_PROCESS_ID = "default"
 class OspfInterfaceEntry(TypedDict):
     """Schema for a single OSPF interface brief entry."""
 
-    pid: int
     area: str
     ip_address_mask: str
     cost: int
@@ -51,7 +50,7 @@ _SECTION_PATTERN = re.compile(
 # BE1.10     1    0     192.0.2.1/30     1     DR     1/1
 _INTERFACE_PATTERN = re.compile(
     r"^(?P<interface>\S+)\s+"
-    r"(?P<pid>\d+)\s+"
+    r"\d+\s+"
     r"(?P<area>\S+)\s+"
     rf"(?P<ip_address_mask>{IPV4_PREFIX})\s+"
     r"(?P<cost>\d+)\s+"
@@ -149,7 +148,6 @@ class ShowOspfVrfAllInterfaceBriefParser(
             os=OS.CISCO_IOSXR,
         )
         entry: OspfInterfaceEntry = {
-            "pid": int(match.group("pid")),
             "area": match.group("area"),
             "ip_address_mask": match.group("ip_address_mask"),
             "cost": int(match.group("cost")),
