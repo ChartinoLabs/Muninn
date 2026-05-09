@@ -1,0 +1,126 @@
+{
+  "os": "juniper_junos",
+  "command": "show chassis cluster status",
+  "schema": {
+    "name": "ShowChassisClusterStatusResult",
+    "fields": {
+      "cluster_id": {
+        "type": "int",
+        "required": true
+      },
+      "redundancy_groups": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RedundancyGroup",
+            "fields": {
+              "failover_count": {
+                "type": "int",
+                "required": true
+              },
+              "nodes": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "RedundancyGroupNode",
+                    "fields": {
+                      "priority": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "status": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "preempt": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "manual_failover": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "monitor_failures": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "SRX chassis cluster with three redundancy groups, node1 lost",
+      "input": "Monitor Failure codes:\nCS  Cold Sync monitoring        FL  Fabric Connection monitoring\nGR  GRES monitoring             HW  Hardware monitoring\nIF  Interface monitoring        IP  IP monitoring\nLB  Loopback monitoring         MB  Mbuf monitoring\nNH  Nexthop monitoring          NP  NPC monitoring\nSP  SPU monitoring              SM  Schedule monitoring\n\nCluster ID: 1\nNode   Priority Status         Preempt Manual   Monitor-failures\n\nRedundancy group: 0 , Failover count: 1\nnode0  100      primary        no      no       None\nnode1  0        lost           n/a     n/a      n/a\n\nRedundancy group: 1 , Failover count: 1\nnode0  0        primary        no      no       CS\nnode1  0        lost           n/a     n/a      n/a\n\nRedundancy group: 3 , Failover count: 1\nnode0  0        primary        no      no       CS\nnode1  0        lost           n/a     n/a      n/a\n",
+      "expected": {
+        "cluster_id": 1,
+        "redundancy_groups": {
+          "0": {
+            "failover_count": 1,
+            "nodes": {
+              "node0": {
+                "priority": 100,
+                "status": "primary",
+                "preempt": false,
+                "manual_failover": false
+              },
+              "node1": {
+                "priority": 0,
+                "status": "lost"
+              }
+            }
+          },
+          "1": {
+            "failover_count": 1,
+            "nodes": {
+              "node0": {
+                "priority": 0,
+                "status": "primary",
+                "preempt": false,
+                "manual_failover": false,
+                "monitor_failures": [
+                  "CS"
+                ]
+              },
+              "node1": {
+                "priority": 0,
+                "status": "lost"
+              }
+            }
+          },
+          "3": {
+            "failover_count": 1,
+            "nodes": {
+              "node0": {
+                "priority": 0,
+                "status": "primary",
+                "preempt": false,
+                "manual_failover": false,
+                "monitor_failures": [
+                  "CS"
+                ]
+              },
+              "node1": {
+                "priority": 0,
+                "status": "lost"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "os": "juniper_junos",
+  "command": "show ospf3 neighbor",
+  "schema": {
+    "name": "ShowOspf3NeighborResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "Ospf3NeighborEntry",
+            "fields": {
+              "neighbor_id": {
+                "type": "str",
+                "required": true
+              },
+              "interface": {
+                "type": "str",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "priority": {
+                "type": "int",
+                "required": true
+              },
+              "dead_time": {
+                "type": "int",
+                "required": true
+              },
+              "neighbor_address": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Two OSPFv3 neighbors on separate interfaces",
+      "input": "ID               Interface              State     Pri   Dead\n10.189.5.253     ge-0/0/0.0             Full      128     35\n  Neighbor-address fe80::250:56ff:fe8d:53c0\n10.169.14.240   ge-0/0/1.0             Full      128     33\n  Neighbor-address fe80::250:56ff:fe8d:72bd\n",
+      "expected": {
+        "neighbors": {
+          "10.189.5.253": {
+            "neighbor_id": "10.189.5.253",
+            "interface": "ge-0/0/0.0",
+            "state": "Full",
+            "priority": 128,
+            "dead_time": 35,
+            "neighbor_address": "fe80::250:56ff:fe8d:53c0"
+          },
+          "10.169.14.240": {
+            "neighbor_id": "10.169.14.240",
+            "interface": "ge-0/0/1.0",
+            "state": "Full",
+            "priority": 128,
+            "dead_time": 33,
+            "neighbor_address": "fe80::250:56ff:fe8d:72bd"
+          }
+        }
+      }
+    }
+  ]
+}

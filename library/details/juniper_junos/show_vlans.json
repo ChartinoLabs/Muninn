@@ -1,0 +1,143 @@
+{
+  "os": "juniper_junos",
+  "command": "show vlans",
+  "schema": {
+    "name": "ShowVlansResult",
+    "fields": {
+      "vlans": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VlanEntry",
+            "fields": {
+              "tag": {
+                "type": "int",
+                "required": true
+              },
+              "routing_instance": {
+                "type": "str",
+                "required": true
+              },
+              "description": {
+                "type": "str",
+                "required": false
+              },
+              "interfaces": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "VlanInterfaceEntry",
+                    "fields": {
+                      "active": {
+                        "type": "bool",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple VLANs with trunk and access interfaces",
+      "input": "Routing instance        VLAN name             Tag          Interfaces\ndefault-switch          v100-Control           100\n                                                           ae0.0*\n                                                           et-0/0/24.0*\n                                                           ge-0/0/3.0\n                                                           xe-0/0/13.0*\n                                                           xe-0/0/15.0*\n                                                           xe-0/0/17.0*\n                                                           xe-0/0/9.0*\ndefault-switch          v1005-HelpDesk        1005\n                                                           ae0.0*\n                                                           et-0/0/24.0*\n                                                           ge-0/0/7.0\n                                                           xe-0/0/13.0*\n                                                           xe-0/0/15.0*\n                                                           xe-0/0/17.0*\n                                                           xe-0/0/9.0*\ndefault-switch          v109-TEMP-Project-Data 109\n                                                           ae0.0*\n                                                           et-0/0/24.0*\n                                                           ge-0/0/7.0\n                                                           xe-0/0/13.0*\n                                                           xe-0/0/15.0*\n                                                           xe-0/0/17.0*\n                                                           xe-0/0/22.0\n                                                           xe-0/0/9.0*\n\n{master:0}\n",
+      "expected": {
+        "vlans": {
+          "v100-Control": {
+            "tag": 100,
+            "routing_instance": "default-switch",
+            "interfaces": {
+              "ae0.0": {
+                "active": true
+              },
+              "et-0/0/24.0": {
+                "active": true
+              },
+              "ge-0/0/3.0": {
+                "active": false
+              },
+              "xe-0/0/13.0": {
+                "active": true
+              },
+              "xe-0/0/15.0": {
+                "active": true
+              },
+              "xe-0/0/17.0": {
+                "active": true
+              },
+              "xe-0/0/9.0": {
+                "active": true
+              }
+            }
+          },
+          "v1005-HelpDesk": {
+            "tag": 1005,
+            "routing_instance": "default-switch",
+            "interfaces": {
+              "ae0.0": {
+                "active": true
+              },
+              "et-0/0/24.0": {
+                "active": true
+              },
+              "ge-0/0/7.0": {
+                "active": false
+              },
+              "xe-0/0/13.0": {
+                "active": true
+              },
+              "xe-0/0/15.0": {
+                "active": true
+              },
+              "xe-0/0/17.0": {
+                "active": true
+              },
+              "xe-0/0/9.0": {
+                "active": true
+              }
+            }
+          },
+          "v109-TEMP-Project-Data": {
+            "tag": 109,
+            "routing_instance": "default-switch",
+            "interfaces": {
+              "ae0.0": {
+                "active": true
+              },
+              "et-0/0/24.0": {
+                "active": true
+              },
+              "ge-0/0/7.0": {
+                "active": false
+              },
+              "xe-0/0/13.0": {
+                "active": true
+              },
+              "xe-0/0/15.0": {
+                "active": true
+              },
+              "xe-0/0/17.0": {
+                "active": true
+              },
+              "xe-0/0/22.0": {
+                "active": false
+              },
+              "xe-0/0/9.0": {
+                "active": true
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

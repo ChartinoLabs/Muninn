@@ -1,0 +1,591 @@
+{
+  "os": "juniper_junos",
+  "command": "show bgp neighbor",
+  "schema": {
+    "name": "ShowBgpNeighborResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "BgpNeighborEntry",
+            "fields": {
+              "peer_address": {
+                "type": "str",
+                "required": true
+              },
+              "peer_port": {
+                "type": "int",
+                "required": true
+              },
+              "peer_as": {
+                "type": "int | str",
+                "required": true
+              },
+              "local_address": {
+                "type": "str",
+                "required": true
+              },
+              "local_port": {
+                "type": "int",
+                "required": true
+              },
+              "local_as": {
+                "type": "int | str",
+                "required": true
+              },
+              "type": {
+                "type": "str",
+                "required": false
+              },
+              "state": {
+                "type": "str",
+                "required": false
+              },
+              "flags": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              },
+              "last_state": {
+                "type": "str",
+                "required": false
+              },
+              "last_event": {
+                "type": "str",
+                "required": false
+              },
+              "export_policies": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              },
+              "options": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              },
+              "holdtime": {
+                "type": "int",
+                "required": false
+              },
+              "preference": {
+                "type": "int",
+                "required": false
+              },
+              "number_of_flaps": {
+                "type": "int",
+                "required": false
+              },
+              "peer_id": {
+                "type": "str",
+                "required": false
+              },
+              "local_id": {
+                "type": "str",
+                "required": false
+              },
+              "active_holdtime": {
+                "type": "int",
+                "required": false
+              },
+              "keepalive_interval": {
+                "type": "int",
+                "required": false
+              },
+              "peer_index": {
+                "type": "int",
+                "required": false
+              },
+              "bfd_status": {
+                "type": "str",
+                "required": false
+              },
+              "local_interface": {
+                "type": "str",
+                "required": false
+              },
+              "nlri_configured_on_peer": {
+                "type": "str",
+                "required": false
+              },
+              "nlri_advertised_by_peer": {
+                "type": "str",
+                "required": false
+              },
+              "nlri_session": {
+                "type": "str",
+                "required": false
+              },
+              "peer_supports_refresh": {
+                "type": "bool",
+                "required": false
+              },
+              "stale_routes_kept_for": {
+                "type": "int",
+                "required": false
+              },
+              "peer_supports_restarter": {
+                "type": "bool",
+                "required": false
+              },
+              "nlri_restart_negotiated": {
+                "type": "str",
+                "required": false
+              },
+              "nlri_received_eor": {
+                "type": "str",
+                "required": false
+              },
+              "nlri_sent_eor": {
+                "type": "str",
+                "required": false
+              },
+              "peer_supports_4byte_as": {
+                "type": "bool",
+                "required": false
+              },
+              "peer_supports_addpath": {
+                "type": "bool",
+                "required": false
+              },
+              "tables": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "TablePrefixes",
+                    "fields": {
+                      "active_prefixes": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "received_prefixes": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "accepted_prefixes": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "suppressed_due_to_damping": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "advertised_prefixes": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "rib_state": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "send_state": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "bit": {
+                        "type": "int",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "last_traffic": {
+                "type": {
+                  "name": "TrafficSeconds",
+                  "fields": {
+                    "received": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "sent": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "checked": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "input_messages": {
+                "type": {
+                  "name": "MessageCounts",
+                  "fields": {
+                    "total": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "updates": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "refreshes": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "octets": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "output_messages": {
+                "type": {
+                  "type": "ref",
+                  "name": "MessageCounts"
+                },
+                "required": false
+              },
+              "output_queues": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": "int"
+                },
+                "required": false
+              },
+              "last_error": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Mixed IPv4 and IPv6 established eBGP peers with table prefix counts",
+      "input": "\n        show bgp neighbor\n        Peer: 10.145.0.3+64180 AS 30000  Local: 10.145.0.1+179 AS 1\n        Type: External    State: Established    Flags: <ImportEval Sync>\n        Last State: OpenConfirm   Last Event: RecvKeepAlive\n        Last Error: None\n        Export: [ export2bgp ]\n        Options: <Preference PeerAS Refresh>\n        Holdtime: 90 Preference: 170\n        Number of flaps: 0\n        Peer ID: 10.16.2.2         Local ID: 10.4.1.1           Active Holdtime: 90\n        Keepalive Interval: 30         Peer index: 0\n        BFD: disabled, down\n        Local Interface: ge-0/0/1.0\n        NLRI for restart configured on peer: inet-unicast\n        NLRI advertised by peer: inet-unicast\n        NLRI for this session: inet-unicast\n        Peer supports Refresh capability (2)\n        Stale routes from peer are kept for: 300\n        Peer does not support Restarter functionality\n        NLRI that restart is negotiated for: inet-unicast\n        NLRI of received end-of-rib markers: inet-unicast\n        NLRI of all end-of-rib markers sent: inet-unicast\n        Peer supports 4 byte AS extension (peer-as 30000)\n        Peer does not support Addpath\n        Table inet.0 Bit: 10000\n            RIB State: BGP restart is complete\n            Send state: in sync\n            Active prefixes:              1\n            Received prefixes:            1\n            Accepted prefixes:            1\n            Suppressed due to damping:    0\n            Advertised prefixes:          2\n        Last traffic (seconds): Received 6    Sent 1    Checked 52\n        Input messages:  Total 9      Updates 2       Refreshes 0     Octets 244\n        Output messages: Total 10     Updates 2       Refreshes 0     Octets 315\n        Output Queue[0]: 0\n\n        Peer: 10.135.0.2+55323 AS 2      Local: 10.135.0.1+179 AS 1\n        Type: External    State: Established    Flags: <ImportEval Sync>\n        Last State: OpenConfirm   Last Event: RecvKeepAlive\n        Last Error: None\n        Export: [ export2bgp ]\n        Options: <Preference PeerAS Refresh>\n        Holdtime: 90 Preference: 170\n        Number of flaps: 0\n        Peer ID: 10.36.3.3         Local ID: 10.4.1.1           Active Holdtime: 90\n        Keepalive Interval: 30         Peer index: 0\n        BFD: disabled, down\n        Local Interface: ge-0/0/2.0\n        NLRI for restart configured on peer: inet-unicast\n        NLRI advertised by peer: inet-unicast\n        NLRI for this session: inet-unicast\n        Peer supports Refresh capability (2)\n        Stale routes from peer are kept for: 300\n        Peer does not support Restarter functionality\n        NLRI that restart is negotiated for: inet-unicast\n        NLRI of received end-of-rib markers: inet-unicast\n        NLRI of all end-of-rib markers sent: inet-unicast\n        Peer supports 4 byte AS extension (peer-as 2)\n        Peer does not support Addpath\n        Table inet.0 Bit: 10001\n            RIB State: BGP restart is complete\n            Send state: in sync\n            Active prefixes:              1\n            Received prefixes:            1\n            Accepted prefixes:            1\n            Suppressed due to damping:    0\n            Advertised prefixes:          2\n        Last traffic (seconds): Received 18   Sent 12   Checked 35\n        Input messages:  Total 8      Updates 2       Refreshes 0     Octets 225\n        Output messages: Total 9      Updates 2       Refreshes 0     Octets 296\n        Output Queue[0]: 0\n\n        Peer: 2001:20::3+179 AS 30000  Local: 2001:20::1+62643 AS 1\n        Type: External    State: Established    Flags: <ImportEval Sync>\n        Last State: OpenConfirm   Last Event: RecvKeepAlive\n        Last Error: None\n        Export: [ export2bgp ]\n        Options: <Preference PeerAS Refresh>\n        Holdtime: 90 Preference: 170\n        Number of flaps: 0\n        Peer ID: 10.16.2.2         Local ID: 10.4.1.1           Active Holdtime: 90\n        Keepalive Interval: 30         Peer index: 0\n        BFD: disabled, down\n        Local Interface: ge-0/0/1.0\n        NLRI for restart configured on peer: inet6-unicast\n        NLRI advertised by peer: inet6-unicast\n        NLRI for this session: inet6-unicast\n        Peer supports Refresh capability (2)\n        Stale routes from peer are kept for: 300\n        Peer does not support Restarter functionality\n        NLRI that restart is negotiated for: inet6-unicast\n        NLRI of received end-of-rib markers: inet6-unicast\n        NLRI of all end-of-rib markers sent: inet6-unicast\n        Peer supports 4 byte AS extension (peer-as 30000)\n        Peer does not support Addpath\n        Table inet6.0 Bit: 20000\n            RIB State: BGP restart is complete\n            Send state: in sync\n            Active prefixes:              1\n            Received prefixes:            1\n            Accepted prefixes:            1\n            Suppressed due to damping:    0\n            Advertised prefixes:          2\n        Last traffic (seconds): Received 15   Sent 10   Checked 29\n        Input messages:  Total 7      Updates 2       Refreshes 0     Octets 219\n        Output messages: Total 9      Updates 2       Refreshes 0     Octets 395\n        Output Queue[1]: 0\n\n        Peer: 2001:30::2+179 AS 2      Local: 2001:30::1+61370 AS 1\n        Type: External    State: Established    Flags: <ImportEval Sync>\n        Last State: OpenConfirm   Last Event: RecvKeepAlive\n        Last Error: None\n        Export: [ export2bgp ]\n        Options: <Preference PeerAS Refresh>\n        Holdtime: 90 Preference: 170\n        Number of flaps: 0\n        Peer ID: 10.36.3.3         Local ID: 10.4.1.1           Active Holdtime: 90\n        Keepalive Interval: 30         Peer index: 0\n        BFD: disabled, down\n        Local Interface: ge-0/0/2.0\n        NLRI for restart configured on peer: inet6-unicast\n        NLRI advertised by peer: inet6-unicast\n        NLRI for this session: inet6-unicast\n        Peer supports Refresh capability (2)\n        Stale routes from peer are kept for: 300\n        Peer does not support Restarter functionality\n        NLRI that restart is negotiated for: inet6-unicast\n        NLRI of received end-of-rib markers: inet6-unicast\n        NLRI of all end-of-rib markers sent: inet6-unicast\n        Peer supports 4 byte AS extension (peer-as 2)\n        Peer does not support Addpath\n        Table inet6.0 Bit: 20001\n            RIB State: BGP restart is complete\n            Send state: in sync\n            Active prefixes:              1\n            Received prefixes:            1\n            Accepted prefixes:            1\n            Suppressed due to damping:    0\n            Advertised prefixes:          2\n        Last traffic (seconds): Received 2    Sent 1    Checked 21\n        Input messages:  Total 7      Updates 2       Refreshes 0     Octets 219\n        Output messages: Total 9      Updates 2       Refreshes 0     Octets 395\n        Output Queue[1]: 0\n",
+      "expected": {
+        "neighbors": {
+          "10.145.0.3": {
+            "peer_address": "10.145.0.3",
+            "peer_port": 64180,
+            "peer_as": 30000,
+            "local_address": "10.145.0.1",
+            "local_port": 179,
+            "local_as": 1,
+            "type": "External",
+            "state": "Established",
+            "flags": [
+              "ImportEval",
+              "Sync"
+            ],
+            "last_state": "OpenConfirm",
+            "last_event": "RecvKeepAlive",
+            "export_policies": [
+              "export2bgp"
+            ],
+            "options": [
+              "Preference",
+              "PeerAS",
+              "Refresh"
+            ],
+            "holdtime": 90,
+            "preference": 170,
+            "number_of_flaps": 0,
+            "peer_id": "10.16.2.2",
+            "local_id": "10.4.1.1",
+            "active_holdtime": 90,
+            "keepalive_interval": 30,
+            "peer_index": 0,
+            "bfd_status": "disabled, down",
+            "local_interface": "ge-0/0/1.0",
+            "nlri_configured_on_peer": "inet-unicast",
+            "nlri_advertised_by_peer": "inet-unicast",
+            "nlri_session": "inet-unicast",
+            "peer_supports_refresh": true,
+            "stale_routes_kept_for": 300,
+            "peer_supports_restarter": false,
+            "nlri_restart_negotiated": "inet-unicast",
+            "nlri_received_eor": "inet-unicast",
+            "nlri_sent_eor": "inet-unicast",
+            "peer_supports_4byte_as": true,
+            "peer_supports_addpath": false,
+            "last_traffic": {
+              "received": 6,
+              "sent": 1,
+              "checked": 52
+            },
+            "input_messages": {
+              "total": 9,
+              "updates": 2,
+              "refreshes": 0,
+              "octets": 244
+            },
+            "output_messages": {
+              "total": 10,
+              "updates": 2,
+              "refreshes": 0,
+              "octets": 315
+            },
+            "output_queues": {
+              "0": 0
+            },
+            "tables": {
+              "inet.0": {
+                "bit": 10000,
+                "active_prefixes": 1,
+                "received_prefixes": 1,
+                "accepted_prefixes": 1,
+                "suppressed_due_to_damping": 0,
+                "advertised_prefixes": 2,
+                "rib_state": "BGP restart is complete",
+                "send_state": "in sync"
+              }
+            }
+          },
+          "10.135.0.2": {
+            "peer_address": "10.135.0.2",
+            "peer_port": 55323,
+            "peer_as": 2,
+            "local_address": "10.135.0.1",
+            "local_port": 179,
+            "local_as": 1,
+            "type": "External",
+            "state": "Established",
+            "flags": [
+              "ImportEval",
+              "Sync"
+            ],
+            "last_state": "OpenConfirm",
+            "last_event": "RecvKeepAlive",
+            "export_policies": [
+              "export2bgp"
+            ],
+            "options": [
+              "Preference",
+              "PeerAS",
+              "Refresh"
+            ],
+            "holdtime": 90,
+            "preference": 170,
+            "number_of_flaps": 0,
+            "peer_id": "10.36.3.3",
+            "local_id": "10.4.1.1",
+            "active_holdtime": 90,
+            "keepalive_interval": 30,
+            "peer_index": 0,
+            "bfd_status": "disabled, down",
+            "local_interface": "ge-0/0/2.0",
+            "nlri_configured_on_peer": "inet-unicast",
+            "nlri_advertised_by_peer": "inet-unicast",
+            "nlri_session": "inet-unicast",
+            "peer_supports_refresh": true,
+            "stale_routes_kept_for": 300,
+            "peer_supports_restarter": false,
+            "nlri_restart_negotiated": "inet-unicast",
+            "nlri_received_eor": "inet-unicast",
+            "nlri_sent_eor": "inet-unicast",
+            "peer_supports_4byte_as": true,
+            "peer_supports_addpath": false,
+            "last_traffic": {
+              "received": 18,
+              "sent": 12,
+              "checked": 35
+            },
+            "input_messages": {
+              "total": 8,
+              "updates": 2,
+              "refreshes": 0,
+              "octets": 225
+            },
+            "output_messages": {
+              "total": 9,
+              "updates": 2,
+              "refreshes": 0,
+              "octets": 296
+            },
+            "output_queues": {
+              "0": 0
+            },
+            "tables": {
+              "inet.0": {
+                "bit": 10001,
+                "active_prefixes": 1,
+                "received_prefixes": 1,
+                "accepted_prefixes": 1,
+                "suppressed_due_to_damping": 0,
+                "advertised_prefixes": 2,
+                "rib_state": "BGP restart is complete",
+                "send_state": "in sync"
+              }
+            }
+          },
+          "2001:20::3": {
+            "peer_address": "2001:20::3",
+            "peer_port": 179,
+            "peer_as": 30000,
+            "local_address": "2001:20::1",
+            "local_port": 62643,
+            "local_as": 1,
+            "type": "External",
+            "state": "Established",
+            "flags": [
+              "ImportEval",
+              "Sync"
+            ],
+            "last_state": "OpenConfirm",
+            "last_event": "RecvKeepAlive",
+            "export_policies": [
+              "export2bgp"
+            ],
+            "options": [
+              "Preference",
+              "PeerAS",
+              "Refresh"
+            ],
+            "holdtime": 90,
+            "preference": 170,
+            "number_of_flaps": 0,
+            "peer_id": "10.16.2.2",
+            "local_id": "10.4.1.1",
+            "active_holdtime": 90,
+            "keepalive_interval": 30,
+            "peer_index": 0,
+            "bfd_status": "disabled, down",
+            "local_interface": "ge-0/0/1.0",
+            "nlri_configured_on_peer": "inet6-unicast",
+            "nlri_advertised_by_peer": "inet6-unicast",
+            "nlri_session": "inet6-unicast",
+            "peer_supports_refresh": true,
+            "stale_routes_kept_for": 300,
+            "peer_supports_restarter": false,
+            "nlri_restart_negotiated": "inet6-unicast",
+            "nlri_received_eor": "inet6-unicast",
+            "nlri_sent_eor": "inet6-unicast",
+            "peer_supports_4byte_as": true,
+            "peer_supports_addpath": false,
+            "last_traffic": {
+              "received": 15,
+              "sent": 10,
+              "checked": 29
+            },
+            "input_messages": {
+              "total": 7,
+              "updates": 2,
+              "refreshes": 0,
+              "octets": 219
+            },
+            "output_messages": {
+              "total": 9,
+              "updates": 2,
+              "refreshes": 0,
+              "octets": 395
+            },
+            "output_queues": {
+              "1": 0
+            },
+            "tables": {
+              "inet6.0": {
+                "bit": 20000,
+                "active_prefixes": 1,
+                "received_prefixes": 1,
+                "accepted_prefixes": 1,
+                "suppressed_due_to_damping": 0,
+                "advertised_prefixes": 2,
+                "rib_state": "BGP restart is complete",
+                "send_state": "in sync"
+              }
+            }
+          },
+          "2001:30::2": {
+            "peer_address": "2001:30::2",
+            "peer_port": 179,
+            "peer_as": 2,
+            "local_address": "2001:30::1",
+            "local_port": 61370,
+            "local_as": 1,
+            "type": "External",
+            "state": "Established",
+            "flags": [
+              "ImportEval",
+              "Sync"
+            ],
+            "last_state": "OpenConfirm",
+            "last_event": "RecvKeepAlive",
+            "export_policies": [
+              "export2bgp"
+            ],
+            "options": [
+              "Preference",
+              "PeerAS",
+              "Refresh"
+            ],
+            "holdtime": 90,
+            "preference": 170,
+            "number_of_flaps": 0,
+            "peer_id": "10.36.3.3",
+            "local_id": "10.4.1.1",
+            "active_holdtime": 90,
+            "keepalive_interval": 30,
+            "peer_index": 0,
+            "bfd_status": "disabled, down",
+            "local_interface": "ge-0/0/2.0",
+            "nlri_configured_on_peer": "inet6-unicast",
+            "nlri_advertised_by_peer": "inet6-unicast",
+            "nlri_session": "inet6-unicast",
+            "peer_supports_refresh": true,
+            "stale_routes_kept_for": 300,
+            "peer_supports_restarter": false,
+            "nlri_restart_negotiated": "inet6-unicast",
+            "nlri_received_eor": "inet6-unicast",
+            "nlri_sent_eor": "inet6-unicast",
+            "peer_supports_4byte_as": true,
+            "peer_supports_addpath": false,
+            "last_traffic": {
+              "received": 2,
+              "sent": 1,
+              "checked": 21
+            },
+            "input_messages": {
+              "total": 7,
+              "updates": 2,
+              "refreshes": 0,
+              "octets": 219
+            },
+            "output_messages": {
+              "total": 9,
+              "updates": 2,
+              "refreshes": 0,
+              "octets": 395
+            },
+            "output_queues": {
+              "1": 0
+            },
+            "tables": {
+              "inet6.0": {
+                "bit": 20001,
+                "active_prefixes": 1,
+                "received_prefixes": 1,
+                "accepted_prefixes": 1,
+                "suppressed_due_to_damping": 0,
+                "advertised_prefixes": 2,
+                "rib_state": "BGP restart is complete",
+                "send_state": "in sync"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,287 @@
+{
+  "os": "juniper_junos",
+  "command": "show pfe statistics traffic",
+  "schema": {
+    "name": "ShowPfeStatisticsTrafficResult",
+    "fields": {
+      "traffic": {
+        "type": {
+          "name": "TrafficStats",
+          "fields": {
+            "input_packets": {
+              "type": "int",
+              "required": false
+            },
+            "input_pps": {
+              "type": "int",
+              "required": false
+            },
+            "output_packets": {
+              "type": "int",
+              "required": false
+            },
+            "output_pps": {
+              "type": "int",
+              "required": false
+            },
+            "fabric_input": {
+              "type": "int",
+              "required": false
+            },
+            "fabric_input_pps": {
+              "type": "int",
+              "required": false
+            },
+            "fabric_output": {
+              "type": "int",
+              "required": false
+            },
+            "fabric_output_pps": {
+              "type": "int",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "local_traffic": {
+        "type": {
+          "name": "LocalTrafficStats",
+          "fields": {
+            "local_packets_input": {
+              "type": "int",
+              "required": false
+            },
+            "local_packets_output": {
+              "type": "int",
+              "required": false
+            },
+            "software_input_control_plane_drops": {
+              "type": "int",
+              "required": false
+            },
+            "software_input_high_drops": {
+              "type": "int",
+              "required": false
+            },
+            "software_input_medium_drops": {
+              "type": "int",
+              "required": false
+            },
+            "software_input_low_drops": {
+              "type": "int",
+              "required": false
+            },
+            "software_output_drops": {
+              "type": "int",
+              "required": false
+            },
+            "hardware_input_drops": {
+              "type": "int",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "local_protocol": {
+        "type": {
+          "name": "LocalProtocolStats",
+          "fields": {
+            "hdlc_keepalives": {
+              "type": "int",
+              "required": false
+            },
+            "atm_oam": {
+              "type": "int",
+              "required": false
+            },
+            "frame_relay_lmi": {
+              "type": "int",
+              "required": false
+            },
+            "ppp_lcp_ncp": {
+              "type": "int",
+              "required": false
+            },
+            "ospf_hello": {
+              "type": "int",
+              "required": false
+            },
+            "ospf3_hello": {
+              "type": "int",
+              "required": false
+            },
+            "rsvp_hello": {
+              "type": "int",
+              "required": false
+            },
+            "ldp_hello": {
+              "type": "int",
+              "required": false
+            },
+            "bfd": {
+              "type": "int",
+              "required": false
+            },
+            "isis_iih": {
+              "type": "int",
+              "required": false
+            },
+            "lacp": {
+              "type": "int",
+              "required": false
+            },
+            "arp": {
+              "type": "int",
+              "required": false
+            },
+            "ether_oam": {
+              "type": "int",
+              "required": false
+            },
+            "unknown": {
+              "type": "int",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "hardware_discard": {
+        "type": {
+          "name": "HardwareDiscardStats",
+          "fields": {
+            "timeout": {
+              "type": "int",
+              "required": false
+            },
+            "truncated_key": {
+              "type": "int",
+              "required": false
+            },
+            "bits_to_test": {
+              "type": "int",
+              "required": false
+            },
+            "data_error": {
+              "type": "int",
+              "required": false
+            },
+            "tcp_header_length_error": {
+              "type": "int",
+              "required": false
+            },
+            "stack_underflow": {
+              "type": "int",
+              "required": false
+            },
+            "stack_overflow": {
+              "type": "int",
+              "required": false
+            },
+            "normal_discard": {
+              "type": "int",
+              "required": false
+            },
+            "extended_discard": {
+              "type": "int",
+              "required": false
+            },
+            "invalid_interface": {
+              "type": "int",
+              "required": false
+            },
+            "info_cell_drops": {
+              "type": "int",
+              "required": false
+            },
+            "fabric_drops": {
+              "type": "int",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "checksum_mtu": {
+        "type": {
+          "name": "ChecksumMtuStats",
+          "fields": {
+            "input_checksum": {
+              "type": "int",
+              "required": false
+            },
+            "output_mtu": {
+              "type": "int",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "PFE traffic statistics from MX series router",
+      "input": "\n                show pfe statistics traffic\n        Packet Forwarding Engine traffic statistics:\n            Input  packets:            763584752                   14 pps\n            Output packets:            728623201                   16 pps\n            Fabric Input  :                    0                    0 pps\n            Fabric Output :                    0                    0 pps\n        Packet Forwarding Engine local traffic statistics:\n            Local packets input                 :            184259247\n            Local packets output                :            370506284\n            Software input control plane drops  :                    0\n            Software input high drops           :                    0\n            Software input medium drops         :                    0\n            Software input low drops            :                    0\n            Software output drops               :                    0\n            Hardware input drops                :                    0\n        Packet Forwarding Engine local protocol statistics:\n            HDLC keepalives            :                    0\n            ATM OAM                    :                    0\n            Frame Relay LMI            :                    0\n            PPP LCP/NCP                :                    0\n            OSPF hello                 :              5732336\n            OSPF3 hello                :              4146329\n            RSVP hello                 :              7040269\n            LDP hello                  :              3462026\n            BFD                        :             82347033\n            IS-IS IIH                  :                    0\n            LACP                       :                    0\n            ARP                        :                56818\n            ETHER OAM                  :                    0\n            Unknown                    :                    0\n        Packet Forwarding Engine hardware discard statistics:\n            Timeout                    :                    0\n            Truncated key              :                    0\n            Bits to test               :                    0\n            Data error                 :                    0\n            TCP header length error    :                    0\n            Stack underflow            :                    0\n            Stack overflow             :                    0\n            Normal discard             :               962415\n            Extended discard           :                    0\n            Invalid interface          :                    0\n            Info cell drops            :                    0\n            Fabric drops               :                    0\n        Packet Forwarding Engine Input IPv4 Header Checksum Error and Output MTU Error statistics:\n            Input Checksum             :                    0\n            Output MTU                 :                    0\n",
+      "expected": {
+        "traffic": {
+          "input_packets": 763584752,
+          "input_pps": 14,
+          "output_packets": 728623201,
+          "output_pps": 16,
+          "fabric_input": 0,
+          "fabric_input_pps": 0,
+          "fabric_output": 0,
+          "fabric_output_pps": 0
+        },
+        "local_traffic": {
+          "local_packets_input": 184259247,
+          "local_packets_output": 370506284,
+          "software_input_control_plane_drops": 0,
+          "software_input_high_drops": 0,
+          "software_input_medium_drops": 0,
+          "software_input_low_drops": 0,
+          "software_output_drops": 0,
+          "hardware_input_drops": 0
+        },
+        "local_protocol": {
+          "hdlc_keepalives": 0,
+          "atm_oam": 0,
+          "frame_relay_lmi": 0,
+          "ppp_lcp_ncp": 0,
+          "ospf_hello": 5732336,
+          "ospf3_hello": 4146329,
+          "rsvp_hello": 7040269,
+          "ldp_hello": 3462026,
+          "bfd": 82347033,
+          "isis_iih": 0,
+          "lacp": 0,
+          "arp": 56818,
+          "ether_oam": 0,
+          "unknown": 0
+        },
+        "hardware_discard": {
+          "timeout": 0,
+          "truncated_key": 0,
+          "bits_to_test": 0,
+          "data_error": 0,
+          "tcp_header_length_error": 0,
+          "stack_underflow": 0,
+          "stack_overflow": 0,
+          "normal_discard": 962415,
+          "extended_discard": 0,
+          "invalid_interface": 0,
+          "info_cell_drops": 0,
+          "fabric_drops": 0
+        },
+        "checksum_mtu": {
+          "input_checksum": 0,
+          "output_mtu": 0
+        }
+      }
+    }
+  ]
+}
