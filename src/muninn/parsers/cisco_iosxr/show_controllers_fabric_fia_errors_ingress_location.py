@@ -26,7 +26,10 @@ class ShowControllersFabricFiaErrorsIngressLocationResult(TypedDict):
     fia_instances: dict[str, FiaErrorCounter]
 
 
-@register(OS.CISCO_IOSXR, "show controllers fabric fia errors ingress location")
+@register(
+    OS.CISCO_IOSXR,
+    r"show controllers fabric fia errors ingress location (?P<location>\S+)",
+)
 class ShowControllersFabricFiaErrorsIngressLocationParser(
     BaseParser[ShowControllersFabricFiaErrorsIngressLocationResult],
 ):
