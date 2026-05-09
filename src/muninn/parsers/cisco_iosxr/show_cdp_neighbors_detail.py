@@ -22,6 +22,7 @@ class CdpNeighborDetailEntry(TypedDict):
     port_id: str
     hold_time: int
     version: str
+    system_name: NotRequired[str]
     advertisement_version: NotRequired[int]
     native_vlan: NotRequired[int]
     duplex: NotRequired[str]
@@ -46,6 +47,7 @@ class ShowCdpNeighborsDetailParser(BaseParser[ShowCdpNeighborsDetailResult]):
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.CDP})
 
     _DEVICE_ID_PATTERN = re.compile(r"Device ID:\s*(.+)")
+    _SYSNAME_PATTERN = re.compile(r"SysName\s*:[ \t]*(\S.*)")
     _IP_ADDRESS_PATTERN = re.compile(r"IP(?:v4)? [Aa]ddress:\s*(\S+)")
     _PLATFORM_CAPABILITIES_PATTERN = re.compile(
         r"Platform:\s*(.+?),\s+Capabilities:\s*(.+)"
@@ -160,6 +162,8 @@ class ShowCdpNeighborsDetailParser(BaseParser[ShowCdpNeighborsDetailResult]):
 
         platform, capabilities = cls._extract_platform_capabilities(block)
         hold_match = cls._HOLDTIME_PATTERN.search(block)
+        if not hold_match:
+            return None
 
         local_interface = canonical_interface_name(intf_match.group(1))
         port_id = canonical_interface_name(intf_match.group(2))
@@ -170,9 +174,15 @@ class ShowCdpNeighborsDetailParser(BaseParser[ShowCdpNeighborsDetailResult]):
             "platform": platform,
             "capabilities": capabilities,
             "port_id": port_id,
-            "hold_time": int(hold_match.group(1)) if hold_match else 0,
+            "hold_time": int(hold_match.group(1)),
             "version": cls._extract_version(block),
         }
+
+        sysname_match = cls._SYSNAME_PATTERN.search(block)
+        if sysname_match:
+            sysname = sysname_match.group(1).strip()
+            if sysname:
+                entry["system_name"] = sysname
 
         adv_match = cls._ADV_VERSION_PATTERN.search(block)
         if adv_match:
