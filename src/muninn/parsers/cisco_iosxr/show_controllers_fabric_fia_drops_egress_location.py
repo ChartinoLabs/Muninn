@@ -27,7 +27,10 @@ class ShowControllersFabricFiaDropsEgressLocationResult(TypedDict):
     fia_instances: dict[str, FiaDropCounters]
 
 
-@register(OS.CISCO_IOSXR, "show controllers fabric fia drops egress location")
+@register(
+    OS.CISCO_IOSXR,
+    r"show controllers fabric fia drops egress location (?P<location>\S+)",
+)
 class ShowControllersFabricFiaDropsEgressLocationParser(
     BaseParser[ShowControllersFabricFiaDropsEgressLocationResult],
 ):
