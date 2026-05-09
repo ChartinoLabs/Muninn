@@ -35,6 +35,42 @@ class TestOperatingSystem:
         assert "cisco_iosxe" in CiscoIOSXE.aliases
 
 
+class TestDisplayName:
+    """Tests that every OS exposes a user-facing display name."""
+
+    @pytest.mark.parametrize(
+        ("os_member", "expected"),
+        [
+            (OS.CISCO_NXOS, "Cisco NX-OS"),
+            (OS.CISCO_IOSXE, "Cisco IOS-XE"),
+            (OS.CISCO_IOSXR, "Cisco IOS-XR"),
+            (OS.CISCO_IOS, "Cisco IOS"),
+            (OS.ARISTA_EOS, "Arista EOS"),
+            (OS.JUNIPER_JUNOS, "Juniper Junos"),
+            (OS.PALOALTO_PANOS, "Palo Alto PAN-OS"),
+            (OS.NOKIA_SROS, "Nokia SR OS"),
+            (OS.LINUX, "Linux"),
+        ],
+    )
+    def test_display_name(self, os_member: OS, expected: str) -> None:
+        """Each OS exposes the expected display name."""
+        assert os_member.value.display_name == expected
+
+    def test_every_os_has_a_display_name(self) -> None:
+        """Every registered OS declares a non-empty display_name."""
+        for member in OS:
+            assert getattr(member.value, "display_name", "")
+
+    def test_display_name_differs_from_slug(self) -> None:
+        """Display name is more human-readable than the canonical slug."""
+        for member in OS:
+            cls = member.value
+            # Linux is the one case where the slug == display name.
+            if cls.name == "linux":
+                continue
+            assert cls.display_name != cls.name
+
+
 class TestOSEnum:
     """Tests for OS enum."""
 

@@ -320,20 +320,21 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
   var detailCache = {};
   var expandedKey = null;
 
-  var osDisplayNames = {
+  // Display names declared on each OperatingSystem class in src/muninn/os.py
+  // are emitted into newer catalog entries as `os_display_name`. For older
+  // catalog files (v0.1.0, v0.2.0) that predate that, fall back to this map.
+  var osDisplayNamesFallback = {
     "cisco_ios": "Cisco IOS",
     "cisco_iosxe": "Cisco IOS-XE",
     "cisco_iosxr": "Cisco IOS-XR",
-    "cisco_nxos": "Cisco NX-OS",
-    "arista_eos": "Arista EOS",
-    "juniper_junos": "Juniper Junos",
-    "paloalto_panos": "Palo Alto PAN-OS",
-    "nokia_sros": "Nokia SR OS",
-    "linux": "Linux"
+    "cisco_nxos": "Cisco NX-OS"
   };
 
+  // Built per loaded catalog: os slug -> display name from catalog entries.
+  var osDisplayNames = {};
+
   function osLabel(os) {
-    return osDisplayNames[os] || os;
+    return osDisplayNames[os] || osDisplayNamesFallback[os] || os;
   }
 
   function parserKey(p) {
@@ -393,6 +394,10 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
       .then(function (r) { return r.json(); })
       .then(function (parsers) {
         currentParsers = parsers;
+        osDisplayNames = {};
+        parsers.forEach(function (p) {
+          if (p.os_display_name) osDisplayNames[p.os] = p.os_display_name;
+        });
         rebuildFilters();
         render();
       })
