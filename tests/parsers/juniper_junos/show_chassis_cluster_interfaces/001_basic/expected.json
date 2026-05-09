@@ -1,13 +1,13 @@
 {
     "control_link_status": "Up",
     "control_interfaces": {
-        "0": {
-            "interface": "em0",
+        "em0": {
+            "index": 0,
             "monitored_status": "Up",
             "internal_sa": "Disabled"
         },
-        "1": {
-            "interface": "em1",
+        "em1": {
+            "index": 1,
             "monitored_status": "Down",
             "internal_sa": "Disabled"
         }
@@ -74,7 +74,13 @@
     "monitored_interfaces": {
         "ge-0/1/9": {
             "weight": 100,
-            "status": "Up"
+            "status": "Up",
+            "redundancy_group": 1
+        },
+        "ge-7/1/9": {
+            "weight": 100,
+            "status": "Up",
+            "redundancy_group": 2
         }
     }
 }

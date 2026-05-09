@@ -13,7 +13,7 @@ from muninn.tags import ParserTag
 class ControlInterface(TypedDict):
     """Schema for a control plane interface entry."""
 
-    interface: str
+    index: int
     monitored_status: str
     internal_sa: str
 
@@ -202,9 +202,9 @@ class ShowChassisClusterInterfacesParser(
     ) -> None:
         """Parse a control interface line into the result dict."""
         if match := cls._CONTROL_IFACE.match(line):
-            index = match.group("index")
-            result[index] = ControlInterface(
-                interface=match.group("interface"),
+            interface = match.group("interface")
+            result[interface] = ControlInterface(
+                index=int(match.group("index")),
                 monitored_status=match.group("monitored_status"),
                 internal_sa=match.group("internal_sa"),
             )
