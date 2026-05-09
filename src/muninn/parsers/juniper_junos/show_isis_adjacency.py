@@ -1,7 +1,7 @@
 """Parser for 'show isis adjacency' command on Juniper Junos."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -9,24 +9,19 @@ from muninn.registry import register
 from muninn.tags import ParserTag
 
 
-class IsisAdjacencyEntry(TypedDict, total=False):
+class IsisAdjacencyEntry(TypedDict):
     """Schema for a single IS-IS adjacency entry.
 
     Attributes:
-        interface: Local interface name (e.g., ``ge-0/0/2.0``).
-        system: IS-IS system name or ID of the neighbor.
-        level: IS-IS level (e.g., ``1``, ``2``, ``3``).
         state: Adjacency state (e.g., ``Up``, ``Down``, ``Init``).
         hold_time: Hold timer countdown in seconds.
         snpa: Subnetwork Point of Attachment (MAC address of the neighbor).
+            Omitted on link types that do not expose a SNPA value.
     """
 
-    interface: str
-    system: str
-    level: int
     state: str
     hold_time: int
-    snpa: str
+    snpa: NotRequired[str]
 
 
 class ShowIsisAdjacencyResult(TypedDict):
@@ -99,15 +94,12 @@ class ShowIsisAdjacencyParser(BaseParser[ShowIsisAdjacencyResult]):
 
             interface = match.group("interface")
             system = match.group("system")
-            level = str(match.group("level"))
+            level = match.group("level")
 
-            entry = IsisAdjacencyEntry(
-                interface=interface,
-                system=system,
-                level=int(match.group("level")),
-                state=match.group("state"),
-                hold_time=int(match.group("hold_time")),
-            )
+            entry: IsisAdjacencyEntry = {
+                "state": match.group("state"),
+                "hold_time": int(match.group("hold_time")),
+            }
 
             snpa = match.group("snpa")
             if snpa is not None:
@@ -119,4 +111,4 @@ class ShowIsisAdjacencyParser(BaseParser[ShowIsisAdjacencyResult]):
             msg = "No IS-IS adjacencies found in output"
             raise ValueError(msg)
 
-        return cast(ShowIsisAdjacencyResult, {"adjacencies": adjacencies})
+        return ShowIsisAdjacencyResult(adjacencies=adjacencies)
