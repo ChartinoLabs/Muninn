@@ -114,7 +114,9 @@ class MuninnRuntime:
         self,
         os: str | OS | type[OperatingSystem],
         command: str,
-    ) -> tuple[ExecutionMode, list[tuple[str, str]], list[ParserCandidate], bool]:
+    ) -> tuple[
+        ExecutionMode, list[tuple[ParserSource, str]], list[ParserCandidate], bool
+    ]:
         if self._autoload_builtins and not self._builtins_loaded:
             self.load_builtin_parsers()
 
@@ -141,7 +143,7 @@ class MuninnRuntime:
         resolved_os: OS,
         command: str,
         execution_mode: ExecutionMode,
-        candidate_order: list[tuple[str, str]],
+        candidate_order: list[tuple[ParserSource, str]],
     ) -> None:
         logger.debug(
             "Parser candidate order for os=%s command=%r mode=%s: %s",
