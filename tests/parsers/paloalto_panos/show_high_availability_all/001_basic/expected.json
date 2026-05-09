@@ -12,11 +12,16 @@
         "monitor_fail_hold_down_interval": "1 min",
         "state_sync": "Complete",
         "state_sync_type": "ethernet",
+        "ha1_joint_config": {
+            "link_monitor_interval_ms": 3000,
+            "encryption_enabled": false
+        },
         "ha1_control_link": {
             "ip_address": "10.1.1.1/30",
             "mac_address": "00:90:0b:33:3d:53",
             "interface": "dedicated-ha1",
-            "link_state": "Up; Setting: 1Gb/s-full"
+            "link_state": "Up; Setting: 1Gb/s-full",
+            "key_imported": false
         },
         "ha2_data_link": {
             "ip_address": "10.2.2.1/30",
@@ -41,6 +46,14 @@
             "application_content": "580-3287",
             "anti_virus": "1858-2337",
             "threat_content": "580-3287"
+        },
+        "version_compatibility": {
+            "software_version": "Match",
+            "application_content": "Match",
+            "anti_virus": "Match",
+            "threat_content": "Match",
+            "vpn_client_software": "Match",
+            "global_protect_client_software": "Match"
         }
     },
     "peer": {
@@ -53,7 +66,8 @@
         "mgmt_ipv4": "10.10.186.198/24",
         "ha1_control_link": {
             "ip_address": "10.1.1.2",
-            "mac_address": "00:90:0b:33:44:53"
+            "mac_address": "00:90:0b:33:44:53",
+            "connection": "up; Primary HA1 link"
         },
         "ha2_data_link": {
             "ip_address": "10.2.2.2",

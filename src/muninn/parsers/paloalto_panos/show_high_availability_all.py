@@ -1,7 +1,7 @@
 """Parser for 'show high-availability all' command on Palo Alto PAN-OS."""
 
 import re
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
@@ -31,6 +31,8 @@ class HAControlLink(TypedDict):
     mac_address: NotRequired[str]
     interface: NotRequired[str]
     link_state: NotRequired[str]
+    key_imported: NotRequired[bool]
+    connection: NotRequired[str]
 
 
 class HADataLink(TypedDict):
@@ -40,6 +42,7 @@ class HADataLink(TypedDict):
     mac_address: NotRequired[str]
     interface: NotRequired[str]
     link_state: NotRequired[str]
+    connection: NotRequired[str]
 
 
 class HAVersionInfo(TypedDict):
@@ -54,12 +57,35 @@ class HAVersionInfo(TypedDict):
     global_protect_client_software: NotRequired[str]
 
 
-class HALocalInfo(TypedDict):
-    """Local HA peer information."""
+class HAVersionCompatibility(TypedDict):
+    """Version compatibility status between local and peer."""
 
-    version: int
-    mode: str
-    state: str
+    software_version: NotRequired[str]
+    application_content: NotRequired[str]
+    anti_virus: NotRequired[str]
+    threat_content: NotRequired[str]
+    vpn_client_software: NotRequired[str]
+    global_protect_client_software: NotRequired[str]
+
+
+class HA1JointConfig(TypedDict):
+    """HA1 control links joint configuration shared by local and peer."""
+
+    link_monitor_interval_ms: NotRequired[int]
+    encryption_enabled: NotRequired[bool]
+
+
+class HALocalInfo(TypedDict):
+    """Local HA peer information.
+
+    All fields are ``NotRequired`` because each is populated only when its
+    corresponding line appears in the device output; the parser does not
+    synthesize defaults for missing lines.
+    """
+
+    version: NotRequired[int]
+    mode: NotRequired[str]
+    state: NotRequired[str]
     state_duration: NotRequired[str]
     model: NotRequired[str]
     mgmt_ipv4: NotRequired[str]
@@ -71,15 +97,22 @@ class HALocalInfo(TypedDict):
     version_info: NotRequired[HAVersionInfo]
     state_sync: NotRequired[str]
     state_sync_type: NotRequired[str]
+    ha1_joint_config: NotRequired[HA1JointConfig]
+    version_compatibility: NotRequired[HAVersionCompatibility]
 
 
 class HAPeerInfo(TypedDict):
-    """Peer HA information."""
+    """Peer HA information.
 
-    connection_status: str
-    version: int
-    mode: str
-    state: str
+    All fields are ``NotRequired`` because each is populated only when its
+    corresponding line appears in the device output; the parser does not
+    synthesize defaults for missing lines.
+    """
+
+    connection_status: NotRequired[str]
+    version: NotRequired[int]
+    mode: NotRequired[str]
+    state: NotRequired[str]
     state_duration: NotRequired[str]
     model: NotRequired[str]
     mgmt_ipv4: NotRequired[str]
@@ -92,7 +125,7 @@ class HAPeerInfo(TypedDict):
 class HALinkMonitoring(TypedDict):
     """Link monitoring configuration."""
 
-    enabled: bool
+    enabled: NotRequired[bool]
     failure_condition: NotRequired[str]
     interfaces: NotRequired[dict[str, str]]
 
@@ -100,14 +133,14 @@ class HALinkMonitoring(TypedDict):
 class HAPathMonitoring(TypedDict):
     """Path monitoring configuration."""
 
-    enabled: bool
+    enabled: NotRequired[bool]
     failure_condition: NotRequired[str]
 
 
 class HAConfigSync(TypedDict):
     """Configuration synchronization status."""
 
-    enabled: bool
+    enabled: NotRequired[bool]
     running_config: NotRequired[str]
 
 
@@ -164,6 +197,24 @@ _HELLO_INTERVAL = re.compile(r"^\s+Hello Message Interval:\s+(.+)$")
 _HEARTBEAT_INTERVAL = re.compile(r"^\s+Heartbeat Ping Interval:\s+(.+)$")
 _MON_FAIL_UP = re.compile(r"^\s+Monitor Fail Hold Up Interval:\s+(.+)$")
 _ADDON_HOLD = re.compile(r"^\s+Addon Master Hold Up Interval:\s+(.+)$")
+_LINK_MONITOR_INTERVAL = re.compile(r"^\s+Link Monitor Interval:\s+(.+)$")
+_ENCRYPTION_ENABLED = re.compile(r"^\s+Encryption Enabled:\s+(\S+)$")
+_KEY_IMPORTED = re.compile(r"^\s+Key Imported\s*:\s*(\S+)$")
+_CONNECTION_FREEFORM = re.compile(r"^\s+Connection\s+(.+)$")
+
+# Version compatibility lines: "<Field> Compatibility: <Match|Mismatch>"
+_COMPAT_LINE = re.compile(r"^\s+(.+?)\s+Compatibility:\s+(\S+)$")
+# Version compatibility line for the Software Version row (no "Compatibility:")
+_SOFTWARE_VERSION_LINE = re.compile(r"^\s+Software Version:\s+(\S+)$")
+
+# Map between version compatibility human label and TypedDict key.
+_COMPAT_LABEL_TO_KEY: dict[str, str] = {
+    "Application Content": "application_content",
+    "Anti-Virus": "anti_virus",
+    "Threat Content": "threat_content",
+    "VPN Client Software": "vpn_client_software",
+    "Global Protect Client Software": "global_protect_client_software",
+}
 
 # Section tracking constants
 _SECTION_NONE = "none"
@@ -183,6 +234,7 @@ _SUB_AP_MODE = "ap_mode"
 _SUB_VERSION = "version"
 _SUB_COMPAT = "compat"
 _SUB_GROUP_LINK = "group_link"
+_SUB_HA1_JOINT = "ha1_joint"
 
 # Major section header -> section constant
 _SECTION_HEADERS: dict[str, str] = {
@@ -205,6 +257,7 @@ _SUB_HEADERS_EXACT: dict[str, str] = {
 
 # Sub-section header -> sub-section constant (prefix match)
 _SUB_HEADERS_PREFIX: dict[str, str] = {
+    "HA1 Control Links Joint Configuration": _SUB_HA1_JOINT,
     "HA1 Control Link": _SUB_HA1,
     "HA2 Data Link": _SUB_HA2,
 }
@@ -241,8 +294,8 @@ def _parse_yes_no(value: str) -> bool:
     return value.lower() == "yes"
 
 
-def _parse_link_info(line: str, target: dict[str, str]) -> None:
-    """Parse HA link fields (IP, MAC, interface, link state)."""
+def _parse_link_info(line: str, target: dict[str, object]) -> None:
+    """Parse HA link fields (IP, MAC, interface, link state, key/conn)."""
     for pattern, key in (
         (_IP_ADDR, "ip_address"),
         (_MAC_ADDR, "mac_address"),
@@ -253,6 +306,46 @@ def _parse_link_info(line: str, target: dict[str, str]) -> None:
         if m:
             target[key] = m.group(1).strip()
             return
+    m = _KEY_IMPORTED.match(line)
+    if m:
+        target["key_imported"] = _parse_yes_no(m.group(1))
+        return
+    # "Connection up; Primary HA1 link" — appears on peer HA1 control link.
+    # Don't consume "Connection status:" lines (those are peer-base fields).
+    if "status:" not in line:
+        m = _CONNECTION_FREEFORM.match(line)
+        if m:
+            target["connection"] = m.group(1).strip()
+
+
+def _parse_ha1_joint_config(
+    line: str,
+    target: dict[str, object],
+) -> None:
+    """Parse HA1 Control Links Joint Configuration fields."""
+    m = _LINK_MONITOR_INTERVAL.match(line)
+    if m:
+        ms = _parse_ms(m.group(1).strip())
+        if ms is not None:
+            target["link_monitor_interval_ms"] = ms
+        return
+    m = _ENCRYPTION_ENABLED.match(line)
+    if m:
+        target["encryption_enabled"] = _parse_yes_no(m.group(1))
+
+
+def _parse_compat_block(line: str, target: dict[str, str]) -> None:
+    """Parse Version Compatibility fields (Software Version + per-component)."""
+    m = _SOFTWARE_VERSION_LINE.match(line)
+    if m:
+        target["software_version"] = m.group(1).strip()
+        return
+    m = _COMPAT_LINE.match(line)
+    if m:
+        label = m.group(1).strip()
+        key = _COMPAT_LABEL_TO_KEY.get(label)
+        if key is not None:
+            target[key] = m.group(2).strip()
 
 
 def _parse_device_info(line: str, target: dict[str, object]) -> None:
@@ -366,6 +459,8 @@ class _ParseState:
         "local_ha2",
         "local_election",
         "local_version",
+        "local_compat",
+        "local_ha1_joint",
         "peer_ha1",
         "peer_ha2",
         "peer_election",
@@ -382,12 +477,14 @@ class _ParseState:
         self.link_mon: dict[str, object] = {}
         self.path_mon: dict[str, object] = {}
         self.config_sync: dict[str, object] = {}
-        self.local_ha1: dict[str, str] = {}
-        self.local_ha2: dict[str, str] = {}
+        self.local_ha1: dict[str, object] = {}
+        self.local_ha2: dict[str, object] = {}
         self.local_election: dict[str, object] = {}
         self.local_version: dict[str, str] = {}
-        self.peer_ha1: dict[str, str] = {}
-        self.peer_ha2: dict[str, str] = {}
+        self.local_compat: dict[str, str] = {}
+        self.local_ha1_joint: dict[str, object] = {}
+        self.peer_ha1: dict[str, object] = {}
+        self.peer_ha2: dict[str, object] = {}
         self.peer_election: dict[str, object] = {}
         self.peer_version: dict[str, str] = {}
         self.link_interfaces: dict[str, str] = {}
@@ -400,6 +497,16 @@ class _ParseState:
         _attach_if_nonempty(self.local, "ha2_data_link", self.local_ha2)
         _attach_if_nonempty(self.local, "election_options", self.local_election)
         _attach_if_nonempty(self.local, "version_info", self.local_version)
+        _attach_if_nonempty(
+            self.local,
+            "version_compatibility",
+            self.local_compat,
+        )
+        _attach_if_nonempty(
+            self.local,
+            "ha1_joint_config",
+            self.local_ha1_joint,
+        )
         _attach_if_nonempty(self.peer, "ha1_control_link", self.peer_ha1)
         _attach_if_nonempty(self.peer, "ha2_data_link", self.peer_ha2)
         _attach_if_nonempty(self.peer, "election_options", self.peer_election)
@@ -423,6 +530,64 @@ def _attach_if_nonempty(
     """Attach child dict to parent under key only if child is non-empty."""
     if child:
         parent[key] = child
+
+
+def _parse_peer_base(line: str, peer: dict[str, object]) -> None:
+    """Parse peer base fields including connection status."""
+    m = _CONNECTION_STATUS.match(line)
+    if m:
+        peer["connection_status"] = m.group(1)
+        return
+    _parse_peer_or_local_base(line, peer)
+
+
+def _parse_ap_mode(line: str, local: dict[str, object]) -> None:
+    """Parse Active-Passive mode fields."""
+    m = _PASSIVE_LINK.match(line)
+    if m:
+        local["passive_link_state"] = m.group(1)
+        return
+    m = _MONITOR_FAIL_DOWN.match(line)
+    if m:
+        local["monitor_fail_hold_down_interval"] = m.group(1).strip()
+
+
+# Handler signature: (line, state) -> None
+_LOCAL_SUB_HANDLERS: dict[str, "Callable[[str, _ParseState], None]"] = {
+    _SUB_NONE: lambda line, st: _parse_peer_or_local_base(line, st.local),
+    _SUB_DEVICE: lambda line, st: _parse_device_info(line, st.local),
+    _SUB_HA1_JOINT: lambda line, st: _parse_ha1_joint_config(
+        line,
+        st.local_ha1_joint,
+    ),
+    _SUB_HA1: lambda line, st: _parse_link_info(line, st.local_ha1),
+    _SUB_HA2: lambda line, st: _parse_link_info(line, st.local_ha2),
+    _SUB_ELECTION: lambda line, st: _parse_election_info(
+        line,
+        st.local_election,
+    ),
+    _SUB_AP_MODE: lambda line, st: _parse_ap_mode(line, st.local),
+    _SUB_VERSION: lambda line, st: _parse_version_block(
+        line,
+        st.local_version,
+    ),
+    _SUB_COMPAT: lambda line, st: _parse_compat_block(line, st.local_compat),
+}
+
+_PEER_SUB_HANDLERS: dict[str, "Callable[[str, _ParseState], None]"] = {
+    _SUB_NONE: lambda line, st: _parse_peer_base(line, st.peer),
+    _SUB_DEVICE: lambda line, st: _parse_device_info(line, st.peer),
+    _SUB_HA1: lambda line, st: _parse_link_info(line, st.peer_ha1),
+    _SUB_HA2: lambda line, st: _parse_link_info(line, st.peer_ha2),
+    _SUB_ELECTION: lambda line, st: _parse_election_info(
+        line,
+        st.peer_election,
+    ),
+    _SUB_VERSION: lambda line, st: _parse_version_block(
+        line,
+        st.peer_version,
+    ),
+}
 
 
 @register(OS.PALOALTO_PANOS, "show high-availability all")
@@ -522,58 +687,16 @@ class ShowHighAvailabilityAllParser(
                 state.local["state_sync_type"] = m.group(2)
             return
 
-        sub = state.sub_section
-        if sub == _SUB_NONE:
-            _parse_peer_or_local_base(line, state.local)
-        elif sub == _SUB_DEVICE:
-            _parse_device_info(line, state.local)
-        elif sub == _SUB_HA1:
-            _parse_link_info(line, state.local_ha1)
-        elif sub == _SUB_HA2:
-            _parse_link_info(line, state.local_ha2)
-        elif sub == _SUB_ELECTION:
-            _parse_election_info(line, state.local_election)
-        elif sub == _SUB_AP_MODE:
-            cls._parse_ap_mode(line, state.local)
-        elif sub == _SUB_VERSION:
-            _parse_version_block(line, state.local_version)
+        handler = _LOCAL_SUB_HANDLERS.get(state.sub_section)
+        if handler is not None:
+            handler(line, state)
 
     @classmethod
     def _parse_peer_line(cls, line: str, state: _ParseState) -> None:
         """Parse a line within the Peer Information section."""
-        sub = state.sub_section
-        if sub == _SUB_NONE:
-            cls._parse_peer_base(line, state.peer)
-        elif sub == _SUB_DEVICE:
-            _parse_device_info(line, state.peer)
-        elif sub == _SUB_HA1:
-            _parse_link_info(line, state.peer_ha1)
-        elif sub == _SUB_HA2:
-            _parse_link_info(line, state.peer_ha2)
-        elif sub == _SUB_ELECTION:
-            _parse_election_info(line, state.peer_election)
-        elif sub == _SUB_VERSION:
-            _parse_version_block(line, state.peer_version)
-
-    @staticmethod
-    def _parse_peer_base(line: str, peer: dict[str, object]) -> None:
-        """Parse peer base fields including connection status."""
-        m = _CONNECTION_STATUS.match(line)
-        if m:
-            peer["connection_status"] = m.group(1)
-            return
-        _parse_peer_or_local_base(line, peer)
-
-    @staticmethod
-    def _parse_ap_mode(line: str, local: dict[str, object]) -> None:
-        """Parse Active-Passive mode fields."""
-        m = _PASSIVE_LINK.match(line)
-        if m:
-            local["passive_link_state"] = m.group(1)
-            return
-        m = _MONITOR_FAIL_DOWN.match(line)
-        if m:
-            local["monitor_fail_hold_down_interval"] = m.group(1).strip()
+        handler = _PEER_SUB_HANDLERS.get(state.sub_section)
+        if handler is not None:
+            handler(line, state)
 
     @classmethod
     def _parse_link_mon_line(
