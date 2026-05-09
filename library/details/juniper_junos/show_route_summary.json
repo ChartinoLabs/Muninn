@@ -1,0 +1,264 @@
+{
+  "os": "juniper_junos",
+  "command": "show route summary",
+  "schema": {
+    "name": "ShowRouteSummaryResult",
+    "fields": {
+      "autonomous_system": {
+        "type": "int | str",
+        "required": true
+      },
+      "router_id": {
+        "type": "str",
+        "required": true
+      },
+      "highwater_mark": {
+        "type": {
+          "name": "HighwaterMark",
+          "fields": {
+            "rib_unique_destination_routes": {
+              "type": {
+                "name": "HighwaterEntry",
+                "fields": {
+                  "value": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "at": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "time_averaged": {
+                    "type": "int",
+                    "required": false
+                  }
+                }
+              },
+              "required": false
+            },
+            "rib_routes": {
+              "type": {
+                "type": "ref",
+                "name": "HighwaterEntry"
+              },
+              "required": false
+            },
+            "fib_routes": {
+              "type": {
+                "type": "ref",
+                "name": "HighwaterEntry"
+              },
+              "required": false
+            },
+            "vrf_type_routing_instances": {
+              "type": {
+                "type": "ref",
+                "name": "HighwaterEntry"
+              },
+              "required": false
+            }
+          }
+        },
+        "required": true
+      },
+      "tables": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RoutingTableEntry",
+            "fields": {
+              "destinations": {
+                "type": "int",
+                "required": true
+              },
+              "total_routes": {
+                "type": "int",
+                "required": true
+              },
+              "active": {
+                "type": "int",
+                "required": true
+              },
+              "holddown": {
+                "type": "int",
+                "required": true
+              },
+              "hidden": {
+                "type": "int",
+                "required": true
+              },
+              "protocols": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "ProtocolEntry",
+                    "fields": {
+                      "routes": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "active": {
+                        "type": "int",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple routing tables with protocol breakdowns and highwater marks",
+      "input": "Autonomous system number: 65000\nRouter ID: 129.250.0.2\n\nHighwater Mark (All time / Time averaged watermark)\n    RIB unique destination routes: 1221502 at 2000-01-01 00:00:00 / 1217389\n    RIB routes                   : 11101463 at 2000-01-01 00:00:00 / 10394871\n    FIB routes                   : 1207937 at 2000-01-01 00:00:00 / 1203820\n    VRF type routing instances   : 1 at 2000-01-01 00:00:00\n\ninet.0: 993427 destinations, 8574425 routes (992253 active, 13182 holddown, 1328663 hidden)\n              Direct:      8 routes,      7 active\n               Local:      7 routes,      7 active\n                 BGP: 8568064 routes, 985893 active\n              Static:      2 routes,      2 active\n               IS-IS:   6343 routes,   6343 active\n                 LDP:      1 routes,      1 active\n\niso.0: 1 destinations, 1 routes (1 active, 0 holddown, 0 hidden)\n              Direct:      1 routes,      1 active\n\nmpls.0: 284 destinations, 284 routes (284 active, 0 holddown, 0 hidden)\n                MPLS:      6 routes,      6 active\n                RSVP:      4 routes,      4 active\n                 LDP:    274 routes,    274 active\n\ninet6.0: 214385 destinations, 1781556 routes (214292 active, 2700 holddown, 257364 hidden)\n              Direct:      4 routes,      4 active\n               Local:      4 routes,      4 active\n                 BGP: 1775906 routes, 208642 active\n              Static:      2 routes,      2 active\n               IS-IS:   5639 routes,   5639 active\n               INET6:      1 routes,      1 active\n\nl2circuit.0: 1 destinations, 1 routes (1 active, 0 holddown, 0 hidden)\n                 LDP:      1 routes,      1 active\n",
+      "expected": {
+        "autonomous_system": 65000,
+        "router_id": "129.250.0.2",
+        "highwater_mark": {
+          "rib_unique_destination_routes": {
+            "value": 1221502,
+            "at": "2000-01-01 00:00:00",
+            "time_averaged": 1217389
+          },
+          "rib_routes": {
+            "value": 11101463,
+            "at": "2000-01-01 00:00:00",
+            "time_averaged": 10394871
+          },
+          "fib_routes": {
+            "value": 1207937,
+            "at": "2000-01-01 00:00:00",
+            "time_averaged": 1203820
+          },
+          "vrf_type_routing_instances": {
+            "value": 1,
+            "at": "2000-01-01 00:00:00"
+          }
+        },
+        "tables": {
+          "inet.0": {
+            "destinations": 993427,
+            "total_routes": 8574425,
+            "active": 992253,
+            "holddown": 13182,
+            "hidden": 1328663,
+            "protocols": {
+              "Direct": {
+                "routes": 8,
+                "active": 7
+              },
+              "Local": {
+                "routes": 7,
+                "active": 7
+              },
+              "BGP": {
+                "routes": 8568064,
+                "active": 985893
+              },
+              "Static": {
+                "routes": 2,
+                "active": 2
+              },
+              "IS-IS": {
+                "routes": 6343,
+                "active": 6343
+              },
+              "LDP": {
+                "routes": 1,
+                "active": 1
+              }
+            }
+          },
+          "iso.0": {
+            "destinations": 1,
+            "total_routes": 1,
+            "active": 1,
+            "holddown": 0,
+            "hidden": 0,
+            "protocols": {
+              "Direct": {
+                "routes": 1,
+                "active": 1
+              }
+            }
+          },
+          "mpls.0": {
+            "destinations": 284,
+            "total_routes": 284,
+            "active": 284,
+            "holddown": 0,
+            "hidden": 0,
+            "protocols": {
+              "MPLS": {
+                "routes": 6,
+                "active": 6
+              },
+              "RSVP": {
+                "routes": 4,
+                "active": 4
+              },
+              "LDP": {
+                "routes": 274,
+                "active": 274
+              }
+            }
+          },
+          "inet6.0": {
+            "destinations": 214385,
+            "total_routes": 1781556,
+            "active": 214292,
+            "holddown": 2700,
+            "hidden": 257364,
+            "protocols": {
+              "Direct": {
+                "routes": 4,
+                "active": 4
+              },
+              "Local": {
+                "routes": 4,
+                "active": 4
+              },
+              "BGP": {
+                "routes": 1775906,
+                "active": 208642
+              },
+              "Static": {
+                "routes": 2,
+                "active": 2
+              },
+              "IS-IS": {
+                "routes": 5639,
+                "active": 5639
+              },
+              "INET6": {
+                "routes": 1,
+                "active": 1
+              }
+            }
+          },
+          "l2circuit.0": {
+            "destinations": 1,
+            "total_routes": 1,
+            "active": 1,
+            "holddown": 0,
+            "hidden": 0,
+            "protocols": {
+              "LDP": {
+                "routes": 1,
+                "active": 1
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
