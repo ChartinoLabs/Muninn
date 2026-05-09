@@ -13,13 +13,20 @@ class ProcessCpuEntry(TypedDict):
     """Schema for a single process CPU entry."""
 
     pid: int
+    name: str
     one_minute: float
     five_minutes: float
     fifteen_minutes: float
 
 
 class ShowProcessesCpuResult(TypedDict):
-    """Schema for 'show processes cpu' parsed output on IOS-XR."""
+    """Schema for 'show processes cpu' parsed output on IOS-XR.
+
+    The ``processes`` mapping is keyed by PID (as a string) because process
+    names are not unique on IOS-XR — multiple instances of helpers such as
+    ``pkgfs``, ``bcdls``, ``bcdl_agent``, ``sysmgr``, and ``devb-umass``
+    routinely appear under different PIDs in real device output.
+    """
 
     cpu_utilization_one_minute: int
     cpu_utilization_five_minutes: int
@@ -85,9 +92,10 @@ class ShowProcessesCpuParser(BaseParser[ShowProcessesCpuResult]):
 
             match = cls._PROCESS_PATTERN.match(stripped)
             if match:
-                name = match.group("name")
-                processes[name] = ProcessCpuEntry(
-                    pid=int(match.group("pid")),
+                pid = match.group("pid")
+                processes[pid] = ProcessCpuEntry(
+                    pid=int(pid),
+                    name=match.group("name"),
                     one_minute=float(match.group("one")),
                     five_minutes=float(match.group("five")),
                     fifteen_minutes=float(match.group("fifteen")),
