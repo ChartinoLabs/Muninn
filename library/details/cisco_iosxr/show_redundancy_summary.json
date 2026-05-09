@@ -1,0 +1,71 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show redundancy summary",
+  "schema": {
+    "name": "ShowRedundancySummaryResult",
+    "fields": {
+      "pairs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RedundancyPairEntry",
+            "fields": {
+              "active_node": {
+                "type": "str",
+                "required": true
+              },
+              "active_role": {
+                "type": "str",
+                "required": true
+              },
+              "standby_node": {
+                "type": "str",
+                "required": false
+              },
+              "standby_role": {
+                "type": "str",
+                "required": false
+              },
+              "ready_status": {
+                "type": "str",
+                "required": true
+              },
+              "nsr_status": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Dual RSP redundancy with node and process group pairs",
+      "input": "Tue Mar  7 14:33:54.330 EST\n  Active/Primary   Standby/Backup\n  --------------   --------------\n  0/RSP0/CPU0(A)   0/RSP1/CPU0(S) (Node Ready, NSR: Ready)\n  0/RSP0/CPU0(P)   0/RSP1/CPU0(B) (Proc Group Ready, NSR: Ready)\n",
+      "expected": {
+        "pairs": {
+          "node": {
+            "active_node": "0/RSP0/CPU0",
+            "active_role": "Active",
+            "standby_node": "0/RSP1/CPU0",
+            "standby_role": "Standby",
+            "ready_status": "Node Ready",
+            "nsr_status": "Ready"
+          },
+          "proc_group": {
+            "active_node": "0/RSP0/CPU0",
+            "active_role": "Primary",
+            "standby_node": "0/RSP1/CPU0",
+            "standby_role": "Backup",
+            "ready_status": "Proc Group Ready",
+            "nsr_status": "Ready"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show interfaces summary",
+  "schema": {
+    "name": "ShowInterfacesSummaryResult",
+    "fields": {
+      "all_types": {
+        "type": {
+          "name": "InterfaceTypeSummaryEntry",
+          "fields": {
+            "total": {
+              "type": "int",
+              "required": true
+            },
+            "up": {
+              "type": "int",
+              "required": true
+            },
+            "down": {
+              "type": "int",
+              "required": true
+            },
+            "admin_down": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "by_type": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "ref",
+            "name": "InterfaceTypeSummaryEntry"
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Interface type summary with Bundle-Ether, HundredGigE, Loopback, Ethernet, Null, and TenGigE types",
+      "input": "Interface Type          Total    UP       Down     Admin Down\n--------------          -----    --       ----     ----------\nALL TYPES               81       51       0        30\n--------------\nIFT_ETHERBUNDLE         11       11       0        0\nIFT_HUNDREDGE           26       2        0        24\nIFT_LOOPBACK            1        1        0        0\nIFT_ETHERNET            2        0        0        2\nIFT_NULL                1        1        0        0\nIFT_TENGETHERNET        40       36       0        4\n",
+      "expected": {
+        "all_types": {
+          "total": 81,
+          "up": 51,
+          "down": 0,
+          "admin_down": 30
+        },
+        "by_type": {
+          "IFT_ETHERBUNDLE": {
+            "total": 11,
+            "up": 11,
+            "down": 0,
+            "admin_down": 0
+          },
+          "IFT_HUNDREDGE": {
+            "total": 26,
+            "up": 2,
+            "down": 0,
+            "admin_down": 24
+          },
+          "IFT_LOOPBACK": {
+            "total": 1,
+            "up": 1,
+            "down": 0,
+            "admin_down": 0
+          },
+          "IFT_ETHERNET": {
+            "total": 2,
+            "up": 0,
+            "down": 0,
+            "admin_down": 2
+          },
+          "IFT_NULL": {
+            "total": 1,
+            "up": 1,
+            "down": 0,
+            "admin_down": 0
+          },
+          "IFT_TENGETHERNET": {
+            "total": 40,
+            "up": 36,
+            "down": 0,
+            "admin_down": 4
+          }
+        }
+      }
+    }
+  ]
+}

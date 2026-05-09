@@ -1,0 +1,47 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show inventory",
+  "schema": null,
+  "examples": [
+    {
+      "name": "ASR9K inventory with RSP, linecards, and SFP modules including N/A VID entries",
+      "input": "\nNAME: \"module 0/RSP0/CPU0\", DESCR: \"ASR9K Route Switch Processor with 440G/slot Fabric and 6GB\"\nPID: A9K-RSP440-TR, VID: V05, SN: FOC1808NEND\n\nNAME: \"module 0/RSP1/CPU0\", DESCR: \"ASR9K Route Switch Processor with 440G/slot Fabric and 6GB\"\nPID: A9K-RSP440-TR, VID: V05, SN: FOC1808NEP5\n\nNAME: \"module 0/0/CPU0\", DESCR: \"80G Modular Linecard, Service Edge Optimized\"\nPID: A9K-MOD80-SE, VID: V06, SN: FOC1821NEET\n\nNAME: \"module 0/0/0\", DESCR: \"ASR 9000 20-port 1GE Modular Port Adapter\"\nPID: A9K-MPA-20X1GE, VID: V02, SN: FOC1811N49J\n\nNAME: \"module mau 0/0/0/0\", DESCR: \"Unknown or Unsupported CPAK Module\"\nPID: GLC-T               , VID: N/A, SN: 00000MTC160107LP\n\nNAME: \"module mau 0/0/0/1\", DESCR: \"Unknown or Unsupported CPAK Module\"\nPID: GLC-T               , VID: N/A, SN: 00000MTC17150731\n",
+      "expected": {
+        "module 0/RSP0/CPU0": {
+          "description": "ASR9K Route Switch Processor with 440G/slot Fabric and 6GB",
+          "pid": "A9K-RSP440-TR",
+          "vid": "V05",
+          "sn": "FOC1808NEND"
+        },
+        "module 0/RSP1/CPU0": {
+          "description": "ASR9K Route Switch Processor with 440G/slot Fabric and 6GB",
+          "pid": "A9K-RSP440-TR",
+          "vid": "V05",
+          "sn": "FOC1808NEP5"
+        },
+        "module 0/0/CPU0": {
+          "description": "80G Modular Linecard, Service Edge Optimized",
+          "pid": "A9K-MOD80-SE",
+          "vid": "V06",
+          "sn": "FOC1821NEET"
+        },
+        "module 0/0/0": {
+          "description": "ASR 9000 20-port 1GE Modular Port Adapter",
+          "pid": "A9K-MPA-20X1GE",
+          "vid": "V02",
+          "sn": "FOC1811N49J"
+        },
+        "module mau 0/0/0/0": {
+          "description": "Unknown or Unsupported CPAK Module",
+          "pid": "GLC-T",
+          "sn": "00000MTC160107LP"
+        },
+        "module mau 0/0/0/1": {
+          "description": "Unknown or Unsupported CPAK Module",
+          "pid": "GLC-T",
+          "sn": "00000MTC17150731"
+        }
+      }
+    }
+  ]
+}

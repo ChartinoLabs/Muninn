@@ -1,0 +1,258 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show arp",
+  "schema": {
+    "name": "ShowArpResult",
+    "fields": {
+      "arp_entries": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ArpEntry",
+            "fields": {
+              "age": {
+                "type": "str",
+                "required": false
+              },
+              "mac_address": {
+                "type": "str",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "type": {
+                "type": "str",
+                "required": true
+              },
+              "interface": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "ARP table with multiple line-card sections, dynamic and interface entries, and incomplete state",
+      "input": "Wed Jan  1 22:02:56.878 UTC\n\n-------------------------------------------------------------------------------\n0/0/CPU0\n-------------------------------------------------------------------------------\nAddress         Age        Hardware Addr   State      Type  Interface\n10.10.10.1      -          5254.0001.9002  Interface  ARPA  GigabitEthernet0/0/0/0\n10.10.10.101    01:25:23   aabb.cc00.6500  Dynamic    ARPA  GigabitEthernet0/0/0/0\n10.10.10.102    01:25:22   aabb.cc00.6600  Dynamic    ARPA  GigabitEthernet0/0/0/0\n10.10.10.103    01:25:21   aabb.cc00.6700  Dynamic    ARPA  GigabitEthernet0/0/0/0\n10.10.10.104    01:25:20   aabb.cc00.6800  Dynamic    ARPA  GigabitEthernet0/0/0/0\n10.10.10.105    01:25:19   aabb.cc00.6900  Dynamic    ARPA  GigabitEthernet0/0/0/0\n10.10.10.106    01:25:18   aabb.cc00.6a00  Dynamic    ARPA  GigabitEthernet0/0/0/0\n10.10.10.107    01:25:17   aabb.cc00.6b00  Dynamic    ARPA  GigabitEthernet0/0/0/0\n10.10.10.108    01:25:16   aabb.cc00.6c00  Dynamic    ARPA  GigabitEthernet0/0/0/0\n10.10.10.109    00:00:03   0000.0000.0000  Incomplete ARPA  GigabitEthernet0/0/0/0\n\n-------------------------------------------------------------------------------\n0/1/CPU0\n-------------------------------------------------------------------------------\nAddress         Age        Hardware Addr   State      Type  Interface\n10.10.20.1      -          5254.0002.9002  Interface  ARPA  GigabitEthernet0/1/0/0\n10.10.20.101    02:25:23   aacc.cc00.6500  Dynamic    ARPA  GigabitEthernet0/1/0/0\n10.10.20.102    02:25:22   aacc.cc00.6600  Dynamic    ARPA  GigabitEthernet0/1/0/0\n10.10.20.103    02:25:21   aacc.cc00.6700  Dynamic    ARPA  GigabitEthernet0/1/0/0\n10.10.20.104    02:25:20   aacc.cc00.6800  Dynamic    ARPA  GigabitEthernet0/1/0/0\n10.10.20.105    02:25:19   aacc.cc00.6900  Dynamic    ARPA  GigabitEthernet0/1/0/0\n10.10.20.106    02:25:18   aacc.cc00.6a00  Dynamic    ARPA  GigabitEthernet0/1/0/0\n10.10.20.107    02:25:17   aacc.cc00.6b00  Dynamic    ARPA  GigabitEthernet0/1/0/0\n10.10.20.108    02:25:16   aacc.cc00.6c00  Dynamic    ARPA  GigabitEthernet0/1/0/0\n10.10.20.109    00:00:03   0000.0000.0000  Incomplete ARPA  GigabitEthernet0/1/0/0\n\n-------------------------------------------------------------------------------\n0/2/CPU0\n-------------------------------------------------------------------------------\nAddress         Age        Hardware Addr   State      Type  Interface\n10.10.30.1      -          5254.0003.9002  Interface  ARPA  GigabitEthernet0/2/0/0\n10.10.30.101    03:25:23   aadd.cc00.6500  Dynamic    ARPA  GigabitEthernet0/2/0/0\n10.10.30.102    03:25:22   aadd.cc00.6600  Dynamic    ARPA  GigabitEthernet0/2/0/0\n10.10.30.103    03:25:21   aadd.cc00.6700  Dynamic    ARPA  GigabitEthernet0/2/0/0\n10.10.30.104    03:25:20   aadd.cc00.6800  Dynamic    ARPA  GigabitEthernet0/2/0/0\n10.10.30.105    03:25:19   aadd.cc00.6900  Dynamic    ARPA  GigabitEthernet0/2/0/0\n10.10.30.106    03:25:18   aadd.cc00.6a00  Dynamic    ARPA  GigabitEthernet0/2/0/0\n10.10.30.107    03:25:17   aadd.cc00.6b00  Dynamic    ARPA  GigabitEthernet0/2/0/0\n10.10.30.108    03:25:16   aadd.cc00.6c00  Dynamic    ARPA  GigabitEthernet0/2/0/0\n10.10.30.109    00:00:03   0000.0000.0000  Incomplete ARPA  GigabitEthernet0/2/0/0\n",
+      "expected": {
+        "arp_entries": {
+          "10.10.10.1": {
+            "mac_address": "5254.0001.9002",
+            "state": "Interface",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/0/0/0"
+          },
+          "10.10.10.101": {
+            "age": "01:25:23",
+            "mac_address": "aabb.cc00.6500",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/0/0/0"
+          },
+          "10.10.10.102": {
+            "age": "01:25:22",
+            "mac_address": "aabb.cc00.6600",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/0/0/0"
+          },
+          "10.10.10.103": {
+            "age": "01:25:21",
+            "mac_address": "aabb.cc00.6700",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/0/0/0"
+          },
+          "10.10.10.104": {
+            "age": "01:25:20",
+            "mac_address": "aabb.cc00.6800",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/0/0/0"
+          },
+          "10.10.10.105": {
+            "age": "01:25:19",
+            "mac_address": "aabb.cc00.6900",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/0/0/0"
+          },
+          "10.10.10.106": {
+            "age": "01:25:18",
+            "mac_address": "aabb.cc00.6a00",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/0/0/0"
+          },
+          "10.10.10.107": {
+            "age": "01:25:17",
+            "mac_address": "aabb.cc00.6b00",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/0/0/0"
+          },
+          "10.10.10.108": {
+            "age": "01:25:16",
+            "mac_address": "aabb.cc00.6c00",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/0/0/0"
+          },
+          "10.10.10.109": {
+            "age": "00:00:03",
+            "mac_address": "0000.0000.0000",
+            "state": "Incomplete",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/0/0/0"
+          },
+          "10.10.20.1": {
+            "mac_address": "5254.0002.9002",
+            "state": "Interface",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/1/0/0"
+          },
+          "10.10.20.101": {
+            "age": "02:25:23",
+            "mac_address": "aacc.cc00.6500",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/1/0/0"
+          },
+          "10.10.20.102": {
+            "age": "02:25:22",
+            "mac_address": "aacc.cc00.6600",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/1/0/0"
+          },
+          "10.10.20.103": {
+            "age": "02:25:21",
+            "mac_address": "aacc.cc00.6700",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/1/0/0"
+          },
+          "10.10.20.104": {
+            "age": "02:25:20",
+            "mac_address": "aacc.cc00.6800",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/1/0/0"
+          },
+          "10.10.20.105": {
+            "age": "02:25:19",
+            "mac_address": "aacc.cc00.6900",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/1/0/0"
+          },
+          "10.10.20.106": {
+            "age": "02:25:18",
+            "mac_address": "aacc.cc00.6a00",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/1/0/0"
+          },
+          "10.10.20.107": {
+            "age": "02:25:17",
+            "mac_address": "aacc.cc00.6b00",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/1/0/0"
+          },
+          "10.10.20.108": {
+            "age": "02:25:16",
+            "mac_address": "aacc.cc00.6c00",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/1/0/0"
+          },
+          "10.10.20.109": {
+            "age": "00:00:03",
+            "mac_address": "0000.0000.0000",
+            "state": "Incomplete",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/1/0/0"
+          },
+          "10.10.30.1": {
+            "mac_address": "5254.0003.9002",
+            "state": "Interface",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/2/0/0"
+          },
+          "10.10.30.101": {
+            "age": "03:25:23",
+            "mac_address": "aadd.cc00.6500",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/2/0/0"
+          },
+          "10.10.30.102": {
+            "age": "03:25:22",
+            "mac_address": "aadd.cc00.6600",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/2/0/0"
+          },
+          "10.10.30.103": {
+            "age": "03:25:21",
+            "mac_address": "aadd.cc00.6700",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/2/0/0"
+          },
+          "10.10.30.104": {
+            "age": "03:25:20",
+            "mac_address": "aadd.cc00.6800",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/2/0/0"
+          },
+          "10.10.30.105": {
+            "age": "03:25:19",
+            "mac_address": "aadd.cc00.6900",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/2/0/0"
+          },
+          "10.10.30.106": {
+            "age": "03:25:18",
+            "mac_address": "aadd.cc00.6a00",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/2/0/0"
+          },
+          "10.10.30.107": {
+            "age": "03:25:17",
+            "mac_address": "aadd.cc00.6b00",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/2/0/0"
+          },
+          "10.10.30.108": {
+            "age": "03:25:16",
+            "mac_address": "aadd.cc00.6c00",
+            "state": "Dynamic",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/2/0/0"
+          },
+          "10.10.30.109": {
+            "age": "00:00:03",
+            "mac_address": "0000.0000.0000",
+            "state": "Incomplete",
+            "type": "ARPA",
+            "interface": "GigabitEthernet0/2/0/0"
+          }
+        }
+      }
+    }
+  ]
+}

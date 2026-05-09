@@ -1,0 +1,115 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show ipv6 neighbors",
+  "schema": {
+    "name": "ShowIpv6NeighborsResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "Ipv6NeighborEntry",
+              "fields": {
+                "age": {
+                  "type": "int",
+                  "required": true
+                },
+                "link_layer_address": {
+                  "type": "str",
+                  "required": true
+                },
+                "state": {
+                  "type": "str",
+                  "required": true
+                },
+                "location": {
+                  "type": "str",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple IPv6 neighbors across interfaces with multicast adjacency entries",
+      "input": "Fri Oct 11 02:35:25.149 UTC\nIPv6 Address                              Age Link-layer Addr State Interface            Location\n2001:db8:ffff::12:2                      110  0c07.a11a.b801 REACH Gi0/0/0/0            0/0/CPU0\nfe80::e07:a1ff:fe1a:b801                 99   0c07.a11a.b801 REACH Gi0/0/0/0            0/0/CPU0\n[Mcast adjacency]                           - 0000.0000.0000 REACH Gi0/0/0/0            0/0/CPU0\n[Mcast adjacency]                           - 0000.0000.0000 REACH Gi0/0/0/1            0/0/CPU0\n[Mcast adjacency]                           - 0000.0000.0000 REACH Gi0/0/0/2            0/0/CPU0\n2001:db8:1000:beef::1                    105  ca01.0ff1.0008 REACH Gi0/0/0/3            0/0/CPU0\n2001:db8:1000:beef::2                    108  ca02.0fff.0008 REACH Gi0/0/0/3            0/0/CPU0\n2001:db8:1000:beef::3                    105  ca03.100d.0008 REACH Gi0/0/0/3            0/0/CPU0\nfe80::c801:fff:fef1:8                    89   ca01.0ff1.0008 REACH Gi0/0/0/3            0/0/CPU0\nfe80::c802:fff:feff:8                    105  ca02.0fff.0008 REACH Gi0/0/0/3            0/0/CPU0\nfe80::c803:10ff:fe0d:8                   91   ca03.100d.0008 REACH Gi0/0/0/3            0/0/CPU0\n[Mcast adjacency]                           - 0000.0000.0000 REACH Gi0/0/0/3            0/0/CPU0\n",
+      "expected": {
+        "neighbors": {
+          "2001:db8:ffff::12:2": {
+            "GigabitEthernet0/0/0/0": {
+              "age": 110,
+              "link_layer_address": "0c07.a11a.b801",
+              "state": "REACH",
+              "location": "0/0/CPU0"
+            }
+          },
+          "fe80::e07:a1ff:fe1a:b801": {
+            "GigabitEthernet0/0/0/0": {
+              "age": 99,
+              "link_layer_address": "0c07.a11a.b801",
+              "state": "REACH",
+              "location": "0/0/CPU0"
+            }
+          },
+          "2001:db8:1000:beef::1": {
+            "GigabitEthernet0/0/0/3": {
+              "age": 105,
+              "link_layer_address": "ca01.0ff1.0008",
+              "state": "REACH",
+              "location": "0/0/CPU0"
+            }
+          },
+          "2001:db8:1000:beef::2": {
+            "GigabitEthernet0/0/0/3": {
+              "age": 108,
+              "link_layer_address": "ca02.0fff.0008",
+              "state": "REACH",
+              "location": "0/0/CPU0"
+            }
+          },
+          "2001:db8:1000:beef::3": {
+            "GigabitEthernet0/0/0/3": {
+              "age": 105,
+              "link_layer_address": "ca03.100d.0008",
+              "state": "REACH",
+              "location": "0/0/CPU0"
+            }
+          },
+          "fe80::c801:fff:fef1:8": {
+            "GigabitEthernet0/0/0/3": {
+              "age": 89,
+              "link_layer_address": "ca01.0ff1.0008",
+              "state": "REACH",
+              "location": "0/0/CPU0"
+            }
+          },
+          "fe80::c802:fff:feff:8": {
+            "GigabitEthernet0/0/0/3": {
+              "age": 105,
+              "link_layer_address": "ca02.0fff.0008",
+              "state": "REACH",
+              "location": "0/0/CPU0"
+            }
+          },
+          "fe80::c803:10ff:fe0d:8": {
+            "GigabitEthernet0/0/0/3": {
+              "age": 91,
+              "link_layer_address": "ca03.100d.0008",
+              "state": "REACH",
+              "location": "0/0/CPU0"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

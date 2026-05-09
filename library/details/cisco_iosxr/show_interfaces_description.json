@@ -1,0 +1,130 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show interfaces description",
+  "schema": {
+    "name": "ShowInterfacesDescriptionResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceDescriptionEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "protocol": {
+                "type": "str",
+                "required": true
+              },
+              "description": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Mixed interface types with descriptions, admin-down, deleted, and empty descriptions",
+      "input": "Tue Sep 24 10:49:25.293 BRA\n\nInterface          Status      Protocol    Description\n--------------------------------------------------------------------------------\nBE100              up          up          Ligacao -SAT01 | 10G | (satellite100)\nLo0                up          up          Endereco de Acesso ao Roteador\nLo10               up          up          SPB | BGP | ASN 123456\nLo20               up          up          *** Management Loopback ***\nNu0                up          up\nGi100/0/0/0        up          up          LINK ETHERNET\nGi100/0/0/0.10     up          up          MULTIPLANNING\nGi100/0/0/0.150012 admin-down  admin-down  ADMIN DOWN\nGi100/0/0/2        admin-down  admin-down\nGi100/0/0/9        deleted     deleted     DELETED\nnG100/0/0/42       deleted     deleted\nnG100/0/0/43       down        down\nnT100/0/0/47       up          up\nPT0/RSP0/CPU0/0    admin-down  admin-down\nMg0/RSP1/CPU0/0    admin-down  admin-down\nMg0/RSP1/CPU0/1    admin-down  admin-down\nTe0/3/0/0          up          up          Ligacao | 10G | 10G/061 | (ten0/4/0/1/0)\nTe0/4/0/0          up          up          Ligacao | 10G | 10G/062 | (ten0/3/0/1/7)\nTe0/5/0/3          up          up          Ligacao -SAT04 | 10G | (satellite400)\n",
+      "expected": {
+        "interfaces": {
+          "BE100": {
+            "status": "up",
+            "protocol": "up",
+            "description": "Ligacao -SAT01 | 10G | (satellite100)"
+          },
+          "Loopback0": {
+            "status": "up",
+            "protocol": "up",
+            "description": "Endereco de Acesso ao Roteador"
+          },
+          "Loopback10": {
+            "status": "up",
+            "protocol": "up",
+            "description": "SPB | BGP | ASN 123456"
+          },
+          "Loopback20": {
+            "status": "up",
+            "protocol": "up",
+            "description": "*** Management Loopback ***"
+          },
+          "Null0": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "GigabitEthernet100/0/0/0": {
+            "status": "up",
+            "protocol": "up",
+            "description": "LINK ETHERNET"
+          },
+          "GigabitEthernet100/0/0/0.10": {
+            "status": "up",
+            "protocol": "up",
+            "description": "MULTIPLANNING"
+          },
+          "GigabitEthernet100/0/0/0.150012": {
+            "status": "admin-down",
+            "protocol": "admin-down",
+            "description": "ADMIN DOWN"
+          },
+          "GigabitEthernet100/0/0/2": {
+            "status": "admin-down",
+            "protocol": "admin-down"
+          },
+          "GigabitEthernet100/0/0/9": {
+            "status": "deleted",
+            "protocol": "deleted",
+            "description": "DELETED"
+          },
+          "nG100/0/0/42": {
+            "status": "deleted",
+            "protocol": "deleted"
+          },
+          "nG100/0/0/43": {
+            "status": "down",
+            "protocol": "down"
+          },
+          "nT100/0/0/47": {
+            "status": "up",
+            "protocol": "up"
+          },
+          "PT0/RSP0/CPU0/0": {
+            "status": "admin-down",
+            "protocol": "admin-down"
+          },
+          "MgmtEth0/RSP1/CPU0/0": {
+            "status": "admin-down",
+            "protocol": "admin-down"
+          },
+          "MgmtEth0/RSP1/CPU0/1": {
+            "status": "admin-down",
+            "protocol": "admin-down"
+          },
+          "TenGigabitEthernet0/3/0/0": {
+            "status": "up",
+            "protocol": "up",
+            "description": "Ligacao | 10G | 10G/061 | (ten0/4/0/1/0)"
+          },
+          "TenGigabitEthernet0/4/0/0": {
+            "status": "up",
+            "protocol": "up",
+            "description": "Ligacao | 10G | 10G/062 | (ten0/3/0/1/7)"
+          },
+          "TenGigabitEthernet0/5/0/3": {
+            "status": "up",
+            "protocol": "up",
+            "description": "Ligacao -SAT04 | 10G | (satellite400)"
+          }
+        }
+      }
+    }
+  ]
+}
