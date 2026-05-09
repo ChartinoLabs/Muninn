@@ -31,10 +31,16 @@ class LacpProtocolEntry(TypedDict):
 
 
 class MemberInterfaceEntry(TypedDict):
-    """Schema for a member interface within an aggregated interface."""
+    """Schema for a member interface within an aggregated interface.
 
-    actor: LacpRoleEntry
-    partner: LacpRoleEntry
+    All fields are ``NotRequired`` because each LACP state row (Actor /
+    Partner) and the LACP protocol row are written independently by the
+    parser. A given member is only guaranteed to have whichever rows the
+    device actually emitted for it.
+    """
+
+    actor: NotRequired[LacpRoleEntry]
+    partner: NotRequired[LacpRoleEntry]
     protocol: NotRequired[LacpProtocolEntry]
 
 
