@@ -285,13 +285,16 @@ def generate_catalog_from_source(
         details: dict[tuple[str, str], dict[str, object]] = {}
 
         for spec in specs:
-            os_name = spec.os.value.name
+            os_cls = spec.os.value
+            os_name = os_cls.name
+            os_display = getattr(os_cls, "display_name", os_name)
             command = spec.doc_template
 
             detail_file = f"details/{os_name}/{_command_to_filename(command)}.json"
             entries.append(
                 {
                     "os": os_name,
+                    "os_display_name": os_display,
                     "command": command,
                     "tags": sorted(str(tag) for tag in spec.tags),
                     "source": spec.source,

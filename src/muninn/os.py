@@ -7,15 +7,18 @@ from typing import ClassVar
 class OperatingSystem:
     """Base class for operating system definitions.
 
-    Each OS subclass defines a canonical name and a set of aliases
-    that can be used to look up the OS.
+    Each OS subclass defines a canonical name, a user-facing display
+    name, and a set of aliases that can be used to look up the OS.
 
     Attributes:
-        name: Canonical internal name for this OS.
+        name: Canonical internal name for this OS (used in slugs and paths).
+        display_name: Human-friendly name shown in user-facing surfaces
+            such as the docs site catalog and CLI tooling.
         aliases: Tuple of acceptable string identifiers for this OS.
     """
 
     name: ClassVar[str]
+    display_name: ClassVar[str]
     aliases: ClassVar[tuple[str, ...]]
 
 
@@ -23,6 +26,7 @@ class CiscoNXOS(OperatingSystem):
     """Cisco NX-OS (Nexus switches)."""
 
     name = "cisco_nxos"
+    display_name = "Cisco NX-OS"
     aliases = ("nxos", "cisco_nxos", "nexus", "nx-os", "nx_os")
 
 
@@ -30,6 +34,7 @@ class CiscoIOSXE(OperatingSystem):
     """Cisco IOS-XE (Catalyst switches, ISR/ASR routers)."""
 
     name = "cisco_iosxe"
+    display_name = "Cisco IOS-XE"
     aliases = ("iosxe", "cisco_iosxe", "ios-xe", "ios_xe", "cisco_ios_xe")
 
 
@@ -37,6 +42,7 @@ class CiscoIOSXR(OperatingSystem):
     """Cisco IOS-XR (ASR 9000, NCS, XRv)."""
 
     name = "cisco_iosxr"
+    display_name = "Cisco IOS-XR"
     aliases = ("iosxr", "cisco_iosxr", "ios-xr", "ios_xr", "cisco_ios_xr")
 
 
@@ -44,6 +50,7 @@ class CiscoIOS(OperatingSystem):
     """Cisco IOS Classic (legacy devices)."""
 
     name = "cisco_ios"
+    display_name = "Cisco IOS"
     aliases = ("ios", "cisco_ios")
 
 
@@ -51,6 +58,7 @@ class AristaEOS(OperatingSystem):
     """Arista EOS (data center and campus switches)."""
 
     name = "arista_eos"
+    display_name = "Arista EOS"
     aliases = ("arista_eos", "eos", "arista")
 
 
@@ -58,6 +66,7 @@ class JuniperJunos(OperatingSystem):
     """Juniper Junos (MX, QFX, EX, SRX, PTX)."""
 
     name = "juniper_junos"
+    display_name = "Juniper Junos"
     aliases = ("juniper_junos", "junos", "juniper")
 
 
@@ -65,6 +74,7 @@ class PaloAltoPanOS(OperatingSystem):
     """Palo Alto PAN-OS (next-generation firewalls)."""
 
     name = "paloalto_panos"
+    display_name = "Palo Alto PAN-OS"
     aliases = ("paloalto_panos", "panos", "paloalto", "pan-os", "pan_os")
 
 
@@ -72,6 +82,7 @@ class NokiaSROS(OperatingSystem):
     """Nokia SR OS (7750 SR, 7210 SAS, 7450 ESS)."""
 
     name = "nokia_sros"
+    display_name = "Nokia SR OS"
     aliases = ("nokia_sros", "sros", "nokia", "sr-os", "sr_os")
 
 
@@ -79,6 +90,7 @@ class Linux(OperatingSystem):
     """Linux (including SONiC, Cumulus, FRR-based platforms)."""
 
     name = "linux"
+    display_name = "Linux"
     aliases = ("linux",)
 
 
