@@ -4,6 +4,228 @@ All notable changes to Muninn are documented in this file.
 
 <!-- towncrier release notes start -->
 
+## 0.3.0 - 2026-05-09
+
+### Added Parsers
+
+- Added parser for `show version` on Cisco IOS-XR. ([#698](https://github.com/ChartinoLabs/Muninn/pull/698))
+- Added parser for `show version` on Arista EOS. ([#699](https://github.com/ChartinoLabs/Muninn/pull/699))
+- Added parser for `show version` on Juniper Junos. ([#700](https://github.com/ChartinoLabs/Muninn/pull/700))
+- Added parser for `show system info` on Palo Alto PAN-OS. ([#701](https://github.com/ChartinoLabs/Muninn/pull/701))
+- Added parser for `show port` on Nokia SR OS. ([#702](https://github.com/ChartinoLabs/Muninn/pull/702))
+- Added parser for `ip address show` on Linux. ([#703](https://github.com/ChartinoLabs/Muninn/pull/703))
+- Added parser for `show interfaces brief` on Cisco IOS-XR. ([#710](https://github.com/ChartinoLabs/Muninn/pull/710))
+- Added parser for `show ip route` on Cisco IOS-XR. ([#711](https://github.com/ChartinoLabs/Muninn/pull/711))
+- Added parser for `show interfaces status` on Arista EOS. ([#712](https://github.com/ChartinoLabs/Muninn/pull/712))
+- Added parser for `show ip route` on Arista EOS. ([#713](https://github.com/ChartinoLabs/Muninn/pull/713))
+- Added parser for `show interfaces` on Juniper Junos. ([#714](https://github.com/ChartinoLabs/Muninn/pull/714))
+- Added parser for `show bgp summary` on Juniper Junos. ([#715](https://github.com/ChartinoLabs/Muninn/pull/715))
+- Added parser for `show interface hardware` on Palo Alto PAN-OS. ([#716](https://github.com/ChartinoLabs/Muninn/pull/716))
+- Added parser for `show arp all` on Palo Alto PAN-OS. ([#717](https://github.com/ChartinoLabs/Muninn/pull/717))
+- Added parser for `show router interface` on Nokia SR OS. ([#718](https://github.com/ChartinoLabs/Muninn/pull/718))
+- Added parser for `show lag` on Nokia SR OS. ([#719](https://github.com/ChartinoLabs/Muninn/pull/719))
+- Added parser for `ip route show` on Linux. ([#720](https://github.com/ChartinoLabs/Muninn/pull/720))
+- Added parser for `ip link show` on Linux. ([#721](https://github.com/ChartinoLabs/Muninn/pull/721))
+- Added parser for `show bgp summary` on Cisco IOS-XR. ([#734](https://github.com/ChartinoLabs/Muninn/pull/734))
+- Added parser for `show ospf neighbor` on Cisco IOS-XR. ([#735](https://github.com/ChartinoLabs/Muninn/pull/735))
+- Added parser for `show ip arp` on Arista EOS. ([#736](https://github.com/ChartinoLabs/Muninn/pull/736))
+- Added parser for `show lldp neighbors` on Arista EOS. ([#737](https://github.com/ChartinoLabs/Muninn/pull/737))
+- Added parser for `show arp no-resolve` on Juniper Junos. ([#738](https://github.com/ChartinoLabs/Muninn/pull/738))
+- Added parser for `show ospf neighbor` on Juniper Junos. ([#739](https://github.com/ChartinoLabs/Muninn/pull/739))
+- Added parser for `show routing route` on Palo Alto PAN-OS. ([#740](https://github.com/ChartinoLabs/Muninn/pull/740))
+- Added parser for `show routing protocol bgp summary` on Palo Alto PAN-OS. ([#741](https://github.com/ChartinoLabs/Muninn/pull/741))
+- Added parser for `show router bgp summary family` on Nokia SR OS. ([#742](https://github.com/ChartinoLabs/Muninn/pull/742))
+- Added parser for `show service sap-using` on Nokia SR OS. ([#743](https://github.com/ChartinoLabs/Muninn/pull/743))
+- Added parser for `arp -a` on Linux. ([#744](https://github.com/ChartinoLabs/Muninn/pull/744))
+- Added parser for `show ip interface` on Cisco IOS and IOS-XE. ([#921](https://github.com/ChartinoLabs/Muninn/pull/921))
+- Added ``show bgp instance all summary`` parser for Cisco IOS-XR. Parses BGP process information, speaker table, and neighbor summary across all configured BGP instances, address families, and VRFs.
+- Added `cisco_iosxr` parser for `show cdp neighbors detail`.
+- Added `show bgp vrf all ipv4 unicast summary` parser for Cisco IOS-XR.
+- Added `show ip bgp summary` parser for Arista EOS.
+- Added `show task replication` parser for Juniper Junos.
+- Added parser for `admin show environment fan` on Cisco IOS-XR.
+- Added parser for `admin show environment power` on Cisco IOS-XR.
+- Added parser for `admin show inventory` on Cisco IOS-XR.
+- Added parser for `admin show platform` on Cisco IOS-XR.
+- Added parser for `admin show vm` on Cisco IOS-XR.
+- Added parser for `debug swm status` on Palo Alto PAN-OS.
+- Added parser for `dir` on Arista EOS.
+- Added parser for `dir` on Cisco IOS-XR.
+- Added parser for `dmidecode -t bios` on Linux.
+- Added parser for `dmidecode -t memory` on Linux.
+- Added parser for `dmidecode -t processor` on Linux.
+- Added parser for `dmidecode -t system` on Linux.
+- Added parser for `docker stats --no-stream` on Linux.
+- Added parser for `ifconfig` on Linux.
+- Added parser for `ip vrf show` on Linux.
+- Added parser for `iwconfig` on Linux.
+- Added parser for `nmcli connection show` on Linux.
+- Added parser for `ping` on Cisco IOS-XR.
+- Added parser for `request license info` on Palo Alto PAN-OS.
+- Added parser for `route` on Linux.
+- Added parser for `show arp` on Cisco IOS-XR.
+- Added parser for `show asic-errors all location` on Cisco IOS-XR.
+- Added parser for `show bfd sessions` on Cisco IOS-XR.
+- Added parser for `show bgp neighbor` on Juniper Junos.
+- Added parser for `show bgp neighbors` on Cisco IOS-XR.
+- Added parser for `show bgp vrf all neighbors advertised-routes` on Cisco IOS-XR.
+- Added parser for `show call-home` on Cisco IOS and IOS-XE.
+- Added parser for `show cef drops location` on Cisco IOS-XR.
+- Added parser for `show chassis cluster interfaces` on Juniper Junos.
+- Added parser for `show chassis cluster status` on Juniper Junos.
+- Added parser for `show chassis firmware` on Juniper Junos.
+- Added parser for `show chassis hardware` on Juniper Junos.
+- Added parser for `show clock` on Arista EOS.
+- Added parser for `show configuration commit list` on Cisco IOS-XR.
+- Added parser for `show controller fabric plane all` on Cisco IOS-XR.
+- Added parser for `show controllers HundredGigabitEthernet` on Cisco IOS-XR.
+- Added parser for `show controllers all phy` on Cisco IOS-XR.
+- Added parser for `show controllers fabric fia drops egress location` on Cisco IOS-XR.
+- Added parser for `show controllers fabric fia drops ingress location` on Cisco IOS-XR.
+- Added parser for `show controllers fabric fia errors egress location` on Cisco IOS-XR.
+- Added parser for `show controllers fabric fia errors ingress location` on Cisco IOS-XR.
+- Added parser for `show counter global` on Palo Alto PAN-OS.
+- Added parser for `show ddos-protection statistics` on Juniper Junos.
+- Added parser for `show drops np all` on Cisco IOS-XR.
+- Added parser for `show environment cooling` on Arista EOS.
+- Added parser for `show environment power` on Arista EOS.
+- Added parser for `show environment temperature` on Arista EOS.
+- Added parser for `show high-availability all` on Palo Alto PAN-OS.
+- Added parser for `show high-availability path-monitoring` on Palo Alto PAN-OS.
+- Added parser for `show hostname` on Arista EOS.
+- Added parser for `show hsrp` on Cisco IOS-XR.
+- Added parser for `show install active` on Cisco IOS-XR.
+- Added parser for `show interface logical` on Palo Alto PAN-OS.
+- Added parser for `show interface management` on Palo Alto PAN-OS.
+- Added parser for `show interfaces description` on Arista EOS.
+- Added parser for `show interfaces description` on Cisco IOS-XR.
+- Added parser for `show interfaces summary` on Cisco IOS-XR.
+- Added parser for `show interfaces transceiver detail` on Arista EOS.
+- Added parser for `show interfaces transceiver` on Arista EOS.
+- Added parser for `show interfaces` on Arista EOS.
+- Added parser for `show interfaces` on Cisco IOS-XR.
+- Added parser for `show inventory` on Arista EOS.
+- Added parser for `show inventory` on Cisco IOS-XR.
+- Added parser for `show ip access-lists` on Arista EOS.
+- Added parser for `show ip bgp detail` on Arista EOS.
+- Added parser for `show ip bgp` on Arista EOS.
+- Added parser for `show ip helper-address` on Arista EOS.
+- Added parser for `show ip interface brief` on Arista EOS.
+- Added parser for `show ip interface brief` on Cisco IOS-XR.
+- Added parser for `show ip mroute vrf all detail` on Arista EOS.
+- Added parser for `show ip ospf database` on Arista EOS.
+- Added parser for `show ip ospf interface brief` on Arista EOS.
+- Added parser for `show ip ospf neighbor` on Arista EOS.
+- Added parser for `show ip ospf summary` on Arista EOS.
+- Added parser for `show ip ospf` on IOS-XE.
+- Added parser for `show ipv4 interface` on Cisco IOS-XR.
+- Added parser for `show ipv4 vrf all interface brief` on Cisco IOS-XR.
+- Added parser for `show ipv6 bgp summary` on Arista EOS.
+- Added parser for `show ipv6 neighbors` on Cisco IOS-XR.
+- Added parser for `show ipv6 neighbors` on Juniper Junos.
+- Added parser for `show isis adjacency` on Juniper Junos.
+- Added parser for `show isis neighbors` on Arista EOS.
+- Added parser for `show isis neighbors` on Cisco IOS-XR.
+- Added parser for `show jobs all` on Palo Alto PAN-OS.
+- Added parser for `show krt queue` on Juniper Junos.
+- Added parser for `show lacp interfaces` on Juniper Junos.
+- Added parser for `show ldp neighbor` on Juniper Junos.
+- Added parser for `show lldp neighbors detail` on Arista EOS.
+- Added parser for `show lldp neighbors detail` on Cisco IOS-XR.
+- Added parser for `show lldp neighbors` on Cisco IOS-XR.
+- Added parser for `show lldp neighbors` on Juniper Junos.
+- Added parser for `show logging` on Cisco IOS-XR. Parses syslog configuration (console, monitor, trap, buffer levels and counts) and log buffer entries.
+- Added parser for `show lpts pifib hardware police location` on Cisco IOS-XR.
+- Added parser for `show mac address-table` on Arista EOS.
+- Added parser for `show mac all` on Palo Alto PAN-OS.
+- Added parser for `show mac security interface` on Arista EOS.
+- Added parser for `show mac security mka counters` on Arista EOS.
+- Added parser for `show mac security participants detail` on Arista EOS.
+- Added parser for `show mlag` on Arista EOS.
+- Added parser for `show mpls ldp neighbor brief` on Cisco IOS-XR.
+- Added parser for `show ntp associations` on Juniper Junos.
+- Added parser for `show ntp status` on Juniper Junos.
+- Added parser for `show ospf vrf all interface brief` on Cisco IOS-XR.
+- Added parser for `show ospf vrf all neighbor` on Cisco IOS-XR.
+- Added parser for `show ospf3 neighbor` on Juniper Junos.
+- Added parser for `show pfe statistics traffic` on Juniper Junos.
+- Added parser for `show pim ipv4 group-map` on Cisco IOS-XR.
+- Added parser for `show pim ipv4 interface` on Arista EOS.
+- Added parser for `show pim ipv4 interface` on Cisco IOS-XR.
+- Added parser for `show pim ipv4 neighbor` on Arista EOS.
+- Added parser for `show pim ipv4 neighbor` on Cisco IOS-XR.
+- Added parser for `show platform` on Cisco IOS-XR.
+- Added parser for `show port-channel summary` on Arista EOS.
+- Added parser for `show ppm transmissions protocol bfd detail` on Juniper Junos.
+- Added parser for `show processes cpu` on Cisco IOS-XR.
+- Added parser for `show redundancy summary` on Cisco IOS-XR.
+- Added parser for `show reload cause` on Arista EOS.
+- Added parser for `show route summary` on Juniper Junos.
+- Added parser for `show route` on Juniper Junos.
+- Added parser for `show router arp dynamic` on Nokia SR OS.
+- Added parser for `show router isis adjacency` on Nokia SR OS.
+- Added parser for `show rsvp interface` on Juniper Junos.
+- Added parser for `show rsvp neighbors` on Cisco IOS-XR.
+- Added parser for `show running nat-policy` on Palo Alto PAN-OS.
+- Added parser for `show running security-policy` on Palo Alto PAN-OS.
+- Added parser for `show security policies hit-count` on Juniper Junos.
+- Added parser for `show service sdp-using` on Nokia SR OS.
+- Added parser for `show snmp community` on Arista EOS.
+- Added parser for `show system configuration database usage` on Juniper Junos.
+- Added parser for `show system ntp all` on Nokia SR OS.
+- Added parser for `show system processes brief` on Juniper Junos.
+- Added parser for `show system processes summary` on Juniper Junos.
+- Added parser for `show system uptime` on Juniper Junos.
+- Added parser for `show ted database extensive` on Juniper Junos.
+- Added parser for `show version brief` on Cisco IOS-XR.
+- Added parser for `show vlan` on Arista EOS.
+- Added parser for `show vlans` on Juniper Junos.
+- Added parser for `show vrf all detail` on Cisco IOS-XR.
+- Added parser for `show vrf` on Arista EOS.
+- Added parser for `test security-policy-match` on Palo Alto PAN-OS.
+- Added parser for `top` on Linux.
+
+### Updated Parsers
+
+- Added pattern registration `ping <destination>` for IOS and IOS-XE ping parser to support parameterized commands.
+- Cross-registered `ping` parser for IOS-XE (previously IOS-only).
+- ``show bgp all`` / ``show ip bgp all`` (IOS-XE): ``as_path`` and ``path_type`` fields in BGP path entries are now omitted when empty instead of being set to ``""``.
+- ``show cdp neighbors detail`` (IOS/IOS-XE): ``vtp_management_domain`` field is now omitted when the device reports an empty VTP domain instead of being set to ``""``.
+- ``show interfaces`` (IOS/IOS-XE): ``duplex`` and ``speed`` fields in port-channel member entries are now omitted when unavailable instead of being set to ``""``.
+- ``show inventory`` (IOS/IOS-XE/NX-OS): ``description`` field is now omitted when the device reports an empty description instead of being set to ``""``.
+- ``show ip bgp neighbors advertised-routes`` (IOS): ``path`` field in route entries is now omitted when empty instead of being set to ``""``.
+- ``show ip bgp`` / ``show bgp vrf all all`` (NX-OS): ``status_codes``, ``as_path``, and ``path_type`` fields in BGP path entries are now omitted when empty instead of being set to ``""``.
+- ``show ip bgp`` / ``show ip bgp regexp`` (IOS-XE): ``as_path`` and ``path_type`` fields in BGP path entries are now omitted when empty instead of being set to ``""``.
+- ``show port`` (Nokia SR OS): ``link_state`` field is now omitted for connector ports instead of being set to ``""``.
+- ``show stackwise-virtual neighbors`` (IOS-XE): ``remote_port`` field is now omitted when the remote port is not reported instead of being set to ``""``.
+- ``show vlan`` (IOS/IOS-XE): ``type`` field in VLAN entries is now omitted when not present in the extended table instead of being set to ``""``.
+
+### Fixed Parsers
+
+- Fixed `show lldp neighbors` parser and `canonical_interface_name` to correctly handle FiveGigabitEthernet (`Fi`) interfaces on Catalyst 9000 series switches. ([#928](https://github.com/ChartinoLabs/Muninn/pull/928))
+- Fixed `show ip ospf interface` parser to extract `transmit_delay`, `state`, `priority`, and `bfd_enabled` when `, BFD enabled` is appended to the state line on IOS-XE devices.
+- Fixed `show version` parser to extract license fields (level, type, next reload level) from C9300, ISR4451, C3945, and C1900 platforms, and `image_type` from C9300 switches.
+
+### Core Features
+
+- Added OS definitions and parser scaffolding for Arista EOS, Juniper Junos, Palo Alto PAN-OS, Nokia SR OS, and Linux platforms.
+- Parser library now displays TypedDict schema and test fixture examples (CLI input and parsed output) for each parser, loaded on demand when a row is expanded.
+
+### Core Fixes
+
+- Fixed parser library page not rendering on first visit when using MkDocs Material instant navigation. ([#670](https://github.com/ChartinoLabs/Muninn/pull/670))
+
+### Internal
+
+- Bump ty from 0.0.24 to 0.0.25 and resolve all 229 newly-enforced type-checking violations across the parser codebase. ([#667](https://github.com/ChartinoLabs/Muninn/pull/667))
+- Added CI, package, and license badges to the README. ([#689](https://github.com/ChartinoLabs/Muninn/pull/689))
+- Bumped the `ty` type checker dev dependency from 0.0.29 to 0.0.34. ([#932](https://github.com/ChartinoLabs/Muninn/pull/932))
+- Added Acknowledgments section to README recognizing Cisco GenieParser and NTC Templates projects.
+- Added fixture guardrail test that rejects empty string values in ``expected.json`` files, with legacy exemptions for existing fixtures.
+- Expanded interface canonicalization guardrail to cover all vendor OS directories and added IOS-XR prefix support (MgmtEth, Null, tunnel-te).
+- Removed 13 unused ``type: ignore`` comments flagged by newer ``ty`` releases.
+
+
 ## 0.2.0 - 2026-03-25
 
 ### Added Parsers
