@@ -5,6 +5,7 @@ from typing import ClassVar, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
@@ -46,7 +47,7 @@ class ShowIpInterfaceBriefParser(BaseParser[ShowIpInterfaceBriefResult]):
     # Columns: Interface  IP-Address  Status  Protocol  Vrf-Name
     _INTF_LINE = re.compile(
         r"^\s*(?P<name>\S+)"
-        r"\s+(?P<ip_address>\S+)"
+        rf"\s+(?P<ip_address>{IPV4_ADDRESS}|unassigned)"
         r"\s+(?P<status>Up|Down|Shutdown)"
         r"\s+(?P<protocol>Up|Down)"
         r"\s+(?P<vrf>\S+)"
