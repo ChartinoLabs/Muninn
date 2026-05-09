@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import SEPARATOR_DASH_RE
 from muninn.registry import register
 from muninn.tags import ParserTag
 
@@ -29,7 +30,9 @@ class ShowPlatformParser(BaseParser[ShowPlatformResult]):
     and optional config state information.
     """
 
-    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.PLATFORM})
+    tags: ClassVar[frozenset[ParserTag]] = frozenset(
+        {ParserTag.PLATFORM, ParserTag.SYSTEM}
+    )
 
     # Match lines like:
     # 0/RSP0/CPU0     A9K-RSP440-TR(Active)     IOS XR RUN       PWR,NSHUT,MON
@@ -42,9 +45,6 @@ class ShowPlatformParser(BaseParser[ShowPlatformResult]):
         r"(?P<state>.+?)"
         r"(?:\s{2,}(?P<config_state>\S+.*))?$"
     )
-
-    # Separator line of dashes
-    _SEPARATOR = re.compile(r"^-{5,}$")
 
     @classmethod
     def parse(cls, output: str) -> ShowPlatformResult:
@@ -68,7 +68,7 @@ class ShowPlatformParser(BaseParser[ShowPlatformResult]):
                 continue
 
             # Skip until we pass the separator line
-            if cls._SEPARATOR.match(stripped):
+            if SEPARATOR_DASH_RE.match(stripped):
                 past_header = True
                 continue
 
