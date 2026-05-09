@@ -13,7 +13,7 @@ class NodeInfo(TypedDict):
     """Schema for a single node's install information."""
 
     node_type: str
-    boot_partition: str
+    boot_partition: NotRequired[str]
     active_packages: list[str]
 
 
@@ -104,7 +104,6 @@ class ShowInstallActiveParser(BaseParser[ShowInstallActiveResult]):
                 current_node = match.group("location")
                 nodes[current_node] = NodeInfo(
                     node_type=match.group("node_type"),
-                    boot_partition="",
                     active_packages=[],
                 )
                 in_packages = False
