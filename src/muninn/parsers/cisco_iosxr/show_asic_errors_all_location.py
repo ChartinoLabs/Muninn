@@ -25,11 +25,14 @@ class AsicInstanceErrors(TypedDict):
 ShowAsicErrorsAllLocationResult = dict[str, dict[str, AsicInstanceErrors]]
 
 
-@register(OS.CISCO_IOSXR, "show asic-errors all location")
+@register(
+    OS.CISCO_IOSXR,
+    r"show asic-errors all location (?P<location>\S+)",
+)
 class ShowAsicErrorsAllLocationParser(
     BaseParser[ShowAsicErrorsAllLocationResult],
 ):
-    """Parser for 'show asic-errors all location' on Cisco IOS-XR.
+    """Parser for 'show asic-errors all location <location>' on Cisco IOS-XR.
 
     Parses ASIC error summaries grouped by ASIC type and instance number.
     """
