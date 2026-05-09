@@ -52,6 +52,7 @@ _NONE_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset(
         # IOS-XR controller output uses "None" as a vendor-defined operational
         # mode for flowcontrol (None / Tx / Rx / Both).
         "cisco_iosxr/show_controllers_hundredgigabitethernet/001_basic/expected.json",
+        "cisco_iosxr/show_controllers_hundredgigabitethernet/002_low_power_optic/expected.json",
         "arista_eos/show_version/005_ceos_clab/expected.json",
         "ios/show_crypto_session_detail/001_basic/expected.json",
         "ios/show_license/001_basic/expected.json",
