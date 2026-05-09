@@ -1,0 +1,165 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show ospf vrf all neighbor",
+  "schema": {
+    "name": "ShowOspfVrfAllNeighborResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "OspfVrfEntry",
+            "fields": {
+              "processes": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "OspfVrfProcessEntry",
+                    "fields": {
+                      "neighbors": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "type": "dict",
+                            "key": "str",
+                            "value": {
+                              "name": "OspfVrfNeighborEntry",
+                              "fields": {
+                                "priority": {
+                                  "type": "int",
+                                  "required": true
+                                },
+                                "state": {
+                                  "type": "str",
+                                  "required": true
+                                },
+                                "dead_time": {
+                                  "type": "str",
+                                  "required": true
+                                },
+                                "address": {
+                                  "type": "str",
+                                  "required": true
+                                },
+                                "role": {
+                                  "type": "str",
+                                  "required": false
+                                },
+                                "up_time": {
+                                  "type": "str",
+                                  "required": false
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "OSPF neighbors across three VRFs with Bundle-Ether and physical interfaces",
+      "input": "\nWed Jul 27 17:18:33.921 CST\n\n* Indicates MADJ interface\n# Indicates Neighbor awaiting BFD session up\n\nNeighbors for OSPF 1, VRF red\n\nNeighbor ID     Pri   State           Dead Time   Address         Interface\n192.0.2.1       0     FULL/  -        00:00:39    192.0.2.2       Bundle-Ether10.10\n    Neighbor is up for 5w0d\n192.0.2.3       1     FULL/DR         00:00:39    192.0.2.4       TenGigE0/0/0/10.10\n    Neighbor is up for 35w1d\n\nTotal neighbor count: 2\n\n\n* Indicates MADJ interface\n# Indicates Neighbor awaiting BFD session up\n\nNeighbors for OSPF 1, VRF green\n\nNeighbor ID     Pri   State           Dead Time   Address         Interface\n192.0.2.5       0     FULL/  -        00:00:34    192.0.2.6       Bundle-Ether10.20\n    Neighbor is up for 6d16h\n192.0.2.7       1     FULL/DR         00:00:38    192.0.2.8       TenGigE0/0/0/10.20\n    Neighbor is up for 35w1d\n\nTotal neighbor count: 2\n\n\n* Indicates MADJ interface\n# Indicates Neighbor awaiting BFD session up\n\nNeighbors for OSPF 1, VRF blue\n\nNeighbor ID     Pri   State           Dead Time   Address         Interface\n192.0.2.9       1     FULL/BDR        00:00:39    192.0.2.10      Bundle-Ether10.30\n    Neighbor is up for 35w1d\n192.0.2.11      1     FULL/BDR        00:00:39    192.0.2.12      GigabitEthernet100/0/0/0\n    Neighbor is up for 35w1d\n\nTotal neighbor count: 2\n",
+      "expected": {
+        "vrfs": {
+          "red": {
+            "processes": {
+              "1": {
+                "neighbors": {
+                  "Bundle-Ether10.10": {
+                    "192.0.2.1": {
+                      "priority": 0,
+                      "state": "FULL",
+                      "dead_time": "00:00:39",
+                      "address": "192.0.2.2",
+                      "up_time": "5w0d"
+                    }
+                  },
+                  "TenGigE0/0/0/10.10": {
+                    "192.0.2.3": {
+                      "priority": 1,
+                      "state": "FULL",
+                      "dead_time": "00:00:39",
+                      "address": "192.0.2.4",
+                      "role": "DR",
+                      "up_time": "35w1d"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "green": {
+            "processes": {
+              "1": {
+                "neighbors": {
+                  "Bundle-Ether10.20": {
+                    "192.0.2.5": {
+                      "priority": 0,
+                      "state": "FULL",
+                      "dead_time": "00:00:34",
+                      "address": "192.0.2.6",
+                      "up_time": "6d16h"
+                    }
+                  },
+                  "TenGigE0/0/0/10.20": {
+                    "192.0.2.7": {
+                      "priority": 1,
+                      "state": "FULL",
+                      "dead_time": "00:00:38",
+                      "address": "192.0.2.8",
+                      "role": "DR",
+                      "up_time": "35w1d"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "blue": {
+            "processes": {
+              "1": {
+                "neighbors": {
+                  "Bundle-Ether10.30": {
+                    "192.0.2.9": {
+                      "priority": 1,
+                      "state": "FULL",
+                      "dead_time": "00:00:39",
+                      "address": "192.0.2.10",
+                      "role": "BDR",
+                      "up_time": "35w1d"
+                    }
+                  },
+                  "GigabitEthernet100/0/0/0": {
+                    "192.0.2.11": {
+                      "priority": 1,
+                      "state": "FULL",
+                      "dead_time": "00:00:39",
+                      "address": "192.0.2.12",
+                      "role": "BDR",
+                      "up_time": "35w1d"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

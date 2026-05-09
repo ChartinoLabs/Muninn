@@ -1,0 +1,154 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show ipv4 interface",
+  "schema": {
+    "name": "ShowIPv4InterfaceResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "IPv4InterfaceEntry",
+            "fields": {
+              "interface_status": {
+                "type": "str",
+                "required": false
+              },
+              "protocol_status": {
+                "type": "str",
+                "required": false
+              },
+              "vrf": {
+                "type": "str",
+                "required": false
+              },
+              "vrf_id": {
+                "type": "str",
+                "required": false
+              },
+              "ip_address": {
+                "type": "str",
+                "required": false
+              },
+              "prefix_length": {
+                "type": "int",
+                "required": false
+              },
+              "mtu": {
+                "type": "int",
+                "required": false
+              },
+              "ip_mtu": {
+                "type": "int",
+                "required": false
+              },
+              "proxy_arp": {
+                "type": "bool",
+                "required": false
+              },
+              "icmp_redirects": {
+                "type": "str",
+                "required": false
+              },
+              "icmp_unreachables": {
+                "type": "str",
+                "required": false
+              },
+              "icmp_mask_replies": {
+                "type": "str",
+                "required": false
+              },
+              "directed_broadcast": {
+                "type": "bool",
+                "required": false
+              },
+              "table_id": {
+                "type": "str",
+                "required": false
+              },
+              "multicast_groups": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              },
+              "outgoing_access_list": {
+                "type": "str",
+                "required": false
+              },
+              "inbound_access_list": {
+                "type": "str",
+                "required": false
+              },
+              "inbound_common_access_list": {
+                "type": "str",
+                "required": false
+              },
+              "helper_address": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple GigabitEthernet interfaces with IPv4 addresses and multicast groups",
+      "input": "Sun Jun 19 08:45:14.652 UTC\nGigabitEthernet0/0/0/0 is Up, ipv4 protocol is Up\n  Vrf is default (vrfid 0x60000000)\n  Internet address is 10.2.0.2/30\n  MTU is 1514 (1500 is available to IP)\n  Helper address is not set\n  Multicast reserved groups joined: 224.0.0.2 224.0.0.1 224.0.0.9\n      224.0.0.10\n  Directed broadcast forwarding is disabled\n  Outgoing access list is not set\n  Inbound  common access list is not set, access list is not set\n  Proxy ARP is disabled\n  ICMP redirects are never sent\n  ICMP unreachables are always sent\n  ICMP mask replies are never sent\n  Table Id is 0xe0000000\nGigabitEthernet0/0/0/1 is Up, ipv4 protocol is Up\n  Vrf is default (vrfid 0x60000000)\n  Internet address is 10.0.7.1/30\n  MTU is 1514 (1500 is available to IP)\n  Helper address is not set\n  Multicast reserved groups joined: 224.0.0.2 224.0.0.1 224.0.0.5\n      224.0.0.6\n  Directed broadcast forwarding is disabled\n  Outgoing access list is not set\n  Inbound  common access list is not set, access list is not set\n  Proxy ARP is disabled\n  ICMP redirects are never sent\n  ICMP unreachables are always sent\n  ICMP mask replies are never sent\n  Table Id is 0xe0000000\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet0/0/0/0": {
+            "interface_status": "Up",
+            "protocol_status": "Up",
+            "vrf": "default",
+            "vrf_id": "0x60000000",
+            "ip_address": "10.2.0.2",
+            "prefix_length": 30,
+            "mtu": 1514,
+            "ip_mtu": 1500,
+            "multicast_groups": [
+              "224.0.0.2",
+              "224.0.0.1",
+              "224.0.0.9",
+              "224.0.0.10"
+            ],
+            "directed_broadcast": false,
+            "proxy_arp": false,
+            "icmp_redirects": "never sent",
+            "icmp_unreachables": "always sent",
+            "icmp_mask_replies": "never sent",
+            "table_id": "0xe0000000"
+          },
+          "GigabitEthernet0/0/0/1": {
+            "interface_status": "Up",
+            "protocol_status": "Up",
+            "vrf": "default",
+            "vrf_id": "0x60000000",
+            "ip_address": "10.0.7.1",
+            "prefix_length": 30,
+            "mtu": 1514,
+            "ip_mtu": 1500,
+            "multicast_groups": [
+              "224.0.0.2",
+              "224.0.0.1",
+              "224.0.0.5",
+              "224.0.0.6"
+            ],
+            "directed_broadcast": false,
+            "proxy_arp": false,
+            "icmp_redirects": "never sent",
+            "icmp_unreachables": "always sent",
+            "icmp_mask_replies": "never sent",
+            "table_id": "0xe0000000"
+          }
+        }
+      }
+    }
+  ]
+}

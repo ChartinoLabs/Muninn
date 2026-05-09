@@ -1,0 +1,139 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show pim ipv4 neighbor",
+  "schema": {
+    "name": "ShowPimIpv4NeighborResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "PimNeighborEntry",
+              "fields": {
+                "interface": {
+                  "type": "str",
+                  "required": true
+                },
+                "uptime": {
+                  "type": "str",
+                  "required": true
+                },
+                "expires": {
+                  "type": "str",
+                  "required": true
+                },
+                "dr_priority": {
+                  "type": "int",
+                  "required": true
+                },
+                "is_designated_router": {
+                  "type": "bool",
+                  "required": true
+                },
+                "bidir_capable": {
+                  "type": "bool",
+                  "required": true
+                },
+                "proxy_capable": {
+                  "type": "bool",
+                  "required": true
+                },
+                "ecmp_redirect_capable": {
+                  "type": "bool",
+                  "required": true
+                },
+                "is_self": {
+                  "type": "bool",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple PIM neighbors with mixed flags and DR roles",
+      "input": "\nWed Jul 27 17:18:37.203 CST\n\nPIM neighbors in VRF default\nFlag: B - Bidir capable, P - Proxy capable, DR - Designated Router,\n      E - ECMP Redirect capable\n      * indicates the neighbor created for this router\n\nNeighbor Address             Interface              Uptime    Expires  DR pri   Flags\n\n192.0.2.1*                   Bundle-Ether10.10      1d09h     00:01:29 1      B E\n192.0.2.2                    Bundle-Ether10.20      02:26:23  00:01:26 1 (DR)\n192.0.2.3                    BVI10                  2y51w     00:01:27 2 (DR) B\n192.0.2.4                    BVI10                  2y51w     00:01:24 0\n192.0.2.5                    BVI10                  45w1d     00:01:19 1      P\n192.0.2.6*                   BVI10                  2y51w     00:01:25 1      B\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "192.0.2.1": {
+              "interface": "Bundle-Ether10.10",
+              "uptime": "1d09h",
+              "expires": "00:01:29",
+              "dr_priority": 1,
+              "is_designated_router": false,
+              "bidir_capable": true,
+              "proxy_capable": false,
+              "ecmp_redirect_capable": true,
+              "is_self": true
+            },
+            "192.0.2.2": {
+              "interface": "Bundle-Ether10.20",
+              "uptime": "02:26:23",
+              "expires": "00:01:26",
+              "dr_priority": 1,
+              "is_designated_router": true,
+              "bidir_capable": false,
+              "proxy_capable": false,
+              "ecmp_redirect_capable": false,
+              "is_self": false
+            },
+            "192.0.2.3": {
+              "interface": "BVI10",
+              "uptime": "2y51w",
+              "expires": "00:01:27",
+              "dr_priority": 2,
+              "is_designated_router": true,
+              "bidir_capable": true,
+              "proxy_capable": false,
+              "ecmp_redirect_capable": false,
+              "is_self": false
+            },
+            "192.0.2.4": {
+              "interface": "BVI10",
+              "uptime": "2y51w",
+              "expires": "00:01:24",
+              "dr_priority": 0,
+              "is_designated_router": false,
+              "bidir_capable": false,
+              "proxy_capable": false,
+              "ecmp_redirect_capable": false,
+              "is_self": false
+            },
+            "192.0.2.5": {
+              "interface": "BVI10",
+              "uptime": "45w1d",
+              "expires": "00:01:19",
+              "dr_priority": 1,
+              "is_designated_router": false,
+              "bidir_capable": false,
+              "proxy_capable": true,
+              "ecmp_redirect_capable": false,
+              "is_self": false
+            },
+            "192.0.2.6": {
+              "interface": "BVI10",
+              "uptime": "2y51w",
+              "expires": "00:01:25",
+              "dr_priority": 1,
+              "is_designated_router": false,
+              "bidir_capable": true,
+              "proxy_capable": false,
+              "ecmp_redirect_capable": false,
+              "is_self": true
+            }
+          }
+        }
+      }
+    }
+  ]
+}

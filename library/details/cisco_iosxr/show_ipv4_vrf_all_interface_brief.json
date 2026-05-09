@@ -1,0 +1,142 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show ipv4 vrf all interface brief",
+  "schema": {
+    "name": "ShowIpv4VrfAllInterfaceBriefResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "Ipv4VrfInterfaceBriefEntry",
+              "fields": {
+                "ip_address": {
+                  "type": "str",
+                  "required": true
+                },
+                "interface_status": {
+                  "type": "str",
+                  "required": true
+                },
+                "protocol_status": {
+                  "type": "str",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Mixed interface types across multiple VRFs including BVI, Bundle-Ether, Loopback, GigabitEthernet, and TenGigE",
+      "input": "\nWed Jul 27 17:18:32.918 CST\n\nInterface                      IP-Address      Status          Protocol Vrf-Name\nBVI10                          192.0.2.1       Up              Up       red\nBVI20                          192.0.2.1       Shutdown        Down     red\nBVI30                          192.0.2.1       Down            Down     red\nBundle-Ether1                  192.0.2.1       Up              Up       **brown\nBundle-Ether1.10               192.0.2.1       Up              Up       green\nBundle-Ether1.20               192.0.2.1       Up              Up       blue\nBundle-Ether1.30               192.0.2.1       Up              Up       blue\nBundle-Ether2                  192.0.2.1       Up              Up       **brown\nBundle-Ether3                  192.0.2.1       Up              Up       **brown\nLoopback0                      192.0.2.1       Up              Up       purple\nLoopback1                      192.0.2.1       Up              Up       green\nGigabitEthernet100/0/0/0       192.0.2.1       Up              Up       blue\nGigabitEthernet200/0/0/0.10    192.0.2.1       Up              Up       purple\nGigabitEthernet200/0/0/0.20    192.0.2.1       Up              Up       purple\nGigabitEthernet200/0/0/0.30    192.0.2.1       Down            Down     purple\nTenGigE0/1/0/0                 192.0.2.1       Up              Up       green\nTenGigE0/2/0/0.10              192.0.2.1       Up              Up       green\n",
+      "expected": {
+        "vrfs": {
+          "red": {
+            "BVI10": {
+              "ip_address": "192.0.2.1",
+              "interface_status": "Up",
+              "protocol_status": "Up"
+            },
+            "BVI20": {
+              "ip_address": "192.0.2.1",
+              "interface_status": "Shutdown",
+              "protocol_status": "Down"
+            },
+            "BVI30": {
+              "ip_address": "192.0.2.1",
+              "interface_status": "Down",
+              "protocol_status": "Down"
+            }
+          },
+          "brown": {
+            "Bundle-Ether1": {
+              "ip_address": "192.0.2.1",
+              "interface_status": "Up",
+              "protocol_status": "Up"
+            },
+            "Bundle-Ether2": {
+              "ip_address": "192.0.2.1",
+              "interface_status": "Up",
+              "protocol_status": "Up"
+            },
+            "Bundle-Ether3": {
+              "ip_address": "192.0.2.1",
+              "interface_status": "Up",
+              "protocol_status": "Up"
+            }
+          },
+          "green": {
+            "Bundle-Ether1.10": {
+              "ip_address": "192.0.2.1",
+              "interface_status": "Up",
+              "protocol_status": "Up"
+            },
+            "Loopback1": {
+              "ip_address": "192.0.2.1",
+              "interface_status": "Up",
+              "protocol_status": "Up"
+            },
+            "TenGigE0/1/0/0": {
+              "ip_address": "192.0.2.1",
+              "interface_status": "Up",
+              "protocol_status": "Up"
+            },
+            "TenGigE0/2/0/0.10": {
+              "ip_address": "192.0.2.1",
+              "interface_status": "Up",
+              "protocol_status": "Up"
+            }
+          },
+          "blue": {
+            "Bundle-Ether1.20": {
+              "ip_address": "192.0.2.1",
+              "interface_status": "Up",
+              "protocol_status": "Up"
+            },
+            "Bundle-Ether1.30": {
+              "ip_address": "192.0.2.1",
+              "interface_status": "Up",
+              "protocol_status": "Up"
+            },
+            "GigabitEthernet100/0/0/0": {
+              "ip_address": "192.0.2.1",
+              "interface_status": "Up",
+              "protocol_status": "Up"
+            }
+          },
+          "purple": {
+            "Loopback0": {
+              "ip_address": "192.0.2.1",
+              "interface_status": "Up",
+              "protocol_status": "Up"
+            },
+            "GigabitEthernet200/0/0/0.10": {
+              "ip_address": "192.0.2.1",
+              "interface_status": "Up",
+              "protocol_status": "Up"
+            },
+            "GigabitEthernet200/0/0/0.20": {
+              "ip_address": "192.0.2.1",
+              "interface_status": "Up",
+              "protocol_status": "Up"
+            },
+            "GigabitEthernet200/0/0/0.30": {
+              "ip_address": "192.0.2.1",
+              "interface_status": "Down",
+              "protocol_status": "Down"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,281 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show bgp instance all summary",
+  "schema": {
+    "name": "ShowBgpInstanceAllSummaryResult",
+    "fields": {
+      "instances": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InstanceEntry",
+            "fields": {
+              "address_families": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "AddressFamilyEntry",
+                    "fields": {
+                      "vrfs": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "VrfEntry",
+                            "fields": {
+                              "router_id": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "local_as": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "generic_scan_interval": {
+                                "type": "int",
+                                "required": false
+                              },
+                              "nsr_enabled": {
+                                "type": "bool",
+                                "required": false
+                              },
+                              "table_state": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "table_id": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "rd_version": {
+                                "type": "int",
+                                "required": false
+                              },
+                              "main_routing_table_version": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "nsr_initial_initsync_version": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "nsr_issu_sync_group_versions": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "scan_interval": {
+                                "type": "int",
+                                "required": false
+                              },
+                              "operation_mode": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "process": {
+                                "type": {
+                                  "name": "ProcessEntry",
+                                  "fields": {
+                                    "rcv_tbl_ver": {
+                                      "type": "int",
+                                      "required": true
+                                    },
+                                    "brib_rib": {
+                                      "type": "int",
+                                      "required": true
+                                    },
+                                    "label_ver": {
+                                      "type": "int",
+                                      "required": true
+                                    },
+                                    "import_ver": {
+                                      "type": "int",
+                                      "required": true
+                                    },
+                                    "send_tbl_ver": {
+                                      "type": "int",
+                                      "required": true
+                                    },
+                                    "standby_ver": {
+                                      "type": "int",
+                                      "required": true
+                                    }
+                                  }
+                                },
+                                "required": false
+                              },
+                              "neighbors": {
+                                "type": {
+                                  "type": "dict",
+                                  "key": "str",
+                                  "value": {
+                                    "name": "NeighborEntry",
+                                    "fields": {
+                                      "spk": {
+                                        "type": "int",
+                                        "required": true
+                                      },
+                                      "remote_as": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "msg_rcvd": {
+                                        "type": "int",
+                                        "required": true
+                                      },
+                                      "msg_sent": {
+                                        "type": "int",
+                                        "required": true
+                                      },
+                                      "tbl_ver": {
+                                        "type": "int",
+                                        "required": true
+                                      },
+                                      "in_queue": {
+                                        "type": "int",
+                                        "required": true
+                                      },
+                                      "out_queue": {
+                                        "type": "int",
+                                        "required": true
+                                      },
+                                      "up_down": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "state_pfxrcd": {
+                                        "type": "str",
+                                        "required": true
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": true
+                              }
+                            }
+                          }
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Single default instance with multiple neighbors in various states",
+      "input": "\nWed Jul 27 17:18:35.642 CST\n\nBGP instance 0: 'default'\n=========================\nBGP router identifier 192.0.2.1, local AS number 65533\nBGP generic scan interval 60 secs\nNon-stop routing is enabled\nBGP table state: Active\nTable ID: 0xe0000000   RD version: 2308648196\nBGP main routing table version 2308648196\nBGP NSR Initial initsync version 2063371958 (Reached)\nBGP NSR/ISSU Sync-Group versions 2308648196/0\nBGP scan interval 60 secs\n\nBGP is operating in STANDALONE mode.\n\n\nProcess       RcvTblVer   bRIB/RIB   LabelVer  ImportVer  SendTblVer  StandbyVer\nSpeaker       2308648196  2308648196  2308648196  2308648196  2308648196  2308648196\n\nSome configured eBGP neighbors (under default or non-default vrfs)\ndo not have both inbound and outbound policies configured for IPv4 Unicast\naddress family. These neighbors will default to sending and/or\nreceiving no routes and are marked with '!' in the output below.\nUse the 'show bgp neighbor <nbr_address>' command for details.\n\nNeighbor        Spk    AS MsgRcvd MsgSent   TblVer  InQ OutQ  Up/Down  St/PfxRcd\n10.1.1.1          0 65533 3687720 44027503 2308648193    0    0     6w0d          4\n10.1.1.2          0 65533 2998156       0        0    0    0    1y11w Active\n10.1.1.3          0 65533  740185  712198 2308648196    0    0    6d12h          0\n10.1.1.4          0 65533   19179   11983 2308648196    0    0 01:57:59         10\n10.1.1.5          0 65533 3372692  355977 2308648196    0    0     1w6d          0!\n10.1.1.6          0 65533 5765678       0        0    0    0    45w1d Idle!\n",
+      "expected": {
+        "instances": {
+          "default": {
+            "address_families": {
+              "default": {
+                "vrfs": {
+                  "default": {
+                    "router_id": "192.0.2.1",
+                    "local_as": "65533",
+                    "generic_scan_interval": 60,
+                    "nsr_enabled": true,
+                    "table_state": "Active",
+                    "table_id": "0xe0000000",
+                    "rd_version": 2308648196,
+                    "main_routing_table_version": 2308648196,
+                    "nsr_initial_initsync_version": "2063371958 (Reached)",
+                    "nsr_issu_sync_group_versions": "2308648196/0",
+                    "scan_interval": 60,
+                    "operation_mode": "STANDALONE",
+                    "process": {
+                      "rcv_tbl_ver": 2308648196,
+                      "brib_rib": 2308648196,
+                      "label_ver": 2308648196,
+                      "import_ver": 2308648196,
+                      "send_tbl_ver": 2308648196,
+                      "standby_ver": 2308648196
+                    },
+                    "neighbors": {
+                      "10.1.1.1": {
+                        "spk": 0,
+                        "remote_as": "65533",
+                        "msg_rcvd": 3687720,
+                        "msg_sent": 44027503,
+                        "tbl_ver": 2308648193,
+                        "in_queue": 0,
+                        "out_queue": 0,
+                        "up_down": "6w0d",
+                        "state_pfxrcd": "4"
+                      },
+                      "10.1.1.2": {
+                        "spk": 0,
+                        "remote_as": "65533",
+                        "msg_rcvd": 2998156,
+                        "msg_sent": 0,
+                        "tbl_ver": 0,
+                        "in_queue": 0,
+                        "out_queue": 0,
+                        "up_down": "1y11w",
+                        "state_pfxrcd": "Active"
+                      },
+                      "10.1.1.3": {
+                        "spk": 0,
+                        "remote_as": "65533",
+                        "msg_rcvd": 740185,
+                        "msg_sent": 712198,
+                        "tbl_ver": 2308648196,
+                        "in_queue": 0,
+                        "out_queue": 0,
+                        "up_down": "6d12h",
+                        "state_pfxrcd": "0"
+                      },
+                      "10.1.1.4": {
+                        "spk": 0,
+                        "remote_as": "65533",
+                        "msg_rcvd": 19179,
+                        "msg_sent": 11983,
+                        "tbl_ver": 2308648196,
+                        "in_queue": 0,
+                        "out_queue": 0,
+                        "up_down": "01:57:59",
+                        "state_pfxrcd": "10"
+                      },
+                      "10.1.1.5": {
+                        "spk": 0,
+                        "remote_as": "65533",
+                        "msg_rcvd": 3372692,
+                        "msg_sent": 355977,
+                        "tbl_ver": 2308648196,
+                        "in_queue": 0,
+                        "out_queue": 0,
+                        "up_down": "1w6d",
+                        "state_pfxrcd": "0!"
+                      },
+                      "10.1.1.6": {
+                        "spk": 0,
+                        "remote_as": "65533",
+                        "msg_rcvd": 5765678,
+                        "msg_sent": 0,
+                        "tbl_ver": 0,
+                        "in_queue": 0,
+                        "out_queue": 0,
+                        "up_down": "45w1d",
+                        "state_pfxrcd": "Idle!"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

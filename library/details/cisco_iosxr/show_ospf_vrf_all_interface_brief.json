@@ -1,0 +1,133 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show ospf vrf all interface brief",
+  "schema": {
+    "name": "ShowOspfVrfAllInterfaceBriefResult",
+    "fields": {
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "OspfVrfEntry",
+              "fields": {
+                "interfaces": {
+                  "type": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "name": "OspfInterfaceEntry",
+                      "fields": {
+                        "area": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "ip_address_mask": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "cost": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "state": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "neighbors_full": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "neighbors_count": {
+                          "type": "int",
+                          "required": true
+                        }
+                      }
+                    }
+                  },
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple VRFs with mixed interface types and neighbor states",
+      "input": "\nWed Jul 27 17:18:34.807 CST\n\n* Indicates MADJ interface, (P) Indicates fast detect hold down state\n\nInterfaces for OSPF 1, VRF red\n\nInterface          PID   Area            IP Address/Mask    Cost  State Nbrs F/C\nBE1.10             1     0               192.0.2.1/30       1     DR    1/1\nTe0/0/0/10.10      1     0               192.0.2.5/30       1     BDR   1/1\n\n\nInterfaces for OSPF 1, VRF green\n\nBE1.20             1     0               192.0.2.9/30       1000  P2P   0/0\nGi300/0/0/0.10     1     0               192.0.2.13/30      1     DR    0/0\n\n\nInterfaces for OSPF 1, VRF blue\n\nBE1.30             1     0               192.0.2.17/30      1     DR    1/1\nGi300/0/0/0        1     0               192.0.2.21/30      1     DR    0/0\n",
+      "expected": {
+        "processes": {
+          "1": {
+            "red": {
+              "interfaces": {
+                "BE1.10": {
+                  "area": "0",
+                  "ip_address_mask": "192.0.2.1/30",
+                  "cost": 1,
+                  "state": "DR",
+                  "neighbors_full": 1,
+                  "neighbors_count": 1
+                },
+                "TenGigabitEthernet0/0/0/10.10": {
+                  "area": "0",
+                  "ip_address_mask": "192.0.2.5/30",
+                  "cost": 1,
+                  "state": "BDR",
+                  "neighbors_full": 1,
+                  "neighbors_count": 1
+                }
+              }
+            },
+            "green": {
+              "interfaces": {
+                "BE1.20": {
+                  "area": "0",
+                  "ip_address_mask": "192.0.2.9/30",
+                  "cost": 1000,
+                  "state": "P2P",
+                  "neighbors_full": 0,
+                  "neighbors_count": 0
+                },
+                "GigabitEthernet300/0/0/0.10": {
+                  "area": "0",
+                  "ip_address_mask": "192.0.2.13/30",
+                  "cost": 1,
+                  "state": "DR",
+                  "neighbors_full": 0,
+                  "neighbors_count": 0
+                }
+              }
+            },
+            "blue": {
+              "interfaces": {
+                "BE1.30": {
+                  "area": "0",
+                  "ip_address_mask": "192.0.2.17/30",
+                  "cost": 1,
+                  "state": "DR",
+                  "neighbors_full": 1,
+                  "neighbors_count": 1
+                },
+                "GigabitEthernet300/0/0/0": {
+                  "area": "0",
+                  "ip_address_mask": "192.0.2.21/30",
+                  "cost": 1,
+                  "state": "DR",
+                  "neighbors_full": 0,
+                  "neighbors_count": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
