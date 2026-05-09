@@ -227,17 +227,17 @@ class ShowControllersHundredGigabitEthernetParser(
         if key is None:
             return None
         cols = m.group("rest").split()
-        threshold: AlarmThreshold = {}
+        threshold: dict[str, float] = {}
         for col_key, raw in zip(_THRESHOLD_COLUMN_KEYS, cols, strict=False):
             if raw in _PLACEHOLDER_TOKENS:
                 continue
             try:
-                threshold[col_key] = float(raw)  # type: ignore[literal-required]
+                threshold[col_key] = float(raw)
             except ValueError:
                 continue
         if not threshold:
             return None
-        return key, threshold
+        return key, cast(AlarmThreshold, threshold)
 
     @classmethod
     def _record_threshold_row(
