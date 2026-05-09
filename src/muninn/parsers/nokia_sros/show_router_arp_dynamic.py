@@ -5,6 +5,7 @@ from typing import ClassVar, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS, MAC_ADDRESS_COLON
 from muninn.registry import register
 from muninn.tags import ParserTag
 
@@ -43,8 +44,8 @@ class ShowRouterArpDynamicParser(BaseParser[ShowRouterArpDynamicResult]):
     _FOOTER = re.compile(r"^\s*No\.\s+of\s+ARP\s+Entries:", re.I)
 
     _ARP_ROW = re.compile(
-        r"^(?P<ip>\S+)\s+"
-        r"(?P<mac>[0-9a-fA-F:]{17})\s+"
+        rf"^(?P<ip>{IPV4_ADDRESS})\s+"
+        rf"(?P<mac>{MAC_ADDRESS_COLON})\s+"
         r"(?P<expiry>\S+)\s+"
         r"(?P<arp_type>\S+)\s+"
         r"(?P<interface>\S+)\s*$"
@@ -89,7 +90,7 @@ class ShowRouterArpDynamicParser(BaseParser[ShowRouterArpDynamicResult]):
             if match:
                 ip_address = match.group("ip")
                 entry: ArpDynamicEntry = {
-                    "mac_address": match.group("mac"),
+                    "mac_address": match.group("mac").lower(),
                     "expiry": match.group("expiry"),
                     "arp_type": match.group("arp_type"),
                     "interface": match.group("interface"),
