@@ -43,13 +43,19 @@ def _parse_counter_line(line: str, entry: dict[str, object]) -> None:
             return
 
 
-@register(OS.CISCO_IOSXR, "show controllers fabric fia errors egress location")
+@register(
+    OS.CISCO_IOSXR,
+    r"show controllers fabric fia errors egress location (?P<location>\S+)",
+)
 class ShowControllersFabricFiaErrorsEgressLocationParser(
     BaseParser[ShowControllersFabricFiaErrorsEgressLocationResult],
 ):
-    """Parser for 'show controllers fabric fia errors egress location'.
+    """Parser for 'show controllers fabric fia errors egress location <location>'.
 
     Parses per-FIA egress error counters from the fabric controller output.
+    The IOS-XR ``location`` keyword requires a node identifier
+    (e.g. ``0/RP0/CPU0`` or ``all``) to actually run on a device, so the
+    parser is registered as a regex pattern that captures the location.
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.PLATFORM})
