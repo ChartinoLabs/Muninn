@@ -1,0 +1,120 @@
+{
+  "os": "paloalto_panos",
+  "command": "request license info",
+  "schema": {
+    "name": "RequestLicenseInfoResult",
+    "fields": {
+      "licenses": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "LicenseEntry",
+            "fields": {
+              "description": {
+                "type": "str",
+                "required": true
+              },
+              "serial": {
+                "type": "str",
+                "required": true
+              },
+              "issued": {
+                "type": "str",
+                "required": true
+              },
+              "expires": {
+                "type": "str",
+                "required": true
+              },
+              "expired": {
+                "type": "bool",
+                "required": true
+              },
+              "base_license": {
+                "type": "str",
+                "required": false
+              },
+              "auth_code": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "current_date": {
+        "type": "str",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "PA-VM with multiple license features including WildFire, Premium, URL Filtering, GlobalProtect, and Threat Prevention",
+      "input": "Current PDT Date: May 19, 2021\n\nLicense entry:\nFeature: WildFire License\nDescription: WildFire signature feed, integrated WildFire logs, WildFire API\nSerial: 0000000xxxxxxxx\nIssued: January 13, 2020\nExpires: March 08, 2023\nExpired?: no\nBase license: PA-VM\n\nLicense entry:\nFeature: Premium\nDescription: 24 x 7 phone support; advanced replacement hardware service\nSerial: 0000000xxxxxxxx\nIssued: January 13, 2020\nExpires: January 09, 2023\nExpired?: no\nBase license: PA-VM\n\nLicense entry:\nFeature: PAN-DB URL Filtering\nDescription: Palo Alto Networks URL Filtering License\nSerial: 0000000xxxxxxxx\nIssued: January 13, 2020\nExpires: March 08, 2023\nExpired?: no\nBase license: PA-VM\n\nLicense entry:\nFeature: GlobalProtect Portal\nDescription: GlobalProtect Portal License\nSerial: 0000000xxxxxxxx\nIssued: March 08, 2017\nExpires: Never\nExpired?: no\nBase license: PA-VM\n\nLicense entry:\nFeature: PA-VM\nDescription: Standard VM-100\nSerial: 0000000xxxxxxxx\nIssued: March 08, 2017\nExpires: Never\nExpired?: no\n\nLicense entry:\nFeature: Threat Prevention\nDescription: Threat Prevention\nSerial: 0000000xxxxxxxx\nIssued: January 13, 2020\nExpires: January 13, 2023\nExpired?: no\nBase license: PA-VM\n\nLicense entry:\nFeature: GlobalProtect Gateway\nDescription: GlobalProtect Gateway License\nSerial: 0000000xxxxxxxx\nIssued: January 13, 2020\nExpires: March 08, 2023\nExpired?: no\nBase license: PA-VM\nAuthcode: abc def\n",
+      "expected": {
+        "licenses": {
+          "WildFire License": {
+            "description": "WildFire signature feed, integrated WildFire logs, WildFire API",
+            "serial": "0000000xxxxxxxx",
+            "issued": "January 13, 2020",
+            "expires": "March 08, 2023",
+            "expired": false,
+            "base_license": "PA-VM"
+          },
+          "Premium": {
+            "description": "24 x 7 phone support; advanced replacement hardware service",
+            "serial": "0000000xxxxxxxx",
+            "issued": "January 13, 2020",
+            "expires": "January 09, 2023",
+            "expired": false,
+            "base_license": "PA-VM"
+          },
+          "PAN-DB URL Filtering": {
+            "description": "Palo Alto Networks URL Filtering License",
+            "serial": "0000000xxxxxxxx",
+            "issued": "January 13, 2020",
+            "expires": "March 08, 2023",
+            "expired": false,
+            "base_license": "PA-VM"
+          },
+          "GlobalProtect Portal": {
+            "description": "GlobalProtect Portal License",
+            "serial": "0000000xxxxxxxx",
+            "issued": "March 08, 2017",
+            "expires": "Never",
+            "expired": false,
+            "base_license": "PA-VM"
+          },
+          "PA-VM": {
+            "description": "Standard VM-100",
+            "serial": "0000000xxxxxxxx",
+            "issued": "March 08, 2017",
+            "expires": "Never",
+            "expired": false
+          },
+          "Threat Prevention": {
+            "description": "Threat Prevention",
+            "serial": "0000000xxxxxxxx",
+            "issued": "January 13, 2020",
+            "expires": "January 13, 2023",
+            "expired": false,
+            "base_license": "PA-VM"
+          },
+          "GlobalProtect Gateway": {
+            "description": "GlobalProtect Gateway License",
+            "serial": "0000000xxxxxxxx",
+            "issued": "January 13, 2020",
+            "expires": "March 08, 2023",
+            "expired": false,
+            "base_license": "PA-VM",
+            "auth_code": "abc def"
+          }
+        },
+        "current_date": "May 19, 2021"
+      }
+    }
+  ]
+}

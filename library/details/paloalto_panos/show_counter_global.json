@@ -1,0 +1,116 @@
+{
+  "os": "paloalto_panos",
+  "command": "show counter global",
+  "schema": {
+    "name": "ShowCounterGlobalResult",
+    "fields": {
+      "elapsed_time_seconds": {
+        "type": "float",
+        "required": false
+      },
+      "counters": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "CounterEntry",
+            "fields": {
+              "value": {
+                "type": "int",
+                "required": true
+              },
+              "rate": {
+                "type": "int",
+                "required": true
+              },
+              "severity": {
+                "type": "str",
+                "required": true
+              },
+              "category": {
+                "type": "str",
+                "required": true
+              },
+              "aspect": {
+                "type": "str",
+                "required": true
+              },
+              "description": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic global counters with packet, flow, and SSL counters",
+      "input": "Global counters:\nElapsed time since last sampling: 349.576 seconds\n\nname                                   value     rate severity  category  aspect    description\n--------------------------------------------------------------------------------\npkt_recv                                  29        0 info      packet    pktproc   Packets received\npkt_sent                                  21        0 info      packet    pktproc   Packets transmitted\npkt_sock_recv                              1        0 info      packet    pktproc   Packets received at socket level - delayed counter\npkt_lldp_sent                              1        0 info      packet    pktproc   LLDP Packets transmitted\nflow_rcv_dot1q_tag_err                     1        0 drop      flow      parse     Packets dropped: 802.1q tag not configured\nflow_no_interface                          1        0 drop      flow      parse     Packets dropped: invalid interface\nssl_hsm_up_down_event_rcv                  1        0 info      ssl       pktproc   The number of HSM up/down events received\n--------------------------------------------------------------------------------\nTotal counters shown: 7\n--------------------------------------------------------------------------------\n",
+      "expected": {
+        "elapsed_time_seconds": 349.576,
+        "counters": {
+          "pkt_recv": {
+            "value": 29,
+            "rate": 0,
+            "severity": "info",
+            "category": "packet",
+            "aspect": "pktproc",
+            "description": "Packets received"
+          },
+          "pkt_sent": {
+            "value": 21,
+            "rate": 0,
+            "severity": "info",
+            "category": "packet",
+            "aspect": "pktproc",
+            "description": "Packets transmitted"
+          },
+          "pkt_sock_recv": {
+            "value": 1,
+            "rate": 0,
+            "severity": "info",
+            "category": "packet",
+            "aspect": "pktproc",
+            "description": "Packets received at socket level - delayed counter"
+          },
+          "pkt_lldp_sent": {
+            "value": 1,
+            "rate": 0,
+            "severity": "info",
+            "category": "packet",
+            "aspect": "pktproc",
+            "description": "LLDP Packets transmitted"
+          },
+          "flow_rcv_dot1q_tag_err": {
+            "value": 1,
+            "rate": 0,
+            "severity": "drop",
+            "category": "flow",
+            "aspect": "parse",
+            "description": "Packets dropped: 802.1q tag not configured"
+          },
+          "flow_no_interface": {
+            "value": 1,
+            "rate": 0,
+            "severity": "drop",
+            "category": "flow",
+            "aspect": "parse",
+            "description": "Packets dropped: invalid interface"
+          },
+          "ssl_hsm_up_down_event_rcv": {
+            "value": 1,
+            "rate": 0,
+            "severity": "info",
+            "category": "ssl",
+            "aspect": "pktproc",
+            "description": "The number of HSM up/down events received"
+          }
+        }
+      }
+    }
+  ]
+}

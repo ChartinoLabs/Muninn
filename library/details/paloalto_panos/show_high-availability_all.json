@@ -1,0 +1,489 @@
+{
+  "os": "paloalto_panos",
+  "command": "show high-availability all",
+  "schema": {
+    "name": "ShowHighAvailabilityAllResult",
+    "fields": {
+      "group_id": {
+        "type": "int",
+        "required": true
+      },
+      "mode": {
+        "type": "str",
+        "required": true
+      },
+      "local": {
+        "type": {
+          "name": "HALocalInfo",
+          "fields": {
+            "version": {
+              "type": "int",
+              "required": false
+            },
+            "mode": {
+              "type": "str",
+              "required": false
+            },
+            "state": {
+              "type": "str",
+              "required": false
+            },
+            "state_duration": {
+              "type": "str",
+              "required": false
+            },
+            "model": {
+              "type": "str",
+              "required": false
+            },
+            "mgmt_ipv4": {
+              "type": "str",
+              "required": false
+            },
+            "ha1_control_link": {
+              "type": {
+                "name": "HAControlLink",
+                "fields": {
+                  "ip_address": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "mac_address": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "interface": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "link_state": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "key_imported": {
+                    "type": "bool",
+                    "required": false
+                  },
+                  "connection": {
+                    "type": "str",
+                    "required": false
+                  }
+                }
+              },
+              "required": false
+            },
+            "ha2_data_link": {
+              "type": {
+                "name": "HADataLink",
+                "fields": {
+                  "ip_address": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "mac_address": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "interface": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "link_state": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "connection": {
+                    "type": "str",
+                    "required": false
+                  }
+                }
+              },
+              "required": false
+            },
+            "election_options": {
+              "type": {
+                "name": "HAElectionOptions",
+                "fields": {
+                  "priority": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "preemptive": {
+                    "type": "bool",
+                    "required": true
+                  },
+                  "promotion_hold_interval_ms": {
+                    "type": "int",
+                    "required": false
+                  },
+                  "hello_interval_ms": {
+                    "type": "int",
+                    "required": false
+                  },
+                  "heartbeat_interval_ms": {
+                    "type": "int",
+                    "required": false
+                  },
+                  "max_flaps": {
+                    "type": "int",
+                    "required": false
+                  },
+                  "preemption_hold_interval": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "monitor_fail_hold_up_interval_ms": {
+                    "type": "int",
+                    "required": false
+                  },
+                  "addon_master_hold_up_interval_ms": {
+                    "type": "int",
+                    "required": false
+                  }
+                }
+              },
+              "required": false
+            },
+            "passive_link_state": {
+              "type": "str",
+              "required": false
+            },
+            "monitor_fail_hold_down_interval": {
+              "type": "str",
+              "required": false
+            },
+            "version_info": {
+              "type": {
+                "name": "HAVersionInfo",
+                "fields": {
+                  "build_release": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "url_database": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "application_content": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "anti_virus": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "threat_content": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "vpn_client_software": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "global_protect_client_software": {
+                    "type": "str",
+                    "required": false
+                  }
+                }
+              },
+              "required": false
+            },
+            "state_sync": {
+              "type": "str",
+              "required": false
+            },
+            "state_sync_type": {
+              "type": "str",
+              "required": false
+            },
+            "ha1_joint_config": {
+              "type": {
+                "name": "HA1JointConfig",
+                "fields": {
+                  "link_monitor_interval_ms": {
+                    "type": "int",
+                    "required": false
+                  },
+                  "encryption_enabled": {
+                    "type": "bool",
+                    "required": false
+                  }
+                }
+              },
+              "required": false
+            },
+            "version_compatibility": {
+              "type": {
+                "name": "HAVersionCompatibility",
+                "fields": {
+                  "software_version": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "application_content": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "anti_virus": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "threat_content": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "vpn_client_software": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "global_protect_client_software": {
+                    "type": "str",
+                    "required": false
+                  }
+                }
+              },
+              "required": false
+            }
+          }
+        },
+        "required": true
+      },
+      "peer": {
+        "type": {
+          "name": "HAPeerInfo",
+          "fields": {
+            "connection_status": {
+              "type": "str",
+              "required": false
+            },
+            "version": {
+              "type": "int",
+              "required": false
+            },
+            "mode": {
+              "type": "str",
+              "required": false
+            },
+            "state": {
+              "type": "str",
+              "required": false
+            },
+            "state_duration": {
+              "type": "str",
+              "required": false
+            },
+            "model": {
+              "type": "str",
+              "required": false
+            },
+            "mgmt_ipv4": {
+              "type": "str",
+              "required": false
+            },
+            "ha1_control_link": {
+              "type": {
+                "type": "ref",
+                "name": "HAControlLink"
+              },
+              "required": false
+            },
+            "ha2_data_link": {
+              "type": {
+                "type": "ref",
+                "name": "HADataLink"
+              },
+              "required": false
+            },
+            "election_options": {
+              "type": {
+                "type": "ref",
+                "name": "HAElectionOptions"
+              },
+              "required": false
+            },
+            "version_info": {
+              "type": {
+                "type": "ref",
+                "name": "HAVersionInfo"
+              },
+              "required": false
+            }
+          }
+        },
+        "required": true
+      },
+      "link_monitoring": {
+        "type": {
+          "name": "HALinkMonitoring",
+          "fields": {
+            "enabled": {
+              "type": "bool",
+              "required": false
+            },
+            "failure_condition": {
+              "type": "str",
+              "required": false
+            },
+            "interfaces": {
+              "type": {
+                "type": "dict",
+                "key": "str",
+                "value": "str"
+              },
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "path_monitoring": {
+        "type": {
+          "name": "HAPathMonitoring",
+          "fields": {
+            "enabled": {
+              "type": "bool",
+              "required": false
+            },
+            "failure_condition": {
+              "type": "str",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "config_sync": {
+        "type": {
+          "name": "HAConfigSync",
+          "fields": {
+            "enabled": {
+              "type": "bool",
+              "required": false
+            },
+            "running_config": {
+              "type": "str",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Active-passive HA pair with full link and path monitoring",
+      "input": "Group 1:\n  Mode: Active-Passive\n  Local Information:\n    Version: 1\n    Mode: Active-Passive\n    State: active (last 45 days)\n    Device Information:\n      Model: PA-5020\n      Management IPv4 Address: 10.10.186.197/24\n      Management IPv6 Address:\n      Jumbo-Frames disabled; MTU 1500\n    HA1 Control Links Joint Configuration:\n      Link Monitor Interval: 3000 ms\n      Encryption Enabled: no\n    HA1 Control Link Information:\n      IP Address: 10.1.1.1/30\n      MAC Address: 00:90:0b:33:3d:53\n      Interface: dedicated-ha1\n      Link State: Up; Setting: 1Gb/s-full\n      Key Imported : no\n    HA2 Data Link Information:\n      IP Address: 10.2.2.1/30\n      MAC Address: 58:49:3b:1e:69:16\n      Interface: dedicated-ha2\n      Link State: Up; Setting: 1Gb/s-full\n    Election Option Information:\n      Priority: 50\n      Preemptive: yes\n      Promotion Hold Interval: 2000 ms\n      Hello Message Interval: 8000 ms\n      Heartbeat Ping Interval: 1000 ms\n      Max # of Flaps: 3\n      Preemption Hold Interval: 1 min\n      Monitor Fail Hold Up Interval: 0 ms\n      Addon Master Hold Up Interval: 500 ms\n    Active-Passive Mode:\n      Passive Link State: auto\n      Monitor Fail Hold Down Interval: 1 min\n    Version Information:\n      Build Release: 6.1.10\n      URL Database: 4773\n      Application Content: 580-3287\n      Anti-Virus: 1858-2337\n      Threat Content: 580-3287\n      VPN Client Software: Not Installed\n      Global Protect Client Software: Not Installed\n    Version Compatibility:\n      Software Version: Match\n      Application Content Compatibility: Match\n      Anti-Virus Compatibility: Match\n      Threat Content Compatibility: Match\n      VPN Client Software Compatibility: Match\n      Global Protect Client Software Compatibility: Match\n    State Synchronization: Complete; type: ethernet\n  Peer Information:\n    Connection status: up\n    Version: 1\n    Mode: Active-Passive\n    State: passive (last 45 days)\n    Device Information:\n      Model: PA-5020\n      Management IPv4 Address: 10.10.186.198/24\n      Management IPv6 Address:\n      Jumbo-Frames disabled; MTU 1500\n    HA1 Control Link Information:\n      IP Address: 10.1.1.2\n      MAC Address: 00:90:0b:33:44:53\n      Connection up; Primary HA1 link\n    HA2 Data Link Information:\n      IP Address: 10.2.2.2\n      MAC Address: 58:49:3b:1e:55:16\n    Election Option Information:\n      Priority: 100\n      Preemptive: yes\n    Version Information:\n      Build Release: 6.1.10\n      URL Database: 4773\n      Application Content: 580-3287\n      Anti-Virus: 1858-2337\n      Threat Content: 580-3287\n      VPN Client Software: Not Installed\n      Global Protect Client Software: Not Installed\n  Initial Monitor Hold inactive; Allow Network/Links to Settle:\n    Link and path monitoring failures honored\n  Link Monitoring Information:\n    Enabled: yes\n    Failure condition: any\n    Group Link:\n      Enabled: yes\n      Failure condition: any\n      Interface ethernet1/1: up\n      Interface ethernet1/2: up\n      Interface ethernet1/3: up\n      Interface ethernet1/4: up\n      Interface ethernet1/5: up\n      Interface ethernet1/6: up\n      Interface ethernet1/7: up\n      Interface ethernet1/8: up\n  Path Monitoring Information:\n    Enabled: yes\n    Failure condition: any\n    Virtual-Wire Groups:\n      No Virtual-Wire path monitoring groups\n    VLAN Groups:\n      No VLAN path monitoring groups\n    Virtual-Router Groups:\n      No Virtual-Router path monitoring groups\n  Configuration Synchronization:\n    Enabled: yes\n    Running Configuration: synchronized\n",
+      "expected": {
+        "group_id": 1,
+        "mode": "Active-Passive",
+        "local": {
+          "version": 1,
+          "mode": "Active-Passive",
+          "state": "active",
+          "state_duration": "45 days",
+          "model": "PA-5020",
+          "mgmt_ipv4": "10.10.186.197/24",
+          "passive_link_state": "auto",
+          "monitor_fail_hold_down_interval": "1 min",
+          "state_sync": "Complete",
+          "state_sync_type": "ethernet",
+          "ha1_joint_config": {
+            "link_monitor_interval_ms": 3000,
+            "encryption_enabled": false
+          },
+          "ha1_control_link": {
+            "ip_address": "10.1.1.1/30",
+            "mac_address": "00:90:0b:33:3d:53",
+            "interface": "dedicated-ha1",
+            "link_state": "Up; Setting: 1Gb/s-full",
+            "key_imported": false
+          },
+          "ha2_data_link": {
+            "ip_address": "10.2.2.1/30",
+            "mac_address": "58:49:3b:1e:69:16",
+            "interface": "dedicated-ha2",
+            "link_state": "Up; Setting: 1Gb/s-full"
+          },
+          "election_options": {
+            "priority": 50,
+            "preemptive": true,
+            "promotion_hold_interval_ms": 2000,
+            "hello_interval_ms": 8000,
+            "heartbeat_interval_ms": 1000,
+            "max_flaps": 3,
+            "preemption_hold_interval": "1 min",
+            "monitor_fail_hold_up_interval_ms": 0,
+            "addon_master_hold_up_interval_ms": 500
+          },
+          "version_info": {
+            "build_release": "6.1.10",
+            "url_database": "4773",
+            "application_content": "580-3287",
+            "anti_virus": "1858-2337",
+            "threat_content": "580-3287"
+          },
+          "version_compatibility": {
+            "software_version": "Match",
+            "application_content": "Match",
+            "anti_virus": "Match",
+            "threat_content": "Match",
+            "vpn_client_software": "Match",
+            "global_protect_client_software": "Match"
+          }
+        },
+        "peer": {
+          "connection_status": "up",
+          "version": 1,
+          "mode": "Active-Passive",
+          "state": "passive",
+          "state_duration": "45 days",
+          "model": "PA-5020",
+          "mgmt_ipv4": "10.10.186.198/24",
+          "ha1_control_link": {
+            "ip_address": "10.1.1.2",
+            "mac_address": "00:90:0b:33:44:53",
+            "connection": "up; Primary HA1 link"
+          },
+          "ha2_data_link": {
+            "ip_address": "10.2.2.2",
+            "mac_address": "58:49:3b:1e:55:16"
+          },
+          "election_options": {
+            "priority": 100,
+            "preemptive": true
+          },
+          "version_info": {
+            "build_release": "6.1.10",
+            "url_database": "4773",
+            "application_content": "580-3287",
+            "anti_virus": "1858-2337",
+            "threat_content": "580-3287"
+          }
+        },
+        "link_monitoring": {
+          "enabled": true,
+          "failure_condition": "any",
+          "interfaces": {
+            "ethernet1/1": "up",
+            "ethernet1/2": "up",
+            "ethernet1/3": "up",
+            "ethernet1/4": "up",
+            "ethernet1/5": "up",
+            "ethernet1/6": "up",
+            "ethernet1/7": "up",
+            "ethernet1/8": "up"
+          }
+        },
+        "path_monitoring": {
+          "enabled": true,
+          "failure_condition": "any"
+        },
+        "config_sync": {
+          "enabled": true,
+          "running_config": "synchronized"
+        }
+      }
+    }
+  ]
+}

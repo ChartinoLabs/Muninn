@@ -1,0 +1,33 @@
+{
+  "os": "paloalto_panos",
+  "command": "show running nat-policy",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Two NAT rules with source and destination NAT translations",
+      "input": "\"NAT default\" {\n        nat-type ipv4;\n        from Trust;\n        source 10.1.1.0/24;\n        to Untrust;\n        to-interface  ;\n        destination any;\n        service  any/any/any;\n        translate-to \"src: ethernet1/1 200.10.10.1 (dynamic-ip-and-port) (pool idx: 2)\";\n        terminal no;\n}\n\nInbound-NAT-to-DMZ-Server1 {\n        nat-type ipv4;\n        from Untrust;\n        source any;\n        to Untrust;\n        to-interface  ;\n        destination 200.10.10.100;\n        service  any/any/any;\n        translate-to \"dst: 10.1.2.10\";\n        terminal no;\n}\n",
+      "expected": {
+        "NAT default": {
+          "nat_type": "ipv4",
+          "from_zone": "Trust",
+          "source": "10.1.1.0/24",
+          "to_zone": "Untrust",
+          "destination": "any",
+          "service": "any/any/any",
+          "translate_to": "src: ethernet1/1 200.10.10.1 (dynamic-ip-and-port) (pool idx: 2)",
+          "terminal": false
+        },
+        "Inbound-NAT-to-DMZ-Server1": {
+          "nat_type": "ipv4",
+          "from_zone": "Untrust",
+          "source": "any",
+          "to_zone": "Untrust",
+          "destination": "200.10.10.100",
+          "service": "any/any/any",
+          "translate_to": "dst: 10.1.2.10",
+          "terminal": false
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "os": "paloalto_panos",
+  "command": "show mac all",
+  "schema": {
+    "name": "ShowMacAllResult",
+    "fields": {
+      "max_entries": {
+        "type": "int",
+        "required": true
+      },
+      "default_timeout": {
+        "type": "int",
+        "required": true
+      },
+      "total_entries": {
+        "type": "int",
+        "required": true
+      },
+      "total_entries_shown": {
+        "type": "int",
+        "required": true
+      },
+      "entries": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "MacEntry",
+            "fields": {
+              "vlan": {
+                "type": "str",
+                "required": true
+              },
+              "mac_address": {
+                "type": "str",
+                "required": true
+              },
+              "interface": {
+                "type": "str",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "ttl": {
+                "type": "int",
+                "required": true
+              },
+              "status_description": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic MAC address table with three complete entries",
+      "input": "\nmaximum of entries supported :      1500\ndefault timeout :                   1800 seconds\ntotal MAC entries in table :        3\ntotal MAC entries shown :           3\nstatus: s - static, c - complete, i - incomplete\n\nvlan                hw address        interface         status   ttl\n--------------------------------------------------------------------------------\nTest                00:50:00:00:07:00 ethernet1/2.110     c      1778\nTest                00:50:00:00:08:00 ethernet1/2.111     c      1796\nTest                50:00:00:02:00:01 ethernet1/2.110     c      704\n",
+      "expected": {
+        "max_entries": 1500,
+        "default_timeout": 1800,
+        "total_entries": 3,
+        "total_entries_shown": 3,
+        "entries": {
+          "00:50:00:00:07:00": {
+            "vlan": "Test",
+            "mac_address": "00:50:00:00:07:00",
+            "interface": "ethernet1/2.110",
+            "status": "c",
+            "ttl": 1778,
+            "status_description": "complete"
+          },
+          "00:50:00:00:08:00": {
+            "vlan": "Test",
+            "mac_address": "00:50:00:00:08:00",
+            "interface": "ethernet1/2.111",
+            "status": "c",
+            "ttl": 1796,
+            "status_description": "complete"
+          },
+          "50:00:00:02:00:01": {
+            "vlan": "Test",
+            "mac_address": "50:00:00:02:00:01",
+            "interface": "ethernet1/2.110",
+            "status": "c",
+            "ttl": 704,
+            "status_description": "complete"
+          }
+        }
+      }
+    }
+  ]
+}

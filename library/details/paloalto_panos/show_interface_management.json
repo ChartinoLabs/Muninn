@@ -1,0 +1,140 @@
+{
+  "os": "paloalto_panos",
+  "command": "show interface management",
+  "schema": {
+    "name": "ShowInterfaceManagementResult",
+    "fields": {
+      "name": {
+        "type": "str",
+        "required": true
+      },
+      "runtime_speed": {
+        "type": "str",
+        "required": true
+      },
+      "runtime_duplex": {
+        "type": "str",
+        "required": true
+      },
+      "runtime_state": {
+        "type": "str",
+        "required": true
+      },
+      "configured_speed": {
+        "type": "str",
+        "required": true
+      },
+      "configured_duplex": {
+        "type": "str",
+        "required": true
+      },
+      "configured_state": {
+        "type": "str",
+        "required": true
+      },
+      "mac_address": {
+        "type": "str",
+        "required": true
+      },
+      "ip_address": {
+        "type": "str",
+        "required": false
+      },
+      "netmask": {
+        "type": "str",
+        "required": false
+      },
+      "default_gateway": {
+        "type": "str",
+        "required": false
+      },
+      "ipv6_address": {
+        "type": "str",
+        "required": false
+      },
+      "ipv6_link_local_address": {
+        "type": "str",
+        "required": false
+      },
+      "ipv6_default_gateway": {
+        "type": "str",
+        "required": false
+      },
+      "counters": {
+        "type": {
+          "name": "ShowInterfaceManagementCounters",
+          "fields": {
+            "bytes_received": {
+              "type": "int",
+              "required": true
+            },
+            "bytes_transmitted": {
+              "type": "int",
+              "required": true
+            },
+            "packets_received": {
+              "type": "int",
+              "required": true
+            },
+            "packets_transmitted": {
+              "type": "int",
+              "required": true
+            },
+            "receive_errors": {
+              "type": "int",
+              "required": true
+            },
+            "transmit_errors": {
+              "type": "int",
+              "required": true
+            },
+            "receive_packets_dropped": {
+              "type": "int",
+              "required": true
+            },
+            "transmit_packets_dropped": {
+              "type": "int",
+              "required": true
+            },
+            "multicast_packets_received": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Management interface with IPv4 config and link-local IPv6",
+      "input": "\n\n-------------------------------------------------------------------------------\nName: Management Interface\nLink status:\n  Runtime link speed/duplex/state: 1000/full/up\n  Configured link speed/duplex/state: auto/auto/auto\nMAC address:\n  Port MAC address 08:66:1f:02:04:a3\n\nIp address: 10.0.1.5\nNetmask: 255.255.255.0\nDefault gateway: 10.0.1.1\nIpv6 address: unknown\nIpv6 link local address: fe80::a66:1fff:fe02:4a3/64\nIpv6 default gateway:\n-------------------------------------------------------------------------------\n\n\n-------------------------------------------------------------------------------\nLogical interface counters:\n-------------------------------------------------------------------------------\nbytes received                    264279971\nbytes transmitted                 238725455\npackets received                  279836\npackets transmitted               291248\nreceive errors                    0\ntransmit errors                   0\nreceive packets dropped           0\ntransmit packets dropped          0\nmulticast packets received        0\n-------------------------------------------------------------------------------\n",
+      "expected": {
+        "name": "Management Interface",
+        "runtime_speed": "1000",
+        "runtime_duplex": "full",
+        "runtime_state": "up",
+        "configured_speed": "auto",
+        "configured_duplex": "auto",
+        "configured_state": "auto",
+        "mac_address": "08:66:1f:02:04:a3",
+        "ip_address": "10.0.1.5",
+        "netmask": "255.255.255.0",
+        "default_gateway": "10.0.1.1",
+        "ipv6_link_local_address": "fe80::a66:1fff:fe02:4a3/64",
+        "counters": {
+          "bytes_received": 264279971,
+          "bytes_transmitted": 238725455,
+          "packets_received": 279836,
+          "packets_transmitted": 291248,
+          "receive_errors": 0,
+          "transmit_errors": 0,
+          "receive_packets_dropped": 0,
+          "transmit_packets_dropped": 0,
+          "multicast_packets_received": 0
+        }
+      }
+    }
+  ]
+}

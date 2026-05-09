@@ -1,0 +1,69 @@
+{
+  "os": "paloalto_panos",
+  "command": "show jobs all",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Basic job listing with multiple completed jobs",
+      "input": "Enqueued                     ID             Type    Status Result Completed\n--------------------------------------------------------------------------\n2016/04/28 03:05:24        2341      FqdnRefresh       FIN     OK 03:05:41\n2016/04/28 02:35:05        2340      FqdnRefresh       FIN     OK 02:35:22\n2016/04/28 02:05:03        2339      FqdnRefresh       FIN     OK 02:05:21\n2016/04/28 01:35:01        2338      FqdnRefresh       FIN     OK 01:35:01\n2016/04/28 01:04:43        2337      FqdnRefresh       FIN     OK 01:05:00\n2016/04/28 01:01:43        2336        Antivirus       FIN     OK 01:02:26\n2016/04/28 01:00:09        2335          Install       FIN     OK 01:01:43\n2016/04/28 01:00:06        2334           Downld       FIN     OK 01:00:08\n",
+      "expected": {
+        "2341": {
+          "enqueued": "2016/04/28 03:05:24",
+          "job_type": "FqdnRefresh",
+          "status": "FIN",
+          "result": "OK",
+          "completed": "03:05:41"
+        },
+        "2340": {
+          "enqueued": "2016/04/28 02:35:05",
+          "job_type": "FqdnRefresh",
+          "status": "FIN",
+          "result": "OK",
+          "completed": "02:35:22"
+        },
+        "2339": {
+          "enqueued": "2016/04/28 02:05:03",
+          "job_type": "FqdnRefresh",
+          "status": "FIN",
+          "result": "OK",
+          "completed": "02:05:21"
+        },
+        "2338": {
+          "enqueued": "2016/04/28 01:35:01",
+          "job_type": "FqdnRefresh",
+          "status": "FIN",
+          "result": "OK",
+          "completed": "01:35:01"
+        },
+        "2337": {
+          "enqueued": "2016/04/28 01:04:43",
+          "job_type": "FqdnRefresh",
+          "status": "FIN",
+          "result": "OK",
+          "completed": "01:05:00"
+        },
+        "2336": {
+          "enqueued": "2016/04/28 01:01:43",
+          "job_type": "Antivirus",
+          "status": "FIN",
+          "result": "OK",
+          "completed": "01:02:26"
+        },
+        "2335": {
+          "enqueued": "2016/04/28 01:00:09",
+          "job_type": "Install",
+          "status": "FIN",
+          "result": "OK",
+          "completed": "01:01:43"
+        },
+        "2334": {
+          "enqueued": "2016/04/28 01:00:06",
+          "job_type": "Downld",
+          "status": "FIN",
+          "result": "OK",
+          "completed": "01:00:08"
+        }
+      }
+    }
+  ]
+}
