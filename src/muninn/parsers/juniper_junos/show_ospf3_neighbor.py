@@ -1,7 +1,7 @@
 """Parser for 'show ospf3 neighbor' command on Juniper Junos."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -19,7 +19,9 @@ class Ospf3NeighborEntry(TypedDict):
         state: Adjacency state (e.g., ``Full``, ``2Way``, ``Init``).
         priority: Neighbor priority value.
         dead_time: Dead timer countdown in seconds.
-        neighbor_address: IPv6 link-local address of the neighbor.
+        neighbor_address: IPv6 link-local address of the neighbor. Omitted when
+            the device does not emit a ``Neighbor-address`` continuation line
+            for this entry.
     """
 
     neighbor_id: str
@@ -27,7 +29,7 @@ class Ospf3NeighborEntry(TypedDict):
     state: str
     priority: int
     dead_time: int
-    neighbor_address: str
+    neighbor_address: NotRequired[str]
 
 
 class ShowOspf3NeighborResult(TypedDict):
@@ -108,7 +110,6 @@ class ShowOspf3NeighborParser(BaseParser[ShowOspf3NeighborResult]):
                     state=neighbor_match.group("state"),
                     priority=int(neighbor_match.group("priority")),
                     dead_time=int(neighbor_match.group("dead_time")),
-                    neighbor_address="",
                 )
                 continue
 
