@@ -203,7 +203,10 @@ def _split_vrf_sections(
     return sections
 
 
-@register(OS.CISCO_IOSXR, "show bgp vrf all neighbors advertised-routes")
+@register(
+    OS.CISCO_IOSXR,
+    r"show bgp vrf all neighbors (?P<neighbor>\S+) advertised-routes",
+)
 class ShowBgpVrfAllNeighborsAdvertisedRoutesParser(
     BaseParser["ShowBgpVrfAllNeighborsAdvertisedRoutesResult"],
 ):
