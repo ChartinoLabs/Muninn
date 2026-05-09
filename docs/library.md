@@ -324,7 +324,12 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
     "cisco_ios": "Cisco IOS",
     "cisco_iosxe": "Cisco IOS-XE",
     "cisco_iosxr": "Cisco IOS-XR",
-    "cisco_nxos": "Cisco NX-OS"
+    "cisco_nxos": "Cisco NX-OS",
+    "arista_eos": "Arista EOS",
+    "juniper_junos": "Juniper Junos",
+    "paloalto_panos": "Palo Alto PAN-OS",
+    "nokia_sros": "Nokia SR OS",
+    "linux": "Linux"
   };
 
   function osLabel(os) {

@@ -81,6 +81,11 @@ result: ShowIpOspfNeighborResult = ShowIpOspfNeighborParser.parse(raw_output)
 | Cisco IOS-XE | `iosxe`, `cisco_iosxe`, `ios-xe` |
 | Cisco IOS | `ios`, `cisco_ios` |
 | Cisco IOS-XR | `iosxr`, `cisco_iosxr`, `ios-xr` |
+| Arista EOS | `arista_eos`, `eos`, `arista` |
+| Juniper Junos | `juniper_junos`, `junos`, `juniper` |
+| Palo Alto PAN-OS | `paloalto_panos`, `panos`, `paloalto`, `pan-os` |
+| Nokia SR OS | `nokia_sros`, `sros`, `nokia`, `sr-os` |
+| Linux | `linux` |
 
 Browse all available parsers in the [Parser Library](library.md).
 
