@@ -552,9 +552,19 @@ def _parse_ap_mode(line: str, local: dict[str, object]) -> None:
         local["monitor_fail_hold_down_interval"] = m.group(1).strip()
 
 
+def _parse_local_base_void(line: str, st: "_ParseState") -> None:
+    """Wrapper for `_parse_peer_or_local_base` that discards its bool return."""
+    _parse_peer_or_local_base(line, st.local)
+
+
+def _parse_peer_base_void(line: str, st: "_ParseState") -> None:
+    """Wrapper for `_parse_peer_base` (which forwards to a bool-returning fn)."""
+    _parse_peer_base(line, st.peer)
+
+
 # Handler signature: (line, state) -> None
 _LOCAL_SUB_HANDLERS: dict[str, "Callable[[str, _ParseState], None]"] = {
-    _SUB_NONE: lambda line, st: _parse_peer_or_local_base(line, st.local),
+    _SUB_NONE: _parse_local_base_void,
     _SUB_DEVICE: lambda line, st: _parse_device_info(line, st.local),
     _SUB_HA1_JOINT: lambda line, st: _parse_ha1_joint_config(
         line,
@@ -575,7 +585,7 @@ _LOCAL_SUB_HANDLERS: dict[str, "Callable[[str, _ParseState], None]"] = {
 }
 
 _PEER_SUB_HANDLERS: dict[str, "Callable[[str, _ParseState], None]"] = {
-    _SUB_NONE: lambda line, st: _parse_peer_base(line, st.peer),
+    _SUB_NONE: _parse_peer_base_void,
     _SUB_DEVICE: lambda line, st: _parse_device_info(line, st.peer),
     _SUB_HA1: lambda line, st: _parse_link_info(line, st.peer_ha1),
     _SUB_HA2: lambda line, st: _parse_link_info(line, st.peer_ha2),
