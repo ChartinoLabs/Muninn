@@ -85,15 +85,15 @@ class BgpNeighborEntry(TypedDict):
 
     peer_address: str
     peer_port: int
-    peer_as: int
+    peer_as: int | str
     local_address: str
     local_port: int
-    local_as: int
-    type: str
-    state: str
-    flags: list[str]
-    last_state: str
-    last_event: str
+    local_as: int | str
+    type: NotRequired[str]
+    state: NotRequired[str]
+    flags: NotRequired[list[str]]
+    last_state: NotRequired[str]
+    last_event: NotRequired[str]
     export_policies: NotRequired[list[str]]
     options: NotRequired[list[str]]
     holdtime: NotRequired[int]
@@ -138,9 +138,9 @@ class ShowBgpNeighborResult(TypedDict):
 # Peer: 10.145.0.3+64180 AS 30000  Local: 10.145.0.1+179 AS 1
 _PEER_HEADER_RE = re.compile(
     r"Peer:\s+(?P<peer_addr>\S+?)\+(?P<peer_port>\d+)\s+"
-    r"AS\s+(?P<peer_as>\d+)\s+"
+    r"AS\s+(?P<peer_as>[\d.]+)\s+"
     r"Local:\s+(?P<local_addr>\S+?)\+(?P<local_port>\d+)\s+"
-    r"AS\s+(?P<local_as>\d+)"
+    r"AS\s+(?P<local_as>[\d.]+)"
 )
 
 # Type: External    State: Established    Flags: <ImportEval Sync>
@@ -251,6 +251,19 @@ _MSG_COUNTS_RE = re.compile(
 _OUTPUT_QUEUE_RE = re.compile(r"Output Queue\[(?P<idx>\d+)\]:\s+(?P<depth>\d+)")
 
 
+def _coerce_as(raw: str) -> int | str:
+    """Return an AS number as ``int`` for asplain, or ``str`` for asdot.
+
+    Junos can render 4-byte AS numbers either as a plain integer
+    (``65000``) or in dotted form (``1.100``).  The dotted form must be
+    preserved verbatim because it cannot be losslessly represented as an
+    ``int``.
+    """
+    if "." in raw:
+        return raw
+    return int(raw)
+
+
 def _split_into_peer_blocks(output: str) -> list[list[str]]:
     """Split output into per-peer line blocks."""
     blocks: list[list[str]] = []
@@ -283,15 +296,10 @@ def _parse_peer_header(lines: list[str]) -> BgpNeighborEntry | None:
     entry: BgpNeighborEntry = {
         "peer_address": m.group("peer_addr"),
         "peer_port": int(m.group("peer_port")),
-        "peer_as": int(m.group("peer_as")),
+        "peer_as": _coerce_as(m.group("peer_as")),
         "local_address": m.group("local_addr"),
         "local_port": int(m.group("local_port")),
-        "local_as": int(m.group("local_as")),
-        "type": "",
-        "state": "",
-        "flags": [],
-        "last_state": "",
-        "last_event": "",
+        "local_as": _coerce_as(m.group("local_as")),
     }
     return entry
 
