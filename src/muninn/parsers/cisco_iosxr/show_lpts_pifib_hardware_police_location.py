@@ -117,7 +117,10 @@ def _parse_statistics_line(
     return False
 
 
-@register(OS.CISCO_IOSXR, "show lpts pifib hardware police location")
+@register(
+    OS.CISCO_IOSXR,
+    r"show lpts pifib hardware police location (?P<location>\S+)",
+)
 class ShowLptsPifibHardwarePoliceLocationParser(
     BaseParser["ShowLptsPifibHardwarePoliceLocationResult"],
 ):
