@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_PREFIX
 from muninn.registry import register
 from muninn.tags import ParserTag
 
@@ -15,9 +16,9 @@ _UNKNOWN_TYPE = "---"
 class ISCDEntry(TypedDict):
     """Interface Switching Capability Descriptor."""
 
-    switching_type: str
-    encoding_type: str
-    maximum_lsp_bw_bps: list[str]
+    switching_type: NotRequired[str]
+    encoding_type: NotRequired[str]
+    maximum_lsp_bw_bps: NotRequired[list[int]]
 
 
 class AdjacencySID(TypedDict):
@@ -55,16 +56,23 @@ class LinkEntry(TypedDict):
 
     local_address: str
     remote_address: str
-    local_interface_index: int
-    remote_interface_index: int
+    local_interface_index: NotRequired[int]
+    remote_interface_index: NotRequired[int]
     color: NotRequired[int]
     color_name: NotRequired[str]
-    metric: int
-    static_bw: NotRequired[str]
-    reservable_bw: NotRequired[str]
-    available_bw_bps: NotRequired[list[str]]
+    metric: NotRequired[int]
+    static_bw_bps: NotRequired[int]
+    reservable_bw_bps: NotRequired[int]
+    available_bw_bps: NotRequired[list[int]]
     iscd: NotRequired[dict[str, ISCDEntry]]
     adjacency_sids: NotRequired[dict[str, AdjacencySID]]
+
+
+class TedSummary(TypedDict):
+    """Summary counts from the TED database header line."""
+
+    isis_nodes: int
+    inet_nodes: int
 
 
 class NodeEntry(TypedDict):
@@ -81,7 +89,11 @@ class NodeEntry(TypedDict):
     spring_algorithms: NotRequired[list[int]]
 
 
-ShowTedDatabaseExtensiveResult = dict[str, NodeEntry]
+class ShowTedDatabaseExtensiveResult(TypedDict):
+    """Top-level result for 'show ted database extensive'."""
+
+    summary: NotRequired[TedSummary]
+    nodes: dict[str, NodeEntry]
 
 
 # -- Compiled patterns --
@@ -113,7 +125,10 @@ _ADJ_SID = re.compile(
     r"^\s*(?P<af>IPV[46]),\s+SID:\s+(?P<sid>\d+),"
     r"\s+Flags:\s+(?P<flags>0x[0-9a-fA-F]+),\s+Weight:\s+(?P<weight>\d+)\s*$"
 )
-_PREFIX_LINE = re.compile(r"^\s+(?P<prefix>\d+\.\d+\.\d+\.\d+/\d+)\s*$")
+_PREFIX_LINE = re.compile(rf"^\s+(?P<prefix>{IPV4_PREFIX})\s*$")
+_TED_SUMMARY = re.compile(
+    r"^\s*TED database:\s+(?P<isis>\d+)\s+ISIS nodes\s+(?P<inet>\d+)\s+INET nodes\s*$"
+)
 _PREFIX_FLAGS = re.compile(r"^\s*Flags:\s+(?P<flags>0x[0-9a-fA-F]+)\s*$")
 _PREFIX_SID_LINE = re.compile(
     r"^\s*SID:\s+(?P<sid>\d+),\s+Flags:\s+(?P<flags>0x[0-9a-fA-F]+),"
@@ -126,11 +141,40 @@ _SRGB_BLOCK = re.compile(
 )
 _SPRING_ALGO = re.compile(r"^\s*Algo:\s+(?P<algo>\d+)\s*$")
 _BW_VALUES = re.compile(r"\[(\d+)\]\s+(\S+)")
+_BW_NUMERIC = re.compile(r"^(?P<num>\d+)(?P<unit>[a-zA-Z]+)?$")
+_BW_UNIT_MULTIPLIERS = {
+    "bps": 1,
+    "Kbps": 1_000,
+    "Mbps": 1_000_000,
+    "Gbps": 1_000_000_000,
+    "Tbps": 1_000_000_000_000,
+}
 
 
-def _parse_bw_line(line: str) -> list[str]:
-    """Extract bandwidth values from a priority-indexed line."""
-    return [m.group(2) for m in _BW_VALUES.finditer(line)]
+def _parse_bw_value_to_bps(value: str) -> int | None:
+    """Convert a bandwidth string like '10bps' or '2Mbps' to integer bits/sec.
+
+    Returns None if the value cannot be parsed.
+    """
+    m = _BW_NUMERIC.match(value)
+    if not m:
+        return None
+    num = int(m.group("num"))
+    unit = m.group("unit") or "bps"
+    multiplier = _BW_UNIT_MULTIPLIERS.get(unit)
+    if multiplier is None:
+        return None
+    return num * multiplier
+
+
+def _parse_bw_line(line: str) -> list[int]:
+    """Extract bandwidth values from a priority-indexed line, in bits/sec."""
+    out: list[int] = []
+    for m in _BW_VALUES.finditer(line):
+        bps = _parse_bw_value_to_bps(m.group(2))
+        if bps is not None:
+            out.append(bps)
+    return out
 
 
 def _is_link_block_boundary(line: str, stripped: str) -> bool:
@@ -177,7 +221,7 @@ def _process_link_value_line(
 
 
 def _collect_bw_values(
-    bw_vals: list[str],
+    bw_vals: list[int],
     bw_target: str,
     link: dict[str, object],
     current_iscd: dict[str, object] | None,
@@ -186,11 +230,11 @@ def _collect_bw_values(
     if bw_target == "available":
         available = link.get("available_bw_bps")
         if isinstance(available, list):
-            cast(list[str], available).extend(bw_vals)
+            cast(list[int], available).extend(bw_vals)
     elif bw_target == "max_lsp" and current_iscd is not None:
         max_lsp = current_iscd.get("maximum_lsp_bw_bps")
         if isinstance(max_lsp, list):
-            cast(list[str], max_lsp).extend(bw_vals)
+            cast(list[int], max_lsp).extend(bw_vals)
 
 
 def _parse_link_attributes(
@@ -218,11 +262,15 @@ def _parse_link_attributes(
         return True
 
     if m := _STATIC_BW.match(stripped):
-        link["static_bw"] = m.group("bw")
+        bps = _parse_bw_value_to_bps(m.group("bw"))
+        if bps is not None:
+            link["static_bw_bps"] = bps
         return True
 
     if m := _RESERVABLE_BW.match(stripped):
-        link["reservable_bw"] = m.group("bw")
+        bps = _parse_bw_value_to_bps(m.group("bw"))
+        if bps is not None:
+            link["reservable_bw_bps"] = bps
         return True
 
     return False
@@ -544,6 +592,36 @@ def _parse_node_body(
     return idx
 
 
+def _parse_node(
+    lines: list[str],
+    start: int,
+    node_id_match: re.Match[str],
+) -> tuple[str, NodeEntry, int] | None:
+    """Parse a single node block. Return (node_id, node, next_idx) or None."""
+    node_id = node_id_match.group("node_id")
+    idx = start + 1
+
+    if idx >= len(lines):
+        return None
+
+    type_match = _NODE_TYPE.match(lines[idx].strip())
+    if not type_match:
+        return node_id, cast(NodeEntry, {}), idx
+
+    node: dict[str, object] = {
+        "age_secs": int(type_match.group("age")),
+        "link_in": int(type_match.group("link_in")),
+        "link_out": int(type_match.group("link_out")),
+    }
+
+    node_type = type_match.group("type")
+    if node_type != _UNKNOWN_TYPE:
+        node["node_type"] = node_type
+
+    idx = _parse_node_body(lines, idx + 1, node)
+    return node_id, cast(NodeEntry, node), idx
+
+
 @register(OS.JUNIPER_JUNOS, "show ted database extensive")
 class ShowTedDatabaseExtensiveParser(
     BaseParser[ShowTedDatabaseExtensiveResult],
@@ -564,48 +642,45 @@ class ShowTedDatabaseExtensiveParser(
             output: Raw CLI output from command.
 
         Returns:
-            Dict keyed by node ID with node details.
+            Result dict with nodes keyed by node ID and an optional summary.
 
         Raises:
             ValueError: If no nodes found in output.
         """
         lines = output.splitlines()
-        result: ShowTedDatabaseExtensiveResult = {}
+        nodes: dict[str, NodeEntry] = {}
+        summary: TedSummary | None = None
         idx = 0
 
         while idx < len(lines):
-            m = _NODE_ID.match(lines[idx])
-            if not m:
+            line = lines[idx]
+
+            if summary is None and (sm := _TED_SUMMARY.match(line)):
+                summary = TedSummary(
+                    isis_nodes=int(sm.group("isis")),
+                    inet_nodes=int(sm.group("inet")),
+                )
                 idx += 1
                 continue
 
-            node_id = m.group("node_id")
-            idx += 1
-
-            if idx >= len(lines):
-                break
-
-            type_match = _NODE_TYPE.match(lines[idx].strip())
-            if not type_match:
+            node_id_match = _NODE_ID.match(line)
+            if not node_id_match:
+                idx += 1
                 continue
 
-            node: dict[str, object] = {
-                "age_secs": int(type_match.group("age")),
-                "link_in": int(type_match.group("link_in")),
-                "link_out": int(type_match.group("link_out")),
-            }
+            parsed = _parse_node(lines, idx, node_id_match)
+            if parsed is None:
+                break
+            node_id, node, idx = parsed
+            if node:
+                nodes[node_id] = node
 
-            node_type = type_match.group("type")
-            if node_type != _UNKNOWN_TYPE:
-                node["node_type"] = node_type
-
-            idx += 1
-
-            idx = _parse_node_body(lines, idx, node)
-            result[node_id] = cast(NodeEntry, node)
-
-        if not result:
+        if not nodes:
             msg = "No TED nodes found in output"
             raise ValueError(msg)
+
+        result: ShowTedDatabaseExtensiveResult = {"nodes": nodes}
+        if summary is not None:
+            result["summary"] = summary
 
         return result
