@@ -1,0 +1,72 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show lldp neighbors",
+  "schema": {
+    "name": "ShowLldpNeighborsResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "LldpNeighborEntry",
+              "fields": {
+                "device_id": {
+                  "type": "str",
+                  "required": true
+                },
+                "hold_time": {
+                  "type": "int",
+                  "required": true
+                },
+                "capabilities": {
+                  "type": "str",
+                  "required": false
+                },
+                "port_id": {
+                  "type": "str",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_entries": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic LLDP neighbors with two router peers",
+      "input": "Mon Jan 29 19:06:33.768 UTC\nCapability codes:\n        (R) Router, (B) Bridge, (T) Telephone, (C) DOCSIS Cable Device\n        (W) WLAN Access Point, (P) Repeater, (S) Station, (O) Other\n\nDevice ID       Local Intf          Hold-time  Capability     Port ID\nASR-OCC-P1      Gi0/0/0/0           120        R               Gi0/0/0/2\nASR-LON-P1      Gi0/0/0/3           120        R               Gi0/0/0/2\n\nTotal entries displayed: 2\n",
+      "expected": {
+        "neighbors": {
+          "GigabitEthernet0/0/0/0": {
+            "ASR-OCC-P1": {
+              "device_id": "ASR-OCC-P1",
+              "hold_time": 120,
+              "capabilities": "R",
+              "port_id": "GigabitEthernet0/0/0/2"
+            }
+          },
+          "GigabitEthernet0/0/0/3": {
+            "ASR-LON-P1": {
+              "device_id": "ASR-LON-P1",
+              "hold_time": 120,
+              "capabilities": "R",
+              "port_id": "GigabitEthernet0/0/0/2"
+            }
+          }
+        },
+        "total_entries": 2
+      }
+    }
+  ]
+}

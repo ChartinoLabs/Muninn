@@ -1,0 +1,101 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show pim ipv4 interface",
+  "schema": {
+    "name": "ShowPimIpv4InterfaceResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "PimIpv4InterfaceEntry",
+              "fields": {
+                "address": {
+                  "type": "str",
+                  "required": true
+                },
+                "pim_enabled": {
+                  "type": "bool",
+                  "required": true
+                },
+                "neighbor_count": {
+                  "type": "int",
+                  "required": true
+                },
+                "hello_interval": {
+                  "type": "int",
+                  "required": true
+                },
+                "dr_priority": {
+                  "type": "int",
+                  "required": true
+                },
+                "dr_address": {
+                  "type": "str",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic PIM IPv4 interface output with BVI and Bundle-Ether interfaces",
+      "input": "\nWed Jul 27 17:18:38.018 CST\n\nPIM interfaces in VRF default\nAddress               Interface                     PIM  Nbr   Hello  DR    DR\n                                                         Count Intvl  Prior\n\n192.0.2.1             BVI10                         on   11    30     1     192.0.2.2\n192.0.2.1             Bundle-Ether10                on   2     30     1     192.0.2.2\n192.0.2.1             Bundle-Ether10.10             on   2     30     1     192.0.2.2\n192.0.2.1             Bundle-Ether10.20             on   2     30     1     192.0.2.2\n192.0.2.1             Bundle-Ether10.30             on   2     30     1     192.0.2.2\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "BVI10": {
+              "address": "192.0.2.1",
+              "pim_enabled": true,
+              "neighbor_count": 11,
+              "hello_interval": 30,
+              "dr_priority": 1,
+              "dr_address": "192.0.2.2"
+            },
+            "Bundle-Ether10": {
+              "address": "192.0.2.1",
+              "pim_enabled": true,
+              "neighbor_count": 2,
+              "hello_interval": 30,
+              "dr_priority": 1,
+              "dr_address": "192.0.2.2"
+            },
+            "Bundle-Ether10.10": {
+              "address": "192.0.2.1",
+              "pim_enabled": true,
+              "neighbor_count": 2,
+              "hello_interval": 30,
+              "dr_priority": 1,
+              "dr_address": "192.0.2.2"
+            },
+            "Bundle-Ether10.20": {
+              "address": "192.0.2.1",
+              "pim_enabled": true,
+              "neighbor_count": 2,
+              "hello_interval": 30,
+              "dr_priority": 1,
+              "dr_address": "192.0.2.2"
+            },
+            "Bundle-Ether10.30": {
+              "address": "192.0.2.1",
+              "pim_enabled": true,
+              "neighbor_count": 2,
+              "hello_interval": 30,
+              "dr_priority": 1,
+              "dr_address": "192.0.2.2"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show lldp neighbors detail",
+  "schema": {
+    "name": "ShowLldpNeighborsDetailResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "LldpNeighborDetailEntry",
+            "fields": {
+              "chassis_id": {
+                "type": "str",
+                "required": true
+              },
+              "port_id": {
+                "type": "str",
+                "required": true
+              },
+              "port_description": {
+                "type": "str",
+                "required": false
+              },
+              "system_name": {
+                "type": "str",
+                "required": false
+              },
+              "system_description": {
+                "type": "str",
+                "required": false
+              },
+              "time_remaining": {
+                "type": "int",
+                "required": true
+              },
+              "hold_time": {
+                "type": "int",
+                "required": true
+              },
+              "age": {
+                "type": "int",
+                "required": false
+              },
+              "system_capabilities": {
+                "type": "str",
+                "required": false
+              },
+              "enabled_capabilities": {
+                "type": "str",
+                "required": false
+              },
+              "management_addresses": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              },
+              "peer_mac_address": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_entries": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple LLDP neighbors with mixed interface types and capabilities",
+      "input": "Tue Jan 16 13:49:50.315 AEST\nCapability codes:\n        (R) Router, (B) Bridge, (T) Telephone, (C) DOCSIS Cable Device\n        (W) WLAN Access Point, (P) Repeater, (S) Station, (O) Other\n\n------------------------------------------------\nLocal Interface: FourHundredGigE0/0/0/0\nChassis id: 6c03.b5aa.bbcc\nPort id: Fou1/0/22\nPort Description: uplink:router1:FH0/0/0/0\nSystem Name: router-400.router.com\n\nSystem Description:\nCisco IOS Software [Cupertino], Catalyst L3 Switch Software (CAT9K_IOSXE), Version 17.9.3, RELEASE SOFTWARE (fc6)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2023 by Cisco Systems, Inc.\nCompiled Tue 14-Mar-23 18:26 by mcpre\n\nTime remaining: 90 seconds\nHold Time: 120 seconds\nAge: 732802 seconds\nSystem Capabilities: B,R\nEnabled Capabilities: B,R\nManagement Addresses:\n  IPv4 address: 172.1.1.79\n  IPv6 address: 2407:abcd:0:aaaa::0000\n\nPeer MAC Address: 6c:03:b5:aa:bb:cc\n\n\n------------------------------------------------\nLocal Interface: FourHundredGigE0/0/0/28\nChassis id: d0dc.2cdd.aabc\nPort id: FourHundredGigE0/0/0/28\nPort Description: uplink:router1::FH0/0/0/28\nSystem Name: router2.com\n\nSystem Description:\n7.9.2, 8000\n\nTime remaining: 98 seconds\nHold Time: 120 seconds\nAge: 729378 seconds\nSystem Capabilities: R\nEnabled Capabilities: R\nManagement Addresses:\n  IPv4 address: 172.1.1.64\n  IPv6 address: 2407:abcd:0:aaab::0000\n\nPeer MAC Address: d0:dc:2c:aa:bb:cc\n\n\n------------------------------------------------\nLocal Interface: FourHundredGigE0/0/0/29\nChassis id: d0dc.abcd.dcba\nPort id: FourHundredGigE0/0/0/29\nPort Description: uplink:router1:FH0/0/0/29\nSystem Name: router66.router.com\n\nSystem Description:\n7.9.2, 8000\n\nTime remaining: 100 seconds\nHold Time: 120 seconds\nAge: 729313 seconds\nSystem Capabilities: R\nEnabled Capabilities: R\nManagement Addresses:\n  IPv4 address: 172.1.1.66\n  IPv6 address: 2407:abcd:0:aaac::0000\n\nPeer MAC Address: d0:dc:2c:aa:bb:cd\n\n\n------------------------------------------------\nLocal Interface: HundredGigE0/0/0/30\nChassis id: 247e.32bb.0000\nPort id: Eth1/4\nPort Description: router1:Hun1/0/30\nSystem Name: otter-buffy\n\nSystem Description:\nCisco NX-OS(tm) n7700, Software (n7700-s2-dk9), Version 8.4(3), RELEASE SOFTWARE Copyright (c) 2002-2020 by Cisco Systems, Inc. Compiled 9/4/2020 23:00:00\n\nTime remaining: 117 seconds\nHold Time: 120 seconds\nAge: 732508 seconds\nSystem Capabilities: B,R\nEnabled Capabilities: B,R\nManagement Addresses:\n  IPv4 address: 172.1.1.158\n\nPeer MAC Address: 24:7e:12:aa:bb:cc\n\n\n------------------------------------------------\nLocal Interface: HundredGigE0/0/0/31\nChassis id: 2cab.ebe1.ffff\nPort id: Eth2/4\nPort Description: uplink:router1:Hun1/0/31\nSystem Name: onyx.mgmt.com\n\nSystem Description:\nCisco NX-OS(tm) n7700, Software (n7700-s2-dk9), Version 8.4(3), RELEASE SOFTWARE Copyright (c) 2002-2020 by Cisco Systems, Inc. Compiled 9/4/2020 23:00:00\n\nTime remaining: 104 seconds\nHold Time: 120 seconds\nAge: 732462 seconds\nSystem Capabilities: B,R\nEnabled Capabilities: B,R\nManagement Addresses:\n  IPv4 address: 172.1.1.158\n\nPeer MAC Address: 2c:ab:eb:aa:bb:cc\n\n\nTotal entries displayed: 5\n",
+      "expected": {
+        "neighbors": {
+          "FourHundredGigabitEthernet0/0/0/0": {
+            "chassis_id": "6c03.b5aa.bbcc",
+            "port_id": "Fou1/0/22",
+            "time_remaining": 90,
+            "hold_time": 120,
+            "port_description": "uplink:router1:FH0/0/0/0",
+            "system_name": "router-400.router.com",
+            "system_capabilities": "B, R",
+            "enabled_capabilities": "B, R",
+            "peer_mac_address": "6c:03:b5:aa:bb:cc",
+            "system_description": "Cisco IOS Software [Cupertino], Catalyst L3 Switch Software (CAT9K_IOSXE), Version 17.9.3, RELEASE SOFTWARE (fc6)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2023 by Cisco Systems, Inc.\nCompiled Tue 14-Mar-23 18:26 by mcpre",
+            "age": 732802,
+            "management_addresses": [
+              "172.1.1.79",
+              "2407:abcd:0:aaaa::0000"
+            ]
+          },
+          "FourHundredGigabitEthernet0/0/0/28": {
+            "chassis_id": "d0dc.2cdd.aabc",
+            "port_id": "FourHundredGigabitEthernet0/0/0/28",
+            "time_remaining": 98,
+            "hold_time": 120,
+            "port_description": "uplink:router1::FH0/0/0/28",
+            "system_name": "router2.com",
+            "system_capabilities": "R",
+            "enabled_capabilities": "R",
+            "peer_mac_address": "d0:dc:2c:aa:bb:cc",
+            "system_description": "7.9.2, 8000",
+            "age": 729378,
+            "management_addresses": [
+              "172.1.1.64",
+              "2407:abcd:0:aaab::0000"
+            ]
+          },
+          "FourHundredGigabitEthernet0/0/0/29": {
+            "chassis_id": "d0dc.abcd.dcba",
+            "port_id": "FourHundredGigabitEthernet0/0/0/29",
+            "time_remaining": 100,
+            "hold_time": 120,
+            "port_description": "uplink:router1:FH0/0/0/29",
+            "system_name": "router66.router.com",
+            "system_capabilities": "R",
+            "enabled_capabilities": "R",
+            "peer_mac_address": "d0:dc:2c:aa:bb:cd",
+            "system_description": "7.9.2, 8000",
+            "age": 729313,
+            "management_addresses": [
+              "172.1.1.66",
+              "2407:abcd:0:aaac::0000"
+            ]
+          },
+          "HundredGigabitEthernet0/0/0/30": {
+            "chassis_id": "247e.32bb.0000",
+            "port_id": "Ethernet1/4",
+            "time_remaining": 117,
+            "hold_time": 120,
+            "port_description": "router1:Hun1/0/30",
+            "system_name": "otter-buffy",
+            "system_capabilities": "B, R",
+            "enabled_capabilities": "B, R",
+            "peer_mac_address": "24:7e:12:aa:bb:cc",
+            "system_description": "Cisco NX-OS(tm) n7700, Software (n7700-s2-dk9), Version 8.4(3), RELEASE SOFTWARE Copyright (c) 2002-2020 by Cisco Systems, Inc. Compiled 9/4/2020 23:00:00",
+            "age": 732508,
+            "management_addresses": [
+              "172.1.1.158"
+            ]
+          },
+          "HundredGigabitEthernet0/0/0/31": {
+            "chassis_id": "2cab.ebe1.ffff",
+            "port_id": "Ethernet2/4",
+            "time_remaining": 104,
+            "hold_time": 120,
+            "port_description": "uplink:router1:Hun1/0/31",
+            "system_name": "onyx.mgmt.com",
+            "system_capabilities": "B, R",
+            "enabled_capabilities": "B, R",
+            "peer_mac_address": "2c:ab:eb:aa:bb:cc",
+            "system_description": "Cisco NX-OS(tm) n7700, Software (n7700-s2-dk9), Version 8.4(3), RELEASE SOFTWARE Copyright (c) 2002-2020 by Cisco Systems, Inc. Compiled 9/4/2020 23:00:00",
+            "age": 732462,
+            "management_addresses": [
+              "172.1.1.158"
+            ]
+          }
+        },
+        "total_entries": 5
+      }
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show pim ipv4 group-map",
+  "schema": null,
+  "examples": [
+    {
+      "name": "PIM IPv4 group-map with DM, SSM, SM, and NO protocol entries",
+      "input": "\nWed Jul 27 17:18:36.472 CST\n\nIP PIM Group Mapping Table\n(* indicates group mappings being used)\n(+ indicates BSR group mappings active in MRIB)\n\nGroup Range         Proto Client   Groups RP address      Info\n\n224.0.1.1/32*       DM    perm     0      0.0.0.0\n224.0.1.2/32*       DM    perm     1      0.0.0.0\n224.0.0.0/24*       NO    perm     0      0.0.0.0\n232.0.0.0/8*        SSM   config   40     0.0.0.0\n224.0.0.0/4*        SM    static   7      0.0.0.0         RPF: Null,0.0.0.0\n",
+      "expected": {
+        "224.0.1.1/32": {
+          "protocol": "DM",
+          "client": "perm",
+          "groups": 0,
+          "rp_address": "0.0.0.0",
+          "active": true,
+          "bsr_active_in_mrib": false
+        },
+        "224.0.1.2/32": {
+          "protocol": "DM",
+          "client": "perm",
+          "groups": 1,
+          "rp_address": "0.0.0.0",
+          "active": true,
+          "bsr_active_in_mrib": false
+        },
+        "224.0.0.0/24": {
+          "protocol": "NO",
+          "client": "perm",
+          "groups": 0,
+          "rp_address": "0.0.0.0",
+          "active": true,
+          "bsr_active_in_mrib": false
+        },
+        "232.0.0.0/8": {
+          "protocol": "SSM",
+          "client": "config",
+          "groups": 40,
+          "rp_address": "0.0.0.0",
+          "active": true,
+          "bsr_active_in_mrib": false
+        },
+        "224.0.0.0/4": {
+          "protocol": "SM",
+          "client": "static",
+          "groups": 7,
+          "rp_address": "0.0.0.0",
+          "active": true,
+          "bsr_active_in_mrib": false,
+          "info": "RPF: Null,0.0.0.0"
+        }
+      }
+    }
+  ]
+}

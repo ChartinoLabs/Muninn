@@ -1,0 +1,27 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show hsrp",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Single IPv4 HSRP group in active state with preempt enabled",
+      "input": "Fri May 17 20:29:32.108 UTC\n\nIPv4 Groups:\n\n                       P indicates configured to preempt.\n\n                       |\n\nInterface     Grp Pri P State   Active addr     Standby addr   Group addr\n\nGi0/0/0/1         1 110 P Active local           10.1.1.3       10.1.1.1\n\nIPv6 Groups:\n\n                       P indicates configured to preempt.\n\n                       |\n\nInterface     Grp Pri P State   Active addr     Standby addr   Group addr\n",
+      "expected": {
+        "GigabitEthernet0/0/0/1": {
+          "ipv4_groups": {
+            "1": {
+              "group": 1,
+              "address_family": "ipv4",
+              "priority": 110,
+              "preempt": true,
+              "state": "Active",
+              "active_router": "local",
+              "standby_router": "10.1.1.3",
+              "virtual_ip": "10.1.1.1"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

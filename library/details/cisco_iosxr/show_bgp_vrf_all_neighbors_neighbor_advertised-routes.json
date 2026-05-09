@@ -1,0 +1,54 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show bgp vrf all neighbors <neighbor> advertised-routes",
+  "schema": {
+    "name": "ShowBgpVrfAllNeighborsAdvertisedRoutesResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfEntry",
+            "fields": {
+              "route_distinguisher": {
+                "type": "str",
+                "required": false
+              },
+              "prefixes": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "PrefixEntry",
+                    "fields": {
+                      "next_hop": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "source": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "as_path": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "origin": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}
