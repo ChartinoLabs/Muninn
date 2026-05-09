@@ -1,0 +1,67 @@
+{
+    "Allow 10.125.100.58-To-Google DNS": {
+        "index": 1,
+        "from_zone": "Internal",
+        "source": [
+            "10.125.100.58"
+        ],
+        "to_zone": "External",
+        "destination": [
+            "8.8.8.8"
+        ],
+        "user": "any",
+        "source_device": "any",
+        "destination_device": "any",
+        "category": "any",
+        "application_service": [
+            "0:any/tcp/any/59"
+        ],
+        "action": "allow",
+        "icmp_unreachable": false,
+        "terminal": true
+    },
+    "Allow 10.125.100.58-To-1.1.1.1": {
+        "index": 2,
+        "from_zone": "Internal",
+        "source": [
+            "10.125.100.58"
+        ],
+        "to_zone": "External",
+        "destination": [
+            "1.1.1.1"
+        ],
+        "user": "any",
+        "source_device": "any",
+        "destination_device": "any",
+        "category": "any",
+        "application_service": [
+            "0:any/tcp/any/53"
+        ],
+        "action": "allow",
+        "icmp_unreachable": false,
+        "terminal": true
+    },
+    "Allow DNS_Objects-To-192.0.2.10": {
+        "index": 4,
+        "from_zone": "Internal",
+        "source": [
+            "1.1.1.1",
+            "8.8.8.8"
+        ],
+        "to_zone": "External",
+        "destination": [
+            "192.0.2.10"
+        ],
+        "user": "any",
+        "source_device": "any",
+        "destination_device": "any",
+        "category": "any",
+        "application_service": [
+            "0:any/tcp/any/53",
+            "1:any/tcp/any/54"
+        ],
+        "action": "allow",
+        "icmp_unreachable": false,
+        "terminal": true
+    }
+}
