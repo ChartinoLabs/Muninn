@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
+from muninn.utils import canonical_interface_name
 
 
 class VrfAddressFamily(TypedDict):
@@ -147,7 +148,9 @@ class ShowVrfAllDetailParser(BaseParser[ShowVrfAllDetailResult]):
             # Stop if this is an AF or RT line rather than an interface name
             if stripped.startswith(("Address family", "No ", "Import ", "Export ")):
                 break
-            entry["interfaces"].append(stripped)
+            entry["interfaces"].append(
+                canonical_interface_name(stripped, os=OS.CISCO_IOSXR)
+            )
             idx += 1
         return idx
 
