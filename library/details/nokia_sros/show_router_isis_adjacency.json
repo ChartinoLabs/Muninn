@@ -1,0 +1,85 @@
+{
+  "os": "nokia_sros",
+  "command": "show router isis adjacency",
+  "schema": {
+    "name": "ShowRouterIsisAdjacencyResult",
+    "fields": {
+      "router_context": {
+        "type": "str",
+        "required": true
+      },
+      "isis_instance": {
+        "type": "int",
+        "required": true
+      },
+      "adjacencies": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "IsisAdjacencyEntry",
+              "fields": {
+                "state": {
+                  "type": "str",
+                  "required": true
+                },
+                "hold_time": {
+                  "type": "int",
+                  "required": true
+                },
+                "interface": {
+                  "type": "str",
+                  "required": true
+                },
+                "mt_id": {
+                  "type": "int",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic IS-IS adjacency table with three L2 neighbors in Up state",
+      "input": "\n    A:admin@COTKON04XR2# show router  isis adjacency\n    ===============================================================================\n    Rtr Base ISIS Instance 0 Adjacency\n    ===============================================================================\n    System ID                Usage State Hold Interface                     MT-ID\n    -------------------------------------------------------------------------------\n    GENIE01R07              L2    Up    24   To-GENIE01R07-LAG-7          0\n    GENIE04XR1              L2    Up    24   To-GENIE04XR1-LAG-4          0\n    GENIE03R07              L2    Up    24   To-GENIE03R07-LAG-9          0\n    -------------------------------------------------------------------------------\n    Adjacencies : 3\n    ===============================================================================\n    []\n",
+      "expected": {
+        "router_context": "Base",
+        "isis_instance": 0,
+        "adjacencies": {
+          "GENIE01R07": {
+            "L2": {
+              "state": "Up",
+              "hold_time": 24,
+              "interface": "To-GENIE01R07-LAG-7",
+              "mt_id": 0
+            }
+          },
+          "GENIE04XR1": {
+            "L2": {
+              "state": "Up",
+              "hold_time": 24,
+              "interface": "To-GENIE04XR1-LAG-4",
+              "mt_id": 0
+            }
+          },
+          "GENIE03R07": {
+            "L2": {
+              "state": "Up",
+              "hold_time": 24,
+              "interface": "To-GENIE03R07-LAG-9",
+              "mt_id": 0
+            }
+          }
+        }
+      }
+    }
+  ]
+}
