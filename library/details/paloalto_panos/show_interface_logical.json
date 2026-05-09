@@ -1,0 +1,126 @@
+{
+  "os": "paloalto_panos",
+  "command": "show interface logical",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Mixed physical, subinterface, HA, and virtual logical interfaces",
+      "input": "total configured logical interfaces: 38\n\u200b\nname                id    vsys zone             forwarding               tag    address\n------------------- ----- ---- ---------------- ------------------------ ------ ------------------\nethernet1/1         16    1                     N/A                      0      N/A\nethernet1/2         17    1                     N/A                      0      N/A\nethernet1/2.100     275   1    ISP1         vr:default               100    65.5.44.46/30\nethernet1/3         18    1                     N/A                      0      N/A\nethernet1/3.101     278   1    ISP2         vr:default               101    65.5.26.46/30\nethernet1/4         19    1                     N/A                      0      N/A\nethernet1/4.102     256   1    WAN     vr:default               102    10.10.134.1/24\nethernet1/5         20    1                     N/A                      0      N/A\nethernet1/5.103     261   1    Voice            vr:default               101    10.10.248.49/24\nethernet1/6         21    1                     N/A                      0      N/A\nethernet1/6.104     265   1    Video            vr:default               901    10.10.10.1/24\nethernet1/7         22    1    Guest1   N/A                      0      N/A\nethernet1/7.700     267   1    Guest1   vr:default               700    10.10.100.1/23\ndedicated-ha1       5     1                     ha                       0      10.1.1.1/30\ndedicated-ha2       6     1                     ha                       0      10.2.2.1/30\nvlan                1     1                     N/A                      0      N/A\nloopback            3     1                     N/A                      0      N/A\ntunnel              4     1                     N/A                      0      N/A\n",
+      "expected": {
+        "ethernet1/1": {
+          "id": 16,
+          "vsys": 1,
+          "tag": 0
+        },
+        "ethernet1/2": {
+          "id": 17,
+          "vsys": 1,
+          "tag": 0
+        },
+        "ethernet1/2.100": {
+          "id": 275,
+          "vsys": 1,
+          "tag": 100,
+          "zone": "ISP1",
+          "forwarding": "vr:default",
+          "address": "65.5.44.46/30"
+        },
+        "ethernet1/3": {
+          "id": 18,
+          "vsys": 1,
+          "tag": 0
+        },
+        "ethernet1/3.101": {
+          "id": 278,
+          "vsys": 1,
+          "tag": 101,
+          "zone": "ISP2",
+          "forwarding": "vr:default",
+          "address": "65.5.26.46/30"
+        },
+        "ethernet1/4": {
+          "id": 19,
+          "vsys": 1,
+          "tag": 0
+        },
+        "ethernet1/4.102": {
+          "id": 256,
+          "vsys": 1,
+          "tag": 102,
+          "zone": "WAN",
+          "forwarding": "vr:default",
+          "address": "10.10.134.1/24"
+        },
+        "ethernet1/5": {
+          "id": 20,
+          "vsys": 1,
+          "tag": 0
+        },
+        "ethernet1/5.103": {
+          "id": 261,
+          "vsys": 1,
+          "tag": 101,
+          "zone": "Voice",
+          "forwarding": "vr:default",
+          "address": "10.10.248.49/24"
+        },
+        "ethernet1/6": {
+          "id": 21,
+          "vsys": 1,
+          "tag": 0
+        },
+        "ethernet1/6.104": {
+          "id": 265,
+          "vsys": 1,
+          "tag": 901,
+          "zone": "Video",
+          "forwarding": "vr:default",
+          "address": "10.10.10.1/24"
+        },
+        "ethernet1/7": {
+          "id": 22,
+          "vsys": 1,
+          "tag": 0,
+          "zone": "Guest1"
+        },
+        "ethernet1/7.700": {
+          "id": 267,
+          "vsys": 1,
+          "tag": 700,
+          "zone": "Guest1",
+          "forwarding": "vr:default",
+          "address": "10.10.100.1/23"
+        },
+        "dedicated-ha1": {
+          "id": 5,
+          "vsys": 1,
+          "tag": 0,
+          "forwarding": "ha",
+          "address": "10.1.1.1/30"
+        },
+        "dedicated-ha2": {
+          "id": 6,
+          "vsys": 1,
+          "tag": 0,
+          "forwarding": "ha",
+          "address": "10.2.2.1/30"
+        },
+        "vlan": {
+          "id": 1,
+          "vsys": 1,
+          "tag": 0
+        },
+        "loopback": {
+          "id": 3,
+          "vsys": 1,
+          "tag": 0
+        },
+        "tunnel": {
+          "id": 4,
+          "vsys": 1,
+          "tag": 0
+        }
+      }
+    }
+  ]
+}
