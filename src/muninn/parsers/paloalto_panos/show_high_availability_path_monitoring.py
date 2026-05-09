@@ -5,6 +5,7 @@ from typing import ClassVar, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import SEPARATOR_DASH_RE
 from muninn.registry import register
 from muninn.tags import ParserTag
 
@@ -18,11 +19,11 @@ class PathMonitoringEntry(TypedDict):
     destination: str
     success: int
     total: int
-    rtt_min: float
-    rtt_max: float
-    rtt_avg: float
+    rtt_min_ms: float
+    rtt_max_ms: float
+    rtt_avg_ms: float
     probe_count: int
-    probe_interval: int
+    probe_interval_ms: int
 
 
 class ShowHighAvailabilityPathMonitoringResult(TypedDict):
@@ -32,12 +33,6 @@ class ShowHighAvailabilityPathMonitoringResult(TypedDict):
     hold_time_ms: int
     paths: dict[str, PathMonitoringEntry]
 
-
-# Header line identifying the table columns
-_HEADER_PREFIX = "grp/name/type"
-
-# Separator lines
-_SEPARATOR = re.compile(r"^-{3,}$")
 
 # Total paths monitored
 _TOTAL_PATHS = re.compile(r"^total paths monitored\s*:\s*(\d+)")
@@ -64,11 +59,11 @@ def _build_entry(match: re.Match[str]) -> PathMonitoringEntry:
         destination=match.group("destination"),
         success=int(match.group("success")),
         total=int(match.group("total")),
-        rtt_min=float(match.group("rtt_min")),
-        rtt_max=float(match.group("rtt_max")),
-        rtt_avg=float(match.group("rtt_avg")),
+        rtt_min_ms=float(match.group("rtt_min")),
+        rtt_max_ms=float(match.group("rtt_max")),
+        rtt_avg_ms=float(match.group("rtt_avg")),
         probe_count=int(match.group("probe_count")),
-        probe_interval=int(match.group("probe_interval")),
+        probe_interval_ms=int(match.group("probe_interval")),
     )
 
 
@@ -118,7 +113,7 @@ class ShowHighAvailabilityPathMonitoringParser(
         for line in output.splitlines():
             stripped = line.strip()
 
-            if not stripped or _SEPARATOR.match(stripped):
+            if not stripped or SEPARATOR_DASH_RE.match(stripped):
                 continue
 
             total_match = _TOTAL_PATHS.match(stripped)
