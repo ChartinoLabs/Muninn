@@ -28,10 +28,14 @@ class ShowIsisNeighborsResult(TypedDict):
     """
 
     instances: dict[str, dict[str, dict[str, IsisNeighborEntry]]]
+    total_neighbor_count: NotRequired[int]
 
 
 # Instance header: "IS-IS <tag> neighbors:"
 _INSTANCE_PATTERN = re.compile(r"^IS-IS\s+(?P<instance>\S+)\s+neighbors:\s*$")
+
+# Summary footer: "Total neighbor count: N"
+_TOTAL_PATTERN = re.compile(r"^Total\s+neighbor\s+count:\s+(?P<count>\d+)\s*$")
 
 # Neighbor table row:
 # System Id      Interface        SNPA           State Holdtime Type IETF-NSF
@@ -81,6 +85,7 @@ class ShowIsisNeighborsParser(BaseParser["ShowIsisNeighborsResult"]):
         """
         instances: dict[str, dict[str, dict[str, IsisNeighborEntry]]] = {}
         current_instance: str | None = None
+        total_neighbor_count: int | None = None
 
         for line in output.splitlines():
             stripped = line.strip()
@@ -92,6 +97,11 @@ class ShowIsisNeighborsParser(BaseParser["ShowIsisNeighborsResult"]):
                 current_instance = instance_match.group("instance")
                 if current_instance not in instances:
                     instances[current_instance] = {}
+                continue
+
+            total_match = _TOTAL_PATTERN.match(stripped)
+            if total_match:
+                total_neighbor_count = int(total_match.group("count"))
                 continue
 
             neighbor_match = _NEIGHBOR_PATTERN.match(stripped)
@@ -106,7 +116,10 @@ class ShowIsisNeighborsParser(BaseParser["ShowIsisNeighborsResult"]):
             msg = "No IS-IS neighbors found in output"
             raise ValueError(msg)
 
-        return {"instances": instances}
+        result: ShowIsisNeighborsResult = {"instances": instances}
+        if total_neighbor_count is not None:
+            result["total_neighbor_count"] = total_neighbor_count
+        return result
 
     @staticmethod
     def _add_neighbor(
