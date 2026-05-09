@@ -34,17 +34,17 @@ class ShowLoggingResult(TypedDict):
     console_logging_messages_logged: NotRequired[int]
 
     # Monitor logging
-    monitor_logging_level: str
-    monitor_logging_messages_logged: int
+    monitor_logging_level: NotRequired[str]
+    monitor_logging_messages_logged: NotRequired[int]
 
     # Trap logging
-    trap_logging_level: str
-    trap_logging_messages_logged: int
+    trap_logging_level: NotRequired[str]
+    trap_logging_messages_logged: NotRequired[int]
 
     # Buffer logging
-    buffer_logging_level: str
-    buffer_logging_messages_logged: int
-    buffer_size_bytes: int
+    buffer_logging_level: NotRequired[str]
+    buffer_logging_messages_logged: NotRequired[int]
+    buffer_size_bytes: NotRequired[int]
 
     # Log entries from the buffer
     log_entries: list[LogEntry]
