@@ -1,7 +1,7 @@
 """Parser for 'show running security-policy' command on Palo Alto PAN-OS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -136,7 +136,7 @@ class ShowRunningSecurityPolicyParser(
                 continue
 
             if line.strip() == "}" and current_rule is not None:
-                result[current_rule] = current_data  # type: ignore[assignment]
+                result[current_rule] = cast(SecurityPolicyRuleResult, current_data)
                 current_rule = None
                 continue
 
