@@ -179,6 +179,9 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         # --- Juniper Junos ---
         # software_packages uses list-of-dicts because package names are not
         # unique (real device output can list the same package name twice).
+        # routes uses list-of-dicts because a prefix can have multiple routes
+        # from the same protocol; next_hops has no natural unique key for ECMP.
+        "juniper_junos/show_route/001_basic/expected.json",
         "juniper_junos/show_version/001_mx240/expected.json",
         "juniper_junos/show_version/002_qfx5100/expected.json",
         "juniper_junos/show_version/003_srx_cluster/expected.json",
