@@ -25,7 +25,7 @@ class CefDropNodeEntry(TypedDict):
 ShowCefDropsLocationResult = dict[str, CefDropNodeEntry]
 
 
-@register(OS.CISCO_IOSXR, "show cef drops location")
+@register(OS.CISCO_IOSXR, r"show cef drops location (?P<location>\S+)")
 class ShowCefDropsLocationParser(BaseParser[ShowCefDropsLocationResult]):
     """Parser for 'show cef drops location' on Cisco IOS-XR.
 
