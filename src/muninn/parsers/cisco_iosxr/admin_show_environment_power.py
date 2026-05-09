@@ -32,9 +32,20 @@ class PowerConsumerEntry(TypedDict):
     status: str
 
 
+class PowerGroupTotals(TypedDict):
+    """Schema for per-power-group input/output totals."""
+
+    input_watts: int
+    input_current_a: float
+    input_current_b: float
+    output_watts: int
+    output_current: float
+
+
 class ChassisPowerSummary(TypedDict):
     """Schema for chassis-level power summary."""
 
+    chassis_number: int
     total_capacity_watts: int
     total_required_watts: int
     total_input_watts: int
@@ -46,6 +57,7 @@ class AdminShowEnvironmentPowerResult(TypedDict):
 
     chassis_summary: ChassisPowerSummary
     power_supplies: dict[str, PowerSupplyEntry]
+    power_group_totals: dict[str, PowerGroupTotals]
     power_consumers: dict[str, PowerConsumerEntry]
 
 
@@ -62,6 +74,9 @@ class AdminShowEnvironmentPowerParser(
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.ENVIRONMENT})
 
     # Chassis summary patterns
+    _CHASSIS_HEADER = re.compile(
+        r"CHASSIS LEVEL POWER INFO:\s*(\d+)",
+    )
     _TOTAL_CAPACITY = re.compile(
         r"Total output power capacity.*?:\s+(\d+)W\s*\+\s+(\d+)W",
     )
@@ -77,6 +92,14 @@ class AdminShowEnvironmentPowerParser(
 
     # Power Group header
     _POWER_GROUP = re.compile(r"^Power Group (\d+):")
+
+    # Per-group totals line, e.g.:
+    # Total of Power Group 0:       686W/  ( 6.3/ 6.4)A     639W/ 52.8A
+    _POWER_GROUP_TOTAL = re.compile(
+        r"^Total of Power Group (?P<group>\d+):\s+"
+        r"(?P<in_watts>\d+)W/\s*\(\s*(?P<in_amps_a>[\d.]+)/\s*(?P<in_amps_b>[\d.]+)\)A\s+"
+        r"(?P<out_watts>\d+)W/\s*(?P<out_amps>[\d.]+)A",
+    )
 
     # Power supply module line, e.g.:
     #    0/PM0       3kW-DC      54.0/54.0   3.3/ 3.5    12.1     27.0    OK
@@ -104,6 +127,10 @@ class AdminShowEnvironmentPowerParser(
     @classmethod
     def _parse_chassis_summary(cls, output: str) -> ChassisPowerSummary:
         """Extract chassis-level power totals."""
+        chassis_number = 0
+        if match := cls._CHASSIS_HEADER.search(output):
+            chassis_number = int(match.group(1))
+
         capacity = 0
         if match := cls._TOTAL_CAPACITY.search(output):
             capacity = int(match.group(1)) + int(match.group(2))
@@ -121,11 +148,35 @@ class AdminShowEnvironmentPowerParser(
             total_out = int(match.group(1))
 
         return ChassisPowerSummary(
+            chassis_number=chassis_number,
             total_capacity_watts=capacity,
             total_required_watts=required,
             total_input_watts=total_in,
             total_output_watts=total_out,
         )
+
+    @classmethod
+    def _parse_power_group_totals(
+        cls,
+        output: str,
+    ) -> dict[str, PowerGroupTotals]:
+        """Extract per-power-group input/output totals."""
+        totals: dict[str, PowerGroupTotals] = {}
+
+        for line in output.splitlines():
+            match = cls._POWER_GROUP_TOTAL.match(line.strip())
+            if not match:
+                continue
+            group = match.group("group")
+            totals[group] = PowerGroupTotals(
+                input_watts=int(match.group("in_watts")),
+                input_current_a=float(match.group("in_amps_a")),
+                input_current_b=float(match.group("in_amps_b")),
+                output_watts=int(match.group("out_watts")),
+                output_current=float(match.group("out_amps")),
+            )
+
+        return totals
 
     @classmethod
     def _parse_power_supplies(
@@ -228,6 +279,7 @@ class AdminShowEnvironmentPowerParser(
         """
         chassis_summary = cls._parse_chassis_summary(output)
         power_supplies = cls._parse_power_supplies(output)
+        power_group_totals = cls._parse_power_group_totals(output)
         power_consumers = cls._parse_power_consumers(output)
 
         if not power_supplies and not power_consumers:
@@ -239,6 +291,7 @@ class AdminShowEnvironmentPowerParser(
             {
                 "chassis_summary": chassis_summary,
                 "power_supplies": power_supplies,
+                "power_group_totals": power_group_totals,
                 "power_consumers": power_consumers,
             },
         )
