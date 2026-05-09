@@ -1,0 +1,78 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show lpts pifib hardware police location <location>",
+  "schema": {
+    "name": "ShowLptsPifibHardwarePoliceLocationResult",
+    "fields": {
+      "node": {
+        "type": "str",
+        "required": true
+      },
+      "burst_ms": {
+        "type": "int",
+        "required": true
+      },
+      "flow_types": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "FlowTypeEntry",
+            "fields": {
+              "policer_type": {
+                "type": "int",
+                "required": true
+              },
+              "type": {
+                "type": "str",
+                "required": true
+              },
+              "current_rate": {
+                "type": "int",
+                "required": true
+              },
+              "default_rate": {
+                "type": "int",
+                "required": true
+              },
+              "accepted": {
+                "type": "int",
+                "required": true
+              },
+              "dropped": {
+                "type": "int",
+                "required": true
+              },
+              "tos_value": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "statistics": {
+        "type": {
+          "name": "StatisticsEntry",
+          "fields": {
+            "packets_accepted_by_deleted_entries": {
+              "type": "int",
+              "required": true
+            },
+            "packets_dropped_by_deleted_entries": {
+              "type": "int",
+              "required": true
+            },
+            "run_out_of_statistics_counter_errors": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": []
+}

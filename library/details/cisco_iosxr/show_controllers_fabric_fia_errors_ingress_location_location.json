@@ -1,0 +1,34 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show controllers fabric fia errors ingress location <location>",
+  "schema": {
+    "name": "ShowControllersFabricFiaErrorsIngressLocationResult",
+    "fields": {
+      "fia_instances": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "FiaErrorCounter",
+            "fields": {
+              "category": {
+                "type": "str",
+                "required": true
+              },
+              "counters": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": "int"
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}

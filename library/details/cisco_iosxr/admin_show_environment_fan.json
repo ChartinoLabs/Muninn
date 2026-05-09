@@ -1,0 +1,246 @@
+{
+  "os": "cisco_iosxr",
+  "command": "admin show environment fan",
+  "schema": null,
+  "examples": [
+    {
+      "name": "NCS 5500 chassis with fan trays and power modules",
+      "input": "Sat Mar 10 14:03:31.155 UTC\n===============================================================================\n                        Fan speed (rpm)\nLocation   FRU Type           FAN_0   FAN_1   FAN_2   FAN_3   FAN_4   FAN_5\n                                  FAN_6   FAN_7   FAN_8   FAN_9  FAN_10  FAN_11\n-------------------------------------------------------------------------------\n0/FT0      NC55-5516-FAN       6192    3870    6214    3859    6257    3857\n                                   6420    4029    6390    3938    6467    4066\n0/FT1      NC55-5516-FAN       6360    3970    6143    3824    6033    3750\n                                   6279    3859    6060    3721    6375    3964\n0/FT2      NC55-5516-FAN       6545    4014    6474    3994    6000    3752\n                                   6375    4002    5921    3698    6308    3915\n\n0/PM0      NC55-PWR-3KW-AC     8021    8537\n\n0/PM1      NC55-PWR-3KW-AC     8064    8387\n\n0/PM2      NC55-PWR-3KW-AC     8064    8473\n\n0/PM3      NC55-PWR-3KW-AC     7978    8537\n\n0/PM4      NC55-PWR-3KW-AC     8064    8473\n\n0/PM5      NC55-PWR-3KW-AC     8086    8451\n\n0/PM6      NC55-PWR-3KW-AC     8086    8537\n\n0/PM7      NC55-PWR-3KW-AC     7978    8473\n\n0/PM8      NC55-PWR-3KW-AC     8000    8516\n\n0/PM9      NC55-PWR-3KW-AC     8021    8516\n",
+      "expected": {
+        "0/FT0": {
+          "fru_type": "NC55-5516-FAN",
+          "fans": {
+            "FAN_0": {
+              "speed_rpm": 6192
+            },
+            "FAN_1": {
+              "speed_rpm": 3870
+            },
+            "FAN_2": {
+              "speed_rpm": 6214
+            },
+            "FAN_3": {
+              "speed_rpm": 3859
+            },
+            "FAN_4": {
+              "speed_rpm": 6257
+            },
+            "FAN_5": {
+              "speed_rpm": 3857
+            },
+            "FAN_6": {
+              "speed_rpm": 6420
+            },
+            "FAN_7": {
+              "speed_rpm": 4029
+            },
+            "FAN_8": {
+              "speed_rpm": 6390
+            },
+            "FAN_9": {
+              "speed_rpm": 3938
+            },
+            "FAN_10": {
+              "speed_rpm": 6467
+            },
+            "FAN_11": {
+              "speed_rpm": 4066
+            }
+          }
+        },
+        "0/FT1": {
+          "fru_type": "NC55-5516-FAN",
+          "fans": {
+            "FAN_0": {
+              "speed_rpm": 6360
+            },
+            "FAN_1": {
+              "speed_rpm": 3970
+            },
+            "FAN_2": {
+              "speed_rpm": 6143
+            },
+            "FAN_3": {
+              "speed_rpm": 3824
+            },
+            "FAN_4": {
+              "speed_rpm": 6033
+            },
+            "FAN_5": {
+              "speed_rpm": 3750
+            },
+            "FAN_6": {
+              "speed_rpm": 6279
+            },
+            "FAN_7": {
+              "speed_rpm": 3859
+            },
+            "FAN_8": {
+              "speed_rpm": 6060
+            },
+            "FAN_9": {
+              "speed_rpm": 3721
+            },
+            "FAN_10": {
+              "speed_rpm": 6375
+            },
+            "FAN_11": {
+              "speed_rpm": 3964
+            }
+          }
+        },
+        "0/FT2": {
+          "fru_type": "NC55-5516-FAN",
+          "fans": {
+            "FAN_0": {
+              "speed_rpm": 6545
+            },
+            "FAN_1": {
+              "speed_rpm": 4014
+            },
+            "FAN_2": {
+              "speed_rpm": 6474
+            },
+            "FAN_3": {
+              "speed_rpm": 3994
+            },
+            "FAN_4": {
+              "speed_rpm": 6000
+            },
+            "FAN_5": {
+              "speed_rpm": 3752
+            },
+            "FAN_6": {
+              "speed_rpm": 6375
+            },
+            "FAN_7": {
+              "speed_rpm": 4002
+            },
+            "FAN_8": {
+              "speed_rpm": 5921
+            },
+            "FAN_9": {
+              "speed_rpm": 3698
+            },
+            "FAN_10": {
+              "speed_rpm": 6308
+            },
+            "FAN_11": {
+              "speed_rpm": 3915
+            }
+          }
+        },
+        "0/PM0": {
+          "fru_type": "NC55-PWR-3KW-AC",
+          "fans": {
+            "FAN_0": {
+              "speed_rpm": 8021
+            },
+            "FAN_1": {
+              "speed_rpm": 8537
+            }
+          }
+        },
+        "0/PM1": {
+          "fru_type": "NC55-PWR-3KW-AC",
+          "fans": {
+            "FAN_0": {
+              "speed_rpm": 8064
+            },
+            "FAN_1": {
+              "speed_rpm": 8387
+            }
+          }
+        },
+        "0/PM2": {
+          "fru_type": "NC55-PWR-3KW-AC",
+          "fans": {
+            "FAN_0": {
+              "speed_rpm": 8064
+            },
+            "FAN_1": {
+              "speed_rpm": 8473
+            }
+          }
+        },
+        "0/PM3": {
+          "fru_type": "NC55-PWR-3KW-AC",
+          "fans": {
+            "FAN_0": {
+              "speed_rpm": 7978
+            },
+            "FAN_1": {
+              "speed_rpm": 8537
+            }
+          }
+        },
+        "0/PM4": {
+          "fru_type": "NC55-PWR-3KW-AC",
+          "fans": {
+            "FAN_0": {
+              "speed_rpm": 8064
+            },
+            "FAN_1": {
+              "speed_rpm": 8473
+            }
+          }
+        },
+        "0/PM5": {
+          "fru_type": "NC55-PWR-3KW-AC",
+          "fans": {
+            "FAN_0": {
+              "speed_rpm": 8086
+            },
+            "FAN_1": {
+              "speed_rpm": 8451
+            }
+          }
+        },
+        "0/PM6": {
+          "fru_type": "NC55-PWR-3KW-AC",
+          "fans": {
+            "FAN_0": {
+              "speed_rpm": 8086
+            },
+            "FAN_1": {
+              "speed_rpm": 8537
+            }
+          }
+        },
+        "0/PM7": {
+          "fru_type": "NC55-PWR-3KW-AC",
+          "fans": {
+            "FAN_0": {
+              "speed_rpm": 7978
+            },
+            "FAN_1": {
+              "speed_rpm": 8473
+            }
+          }
+        },
+        "0/PM8": {
+          "fru_type": "NC55-PWR-3KW-AC",
+          "fans": {
+            "FAN_0": {
+              "speed_rpm": 8000
+            },
+            "FAN_1": {
+              "speed_rpm": 8516
+            }
+          }
+        },
+        "0/PM9": {
+          "fru_type": "NC55-PWR-3KW-AC",
+          "fans": {
+            "FAN_0": {
+              "speed_rpm": 8021
+            },
+            "FAN_1": {
+              "speed_rpm": 8516
+            }
+          }
+        }
+      }
+    }
+  ]
+}
