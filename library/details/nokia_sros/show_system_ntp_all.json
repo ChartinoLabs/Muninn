@@ -1,0 +1,184 @@
+{
+  "os": "nokia_sros",
+  "command": "show system ntp all",
+  "schema": {
+    "name": "ShowSystemNtpAllResult",
+    "fields": {
+      "status": {
+        "type": {
+          "name": "NtpStatusSection",
+          "fields": {
+            "configured": {
+              "type": "bool",
+              "required": true
+            },
+            "stratum": {
+              "type": "int",
+              "required": true
+            },
+            "admin_status": {
+              "type": "str",
+              "required": true
+            },
+            "oper_status": {
+              "type": "str",
+              "required": true
+            },
+            "server_enabled": {
+              "type": "bool",
+              "required": true
+            },
+            "server_authenticate": {
+              "type": "bool",
+              "required": true
+            },
+            "clock_source": {
+              "type": "str",
+              "required": true
+            },
+            "auth_check": {
+              "type": "bool",
+              "required": true
+            },
+            "current_datetime": {
+              "type": "str",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "associations": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "NtpAssociationEntry",
+            "fields": {
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "reference_id": {
+                "type": "str",
+                "required": true
+              },
+              "stratum": {
+                "type": "int",
+                "required": false
+              },
+              "type": {
+                "type": "str",
+                "required": true
+              },
+              "poll": {
+                "type": "int",
+                "required": true
+              },
+              "reach": {
+                "type": "str",
+                "required": true
+              },
+              "offset_ms": {
+                "type": "float",
+                "required": true
+              },
+              "router": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic NTP status and active associations with mixed states (reject, candidate, chosen)",
+      "input": "\n    A:admin@GENIE01XR1#  show system ntp all\n    ===============================================================================\n    NTP Status\n    ===============================================================================\n    Configured         : Yes                Stratum              : 3\n    Admin Status       : up                 Oper Status          : up\n    Server Enabled     : No                 Server Authenticate  : No\n    Clock Source        : 192.168.132.170\n    Auth Check         : No\n    Current Date & Time: 2020/01/17 17:24:12 UTC\n    ===============================================================================\n    ===============================================================================\n    NTP Active Associations\n    ===============================================================================\n    State                     Reference ID    St Type  A  Poll Reach     Offset(ms)\n        Router         Remote\n    -------------------------------------------------------------------------------\n    reject                    STEP            -  srvr  -  64   ........  0.000\n        Base           172.16.189.64\n    reject                    STEP            -  srvr  -  64   ........  0.000\n        Base           172.16.189.74\n    candidate                 172.16.25.201  4  srvr  -  64   YYYYYYYY  -0.541\n        Base           172.16.25.140\n    candidate                 172.16.25.201  4  srvr  -  64   YYYYYYYY  -0.335\n        Base           172.16.25.141\n    reject                    STEP            -  srvr  -  64   ........  0.000\n        Base           172.16.186.22\n    reject                    STEP            -  srvr  -  64   ........  0.000\n        Base           172.24.107.142\n    chosen                    172.16.85.97   2  srvr  -  64   YYYYYYYY  0.259\n        Base           192.168.132.170\n    ===============================================================================\n    ===============================================================================\n    NTP Clients\n    ===============================================================================\n    vRouter                                                    Time Last Request Rx\n        Address\n    -------------------------------------------------------------------------------\n    ===============================================================================\n",
+      "expected": {
+        "status": {
+          "configured": true,
+          "stratum": 3,
+          "admin_status": "up",
+          "oper_status": "up",
+          "server_enabled": false,
+          "server_authenticate": false,
+          "clock_source": "192.168.132.170",
+          "auth_check": false,
+          "current_datetime": "2020/01/17 17:24:12 UTC"
+        },
+        "associations": {
+          "172.16.189.64": {
+            "state": "reject",
+            "reference_id": "STEP",
+            "type": "srvr",
+            "poll": 64,
+            "reach": "........",
+            "offset_ms": 0.0,
+            "router": "Base"
+          },
+          "172.16.189.74": {
+            "state": "reject",
+            "reference_id": "STEP",
+            "type": "srvr",
+            "poll": 64,
+            "reach": "........",
+            "offset_ms": 0.0,
+            "router": "Base"
+          },
+          "172.16.25.140": {
+            "state": "candidate",
+            "reference_id": "172.16.25.201",
+            "stratum": 4,
+            "type": "srvr",
+            "poll": 64,
+            "reach": "YYYYYYYY",
+            "offset_ms": -0.541,
+            "router": "Base"
+          },
+          "172.16.25.141": {
+            "state": "candidate",
+            "reference_id": "172.16.25.201",
+            "stratum": 4,
+            "type": "srvr",
+            "poll": 64,
+            "reach": "YYYYYYYY",
+            "offset_ms": -0.335,
+            "router": "Base"
+          },
+          "172.16.186.22": {
+            "state": "reject",
+            "reference_id": "STEP",
+            "type": "srvr",
+            "poll": 64,
+            "reach": "........",
+            "offset_ms": 0.0,
+            "router": "Base"
+          },
+          "172.24.107.142": {
+            "state": "reject",
+            "reference_id": "STEP",
+            "type": "srvr",
+            "poll": 64,
+            "reach": "........",
+            "offset_ms": 0.0,
+            "router": "Base"
+          },
+          "192.168.132.170": {
+            "state": "chosen",
+            "reference_id": "172.16.85.97",
+            "stratum": 2,
+            "type": "srvr",
+            "poll": 64,
+            "reach": "YYYYYYYY",
+            "offset_ms": 0.259,
+            "router": "Base"
+          }
+        }
+      }
+    }
+  ]
+}

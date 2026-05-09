@@ -1,0 +1,56 @@
+{
+  "os": "nokia_sros",
+  "command": "show service sdp-using",
+  "schema": null,
+  "examples": [
+    {
+      "name": "SDP bindings with mixed operational states and None labels",
+      "input": "\n===============================================================================\nSDP Using\n===============================================================================\nSvcId      SdpId              Type   Far End              Opr   I.Label E.Label\n                                                         State\n-------------------------------------------------------------------------------\n20001      1000:20001         Spok   10.0.1.5             Up    131069  131066\n20002      1000:20002         Spok   10.0.1.2             Up    131068  131065\n20003      1000:20003         Spok   10.0.1.2             Up    131067  131064\n60001      1000:60001         Spok   10.0.1.3             Up    131066  131068\n60002      1000:60002         Spok   10.0.1.1             Down  None    None\n-------------------------------------------------------------------------------\nNumber of SDPs : 5\n-------------------------------------------------------------------------------\n===============================================================================\n",
+      "expected": {
+        "1000:20001": {
+          "service_id": "20001",
+          "sdp_id": "1000",
+          "type": "Spok",
+          "far_end": "10.0.1.5",
+          "oper_state": "Up",
+          "ingress_label": 131069,
+          "egress_label": 131066
+        },
+        "1000:20002": {
+          "service_id": "20002",
+          "sdp_id": "1000",
+          "type": "Spok",
+          "far_end": "10.0.1.2",
+          "oper_state": "Up",
+          "ingress_label": 131068,
+          "egress_label": 131065
+        },
+        "1000:20003": {
+          "service_id": "20003",
+          "sdp_id": "1000",
+          "type": "Spok",
+          "far_end": "10.0.1.2",
+          "oper_state": "Up",
+          "ingress_label": 131067,
+          "egress_label": 131064
+        },
+        "1000:60001": {
+          "service_id": "60001",
+          "sdp_id": "1000",
+          "type": "Spok",
+          "far_end": "10.0.1.3",
+          "oper_state": "Up",
+          "ingress_label": 131066,
+          "egress_label": 131068
+        },
+        "1000:60002": {
+          "service_id": "60002",
+          "sdp_id": "1000",
+          "type": "Spok",
+          "far_end": "10.0.1.1",
+          "oper_state": "Down"
+        }
+      }
+    }
+  ]
+}
