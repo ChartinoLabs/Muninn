@@ -1,0 +1,110 @@
+{
+    "group_id": 1,
+    "mode": "Active-Passive",
+    "local": {
+        "version": 1,
+        "mode": "Active-Passive",
+        "state": "active",
+        "state_duration": "45 days",
+        "model": "PA-5020",
+        "mgmt_ipv4": "10.10.186.197/24",
+        "passive_link_state": "auto",
+        "monitor_fail_hold_down_interval": "1 min",
+        "state_sync": "Complete",
+        "state_sync_type": "ethernet",
+        "ha1_joint_config": {
+            "link_monitor_interval_ms": 3000,
+            "encryption_enabled": false
+        },
+        "ha1_control_link": {
+            "ip_address": "10.1.1.1/30",
+            "mac_address": "00:90:0b:33:3d:53",
+            "interface": "dedicated-ha1",
+            "link_state": "Up; Setting: 1Gb/s-full",
+            "key_imported": false
+        },
+        "ha2_data_link": {
+            "ip_address": "10.2.2.1/30",
+            "mac_address": "58:49:3b:1e:69:16",
+            "interface": "dedicated-ha2",
+            "link_state": "Up; Setting: 1Gb/s-full"
+        },
+        "election_options": {
+            "priority": 50,
+            "preemptive": true,
+            "promotion_hold_interval_ms": 2000,
+            "hello_interval_ms": 8000,
+            "heartbeat_interval_ms": 1000,
+            "max_flaps": 3,
+            "preemption_hold_interval": "1 min",
+            "monitor_fail_hold_up_interval_ms": 0,
+            "addon_master_hold_up_interval_ms": 500
+        },
+        "version_info": {
+            "build_release": "6.1.10",
+            "url_database": "4773",
+            "application_content": "580-3287",
+            "anti_virus": "1858-2337",
+            "threat_content": "580-3287"
+        },
+        "version_compatibility": {
+            "software_version": "Match",
+            "application_content": "Match",
+            "anti_virus": "Match",
+            "threat_content": "Match",
+            "vpn_client_software": "Match",
+            "global_protect_client_software": "Match"
+        }
+    },
+    "peer": {
+        "connection_status": "up",
+        "version": 1,
+        "mode": "Active-Passive",
+        "state": "passive",
+        "state_duration": "45 days",
+        "model": "PA-5020",
+        "mgmt_ipv4": "10.10.186.198/24",
+        "ha1_control_link": {
+            "ip_address": "10.1.1.2",
+            "mac_address": "00:90:0b:33:44:53",
+            "connection": "up; Primary HA1 link"
+        },
+        "ha2_data_link": {
+            "ip_address": "10.2.2.2",
+            "mac_address": "58:49:3b:1e:55:16"
+        },
+        "election_options": {
+            "priority": 100,
+            "preemptive": true
+        },
+        "version_info": {
+            "build_release": "6.1.10",
+            "url_database": "4773",
+            "application_content": "580-3287",
+            "anti_virus": "1858-2337",
+            "threat_content": "580-3287"
+        }
+    },
+    "link_monitoring": {
+        "enabled": true,
+        "failure_condition": "any",
+        "interfaces": {
+            "ethernet1/1": "up",
+            "ethernet1/2": "up",
+            "ethernet1/3": "up",
+            "ethernet1/4": "up",
+            "ethernet1/5": "up",
+            "ethernet1/6": "up",
+            "ethernet1/7": "up",
+            "ethernet1/8": "up"
+        }
+    },
+    "path_monitoring": {
+        "enabled": true,
+        "failure_condition": "any"
+    },
+    "config_sync": {
+        "enabled": true,
+        "running_config": "synchronized"
+    }
+}
