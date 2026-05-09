@@ -1,0 +1,111 @@
+{
+  "os": "paloalto_panos",
+  "command": "show high-availability path-monitoring",
+  "schema": {
+    "name": "ShowHighAvailabilityPathMonitoringResult",
+    "fields": {
+      "total_paths_monitored": {
+        "type": "int",
+        "required": true
+      },
+      "hold_time_ms": {
+        "type": "int",
+        "required": true
+      },
+      "paths": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PathMonitoringEntry",
+            "fields": {
+              "group": {
+                "type": "str",
+                "required": true
+              },
+              "name": {
+                "type": "str",
+                "required": true
+              },
+              "type": {
+                "type": "str",
+                "required": true
+              },
+              "destination": {
+                "type": "str",
+                "required": true
+              },
+              "success": {
+                "type": "int",
+                "required": true
+              },
+              "total": {
+                "type": "int",
+                "required": true
+              },
+              "rtt_min_ms": {
+                "type": "float",
+                "required": true
+              },
+              "rtt_max_ms": {
+                "type": "float",
+                "required": true
+              },
+              "rtt_avg_ms": {
+                "type": "float",
+                "required": true
+              },
+              "probe_count": {
+                "type": "int",
+                "required": true
+              },
+              "probe_interval_ms": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Two path monitoring destinations with successful probes",
+      "input": "--------------------------------------------------------------------------------\ntotal paths monitored :                         2\nhold time to send probe packets :               1000 ms\n  (after device becomes active)\n--------------------------------------------------------------------------------\ngrp/name/type             destination     suc/total rtt min/max/avg (ms) probe cnt/interval(ms)\n--------------------------------------------------------------------------------\nHA_PATH_NORTH/VR_HANDOFF/virtual-router 8.8.8.8         10/10     3.66/4.19/3.90      10/1000\nHA_PATH_NORTH/VR_HANDOFF/virtual-router 217.111.187.217 10/10     2.36/2.75/2.58      10/1000\n--------------------------------------------------------------------------------\n",
+      "expected": {
+        "total_paths_monitored": 2,
+        "hold_time_ms": 1000,
+        "paths": {
+          "8.8.8.8": {
+            "group": "HA_PATH_NORTH",
+            "name": "VR_HANDOFF",
+            "type": "virtual-router",
+            "destination": "8.8.8.8",
+            "success": 10,
+            "total": 10,
+            "rtt_min_ms": 3.66,
+            "rtt_max_ms": 4.19,
+            "rtt_avg_ms": 3.9,
+            "probe_count": 10,
+            "probe_interval_ms": 1000
+          },
+          "217.111.187.217": {
+            "group": "HA_PATH_NORTH",
+            "name": "VR_HANDOFF",
+            "type": "virtual-router",
+            "destination": "217.111.187.217",
+            "success": 10,
+            "total": 10,
+            "rtt_min_ms": 2.36,
+            "rtt_max_ms": 2.75,
+            "rtt_avg_ms": 2.58,
+            "probe_count": 10,
+            "probe_interval_ms": 1000
+          }
+        }
+      }
+    }
+  ]
+}
