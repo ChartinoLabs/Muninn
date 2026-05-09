@@ -30,7 +30,10 @@ class FiaInstanceEntry(TypedDict):
 ShowControllersFabricFiaDropsIngressLocationResult = dict[str, FiaInstanceEntry]
 
 
-@register(OS.CISCO_IOSXR, "show controllers fabric fia drops ingress location")
+@register(
+    OS.CISCO_IOSXR,
+    r"show controllers fabric fia drops ingress location (?P<location>\S+)",
+)
 class ShowControllersFabricFiaDropsIngressLocationParser(
     BaseParser[ShowControllersFabricFiaDropsIngressLocationResult],
 ):
