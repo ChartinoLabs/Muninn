@@ -28,19 +28,28 @@ _TALLY_CODES: dict[str, str] = {
 
 
 class NtpPeerEntry(TypedDict):
-    """Schema for a single NTP peer entry."""
+    """Schema for a single NTP peer entry.
+
+    The ``reach`` field is an 8-bit shift register from ``ntpq``: each bit
+    records whether one of the most recent eight polls succeeded.  The raw
+    CLI prints it in octal (``377`` = all eight succeeded), so we parse it
+    as an octal integer and store the decoded value in ``reach`` (range
+    0-255).  ``reach_raw`` preserves the literal octal token for callers
+    that want to display the value the same way the device did.
+    """
 
     tally: NotRequired[str]
     remote: str
     refid: str
     stratum: int
     type: NotRequired[str]
-    when: NotRequired[int]
-    poll: int
+    when_seconds: NotRequired[int]
+    poll_seconds: int
     reach: int
-    delay: float
-    offset: float
-    jitter: float
+    reach_raw: str
+    delay_ms: float
+    offset_ms: float
+    jitter_ms: float
 
 
 # Parsed output keyed by remote peer address.
@@ -104,15 +113,17 @@ class ShowNtpAssociationsParser(BaseParser[ShowNtpAssociationsResult]):
             tally_char = match.group("tally")
             remote = match.group("remote")
 
+            reach_token = match.group("reach")
             entry = NtpPeerEntry(
                 remote=remote,
                 refid=match.group("refid"),
                 stratum=int(match.group("stratum")),
-                poll=int(match.group("poll")),
-                reach=int(match.group("reach")),
-                delay=float(match.group("delay")),
-                offset=float(match.group("offset")),
-                jitter=float(match.group("jitter")),
+                poll_seconds=int(match.group("poll")),
+                reach=int(reach_token, 8),
+                reach_raw=reach_token,
+                delay_ms=float(match.group("delay")),
+                offset_ms=float(match.group("offset")),
+                jitter_ms=float(match.group("jitter")),
             )
 
             tally = _TALLY_CODES.get(tally_char)
@@ -125,7 +136,7 @@ class ShowNtpAssociationsParser(BaseParser[ShowNtpAssociationsResult]):
 
             when = cls._parse_when(match.group("when"))
             if when is not None:
-                entry["when"] = when
+                entry["when_seconds"] = when
 
             result[remote] = entry
 
