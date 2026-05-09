@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 from muninn.tags import ParserTag
 
@@ -36,7 +37,7 @@ class AdminShowVMParser(BaseParser[AdminShowVMResult]):
     _VM_ENTRY_PATTERN = re.compile(
         r"^(?P<id>\S+)\s+"
         r"(?P<status>\S+)\s+"
-        r"(?P<ip>\d+\.\d+\.\d+\.\d+)\s+"
+        rf"(?P<ip>{IPV4_ADDRESS})\s+"
         r"(?P<hb>\S+)"
     )
     _SKIP_PREFIXES = ("---", "Id")
