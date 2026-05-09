@@ -1,0 +1,320 @@
+{
+  "os": "cisco_iosxr",
+  "command": "admin show environment power",
+  "schema": {
+    "name": "AdminShowEnvironmentPowerResult",
+    "fields": {
+      "chassis_summary": {
+        "type": {
+          "name": "ChassisPowerSummary",
+          "fields": {
+            "chassis_number": {
+              "type": "int",
+              "required": true
+            },
+            "total_capacity_watts": {
+              "type": "int",
+              "required": true
+            },
+            "total_required_watts": {
+              "type": "int",
+              "required": true
+            },
+            "total_input_watts": {
+              "type": "int",
+              "required": true
+            },
+            "total_output_watts": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "power_supplies": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PowerSupplyEntry",
+            "fields": {
+              "supply_type": {
+                "type": "str",
+                "required": true
+              },
+              "input_voltage_a": {
+                "type": "float",
+                "required": true
+              },
+              "input_voltage_b": {
+                "type": "float",
+                "required": true
+              },
+              "input_current_a": {
+                "type": "float",
+                "required": true
+              },
+              "input_current_b": {
+                "type": "float",
+                "required": true
+              },
+              "output_voltage": {
+                "type": "float",
+                "required": true
+              },
+              "output_current": {
+                "type": "float",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "power_group": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "power_group_totals": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PowerGroupTotals",
+            "fields": {
+              "input_watts": {
+                "type": "int",
+                "required": true
+              },
+              "input_current_a": {
+                "type": "float",
+                "required": true
+              },
+              "input_current_b": {
+                "type": "float",
+                "required": true
+              },
+              "output_watts": {
+                "type": "int",
+                "required": true
+              },
+              "output_current": {
+                "type": "float",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "power_consumers": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PowerConsumerEntry",
+            "fields": {
+              "card_type": {
+                "type": "str",
+                "required": false
+              },
+              "power_allocated_watts": {
+                "type": "int",
+                "required": true
+              },
+              "power_used_watts": {
+                "type": "int",
+                "required": false
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "NCS 5504 chassis with 4 DC power supplies across 2 groups",
+      "input": "Fri Jan 17 14:45:54.414 EST\n================================================================================\nCHASSIS LEVEL POWER INFO: 0\n================================================================================\n   Total output power capacity (Group 0 + Group 1) :    6000W +    6000W\n   Total output power required                     :    2493W\n   Total power input                               :    1334W\n   Total power output                              :    1246W\n\nPower Group 0:\n================================================================================\n   Power       Supply      --------Input-------   ----Output----    Status\n   Module      Type        Volts A/B   Amps A/B   Volts     Amps\n================================================================================\n   0/PM0       3kW-DC      54.0/54.0   3.3/ 3.5    12.1     27.0    Failed\n   0/PM1       3kW-DC      54.0/54.0   3.0/ 2.9    12.1     25.8    OK\n\nTotal of Power Group 0:       686W/  ( 6.3/ 6.4)A     639W/ 52.8A\n\nPower Group 1:\n================================================================================\n   Power       Supply      --------Input-------   ----Output----    Status\n   Module      Type        Volts A/B   Amps A/B   Volts     Amps\n================================================================================\n   0/PM2       3kW-DC      54.0/54.0   2.7/ 2.9    12.1     23.8    OK\n   0/PM3       3kW-DC      54.0/54.0   3.1/ 3.3    12.1     26.4    OK\n\nTotal of Power Group 1:       648W/  ( 5.8/ 6.2)A     607W/ 50.2A\n\n================================================================================\n   Location     Card Type            Power       Power       Status\n                                     Allocated   Used\n                                     Watts       Watts\n================================================================================\n   0/0          NC55-36X100G           902         504       ON\n   0/1                 -                25           -       RESERVED\n   0/2                 -                25           -       RESERVED\n   0/3                 -                25           -       RESERVED\n   0/RP0        NC55-RP                 90          37       ON\n   0/RP1        NC55-RP                 90          28       ON\n   0/FC0        NC55-5504-FC           124          89       ON\n   0/FC1        NC55-5504-FC           124          90       ON\n   0/FC2        NC55-5504-FC           124          88       ON\n   0/FC3        NC55-5504-FC           124          88       ON\n   0/FC4        NC55-5504-FC           124          87       ON\n   0/FC5        NC55-5504-FC           124          88       ON\n   0/FT0        NC55-5504-FAN          174          20       ON\n   0/FT1        NC55-5504-FAN          174          19       ON\n   0/FT2        NC55-5504-FAN          174          21       ON\n   0/SC0        NC55-SC                 35          17       ON\n   0/SC1        NC55-SC                 35          15       ON\n",
+      "expected": {
+        "chassis_summary": {
+          "chassis_number": 0,
+          "total_capacity_watts": 12000,
+          "total_required_watts": 2493,
+          "total_input_watts": 1334,
+          "total_output_watts": 1246
+        },
+        "power_supplies": {
+          "0/PM0": {
+            "supply_type": "3kW-DC",
+            "input_voltage_a": 54.0,
+            "input_voltage_b": 54.0,
+            "input_current_a": 3.3,
+            "input_current_b": 3.5,
+            "output_voltage": 12.1,
+            "output_current": 27.0,
+            "status": "Failed",
+            "power_group": 0
+          },
+          "0/PM1": {
+            "supply_type": "3kW-DC",
+            "input_voltage_a": 54.0,
+            "input_voltage_b": 54.0,
+            "input_current_a": 3.0,
+            "input_current_b": 2.9,
+            "output_voltage": 12.1,
+            "output_current": 25.8,
+            "status": "OK",
+            "power_group": 0
+          },
+          "0/PM2": {
+            "supply_type": "3kW-DC",
+            "input_voltage_a": 54.0,
+            "input_voltage_b": 54.0,
+            "input_current_a": 2.7,
+            "input_current_b": 2.9,
+            "output_voltage": 12.1,
+            "output_current": 23.8,
+            "status": "OK",
+            "power_group": 1
+          },
+          "0/PM3": {
+            "supply_type": "3kW-DC",
+            "input_voltage_a": 54.0,
+            "input_voltage_b": 54.0,
+            "input_current_a": 3.1,
+            "input_current_b": 3.3,
+            "output_voltage": 12.1,
+            "output_current": 26.4,
+            "status": "OK",
+            "power_group": 1
+          }
+        },
+        "power_group_totals": {
+          "0": {
+            "input_watts": 686,
+            "input_current_a": 6.3,
+            "input_current_b": 6.4,
+            "output_watts": 639,
+            "output_current": 52.8
+          },
+          "1": {
+            "input_watts": 648,
+            "input_current_a": 5.8,
+            "input_current_b": 6.2,
+            "output_watts": 607,
+            "output_current": 50.2
+          }
+        },
+        "power_consumers": {
+          "0/0": {
+            "card_type": "NC55-36X100G",
+            "power_allocated_watts": 902,
+            "power_used_watts": 504,
+            "status": "ON"
+          },
+          "0/1": {
+            "power_allocated_watts": 25,
+            "status": "RESERVED"
+          },
+          "0/2": {
+            "power_allocated_watts": 25,
+            "status": "RESERVED"
+          },
+          "0/3": {
+            "power_allocated_watts": 25,
+            "status": "RESERVED"
+          },
+          "0/RP0": {
+            "card_type": "NC55-RP",
+            "power_allocated_watts": 90,
+            "power_used_watts": 37,
+            "status": "ON"
+          },
+          "0/RP1": {
+            "card_type": "NC55-RP",
+            "power_allocated_watts": 90,
+            "power_used_watts": 28,
+            "status": "ON"
+          },
+          "0/FC0": {
+            "card_type": "NC55-5504-FC",
+            "power_allocated_watts": 124,
+            "power_used_watts": 89,
+            "status": "ON"
+          },
+          "0/FC1": {
+            "card_type": "NC55-5504-FC",
+            "power_allocated_watts": 124,
+            "power_used_watts": 90,
+            "status": "ON"
+          },
+          "0/FC2": {
+            "card_type": "NC55-5504-FC",
+            "power_allocated_watts": 124,
+            "power_used_watts": 88,
+            "status": "ON"
+          },
+          "0/FC3": {
+            "card_type": "NC55-5504-FC",
+            "power_allocated_watts": 124,
+            "power_used_watts": 88,
+            "status": "ON"
+          },
+          "0/FC4": {
+            "card_type": "NC55-5504-FC",
+            "power_allocated_watts": 124,
+            "power_used_watts": 87,
+            "status": "ON"
+          },
+          "0/FC5": {
+            "card_type": "NC55-5504-FC",
+            "power_allocated_watts": 124,
+            "power_used_watts": 88,
+            "status": "ON"
+          },
+          "0/FT0": {
+            "card_type": "NC55-5504-FAN",
+            "power_allocated_watts": 174,
+            "power_used_watts": 20,
+            "status": "ON"
+          },
+          "0/FT1": {
+            "card_type": "NC55-5504-FAN",
+            "power_allocated_watts": 174,
+            "power_used_watts": 19,
+            "status": "ON"
+          },
+          "0/FT2": {
+            "card_type": "NC55-5504-FAN",
+            "power_allocated_watts": 174,
+            "power_used_watts": 21,
+            "status": "ON"
+          },
+          "0/SC0": {
+            "card_type": "NC55-SC",
+            "power_allocated_watts": 35,
+            "power_used_watts": 17,
+            "status": "ON"
+          },
+          "0/SC1": {
+            "card_type": "NC55-SC",
+            "power_allocated_watts": 35,
+            "power_used_watts": 15,
+            "status": "ON"
+          }
+        }
+      }
+    }
+  ]
+}

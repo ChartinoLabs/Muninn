@@ -1,0 +1,111 @@
+{
+  "os": "cisco_iosxr",
+  "command": "admin show inventory",
+  "schema": {
+    "name": "AdminShowInventoryResult",
+    "fields": {
+      "inventory": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InventoryItem",
+            "fields": {
+              "name": {
+                "type": "str",
+                "required": true
+              },
+              "description": {
+                "type": "str",
+                "required": false
+              },
+              "pid": {
+                "type": "str",
+                "required": false
+              },
+              "vid": {
+                "type": "str",
+                "required": false
+              },
+              "serial_number": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic admin show inventory output from ASR-9006 with modules, fans, optics, and chassis",
+      "input": "Fri Aug  9 09:08:06.986 CDT\nNAME: \"module 0/RSP0/CPU0\", DESCR: \"ASR9K Route Switch Processor with 440G/slot Fabric and 6GB\"\nPID: A9K-RSP440-TR, VID: V06, SN: M9YXCZV9QF\n\nNAME: \"fantray 0/FT0/SP\", DESCR: \"ASR-9006 Fan Tray V2\"\nPID: ASR-9006-FAN-V2, VID: V09, SN: PDANV9GYV8H\n\nNAME: \"fan0 0/FT0/SP\", DESCR: \"ASR9K Generic Fan\"\nPID: N/A, VID: N/A, SN:\n\nNAME: \"module 0/1/CPU0\", DESCR: \"160G Modular Linecard, Packet Transport Optimized\"\nPID: A9K-MOD160-TR, VID: V05, SN: 94TU4CACM47Y\n\nNAME: \"module 0/1/0\", DESCR: \"ASR 9000 8-port 10GE Modular Port Adapter\"\nPID: A9K-MPA-8X10GE, VID: V02, SN: 2ZZQVPHZCJ5\n\nNAME: \"module mau 0/1/0/0\", DESCR: \"10GBASE-LR SFP+ Module for SMF\"\nPID: SFP-10G-LR          , VID: V01 , SN: QMXQLS9GKS\n\nNAME: \"module mau TenGigE0/2/CPU0/0\", DESCR: \"10GBASE-LR SFP+ Module for SMF\"\nPID: SFP-10G-LR         , VID: V01 , SN: CB7HHMVC\n\nNAME: \"power-module 0/PS0/M0/SP\", DESCR: \"3kW AC V2 Power Module\"\nPID: PWR-3KW-AC-V2, VID: V03, SN: ZP7K5XBV9KE\n\nNAME: \"chassis ASR-9006\", DESCR: \"ASR 9006 4 Line Card Slot Chassis with V2 AC PEM\"\nPID: ASR-9006, VID: V01, SN: JCY98XR393D\n",
+      "expected": {
+        "inventory": {
+          "module 0/RSP0/CPU0": {
+            "name": "module 0/RSP0/CPU0",
+            "description": "ASR9K Route Switch Processor with 440G/slot Fabric and 6GB",
+            "pid": "A9K-RSP440-TR",
+            "vid": "V06",
+            "serial_number": "M9YXCZV9QF"
+          },
+          "fantray 0/FT0/SP": {
+            "name": "fantray 0/FT0/SP",
+            "description": "ASR-9006 Fan Tray V2",
+            "pid": "ASR-9006-FAN-V2",
+            "vid": "V09",
+            "serial_number": "PDANV9GYV8H"
+          },
+          "fan0 0/FT0/SP": {
+            "name": "fan0 0/FT0/SP",
+            "description": "ASR9K Generic Fan"
+          },
+          "module 0/1/CPU0": {
+            "name": "module 0/1/CPU0",
+            "description": "160G Modular Linecard, Packet Transport Optimized",
+            "pid": "A9K-MOD160-TR",
+            "vid": "V05",
+            "serial_number": "94TU4CACM47Y"
+          },
+          "module 0/1/0": {
+            "name": "module 0/1/0",
+            "description": "ASR 9000 8-port 10GE Modular Port Adapter",
+            "pid": "A9K-MPA-8X10GE",
+            "vid": "V02",
+            "serial_number": "2ZZQVPHZCJ5"
+          },
+          "module mau 0/1/0/0": {
+            "name": "module mau 0/1/0/0",
+            "description": "10GBASE-LR SFP+ Module for SMF",
+            "pid": "SFP-10G-LR",
+            "vid": "V01",
+            "serial_number": "QMXQLS9GKS"
+          },
+          "module mau TenGigE0/2/CPU0/0": {
+            "name": "module mau TenGigE0/2/CPU0/0",
+            "description": "10GBASE-LR SFP+ Module for SMF",
+            "pid": "SFP-10G-LR",
+            "vid": "V01",
+            "serial_number": "CB7HHMVC"
+          },
+          "power-module 0/PS0/M0/SP": {
+            "name": "power-module 0/PS0/M0/SP",
+            "description": "3kW AC V2 Power Module",
+            "pid": "PWR-3KW-AC-V2",
+            "vid": "V03",
+            "serial_number": "ZP7K5XBV9KE"
+          },
+          "chassis ASR-9006": {
+            "name": "chassis ASR-9006",
+            "description": "ASR 9006 4 Line Card Slot Chassis with V2 AC PEM",
+            "pid": "ASR-9006",
+            "vid": "V01",
+            "serial_number": "JCY98XR393D"
+          }
+        }
+      }
+    }
+  ]
+}
