@@ -127,6 +127,9 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
   td.expand-cell span {
     display: inline-block;
     transition: transform 0.2s ease;
+    /* Hint the compositor up-front so toggling .expanded doesn't churn
+       layers on every expand/collapse. */
+    will-change: transform;
   }
   tr.catalog-row.expanded td.expand-cell span {
     transform: rotate(90deg);
@@ -207,6 +210,10 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
     overflow-y: auto;
     max-height: 400px;
     margin-bottom: 1rem;
+    /* Skip layout/paint cost for the schema tree when it scrolls out of
+       view, and reserve space so adding it doesn't reflow the panel. */
+    content-visibility: auto;
+    contain-intrinsic-size: auto 320px;
   }
   .schema-field-name {
     color: var(--md-accent-fg-color);
@@ -294,6 +301,11 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
     overflow-x: auto;
     max-height: 400px;
     overflow-y: auto;
+    /* Example fixtures can be tens of KB. Let the engine skip layout
+       work for off-screen content and reserve a stable intrinsic size
+       so inserting the <pre> doesn't trigger a full panel reflow. */
+    content-visibility: auto;
+    contain-intrinsic-size: auto 380px;
   }
   .detail-loading {
     padding: 1rem;
@@ -636,14 +648,19 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
     var panel = detailRow.querySelector(".detail-panel");
     var cached = detailCache[key];
     if (cached) {
-      renderDetailContent(panel, cached);
+      // Yield to the browser so the click → empty panel transition can
+      // paint before we do the (synchronous, sometimes expensive) schema
+      // and example tree builds. Without this the cursor can feel laggy
+      // for hundreds of ms post-click even though INP itself is fast.
+      requestAnimationFrame(function () {
+        if (expandedKey === key) renderDetailContent(panel, cached);
+      });
     } else {
-      loadDetail(p, panel);
+      loadDetail(p, panel, key);
     }
   }
 
-  function loadDetail(p, panel) {
-    var key = parserKey(p);
+  function loadDetail(p, panel, key) {
     if (!p.detail_file) {
       setMessage(panel, "detail-error", "No detail data available.");
       return;
@@ -652,9 +669,11 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
       .then(function (r) { return r.json(); })
       .then(function (data) {
         detailCache[key] = data;
-        if (expandedKey === key) {
-          renderDetailContent(panel, data);
-        }
+        if (expandedKey !== key) return;
+        // Yield a frame before the heavy render — same reason as above.
+        requestAnimationFrame(function () {
+          if (expandedKey === key) renderDetailContent(panel, data);
+        });
       })
       .catch(function () {
         if (expandedKey === key) {
