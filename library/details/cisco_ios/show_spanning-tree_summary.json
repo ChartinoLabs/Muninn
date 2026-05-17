@@ -1,0 +1,176 @@
+{
+  "os": "cisco_ios",
+  "command": "show spanning-tree summary",
+  "schema": {
+    "name": "ShowSpanningTreeSummaryResult",
+    "fields": {
+      "mode": {
+        "type": "str",
+        "required": true
+      },
+      "root_bridge_for": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": true
+      },
+      "defaults": {
+        "type": {
+          "name": "StpDefaults",
+          "fields": {
+            "etherchannel_misconfig_guard": {
+              "type": "str",
+              "required": false
+            },
+            "extended_system_id": {
+              "type": "str",
+              "required": false
+            },
+            "portfast_default": {
+              "type": "str",
+              "required": false
+            },
+            "portfast_edge_bpdu_guard_default": {
+              "type": "str",
+              "required": false
+            },
+            "portfast_edge_bpdu_filter_default": {
+              "type": "str",
+              "required": false
+            },
+            "loopguard_default": {
+              "type": "str",
+              "required": false
+            },
+            "pvst_simulation_default": {
+              "type": "str",
+              "required": false
+            },
+            "bridge_assurance": {
+              "type": "str",
+              "required": false
+            },
+            "uplinkfast": {
+              "type": "str",
+              "required": false
+            },
+            "backbonefast": {
+              "type": "str",
+              "required": false
+            }
+          }
+        },
+        "required": true
+      },
+      "pathcost_method": {
+        "type": "str",
+        "required": false
+      },
+      "vlans": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VlanCounts",
+            "fields": {
+              "blocking": {
+                "type": "int",
+                "required": true
+              },
+              "listening": {
+                "type": "int",
+                "required": true
+              },
+              "learning": {
+                "type": "int",
+                "required": true
+              },
+              "forwarding": {
+                "type": "int",
+                "required": true
+              },
+              "stp_active": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "summary": {
+        "type": {
+          "name": "VlanSummary",
+          "fields": {
+            "total_vlans": {
+              "type": "int",
+              "required": true
+            },
+            "blocking": {
+              "type": "int",
+              "required": true
+            },
+            "listening": {
+              "type": "int",
+              "required": true
+            },
+            "learning": {
+              "type": "int",
+              "required": true
+            },
+            "forwarding": {
+              "type": "int",
+              "required": true
+            },
+            "stp_active": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "show spanning-tree summary output from a Catalyst 3750-X stack in rapid-pvst mode",
+      "input": "Switch is in rapid-pvst mode\nRoot bridge for: none\nEtherChannel misconfig guard            is enabled\nExtended system ID                      is enabled\nPortfast Default                        is disabled\nPortfast Edge BPDU Guard Default        is disabled\nPortfast Edge BPDU Filter Default       is disabled\nLoopguard Default                       is disabled\nPVST Simulation Default                 is enabled but inactive in rapid-pvst\nmode\nBridge Assurance                        is enabled\nUplinkFast                              is disabled\nBackboneFast                            is disabled\nConfigured Pathcost method used is short\n\nName                   Blocking Listening Learning Forwarding STP Active\n---------------------- -------- --------- -------- ---------- ----------\nVLAN0021                     0         0        0          5          5\n---------------------- -------- --------- -------- ---------- ----------\n1 vlan                       0         0        0          5          5\n",
+      "expected": {
+        "defaults": {
+          "etherchannel_misconfig_guard": "enabled",
+          "extended_system_id": "enabled",
+          "portfast_default": "disabled",
+          "portfast_edge_bpdu_guard_default": "disabled",
+          "portfast_edge_bpdu_filter_default": "disabled",
+          "loopguard_default": "disabled",
+          "pvst_simulation_default": "enabled but inactive in rapid-pvst mode",
+          "bridge_assurance": "enabled",
+          "uplinkfast": "disabled",
+          "backbonefast": "disabled"
+        },
+        "vlans": {
+          "21": {
+            "blocking": 0,
+            "listening": 0,
+            "learning": 0,
+            "forwarding": 5,
+            "stp_active": 5
+          }
+        },
+        "mode": "rapid-pvst",
+        "root_bridge_for": [],
+        "pathcost_method": "short",
+        "summary": {
+          "total_vlans": 1,
+          "blocking": 0,
+          "listening": 0,
+          "learning": 0,
+          "forwarding": 5,
+          "stp_active": 5
+        }
+      }
+    }
+  ]
+}
