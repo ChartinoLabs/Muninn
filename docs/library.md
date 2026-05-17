@@ -31,6 +31,10 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
     </tbody>
   </table>
 
+  <!-- Detail panel lives OUTSIDE the table so expanding it doesn't grow
+       the table and force the surrounding compositor layer to re-rasterize. -->
+  <div id="parser-detail-host" hidden></div>
+
   <div id="catalog-empty" style="display: none;">
     No parsers match your filters.
   </div>
@@ -126,7 +130,6 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
   }
   td.expand-cell span {
     display: inline-block;
-    transition: transform 0.2s ease;
   }
   tr.catalog-row.expanded td.expand-cell span {
     transform: rotate(90deg);
@@ -168,10 +171,14 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
     color: var(--md-default-fg-color--light);
   }
 
-  /* Detail panel */
-  tr.detail-row td {
-    padding: 0;
-    border-bottom: 1px solid var(--md-default-fg-color--lightest);
+  /* Detail panel lives outside the table to avoid table-layer
+     invalidation when expanded. */
+  #parser-detail-host {
+    margin-top: 0;
+    border-top: 1px solid var(--md-default-fg-color--lightest);
+  }
+  #parser-detail-host[hidden] {
+    display: none;
   }
   .detail-panel {
     padding: 1rem 1.5rem 1.5rem;
@@ -394,6 +401,7 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
   function loadVersion(file) {
     expandedKey = null;
     detailCache = {};
+    hideDetailHost();
     fetch(file)
       .then(function (r) { return r.json(); })
       .then(function (parsers) {
@@ -524,46 +532,25 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
       return sortDir === "asc" ? cmp : -cmp;
     });
 
-    // Preserve any existing expanded detail row so we don't re-render its
-    // (potentially large) panel on every keystroke / filter / sort.
-    var preservedDetailRow = null;
-    if (expandedKey !== null) {
-      preservedDetailRow = tbody.querySelector("tr.detail-row");
-      if (preservedDetailRow) tbody.removeChild(preservedDetailRow);
-    }
-
+    // Build all rows into a fragment; insert in one shot. The detail
+    // panel lives outside the table (#parser-detail-host) so we don't
+    // need to splice anything between rows here.
     var expandedStillVisible = false;
     var fragment = document.createDocumentFragment();
 
     filtered.forEach(function (p) {
-      var key = parserKey(p);
       var row = createRow(p);
       fragment.appendChild(row);
-
-      if (expandedKey === key) {
-        expandedStillVisible = true;
-        if (preservedDetailRow) {
-          fragment.appendChild(preservedDetailRow);
-        } else {
-          var detailRow = createDetailRow();
-          fragment.appendChild(detailRow);
-          var panel = detailRow.querySelector(".detail-panel");
-          var data = detailCache[key];
-          if (data) {
-            renderDetailContent(panel, data);
-          } else {
-            loadDetail(p, panel);
-          }
-        }
-      }
+      if (expandedKey === parserKey(p)) expandedStillVisible = true;
     });
 
     while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
     tbody.appendChild(fragment);
 
-    // Expanded parser was filtered out — drop the expanded state.
+    // Expanded parser was filtered out — drop expansion and hide host.
     if (expandedKey !== null && !expandedStillVisible) {
       expandedKey = null;
+      hideDetailHost();
     }
 
     stats.textContent = "Showing " + filtered.length + " of " + currentParsers.length + " parsers";
@@ -580,57 +567,56 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
 
   // --- Detail panel ---
 
-  function createDetailRow() {
-    var tr = document.createElement("tr");
-    tr.className = "detail-row";
-    var td = document.createElement("td");
-    td.colSpan = 4;
+  var detailHost = document.getElementById("parser-detail-host");
+
+  function buildPanelInto(host) {
+    while (host.firstChild) host.removeChild(host.firstChild);
     var panel = document.createElement("div");
     panel.className = "detail-panel";
     setMessage(panel, "detail-loading", "Loading details...");
-    td.appendChild(panel);
-    tr.appendChild(td);
-    return tr;
+    host.appendChild(panel);
+    return panel;
+  }
+
+  function showDetailHost() {
+    detailHost.hidden = false;
+  }
+
+  function hideDetailHost() {
+    detailHost.hidden = true;
+    while (detailHost.firstChild) detailHost.removeChild(detailHost.firstChild);
   }
 
   function toggleDetail(p, rowEl) {
     var key = parserKey(p);
 
     if (expandedKey === key) {
-      // Collapse
       expandedKey = null;
       rowEl.classList.remove("expanded");
-      var next = rowEl.nextElementSibling;
-      if (next && next.classList.contains("detail-row")) {
-        next.parentNode.removeChild(next);
-      }
+      hideDetailHost();
       return;
     }
 
     // Collapse any previously expanded row
     var prevExpanded = tbody.querySelector("tr.catalog-row.expanded");
-    if (prevExpanded) {
-      prevExpanded.classList.remove("expanded");
-      var prevDetail = prevExpanded.nextElementSibling;
-      if (prevDetail && prevDetail.classList.contains("detail-row")) {
-        prevDetail.parentNode.removeChild(prevDetail);
-      }
-    }
+    if (prevExpanded) prevExpanded.classList.remove("expanded");
 
-    // Expand this row
     expandedKey = key;
     rowEl.classList.add("expanded");
 
-    var detailRow = createDetailRow();
-    rowEl.parentNode.insertBefore(detailRow, rowEl.nextSibling);
+    // Render placeholder synchronously; this is a single small append
+    // outside the table, so the table layer doesn't get invalidated.
+    var panel = buildPanelInto(detailHost);
+    showDetailHost();
 
-    var panel = detailRow.querySelector(".detail-panel");
+    // Bring the panel into view so the user actually sees the detail
+    // when the clicked row was far up the table.
+    detailHost.scrollIntoView({ block: "nearest", behavior: "smooth" });
+
     var cached = detailCache[key];
     if (cached) {
-      // Yield to the browser so the click → empty panel transition can
-      // paint before we do the (synchronous, sometimes expensive) schema
-      // and example tree builds. Without this the cursor can feel laggy
-      // for hundreds of ms post-click even though INP itself is fast.
+      // Defer the heavy schema/example DOM build to a later frame so
+      // the click is acked and the empty panel is painted first.
       requestAnimationFrame(function () {
         if (expandedKey === key) renderDetailContent(panel, cached);
       });
@@ -649,7 +635,6 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
       .then(function (data) {
         detailCache[key] = data;
         if (expandedKey !== key) return;
-        // Yield a frame before the heavy render — same reason as above.
         requestAnimationFrame(function () {
           if (expandedKey === key) renderDetailContent(panel, data);
         });
