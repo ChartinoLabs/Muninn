@@ -127,21 +127,12 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
   td.expand-cell span {
     display: inline-block;
     transition: transform 0.2s ease;
-    /* Hint the compositor up-front so toggling .expanded doesn't churn
-       layers on every expand/collapse. */
-    will-change: transform;
   }
   tr.catalog-row.expanded td.expand-cell span {
     transform: rotate(90deg);
   }
   tr.catalog-row {
     cursor: pointer;
-    /* Isolate per-row layout/style work so hover and class toggles on one
-       row don't ripple through the other 300+ rows. */
-    contain: layout style;
-  }
-  tr.detail-row {
-    contain: layout style;
   }
   tr.catalog-row:hover td {
     background: var(--md-code-bg-color);
@@ -187,9 +178,6 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
     background: var(--md-code-bg-color);
     overflow: hidden;
     min-width: 0;
-    /* Isolate layout/style/paint work so expanding a row doesn't trigger
-       a reflow of the surrounding 300+ rows or restyle the whole table. */
-    contain: layout style paint;
   }
   .detail-panel h4 {
     margin: 0 0 0.5rem;
@@ -210,10 +198,6 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
     overflow-y: auto;
     max-height: 400px;
     margin-bottom: 1rem;
-    /* Skip layout/paint cost for the schema tree when it scrolls out of
-       view, and reserve space so adding it doesn't reflow the panel. */
-    content-visibility: auto;
-    contain-intrinsic-size: auto 320px;
   }
   .schema-field-name {
     color: var(--md-accent-fg-color);
@@ -301,11 +285,6 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
     overflow-x: auto;
     max-height: 400px;
     overflow-y: auto;
-    /* Example fixtures can be tens of KB. Let the engine skip layout
-       work for off-screen content and reserve a stable intrinsic size
-       so inserting the <pre> doesn't trigger a full panel reflow. */
-    content-visibility: auto;
-    contain-intrinsic-size: auto 380px;
   }
   .detail-loading {
     padding: 1rem;
