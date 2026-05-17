@@ -1,0 +1,35 @@
+{
+  "os": "cisco_ios",
+  "command": "show spanning-tree inconsistentports",
+  "schema": {
+    "name": "ShowSpanningTreeInconsistentPortsResult",
+    "fields": {
+      "vlans": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": "str"
+          }
+        },
+        "required": true
+      },
+      "inconsistent_count": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "show spanning-tree inconsistentports output from a Catalyst 3750-X stack with no inconsistent ports",
+      "input": "Name                 Interface                Inconsistency\n-------------------- ------------------------ ------------------\n\nNumber of inconsistent ports (segments) in the system : 0\n",
+      "expected": {
+        "vlans": {},
+        "inconsistent_count": 0
+      }
+    }
+  ]
+}
