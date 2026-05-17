@@ -1,0 +1,133 @@
+{
+  "os": "cisco_ios",
+  "command": "show users wide",
+  "schema": {
+    "name": "ShowUsersWideResult",
+    "fields": {
+      "lines": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "UserWideEntry",
+              "fields": {
+                "active": {
+                  "type": "bool",
+                  "required": true
+                },
+                "user": {
+                  "type": "str",
+                  "required": false
+                },
+                "host": {
+                  "type": "str",
+                  "required": false
+                },
+                "idle": {
+                  "type": "str",
+                  "required": false
+                },
+                "location": {
+                  "type": "str",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "show users wide output from a Catalyst 3750-X stack with two active vty sessions",
+      "input": "Line       User       Host(s)              Idle       Location\n   0 con 0                                     00:00:00\n   1 vty 0     superman   idle                 00:05:49 192.0.2.50\n*  2 vty 1     admin      idle                 00:00:09 192.0.2.50\n   3 vty 2                                     00:00:00\n   4 vty 3                                     00:00:00\n   5 vty 4                                     00:00:00\n   6 vty 5                                     00:00:00\n   7 vty 6                                     00:00:00\n   8 vty 7                                     00:00:00\n   9 vty 8                                     00:00:00\n  10 vty 9                                     00:00:00\n  11 vty 10                                    00:00:00\n  12 vty 11                                    00:00:00\n  13 vty 12                                    00:00:00\n  14 vty 13                                    00:00:00\n  15 vty 14                                    00:00:00\n  16 vty 15                                    00:00:00\n\n  Interface    User               Mode         Idle     Peer Address\n",
+      "expected": {
+        "lines": {
+          "con": {
+            "0": {
+              "active": false,
+              "idle": "00:00:00"
+            }
+          },
+          "vty": {
+            "0": {
+              "active": false,
+              "user": "superman",
+              "host": "idle",
+              "idle": "00:05:49",
+              "location": "192.0.2.50"
+            },
+            "1": {
+              "active": true,
+              "user": "admin",
+              "host": "idle",
+              "idle": "00:00:09",
+              "location": "192.0.2.50"
+            },
+            "2": {
+              "active": false,
+              "idle": "00:00:00"
+            },
+            "3": {
+              "active": false,
+              "idle": "00:00:00"
+            },
+            "4": {
+              "active": false,
+              "idle": "00:00:00"
+            },
+            "5": {
+              "active": false,
+              "idle": "00:00:00"
+            },
+            "6": {
+              "active": false,
+              "idle": "00:00:00"
+            },
+            "7": {
+              "active": false,
+              "idle": "00:00:00"
+            },
+            "8": {
+              "active": false,
+              "idle": "00:00:00"
+            },
+            "9": {
+              "active": false,
+              "idle": "00:00:00"
+            },
+            "10": {
+              "active": false,
+              "idle": "00:00:00"
+            },
+            "11": {
+              "active": false,
+              "idle": "00:00:00"
+            },
+            "12": {
+              "active": false,
+              "idle": "00:00:00"
+            },
+            "13": {
+              "active": false,
+              "idle": "00:00:00"
+            },
+            "14": {
+              "active": false,
+              "idle": "00:00:00"
+            },
+            "15": {
+              "active": false,
+              "idle": "00:00:00"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
