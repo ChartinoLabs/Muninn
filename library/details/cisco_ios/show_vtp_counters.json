@@ -1,0 +1,93 @@
+{
+  "os": "cisco_ios",
+  "command": "show vtp counters",
+  "schema": {
+    "name": "ShowVtpCountersResult",
+    "fields": {
+      "summary_advertisements_received": {
+        "type": "int",
+        "required": true
+      },
+      "subset_advertisements_received": {
+        "type": "int",
+        "required": true
+      },
+      "request_advertisements_received": {
+        "type": "int",
+        "required": true
+      },
+      "summary_advertisements_transmitted": {
+        "type": "int",
+        "required": true
+      },
+      "subset_advertisements_transmitted": {
+        "type": "int",
+        "required": true
+      },
+      "request_advertisements_transmitted": {
+        "type": "int",
+        "required": true
+      },
+      "config_revision_errors": {
+        "type": "int",
+        "required": true
+      },
+      "config_digest_errors": {
+        "type": "int",
+        "required": true
+      },
+      "v1_summary_errors": {
+        "type": "int",
+        "required": true
+      },
+      "pruning": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VtpPruningEntry",
+            "fields": {
+              "join_transmitted": {
+                "type": "int",
+                "required": true
+              },
+              "join_received": {
+                "type": "int",
+                "required": true
+              },
+              "summary_advts_received_from_non_pruning_capable_device": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "show vtp counters output from a Catalyst 3750-X stack",
+      "input": "VTP statistics:\nSummary advertisements received    : 0\nSubset advertisements received     : 0\nRequest advertisements received    : 0\nSummary advertisements transmitted : 0\nSubset advertisements transmitted  : 0\nRequest advertisements transmitted : 0\nNumber of config revision errors   : 0\nNumber of config digest errors     : 0\nNumber of V1 summary errors        : 0\n\n\nVTP pruning statistics:\n\nTrunk            Join Transmitted Join Received    Summary advts received from\n                                                   non-pruning-capable device\n---------------- ---------------- ---------------- ---------------------------\nPo1                 0                0                0\n",
+      "expected": {
+        "summary_advertisements_received": 0,
+        "subset_advertisements_received": 0,
+        "request_advertisements_received": 0,
+        "summary_advertisements_transmitted": 0,
+        "subset_advertisements_transmitted": 0,
+        "request_advertisements_transmitted": 0,
+        "config_revision_errors": 0,
+        "config_digest_errors": 0,
+        "v1_summary_errors": 0,
+        "pruning": {
+          "Port-channel1": {
+            "join_transmitted": 0,
+            "join_received": 0,
+            "summary_advts_received_from_non_pruning_capable_device": 0
+          }
+        }
+      }
+    }
+  ]
+}
