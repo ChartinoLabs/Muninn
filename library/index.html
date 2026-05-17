@@ -782,7 +782,6 @@
   <table id="catalog-table">
     <thead>
       <tr>
-        <th class="expand-col"></th>
         <th data-sort="os">Platform</th>
         <th data-sort="command">Command</th>
         <th data-sort="tags">Tags</th>
@@ -797,6 +796,19 @@
   </div>
 </div>
 
+<!-- Native <dialog> handles backdrop, focus trap, and Esc-to-close.
+     Lives outside the catalog container so it overlays the whole page. -->
+<p><dialog id="parser-detail-modal">
+<br />
+<div class="modal-header">
+    <div class="modal-title-block">
+      <div class="modal-platform"></div>
+      <h2 class="modal-command"></h2>
+    </div>
+    <button class="modal-close" type="button" aria-label="Close">&times;</button>
+  </div></p>
+<div class="modal-body"></div>
+<p></dialog></p>
 <style>
   .md-sidebar--secondary {
     display: none;
@@ -872,41 +884,11 @@
     border-bottom: 1px solid var(--md-default-fg-color--lightest);
     vertical-align: top;
   }
-  th.expand-col {
-    width: 2rem;
-    cursor: default;
-  }
-  th.expand-col::after {
-    content: none;
-  }
-  td.expand-cell {
-    width: 2rem;
-    text-align: center;
-    color: var(--md-default-fg-color--lighter);
-    font-size: 0.7rem;
-  }
-  td.expand-cell span {
-    display: inline-block;
-    transition: transform 0.2s ease;
-  }
-  tr.catalog-row.expanded td.expand-cell span {
-    transform: rotate(90deg);
-  }
   tr.catalog-row {
     cursor: pointer;
   }
   tr.catalog-row:hover td {
     background: var(--md-code-bg-color);
-  }
-  tr.catalog-row:hover td.expand-cell {
-    color: var(--md-accent-fg-color);
-  }
-  tr.catalog-row.expanded td {
-    background: var(--md-code-bg-color);
-    border-bottom: none;
-  }
-  tr.catalog-row.expanded td.expand-cell {
-    color: var(--md-accent-fg-color);
   }
   .tag-chip {
     display: inline-block;
@@ -929,18 +911,70 @@
     color: var(--md-default-fg-color--light);
   }
 
-  /* Detail panel */
-  tr.detail-row td {
+  /* Modal: native <dialog> handles backdrop, focus trap, Esc to close. */
+  #parser-detail-modal {
+    width: min(960px, 92vw);
+    max-height: 88vh;
     padding: 0;
-    border-bottom: 1px solid var(--md-default-fg-color--lightest);
-  }
-  .detail-panel {
-    padding: 1rem 1.5rem 1.5rem;
-    background: var(--md-code-bg-color);
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 8px;
+    background: var(--md-default-bg-color);
+    color: var(--md-default-fg-color);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
     overflow: hidden;
+  }
+  #parser-detail-modal::backdrop {
+    background: rgba(0, 0, 0, 0.45);
+  }
+  #parser-detail-modal .modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--md-default-fg-color--lightest);
+    background: var(--md-code-bg-color);
+  }
+  #parser-detail-modal .modal-title-block {
     min-width: 0;
   }
-  .detail-panel h4 {
+  #parser-detail-modal .modal-platform {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--md-accent-fg-color);
+    margin-bottom: 0.25rem;
+  }
+  #parser-detail-modal .modal-command {
+    margin: 0;
+    font-family: var(--md-code-font);
+    font-size: 1.05rem;
+    font-weight: 500;
+    word-break: break-word;
+  }
+  #parser-detail-modal .modal-close {
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--md-default-fg-color--light);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  #parser-detail-modal .modal-close:hover {
+    background: var(--md-default-fg-color--lightest);
+    color: var(--md-default-fg-color);
+  }
+  #parser-detail-modal .modal-body {
+    padding: 1rem 1.5rem 1.5rem;
+    overflow-y: auto;
+    max-height: calc(88vh - 4.5rem);
+  }
+  .modal-body h4 {
     margin: 0 0 0.5rem;
     font-size: 0.95rem;
     color: var(--md-default-fg-color);
@@ -956,6 +990,8 @@
     border: 1px solid var(--md-default-fg-color--lightest);
     border-radius: 4px;
     overflow-x: auto;
+    overflow-y: auto;
+    max-height: 400px;
     margin-bottom: 1rem;
   }
   .schema-field-name {
@@ -1076,10 +1112,12 @@
   var table = document.getElementById("catalog-table");
 
   var currentParsers = [];
+  var parsersByKey = {};
   var sortCol = "command";
   var sortDir = "asc";
   var detailCache = {};
   var expandedKey = null;
+  var searchDebounce = null;
 
   // Display names declared on each OperatingSystem class in src/muninn/os.py
   // are emitted into newer catalog entries as `os_display_name`. For older
@@ -1149,15 +1187,17 @@
   }
 
   function loadVersion(file) {
-    expandedKey = null;
+    closeModal();
     detailCache = {};
     fetch(file)
       .then(function (r) { return r.json(); })
       .then(function (parsers) {
         currentParsers = parsers;
         osDisplayNames = {};
+        parsersByKey = {};
         parsers.forEach(function (p) {
           if (p.os_display_name) osDisplayNames[p.os] = p.os_display_name;
+          parsersByKey[parserKey(p)] = p;
         });
         rebuildFilters();
         render();
@@ -1227,14 +1267,7 @@
     var key = parserKey(p);
     var tr = document.createElement("tr");
     tr.className = "catalog-row";
-    if (expandedKey === key) tr.classList.add("expanded");
-
-    var tdExpand = document.createElement("td");
-    tdExpand.className = "expand-cell";
-    var chevron = document.createElement("span");
-    chevron.textContent = "\u25B6";
-    tdExpand.appendChild(chevron);
-    tr.appendChild(tdExpand);
+    tr.dataset.parserKey = key;
 
     var tdOs = document.createElement("td");
     tdOs.textContent = osLabel(p.os);
@@ -1252,10 +1285,6 @@
       tdTags.appendChild(createTagChip(t));
     });
     tr.appendChild(tdTags);
-
-    tr.addEventListener("click", function () {
-      toggleDetail(p, tr);
-    });
 
     return tr;
   }
@@ -1282,25 +1311,15 @@
       return sortDir === "asc" ? cmp : -cmp;
     });
 
-    while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
-
+    // Build all rows into a fragment; insert in one shot. The detail
+    // modal is independent of the table, so filtering doesn't affect it.
+    var fragment = document.createDocumentFragment();
     filtered.forEach(function (p) {
-      var row = createRow(p);
-      tbody.appendChild(row);
-
-      // Re-insert expanded detail row if this parser is expanded
-      if (expandedKey === parserKey(p)) {
-        var detailRow = createDetailRow();
-        tbody.appendChild(detailRow);
-        var panel = detailRow.querySelector(".detail-panel");
-        var data = detailCache[parserKey(p)];
-        if (data) {
-          renderDetailContent(panel, data);
-        } else {
-          loadDetail(p, panel);
-        }
-      }
+      fragment.appendChild(createRow(p));
     });
+
+    while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
+    tbody.appendChild(fragment);
 
     stats.textContent = "Showing " + filtered.length + " of " + currentParsers.length + " parsers";
     empty.style.display = filtered.length === 0 ? "block" : "none";
@@ -1314,63 +1333,69 @@
     });
   }
 
-  // --- Detail panel ---
+  // --- Detail modal ---
 
-  function createDetailRow() {
-    var tr = document.createElement("tr");
-    tr.className = "detail-row";
-    var td = document.createElement("td");
-    td.colSpan = 4;
-    var panel = document.createElement("div");
-    panel.className = "detail-panel";
-    setMessage(panel, "detail-loading", "Loading details...");
-    td.appendChild(panel);
-    tr.appendChild(td);
-    return tr;
-  }
+  var modal = document.getElementById("parser-detail-modal");
+  var modalCommand = modal.querySelector(".modal-command");
+  var modalPlatform = modal.querySelector(".modal-platform");
+  var modalBody = modal.querySelector(".modal-body");
+  var modalCloseBtn = modal.querySelector(".modal-close");
 
-  function toggleDetail(p, rowEl) {
+  // expandedKey is the parser currently shown in the modal (or null).
+  function openModal(p) {
     var key = parserKey(p);
-
-    if (expandedKey === key) {
-      // Collapse
-      expandedKey = null;
-      rowEl.classList.remove("expanded");
-      var next = rowEl.nextElementSibling;
-      if (next && next.classList.contains("detail-row")) {
-        next.parentNode.removeChild(next);
-      }
-      return;
-    }
-
-    // Collapse any previously expanded row
-    var prevExpanded = tbody.querySelector("tr.catalog-row.expanded");
-    if (prevExpanded) {
-      prevExpanded.classList.remove("expanded");
-      var prevDetail = prevExpanded.nextElementSibling;
-      if (prevDetail && prevDetail.classList.contains("detail-row")) {
-        prevDetail.parentNode.removeChild(prevDetail);
-      }
-    }
-
-    // Expand this row
     expandedKey = key;
-    rowEl.classList.add("expanded");
 
-    var detailRow = createDetailRow();
-    rowEl.parentNode.insertBefore(detailRow, rowEl.nextSibling);
+    modalCommand.textContent = p.command;
+    modalPlatform.textContent = osLabel(p.os);
 
-    var panel = detailRow.querySelector(".detail-panel");
+    // Reset body with a placeholder synchronously; the heavy render is
+    // deferred a frame so the open animation can paint first.
+    while (modalBody.firstChild) modalBody.removeChild(modalBody.firstChild);
+    setMessage(modalBody, "detail-loading", "Loading details...");
+
+    if (typeof modal.showModal === "function") {
+      modal.showModal();
+    } else {
+      modal.setAttribute("open", "");
+    }
+
     var cached = detailCache[key];
     if (cached) {
-      renderDetailContent(panel, cached);
+      requestAnimationFrame(function () {
+        if (expandedKey === key) renderDetailContent(modalBody, cached);
+      });
     } else {
-      loadDetail(p, panel);
+      loadDetail(p, modalBody, key);
     }
   }
 
-  function loadDetail(p, panel) {
-    var key = parserKey(p);
+  function closeModal() {
+    if (expandedKey === null) return;
+    expandedKey = null;
+    if (typeof modal.close === "function") {
+      modal.close();
+    } else {
+      modal.removeAttribute("open");
+    }
+    while (modalBody.firstChild) modalBody.removeChild(modalBody.firstChild);
+  }
+
+  modalCloseBtn.addEventListener("click", closeModal);
+  // Close on Esc — <dialog> does this natively, but also handle backdrop click.
+  modal.addEventListener("close", function () {
+    if (expandedKey !== null) {
+      expandedKey = null;
+      while (modalBody.firstChild) modalBody.removeChild(modalBody.firstChild);
+    }
+  });
+  modal.addEventListener("click", function (e) {
+    // Native <dialog> reports clicks on the backdrop as clicks on the
+    // dialog element itself (since the backdrop is a pseudo-element).
+    if (e.target === modal) closeModal();
+  });
+
+  function loadDetail(p, panel, key) {
     if (!p.detail_file) {
       setMessage(panel, "detail-error", "No detail data available.");
       return;
@@ -1379,9 +1404,10 @@
       .then(function (r) { return r.json(); })
       .then(function (data) {
         detailCache[key] = data;
-        if (expandedKey === key) {
-          renderDetailContent(panel, data);
-        }
+        if (expandedKey !== key) return;
+        requestAnimationFrame(function () {
+          if (expandedKey === key) renderDetailContent(panel, data);
+        });
       })
       .catch(function () {
         if (expandedKey === key) {
@@ -1555,6 +1581,56 @@
 
   // --- Example rendering ---
 
+  // Build the per-example content (CLI output + parsed JSON view-toggle).
+  // The parsed JSON is only stringified on first click, since example
+  // fixtures can be hundreds of KB and synchronously injecting that into
+  // the DOM forces a layout pass that visibly lags the browser.
+  function buildExamplePaneContent(pane, ex) {
+    var viewBar = document.createElement("div");
+    viewBar.className = "example-view-bar";
+
+    var cliBtn = document.createElement("button");
+    cliBtn.className = "example-view-btn active";
+    cliBtn.textContent = "CLI Output";
+    viewBar.appendChild(cliBtn);
+
+    var parsedBtn = document.createElement("button");
+    parsedBtn.className = "example-view-btn";
+    parsedBtn.textContent = "Parsed Result";
+    viewBar.appendChild(parsedBtn);
+
+    pane.appendChild(viewBar);
+
+    var cliPre = document.createElement("pre");
+    cliPre.className = "example-pre";
+    cliPre.textContent = ex.input;
+    pane.appendChild(cliPre);
+
+    var parsedPre = document.createElement("pre");
+    parsedPre.className = "example-pre";
+    parsedPre.style.display = "none";
+    pane.appendChild(parsedPre);
+    var parsedFilled = false;
+
+    cliBtn.addEventListener("click", function () {
+      cliBtn.classList.add("active");
+      parsedBtn.classList.remove("active");
+      cliPre.style.display = "";
+      parsedPre.style.display = "none";
+    });
+
+    parsedBtn.addEventListener("click", function () {
+      if (!parsedFilled) {
+        parsedPre.textContent = JSON.stringify(ex.expected, null, 2);
+        parsedFilled = true;
+      }
+      parsedBtn.classList.add("active");
+      cliBtn.classList.remove("active");
+      parsedPre.style.display = "";
+      cliPre.style.display = "none";
+    });
+  }
+
   function renderExamples(examples) {
     var container = document.createElement("div");
     container.className = "example-tabs";
@@ -1564,6 +1640,7 @@
     container.appendChild(bar);
 
     var panes = [];
+    var built = [];
 
     examples.forEach(function (ex, idx) {
       var btn = document.createElement("button");
@@ -1575,6 +1652,10 @@
           b.classList.remove("active");
         });
         btn.classList.add("active");
+        if (!built[idx]) {
+          buildExamplePaneContent(panes[idx], ex);
+          built[idx] = true;
+        }
         panes.forEach(function (pane, j) {
           pane.classList.toggle("active", j === idx);
         });
@@ -1583,48 +1664,11 @@
 
       var pane = document.createElement("div");
       pane.className = "example-content";
-      if (idx === 0) pane.classList.add("active");
-
-      // View toggle: CLI Output / Parsed Result
-      var viewBar = document.createElement("div");
-      viewBar.className = "example-view-bar";
-
-      var cliBtn = document.createElement("button");
-      cliBtn.className = "example-view-btn active";
-      cliBtn.textContent = "CLI Output";
-      viewBar.appendChild(cliBtn);
-
-      var parsedBtn = document.createElement("button");
-      parsedBtn.className = "example-view-btn";
-      parsedBtn.textContent = "Parsed Result";
-      viewBar.appendChild(parsedBtn);
-
-      pane.appendChild(viewBar);
-
-      var cliPre = document.createElement("pre");
-      cliPre.className = "example-pre";
-      cliPre.textContent = ex.input;
-      pane.appendChild(cliPre);
-
-      var parsedPre = document.createElement("pre");
-      parsedPre.className = "example-pre";
-      parsedPre.style.display = "none";
-      parsedPre.textContent = JSON.stringify(ex.expected, null, 2);
-      pane.appendChild(parsedPre);
-
-      cliBtn.addEventListener("click", function () {
-        cliBtn.classList.add("active");
-        parsedBtn.classList.remove("active");
-        cliPre.style.display = "";
-        parsedPre.style.display = "none";
-      });
-
-      parsedBtn.addEventListener("click", function () {
-        parsedBtn.classList.add("active");
-        cliBtn.classList.remove("active");
-        parsedPre.style.display = "";
-        cliPre.style.display = "none";
-      });
+      if (idx === 0) {
+        pane.classList.add("active");
+        buildExamplePaneContent(pane, ex);
+        built[idx] = true;
+      }
 
       container.appendChild(pane);
       panes.push(pane);
@@ -1635,9 +1679,26 @@
 
   // --- Event listeners ---
 
-  search.addEventListener("input", render);
+  // Debounce search input so we don't rebuild the table on every keystroke.
+  search.addEventListener("input", function () {
+    if (searchDebounce !== null) clearTimeout(searchDebounce);
+    searchDebounce = setTimeout(function () {
+      searchDebounce = null;
+      render();
+    }, 150);
+  });
   osFilter.addEventListener("change", render);
   tagFilter.addEventListener("change", render);
+
+  // Single delegated click handler for all catalog rows, instead of attaching
+  // one per row at render time.
+  tbody.addEventListener("click", function (e) {
+    var row = e.target.closest("tr.catalog-row");
+    if (!row || !tbody.contains(row)) return;
+    var key = row.dataset.parserKey;
+    var p = parsersByKey[key];
+    if (p) openModal(p);
+  });
 
   table.querySelectorAll("th[data-sort]").forEach(function (th) {
     th.addEventListener("click", function () {
