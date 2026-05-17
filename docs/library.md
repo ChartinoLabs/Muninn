@@ -21,7 +21,6 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
   <table id="catalog-table">
     <thead>
       <tr>
-        <th class="expand-col"></th>
         <th data-sort="os">Platform</th>
         <th data-sort="command">Command</th>
         <th data-sort="tags">Tags</th>
@@ -31,14 +30,23 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
     </tbody>
   </table>
 
-  <!-- Detail panel lives OUTSIDE the table so expanding it doesn't grow
-       the table and force the surrounding compositor layer to re-rasterize. -->
-  <div id="parser-detail-host" hidden></div>
-
   <div id="catalog-empty" style="display: none;">
     No parsers match your filters.
   </div>
 </div>
+
+<!-- Native <dialog> handles backdrop, focus trap, and Esc-to-close.
+     Lives outside the catalog container so it overlays the whole page. -->
+<dialog id="parser-detail-modal">
+  <div class="modal-header">
+    <div class="modal-title-block">
+      <div class="modal-platform"></div>
+      <h2 class="modal-command"></h2>
+    </div>
+    <button class="modal-close" type="button" aria-label="Close">&times;</button>
+  </div>
+  <div class="modal-body"></div>
+</dialog>
 
 <style>
   .md-sidebar--secondary {
@@ -115,40 +123,11 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
     border-bottom: 1px solid var(--md-default-fg-color--lightest);
     vertical-align: top;
   }
-  th.expand-col {
-    width: 2rem;
-    cursor: default;
-  }
-  th.expand-col::after {
-    content: none;
-  }
-  td.expand-cell {
-    width: 2rem;
-    text-align: center;
-    color: var(--md-default-fg-color--lighter);
-    font-size: 0.7rem;
-  }
-  td.expand-cell span {
-    display: inline-block;
-  }
-  tr.catalog-row.expanded td.expand-cell span {
-    transform: rotate(90deg);
-  }
   tr.catalog-row {
     cursor: pointer;
   }
   tr.catalog-row:hover td {
     background: var(--md-code-bg-color);
-  }
-  tr.catalog-row:hover td.expand-cell {
-    color: var(--md-accent-fg-color);
-  }
-  tr.catalog-row.expanded td {
-    background: var(--md-code-bg-color);
-    border-bottom: none;
-  }
-  tr.catalog-row.expanded td.expand-cell {
-    color: var(--md-accent-fg-color);
   }
   .tag-chip {
     display: inline-block;
@@ -171,22 +150,70 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
     color: var(--md-default-fg-color--light);
   }
 
-  /* Detail panel lives outside the table to avoid table-layer
-     invalidation when expanded. */
-  #parser-detail-host {
-    margin-top: 0;
-    border-top: 1px solid var(--md-default-fg-color--lightest);
-  }
-  #parser-detail-host[hidden] {
-    display: none;
-  }
-  .detail-panel {
-    padding: 1rem 1.5rem 1.5rem;
-    background: var(--md-code-bg-color);
+  /* Modal: native <dialog> handles backdrop, focus trap, Esc to close. */
+  #parser-detail-modal {
+    width: min(960px, 92vw);
+    max-height: 88vh;
+    padding: 0;
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 8px;
+    background: var(--md-default-bg-color);
+    color: var(--md-default-fg-color);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
     overflow: hidden;
+  }
+  #parser-detail-modal::backdrop {
+    background: rgba(0, 0, 0, 0.45);
+  }
+  #parser-detail-modal .modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--md-default-fg-color--lightest);
+    background: var(--md-code-bg-color);
+  }
+  #parser-detail-modal .modal-title-block {
     min-width: 0;
   }
-  .detail-panel h4 {
+  #parser-detail-modal .modal-platform {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--md-accent-fg-color);
+    margin-bottom: 0.25rem;
+  }
+  #parser-detail-modal .modal-command {
+    margin: 0;
+    font-family: var(--md-code-font);
+    font-size: 1.05rem;
+    font-weight: 500;
+    word-break: break-word;
+  }
+  #parser-detail-modal .modal-close {
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--md-default-fg-color--light);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  #parser-detail-modal .modal-close:hover {
+    background: var(--md-default-fg-color--lightest);
+    color: var(--md-default-fg-color);
+  }
+  #parser-detail-modal .modal-body {
+    padding: 1rem 1.5rem 1.5rem;
+    overflow-y: auto;
+    max-height: calc(88vh - 4.5rem);
+  }
+  .modal-body h4 {
     margin: 0 0 0.5rem;
     font-size: 0.95rem;
     color: var(--md-default-fg-color);
@@ -399,9 +426,8 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
   }
 
   function loadVersion(file) {
-    expandedKey = null;
+    closeModal();
     detailCache = {};
-    hideDetailHost();
     fetch(file)
       .then(function (r) { return r.json(); })
       .then(function (parsers) {
@@ -481,14 +507,6 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
     var tr = document.createElement("tr");
     tr.className = "catalog-row";
     tr.dataset.parserKey = key;
-    if (expandedKey === key) tr.classList.add("expanded");
-
-    var tdExpand = document.createElement("td");
-    tdExpand.className = "expand-cell";
-    var chevron = document.createElement("span");
-    chevron.textContent = "\u25B6";
-    tdExpand.appendChild(chevron);
-    tr.appendChild(tdExpand);
 
     var tdOs = document.createElement("td");
     tdOs.textContent = osLabel(p.os);
@@ -533,25 +551,14 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
     });
 
     // Build all rows into a fragment; insert in one shot. The detail
-    // panel lives outside the table (#parser-detail-host) so we don't
-    // need to splice anything between rows here.
-    var expandedStillVisible = false;
+    // modal is independent of the table, so filtering doesn't affect it.
     var fragment = document.createDocumentFragment();
-
     filtered.forEach(function (p) {
-      var row = createRow(p);
-      fragment.appendChild(row);
-      if (expandedKey === parserKey(p)) expandedStillVisible = true;
+      fragment.appendChild(createRow(p));
     });
 
     while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
     tbody.appendChild(fragment);
-
-    // Expanded parser was filtered out — drop expansion and hide host.
-    if (expandedKey !== null && !expandedStillVisible) {
-      expandedKey = null;
-      hideDetailHost();
-    }
 
     stats.textContent = "Showing " + filtered.length + " of " + currentParsers.length + " parsers";
     empty.style.display = filtered.length === 0 ? "block" : "none";
@@ -565,65 +572,67 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
     });
   }
 
-  // --- Detail panel ---
+  // --- Detail modal ---
 
-  var detailHost = document.getElementById("parser-detail-host");
+  var modal = document.getElementById("parser-detail-modal");
+  var modalCommand = modal.querySelector(".modal-command");
+  var modalPlatform = modal.querySelector(".modal-platform");
+  var modalBody = modal.querySelector(".modal-body");
+  var modalCloseBtn = modal.querySelector(".modal-close");
 
-  function buildPanelInto(host) {
-    while (host.firstChild) host.removeChild(host.firstChild);
-    var panel = document.createElement("div");
-    panel.className = "detail-panel";
-    setMessage(panel, "detail-loading", "Loading details...");
-    host.appendChild(panel);
-    return panel;
-  }
-
-  function showDetailHost() {
-    detailHost.hidden = false;
-  }
-
-  function hideDetailHost() {
-    detailHost.hidden = true;
-    while (detailHost.firstChild) detailHost.removeChild(detailHost.firstChild);
-  }
-
-  function toggleDetail(p, rowEl) {
+  // expandedKey is the parser currently shown in the modal (or null).
+  function openModal(p) {
     var key = parserKey(p);
-
-    if (expandedKey === key) {
-      expandedKey = null;
-      rowEl.classList.remove("expanded");
-      hideDetailHost();
-      return;
-    }
-
-    // Collapse any previously expanded row
-    var prevExpanded = tbody.querySelector("tr.catalog-row.expanded");
-    if (prevExpanded) prevExpanded.classList.remove("expanded");
-
     expandedKey = key;
-    rowEl.classList.add("expanded");
 
-    // Render placeholder synchronously; this is a single small append
-    // outside the table, so the table layer doesn't get invalidated.
-    var panel = buildPanelInto(detailHost);
-    showDetailHost();
+    modalCommand.textContent = p.command;
+    modalPlatform.textContent = osLabel(p.os);
 
-    // Bring the panel into view so the user actually sees the detail
-    // when the clicked row was far up the table.
-    detailHost.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    // Reset body with a placeholder synchronously; the heavy render is
+    // deferred a frame so the open animation can paint first.
+    while (modalBody.firstChild) modalBody.removeChild(modalBody.firstChild);
+    setMessage(modalBody, "detail-loading", "Loading details...");
+
+    if (typeof modal.showModal === "function") {
+      modal.showModal();
+    } else {
+      modal.setAttribute("open", "");
+    }
 
     var cached = detailCache[key];
     if (cached) {
-      // Defer the heavy schema/example DOM build to a later frame so
-      // the click is acked and the empty panel is painted first.
       requestAnimationFrame(function () {
-        if (expandedKey === key) renderDetailContent(panel, cached);
+        if (expandedKey === key) renderDetailContent(modalBody, cached);
       });
     } else {
-      loadDetail(p, panel, key);
+      loadDetail(p, modalBody, key);
     }
   }
+
+  function closeModal() {
+    if (expandedKey === null) return;
+    expandedKey = null;
+    if (typeof modal.close === "function") {
+      modal.close();
+    } else {
+      modal.removeAttribute("open");
+    }
+    while (modalBody.firstChild) modalBody.removeChild(modalBody.firstChild);
+  }
+
+  modalCloseBtn.addEventListener("click", closeModal);
+  // Close on Esc — <dialog> does this natively, but also handle backdrop click.
+  modal.addEventListener("close", function () {
+    if (expandedKey !== null) {
+      expandedKey = null;
+      while (modalBody.firstChild) modalBody.removeChild(modalBody.firstChild);
+    }
+  });
+  modal.addEventListener("click", function (e) {
+    // Native <dialog> reports clicks on the backdrop as clicks on the
+    // dialog element itself (since the backdrop is a pseudo-element).
+    if (e.target === modal) closeModal();
+  });
 
   function loadDetail(p, panel, key) {
     if (!p.detail_file) {
@@ -927,7 +936,7 @@ Browse all parsers available in Muninn. Use the search box and filters to find p
     if (!row || !tbody.contains(row)) return;
     var key = row.dataset.parserKey;
     var p = parsersByKey[key];
-    if (p) toggleDetail(p, row);
+    if (p) openModal(p);
   });
 
   table.querySelectorAll("th[data-sort]").forEach(function (th) {
