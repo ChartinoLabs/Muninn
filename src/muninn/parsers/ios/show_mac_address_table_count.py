@@ -35,6 +35,10 @@ _COUNT_FIELD_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("total_mac_addresses", _TOTAL_MAC_RE),
 )
 
+_REQUIRED_COUNT_FIELDS: frozenset[str] = frozenset(
+    key for key, _ in _COUNT_FIELD_PATTERNS
+)
+
 
 class VlanMacCount(TypedDict):
     """Per-VLAN MAC address counts."""
@@ -62,8 +66,9 @@ def _try_count_line(line: str, current_entry: dict[str, int]) -> bool:
 
 
 @register(OS.CISCO_IOS, "show mac address-table count")
+@register(OS.CISCO_IOSXE, "show mac address-table count")
 class ShowMacAddressTableCountParser(BaseParser[ShowMacAddressTableCountResult]):
-    """Parser for 'show mac address-table count' command on IOS."""
+    """Parser for 'show mac address-table count' command on IOS/IOS-XE."""
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset(
         {ParserTag.MAC, ParserTag.SWITCHING, ParserTag.VLAN}
@@ -88,8 +93,11 @@ class ShowMacAddressTableCountParser(BaseParser[ShowMacAddressTableCountResult])
         current_entry: dict[str, int] = {}
 
         def _flush() -> None:
-            if current_vlan is not None and current_entry:
-                vlans[current_vlan] = cast(VlanMacCount, dict(current_entry))
+            if current_vlan is None:
+                return
+            if not _REQUIRED_COUNT_FIELDS.issubset(current_entry):
+                return
+            vlans[current_vlan] = cast(VlanMacCount, dict(current_entry))
 
         for line in output.splitlines():
             vlan_match = _VLAN_HEADER_RE.match(line)
