@@ -31,8 +31,10 @@ _STATUS_ALTERNATION = "|".join(_STATUS_TOKENS)
 _HEADER_RE = re.compile(r"^\s*Port\s+Name\s+Status\b")
 
 # Interface line: a token starting with an uppercase letter followed by
-# digits/slashes (Gi1/0/1, Te1/1/2, Po1, Fa0, Lo0, Vlan10, ...).
-_PORT_TOKEN_RE = re.compile(r"^(?P<port>[A-Z][A-Za-z]*\d[\w/.:-]*)\s")
+# digits/slashes (Gi1/0/1, Te1/1/2, Po1, Fa0, Lo0, Vlan10, ...).  Used only
+# for boolean `.match()` checks during wrap detection, so the port token
+# itself is captured non-greedily without naming.
+_PORT_TOKEN_RE = re.compile(r"^[A-Z][A-Za-z]*\d[\w/.:-]*\s")
 
 # Full data line with all five required columns (Port + optional Name +
 # Status, Vlan, Duplex, Speed) and an optional Type that may be empty
