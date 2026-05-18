@@ -31,7 +31,7 @@ _PENDING_TABLE_HEADER_RE = re.compile(
     re.IGNORECASE,
 )
 _PENDING_ROW_RE = re.compile(
-    r"^(?P<interface>\S+)\s+(?P<reason>\S+)\s+(?P<time_left>\d+)\s*$",
+    r"^\s*(?P<interface>\S+)\s+(?P<reason>\S+)\s+(?P<time_left>\d+)\s*$",
 )
 
 
@@ -45,12 +45,12 @@ class PendingInterface(TypedDict):
 class ShowErrdisableRecoveryResult(TypedDict):
     """Schema for 'show errdisable recovery' parsed output."""
 
-    reasons: dict[str, str]
+    reasons: dict[str, bool]
     timer_interval_seconds: NotRequired[int]
     pending_interfaces: dict[str, PendingInterface]
 
 
-def _try_reason_row(line: str, reasons: dict[str, str]) -> bool:
+def _try_reason_row(line: str, reasons: dict[str, bool]) -> bool:
     """Attempt to parse a `<reason>  <status>` reason-status row.
 
     Returns True if the line was consumed as a reason row.
@@ -61,7 +61,7 @@ def _try_reason_row(line: str, reasons: dict[str, str]) -> bool:
     reason = match.group("reason").strip()
     if not reason:
         return False
-    reasons[reason] = match.group("status").capitalize()
+    reasons[reason] = match.group("status").lower() == "enabled"
     return True
 
 
@@ -107,7 +107,7 @@ class ShowErrdisableRecoveryParser(BaseParser[ShowErrdisableRecoveryResult]):
             Parsed structure with per-reason recovery status, the global
             timer interval, and any interfaces pending re-enable.
         """
-        reasons: dict[str, str] = {}
+        reasons: dict[str, bool] = {}
         pending: dict[str, PendingInterface] = {}
         result: dict = {
             "reasons": reasons,
