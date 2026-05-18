@@ -17,7 +17,7 @@ from muninn.utils import canonical_interface_name
 class SwitchportEntry(TypedDict):
     """Schema for a single interface switchport entry."""
 
-    switchport: str
+    switchport: NotRequired[str]
     administrative_mode: NotRequired[str]
     operational_mode: NotRequired[str]
     operational_mode_bundle: NotRequired[str]
@@ -238,7 +238,8 @@ def _build_entry(fields: dict[str, str]) -> SwitchportEntry:
     entry: dict[str, Any] = {}
 
     switchport = fields.get("switchport", "").strip()
-    entry["switchport"] = switchport
+    if switchport and not _is_placeholder(switchport):
+        entry["switchport"] = switchport
 
     _apply_operational_mode(entry, fields.get("_operational_mode", ""))
     _apply_vlan_fields(entry, fields)
