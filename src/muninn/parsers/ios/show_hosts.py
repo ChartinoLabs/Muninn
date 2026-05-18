@@ -39,6 +39,7 @@ _HOST_ROW_RE = re.compile(
 _CONTINUATION_RE = re.compile(r"^\s+(?P<addresses>\S.*?)\s*$")
 
 _AGE_PLACEHOLDERS = frozenset({"-"})
+_PORT_PLACEHOLDERS = frozenset({"-", "None", "NONE", "none"})
 
 
 class HostEntry(TypedDict):
@@ -108,7 +109,7 @@ def _build_host_entry(match: re.Match[str]) -> tuple[str, HostEntry]:
     }
 
     port = match.group("port")
-    if port and port not in _AGE_PLACEHOLDERS:
+    if port and port not in _PORT_PLACEHOLDERS:
         entry["port"] = port
 
     age = _parse_age(match.group("age"))
