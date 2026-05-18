@@ -1,4 +1,4 @@
-"""Parser for 'show cdp' command on IOS-XE."""
+"""Parser for 'show cdp' command on IOS and IOS-XE."""
 
 import re
 from typing import ClassVar, NotRequired, TypedDict
@@ -135,6 +135,7 @@ def _build_result(fields: _CdpFields) -> ShowCdpResult:
     return result
 
 
+@register(OS.CISCO_IOS, "show cdp")
 @register(OS.CISCO_IOSXE, "show cdp")
 class ShowCdpParser(BaseParser[ShowCdpResult]):
     """Parser for 'show cdp' command.
