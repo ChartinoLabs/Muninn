@@ -1,0 +1,29 @@
+{
+  "os": "cisco_ios",
+  "command": "show ip default-gateway",
+  "schema": {
+    "name": "ShowIpDefaultGatewayResult",
+    "fields": {
+      "default_gateway": {
+        "type": "str",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show ip default-gateway output with a single IPv4 address",
+      "input": "192.0.2.1\n",
+      "expected": {
+        "default_gateway": "192.0.2.1"
+      }
+    },
+    {
+      "name": "show ip default-gateway when no default gateway is configured; device emits 0.0.0.0",
+      "input": "0.0.0.0\n",
+      "expected": {
+        "default_gateway": "0.0.0.0"
+      }
+    }
+  ]
+}
