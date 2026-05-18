@@ -1,0 +1,49 @@
+{
+  "os": "cisco_ios",
+  "command": "show lldp",
+  "schema": {
+    "name": "ShowLldpResult",
+    "fields": {
+      "lldp_enabled": {
+        "type": "bool",
+        "required": true
+      },
+      "status": {
+        "type": "str",
+        "required": false
+      },
+      "hello_timer_seconds": {
+        "type": "int",
+        "required": false
+      },
+      "hold_timer_seconds": {
+        "type": "int",
+        "required": false
+      },
+      "reinit_delay_seconds": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "show lldp output when LLDP is not enabled globally",
+      "input": "% LLDP is not enabled\n",
+      "expected": {
+        "lldp_enabled": false
+      }
+    },
+    {
+      "name": "show lldp output with LLDP enabled showing global timer settings",
+      "input": "Global LLDP Information:\n    Status: ACTIVE\n    LLDP advertisements are sent every 30 seconds\n    LLDP hold time advertised is 120 seconds\n    LLDP interface reinitialisation delay is 2 seconds\n",
+      "expected": {
+        "lldp_enabled": true,
+        "status": "ACTIVE",
+        "hello_timer_seconds": 30,
+        "hold_timer_seconds": 120,
+        "reinit_delay_seconds": 2
+      }
+    }
+  ]
+}
