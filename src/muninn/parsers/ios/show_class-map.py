@@ -1,7 +1,7 @@
 """Parser for 'show class-map' command on IOS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -92,4 +92,4 @@ class ShowClassMapParser(BaseParser["ShowClassMapResult"]):
             msg = "No class-map entries found in output"
             raise ValueError(msg)
 
-        return cast("ShowClassMapResult", {"class_maps": class_maps})
+        return {"class_maps": class_maps}
