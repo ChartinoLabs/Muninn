@@ -1,7 +1,7 @@
 """Parser for 'show errdisable detect' command on IOS."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -13,9 +13,14 @@ _HEADER_RE = re.compile(
     r"^\s*ErrDisable\s+Reason\s+Detection\s+Mode\s*$", re.IGNORECASE
 )
 _ROW_RE = re.compile(
-    r"^(?P<reason>.+?)\s{2,}(?P<detection>Enabled|Disabled)\s+(?P<mode>\S+)\s*$",
+    r"^(?P<reason>\S(?:.*?\S)?)\s{2,}(?P<detection>Enabled|Disabled)\s+(?P<mode>\S+)\s*$",
     re.IGNORECASE,
 )
+# Footer notes emitted by some IOS images after the reasons table, e.g.:
+#   Recovery command: "clear errdisable interface IntName"
+# These can be truncated by narrow terminals into shapes that resemble table
+# rows; explicitly skip any line that starts with such a footer label.
+_FOOTER_PREFIX_RE = re.compile(r"^\s*Recovery\s+command\s*:", re.IGNORECASE)
 
 
 class ErrdisableReasonEntry(TypedDict):
@@ -63,6 +68,7 @@ class ShowErrdisableDetectParser(BaseParser[ShowErrdisableDetectResult]):
                 not line.strip()
                 or _HEADER_RE.match(line)
                 or SEPARATOR_DASH_SPACE_RE.match(line)
+                or _FOOTER_PREFIX_RE.match(line)
             ):
                 continue
 
@@ -79,4 +85,4 @@ class ShowErrdisableDetectParser(BaseParser[ShowErrdisableDetectResult]):
             msg = "No errdisable reasons parsed from 'show errdisable detect' output"
             raise ValueError(msg)
 
-        return cast(ShowErrdisableDetectResult, {"reasons": reasons})
+        return {"reasons": reasons}
