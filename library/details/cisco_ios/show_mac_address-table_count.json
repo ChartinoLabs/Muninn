@@ -1,0 +1,63 @@
+{
+  "os": "cisco_ios",
+  "command": "show mac address-table count",
+  "schema": {
+    "name": "ShowMacAddressTableCountResult",
+    "fields": {
+      "vlans": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VlanMacCount",
+            "fields": {
+              "dynamic_address_count": {
+                "type": "int",
+                "required": true
+              },
+              "static_address_count": {
+                "type": "int",
+                "required": true
+              },
+              "total_mac_addresses": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_mac_address_space_available": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic per-VLAN MAC address-table count summary with total available MAC address space footer",
+      "input": "Mac Entries for Vlan 1:\n---------------------------\nDynamic Address Count  : 0\nStatic  Address Count  : 0\nTotal Mac Addresses    : 0\n\nMac Entries for Vlan 21:\n---------------------------\nDynamic Address Count  : 8\nStatic  Address Count  : 0\nTotal Mac Addresses    : 8\n\nMac Entries for Vlan 1000:\n---------------------------\nDynamic Address Count  : 0\nStatic  Address Count  : 0\nTotal Mac Addresses    : 0\n\nTotal Mac Address Space Available: 6113\n",
+      "expected": {
+        "total_mac_address_space_available": 6113,
+        "vlans": {
+          "1": {
+            "dynamic_address_count": 0,
+            "static_address_count": 0,
+            "total_mac_addresses": 0
+          },
+          "21": {
+            "dynamic_address_count": 8,
+            "static_address_count": 0,
+            "total_mac_addresses": 8
+          },
+          "1000": {
+            "dynamic_address_count": 0,
+            "static_address_count": 0,
+            "total_mac_addresses": 0
+          }
+        }
+      }
+    }
+  ]
+}

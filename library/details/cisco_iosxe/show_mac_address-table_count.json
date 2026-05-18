@@ -1,0 +1,38 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show mac address-table count",
+  "schema": {
+    "name": "ShowMacAddressTableCountResult",
+    "fields": {
+      "vlans": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VlanMacCount",
+            "fields": {
+              "dynamic_address_count": {
+                "type": "int",
+                "required": true
+              },
+              "static_address_count": {
+                "type": "int",
+                "required": true
+              },
+              "total_mac_addresses": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_mac_address_space_available": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": []
+}
