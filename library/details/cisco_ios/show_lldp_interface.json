@@ -1,0 +1,120 @@
+{
+  "os": "cisco_ios",
+  "command": "show lldp interface",
+  "schema": {
+    "name": "ShowLldpInterfaceResult",
+    "fields": {
+      "lldp_enabled": {
+        "type": "bool",
+        "required": true
+      },
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceEntry",
+            "fields": {
+              "tx_enabled": {
+                "type": "bool",
+                "required": true
+              },
+              "rx_enabled": {
+                "type": "bool",
+                "required": true
+              },
+              "tx_state": {
+                "type": "str",
+                "required": true
+              },
+              "rx_state": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "LLDP enabled with per-interface Tx/Rx state across stack member interfaces",
+      "input": "FastEthernet0:\n    Tx: enabled\n    Rx: enabled\n    Tx state: INIT\n    Rx state: WAIT PORT OPER\n\nGigabitEthernet1/0/1:\n    Tx: enabled\n    Rx: enabled\n    Tx state: IDLE\n    Rx state: WAIT FOR FRAME\n\nGigabitEthernet1/0/2:\n    Tx: enabled\n    Rx: enabled\n    Tx state: IDLE\n    Rx state: WAIT FOR FRAME\n\nGigabitEthernet1/0/3:\n    Tx: enabled\n    Rx: enabled\n    Tx state: INIT\n    Rx state: WAIT PORT OPER\n\nGigabitEthernet1/0/4:\n    Tx: enabled\n    Rx: enabled\n    Tx state: INIT\n    Rx state: WAIT PORT OPER\n\nGigabitEthernet1/0/5:\n    Tx: enabled\n    Rx: enabled\n    Tx state: INIT\n    Rx state: WAIT PORT OPER\n\nGigabitEthernet1/0/6:\n    Tx: enabled\n    Rx: enabled\n    Tx state: INIT\n    Rx state: WAIT PORT OPER\n\nGigabitEthernet1/0/7:\n    Tx: enabled\n    Rx: enabled\n    Tx state: INIT\n    Rx state: WAIT PORT OPER\n\nGigabitEthernet1/0/8:\n    Tx: enabled\n    Rx: enabled\n    Tx state: INIT\n    Rx state: WAIT PORT OPER\n\nTenGigabitEthernet1/1/1:\n    Tx: enabled\n    Rx: enabled\n    Tx state: IDLE\n    Rx state: WAIT FOR FRAME\n",
+      "expected": {
+        "lldp_enabled": true,
+        "interfaces": {
+          "FastEthernet0": {
+            "tx_enabled": true,
+            "rx_enabled": true,
+            "tx_state": "INIT",
+            "rx_state": "WAIT PORT OPER"
+          },
+          "GigabitEthernet1/0/1": {
+            "tx_enabled": true,
+            "rx_enabled": true,
+            "tx_state": "IDLE",
+            "rx_state": "WAIT FOR FRAME"
+          },
+          "GigabitEthernet1/0/2": {
+            "tx_enabled": true,
+            "rx_enabled": true,
+            "tx_state": "IDLE",
+            "rx_state": "WAIT FOR FRAME"
+          },
+          "GigabitEthernet1/0/3": {
+            "tx_enabled": true,
+            "rx_enabled": true,
+            "tx_state": "INIT",
+            "rx_state": "WAIT PORT OPER"
+          },
+          "GigabitEthernet1/0/4": {
+            "tx_enabled": true,
+            "rx_enabled": true,
+            "tx_state": "INIT",
+            "rx_state": "WAIT PORT OPER"
+          },
+          "GigabitEthernet1/0/5": {
+            "tx_enabled": true,
+            "rx_enabled": true,
+            "tx_state": "INIT",
+            "rx_state": "WAIT PORT OPER"
+          },
+          "GigabitEthernet1/0/6": {
+            "tx_enabled": true,
+            "rx_enabled": true,
+            "tx_state": "INIT",
+            "rx_state": "WAIT PORT OPER"
+          },
+          "GigabitEthernet1/0/7": {
+            "tx_enabled": true,
+            "rx_enabled": true,
+            "tx_state": "INIT",
+            "rx_state": "WAIT PORT OPER"
+          },
+          "GigabitEthernet1/0/8": {
+            "tx_enabled": true,
+            "rx_enabled": true,
+            "tx_state": "INIT",
+            "rx_state": "WAIT PORT OPER"
+          },
+          "TenGigabitEthernet1/1/1": {
+            "tx_enabled": true,
+            "rx_enabled": true,
+            "tx_state": "IDLE",
+            "rx_state": "WAIT FOR FRAME"
+          }
+        }
+      }
+    },
+    {
+      "name": "LLDP globally disabled - device returns '% LLDP is not enabled'",
+      "input": "% LLDP is not enabled\n",
+      "expected": {
+        "lldp_enabled": false,
+        "interfaces": {}
+      }
+    }
+  ]
+}
