@@ -67,7 +67,7 @@ _LIST_LABEL_MAP: dict[str, str] = {
 class HostKeyEntry(TypedDict):
     """Schema for an IOS SECSH-format host key entry."""
 
-    name: str
+    name: NotRequired[str]
     algorithm: NotRequired[str]
     key: NotRequired[str]
 
@@ -162,7 +162,7 @@ def _try_secsh_keyname(line: str, result: dict) -> bool:
     match = _SECSH_KEYNAME_RE.match(line)
     if not match:
         return False
-    hostkey = cast(HostKeyEntry, result.get("hostkey", {"name": ""}))
+    hostkey = cast(HostKeyEntry, result.get("hostkey", {}))
     hostkey["name"] = match.group("name")
     result["hostkey"] = hostkey
     return True
@@ -173,7 +173,7 @@ def _try_hostkey_blob(line: str, result: dict) -> bool:
     match = _HOSTKEY_BLOB_RE.match(line)
     if not match:
         return False
-    hostkey = cast(HostKeyEntry, result.get("hostkey", {"name": ""}))
+    hostkey = cast(HostKeyEntry, result.get("hostkey", {}))
     hostkey["algorithm"] = match.group("algo")
     blob = match.group("blob").strip()
     # Avoid persisting an obvious placeholder/redaction sentinel as a value.
