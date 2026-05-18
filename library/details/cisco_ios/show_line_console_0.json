@@ -1,0 +1,326 @@
+{
+  "os": "cisco_ios",
+  "command": "show line console 0",
+  "schema": {
+    "name": "ShowLineConsole0Result",
+    "fields": {
+      "tty_table": {
+        "type": {
+          "name": "TtyTableEntry",
+          "fields": {
+            "tty": {
+              "type": "int",
+              "required": true
+            },
+            "type": {
+              "type": "str",
+              "required": true
+            },
+            "tx_rx": {
+              "type": "str",
+              "required": false
+            },
+            "a": {
+              "type": "str",
+              "required": false
+            },
+            "modem": {
+              "type": "str",
+              "required": false
+            },
+            "roty": {
+              "type": "str",
+              "required": false
+            },
+            "acco": {
+              "type": "str",
+              "required": false
+            },
+            "acci": {
+              "type": "str",
+              "required": false
+            },
+            "uses": {
+              "type": "int",
+              "required": true
+            },
+            "noise": {
+              "type": "int",
+              "required": true
+            },
+            "overruns": {
+              "type": "str",
+              "required": true
+            },
+            "int": {
+              "type": "str",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "line": {
+        "type": "int",
+        "required": true
+      },
+      "location": {
+        "type": "str",
+        "required": false
+      },
+      "type": {
+        "type": "str",
+        "required": false
+      },
+      "length_lines": {
+        "type": "int",
+        "required": false
+      },
+      "width_columns": {
+        "type": "int",
+        "required": false
+      },
+      "baud_rate_tx": {
+        "type": "int",
+        "required": false
+      },
+      "baud_rate_rx": {
+        "type": "int",
+        "required": false
+      },
+      "parity": {
+        "type": "str",
+        "required": false
+      },
+      "stopbits": {
+        "type": "str",
+        "required": false
+      },
+      "databits": {
+        "type": "str",
+        "required": false
+      },
+      "status": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": false
+      },
+      "capabilities": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": false
+      },
+      "modem_state": {
+        "type": "str",
+        "required": false
+      },
+      "rj45_console": {
+        "type": "str",
+        "required": false
+      },
+      "usb_console_baud_rate": {
+        "type": "int",
+        "required": false
+      },
+      "special_chars": {
+        "type": {
+          "name": "SpecialCharsEntry",
+          "fields": {
+            "escape": {
+              "type": "str",
+              "required": false
+            },
+            "hold": {
+              "type": "str",
+              "required": false
+            },
+            "stop": {
+              "type": "str",
+              "required": false
+            },
+            "start": {
+              "type": "str",
+              "required": false
+            },
+            "disconnect": {
+              "type": "str",
+              "required": false
+            },
+            "activation": {
+              "type": "str",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "timeouts": {
+        "type": {
+          "name": "TimeoutsEntry",
+          "fields": {
+            "idle_exec": {
+              "type": "str",
+              "required": false
+            },
+            "idle_session": {
+              "type": "str",
+              "required": false
+            },
+            "modem_answer": {
+              "type": "str",
+              "required": false
+            },
+            "session": {
+              "type": "str",
+              "required": false
+            },
+            "dispatch": {
+              "type": "str",
+              "required": false
+            },
+            "idle_session_disconnect_warning": {
+              "type": "str",
+              "required": false
+            },
+            "login_sequence_user_response": {
+              "type": "str",
+              "required": false
+            },
+            "autoselect_initial_wait": {
+              "type": "str",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "modem_type": {
+        "type": "str",
+        "required": false
+      },
+      "session_limit": {
+        "type": "str",
+        "required": false
+      },
+      "time_since_activation": {
+        "type": "str",
+        "required": false
+      },
+      "editing_enabled": {
+        "type": "bool",
+        "required": false
+      },
+      "history_enabled": {
+        "type": "bool",
+        "required": false
+      },
+      "history_size": {
+        "type": "int",
+        "required": false
+      },
+      "dns_resolution_enabled": {
+        "type": "bool",
+        "required": false
+      },
+      "full_user_help_enabled": {
+        "type": "bool",
+        "required": false
+      },
+      "allowed_input_transports": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": false
+      },
+      "allowed_output_transports": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": false
+      },
+      "preferred_transport": {
+        "type": "str",
+        "required": false
+      },
+      "shell_enabled": {
+        "type": "bool",
+        "required": false
+      },
+      "shell_trace": {
+        "type": "str",
+        "required": false
+      },
+      "output_characters_padded": {
+        "type": "bool",
+        "required": false
+      },
+      "special_data_dispatching_characters": {
+        "type": "bool",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic 'show line console 0' output from a Cisco Catalyst 3750-X stack member.",
+      "input": "Tty Typ     Tx/Rx    A Modem  Roty AccO AccI   Uses   Noise  Overruns   Int\n     0 CTY              -    -      -    -    -      0       0     0/0       -\n\nLine 0, Location: \"\", Type: \"\"\nLength: 24 lines, Width: 80 columns\nBaud rate (TX/RX) is 9600/9600, no parity, 2 stopbits, 8 databits\nStatus: Ready\nCapabilities: none\nModem state: Ready\nRJ45 Console is in use\nUSB Console baud rate = 9600\nSpecial Chars: Escape  Hold  Stop  Start  Disconnect  Activation\n                ^^x    none   -     -       none\nTimeouts:      Idle EXEC    Idle Session   Modem Answer  Session   Dispatch\n               00:10:00        never                        none     not set\n                            Idle Session Disconnect Warning\n                              never\n                            Login-sequence User Response\n                             00:00:30\n                            Autoselect Initial Wait\n                              not set\nModem type is unknown.\nSession limit is not set.\nTime since activation: never\nEditing is enabled.\nHistory is enabled, history size is 20.\nDNS resolution in show commands is enabled\nFull user help is disabled\nAllowed input transports are none.\nAllowed output transports are telnet ssh.\nPreferred transport is telnet.\nShell: enabled\nShell trace: off\nNo output characters are padded\nNo special data dispatching characters\n",
+      "expected": {
+        "tty_table": {
+          "tty": 0,
+          "type": "CTY",
+          "uses": 0,
+          "noise": 0,
+          "overruns": "0/0"
+        },
+        "line": 0,
+        "length_lines": 24,
+        "width_columns": 80,
+        "baud_rate_tx": 9600,
+        "baud_rate_rx": 9600,
+        "parity": "no parity",
+        "stopbits": "2",
+        "databits": "8",
+        "status": [
+          "Ready"
+        ],
+        "modem_state": "Ready",
+        "rj45_console": "in use",
+        "usb_console_baud_rate": 9600,
+        "special_chars": {
+          "escape": "^^x"
+        },
+        "modem_type": "unknown",
+        "session_limit": "not set",
+        "time_since_activation": "never",
+        "editing_enabled": true,
+        "history_enabled": true,
+        "history_size": 20,
+        "dns_resolution_enabled": true,
+        "full_user_help_enabled": false,
+        "allowed_output_transports": [
+          "telnet",
+          "ssh"
+        ],
+        "preferred_transport": "telnet",
+        "shell_enabled": true,
+        "shell_trace": "off",
+        "output_characters_padded": false,
+        "special_data_dispatching_characters": false,
+        "timeouts": {
+          "idle_exec": "00:10:00",
+          "idle_session": "never",
+          "dispatch": "not set",
+          "idle_session_disconnect_warning": "never",
+          "login_sequence_user_response": "00:00:30",
+          "autoselect_initial_wait": "not set"
+        }
+      }
+    }
+  ]
+}
