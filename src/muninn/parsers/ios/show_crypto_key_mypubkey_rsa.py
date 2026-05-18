@@ -17,7 +17,7 @@ class RsaKeyEntry(TypedDict):
     generated_at: str
     usage: str
     exportable: bool
-    key_data: str
+    key_data: NotRequired[str]
     storage_device: NotRequired[str]
     temporary: NotRequired[bool]
     redundancy_enabled: NotRequired[bool]
@@ -68,8 +68,15 @@ _KEY_DATA_HEADER_RE = re.compile(r"^\s+Key Data:\s*$")
 
 
 def _finalize_entry(entry: dict, key_data_lines: list[str]) -> RsaKeyEntry:
-    """Attach collected key data to an entry and cast to RsaKeyEntry."""
-    entry["key_data"] = "\n".join(key_data_lines).strip()
+    """Attach collected key data to an entry and cast to RsaKeyEntry.
+
+    ``key_data`` is only written when the device actually emitted key bytes;
+    omitting the field keeps the output free of empty-string placeholders
+    when a ``Key Data:`` section is absent or empty.
+    """
+    key_data = "\n".join(key_data_lines).strip()
+    if key_data:
+        entry["key_data"] = key_data
     return cast(RsaKeyEntry, entry)
 
 
