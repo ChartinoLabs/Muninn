@@ -1,0 +1,41 @@
+{
+  "os": "cisco_ios",
+  "command": "show ntp associations",
+  "schema": null,
+  "examples": [
+    {
+      "name": "NTP associations table with two configured GPS-referenced peers and candidate/sys.peer tally codes",
+      "input": "address         ref clock       st   when   poll reach  delay  offset   disp\n+~192.0.2.14   .GPS.            1    524   1024   377  1.303   0.340  0.054\n*~192.0.2.15   .GPS.            1    727   1024   377  1.299   0.340  0.091\n * sys.peer, # selected, + candidate, - outlyer, x falseticker, ~ configured\n",
+      "expected": {
+        "192.0.2.14": {
+          "address": "192.0.2.14",
+          "ref_clock": ".GPS.",
+          "stratum": 1,
+          "poll_seconds": 1024,
+          "reach": 255,
+          "reach_raw": "377",
+          "delay_ms": 1.303,
+          "offset_ms": 0.34,
+          "dispersion_ms": 0.054,
+          "tally": "candidate",
+          "configured": true,
+          "when_seconds": 524
+        },
+        "192.0.2.15": {
+          "address": "192.0.2.15",
+          "ref_clock": ".GPS.",
+          "stratum": 1,
+          "poll_seconds": 1024,
+          "reach": 255,
+          "reach_raw": "377",
+          "delay_ms": 1.299,
+          "offset_ms": 0.34,
+          "dispersion_ms": 0.091,
+          "tally": "sys.peer",
+          "configured": true,
+          "when_seconds": 727
+        }
+      }
+    }
+  ]
+}
