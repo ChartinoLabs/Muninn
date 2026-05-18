@@ -317,13 +317,14 @@ def _parse_tty_row(tty: int, rest: str) -> TtyTableEntry | None:
 # Mapping from Special Chars header columns to result keys
 _SPECIAL_CHARS_KEYS = ("escape", "hold", "stop", "start", "disconnect", "activation")
 
-# Mapping from Timeouts header columns to result keys
-_TIMEOUTS_MAIN_KEYS = (
-    "idle_exec",
-    "idle_session",
-    "modem_answer",
-    "session",
-    "dispatch",
+# Header column names (verbatim) → output keys for the main Timeouts table.
+# Order matters: used to locate column start positions in the header line.
+_TIMEOUTS_COLUMN_HEADERS: tuple[tuple[str, str], ...] = (
+    ("Idle EXEC", "idle_exec"),
+    ("Idle Session", "idle_session"),
+    ("Modem Answer", "modem_answer"),
+    ("Session", "session"),
+    ("Dispatch", "dispatch"),
 )
 
 
@@ -338,23 +339,38 @@ def _parse_special_chars_values(line: str) -> SpecialCharsEntry:
     return cast(SpecialCharsEntry, entry)
 
 
-def _tokenize_preserving_not_set(line: str) -> list[str]:
-    """Tokenize a line, treating literal 'not set' as a single token.
+def _locate_timeouts_columns(header_line: str) -> list[tuple[int, str]]:
+    """Return ``(start_col, output_key)`` for each Timeouts column header.
 
-    IOS renders "not set" with internal whitespace, so a naive split would
-    fragment it across two columns. Replace it with a sentinel before
-    splitting, then restore.
+    Search for each known column name sequentially so that the standalone
+    ``Session`` column is matched after ``Idle Session``.
     """
-    sentinel = "\x00NOTSET\x00"
-    rebuilt = line.replace("not set", sentinel)
-    return [t.replace(sentinel, "not set") for t in rebuilt.split()]
+    columns: list[tuple[int, str]] = []
+    cursor = 0
+    for header_text, output_key in _TIMEOUTS_COLUMN_HEADERS:
+        idx = header_line.find(header_text, cursor)
+        if idx == -1:
+            return []
+        columns.append((idx, output_key))
+        cursor = idx + len(header_text)
+    return columns
 
 
-def _parse_timeouts_main_values(line: str, timeouts: dict) -> None:
-    """Parse the data row beneath the main Timeouts header."""
-    tokens = _tokenize_preserving_not_set(line)
-    for key, token in zip(_TIMEOUTS_MAIN_KEYS, tokens, strict=False):
-        value = _omit_placeholder(token)
+def _parse_timeouts_main_values(
+    line: str, columns: list[tuple[int, str]], timeouts: dict
+) -> None:
+    """Parse the data row beneath the main Timeouts header.
+
+    IOS aligns Timeouts values within fixed column slots from the header row.
+    Blank middle columns must not shift adjacent values, so slice the data
+    line by each column's start position rather than whitespace-splitting.
+    """
+    if not columns:
+        return
+    for i, (start, key) in enumerate(columns):
+        end = columns[i + 1][0] if i + 1 < len(columns) else len(line)
+        raw = line[start:end].strip()
+        value = _omit_placeholder(raw)
         if value is not None:
             timeouts[key] = value
 
@@ -366,18 +382,20 @@ class _ParseState:
     def __init__(self) -> None:
         self.expect_special_chars_values = False
         self.expect_timeouts_main_values = False
+        self.timeouts_columns: list[tuple[int, str]] = []
         self.expect_idle_session_disconnect_value = False
         self.expect_login_sequence_value = False
         self.expect_autoselect_value = False
 
 
-def _try_block_headers(stripped: str, state: _ParseState) -> bool:
+def _try_block_headers(line: str, stripped: str, state: _ParseState) -> bool:
     """Detect block headers (Special Chars / Timeouts and sub-headers)."""
     if _SPECIAL_CHARS_HDR_RE.match(stripped):
         state.expect_special_chars_values = True
         return True
     if _TIMEOUTS_HDR_RE.match(stripped):
         state.expect_timeouts_main_values = True
+        state.timeouts_columns = _locate_timeouts_columns(line)
         return True
     return False
 
@@ -397,7 +415,7 @@ def _try_indented_timeout_subheaders(line: str, state: _ParseState) -> bool:
 
 
 def _consume_block_value(
-    stripped: str, state: _ParseState, result: dict, timeouts: dict
+    line: str, stripped: str, state: _ParseState, result: dict, timeouts: dict
 ) -> bool:
     """Consume the data row immediately following a recognized block header."""
     if state.expect_special_chars_values:
@@ -405,8 +423,9 @@ def _consume_block_value(
         state.expect_special_chars_values = False
         return True
     if state.expect_timeouts_main_values:
-        _parse_timeouts_main_values(stripped, timeouts)
+        _parse_timeouts_main_values(line, state.timeouts_columns, timeouts)
         state.expect_timeouts_main_values = False
+        state.timeouts_columns = []
         return True
     if state.expect_idle_session_disconnect_value:
         value = _omit_placeholder(stripped)
@@ -654,10 +673,10 @@ def _parse_line(
     ):
         return
 
-    if _consume_block_value(stripped, state, result, timeouts):
+    if _consume_block_value(line, stripped, state, result, timeouts):
         return
 
-    if _try_block_headers(stripped, state):
+    if _try_block_headers(line, stripped, state):
         return
 
     if _try_tty_table(stripped, result, in_tty_table):
