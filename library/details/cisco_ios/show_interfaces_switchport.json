@@ -1,0 +1,216 @@
+{
+  "os": "cisco_ios",
+  "command": "show interfaces switchport",
+  "schema": {
+    "name": "ShowInterfacesSwitchportResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SwitchportEntry",
+            "fields": {
+              "switchport": {
+                "type": "str",
+                "required": false
+              },
+              "administrative_mode": {
+                "type": "str",
+                "required": false
+              },
+              "operational_mode": {
+                "type": "str",
+                "required": false
+              },
+              "operational_mode_bundle": {
+                "type": "str",
+                "required": false
+              },
+              "administrative_trunking_encapsulation": {
+                "type": "str",
+                "required": false
+              },
+              "operational_trunking_encapsulation": {
+                "type": "str",
+                "required": false
+              },
+              "negotiation_of_trunking": {
+                "type": "str",
+                "required": false
+              },
+              "access_vlan": {
+                "type": "int",
+                "required": false
+              },
+              "access_vlan_name": {
+                "type": "str",
+                "required": false
+              },
+              "trunk_native_vlan": {
+                "type": "int",
+                "required": false
+              },
+              "trunk_native_vlan_name": {
+                "type": "str",
+                "required": false
+              },
+              "administrative_native_vlan_tagging": {
+                "type": "str",
+                "required": false
+              },
+              "voice_vlan": {
+                "type": "int",
+                "required": false
+              },
+              "voice_vlan_name": {
+                "type": "str",
+                "required": false
+              },
+              "trunk_vlans_allowed": {
+                "type": "str",
+                "required": false
+              },
+              "pruning_vlans_enabled": {
+                "type": "str",
+                "required": false
+              },
+              "capture_mode": {
+                "type": "str",
+                "required": false
+              },
+              "capture_vlans_allowed": {
+                "type": "str",
+                "required": false
+              },
+              "protected": {
+                "type": "str",
+                "required": false
+              },
+              "unknown_unicast_blocked": {
+                "type": "str",
+                "required": false
+              },
+              "unknown_multicast_blocked": {
+                "type": "str",
+                "required": false
+              },
+              "appliance_trust": {
+                "type": "str",
+                "required": false
+              },
+              "operational_private_vlan": {
+                "type": "str",
+                "required": false
+              },
+              "admin_private_vlan": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": "str"
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic IOS switchport output with trunk, access, and down interfaces including port-channel bundle membership",
+      "input": "Name: Gi1/0/1\nSwitchport: Enabled\nAdministrative Mode: trunk\nOperational Mode: trunk (member of bundle Po1)\nAdministrative Trunking Encapsulation: dot1q\nOperational Trunking Encapsulation: dot1q\nNegotiation of Trunking: On\nAccess Mode VLAN: 1 (default)\nTrunking Native Mode VLAN: 1 (default)\nAdministrative Native VLAN tagging: enabled\nVoice VLAN: none\nAdministrative private-vlan host-association: none\nAdministrative private-vlan mapping: none\nAdministrative private-vlan trunk native VLAN: none\nAdministrative private-vlan trunk Native VLAN tagging: enabled\nAdministrative private-vlan trunk encapsulation: dot1q\nAdministrative private-vlan trunk normal VLANs: none\nAdministrative private-vlan trunk associations: none\nAdministrative private-vlan trunk mappings: none\nOperational private-vlan: none\nTrunking VLANs Enabled: 21\nPruning VLANs Enabled: 2-1001\nCapture Mode Disabled\nCapture VLANs Allowed: ALL\n\nProtected: false\nUnknown unicast blocked: disabled\nUnknown multicast blocked: disabled\nAppliance trust: none\n\nName: Gi1/0/2\nSwitchport: Enabled\nAdministrative Mode: static access\nOperational Mode: static access (member of bundle Po10)\nAdministrative Trunking Encapsulation: negotiate\nOperational Trunking Encapsulation: native\nNegotiation of Trunking: Off\nAccess Mode VLAN: 21 (Corp-10-225-207-0)\nTrunking Native Mode VLAN: 1 (default)\nAdministrative Native VLAN tagging: enabled\nVoice VLAN: none\nAdministrative private-vlan host-association: none\nAdministrative private-vlan mapping: none\nAdministrative private-vlan trunk native VLAN: none\nAdministrative private-vlan trunk Native VLAN tagging: enabled\nAdministrative private-vlan trunk encapsulation: dot1q\nAdministrative private-vlan trunk normal VLANs: none\nAdministrative private-vlan trunk associations: none\nAdministrative private-vlan trunk mappings: none\nOperational private-vlan: none\nTrunking VLANs Enabled: ALL\nPruning VLANs Enabled: 2-1001\nCapture Mode Disabled\nCapture VLANs Allowed: ALL\n\nProtected: false\nUnknown unicast blocked: disabled\nUnknown multicast blocked: disabled\nAppliance trust: none\n\nName: Gi1/0/3\nSwitchport: Enabled\nAdministrative Mode: dynamic auto\nOperational Mode: down\nAdministrative Trunking Encapsulation: negotiate\nNegotiation of Trunking: On\nAccess Mode VLAN: 1 (default)\nTrunking Native Mode VLAN: 1 (default)\nAdministrative Native VLAN tagging: enabled\nVoice VLAN: none\nAdministrative private-vlan host-association: none\nAdministrative private-vlan mapping: none\nAdministrative private-vlan trunk native VLAN: none\nAdministrative private-vlan trunk Native VLAN tagging: enabled\nAdministrative private-vlan trunk encapsulation: dot1q\nAdministrative private-vlan trunk normal VLANs: none\nAdministrative private-vlan trunk associations: none\nAdministrative private-vlan trunk mappings: none\nOperational private-vlan: none\nTrunking VLANs Enabled: ALL\nPruning VLANs Enabled: 2-1001\nCapture Mode Disabled\nCapture VLANs Allowed: ALL\n\nProtected: false\nUnknown unicast blocked: disabled\nUnknown multicast blocked: disabled\nAppliance trust: none\n\nName: Gi1/0/4\nSwitchport: Enabled\nAdministrative Mode: dynamic auto\nOperational Mode: down\nAdministrative Trunking Encapsulation: negotiate\nNegotiation of Trunking: On\nAccess Mode VLAN: 1 (default)\nTrunking Native Mode VLAN: 1 (default)\nAdministrative Native VLAN tagging: enabled\nVoice VLAN: none\nAdministrative private-vlan host-association: none\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1/0/1": {
+            "switchport": "Enabled",
+            "operational_mode": "trunk",
+            "operational_mode_bundle": "Port-channel1",
+            "access_vlan": 1,
+            "access_vlan_name": "default",
+            "trunk_native_vlan": 1,
+            "trunk_native_vlan_name": "default",
+            "administrative_mode": "trunk",
+            "administrative_trunking_encapsulation": "dot1q",
+            "operational_trunking_encapsulation": "dot1q",
+            "negotiation_of_trunking": "On",
+            "administrative_native_vlan_tagging": "enabled",
+            "trunk_vlans_allowed": "21",
+            "pruning_vlans_enabled": "2-1001",
+            "capture_mode": "Disabled",
+            "capture_vlans_allowed": "ALL",
+            "protected": "false",
+            "unknown_unicast_blocked": "disabled",
+            "unknown_multicast_blocked": "disabled",
+            "admin_private_vlan": {
+              "trunk_native_vlan_tagging": "enabled",
+              "trunk_encapsulation": "dot1q"
+            }
+          },
+          "GigabitEthernet1/0/2": {
+            "switchport": "Enabled",
+            "operational_mode": "static access",
+            "operational_mode_bundle": "Port-channel10",
+            "access_vlan": 21,
+            "access_vlan_name": "Corp-10-225-207-0",
+            "trunk_native_vlan": 1,
+            "trunk_native_vlan_name": "default",
+            "administrative_mode": "static access",
+            "administrative_trunking_encapsulation": "negotiate",
+            "operational_trunking_encapsulation": "native",
+            "negotiation_of_trunking": "Off",
+            "administrative_native_vlan_tagging": "enabled",
+            "trunk_vlans_allowed": "ALL",
+            "pruning_vlans_enabled": "2-1001",
+            "capture_mode": "Disabled",
+            "capture_vlans_allowed": "ALL",
+            "protected": "false",
+            "unknown_unicast_blocked": "disabled",
+            "unknown_multicast_blocked": "disabled",
+            "admin_private_vlan": {
+              "trunk_native_vlan_tagging": "enabled",
+              "trunk_encapsulation": "dot1q"
+            }
+          },
+          "GigabitEthernet1/0/3": {
+            "switchport": "Enabled",
+            "operational_mode": "down",
+            "access_vlan": 1,
+            "access_vlan_name": "default",
+            "trunk_native_vlan": 1,
+            "trunk_native_vlan_name": "default",
+            "administrative_mode": "dynamic auto",
+            "administrative_trunking_encapsulation": "negotiate",
+            "negotiation_of_trunking": "On",
+            "administrative_native_vlan_tagging": "enabled",
+            "trunk_vlans_allowed": "ALL",
+            "pruning_vlans_enabled": "2-1001",
+            "capture_mode": "Disabled",
+            "capture_vlans_allowed": "ALL",
+            "protected": "false",
+            "unknown_unicast_blocked": "disabled",
+            "unknown_multicast_blocked": "disabled",
+            "admin_private_vlan": {
+              "trunk_native_vlan_tagging": "enabled",
+              "trunk_encapsulation": "dot1q"
+            }
+          },
+          "GigabitEthernet1/0/4": {
+            "switchport": "Enabled",
+            "operational_mode": "down",
+            "access_vlan": 1,
+            "access_vlan_name": "default",
+            "trunk_native_vlan": 1,
+            "trunk_native_vlan_name": "default",
+            "administrative_mode": "dynamic auto",
+            "administrative_trunking_encapsulation": "negotiate",
+            "negotiation_of_trunking": "On",
+            "administrative_native_vlan_tagging": "enabled"
+          }
+        }
+      }
+    }
+  ]
+}
