@@ -1,0 +1,106 @@
+{
+  "os": "cisco_ios",
+  "command": "show crypto key mypubkey rsa",
+  "schema": {
+    "name": "ShowCryptoKeyMypubkeyRsaResult",
+    "fields": {
+      "keys": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RsaKeyEntry",
+            "fields": {
+              "key_name": {
+                "type": "str",
+                "required": true
+              },
+              "key_type": {
+                "type": "str",
+                "required": true
+              },
+              "generated_at": {
+                "type": "str",
+                "required": true
+              },
+              "usage": {
+                "type": "str",
+                "required": true
+              },
+              "exportable": {
+                "type": "bool",
+                "required": true
+              },
+              "key_data": {
+                "type": "str",
+                "required": false
+              },
+              "storage_device": {
+                "type": "str",
+                "required": false
+              },
+              "temporary": {
+                "type": "bool",
+                "required": false
+              },
+              "redundancy_enabled": {
+                "type": "bool",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Public RSA keys including self-signed and temporary keys",
+      "input": "% Key pair was generated at: 01:29:31 UTC Mar 30 2011\nKey name: TP-self-signed-2189069696\nKey type: RSA KEYS\n Storage Device: private-config\n Usage: General Purpose Key\n Key is not exportable. Redundancy enabled.\n Key Data:\n  <KEY DATA REDACTED>\n% Key pair was generated at: 01:31:53 UTC Mar 30 2011\nKey name: TP-self-signed-2188743936\nKey type: RSA KEYS\n Storage Device: private-config\n Usage: General Purpose Key\n Key is not exportable. Redundancy enabled.\n Key Data:\n  <KEY DATA REDACTED>\n% Key pair was generated at: 02:26:28 UTC Jan 2 2006\nKey name: IOS-SW1.example.com\nKey type: RSA KEYS\n Storage Device: private-config\n Usage: General Purpose Key\n Key is not exportable. Redundancy enabled.\n Key Data:\n  <KEY DATA REDACTED>\n% Key pair was generated at: 00:03:32 UTC Jan 2 2006\nKey name: TP-self-signed-2189069696.server\nKey type: RSA KEYS\nTemporary key\n Usage: Encryption Key\n Key is not exportable.\n Key Data:\n  <KEY DATA REDACTED>\n",
+      "expected": {
+        "keys": {
+          "TP-self-signed-2189069696": {
+            "generated_at": "01:29:31 UTC Mar 30 2011",
+            "key_name": "TP-self-signed-2189069696",
+            "key_type": "RSA KEYS",
+            "storage_device": "private-config",
+            "usage": "General Purpose Key",
+            "exportable": false,
+            "redundancy_enabled": true,
+            "key_data": "<KEY DATA REDACTED>"
+          },
+          "TP-self-signed-2188743936": {
+            "generated_at": "01:31:53 UTC Mar 30 2011",
+            "key_name": "TP-self-signed-2188743936",
+            "key_type": "RSA KEYS",
+            "storage_device": "private-config",
+            "usage": "General Purpose Key",
+            "exportable": false,
+            "redundancy_enabled": true,
+            "key_data": "<KEY DATA REDACTED>"
+          },
+          "IOS-SW1.example.com": {
+            "generated_at": "02:26:28 UTC Jan 2 2006",
+            "key_name": "IOS-SW1.example.com",
+            "key_type": "RSA KEYS",
+            "storage_device": "private-config",
+            "usage": "General Purpose Key",
+            "exportable": false,
+            "redundancy_enabled": true,
+            "key_data": "<KEY DATA REDACTED>"
+          },
+          "TP-self-signed-2189069696.server": {
+            "generated_at": "00:03:32 UTC Jan 2 2006",
+            "key_name": "TP-self-signed-2189069696.server",
+            "key_type": "RSA KEYS",
+            "temporary": true,
+            "usage": "Encryption Key",
+            "exportable": false,
+            "key_data": "<KEY DATA REDACTED>"
+          }
+        }
+      }
+    }
+  ]
+}
