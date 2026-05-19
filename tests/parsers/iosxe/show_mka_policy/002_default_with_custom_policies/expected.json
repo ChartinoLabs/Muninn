@@ -1,0 +1,47 @@
+{
+    "policies": {
+        "DEFAULT POLICY": {
+            "key_server_priority": 0,
+            "delay_protect": "FALSE",
+            "confidentiality_offset": 0,
+            "sak_rekey_on_live_peer_loss": "FALSE",
+            "include_icv_indicator": "TRUE",
+            "cipher_suites": [
+                "GCM-AES-128",
+                "GCM-AES-256"
+            ]
+        },
+        "MACSEC_POLICY_1": {
+            "key_server_priority": 0,
+            "delay_protect": "FALSE",
+            "confidentiality_offset": 0,
+            "sak_rekey_on_live_peer_loss": "FALSE",
+            "include_icv_indicator": "TRUE",
+            "cipher_suites": [
+                "GCM-AES-256"
+            ],
+            "interfaces_applied": [
+                "TenGigabitEthernet0/0/0",
+                "TenGigabitEthernet0/0/1"
+            ]
+        },
+        "macsec": {
+            "key_server_priority": 0,
+            "delay_protect": "FALSE",
+            "confidentiality_offset": 30,
+            "sak_rekey_on_live_peer_loss": "FALSE",
+            "include_icv_indicator": "TRUE",
+            "cipher_suites": [
+                "GCM-AES-128"
+            ],
+            "interfaces_applied": [
+                "TenGigabitEthernet1/0/48",
+                "FortyGigabitEthernet1/1/2",
+                "GigabitEthernet2/0/12",
+                "GigabitEthernet2/0/22",
+                "TenGigabitEthernet3/0/46",
+                "TenGigabitEthernet3/0/48"
+            ]
+        }
+    }
+}
