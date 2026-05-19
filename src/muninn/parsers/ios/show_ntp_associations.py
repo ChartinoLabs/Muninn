@@ -1,4 +1,4 @@
-"""Parser for 'show ntp associations' command on Cisco IOS."""
+"""Parser for 'show ntp associations' command on Cisco IOS and IOS-XE."""
 
 import re
 from typing import ClassVar, NotRequired, TypedDict
@@ -8,7 +8,7 @@ from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
 
-# NTP tally code meanings on Cisco IOS:
+# NTP tally code meanings on Cisco IOS/IOS-XE:
 #   * = sys.peer (current sync source)
 #   # = selected (selected for sync, distance exceeds maximum value)
 #   + = candidate
@@ -23,13 +23,13 @@ _TALLY_CODES: dict[str, str] = {
     "x": "falseticker",
 }
 
-# Second-character configuration marker meanings on Cisco IOS:
+# Second-character configuration marker meanings on Cisco IOS/IOS-XE:
 #   ~ = configured (statically configured peer/server)
 _CONFIG_MARKER_CONFIGURED = "~"
 
 
 class NtpPeerEntry(TypedDict):
-    """Schema for a single NTP peer association entry on Cisco IOS.
+    """Schema for a single NTP peer association entry on Cisco IOS/IOS-XE.
 
     The ``reach`` field is an 8-bit shift register from ``ntpq``: each bit
     records whether one of the most recent eight polls succeeded.  The raw
@@ -57,7 +57,7 @@ class NtpPeerEntry(TypedDict):
 ShowNtpAssociationsResult = dict[str, NtpPeerEntry]
 
 
-# Match NTP association lines.  IOS prefixes each peer with a two-character
+# Match NTP association lines.  IOS/IOS-XE prefixes each peer with a two-character
 # prefix: the first character is the tally code (``*+-x# `` or space) and the
 # second character is the configuration marker (``~`` for configured peers,
 # space otherwise).  The reference clock token may contain dots (``.GPS.``),
@@ -82,18 +82,21 @@ _HEADER_RE = re.compile(
     r"delay\s+offset\s+disp\s*$"
 )
 
-# The legend line on IOS starts with "* sys.peer" after some leading
+# The legend line on IOS/IOS-XE starts with "* sys.peer" after some leading
 # whitespace; matching it lets us skip the legend cleanly.
 _LEGEND_RE = re.compile(r"^\s*\*\s*sys\.peer,")
 
 
 @register(OS.CISCO_IOS, "show ntp associations")
+@register(OS.CISCO_IOSXE, "show ntp associations")
 class ShowNtpAssociationsParser(BaseParser[ShowNtpAssociationsResult]):
-    """Parser for 'show ntp associations' command on Cisco IOS.
+    """Parser for 'show ntp associations' command on Cisco IOS and IOS-XE.
 
     Parses the NTP peer association table including tally code, configuration
     marker, reference clock, stratum, polling interval, reachability, and
-    timing metrics (delay, offset, dispersion).
+    timing metrics (delay, offset, dispersion).  IOS and IOS-XE share an
+    identical output format for this command, so a single parser handles both
+    platforms.
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
@@ -150,7 +153,7 @@ class ShowNtpAssociationsParser(BaseParser[ShowNtpAssociationsResult]):
 
     @classmethod
     def parse(cls, output: str) -> ShowNtpAssociationsResult:
-        """Parse 'show ntp associations' output on Cisco IOS.
+        """Parse 'show ntp associations' output on Cisco IOS/IOS-XE.
 
         Args:
             output: Raw CLI output from the command.
