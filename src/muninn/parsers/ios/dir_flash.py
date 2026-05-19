@@ -1,4 +1,4 @@
-"""Parser for 'dir flash:' command on Cisco IOS."""
+"""Parser for 'dir <filesystem>' commands on Cisco IOS."""
 
 import re
 from typing import ClassVar, NotRequired, TypedDict
@@ -20,7 +20,7 @@ class FileEntry(TypedDict):
 
 
 class DirResult(TypedDict):
-    """Schema for 'dir flash:' parsed output."""
+    """Schema for 'dir <filesystem>' parsed output."""
 
     directory: str
     files: dict[str, FileEntry]
@@ -57,9 +57,13 @@ def _build_file_entry(match: re.Match[str], name: str) -> FileEntry:
     )
 
 
-@register(OS.CISCO_IOS, "dir flash:")
+@register(OS.CISCO_IOS, r"dir (?P<filesystem>\S+)")
 class DirFlashParser(BaseParser[DirResult]):
-    """Parser for 'dir flash:' command output on Cisco IOS.
+    """Parser for 'dir <filesystem>' command output on Cisco IOS.
+
+    Handles any filesystem argument (e.g. ``dir flash:``, ``dir
+    bootflash:``, ``dir slot0:``, ``dir nvram:``). The bare ``dir`` form
+    is handled by ``DirParser`` in ``ios/dir.py``.
 
     Example output::
 
@@ -78,10 +82,10 @@ class DirFlashParser(BaseParser[DirResult]):
 
     @classmethod
     def parse(cls, output: str) -> DirResult:
-        """Parse 'dir flash:' output.
+        """Parse 'dir <filesystem>' output.
 
         Args:
-            output: Raw CLI output from 'dir flash:' command.
+            output: Raw CLI output from a ``dir <filesystem>`` command.
 
         Returns:
             Parsed directory listing data.
