@@ -1,4 +1,4 @@
-"""Parser for 'show vtp counters' command on IOS."""
+"""Parser for 'show vtp counters' command on IOS / IOS-XE."""
 
 import re
 from typing import ClassVar, NotRequired, TypedDict, cast
@@ -98,8 +98,9 @@ def _try_pruning_row(line: str, pruning: dict[str, VtpPruningEntry]) -> None:
 
 
 @register(OS.CISCO_IOS, "show vtp counters")
+@register(OS.CISCO_IOSXE, "show vtp counters")
 class ShowVtpCountersParser(BaseParser[ShowVtpCountersResult]):
-    """Parser for 'show vtp counters' command on IOS."""
+    """Parser for 'show vtp counters' command on IOS / IOS-XE."""
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset(
         {
