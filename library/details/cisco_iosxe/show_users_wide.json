@@ -1,0 +1,71 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show users wide",
+  "schema": {
+    "name": "ShowUsersWideResult",
+    "fields": {
+      "lines": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "UserWideEntry",
+              "fields": {
+                "active": {
+                  "type": "bool",
+                  "required": true
+                },
+                "user": {
+                  "type": "str",
+                  "required": false
+                },
+                "host": {
+                  "type": "str",
+                  "required": false
+                },
+                "idle": {
+                  "type": "str",
+                  "required": false
+                },
+                "location": {
+                  "type": "str",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "show users wide output from a physical testbed device (TAC-R2) with two vty sessions and one console session",
+      "input": "Line                    User\n   0 con 0                  admin\n 866 vty 0                  admin\n*867 vty 1                  admin\n\n  Interface    User               Mode         Idle     Peer Address\n",
+      "expected": {
+        "lines": {
+          "con": {
+            "0": {
+              "active": false,
+              "user": "admin"
+            }
+          },
+          "vty": {
+            "0": {
+              "active": false,
+              "user": "admin"
+            },
+            "1": {
+              "active": true,
+              "user": "admin"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
