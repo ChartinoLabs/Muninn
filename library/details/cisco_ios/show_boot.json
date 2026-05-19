@@ -1,0 +1,129 @@
+{
+  "os": "cisco_ios",
+  "command": "show boot",
+  "schema": {
+    "name": "ShowBootResult",
+    "fields": {
+      "switches": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "BootEntry",
+            "fields": {
+              "boot_path_list": {
+                "type": "str",
+                "required": false
+              },
+              "config_file": {
+                "type": "str",
+                "required": false
+              },
+              "private_config_file": {
+                "type": "str",
+                "required": false
+              },
+              "enable_break": {
+                "type": "bool",
+                "required": false
+              },
+              "manual_boot": {
+                "type": "bool",
+                "required": false
+              },
+              "allow_dev_key": {
+                "type": "bool",
+                "required": false
+              },
+              "helper_path_list": {
+                "type": "str",
+                "required": false
+              },
+              "auto_upgrade": {
+                "type": "bool",
+                "required": false
+              },
+              "auto_upgrade_path": {
+                "type": "str",
+                "required": false
+              },
+              "boot_optimization": {
+                "type": "bool",
+                "required": false
+              },
+              "nvram_buffer_size": {
+                "type": "int",
+                "required": false
+              },
+              "config_download_timeout": {
+                "type": "int",
+                "required": false
+              },
+              "config_download_via_dhcp": {
+                "type": "str",
+                "required": false
+              },
+              "boot_mode": {
+                "type": "str",
+                "required": false
+              },
+              "ipxe_timeout": {
+                "type": "int",
+                "required": false
+              },
+              "baud": {
+                "type": "int",
+                "required": false
+              },
+              "configuration_register": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Path-list format on Catalyst 3750-X stack with two member switch sections",
+      "input": "BOOT path-list      : flash:c3750e-universalk9-mz.152-4.E7.bin\nConfig file         : flash:/config.text\nPrivate Config file : flash:/private-config.text\nEnable Break        : yes\nManual Boot         : no\nAllow Dev Key         : yes\nHELPER path-list    :\nAuto upgrade        : yes\nAuto upgrade path   :\nNVRAM/Config file\n      buffer size:   524288\nTimeout for Config\n          Download:    0 seconds\nConfig Download\n       via DHCP:       disabled (next boot: disabled)\n-------------------\nSwitch 1\n-------------------\nBOOT path-list      : flash:c3750e-universalk9-mz.152-4.E7.bin\nConfig file         : flash:/config.text\nPrivate Config file : flash:/private-config.text\nEnable Break        : yes\nManual Boot         : no\nAllow Dev Key         : yes\nHELPER path-list    :\nAuto upgrade        : no\nAuto upgrade path   :\n-------------------\nSwitch 3\n-------------------\nBOOT path-list      : flash:c3750e-universalk9-mz.152-4.E7.bin\nConfig file         : flash:/config.text\nPrivate Config file : flash:/private-config.text\nEnable Break        : yes\nManual Boot         : no\nAllow Dev Key         : yes\nHELPER path-list    :\nAuto upgrade        : no\nAuto upgrade path   :\n",
+      "expected": {
+        "switches": {
+          "active": {
+            "boot_path_list": "flash:c3750e-universalk9-mz.152-4.E7.bin",
+            "config_file": "flash:/config.text",
+            "private_config_file": "flash:/private-config.text",
+            "enable_break": true,
+            "manual_boot": false,
+            "allow_dev_key": true,
+            "auto_upgrade": true,
+            "nvram_buffer_size": 524288,
+            "config_download_timeout": 0,
+            "config_download_via_dhcp": "disabled (next boot: disabled)"
+          },
+          "1": {
+            "boot_path_list": "flash:c3750e-universalk9-mz.152-4.E7.bin",
+            "config_file": "flash:/config.text",
+            "private_config_file": "flash:/private-config.text",
+            "enable_break": true,
+            "manual_boot": false,
+            "allow_dev_key": true,
+            "auto_upgrade": false
+          },
+          "3": {
+            "boot_path_list": "flash:c3750e-universalk9-mz.152-4.E7.bin",
+            "config_file": "flash:/config.text",
+            "private_config_file": "flash:/private-config.text",
+            "enable_break": true,
+            "manual_boot": false,
+            "allow_dev_key": true,
+            "auto_upgrade": false
+          }
+        }
+      }
+    }
+  ]
+}
