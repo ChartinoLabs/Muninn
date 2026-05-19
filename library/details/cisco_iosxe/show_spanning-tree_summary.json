@@ -1,5 +1,5 @@
 {
-  "os": "cisco_ios",
+  "os": "cisco_iosxe",
   "command": "show spanning-tree summary",
   "schema": {
     "name": "ShowSpanningTreeSummaryResult",
@@ -147,40 +147,71 @@
   },
   "examples": [
     {
-      "name": "show spanning-tree summary output from a Catalyst 3750-X stack in rapid-pvst mode",
-      "input": "Switch is in rapid-pvst mode\nRoot bridge for: none\nEtherChannel misconfig guard            is enabled\nExtended system ID                      is enabled\nPortfast Default                        is disabled\nPortfast Edge BPDU Guard Default        is disabled\nPortfast Edge BPDU Filter Default       is disabled\nLoopguard Default                       is disabled\nPVST Simulation Default                 is enabled but inactive in rapid-pvst\nmode\nBridge Assurance                        is enabled\nUplinkFast                              is disabled\nBackboneFast                            is disabled\nConfigured Pathcost method used is short\n\nName                   Blocking Listening Learning Forwarding STP Active\n---------------------- -------- --------- -------- ---------- ----------\nVLAN0021                     0         0        0          5          5\n---------------------- -------- --------- -------- ---------- ----------\n1 vlan                       0         0        0          5          5\n",
+      "name": "show spanning-tree summary from an ISR 1100 (TAC-R2) with no VLANs/STP active",
+      "input": "Switch is in rapid-pvst mode\nRoot bridge for: none\nExtended system ID                      is enabled\nPortfast Default                        is disabled\nPortFast BPDU Guard Default            is disabled\nPortfast BPDU Filter Default           is disabled\nLoopguard Default                      is disabled\nEtherChannel misconfig guard            is enabled\nUplinkFast                              is disabled\nBackboneFast                            is disabled\nConfigured Pathcost method used is short\n\nName                   Blocking Listening Learning Forwarding STP Active\n---------------------- -------- --------- -------- ---------- ----------\nTotal                        0         0        0          0          0\n",
       "expected": {
         "defaults": {
+          "extended_system_id": "enabled",
+          "portfast_default": "disabled",
+          "portfast_bpdu_guard_default": "disabled",
+          "portfast_bpdu_filter_default": "disabled",
+          "loopguard_default": "disabled",
           "etherchannel_misconfig_guard": "enabled",
+          "uplinkfast": "disabled",
+          "backbonefast": "disabled"
+        },
+        "vlans": {},
+        "mode": "rapid-pvst",
+        "root_bridge_for": [],
+        "pathcost_method": "short",
+        "summary": {
+          "total_vlans": 0,
+          "blocking": 0,
+          "listening": 0,
+          "learning": 0,
+          "forwarding": 0,
+          "stp_active": 0
+        }
+      }
+    },
+    {
+      "name": "show spanning-tree summary from a Catalyst 9300 (TAC-S1) acting as root bridge for VLAN 1",
+      "input": "Switch is in rapid-pvst mode\nRoot bridge for: VLAN0001\nExtended system ID                      is enabled\nPortfast Default                        is disabled\nPortfast Edge BPDU Guard Default        is disabled\nPortfast Edge BPDU Filter Default       is disabled\nLoopguard Default                       is disabled\nBPDU sender conflict                    is enabled\nPVST Simulation Default                 is enabled but inactive in rapid-pvst\nmode\nBridge Assurance                        is disabled\nEtherChannel misconfig guard            is enabled\nUplinkFast                              is disabled\nBackboneFast                            is disabled\nConfigured Pathcost method used is long\n\nName                   Blocking Listening Learning Forwarding STP Active\n---------------------- -------- --------- -------- ---------- ----------\nVLAN0001                     0         0        0          1          1\n---------------------- -------- --------- -------- ---------- ----------\n1 vlan                       0         0        0          1          1\n",
+      "expected": {
+        "defaults": {
           "extended_system_id": "enabled",
           "portfast_default": "disabled",
           "portfast_edge_bpdu_guard_default": "disabled",
           "portfast_edge_bpdu_filter_default": "disabled",
           "loopguard_default": "disabled",
+          "bpdu_sender_conflict": "enabled",
           "pvst_simulation_default": "enabled but inactive in rapid-pvst mode",
-          "bridge_assurance": "enabled",
+          "bridge_assurance": "disabled",
+          "etherchannel_misconfig_guard": "enabled",
           "uplinkfast": "disabled",
           "backbonefast": "disabled"
         },
         "vlans": {
-          "21": {
+          "1": {
             "blocking": 0,
             "listening": 0,
             "learning": 0,
-            "forwarding": 5,
-            "stp_active": 5
+            "forwarding": 1,
+            "stp_active": 1
           }
         },
         "mode": "rapid-pvst",
-        "root_bridge_for": [],
-        "pathcost_method": "short",
+        "root_bridge_for": [
+          "1"
+        ],
+        "pathcost_method": "long",
         "summary": {
           "total_vlans": 1,
           "blocking": 0,
           "listening": 0,
           "learning": 0,
-          "forwarding": 5,
-          "stp_active": 5
+          "forwarding": 1,
+          "stp_active": 1
         }
       }
     }
