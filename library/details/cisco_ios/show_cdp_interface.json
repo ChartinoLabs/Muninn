@@ -1,0 +1,1039 @@
+{
+  "os": "cisco_ios",
+  "command": "show cdp interface",
+  "schema": {
+    "name": "ShowCdpInterfaceResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "CdpInterfaceEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "line_protocol": {
+                "type": "str",
+                "required": true
+              },
+              "encapsulation": {
+                "type": "str",
+                "required": false
+              },
+              "send_interval_seconds": {
+                "type": "int",
+                "required": false
+              },
+              "holdtime_seconds": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "cdp_enabled_interfaces": {
+        "type": "int",
+        "required": false
+      },
+      "interfaces_up": {
+        "type": "int",
+        "required": false
+      },
+      "interfaces_down": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "CDP interface listing from a 3-member Catalyst 3750-X stack with per-interface CDP timers and an aggregate summary footer",
+      "input": "FastEthernet0 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/1 is up, line protocol is up\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/2 is up, line protocol is up\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/3 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/4 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/5 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/6 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/7 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/8 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/9 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/10 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/11 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/12 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/13 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/14 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/15 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/16 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/17 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/18 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/19 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/20 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/21 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/22 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/23 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/24 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/25 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/26 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/27 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/28 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/29 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/30 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/31 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/32 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/33 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/34 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/35 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/36 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/37 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/38 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/39 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/40 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/41 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/42 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/43 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/44 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/45 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/46 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/47 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/0/48 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/1/1 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/1/2 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/1/3 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet1/1/4 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nTenGigabitEthernet1/1/1 is up, line protocol is up\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nTenGigabitEthernet1/1/2 is up, line protocol is up\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/1 is up, line protocol is up\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/2 is up, line protocol is up\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/3 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/4 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/5 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/6 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/7 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/8 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/9 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/10 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/11 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/12 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/13 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/14 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/15 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/16 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/17 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/18 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/19 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/20 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/21 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/22 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/23 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/24 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/25 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/26 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/27 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/28 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/29 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/30 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/31 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/32 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/33 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/34 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/35 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/36 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/37 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/38 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/39 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/40 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/41 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/42 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/43 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/44 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/45 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/46 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/47 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/0/48 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/1/1 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/1/2 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/1/3 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet2/1/4 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nTenGigabitEthernet2/1/1 is up, line protocol is up\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nTenGigabitEthernet2/1/2 is up, line protocol is up\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/1 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/2 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/3 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/4 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/5 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/6 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/7 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/8 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/9 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/10 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/11 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/12 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/13 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/14 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/15 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/16 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/17 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/18 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/19 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/20 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/21 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/22 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/23 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/0/24 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/1/1 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/1/2 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/1/3 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nGigabitEthernet3/1/4 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nTenGigabitEthernet3/1/1 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\nTenGigabitEthernet3/1/2 is down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 180 seconds\n\n cdp enabled interfaces : 139\n interfaces up          : 8\n interfaces down        : 131\n",
+      "expected": {
+        "cdp_enabled_interfaces": 139,
+        "interfaces_up": 8,
+        "interfaces_down": 131,
+        "interfaces": {
+          "FastEthernet0": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/1": {
+            "status": "up",
+            "line_protocol": "up",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/2": {
+            "status": "up",
+            "line_protocol": "up",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/3": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/4": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/5": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/6": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/7": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/8": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/9": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/10": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/11": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/12": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/13": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/14": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/15": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/16": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/17": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/18": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/19": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/20": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/21": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/22": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/23": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/24": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/25": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/26": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/27": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/28": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/29": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/30": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/31": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/32": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/33": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/34": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/35": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/36": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/37": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/38": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/39": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/40": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/41": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/42": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/43": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/44": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/45": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/46": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/47": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/0/48": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/1/1": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/1/2": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/1/3": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet1/1/4": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "TenGigabitEthernet1/1/1": {
+            "status": "up",
+            "line_protocol": "up",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "TenGigabitEthernet1/1/2": {
+            "status": "up",
+            "line_protocol": "up",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/1": {
+            "status": "up",
+            "line_protocol": "up",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/2": {
+            "status": "up",
+            "line_protocol": "up",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/3": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/4": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/5": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/6": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/7": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/8": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/9": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/10": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/11": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/12": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/13": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/14": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/15": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/16": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/17": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/18": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/19": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/20": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/21": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/22": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/23": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/24": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/25": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/26": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/27": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/28": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/29": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/30": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/31": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/32": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/33": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/34": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/35": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/36": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/37": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/38": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/39": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/40": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/41": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/42": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/43": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/44": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/45": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/46": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/47": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/0/48": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/1/1": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/1/2": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/1/3": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet2/1/4": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "TenGigabitEthernet2/1/1": {
+            "status": "up",
+            "line_protocol": "up",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "TenGigabitEthernet2/1/2": {
+            "status": "up",
+            "line_protocol": "up",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/1": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/2": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/3": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/4": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/5": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/6": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/7": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/8": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/9": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/10": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/11": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/12": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/13": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/14": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/15": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/16": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/17": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/18": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/19": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/20": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/21": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/22": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/23": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/0/24": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/1/1": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/1/2": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/1/3": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "GigabitEthernet3/1/4": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "TenGigabitEthernet3/1/1": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          },
+          "TenGigabitEthernet3/1/2": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 180
+          }
+        }
+      }
+    }
+  ]
+}
