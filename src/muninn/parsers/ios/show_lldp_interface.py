@@ -1,4 +1,4 @@
-"""Parser for 'show lldp interface' command on IOS."""
+"""Parser for 'show lldp interface' command on IOS and IOS-XE."""
 
 import re
 from typing import ClassVar, TypedDict, cast
@@ -106,9 +106,10 @@ def _finalize_interface(
     interfaces[canonical] = cast(InterfaceEntry, entry)
 
 
+@register(OS.CISCO_IOSXE, "show lldp interface")
 @register(OS.CISCO_IOS, "show lldp interface")
 class ShowLldpInterfaceParser(BaseParser[ShowLldpInterfaceResult]):
-    """Parser for 'show lldp interface' command on IOS.
+    """Parser for 'show lldp interface' command on IOS and IOS-XE.
 
     The command exposes per-interface LLDP Tx/Rx enable state and the
     current Tx/Rx state machine values. When LLDP is globally disabled,
