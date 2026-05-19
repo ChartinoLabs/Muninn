@@ -12,7 +12,7 @@ from muninn.tags import ParserTag
 _QUEUE_HEADER_RE = re.compile(r"^authen\s+queue=(?P<queue>\S+)\s*$")
 _PERMANENT_HEADER_RE = re.compile(r"^permanent\s+lists\s*$", re.IGNORECASE)
 _ENTRY_RE = re.compile(
-    r"^\s+name=\s*(?P<name>.+?)\s+valid=(?P<valid>\S+)\s+id=(?P<id>\S+)\s+"
+    r"^\s+name=\s*(?P<name>.+?)\s+valid=(?P<valid>\S+)\s+id=(?P<id>\d+)\s+"
     r":state=(?P<state>\S+)\s+:\s*(?P<methods>.*?)\s*$"
 )
 
