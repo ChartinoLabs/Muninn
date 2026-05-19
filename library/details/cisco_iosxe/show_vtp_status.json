@@ -1,0 +1,111 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show vtp status",
+  "schema": {
+    "name": "ShowVtpStatusResult",
+    "fields": {
+      "vtp_version_running": {
+        "type": "int",
+        "required": true
+      },
+      "operating_mode": {
+        "type": "str",
+        "required": true
+      },
+      "max_vlans": {
+        "type": "int",
+        "required": true
+      },
+      "existing_vlans": {
+        "type": "int",
+        "required": true
+      },
+      "configuration_revision": {
+        "type": "int",
+        "required": true
+      },
+      "vtp_version_capable": {
+        "type": "str",
+        "required": false
+      },
+      "domain_name": {
+        "type": "str",
+        "required": false
+      },
+      "pruning_mode": {
+        "type": "str",
+        "required": false
+      },
+      "traps_generation": {
+        "type": "str",
+        "required": false
+      },
+      "device_id": {
+        "type": "str",
+        "required": false
+      },
+      "last_modified_by": {
+        "type": "str",
+        "required": false
+      },
+      "last_modified_at": {
+        "type": "str",
+        "required": false
+      },
+      "local_updater_id": {
+        "type": "str",
+        "required": false
+      },
+      "local_updater_interface": {
+        "type": "str",
+        "required": false
+      },
+      "md5_digest": {
+        "type": "str",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "VTP status on an ISR 1100 router with default empty VTP domain and 64 max VLANs",
+      "input": "VTP Version capable             : 1 to 3\nVTP version running             : 1\nVTP Domain Name                 :\nVTP Pruning Mode                : Disabled (Operationally Disabled)\nVTP Traps Generation            : Disabled\nDevice ID                       : 748f.c25f.0250\nConfiguration last modified by 0.0.0.0 at 0-0-00 00:00:00\nLocal updater ID is 192.0.2.100 on interface Gi0/0/0 (first layer3 interface\nfound)\n\nFeature VLAN:\n--------------\nVTP Operating Mode                : Server\nMaximum VLANs supported locally   : 64\nNumber of existing VLANs          : 5\nConfiguration Revision            : 0\nMD5 digest                        : 0x57 0xCD 0x40 0x65 0x63 0x59 0x47 0xBD\n                                    0x56 0x9D 0x4A 0x3E 0xA5 0x69 0x35 0xBC\n",
+      "expected": {
+        "vtp_version_capable": "1 to 3",
+        "vtp_version_running": 1,
+        "pruning_mode": "Disabled (Operationally Disabled)",
+        "traps_generation": "Disabled",
+        "device_id": "748f.c25f.0250",
+        "last_modified_by": "0.0.0.0",
+        "last_modified_at": "0-0-00 00:00:00",
+        "local_updater_id": "192.0.2.100",
+        "local_updater_interface": "GigabitEthernet0/0/0",
+        "operating_mode": "Server",
+        "max_vlans": 64,
+        "existing_vlans": 5,
+        "configuration_revision": 0,
+        "md5_digest": "0x57 0xCD 0x40 0x65 0x63 0x59 0x47 0xBD 0x56 0x9D 0x4A 0x3E 0xA5 0x69 0x35 0xBC"
+      }
+    },
+    {
+      "name": "VTP status on a Catalyst 9300 switch with default empty VTP domain and 1005 max VLANs",
+      "input": "VTP Version capable             : 1 to 3\nVTP version running             : 1\nVTP Domain Name                 :\nVTP Pruning Mode                : Disabled (Operationally Disabled)\nVTP Traps Generation            : Disabled\nDevice ID                       : ac3a.6728.0f80\nConfiguration last modified by 0.0.0.0 at 0-0-00 00:00:00\nLocal updater ID is 192.0.2.101 on interface Gi0/0 (first layer3 interface\nfound)\n\nFeature VLAN:\n--------------\nVTP Operating Mode                : Server\nMaximum VLANs supported locally   : 1005\nNumber of existing VLANs          : 5\nConfiguration Revision            : 0\nMD5 digest                        : 0x57 0xCD 0x40 0x65 0x63 0x59 0x47 0xBD\n                                    0x56 0x9D 0x4A 0x3E 0xA5 0x69 0x35 0xBC\n",
+      "expected": {
+        "vtp_version_capable": "1 to 3",
+        "vtp_version_running": 1,
+        "pruning_mode": "Disabled (Operationally Disabled)",
+        "traps_generation": "Disabled",
+        "device_id": "ac3a.6728.0f80",
+        "last_modified_by": "0.0.0.0",
+        "last_modified_at": "0-0-00 00:00:00",
+        "local_updater_id": "192.0.2.101",
+        "local_updater_interface": "GigabitEthernet0/0",
+        "operating_mode": "Server",
+        "max_vlans": 1005,
+        "existing_vlans": 5,
+        "configuration_revision": 0,
+        "md5_digest": "0x57 0xCD 0x40 0x65 0x63 0x59 0x47 0xBD 0x56 0x9D 0x4A 0x3E 0xA5 0x69 0x35 0xBC"
+      }
+    }
+  ]
+}

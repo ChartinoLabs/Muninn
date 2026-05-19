@@ -1,0 +1,166 @@
+{
+  "os": "cisco_ios",
+  "command": "show aaa method-lists authentication",
+  "schema": {
+    "name": "ShowAaaMethodListsAuthenticationResult",
+    "fields": {
+      "queues": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "QueueEntry",
+            "fields": {
+              "lists": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "MethodListEntry",
+                    "fields": {
+                      "valid": {
+                        "type": "bool",
+                        "required": true
+                      },
+                      "id": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "state": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "methods": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": true
+                      },
+                      "server_group": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "permanent_lists": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "ref",
+            "name": "MethodListEntry"
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "AAA authentication method-lists with default LOCAL login, a DOT1X SERVER_GROUP entry whose server name wraps to the next line, and the platform's permanent lists",
+      "input": "authen queue=AAA_ML_AUTHEN_LOGIN\n  name=default valid=TRUE id=0 :state=ALIVE : LOCAL\nauthen queue=AAA_ML_AUTHEN_ENABLE\nauthen queue=AAA_ML_AUTHEN_PPP\nauthen queue=AAA_ML_AUTHEN_SGBP\nauthen queue=AAA_ML_AUTHEN_ARAP\nauthen queue=AAA_ML_AUTHEN_DOT1X\n  name= pvt_authen_0 valid=TRUE id=56000002 :state=DEAD : SERVER_GROUP\nprivate_sg-0\nauthen queue=AAA_ML_AUTHEN_8021X\nauthen queue=AAA_ML_AUTHEN_EAPOUDP\nauthen queue=AAA_ML_AUTHEN_CONNECTEDAPPS\npermanent lists\n  name= Permanent Enable None valid=TRUE id=0 :state=ALIVE : ENABLE  NONE\n  name= Permanent Enable valid=TRUE id=0 :state=ALIVE : ENABLE\n  name= Permanent None valid=TRUE id=0 :state=ALIVE : NONE\n  name= Permanent Local valid=TRUE id=0 :state=ALIVE : LOCAL\n  name= Permanent rcmd valid=TRUE id=0 :state=ALIVE : RCMD\n",
+      "expected": {
+        "queues": {
+          "AAA_ML_AUTHEN_LOGIN": {
+            "lists": {
+              "default": {
+                "valid": true,
+                "id": 0,
+                "state": "ALIVE",
+                "methods": [
+                  "LOCAL"
+                ]
+              }
+            }
+          },
+          "AAA_ML_AUTHEN_ENABLE": {
+            "lists": {}
+          },
+          "AAA_ML_AUTHEN_PPP": {
+            "lists": {}
+          },
+          "AAA_ML_AUTHEN_SGBP": {
+            "lists": {}
+          },
+          "AAA_ML_AUTHEN_ARAP": {
+            "lists": {}
+          },
+          "AAA_ML_AUTHEN_DOT1X": {
+            "lists": {
+              "pvt_authen_0": {
+                "valid": true,
+                "id": 56000002,
+                "state": "DEAD",
+                "methods": [
+                  "SERVER_GROUP"
+                ],
+                "server_group": "private_sg-0"
+              }
+            }
+          },
+          "AAA_ML_AUTHEN_8021X": {
+            "lists": {}
+          },
+          "AAA_ML_AUTHEN_EAPOUDP": {
+            "lists": {}
+          },
+          "AAA_ML_AUTHEN_CONNECTEDAPPS": {
+            "lists": {}
+          }
+        },
+        "permanent_lists": {
+          "Permanent Enable None": {
+            "valid": true,
+            "id": 0,
+            "state": "ALIVE",
+            "methods": [
+              "ENABLE",
+              "NONE"
+            ]
+          },
+          "Permanent Enable": {
+            "valid": true,
+            "id": 0,
+            "state": "ALIVE",
+            "methods": [
+              "ENABLE"
+            ]
+          },
+          "Permanent None": {
+            "valid": true,
+            "id": 0,
+            "state": "ALIVE",
+            "methods": [
+              "NONE"
+            ]
+          },
+          "Permanent Local": {
+            "valid": true,
+            "id": 0,
+            "state": "ALIVE",
+            "methods": [
+              "LOCAL"
+            ]
+          },
+          "Permanent rcmd": {
+            "valid": true,
+            "id": 0,
+            "state": "ALIVE",
+            "methods": [
+              "RCMD"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
