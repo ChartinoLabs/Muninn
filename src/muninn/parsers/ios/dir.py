@@ -58,6 +58,7 @@ def _build_file_entry(match: re.Match[str], name: str) -> FileEntry:
 
 
 @register(OS.CISCO_IOS, "dir")
+@register(OS.CISCO_IOS, r"dir (?P<filesystem>\S+)")
 class DirParser(BaseParser[DirResult]):
     r"""Parser for 'dir' command output on Cisco IOS.
 
