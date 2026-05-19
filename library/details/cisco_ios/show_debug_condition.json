@@ -1,0 +1,65 @@
+{
+  "os": "cisco_ios",
+  "command": "show debug condition",
+  "schema": {
+    "name": "ShowDebugConditionResult",
+    "fields": {
+      "conditions": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ConditionEntry",
+            "fields": {
+              "type": {
+                "type": "str",
+                "required": true
+              },
+              "value": {
+                "type": "str",
+                "required": true
+              },
+              "flags_triggered": {
+                "type": "int",
+                "required": true
+              },
+              "flags": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "No debug conditions configured; command returns the no-conditions sentinel",
+      "input": "% No conditions found\n",
+      "expected": {
+        "conditions": {}
+      }
+    },
+    {
+      "name": "Single interface debug condition configured on GigabitEthernet1/0/1",
+      "input": "Condition 1: interface Gi1/0/1 (1 flags triggered)\n        Flags: Gi1/0/1\n",
+      "expected": {
+        "conditions": {
+          "1": {
+            "type": "interface",
+            "value": "GigabitEthernet1/0/1",
+            "flags_triggered": 1,
+            "flags": [
+              "GigabitEthernet1/0/1"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
