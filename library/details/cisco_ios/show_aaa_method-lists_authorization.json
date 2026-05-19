@@ -1,0 +1,97 @@
+{
+  "os": "cisco_ios",
+  "command": "show aaa method-lists authorization",
+  "schema": {
+    "name": "ShowAaaMethodListsAuthorizationResult",
+    "fields": {
+      "author_queues": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": true
+      },
+      "permanent_lists": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PermanentListEntry",
+            "fields": {
+              "valid": {
+                "type": "bool",
+                "required": true
+              },
+              "id": {
+                "type": "int",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "methods": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Default AAA authorization method-lists with internal author queues and the built-in local-list permanent entry",
+      "input": "author queue=AAA_ML_AUTHOR_SHELL\nauthor queue=AAA_ML_AUTHOR_NET\nauthor queue=AAA_ML_AUTHOR_CONN\nauthor queue=AAA_ML_AUTHOR_IPMOBILE\nauthor queue=AAA_ML_AUTHOR_RM\nauthor queue=AAA_ML_AUTHOR_CONFIG\nauthor queue=AAA_ML_AUTHOR_AUTH_PROXY\nauthor queue=AAA_ML_AUTHOR_PREAUTH\nauthor queue=AAA_ML_AUTHOR_FLTSV\nauthor queue=AAA_ML_AUTHOR_SUBSCRIBER_SERVICE\nauthor queue=AAA_ML_AUTHOR_CREDENTIAL_DOWNLOAD\nauthor queue=AAA_ML_AUTHOR_PREPAID\nauthor queue=AAA_ML_AUTHOR_POLICY_IF\nauthor queue=AAA_ML_AUTHOR_CONNECTEDAPPS\nauthor queue=AAA_ML_AUTHOR_COMMAND\nauthor queue=AAA_ML_AUTHOR_COMMAND\nauthor queue=AAA_ML_AUTHOR_COMMAND\nauthor queue=AAA_ML_AUTHOR_COMMAND\nauthor queue=AAA_ML_AUTHOR_COMMAND\nauthor queue=AAA_ML_AUTHOR_COMMAND\nauthor queue=AAA_ML_AUTHOR_COMMAND\nauthor queue=AAA_ML_AUTHOR_COMMAND\nauthor queue=AAA_ML_AUTHOR_COMMAND\nauthor queue=AAA_ML_AUTHOR_COMMAND\nauthor queue=AAA_ML_AUTHOR_COMMAND\nauthor queue=AAA_ML_AUTHOR_COMMAND\nauthor queue=AAA_ML_AUTHOR_COMMAND\nauthor queue=AAA_ML_AUTHOR_COMMAND\nauthor queue=AAA_ML_AUTHOR_COMMAND\nauthor queue=AAA_ML_AUTHOR_COMMAND\npermanent lists\n  name= local-list valid=TRUE id=0 :state=ALIVE : LOCAL\n",
+      "expected": {
+        "author_queues": [
+          "AAA_ML_AUTHOR_SHELL",
+          "AAA_ML_AUTHOR_NET",
+          "AAA_ML_AUTHOR_CONN",
+          "AAA_ML_AUTHOR_IPMOBILE",
+          "AAA_ML_AUTHOR_RM",
+          "AAA_ML_AUTHOR_CONFIG",
+          "AAA_ML_AUTHOR_AUTH_PROXY",
+          "AAA_ML_AUTHOR_PREAUTH",
+          "AAA_ML_AUTHOR_FLTSV",
+          "AAA_ML_AUTHOR_SUBSCRIBER_SERVICE",
+          "AAA_ML_AUTHOR_CREDENTIAL_DOWNLOAD",
+          "AAA_ML_AUTHOR_PREPAID",
+          "AAA_ML_AUTHOR_POLICY_IF",
+          "AAA_ML_AUTHOR_CONNECTEDAPPS",
+          "AAA_ML_AUTHOR_COMMAND",
+          "AAA_ML_AUTHOR_COMMAND",
+          "AAA_ML_AUTHOR_COMMAND",
+          "AAA_ML_AUTHOR_COMMAND",
+          "AAA_ML_AUTHOR_COMMAND",
+          "AAA_ML_AUTHOR_COMMAND",
+          "AAA_ML_AUTHOR_COMMAND",
+          "AAA_ML_AUTHOR_COMMAND",
+          "AAA_ML_AUTHOR_COMMAND",
+          "AAA_ML_AUTHOR_COMMAND",
+          "AAA_ML_AUTHOR_COMMAND",
+          "AAA_ML_AUTHOR_COMMAND",
+          "AAA_ML_AUTHOR_COMMAND",
+          "AAA_ML_AUTHOR_COMMAND",
+          "AAA_ML_AUTHOR_COMMAND",
+          "AAA_ML_AUTHOR_COMMAND"
+        ],
+        "permanent_lists": {
+          "local-list": {
+            "valid": true,
+            "id": 0,
+            "state": "ALIVE",
+            "methods": [
+              "LOCAL"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
