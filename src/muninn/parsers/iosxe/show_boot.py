@@ -357,6 +357,7 @@ def _process_line(
     return current_key, is_path_list
 
 
+@register(OS.CISCO_IOS, "show boot")
 @register(OS.CISCO_IOSXE, "show boot")
 class ShowBootParser(BaseParser[ShowBootResult]):
     """Parser for 'show boot' command.
