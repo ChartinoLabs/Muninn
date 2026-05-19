@@ -16,7 +16,6 @@ class PermanentListEntry(TypedDict):
     id: int
     state: str
     action: str
-    type: NotRequired[str]
 
 
 class ShowAaaMethodListsAccountingResult(TypedDict):
@@ -29,14 +28,12 @@ class ShowAaaMethodListsAccountingResult(TypedDict):
 _ACCT_QUEUE_RE = re.compile(r"^acct queue=(?P<queue>\S+)\s*$")
 _PERMANENT_HEADER_RE = re.compile(r"^permanent lists\s*$")
 _PERMANENT_ENTRY_RE = re.compile(
-    r"^name=\s*(?P<name>\S+)\s+(?P<type>\S+)\s+"
+    r"^name=\s*(?P<name>.+?)\s+"
     r"valid=(?P<valid>\S+)\s+"
     r"id=(?P<id>\d+)\s+"
     r"Action=(?P<action>\S+)\s*"
     r":state=(?P<state>\S+)\s*:?\s*$"
 )
-
-_NONE_LIKE_TYPE_VALUES = frozenset({"None", "none", "-", "N/A"})
 
 
 def _try_parse_permanent_entry(line: str) -> tuple[str, PermanentListEntry] | None:
@@ -57,9 +54,6 @@ def _try_parse_permanent_entry(line: str) -> tuple[str, PermanentListEntry] | No
         "state": match.group("state"),
         "action": match.group("action"),
     }
-    type_value = match.group("type")
-    if type_value not in _NONE_LIKE_TYPE_VALUES:
-        entry["type"] = type_value
     return match.group("name"), entry
 
 
@@ -77,8 +71,9 @@ class ShowAaaMethodListsAccountingParser(
        so ``acct_queues`` preserves order and duplicates as emitted by
        the device.
     2. A ``permanent lists`` section listing built-in (non-user-configured)
-       method-lists with their validity, internal id, action, type, and
-       state. Entries are keyed by method-list name.
+       method-lists with their validity, internal id, action, and state.
+       Entries are keyed by method-list name, which may contain whitespace
+       (e.g. ``Permanent None``).
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.AAA})
