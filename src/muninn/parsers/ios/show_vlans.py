@@ -331,8 +331,9 @@ def _parse_vlans(lines: list[str]) -> dict[str, VlanEntry]:
 
 
 @register(OS.CISCO_IOS, "show vlans")
+@register(OS.CISCO_IOSXE, "show vlans")
 class ShowVlansParser(BaseParser[ShowVlansResult]):
-    """Parser for 'show vlans' on IOS.
+    """Parser for 'show vlans' on IOS and IOS-XE.
 
     Parses dot1q VLAN information including trunk interfaces,
     protocol counters, and per-interface traffic statistics.
