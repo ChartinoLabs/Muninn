@@ -1,0 +1,79 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show users",
+  "schema": {
+    "name": "ShowUsersResult",
+    "fields": {
+      "lines": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "UserEntry",
+              "fields": {
+                "active": {
+                  "type": "bool",
+                  "required": true
+                },
+                "host": {
+                  "type": "str",
+                  "required": false
+                },
+                "user": {
+                  "type": "str",
+                  "required": false
+                },
+                "idle": {
+                  "type": "str",
+                  "required": false
+                },
+                "location": {
+                  "type": "str",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show users with console and VTY sessions including active marker and location",
+      "input": "Line       User       Host(s)              Idle       Location\n   0 con 0     admin      idle                     2w0d\n 866 vty 0     admin      idle                     1w6d 192.0.2.50\n*867 vty 1     admin      idle                 00:00:04 192.0.2.50\n\n  Interface    User               Mode         Idle     Peer Address\n",
+      "expected": {
+        "lines": {
+          "con": {
+            "0": {
+              "active": false,
+              "user": "admin",
+              "host": "idle",
+              "idle": "2w0d"
+            }
+          },
+          "vty": {
+            "0": {
+              "active": false,
+              "user": "admin",
+              "host": "idle",
+              "idle": "1w6d",
+              "location": "192.0.2.50"
+            },
+            "1": {
+              "active": true,
+              "user": "admin",
+              "host": "idle",
+              "idle": "00:00:04",
+              "location": "192.0.2.50"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
