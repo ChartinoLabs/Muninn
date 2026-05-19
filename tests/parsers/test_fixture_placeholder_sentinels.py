@@ -53,6 +53,10 @@ _NONE_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset(
         # mode for flowcontrol (None / Tx / Rx / Both).
         "cisco_iosxr/show_controllers_hundredgigabitethernet/001_basic/expected.json",
         "cisco_iosxr/show_controllers_hundredgigabitethernet/002_low_power_optic/expected.json",
+        # ``NONE`` is a literal AAA method keyword on IOS (skip authentication),
+        # not a missing-value placeholder. It appears in the platform's permanent
+        # lists alongside ``ENABLE``, ``LOCAL``, ``RCMD``.
+        "ios/show_aaa_method-lists_authentication/001_basic/expected.json",
         "arista_eos/show_version/005_ceos_clab/expected.json",
         "ios/show_crypto_session_detail/001_basic/expected.json",
         "ios/show_license/001_basic/expected.json",
