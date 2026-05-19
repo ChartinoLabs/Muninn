@@ -1,0 +1,57 @@
+{
+  "os": "cisco_ios",
+  "command": "show class-map",
+  "schema": {
+    "name": "ShowClassMapResult",
+    "fields": {
+      "class_maps": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ClassMapEntry",
+            "fields": {
+              "match_type": {
+                "type": "str",
+                "required": true
+              },
+              "id": {
+                "type": "int",
+                "required": true
+              },
+              "matches": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              },
+              "description": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Default class-map with match-any criteria",
+      "input": "Class Map match-any class-default (id 0)\n   Match any\n",
+      "expected": {
+        "class_maps": {
+          "class-default": {
+            "match_type": "match-any",
+            "id": 0,
+            "matches": [
+              "any"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
