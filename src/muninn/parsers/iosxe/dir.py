@@ -1,4 +1,4 @@
-"""Parser for 'dir' commands on IOS-XE."""
+"""Parser for 'dir' commands on Cisco IOS and IOS-XE."""
 
 import re
 from typing import ClassVar, NotRequired, TypedDict
@@ -30,12 +30,15 @@ class DirResult(TypedDict):
 
 _DIRECTORY_HEADER = re.compile(r"^Directory\s+of\s+(?P<directory>\S+)\s*$")
 
+# The filename capture is optional to support narrow-terminal IOS captures
+# (e.g. Catalyst 3750-X) where long filenames wrap onto the following line.
+# When the name is absent, the wrapped filename is stitched in below.
 _FILE_ENTRY = re.compile(
     r"^\s*(?P<inode>\d+)\s+"
     r"(?P<permissions>[-drwx]+)\s+"
     r"(?P<size>\d+)\s+"
-    r"(?P<date>\w+\s+\d+\s+\d{4}\s+\d+:\d+:\d+\s+[+-]?\d+:\d+)\s+"
-    r"(?P<name>\S+)\s*$"
+    r"(?P<date>\w+\s+\d+\s+\d{4}\s+\d+:\d+:\d+\s+[+-]?\d+:\d+)"
+    r"(?:\s+(?P<name>\S+))?\s*$"
 )
 
 _SUMMARY = re.compile(
@@ -44,21 +47,23 @@ _SUMMARY = re.compile(
 )
 
 
-def _build_file_entry(match: re.Match[str]) -> FileEntry:
-    """Build a FileEntry from a regex match."""
+def _build_file_entry(match: re.Match[str], name: str) -> FileEntry:
+    """Build a FileEntry from a regex match and an explicit filename."""
     return FileEntry(
         permissions=match.group("permissions"),
         size=int(match.group("size")),
         date=match.group("date"),
-        name=match.group("name"),
+        name=name,
         inode=int(match.group("inode")),
     )
 
 
+@register(OS.CISCO_IOS, "dir")
+@register(OS.CISCO_IOS, r"dir (?P<filesystem>\S+)")
 @register(OS.CISCO_IOSXE, "dir")
 @register(OS.CISCO_IOSXE, r"dir (?P<filesystem>\S+)")
 class DirParser(BaseParser[DirResult]):
-    """Parser for 'dir' command output.
+    """Parser for 'dir' command output on Cisco IOS and IOS-XE.
 
     Example output:
         Directory of bootflash:/
@@ -67,6 +72,9 @@ class DirParser(BaseParser[DirResult]):
            12  -rw-                0  Dec 13 2016 11:36:36 -07:00  ds_stats.txt
 
         1940303872 bytes total (1036210176 bytes free)
+
+    On narrow-terminal IOS captures, a long filename may wrap onto the
+    following line; such wrapped names are stitched back onto their entry.
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
@@ -82,7 +90,7 @@ class DirParser(BaseParser[DirResult]):
             Parsed directory listing data.
 
         Raises:
-            ValueError: If the output cannot be parsed.
+            ValueError: If the directory header or summary is missing.
         """
         directory = _extract_directory(output)
         files = _extract_files(output)
@@ -107,13 +115,28 @@ def _extract_directory(output: str) -> str:
 
 
 def _extract_files(output: str) -> dict[str, FileEntry]:
-    """Extract all file entries from the output."""
+    """Extract all file entries, joining wrapped filenames where needed."""
     files: dict[str, FileEntry] = {}
-    for line in output.splitlines():
-        match = _FILE_ENTRY.match(line.strip())
+    # `pending` holds the prior file-entry match when its inline filename was
+    # absent. Narrow-terminal IOS captures wrap long filenames onto the next
+    # line, so the following non-matching line is treated as the wrapped name.
+    pending: re.Match[str] | None = None
+    for raw_line in output.splitlines():
+        line = raw_line.rstrip()
+        match = _FILE_ENTRY.match(line)
         if match:
-            entry = _build_file_entry(match)
-            files[entry["name"]] = entry
+            name = match.group("name")
+            if name is not None:
+                pending = None
+                files[name] = _build_file_entry(match, name)
+            else:
+                pending = match
+            continue
+        if pending is not None:
+            wrapped_name = line.strip()
+            if wrapped_name:
+                files[wrapped_name] = _build_file_entry(pending, wrapped_name)
+            pending = None
     return files
 
 
