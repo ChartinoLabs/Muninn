@@ -13,16 +13,27 @@ _INTERFACE_HEADER_RE = re.compile(r"^\s*Interface\s+User\s+Mode\s+Idle\s+Peer Ad
 
 # Row format on IOS-XE 'show users wide':
 #   <abs_line> <line_type> <line_id> [<user>] [<host>] [<idle>] [<location>]
-# An optional leading '*' marks the active line. The User/Host/Idle/Location
-# columns are sparsely populated; only Line is guaranteed.
-_ROW_RE = re.compile(
+# An optional leading '*' marks the active line. Depending on the device's
+# column configuration, only Line/User may be emitted (slim layout) or the
+# full Line/User/Host(s)/Idle/Location set may appear (wide layout). The
+# parser tries the wide layout first (anchored on the HH:MM:SS idle field)
+# and falls back to the slim layout. Without this two-pass approach, a row
+# with idle but no user (e.g. ``   0 con 0     00:00:00``) would mis-assign
+# the idle value to the ``user`` field.
+_ROW_WIDE_RE = re.compile(
+    r"^(?P<active>\*)?\s*"
+    r"(?:\d+\s+)?"
+    r"(?P<line_type>\S+)\s+(?P<line_id>\d+(?:/\d+)*)"
+    r"(?:\s+(?P<user>\S+)\s+(?P<host>\S+))?"
+    r"\s+(?P<idle>\d+:\d+:\d+)"
+    r"(?:\s+(?P<location>\S+))?"
+    r"\s*$"
+)
+_ROW_SLIM_RE = re.compile(
     r"^(?P<active>\*)?\s*"
     r"(?:\d+\s+)?"
     r"(?P<line_type>\S+)\s+(?P<line_id>\d+(?:/\d+)*)"
     r"(?:\s+(?P<user>\S+))?"
-    r"(?:\s+(?P<host>\S+))?"
-    r"(?:\s+(?P<idle>\d+:\d+:\d+))?"
-    r"(?:\s+(?P<location>\S+))?"
     r"\s*$"
 )
 
@@ -49,8 +60,9 @@ _OPTIONAL_FIELDS = ("user", "host", "idle", "location")
 def _build_entry(match: re.Match[str]) -> tuple[str, str, UserWideEntry]:
     """Assemble a (line_type, line_id, entry) tuple from a row match."""
     entry: UserWideEntry = {"active": match.group("active") == "*"}
+    groups = match.groupdict()
     for field in _OPTIONAL_FIELDS:
-        value = match.group(field)
+        value = groups.get(field)
         if value:
             entry[field] = value
     return match.group("line_type"), match.group("line_id"), entry
@@ -90,7 +102,7 @@ class ShowUsersWideParser(BaseParser[ShowUsersWideResult]):
             if not raw_line.strip() or _HEADER_RE.match(raw_line):
                 continue
 
-            match = _ROW_RE.match(raw_line)
+            match = _ROW_WIDE_RE.match(raw_line) or _ROW_SLIM_RE.match(raw_line)
             if match is None:
                 continue
 
