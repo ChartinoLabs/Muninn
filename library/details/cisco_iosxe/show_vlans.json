@@ -1,0 +1,214 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show vlans",
+  "schema": {
+    "name": "ShowVlansResult",
+    "fields": {
+      "vlans": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VlanEntry",
+            "fields": {
+              "vlan_id": {
+                "type": "int",
+                "required": true
+              },
+              "encapsulation": {
+                "type": "str",
+                "required": true
+              },
+              "is_native": {
+                "type": "bool",
+                "required": false
+              },
+              "protocols": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "ProtocolCounterEntry",
+                    "fields": {
+                      "received": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "transmitted": {
+                        "type": "int",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "interfaces": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "InterfaceEntry",
+                    "fields": {
+                      "interface": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "vlan_tag": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "addresses": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": "str"
+                        },
+                        "required": false
+                      },
+                      "packets_input": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "bytes_input": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "packets_output": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "bytes_output": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "oversubscription_drops": {
+                        "type": "int",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple dot1q VLANs with native VLAN, trunk interfaces, protocol counters, and per-interface traffic statistics captured from physical testbed devices",
+      "input": "VLAN ID: 1 (IEEE 802.1Q Encapsulation)\n\n This is configured as native Vlan for the following interface(s) :\nGigabitEthernet0/0/1    Native-vlan Tx-type: Untagged\nGigabitEthernet0/0/2    Native-vlan Tx-type: Untagged\n\n   Protocols Configured:          Received:        Transmitted:\n                     IP             171535              156451\n\nVLAN trunk interfaces for VLAN ID 1:\nGigabitEthernet0/0/1\n\nGigabitEthernet0/0/1 (1)\n\n                     IP: 10.0.1.2\n\n      Total 1191 packets, 509225 bytes input\n      Total 10213 packets, 2010424 bytes output\nGigabitEthernet0/0/2\n\nGigabitEthernet0/0/2 (1)\n\n                     IP: 10.0.4.1\n\n      Total 234722 packets, 41356180 bytes input\n      Total 212754 packets, 38745511 bytes output\n\nVLAN ID: 10 (IEEE 802.1Q Encapsulation)\n\n   Protocols Configured:          Received:        Transmitted:\n                     IP             218504              225194\n\nVLAN trunk interfaces for VLAN ID 10:\nGigabitEthernet0/0/1.10\n\nGigabitEthernet0/0/1.10 (10)\n\n                     IP: 10.10.1.2\n\n      Total 0 packets, 0 bytes input\n      Total 6689 packets, 761696 bytes output\nGigabitEthernet0/0/2.10\n\nGigabitEthernet0/0/2.10 (10)\n\n                     IP: 10.10.4.1\n\n      Total 218586 packets, 21582995 bytes input\n      Total 218606 packets, 21277881 bytes output\n\nVLAN ID: 20 (IEEE 802.1Q Encapsulation)\n\n   Protocols Configured:          Received:        Transmitted:\n                     IP             218463              225115\n\nVLAN trunk interfaces for VLAN ID 20:\nGigabitEthernet0/0/1.20\n\nGigabitEthernet0/0/1.20 (20)\n\n                     IP: 10.20.1.2\n\n      Total 0 packets, 0 bytes input\n      Total 6690 packets, 761810 bytes output\nGigabitEthernet0/0/2.20\n\nGigabitEthernet0/0/2.20 (20)\n\n                     IP: 10.20.4.1\n\n      Total 218546 packets, 21579328 bytes input\n      Total 218526 packets, 21271637 bytes output\n",
+      "expected": {
+        "vlans": {
+          "1": {
+            "vlan_id": 1,
+            "encapsulation": "IEEE 802.1Q Encapsulation",
+            "is_native": true,
+            "protocols": {
+              "IP": {
+                "received": 171535,
+                "transmitted": 156451
+              }
+            },
+            "interfaces": {
+              "GigabitEthernet0/0/1": {
+                "interface": "GigabitEthernet0/0/1",
+                "vlan_tag": "1",
+                "addresses": {
+                  "IP": "10.0.1.2"
+                },
+                "packets_input": 1191,
+                "bytes_input": 509225,
+                "packets_output": 10213,
+                "bytes_output": 2010424
+              },
+              "GigabitEthernet0/0/2": {
+                "interface": "GigabitEthernet0/0/2",
+                "vlan_tag": "1",
+                "addresses": {
+                  "IP": "10.0.4.1"
+                },
+                "packets_input": 234722,
+                "bytes_input": 41356180,
+                "packets_output": 212754,
+                "bytes_output": 38745511
+              }
+            }
+          },
+          "10": {
+            "vlan_id": 10,
+            "encapsulation": "IEEE 802.1Q Encapsulation",
+            "protocols": {
+              "IP": {
+                "received": 218504,
+                "transmitted": 225194
+              }
+            },
+            "interfaces": {
+              "GigabitEthernet0/0/1.10": {
+                "interface": "GigabitEthernet0/0/1.10",
+                "vlan_tag": "10",
+                "addresses": {
+                  "IP": "10.10.1.2"
+                },
+                "packets_input": 0,
+                "bytes_input": 0,
+                "packets_output": 6689,
+                "bytes_output": 761696
+              },
+              "GigabitEthernet0/0/2.10": {
+                "interface": "GigabitEthernet0/0/2.10",
+                "vlan_tag": "10",
+                "addresses": {
+                  "IP": "10.10.4.1"
+                },
+                "packets_input": 218586,
+                "bytes_input": 21582995,
+                "packets_output": 218606,
+                "bytes_output": 21277881
+              }
+            }
+          },
+          "20": {
+            "vlan_id": 20,
+            "encapsulation": "IEEE 802.1Q Encapsulation",
+            "protocols": {
+              "IP": {
+                "received": 218463,
+                "transmitted": 225115
+              }
+            },
+            "interfaces": {
+              "GigabitEthernet0/0/1.20": {
+                "interface": "GigabitEthernet0/0/1.20",
+                "vlan_tag": "20",
+                "addresses": {
+                  "IP": "10.20.1.2"
+                },
+                "packets_input": 0,
+                "bytes_input": 0,
+                "packets_output": 6690,
+                "bytes_output": 761810
+              },
+              "GigabitEthernet0/0/2.20": {
+                "interface": "GigabitEthernet0/0/2.20",
+                "vlan_tag": "20",
+                "addresses": {
+                  "IP": "10.20.4.1"
+                },
+                "packets_input": 218546,
+                "bytes_input": 21579328,
+                "packets_output": 218526,
+                "bytes_output": 21271637
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

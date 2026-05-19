@@ -1,0 +1,1469 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show processes memory platform sorted",
+  "schema": {
+    "name": "ShowProcessesMemoryPlatformSortedResult",
+    "fields": {
+      "system_memory": {
+        "type": {
+          "name": "SystemMemory",
+          "fields": {
+            "total_kb": {
+              "type": "int",
+              "required": true
+            },
+            "used_kb": {
+              "type": "int",
+              "required": true
+            },
+            "free_kb": {
+              "type": "int",
+              "required": true
+            },
+            "lowest_kb": {
+              "type": "int",
+              "required": false
+            }
+          }
+        },
+        "required": true
+      },
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ProcessEntry",
+            "fields": {
+              "text_kb": {
+                "type": "int",
+                "required": true
+              },
+              "data_kb": {
+                "type": "int",
+                "required": true
+              },
+              "stack_kb": {
+                "type": "int",
+                "required": true
+              },
+              "dynamic_kb": {
+                "type": "int",
+                "required": true
+              },
+              "rss_kb": {
+                "type": "int",
+                "required": true
+              },
+              "name": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output captured from an ISR 1100 / Catalyst 9300 testbed device",
+      "input": "System memory: 15985428K total, 3152816K used, 12832612K free,\nLowest: 12762084K\n   Pid    Text       Data   Stack    Dynamic        RSS              Name\n-------------------------------------------------------------------------\n  3481  770052     728768     136      12180     728768   linux_iosd-imag\n 20542   24529     313024     136       1164     313024    ucode_pkt_PPE0\n 20961     292     288464     136      29360     288464        cpp_cp_svr\n 25150    4234     204100     136       1208     204100         confd.smp\n 20444   12757     175220     136      26180     175220     fman_fp_image\n  5302     108     101976     136       3732     101976               dbm\n 24772      84     101668     136       8688     101668              pubd\n 25174     448      96832     136      13636      96832           ndbmand\n 20646      13      92012     136       2972      92012        cpp_sp_svr\n  3979     910      91160     136      28632      91160             smand\n  4867    9015      77280     136       3108      77280           fman_rp\n 27766      54      74792     136       3188      74792              paed\n 20751     295      72156     136       4752      72156   cpp_ha_top_leve\n  5589    1458      71948     136       3176      71948             cmand\n 24214     604      70080     136       2880      70080              iomd\n 24464     604      68176     136       2688      68176              iomd\n 20856      76      67064     136       3508      67064        cpp_driver\n  3847     154      65108     136       5968      65108          sessmgrd\n 25344     267      48068     136      17436      48068          dmiauthd\n  5759      51      40964     136       7416      40964         cli_agent\n 21066     224      33112     136       2096      33112           cman_fp\n  6052     263      32176     136       2600      32176             btman\n  3389      70      29176     136       2096      29176               psd\n  4512     479      28140     568       3192      28140              hman\n 16059    2171      27900     136       2288      27900       install_mgr\n 19012      85      24548     136       2364      24548           pistisd\n 22432     774      23472     136       2300      23472              cmcc\n  4104      81      21924     136       1656      21924              repm\n 23289     774      21568     136       1940      21568              cmcc\n  3706     916      19836     136       1840      19836              vman\n     1      39      19740     132      30188      19740           systemd\n 22024     479      18484     136       1500      18484              hman\n 22860     479      18480     136       1500      18480              hman\n 20333     479      18480     136       1500      18480              hman\n 22970     263      18304     136       1860      18304             btman\n 21252     263      17872     136       1860      17872             btman\n  5444     239      17736     132       1780      17736          libvirtd\n 23765     263      17012     136       1724      17012             btman\n 26521    1207      15300     136       4772      15300             nginx\n 25870      97      14788     136       1844      14788          ngiolite\n 13276     703      14412     132      12640      14412   rollback_timer.\n 15679     156      14020     136       1864      14020              lman\n 26580    1207      13920     136       5496      13920             nginx\n  4368     120      13872     136       1948      13872            keyman\n  2875     703      13352     132      11736      13352           psvp.sh\n  5928      87      13028     136       2032      13028           cck_qat\n 13329     703      12620     132      10800      12620   kernel_ftrace.s\n  4220      84      11720     136       1660      11720             plogd\n 25613     391      11020     136        540      11020            ncsshd\n 13333     703      10660     132       8748      10660    selinux_smu.sh\n 13330     703      10652     132       8748      10652     kernel_smu.sh\n  2937     703      10020     132       7812      10020            pvp.sh\n 25047      87       9768     136        656       9768        confd_mgrd\n  1007     236       9564     132       3360       9564     systemd-udevd\n  5417     703       9484     132       7652       9484       droputil.sh\n  7175     703       9444     132       7520       9444      reflector.sh\n  6317      54       9412     136       1276       9412         tamd_proc\n 25485     468       9332     136       1140       9332         ncsshd_bp\n  6191      62       9104     136       2200       9104         tams_proc\n 20098     703       8884     132       7164       8884            pvp.sh\n 21488     703       8880     132       7156       8880            pvp.sh\n 21851     703       8868     132       7156       8868            pvp.sh\n   798     100       8712     132        660       8712   systemd-journal\n 26581    1207       8072     136       5040       8072             nginx\n  6453      67       7692     136       1012       7692   tam_svcs_esg_cf\n  5436      40       6752     132        396       6752          virtlogd\n 24907      57       6356     136        392       6356             pttcd\n 11525     263       6284     132       1116       6284             dhcpd\n  7390     703       6020     132       4236       6020          iptbl.sh\n  6638      52       5540     136        684       5540           autodns\n 16573     703       4464     136       2808       4464    flash_check.sh\n   950      32       3180     132        360       3180           nfsdcld\n  5420     703       3072     132       1188       3072            oom.sh\n   888      26       2984     132        160       2984        rpc.idmapd\n 27754       7       2884     136        268       2884              pman\n 26514       7       2880     136        268       2880              pman\n 25478       7       2856     136        268       2856              pman\n 25165       7       2856     136        268       2856              pman\n 24899       7       2856     136        268       2856              pman\n 24765       7       2856     136        268       2856              pman\n 25607       7       2852     136        268       2852              pman\n 25337       7       2848     136        268       2848              pman\n 25862       7       2844     136        268       2844              pman\n 25040       7       2844     136        268       2844              pman\n 18755       7       2840     136        268       2840              pman\n 16564       7       2840     136        268       2840              pman\n  5750       7       2832     136        268       2832              pman\n 20639       7       2828     136        268       2828              pman\n 16052       7       2828     136        268       2828              pman\n  4097       7       2828     136        268       2828              pman\n  3458       7       2828     136        268       2828              pman\n 24206       7       2824     136        268       2824              pman\n 23752       7       2824     136        268       2824              pman\n 23277       7       2824     136        268       2824              pman\n 22964       7       2824     136        268       2824              pman\n 22846       7       2824     136        268       2824              pman\n 22016       7       2824     136        268       2824              pman\n 20849       7       2824     136        268       2824              pman\n 20744       7       2824     136        268       2824              pman\n 20534       7       2824     136        268       2824              pman\n 20429       7       2824     136        268       2824              pman\n 19000       7       2824     136        268       2824              pman\n 15672       7       2824     136        268       2824              pman\n  6632       7       2824     136        268       2824              pman\n  6046       7       2824     136        268       2824              pman\n  5581       7       2824     136        268       2824              pman\n  5291       7       2824     136        268       2824              pman\n  4503       7       2824     136        268       2824              pman\n  4213       7       2824     136        268       2824              pman\n  3969       7       2824     136        268       2824              pman\n  3840       7       2824     136        268       2824              pman\n  3699       7       2824     136        268       2824              pman\n  3200       7       2824     136        268       2824              pman\n 24452       7       2820     136        268       2820              pman\n 22418       7       2820     136        268       2820              pman\n 21240       7       2820     136        268       2820              pman\n 21059       7       2820     136        268       2820              pman\n 20954       7       2820     136        268       2820              pman\n 20324       7       2820     132        268       2820              pman\n  6440       7       2820     136        268       2820              pman\n  6310       7       2820     136        268       2820              pman\n  6184       7       2820     136        268       2820              pman\n  5921       7       2820     136        268       2820              pman\n  4859       7       2820     136        268       2820              pman\n  4361       7       2820     136        268       2820              pman\n   862      77       2808     132        132       2808            auditd\n  7064       8       2520     132        268       2520             rotee\n  2992       8       2508     132        268       2508             rotee\n 21550       8       2488     132        268       2488             rotee\n 20161       8       2488     132        268       2488             rotee\n 21993       8       2480     132        268       2480             rotee\n  7314       8       2468     132        268       2468             rotee\n  2927       8       2468     132        268       2468             rotee\n 13667       8       2460     132        268       2460             rotee\n 13633       8       2460     132        268       2460             rotee\n 13618       8       2460     132        268       2460             rotee\n 13499       8       2460     132        268       2460             rotee\n  7700       8       2460     132        268       2460             rotee\n  5845       8       2460     132        268       2460             rotee\n  7520       8       2456     132        268       2456             rotee\n 25946     703       2220     132        364       2220   memory_monitor.\n 13274     703       2112     132        264       2112        auxinit.sh\n   878       3       1984     132        132       1984     audisp-syslog\n 18763     703       1728     136        264       1728   sort_files_by_i\n  5637      84       1408     132        132       1408        rpc.mountd\n  6107     657       1384     132        388       1384              sshd\n 13278     109       1316     132        132       1316            xinetd\n 13277     109       1292     132        132       1292            xinetd\n 12105     109       1224     132        132       1224            xinetd\n 12108     109       1172     132        132       1172            xinetd\n  5457     109       1148     132        132       1148            xinetd\n  5422      45        952     132        132        952              sntp\n  7378       8        876     132        180        876       inotifywait\n  7084       8        860     132        132        860       inotifywait\n 21606       8        836     132        132        836       inotifywait\n  2932       8        836     132        132        836       inotifywait\n 22131       8        832     132        132        832       inotifywait\n 20218       8        832     132        132        832       inotifywait\n 13758       8        832     136        132        832       inotifywait\n 13721       8        832     132        132        832       inotifywait\n 13709       8        832     132        132        832       inotifywait\n 13698       8        832     132        132        832       inotifywait\n  7660       8        832     132        132        832       inotifywait\n 13653       8        820     132        132        820       inotifywait\n  5608      53        784     132        132        784         rpc.statd\n  5480      26        760     132        132        760           rpcbind\n 17126      20        732     136        132        732             sleep\n 16265      20        728     136        132        728             sleep\n 11721      20        720     132        132        720             sleep\n  5856      20        704     132        132        704             sleep\n 27584      45        660     136        136        660      inet_gethost\n 25402      13        640     136        132        640   erl_child_setup\n 27585      45        576     136        136        576      inet_gethost\n",
+      "expected": {
+        "system_memory": {
+          "total_kb": 15985428,
+          "used_kb": 3152816,
+          "free_kb": 12832612,
+          "lowest_kb": 12762084
+        },
+        "processes": {
+          "3481": {
+            "text_kb": 770052,
+            "data_kb": 728768,
+            "stack_kb": 136,
+            "dynamic_kb": 12180,
+            "rss_kb": 728768,
+            "name": "linux_iosd-imag"
+          },
+          "20542": {
+            "text_kb": 24529,
+            "data_kb": 313024,
+            "stack_kb": 136,
+            "dynamic_kb": 1164,
+            "rss_kb": 313024,
+            "name": "ucode_pkt_PPE0"
+          },
+          "20961": {
+            "text_kb": 292,
+            "data_kb": 288464,
+            "stack_kb": 136,
+            "dynamic_kb": 29360,
+            "rss_kb": 288464,
+            "name": "cpp_cp_svr"
+          },
+          "25150": {
+            "text_kb": 4234,
+            "data_kb": 204100,
+            "stack_kb": 136,
+            "dynamic_kb": 1208,
+            "rss_kb": 204100,
+            "name": "confd.smp"
+          },
+          "20444": {
+            "text_kb": 12757,
+            "data_kb": 175220,
+            "stack_kb": 136,
+            "dynamic_kb": 26180,
+            "rss_kb": 175220,
+            "name": "fman_fp_image"
+          },
+          "5302": {
+            "text_kb": 108,
+            "data_kb": 101976,
+            "stack_kb": 136,
+            "dynamic_kb": 3732,
+            "rss_kb": 101976,
+            "name": "dbm"
+          },
+          "24772": {
+            "text_kb": 84,
+            "data_kb": 101668,
+            "stack_kb": 136,
+            "dynamic_kb": 8688,
+            "rss_kb": 101668,
+            "name": "pubd"
+          },
+          "25174": {
+            "text_kb": 448,
+            "data_kb": 96832,
+            "stack_kb": 136,
+            "dynamic_kb": 13636,
+            "rss_kb": 96832,
+            "name": "ndbmand"
+          },
+          "20646": {
+            "text_kb": 13,
+            "data_kb": 92012,
+            "stack_kb": 136,
+            "dynamic_kb": 2972,
+            "rss_kb": 92012,
+            "name": "cpp_sp_svr"
+          },
+          "3979": {
+            "text_kb": 910,
+            "data_kb": 91160,
+            "stack_kb": 136,
+            "dynamic_kb": 28632,
+            "rss_kb": 91160,
+            "name": "smand"
+          },
+          "4867": {
+            "text_kb": 9015,
+            "data_kb": 77280,
+            "stack_kb": 136,
+            "dynamic_kb": 3108,
+            "rss_kb": 77280,
+            "name": "fman_rp"
+          },
+          "27766": {
+            "text_kb": 54,
+            "data_kb": 74792,
+            "stack_kb": 136,
+            "dynamic_kb": 3188,
+            "rss_kb": 74792,
+            "name": "paed"
+          },
+          "20751": {
+            "text_kb": 295,
+            "data_kb": 72156,
+            "stack_kb": 136,
+            "dynamic_kb": 4752,
+            "rss_kb": 72156,
+            "name": "cpp_ha_top_leve"
+          },
+          "5589": {
+            "text_kb": 1458,
+            "data_kb": 71948,
+            "stack_kb": 136,
+            "dynamic_kb": 3176,
+            "rss_kb": 71948,
+            "name": "cmand"
+          },
+          "24214": {
+            "text_kb": 604,
+            "data_kb": 70080,
+            "stack_kb": 136,
+            "dynamic_kb": 2880,
+            "rss_kb": 70080,
+            "name": "iomd"
+          },
+          "24464": {
+            "text_kb": 604,
+            "data_kb": 68176,
+            "stack_kb": 136,
+            "dynamic_kb": 2688,
+            "rss_kb": 68176,
+            "name": "iomd"
+          },
+          "20856": {
+            "text_kb": 76,
+            "data_kb": 67064,
+            "stack_kb": 136,
+            "dynamic_kb": 3508,
+            "rss_kb": 67064,
+            "name": "cpp_driver"
+          },
+          "3847": {
+            "text_kb": 154,
+            "data_kb": 65108,
+            "stack_kb": 136,
+            "dynamic_kb": 5968,
+            "rss_kb": 65108,
+            "name": "sessmgrd"
+          },
+          "25344": {
+            "text_kb": 267,
+            "data_kb": 48068,
+            "stack_kb": 136,
+            "dynamic_kb": 17436,
+            "rss_kb": 48068,
+            "name": "dmiauthd"
+          },
+          "5759": {
+            "text_kb": 51,
+            "data_kb": 40964,
+            "stack_kb": 136,
+            "dynamic_kb": 7416,
+            "rss_kb": 40964,
+            "name": "cli_agent"
+          },
+          "21066": {
+            "text_kb": 224,
+            "data_kb": 33112,
+            "stack_kb": 136,
+            "dynamic_kb": 2096,
+            "rss_kb": 33112,
+            "name": "cman_fp"
+          },
+          "6052": {
+            "text_kb": 263,
+            "data_kb": 32176,
+            "stack_kb": 136,
+            "dynamic_kb": 2600,
+            "rss_kb": 32176,
+            "name": "btman"
+          },
+          "3389": {
+            "text_kb": 70,
+            "data_kb": 29176,
+            "stack_kb": 136,
+            "dynamic_kb": 2096,
+            "rss_kb": 29176,
+            "name": "psd"
+          },
+          "4512": {
+            "text_kb": 479,
+            "data_kb": 28140,
+            "stack_kb": 568,
+            "dynamic_kb": 3192,
+            "rss_kb": 28140,
+            "name": "hman"
+          },
+          "16059": {
+            "text_kb": 2171,
+            "data_kb": 27900,
+            "stack_kb": 136,
+            "dynamic_kb": 2288,
+            "rss_kb": 27900,
+            "name": "install_mgr"
+          },
+          "19012": {
+            "text_kb": 85,
+            "data_kb": 24548,
+            "stack_kb": 136,
+            "dynamic_kb": 2364,
+            "rss_kb": 24548,
+            "name": "pistisd"
+          },
+          "22432": {
+            "text_kb": 774,
+            "data_kb": 23472,
+            "stack_kb": 136,
+            "dynamic_kb": 2300,
+            "rss_kb": 23472,
+            "name": "cmcc"
+          },
+          "4104": {
+            "text_kb": 81,
+            "data_kb": 21924,
+            "stack_kb": 136,
+            "dynamic_kb": 1656,
+            "rss_kb": 21924,
+            "name": "repm"
+          },
+          "23289": {
+            "text_kb": 774,
+            "data_kb": 21568,
+            "stack_kb": 136,
+            "dynamic_kb": 1940,
+            "rss_kb": 21568,
+            "name": "cmcc"
+          },
+          "3706": {
+            "text_kb": 916,
+            "data_kb": 19836,
+            "stack_kb": 136,
+            "dynamic_kb": 1840,
+            "rss_kb": 19836,
+            "name": "vman"
+          },
+          "1": {
+            "text_kb": 39,
+            "data_kb": 19740,
+            "stack_kb": 132,
+            "dynamic_kb": 30188,
+            "rss_kb": 19740,
+            "name": "systemd"
+          },
+          "22024": {
+            "text_kb": 479,
+            "data_kb": 18484,
+            "stack_kb": 136,
+            "dynamic_kb": 1500,
+            "rss_kb": 18484,
+            "name": "hman"
+          },
+          "22860": {
+            "text_kb": 479,
+            "data_kb": 18480,
+            "stack_kb": 136,
+            "dynamic_kb": 1500,
+            "rss_kb": 18480,
+            "name": "hman"
+          },
+          "20333": {
+            "text_kb": 479,
+            "data_kb": 18480,
+            "stack_kb": 136,
+            "dynamic_kb": 1500,
+            "rss_kb": 18480,
+            "name": "hman"
+          },
+          "22970": {
+            "text_kb": 263,
+            "data_kb": 18304,
+            "stack_kb": 136,
+            "dynamic_kb": 1860,
+            "rss_kb": 18304,
+            "name": "btman"
+          },
+          "21252": {
+            "text_kb": 263,
+            "data_kb": 17872,
+            "stack_kb": 136,
+            "dynamic_kb": 1860,
+            "rss_kb": 17872,
+            "name": "btman"
+          },
+          "5444": {
+            "text_kb": 239,
+            "data_kb": 17736,
+            "stack_kb": 132,
+            "dynamic_kb": 1780,
+            "rss_kb": 17736,
+            "name": "libvirtd"
+          },
+          "23765": {
+            "text_kb": 263,
+            "data_kb": 17012,
+            "stack_kb": 136,
+            "dynamic_kb": 1724,
+            "rss_kb": 17012,
+            "name": "btman"
+          },
+          "26521": {
+            "text_kb": 1207,
+            "data_kb": 15300,
+            "stack_kb": 136,
+            "dynamic_kb": 4772,
+            "rss_kb": 15300,
+            "name": "nginx"
+          },
+          "25870": {
+            "text_kb": 97,
+            "data_kb": 14788,
+            "stack_kb": 136,
+            "dynamic_kb": 1844,
+            "rss_kb": 14788,
+            "name": "ngiolite"
+          },
+          "13276": {
+            "text_kb": 703,
+            "data_kb": 14412,
+            "stack_kb": 132,
+            "dynamic_kb": 12640,
+            "rss_kb": 14412,
+            "name": "rollback_timer."
+          },
+          "15679": {
+            "text_kb": 156,
+            "data_kb": 14020,
+            "stack_kb": 136,
+            "dynamic_kb": 1864,
+            "rss_kb": 14020,
+            "name": "lman"
+          },
+          "26580": {
+            "text_kb": 1207,
+            "data_kb": 13920,
+            "stack_kb": 136,
+            "dynamic_kb": 5496,
+            "rss_kb": 13920,
+            "name": "nginx"
+          },
+          "4368": {
+            "text_kb": 120,
+            "data_kb": 13872,
+            "stack_kb": 136,
+            "dynamic_kb": 1948,
+            "rss_kb": 13872,
+            "name": "keyman"
+          },
+          "2875": {
+            "text_kb": 703,
+            "data_kb": 13352,
+            "stack_kb": 132,
+            "dynamic_kb": 11736,
+            "rss_kb": 13352,
+            "name": "psvp.sh"
+          },
+          "5928": {
+            "text_kb": 87,
+            "data_kb": 13028,
+            "stack_kb": 136,
+            "dynamic_kb": 2032,
+            "rss_kb": 13028,
+            "name": "cck_qat"
+          },
+          "13329": {
+            "text_kb": 703,
+            "data_kb": 12620,
+            "stack_kb": 132,
+            "dynamic_kb": 10800,
+            "rss_kb": 12620,
+            "name": "kernel_ftrace.s"
+          },
+          "4220": {
+            "text_kb": 84,
+            "data_kb": 11720,
+            "stack_kb": 136,
+            "dynamic_kb": 1660,
+            "rss_kb": 11720,
+            "name": "plogd"
+          },
+          "25613": {
+            "text_kb": 391,
+            "data_kb": 11020,
+            "stack_kb": 136,
+            "dynamic_kb": 540,
+            "rss_kb": 11020,
+            "name": "ncsshd"
+          },
+          "13333": {
+            "text_kb": 703,
+            "data_kb": 10660,
+            "stack_kb": 132,
+            "dynamic_kb": 8748,
+            "rss_kb": 10660,
+            "name": "selinux_smu.sh"
+          },
+          "13330": {
+            "text_kb": 703,
+            "data_kb": 10652,
+            "stack_kb": 132,
+            "dynamic_kb": 8748,
+            "rss_kb": 10652,
+            "name": "kernel_smu.sh"
+          },
+          "2937": {
+            "text_kb": 703,
+            "data_kb": 10020,
+            "stack_kb": 132,
+            "dynamic_kb": 7812,
+            "rss_kb": 10020,
+            "name": "pvp.sh"
+          },
+          "25047": {
+            "text_kb": 87,
+            "data_kb": 9768,
+            "stack_kb": 136,
+            "dynamic_kb": 656,
+            "rss_kb": 9768,
+            "name": "confd_mgrd"
+          },
+          "1007": {
+            "text_kb": 236,
+            "data_kb": 9564,
+            "stack_kb": 132,
+            "dynamic_kb": 3360,
+            "rss_kb": 9564,
+            "name": "systemd-udevd"
+          },
+          "5417": {
+            "text_kb": 703,
+            "data_kb": 9484,
+            "stack_kb": 132,
+            "dynamic_kb": 7652,
+            "rss_kb": 9484,
+            "name": "droputil.sh"
+          },
+          "7175": {
+            "text_kb": 703,
+            "data_kb": 9444,
+            "stack_kb": 132,
+            "dynamic_kb": 7520,
+            "rss_kb": 9444,
+            "name": "reflector.sh"
+          },
+          "6317": {
+            "text_kb": 54,
+            "data_kb": 9412,
+            "stack_kb": 136,
+            "dynamic_kb": 1276,
+            "rss_kb": 9412,
+            "name": "tamd_proc"
+          },
+          "25485": {
+            "text_kb": 468,
+            "data_kb": 9332,
+            "stack_kb": 136,
+            "dynamic_kb": 1140,
+            "rss_kb": 9332,
+            "name": "ncsshd_bp"
+          },
+          "6191": {
+            "text_kb": 62,
+            "data_kb": 9104,
+            "stack_kb": 136,
+            "dynamic_kb": 2200,
+            "rss_kb": 9104,
+            "name": "tams_proc"
+          },
+          "20098": {
+            "text_kb": 703,
+            "data_kb": 8884,
+            "stack_kb": 132,
+            "dynamic_kb": 7164,
+            "rss_kb": 8884,
+            "name": "pvp.sh"
+          },
+          "21488": {
+            "text_kb": 703,
+            "data_kb": 8880,
+            "stack_kb": 132,
+            "dynamic_kb": 7156,
+            "rss_kb": 8880,
+            "name": "pvp.sh"
+          },
+          "21851": {
+            "text_kb": 703,
+            "data_kb": 8868,
+            "stack_kb": 132,
+            "dynamic_kb": 7156,
+            "rss_kb": 8868,
+            "name": "pvp.sh"
+          },
+          "798": {
+            "text_kb": 100,
+            "data_kb": 8712,
+            "stack_kb": 132,
+            "dynamic_kb": 660,
+            "rss_kb": 8712,
+            "name": "systemd-journal"
+          },
+          "26581": {
+            "text_kb": 1207,
+            "data_kb": 8072,
+            "stack_kb": 136,
+            "dynamic_kb": 5040,
+            "rss_kb": 8072,
+            "name": "nginx"
+          },
+          "6453": {
+            "text_kb": 67,
+            "data_kb": 7692,
+            "stack_kb": 136,
+            "dynamic_kb": 1012,
+            "rss_kb": 7692,
+            "name": "tam_svcs_esg_cf"
+          },
+          "5436": {
+            "text_kb": 40,
+            "data_kb": 6752,
+            "stack_kb": 132,
+            "dynamic_kb": 396,
+            "rss_kb": 6752,
+            "name": "virtlogd"
+          },
+          "24907": {
+            "text_kb": 57,
+            "data_kb": 6356,
+            "stack_kb": 136,
+            "dynamic_kb": 392,
+            "rss_kb": 6356,
+            "name": "pttcd"
+          },
+          "11525": {
+            "text_kb": 263,
+            "data_kb": 6284,
+            "stack_kb": 132,
+            "dynamic_kb": 1116,
+            "rss_kb": 6284,
+            "name": "dhcpd"
+          },
+          "7390": {
+            "text_kb": 703,
+            "data_kb": 6020,
+            "stack_kb": 132,
+            "dynamic_kb": 4236,
+            "rss_kb": 6020,
+            "name": "iptbl.sh"
+          },
+          "6638": {
+            "text_kb": 52,
+            "data_kb": 5540,
+            "stack_kb": 136,
+            "dynamic_kb": 684,
+            "rss_kb": 5540,
+            "name": "autodns"
+          },
+          "16573": {
+            "text_kb": 703,
+            "data_kb": 4464,
+            "stack_kb": 136,
+            "dynamic_kb": 2808,
+            "rss_kb": 4464,
+            "name": "flash_check.sh"
+          },
+          "950": {
+            "text_kb": 32,
+            "data_kb": 3180,
+            "stack_kb": 132,
+            "dynamic_kb": 360,
+            "rss_kb": 3180,
+            "name": "nfsdcld"
+          },
+          "5420": {
+            "text_kb": 703,
+            "data_kb": 3072,
+            "stack_kb": 132,
+            "dynamic_kb": 1188,
+            "rss_kb": 3072,
+            "name": "oom.sh"
+          },
+          "888": {
+            "text_kb": 26,
+            "data_kb": 2984,
+            "stack_kb": 132,
+            "dynamic_kb": 160,
+            "rss_kb": 2984,
+            "name": "rpc.idmapd"
+          },
+          "27754": {
+            "text_kb": 7,
+            "data_kb": 2884,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2884,
+            "name": "pman"
+          },
+          "26514": {
+            "text_kb": 7,
+            "data_kb": 2880,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2880,
+            "name": "pman"
+          },
+          "25478": {
+            "text_kb": 7,
+            "data_kb": 2856,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2856,
+            "name": "pman"
+          },
+          "25165": {
+            "text_kb": 7,
+            "data_kb": 2856,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2856,
+            "name": "pman"
+          },
+          "24899": {
+            "text_kb": 7,
+            "data_kb": 2856,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2856,
+            "name": "pman"
+          },
+          "24765": {
+            "text_kb": 7,
+            "data_kb": 2856,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2856,
+            "name": "pman"
+          },
+          "25607": {
+            "text_kb": 7,
+            "data_kb": 2852,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2852,
+            "name": "pman"
+          },
+          "25337": {
+            "text_kb": 7,
+            "data_kb": 2848,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2848,
+            "name": "pman"
+          },
+          "25862": {
+            "text_kb": 7,
+            "data_kb": 2844,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2844,
+            "name": "pman"
+          },
+          "25040": {
+            "text_kb": 7,
+            "data_kb": 2844,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2844,
+            "name": "pman"
+          },
+          "18755": {
+            "text_kb": 7,
+            "data_kb": 2840,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2840,
+            "name": "pman"
+          },
+          "16564": {
+            "text_kb": 7,
+            "data_kb": 2840,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2840,
+            "name": "pman"
+          },
+          "5750": {
+            "text_kb": 7,
+            "data_kb": 2832,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2832,
+            "name": "pman"
+          },
+          "20639": {
+            "text_kb": 7,
+            "data_kb": 2828,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2828,
+            "name": "pman"
+          },
+          "16052": {
+            "text_kb": 7,
+            "data_kb": 2828,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2828,
+            "name": "pman"
+          },
+          "4097": {
+            "text_kb": 7,
+            "data_kb": 2828,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2828,
+            "name": "pman"
+          },
+          "3458": {
+            "text_kb": 7,
+            "data_kb": 2828,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2828,
+            "name": "pman"
+          },
+          "24206": {
+            "text_kb": 7,
+            "data_kb": 2824,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2824,
+            "name": "pman"
+          },
+          "23752": {
+            "text_kb": 7,
+            "data_kb": 2824,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2824,
+            "name": "pman"
+          },
+          "23277": {
+            "text_kb": 7,
+            "data_kb": 2824,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2824,
+            "name": "pman"
+          },
+          "22964": {
+            "text_kb": 7,
+            "data_kb": 2824,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2824,
+            "name": "pman"
+          },
+          "22846": {
+            "text_kb": 7,
+            "data_kb": 2824,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2824,
+            "name": "pman"
+          },
+          "22016": {
+            "text_kb": 7,
+            "data_kb": 2824,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2824,
+            "name": "pman"
+          },
+          "20849": {
+            "text_kb": 7,
+            "data_kb": 2824,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2824,
+            "name": "pman"
+          },
+          "20744": {
+            "text_kb": 7,
+            "data_kb": 2824,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2824,
+            "name": "pman"
+          },
+          "20534": {
+            "text_kb": 7,
+            "data_kb": 2824,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2824,
+            "name": "pman"
+          },
+          "20429": {
+            "text_kb": 7,
+            "data_kb": 2824,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2824,
+            "name": "pman"
+          },
+          "19000": {
+            "text_kb": 7,
+            "data_kb": 2824,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2824,
+            "name": "pman"
+          },
+          "15672": {
+            "text_kb": 7,
+            "data_kb": 2824,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2824,
+            "name": "pman"
+          },
+          "6632": {
+            "text_kb": 7,
+            "data_kb": 2824,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2824,
+            "name": "pman"
+          },
+          "6046": {
+            "text_kb": 7,
+            "data_kb": 2824,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2824,
+            "name": "pman"
+          },
+          "5581": {
+            "text_kb": 7,
+            "data_kb": 2824,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2824,
+            "name": "pman"
+          },
+          "5291": {
+            "text_kb": 7,
+            "data_kb": 2824,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2824,
+            "name": "pman"
+          },
+          "4503": {
+            "text_kb": 7,
+            "data_kb": 2824,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2824,
+            "name": "pman"
+          },
+          "4213": {
+            "text_kb": 7,
+            "data_kb": 2824,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2824,
+            "name": "pman"
+          },
+          "3969": {
+            "text_kb": 7,
+            "data_kb": 2824,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2824,
+            "name": "pman"
+          },
+          "3840": {
+            "text_kb": 7,
+            "data_kb": 2824,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2824,
+            "name": "pman"
+          },
+          "3699": {
+            "text_kb": 7,
+            "data_kb": 2824,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2824,
+            "name": "pman"
+          },
+          "3200": {
+            "text_kb": 7,
+            "data_kb": 2824,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2824,
+            "name": "pman"
+          },
+          "24452": {
+            "text_kb": 7,
+            "data_kb": 2820,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2820,
+            "name": "pman"
+          },
+          "22418": {
+            "text_kb": 7,
+            "data_kb": 2820,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2820,
+            "name": "pman"
+          },
+          "21240": {
+            "text_kb": 7,
+            "data_kb": 2820,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2820,
+            "name": "pman"
+          },
+          "21059": {
+            "text_kb": 7,
+            "data_kb": 2820,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2820,
+            "name": "pman"
+          },
+          "20954": {
+            "text_kb": 7,
+            "data_kb": 2820,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2820,
+            "name": "pman"
+          },
+          "20324": {
+            "text_kb": 7,
+            "data_kb": 2820,
+            "stack_kb": 132,
+            "dynamic_kb": 268,
+            "rss_kb": 2820,
+            "name": "pman"
+          },
+          "6440": {
+            "text_kb": 7,
+            "data_kb": 2820,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2820,
+            "name": "pman"
+          },
+          "6310": {
+            "text_kb": 7,
+            "data_kb": 2820,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2820,
+            "name": "pman"
+          },
+          "6184": {
+            "text_kb": 7,
+            "data_kb": 2820,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2820,
+            "name": "pman"
+          },
+          "5921": {
+            "text_kb": 7,
+            "data_kb": 2820,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2820,
+            "name": "pman"
+          },
+          "4859": {
+            "text_kb": 7,
+            "data_kb": 2820,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2820,
+            "name": "pman"
+          },
+          "4361": {
+            "text_kb": 7,
+            "data_kb": 2820,
+            "stack_kb": 136,
+            "dynamic_kb": 268,
+            "rss_kb": 2820,
+            "name": "pman"
+          },
+          "862": {
+            "text_kb": 77,
+            "data_kb": 2808,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 2808,
+            "name": "auditd"
+          },
+          "7064": {
+            "text_kb": 8,
+            "data_kb": 2520,
+            "stack_kb": 132,
+            "dynamic_kb": 268,
+            "rss_kb": 2520,
+            "name": "rotee"
+          },
+          "2992": {
+            "text_kb": 8,
+            "data_kb": 2508,
+            "stack_kb": 132,
+            "dynamic_kb": 268,
+            "rss_kb": 2508,
+            "name": "rotee"
+          },
+          "21550": {
+            "text_kb": 8,
+            "data_kb": 2488,
+            "stack_kb": 132,
+            "dynamic_kb": 268,
+            "rss_kb": 2488,
+            "name": "rotee"
+          },
+          "20161": {
+            "text_kb": 8,
+            "data_kb": 2488,
+            "stack_kb": 132,
+            "dynamic_kb": 268,
+            "rss_kb": 2488,
+            "name": "rotee"
+          },
+          "21993": {
+            "text_kb": 8,
+            "data_kb": 2480,
+            "stack_kb": 132,
+            "dynamic_kb": 268,
+            "rss_kb": 2480,
+            "name": "rotee"
+          },
+          "7314": {
+            "text_kb": 8,
+            "data_kb": 2468,
+            "stack_kb": 132,
+            "dynamic_kb": 268,
+            "rss_kb": 2468,
+            "name": "rotee"
+          },
+          "2927": {
+            "text_kb": 8,
+            "data_kb": 2468,
+            "stack_kb": 132,
+            "dynamic_kb": 268,
+            "rss_kb": 2468,
+            "name": "rotee"
+          },
+          "13667": {
+            "text_kb": 8,
+            "data_kb": 2460,
+            "stack_kb": 132,
+            "dynamic_kb": 268,
+            "rss_kb": 2460,
+            "name": "rotee"
+          },
+          "13633": {
+            "text_kb": 8,
+            "data_kb": 2460,
+            "stack_kb": 132,
+            "dynamic_kb": 268,
+            "rss_kb": 2460,
+            "name": "rotee"
+          },
+          "13618": {
+            "text_kb": 8,
+            "data_kb": 2460,
+            "stack_kb": 132,
+            "dynamic_kb": 268,
+            "rss_kb": 2460,
+            "name": "rotee"
+          },
+          "13499": {
+            "text_kb": 8,
+            "data_kb": 2460,
+            "stack_kb": 132,
+            "dynamic_kb": 268,
+            "rss_kb": 2460,
+            "name": "rotee"
+          },
+          "7700": {
+            "text_kb": 8,
+            "data_kb": 2460,
+            "stack_kb": 132,
+            "dynamic_kb": 268,
+            "rss_kb": 2460,
+            "name": "rotee"
+          },
+          "5845": {
+            "text_kb": 8,
+            "data_kb": 2460,
+            "stack_kb": 132,
+            "dynamic_kb": 268,
+            "rss_kb": 2460,
+            "name": "rotee"
+          },
+          "7520": {
+            "text_kb": 8,
+            "data_kb": 2456,
+            "stack_kb": 132,
+            "dynamic_kb": 268,
+            "rss_kb": 2456,
+            "name": "rotee"
+          },
+          "25946": {
+            "text_kb": 703,
+            "data_kb": 2220,
+            "stack_kb": 132,
+            "dynamic_kb": 364,
+            "rss_kb": 2220,
+            "name": "memory_monitor."
+          },
+          "13274": {
+            "text_kb": 703,
+            "data_kb": 2112,
+            "stack_kb": 132,
+            "dynamic_kb": 264,
+            "rss_kb": 2112,
+            "name": "auxinit.sh"
+          },
+          "878": {
+            "text_kb": 3,
+            "data_kb": 1984,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 1984,
+            "name": "audisp-syslog"
+          },
+          "18763": {
+            "text_kb": 703,
+            "data_kb": 1728,
+            "stack_kb": 136,
+            "dynamic_kb": 264,
+            "rss_kb": 1728,
+            "name": "sort_files_by_i"
+          },
+          "5637": {
+            "text_kb": 84,
+            "data_kb": 1408,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 1408,
+            "name": "rpc.mountd"
+          },
+          "6107": {
+            "text_kb": 657,
+            "data_kb": 1384,
+            "stack_kb": 132,
+            "dynamic_kb": 388,
+            "rss_kb": 1384,
+            "name": "sshd"
+          },
+          "13278": {
+            "text_kb": 109,
+            "data_kb": 1316,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 1316,
+            "name": "xinetd"
+          },
+          "13277": {
+            "text_kb": 109,
+            "data_kb": 1292,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 1292,
+            "name": "xinetd"
+          },
+          "12105": {
+            "text_kb": 109,
+            "data_kb": 1224,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 1224,
+            "name": "xinetd"
+          },
+          "12108": {
+            "text_kb": 109,
+            "data_kb": 1172,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 1172,
+            "name": "xinetd"
+          },
+          "5457": {
+            "text_kb": 109,
+            "data_kb": 1148,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 1148,
+            "name": "xinetd"
+          },
+          "5422": {
+            "text_kb": 45,
+            "data_kb": 952,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 952,
+            "name": "sntp"
+          },
+          "7378": {
+            "text_kb": 8,
+            "data_kb": 876,
+            "stack_kb": 132,
+            "dynamic_kb": 180,
+            "rss_kb": 876,
+            "name": "inotifywait"
+          },
+          "7084": {
+            "text_kb": 8,
+            "data_kb": 860,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 860,
+            "name": "inotifywait"
+          },
+          "21606": {
+            "text_kb": 8,
+            "data_kb": 836,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 836,
+            "name": "inotifywait"
+          },
+          "2932": {
+            "text_kb": 8,
+            "data_kb": 836,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 836,
+            "name": "inotifywait"
+          },
+          "22131": {
+            "text_kb": 8,
+            "data_kb": 832,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 832,
+            "name": "inotifywait"
+          },
+          "20218": {
+            "text_kb": 8,
+            "data_kb": 832,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 832,
+            "name": "inotifywait"
+          },
+          "13758": {
+            "text_kb": 8,
+            "data_kb": 832,
+            "stack_kb": 136,
+            "dynamic_kb": 132,
+            "rss_kb": 832,
+            "name": "inotifywait"
+          },
+          "13721": {
+            "text_kb": 8,
+            "data_kb": 832,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 832,
+            "name": "inotifywait"
+          },
+          "13709": {
+            "text_kb": 8,
+            "data_kb": 832,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 832,
+            "name": "inotifywait"
+          },
+          "13698": {
+            "text_kb": 8,
+            "data_kb": 832,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 832,
+            "name": "inotifywait"
+          },
+          "7660": {
+            "text_kb": 8,
+            "data_kb": 832,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 832,
+            "name": "inotifywait"
+          },
+          "13653": {
+            "text_kb": 8,
+            "data_kb": 820,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 820,
+            "name": "inotifywait"
+          },
+          "5608": {
+            "text_kb": 53,
+            "data_kb": 784,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 784,
+            "name": "rpc.statd"
+          },
+          "5480": {
+            "text_kb": 26,
+            "data_kb": 760,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 760,
+            "name": "rpcbind"
+          },
+          "17126": {
+            "text_kb": 20,
+            "data_kb": 732,
+            "stack_kb": 136,
+            "dynamic_kb": 132,
+            "rss_kb": 732,
+            "name": "sleep"
+          },
+          "16265": {
+            "text_kb": 20,
+            "data_kb": 728,
+            "stack_kb": 136,
+            "dynamic_kb": 132,
+            "rss_kb": 728,
+            "name": "sleep"
+          },
+          "11721": {
+            "text_kb": 20,
+            "data_kb": 720,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 720,
+            "name": "sleep"
+          },
+          "5856": {
+            "text_kb": 20,
+            "data_kb": 704,
+            "stack_kb": 132,
+            "dynamic_kb": 132,
+            "rss_kb": 704,
+            "name": "sleep"
+          },
+          "27584": {
+            "text_kb": 45,
+            "data_kb": 660,
+            "stack_kb": 136,
+            "dynamic_kb": 136,
+            "rss_kb": 660,
+            "name": "inet_gethost"
+          },
+          "25402": {
+            "text_kb": 13,
+            "data_kb": 640,
+            "stack_kb": 136,
+            "dynamic_kb": 132,
+            "rss_kb": 640,
+            "name": "erl_child_setup"
+          },
+          "27585": {
+            "text_kb": 45,
+            "data_kb": 576,
+            "stack_kb": 136,
+            "dynamic_kb": 136,
+            "rss_kb": 576,
+            "name": "inet_gethost"
+          }
+        }
+      }
+    }
+  ]
+}
