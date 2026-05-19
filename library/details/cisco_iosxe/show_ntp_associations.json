@@ -1,0 +1,39 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ntp associations",
+  "schema": null,
+  "examples": [
+    {
+      "name": "NTP associations table from a TAC-R2 IOS-XE device with a GNSS-referenced sys.peer and an unreachable stratum-16 configured peer",
+      "input": "address         ref clock       st   when   poll reach  delay  offset   disp\n*~192.0.2.10  .GNSS.           1    932   1024   377 39.781  -1.893  1.071\n ~192.0.2.11  .TIME.          16      -     64     0  0.000   0.000 15937.\n * sys.peer, # selected, + candidate, - outlyer, x falseticker, ~ configured\n",
+      "expected": {
+        "192.0.2.10": {
+          "address": "192.0.2.10",
+          "ref_clock": ".GNSS.",
+          "stratum": 1,
+          "poll_seconds": 1024,
+          "reach": 255,
+          "reach_raw": "377",
+          "delay_ms": 39.781,
+          "offset_ms": -1.893,
+          "dispersion_ms": 1.071,
+          "tally": "sys.peer",
+          "configured": true,
+          "when_seconds": 932
+        },
+        "192.0.2.11": {
+          "address": "192.0.2.11",
+          "ref_clock": ".TIME.",
+          "stratum": 16,
+          "poll_seconds": 64,
+          "reach": 0,
+          "reach_raw": "0",
+          "delay_ms": 0.0,
+          "offset_ms": 0.0,
+          "dispersion_ms": 15937.0,
+          "configured": true
+        }
+      }
+    }
+  ]
+}
