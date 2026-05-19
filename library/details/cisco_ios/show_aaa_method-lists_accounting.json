@@ -1,0 +1,89 @@
+{
+  "os": "cisco_ios",
+  "command": "show aaa method-lists accounting",
+  "schema": {
+    "name": "ShowAaaMethodListsAccountingResult",
+    "fields": {
+      "acct_queues": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": true
+      },
+      "permanent_lists": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PermanentListEntry",
+            "fields": {
+              "valid": {
+                "type": "bool",
+                "required": true
+              },
+              "id": {
+                "type": "int",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "action": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "AAA accounting method-lists registration dump from a Catalyst 3750-X stack",
+      "input": "acct queue=AAA_ML_ACCT_SHELL\nacct queue=AAA_ML_ACCT_AUTH_PROXY\nacct queue=AAA_ML_ACCT_NET\nacct queue=AAA_ML_ACCT_CONN\nacct queue=AAA_ML_ACCT_SYSTEM\nacct queue=AAA_ML_ACCT_RESOURCE\nacct queue=AAA_ML_ACCT_RM\nacct queue=AAA_ML_ACCT_DOT1X\nacct queue=AAA_ML_ACCT_IDENTITY\nacct queue=AAA_ML_ACCT_CONNECTEDAPPS\nacct queue=AAA_ML_ACCT_COMMAND\nacct queue=AAA_ML_ACCT_COMMAND\nacct queue=AAA_ML_ACCT_COMMAND\nacct queue=AAA_ML_ACCT_COMMAND\nacct queue=AAA_ML_ACCT_COMMAND\nacct queue=AAA_ML_ACCT_COMMAND\nacct queue=AAA_ML_ACCT_COMMAND\nacct queue=AAA_ML_ACCT_COMMAND\nacct queue=AAA_ML_ACCT_COMMAND\nacct queue=AAA_ML_ACCT_COMMAND\nacct queue=AAA_ML_ACCT_COMMAND\nacct queue=AAA_ML_ACCT_COMMAND\nacct queue=AAA_ML_ACCT_COMMAND\nacct queue=AAA_ML_ACCT_COMMAND\nacct queue=AAA_ML_ACCT_COMMAND\nacct queue=AAA_ML_ACCT_COMMAND\nacct queue=AAA_ML_ACCT_COMMAND\npermanent lists\n  name= Permanent None valid=TRUE id=0 Action=NOT_SET :state=ALIVE :\n",
+      "expected": {
+        "acct_queues": [
+          "AAA_ML_ACCT_SHELL",
+          "AAA_ML_ACCT_AUTH_PROXY",
+          "AAA_ML_ACCT_NET",
+          "AAA_ML_ACCT_CONN",
+          "AAA_ML_ACCT_SYSTEM",
+          "AAA_ML_ACCT_RESOURCE",
+          "AAA_ML_ACCT_RM",
+          "AAA_ML_ACCT_DOT1X",
+          "AAA_ML_ACCT_IDENTITY",
+          "AAA_ML_ACCT_CONNECTEDAPPS",
+          "AAA_ML_ACCT_COMMAND",
+          "AAA_ML_ACCT_COMMAND",
+          "AAA_ML_ACCT_COMMAND",
+          "AAA_ML_ACCT_COMMAND",
+          "AAA_ML_ACCT_COMMAND",
+          "AAA_ML_ACCT_COMMAND",
+          "AAA_ML_ACCT_COMMAND",
+          "AAA_ML_ACCT_COMMAND",
+          "AAA_ML_ACCT_COMMAND",
+          "AAA_ML_ACCT_COMMAND",
+          "AAA_ML_ACCT_COMMAND",
+          "AAA_ML_ACCT_COMMAND",
+          "AAA_ML_ACCT_COMMAND",
+          "AAA_ML_ACCT_COMMAND",
+          "AAA_ML_ACCT_COMMAND",
+          "AAA_ML_ACCT_COMMAND",
+          "AAA_ML_ACCT_COMMAND"
+        ],
+        "permanent_lists": {
+          "Permanent None": {
+            "valid": true,
+            "id": 0,
+            "state": "ALIVE",
+            "action": "NOT_SET"
+          }
+        }
+      }
+    }
+  ]
+}
