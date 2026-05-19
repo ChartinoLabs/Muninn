@@ -1,4 +1,4 @@
-"""Parser for 'show spanning-tree summary' command on IOS."""
+"""Parser for 'show spanning-tree summary' command on IOS and IOS-XE."""
 
 import re
 from typing import ClassVar, NotRequired, TypedDict, cast
@@ -28,16 +28,24 @@ _SUMMARY_ROW_RE = re.compile(
     r"(?P<learning>\d+)\s+(?P<forwarding>\d+)\s+(?P<active>\d+)\s*$",
     re.IGNORECASE,
 )
+_TOTAL_ROW_RE = re.compile(
+    r"^Total\s+(?P<blocking>\d+)\s+(?P<listening>\d+)\s+"
+    r"(?P<learning>\d+)\s+(?P<forwarding>\d+)\s+(?P<active>\d+)\s*$",
+    re.IGNORECASE,
+)
 
 _FEATURE_LABEL_MAP: dict[str, str] = {
     "etherchannel misconfig guard": "etherchannel_misconfig_guard",
     "extended system id": "extended_system_id",
     "portfast default": "portfast_default",
+    "portfast bpdu guard default": "portfast_bpdu_guard_default",
+    "portfast bpdu filter default": "portfast_bpdu_filter_default",
     "portfast edge bpdu guard default": "portfast_edge_bpdu_guard_default",
     "portfast edge bpdu filter default": "portfast_edge_bpdu_filter_default",
     "loopguard default": "loopguard_default",
     "pvst simulation default": "pvst_simulation_default",
     "bridge assurance": "bridge_assurance",
+    "bpdu sender conflict": "bpdu_sender_conflict",
     "uplinkfast": "uplinkfast",
     "backbonefast": "backbonefast",
 }
@@ -49,11 +57,14 @@ class StpDefaults(TypedDict):
     etherchannel_misconfig_guard: NotRequired[str]
     extended_system_id: NotRequired[str]
     portfast_default: NotRequired[str]
+    portfast_bpdu_guard_default: NotRequired[str]
+    portfast_bpdu_filter_default: NotRequired[str]
     portfast_edge_bpdu_guard_default: NotRequired[str]
     portfast_edge_bpdu_filter_default: NotRequired[str]
     loopguard_default: NotRequired[str]
     pvst_simulation_default: NotRequired[str]
     bridge_assurance: NotRequired[str]
+    bpdu_sender_conflict: NotRequired[str]
     uplinkfast: NotRequired[str]
     backbonefast: NotRequired[str]
 
@@ -181,17 +192,34 @@ def _try_vlan_row(line: str, vlans: dict[str, VlanCounts]) -> bool:
 
 
 def _try_summary_row(line: str) -> VlanSummary | None:
-    """Attempt to parse the trailing `N vlans ...` totals row."""
+    """Attempt to parse the trailing totals row.
+
+    Matches both forms emitted by IOS / IOS-XE:
+
+    - ``N vlan[s] <counts>`` (one or more VLANs in the table).
+    - ``Total <counts>`` (no VLANs in the table; IOS-XE on platforms such as
+      the ISR 1100 emits this in place of the ``0 vlans`` row).
+    """
     match = _SUMMARY_ROW_RE.match(line)
-    if match is None:
+    if match is not None:
+        return {
+            "total_vlans": int(match.group("total")),
+            "blocking": int(match.group("blocking")),
+            "listening": int(match.group("listening")),
+            "learning": int(match.group("learning")),
+            "forwarding": int(match.group("forwarding")),
+            "stp_active": int(match.group("active")),
+        }
+    total_match = _TOTAL_ROW_RE.match(line)
+    if total_match is None:
         return None
     return {
-        "total_vlans": int(match.group("total")),
-        "blocking": int(match.group("blocking")),
-        "listening": int(match.group("listening")),
-        "learning": int(match.group("learning")),
-        "forwarding": int(match.group("forwarding")),
-        "stp_active": int(match.group("active")),
+        "total_vlans": 0,
+        "blocking": int(total_match.group("blocking")),
+        "listening": int(total_match.group("listening")),
+        "learning": int(total_match.group("learning")),
+        "forwarding": int(total_match.group("forwarding")),
+        "stp_active": int(total_match.group("active")),
     }
 
 
@@ -229,8 +257,9 @@ def _process_line(line: str, result: dict) -> None:
 
 
 @register(OS.CISCO_IOS, "show spanning-tree summary")
+@register(OS.CISCO_IOSXE, "show spanning-tree summary")
 class ShowSpanningTreeSummaryParser(BaseParser[ShowSpanningTreeSummaryResult]):
-    """Parser for 'show spanning-tree summary' on IOS."""
+    """Parser for 'show spanning-tree summary' on IOS and IOS-XE."""
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset(
         {
