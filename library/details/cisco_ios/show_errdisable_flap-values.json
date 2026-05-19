@@ -1,0 +1,51 @@
+{
+  "os": "cisco_ios",
+  "command": "show errdisable flap-values",
+  "schema": {
+    "name": "ShowErrdisableFlapValuesResult",
+    "fields": {
+      "reasons": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ErrdisableFlapValue",
+            "fields": {
+              "flaps": {
+                "type": "int",
+                "required": true
+              },
+              "time_seconds": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic three-row err-disable flap-values output from a Catalyst stack.",
+      "input": "ErrDisable Reason    Flaps    Time (sec)\n-----------------    ------   ----------\npagp-flap              3       30\ndtp-flap               3       30\nlink-flap              5       10\n",
+      "expected": {
+        "reasons": {
+          "pagp-flap": {
+            "flaps": 3,
+            "time_seconds": 30
+          },
+          "dtp-flap": {
+            "flaps": 3,
+            "time_seconds": 30
+          },
+          "link-flap": {
+            "flaps": 5,
+            "time_seconds": 10
+          }
+        }
+      }
+    }
+  ]
+}
