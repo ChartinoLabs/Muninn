@@ -1,0 +1,167 @@
+{
+  "os": "cisco_ios",
+  "command": "show errdisable detect",
+  "schema": {
+    "name": "ShowErrdisableDetectResult",
+    "fields": {
+      "reasons": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ErrdisableReasonEntry",
+            "fields": {
+              "detection": {
+                "type": "bool",
+                "required": true
+              },
+              "mode": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "show errdisable detect output from a Catalyst 3750-X stack with all reasons enabled",
+      "input": "ErrDisable Reason            Detection        Mode\n-----------------            ---------        ----\narp-inspection               Enabled          port\nbpduguard                    Enabled          port\nchannel-misconfig (STP)      Enabled          port\ncommunity-limit              Enabled          port\ndhcp-rate-limit              Enabled          port\ndtp-flap                     Enabled          port\ngbic-invalid                 Enabled          port\niif-reg-failure              Enabled          port\ninline-power                 Enabled          port\ninvalid-policy               Enabled          port\nl2ptguard                    Enabled          port\nlink-flap                    Enabled          port\nloopback                     Enabled          port\nlsgroup                      Enabled          port\nmac-limit                    Enabled          port\npagp-flap                    Enabled          port\nport-mode-failure            Enabled          port\npppoe-ia-rate-limit          Enabled          port\npsecure-violation            Enabled          port/vlan\nsecurity-violation           Enabled          port\nsfp-config-mismatch          Enabled          port\nsgacl_limitation:enforcem    Enabled          port\nsgacl_limitation:multiple    Enabled          port/vlan\nsmall-frame                  Enabled          port\nstorm-control                Enabled          port\nudld                         Enabled          port\nvmps                         Enabled          port\npsp                          Enabled          port\ndual-active-recovery         Enabled          port\nevc-lite input mapping fa    Enabled          port\nvsl-and-non-vsl-port-pair    Enabled          port\nRecovery command: \"clear     Enabled          port\nfasthello-and-non-fasthel    Enabled          port\n",
+      "expected": {
+        "reasons": {
+          "arp-inspection": {
+            "detection": true,
+            "mode": "port"
+          },
+          "bpduguard": {
+            "detection": true,
+            "mode": "port"
+          },
+          "channel-misconfig (STP)": {
+            "detection": true,
+            "mode": "port"
+          },
+          "community-limit": {
+            "detection": true,
+            "mode": "port"
+          },
+          "dhcp-rate-limit": {
+            "detection": true,
+            "mode": "port"
+          },
+          "dtp-flap": {
+            "detection": true,
+            "mode": "port"
+          },
+          "gbic-invalid": {
+            "detection": true,
+            "mode": "port"
+          },
+          "iif-reg-failure": {
+            "detection": true,
+            "mode": "port"
+          },
+          "inline-power": {
+            "detection": true,
+            "mode": "port"
+          },
+          "invalid-policy": {
+            "detection": true,
+            "mode": "port"
+          },
+          "l2ptguard": {
+            "detection": true,
+            "mode": "port"
+          },
+          "link-flap": {
+            "detection": true,
+            "mode": "port"
+          },
+          "loopback": {
+            "detection": true,
+            "mode": "port"
+          },
+          "lsgroup": {
+            "detection": true,
+            "mode": "port"
+          },
+          "mac-limit": {
+            "detection": true,
+            "mode": "port"
+          },
+          "pagp-flap": {
+            "detection": true,
+            "mode": "port"
+          },
+          "port-mode-failure": {
+            "detection": true,
+            "mode": "port"
+          },
+          "pppoe-ia-rate-limit": {
+            "detection": true,
+            "mode": "port"
+          },
+          "psecure-violation": {
+            "detection": true,
+            "mode": "port/vlan"
+          },
+          "security-violation": {
+            "detection": true,
+            "mode": "port"
+          },
+          "sfp-config-mismatch": {
+            "detection": true,
+            "mode": "port"
+          },
+          "sgacl_limitation:enforcem": {
+            "detection": true,
+            "mode": "port"
+          },
+          "sgacl_limitation:multiple": {
+            "detection": true,
+            "mode": "port/vlan"
+          },
+          "small-frame": {
+            "detection": true,
+            "mode": "port"
+          },
+          "storm-control": {
+            "detection": true,
+            "mode": "port"
+          },
+          "udld": {
+            "detection": true,
+            "mode": "port"
+          },
+          "vmps": {
+            "detection": true,
+            "mode": "port"
+          },
+          "psp": {
+            "detection": true,
+            "mode": "port"
+          },
+          "dual-active-recovery": {
+            "detection": true,
+            "mode": "port"
+          },
+          "evc-lite input mapping fa": {
+            "detection": true,
+            "mode": "port"
+          },
+          "vsl-and-non-vsl-port-pair": {
+            "detection": true,
+            "mode": "port"
+          },
+          "fasthello-and-non-fasthel": {
+            "detection": true,
+            "mode": "port"
+          }
+        }
+      }
+    }
+  ]
+}
