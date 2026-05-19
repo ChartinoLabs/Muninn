@@ -1,0 +1,119 @@
+{
+  "os": "cisco_ios",
+  "command": "show errdisable recovery",
+  "schema": {
+    "name": "ShowErrdisableRecoveryResult",
+    "fields": {
+      "reasons": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": "bool"
+        },
+        "required": true
+      },
+      "timer_interval_seconds": {
+        "type": "int",
+        "required": false
+      },
+      "pending_interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PendingInterface",
+            "fields": {
+              "reason": {
+                "type": "str",
+                "required": true
+              },
+              "time_left_seconds": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic err-disable recovery output with all reasons disabled and no pending interfaces.",
+      "input": "ErrDisable Reason            Timer Status\n-----------------            --------------\narp-inspection               Disabled\nbpduguard                    Disabled\nchannel-misconfig (STP)      Disabled\ndhcp-rate-limit              Disabled\ndtp-flap                     Disabled\ngbic-invalid                 Disabled\ninline-power                 Disabled\nl2ptguard                    Disabled\nlink-flap                    Disabled\nmac-limit                    Disabled\nloopback                     Disabled\npagp-flap                    Disabled\nport-mode-failure            Disabled\npppoe-ia-rate-limit          Disabled\npsecure-violation            Disabled\nsecurity-violation           Disabled\nsfp-config-mismatch          Disabled\nsmall-frame                  Disabled\nstorm-control                Disabled\nudld                         Disabled\nvmps                         Disabled\npsp                          Disabled\ndual-active-recovery         Disabled\nevc-lite input mapping fa    Disabled\nRecovery command: \"clear     Disabled\n\nTimer interval: 300 seconds\n\nInterfaces that will be enabled at the next timeout:\n",
+      "expected": {
+        "reasons": {
+          "arp-inspection": false,
+          "bpduguard": false,
+          "channel-misconfig (STP)": false,
+          "dhcp-rate-limit": false,
+          "dtp-flap": false,
+          "gbic-invalid": false,
+          "inline-power": false,
+          "l2ptguard": false,
+          "link-flap": false,
+          "mac-limit": false,
+          "loopback": false,
+          "pagp-flap": false,
+          "port-mode-failure": false,
+          "pppoe-ia-rate-limit": false,
+          "psecure-violation": false,
+          "security-violation": false,
+          "sfp-config-mismatch": false,
+          "small-frame": false,
+          "storm-control": false,
+          "udld": false,
+          "vmps": false,
+          "psp": false,
+          "dual-active-recovery": false,
+          "evc-lite input mapping fa": false,
+          "Recovery command: \"clear": false
+        },
+        "pending_interfaces": {},
+        "timer_interval_seconds": 300
+      }
+    },
+    {
+      "name": "Err-disable recovery output with one reason enabled and a FastEthernet interface pending re-enable.",
+      "input": "ErrDisable Reason            Timer Status\n-----------------            --------------\narp-inspection               Disabled\nbpduguard                    Enabled\nchannel-misconfig (STP)      Disabled\ndhcp-rate-limit              Disabled\ndtp-flap                     Disabled\ngbic-invalid                 Disabled\ninline-power                 Disabled\nl2ptguard                    Disabled\nlink-flap                    Disabled\nmac-limit                    Disabled\nlink-monitor-failure         Disabled\nloopback                     Disabled\noam-remote-failure           Disabled\npagp-flap                    Disabled\nport-mode-failure            Disabled\npppoe-ia-rate-limit          Disabled\npsecure-violation            Disabled\nsecurity-violation           Disabled\nsfp-config-mismatch          Disabled\nstorm-control                Disabled\nudld                         Disabled\nvmps                         Disabled\npsp                          Disabled\ndual-active-recovery         Disabled\nevc-lite input mapping fa    Disabled\nRecovery command: \"clear     Disabled\n\nTimer interval: 333 seconds\n\nInterfaces that will be enabled at the next timeout:\n\nInterface      Errdisable reason      Time left(sec)\n---------    ---------------------    --------------\n  Fa2/4                bpduguard          273\n",
+      "expected": {
+        "reasons": {
+          "arp-inspection": false,
+          "bpduguard": true,
+          "channel-misconfig (STP)": false,
+          "dhcp-rate-limit": false,
+          "dtp-flap": false,
+          "gbic-invalid": false,
+          "inline-power": false,
+          "l2ptguard": false,
+          "link-flap": false,
+          "mac-limit": false,
+          "link-monitor-failure": false,
+          "loopback": false,
+          "oam-remote-failure": false,
+          "pagp-flap": false,
+          "port-mode-failure": false,
+          "pppoe-ia-rate-limit": false,
+          "psecure-violation": false,
+          "security-violation": false,
+          "sfp-config-mismatch": false,
+          "storm-control": false,
+          "udld": false,
+          "vmps": false,
+          "psp": false,
+          "dual-active-recovery": false,
+          "evc-lite input mapping fa": false,
+          "Recovery command: \"clear": false
+        },
+        "pending_interfaces": {
+          "FastEthernet2/4": {
+            "reason": "bpduguard",
+            "time_left_seconds": 273
+          }
+        },
+        "timer_interval_seconds": 333
+      }
+    }
+  ]
+}
