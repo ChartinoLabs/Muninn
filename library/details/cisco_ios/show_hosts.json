@@ -1,0 +1,86 @@
+{
+  "os": "cisco_ios",
+  "command": "show hosts",
+  "schema": {
+    "name": "ShowHostsResult",
+    "fields": {
+      "name_lookup_view": {
+        "type": "str",
+        "required": false
+      },
+      "default_domain": {
+        "type": "str",
+        "required": false
+      },
+      "domain_list": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": false
+      },
+      "domain_lookup_enabled": {
+        "type": "bool",
+        "required": true
+      },
+      "name_servers": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": true
+      },
+      "hosts": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "HostEntry",
+            "fields": {
+              "port": {
+                "type": "str",
+                "required": false
+              },
+              "flags": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": true
+              },
+              "age": {
+                "type": "int",
+                "required": false
+              },
+              "type": {
+                "type": "str",
+                "required": true
+              },
+              "addresses": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Resolver configured with default domain and unresolved name-server sentinel; no cached host entries",
+      "input": "Name lookup view: Global\nDefault domain is example.com\nName/address lookup uses domain service\nName servers are 255.255.255.255\n\nCodes: UN - unknown, EX - expired, OK - OK, ?? - revalidate\n       temp - temporary, perm - permanent\n       NA - Not Applicable None - Not defined\n\nHost                      Port  Flags      Age Type   Address(es)\n",
+      "expected": {
+        "domain_lookup_enabled": true,
+        "name_servers": [],
+        "hosts": {},
+        "name_lookup_view": "Global",
+        "default_domain": "example.com"
+      }
+    }
+  ]
+}
