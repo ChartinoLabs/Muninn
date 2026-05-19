@@ -1,7 +1,7 @@
 """Parser for 'show vlan brief' command on IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -17,7 +17,7 @@ class VlanBriefEntry(TypedDict):
     vlan_id: int
     name: str
     status: str
-    ports: NotRequired[list[str]]
+    ports: list[str]
 
 
 class ShowVlanBriefResult(TypedDict):
@@ -95,10 +95,8 @@ def _parse_vlan_line(
         "vlan_id": int(vlan_field),
         "name": name,
         "status": status,
+        "ports": _normalize_ports(ports_str),
     }
-    ports = _normalize_ports(ports_str)
-    if ports:
-        entry["ports"] = ports
     return vlan_field, entry, i
 
 
@@ -108,7 +106,7 @@ def _append_continuation_ports(
     """Append wrapped port-list continuation tokens to an existing VLAN."""
     extra = _normalize_ports(stripped)
     if extra:
-        vlans[vlan_id].setdefault("ports", []).extend(extra)
+        vlans[vlan_id]["ports"].extend(extra)
 
 
 def _parse_table(lines: list[str]) -> dict[str, VlanBriefEntry]:
