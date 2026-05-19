@@ -1,0 +1,1036 @@
+{
+  "os": "cisco_ios",
+  "command": "show interfaces status",
+  "schema": {
+    "name": "ShowInterfacesStatusResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceStatusEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "duplex": {
+                "type": "str",
+                "required": true
+              },
+              "speed": {
+                "type": "str",
+                "required": true
+              },
+              "name": {
+                "type": "str",
+                "required": false
+              },
+              "vlan": {
+                "type": "str",
+                "required": false
+              },
+              "type": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic 'show interfaces status' output from a Catalyst 3750-X stack with GigabitEthernet, TenGigabitEthernet, Port-channel, and FastEthernet interfaces. Exercises connected/notconnect statuses, terminal-wrapped Type values (10/100/1000BaseTX, SFP-10GBase-CX1, SFP-10GBase-LR), the special 'Not Present' Type value, the 'routed' vlan value, trunk vlan, truncated description text, and port-channel rows without a Type column.",
+      "input": "Port      Name               Status       Vlan       Duplex  Speed Type\nGi1/0/1                      connected    trunk      a-full a-1000\n10/100/1000BaseTX\nGi1/0/2                      connected    21         a-full a-1000\n10/100/1000BaseTX\nGi1/0/3                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/4                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/5                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/6                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/7                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/8                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/9                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/10                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/11                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/12                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/13                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/14                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/15                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/16                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/17                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/18                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/19                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/20                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/21                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/22                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/23                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/24                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/25                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/26                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/27                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/28                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/29                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/30                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/31                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/32                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/33                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/34                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/35                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/36                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/37                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/38                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/39                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/40                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/41                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/42                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/43                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/44                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/45                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/46                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/47                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/0/48                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi1/1/1                      notconnect   1            auto   auto Not Present\nGi1/1/2                      notconnect   1            auto   auto Not Present\nGi1/1/3                      notconnect   1            auto   auto Not Present\nGi1/1/4                      notconnect   1            auto   auto Not Present\nTe1/1/1                      connected    21           full    10G\nSFP-10GBase-CX1\nTe1/1/2   ***Link to Grassho connected    21           full    10G\nSFP-10GBase-LR\nGi2/0/1                      connected    trunk      a-full a-1000\n10/100/1000BaseTX\nGi2/0/2                      connected    21         a-full a-1000\n10/100/1000BaseTX\nGi2/0/3                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/4                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/5                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/6                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/7                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/8                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/9                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/10                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/11                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/12                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/13                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/14                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/15                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/16                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/17                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/18                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/19                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/20                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/21                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/22                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/23                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/24                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/25                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/26                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/27                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/28                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/29                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/30                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/31                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/32                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/33                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/34                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/35                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/36                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/37                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/38                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/39                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/40                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/41                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/42                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/43                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/44                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/45                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/46                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/47                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/0/48                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi2/1/1                      notconnect   1            auto   auto Not Present\nGi2/1/2                      notconnect   1            auto   auto Not Present\nGi2/1/3                      notconnect   1            auto   auto Not Present\nGi2/1/4                      notconnect   1            auto   auto Not Present\nTe2/1/1                      connected    21           full    10G\nSFP-10GBase-CX1\nTe2/1/2   ***Link to Grassho connected    21           full    10G\nSFP-10GBase-LR\nGi3/0/1                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/2                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/3                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/4                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/5                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/6                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/7                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/8                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/9                      notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/10                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/11                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/12                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/13                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/14                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/15                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/16                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/17                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/18                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/19                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/20                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/21                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/22                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/23                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/0/24                     notconnect   1            auto   auto\n10/100/1000BaseTX\nGi3/1/1                      notconnect   1            auto   auto Not Present\nGi3/1/2                      notconnect   1            auto   auto Not Present\nGi3/1/3                      notconnect   1            auto   auto Not Present\nGi3/1/4                      notconnect   1            auto   auto Not Present\nPo1       **Link to Vlan21 i connected    trunk      a-full a-1000\nPo10                         connected    21         a-full a-1000\nPo17      ***Link to Grassho connected    21         a-full    10G\nFa0                          notconnect   routed       auto   auto 10/100BaseTX\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1/0/1": {
+            "status": "connected",
+            "duplex": "a-full",
+            "speed": "a-1000",
+            "vlan": "trunk",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/2": {
+            "status": "connected",
+            "duplex": "a-full",
+            "speed": "a-1000",
+            "vlan": "21",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/3": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/4": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/5": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/6": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/7": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/8": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/9": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/10": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/11": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/12": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/13": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/14": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/15": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/16": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/17": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/18": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/19": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/20": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/21": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/22": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/23": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/24": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/25": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/26": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/27": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/28": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/29": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/30": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/31": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/32": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/33": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/34": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/35": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/36": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/37": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/38": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/39": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/40": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/41": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/42": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/43": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/44": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/45": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/46": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/47": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/0/48": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet1/1/1": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "Not Present"
+          },
+          "GigabitEthernet1/1/2": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "Not Present"
+          },
+          "GigabitEthernet1/1/3": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "Not Present"
+          },
+          "GigabitEthernet1/1/4": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "Not Present"
+          },
+          "TenGigabitEthernet1/1/1": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "10G",
+            "vlan": "21",
+            "type": "SFP-10GBase-CX1"
+          },
+          "TenGigabitEthernet1/1/2": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "10G",
+            "name": "***Link to Grassho",
+            "vlan": "21",
+            "type": "SFP-10GBase-LR"
+          },
+          "GigabitEthernet2/0/1": {
+            "status": "connected",
+            "duplex": "a-full",
+            "speed": "a-1000",
+            "vlan": "trunk",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/2": {
+            "status": "connected",
+            "duplex": "a-full",
+            "speed": "a-1000",
+            "vlan": "21",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/3": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/4": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/5": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/6": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/7": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/8": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/9": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/10": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/11": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/12": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/13": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/14": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/15": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/16": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/17": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/18": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/19": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/20": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/21": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/22": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/23": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/24": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/25": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/26": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/27": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/28": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/29": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/30": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/31": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/32": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/33": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/34": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/35": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/36": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/37": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/38": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/39": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/40": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/41": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/42": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/43": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/44": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/45": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/46": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/47": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/0/48": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet2/1/1": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "Not Present"
+          },
+          "GigabitEthernet2/1/2": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "Not Present"
+          },
+          "GigabitEthernet2/1/3": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "Not Present"
+          },
+          "GigabitEthernet2/1/4": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "Not Present"
+          },
+          "TenGigabitEthernet2/1/1": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "10G",
+            "vlan": "21",
+            "type": "SFP-10GBase-CX1"
+          },
+          "TenGigabitEthernet2/1/2": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "10G",
+            "name": "***Link to Grassho",
+            "vlan": "21",
+            "type": "SFP-10GBase-LR"
+          },
+          "GigabitEthernet3/0/1": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/2": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/3": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/4": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/5": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/6": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/7": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/8": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/9": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/10": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/11": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/12": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/13": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/14": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/15": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/16": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/17": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/18": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/19": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/20": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/21": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/22": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/23": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/0/24": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "10/100/1000BaseTX"
+          },
+          "GigabitEthernet3/1/1": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "Not Present"
+          },
+          "GigabitEthernet3/1/2": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "Not Present"
+          },
+          "GigabitEthernet3/1/3": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "Not Present"
+          },
+          "GigabitEthernet3/1/4": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "1",
+            "type": "Not Present"
+          },
+          "Port-channel1": {
+            "status": "connected",
+            "duplex": "a-full",
+            "speed": "a-1000",
+            "name": "**Link to Vlan21 i",
+            "vlan": "trunk"
+          },
+          "Port-channel10": {
+            "status": "connected",
+            "duplex": "a-full",
+            "speed": "a-1000",
+            "vlan": "21"
+          },
+          "Port-channel17": {
+            "status": "connected",
+            "duplex": "a-full",
+            "speed": "10G",
+            "name": "***Link to Grassho",
+            "vlan": "21"
+          },
+          "FastEthernet0": {
+            "status": "notconnect",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "routed",
+            "type": "10/100BaseTX"
+          }
+        }
+      }
+    }
+  ]
+}
