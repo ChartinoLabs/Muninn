@@ -176,15 +176,6 @@ class _Acc:
         }
 
 
-# ``Summary of All Currently Active MKA Sessions on Interface ...`` preamble
-# emitted by ``show mka sessions interface <if>``. The variant is not
-# registered here, but the line is benign to ignore when present.
-_SUMMARY_PREAMBLE_RE = re.compile(
-    r"^Summary of All Currently Active MKA Sessions",
-    re.I,
-)
-
-
 @register(OS.CISCO_IOSXE, "show mka sessions")
 class ShowMkaSessionsParser(BaseParser[ShowMkaSessionsResult]):
     """Parser for 'show mka sessions' command on Cisco IOS-XE."""
@@ -200,25 +191,17 @@ class ShowMkaSessionsParser(BaseParser[ShowMkaSessionsResult]):
 
         Returns:
             Parsed MKA session totals plus a ``sessions`` mapping keyed by
-            canonical interface name. The totals fields default to 0 when the
-            header block is absent (e.g. on the
-            ``show mka sessions interface <if>`` variant).
+            canonical interface name.
 
         Raises:
             ValueError: If the output contains neither a recognized header
                 block nor any parseable session rows.
         """
         acc = _Acc()
-        saw_marker = False
         for raw in output.splitlines():
-            if _SUMMARY_PREAMBLE_RE.match(raw.strip()):
-                saw_marker = True
-                continue
             acc.feed(raw)
 
-        recognized = bool(
-            acc.totals or acc.sessions or saw_marker or acc.top_cols is not None
-        )
+        recognized = bool(acc.totals or acc.sessions or acc.top_cols is not None)
         if not recognized:
             msg = "Output does not look like 'show mka sessions'"
             raise ValueError(msg)
