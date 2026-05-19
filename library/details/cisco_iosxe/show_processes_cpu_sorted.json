@@ -1,0 +1,584 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show processes cpu sorted",
+  "schema": {
+    "name": "ShowProcessesCpuSortedResult",
+    "fields": {
+      "cpu_util_five_sec": {
+        "type": "int",
+        "required": true
+      },
+      "cpu_util_five_sec_interrupt": {
+        "type": "int",
+        "required": true
+      },
+      "cpu_util_one_min": {
+        "type": "int",
+        "required": true
+      },
+      "cpu_util_five_min": {
+        "type": "int",
+        "required": true
+      },
+      "load_five_sec": {
+        "type": "int",
+        "required": false
+      },
+      "load_five_sec_interrupt": {
+        "type": "int",
+        "required": false
+      },
+      "load_one_min": {
+        "type": "int",
+        "required": false
+      },
+      "load_five_min": {
+        "type": "int",
+        "required": false
+      },
+      "time_source": {
+        "type": "str",
+        "required": false
+      },
+      "time": {
+        "type": "str",
+        "required": false
+      },
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ProcessEntry",
+            "fields": {
+              "pid": {
+                "type": "int",
+                "required": true
+              },
+              "runtime_ms": {
+                "type": "int",
+                "required": true
+              },
+              "invoked": {
+                "type": "int",
+                "required": true
+              },
+              "usecs": {
+                "type": "int",
+                "required": true
+              },
+              "cpu_five_sec": {
+                "type": "float",
+                "required": true
+              },
+              "cpu_one_min": {
+                "type": "float",
+                "required": true
+              },
+              "cpu_five_min": {
+                "type": "float",
+                "required": true
+              },
+              "tty": {
+                "type": "int",
+                "required": true
+              },
+              "process": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show processes cpu sorted output from an ISR 1100 testbed device",
+      "input": "CPU utilization for five seconds: 1%/0%; one minute: 4%; five minutes: 2%\n PID Runtime(ms)     Invoked      uSecs   5Sec   1Min   5Min TTY Process\n 158      228699       80873       2827  0.23%  0.02%  0.00%   0 Per-minute Jobs\n 141      838517    75419456         11  0.07%  0.07%  0.07%   0 SIS Punt\nProcess\n 161      228698    12154187         18  0.07%  0.01%  0.00%   0 Transceiver\nEnti\n 230      431044    37841827         11  0.07%  0.03%  0.02%   0 IP ARP Retry\nAge\n 273      436438    18987313         22  0.07%  0.02%  0.01%   0 VRRS Main\nthread\n 285      143252     9487275         15  0.07%  0.00%  0.00%   0 Tunnel BGP\n   1           2          34         58  0.00%  0.00%  0.00%   0 Chunk Manager\n   2       58272      243084        239  0.00%  0.00%  0.00%   0 Load Meter\n   3           0           1          0  0.00%  0.00%  0.00%   0 PKI Trustpool\n   4          16          13       1230  0.00%  0.00%  0.00%   0 RF Slave Main\nTh\n   5           0           1          0  0.00%  0.00%  0.00%   0 Retransmission\no\n   6           0           1          0  0.00%  0.00%  0.00%   0 IPC ISSU\nDispatc\n   7           0           1          0  0.00%  0.00%  0.00%   0 EDDRI_MAIN\n   8           0           1          0  0.00%  0.00%  0.00%   0 RO Notify\nTimers\n   9      705834      185781       3799  0.00%  0.04%  0.05%   0 Check heaps\n  10        3027       20258        149  0.00%  0.00%  0.00%   0 Pool Manager\n  11           0           1          0  0.00%  0.00%  0.00%   0 DiscardQ\nBackgro\n  12           0           2          0  0.00%  0.00%  0.00%   0 Timers\n  13         126       18288          6  0.00%  0.00%  0.00%   0 WATCH_AFS\n  14      551366    11045526         49  0.00%  0.03%  0.02%   0 ARP Input\n  15       24675     1267848         19  0.00%  0.00%  0.00%   0 ARP Background\n  16           0           2          0  0.00%  0.00%  0.00%   0 ATM Idle Timer\n  17           0           1          0  0.00%  0.00%  0.00%   0 ATM ASYNC PROC\n  18           1           2        500  0.00%  0.00%  0.00%   0 DDR Timers\n  19           0           1          0  0.00%  0.00%  0.00%   0 CEF MIB API\n  20           0           2          0  0.00%  0.00%  0.00%   0 ATM AutoVC\nPerio\n  21           0           2          0  0.00%  0.00%  0.00%   0 ATM VC Auto\nCrea\n  22           0           1          0  0.00%  0.00%  0.00%   0 ifIndex Receive\n  23           0           2          0  0.00%  0.00%  0.00%   0 DB Lock Manager\n  24       17445     1215416         14  0.00%  0.00%  0.00%   0 GraphIt\n  25           0           1          0  0.00%  0.00%  0.00%   0 DB Notification\n  26      200974    12335155         16  0.00%  0.01%  0.00%   0 DB offload\nwrite\n  27       12138      607679         19  0.00%  0.00%  0.00%   0 IOSXE heartbeat\n  28        1889      243079          7  0.00%  0.00%  0.00%   0 IPC Event\nNotifi\n  29       17821     1186812         15  0.00%  0.00%  0.00%   0 IPC Mcast\nPendin\n  30           0           1          0  0.00%  0.00%  0.00%   0 Platform\nappsess\n  31         259       20258         12  0.00%  0.00%  0.00%   0 IPC Dynamic\nCach\n  32        2003      243079          8  0.00%  0.00%  0.00%   0 IPC Service\nNonC\n  33           0           1          0  0.00%  0.00%  0.00%   0 IPC Zone\nManager\n  34       18649     1186812         15  0.00%  0.00%  0.00%   0 IPC Periodic\nTim\n  35       16666     1186812         14  0.00%  0.00%  0.00%   0 IPC Deferred\nPor\n  36           0           1          0  0.00%  0.00%  0.00%   0 IPC Process\nleve\n  37           0           1          0  0.00%  0.00%  0.00%   0 IPC Seat\nManager\n",
+      "expected": {
+        "cpu_util_five_sec": 1,
+        "cpu_util_five_sec_interrupt": 0,
+        "cpu_util_one_min": 4,
+        "cpu_util_five_min": 2,
+        "processes": {
+          "158": {
+            "pid": 158,
+            "runtime_ms": 228699,
+            "invoked": 80873,
+            "usecs": 2827,
+            "cpu_five_sec": 0.23,
+            "cpu_one_min": 0.02,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "Per-minute Jobs"
+          },
+          "141": {
+            "pid": 141,
+            "runtime_ms": 838517,
+            "invoked": 75419456,
+            "usecs": 11,
+            "cpu_five_sec": 0.07,
+            "cpu_one_min": 0.07,
+            "cpu_five_min": 0.07,
+            "tty": 0,
+            "process": "SIS Punt Process"
+          },
+          "161": {
+            "pid": 161,
+            "runtime_ms": 228698,
+            "invoked": 12154187,
+            "usecs": 18,
+            "cpu_five_sec": 0.07,
+            "cpu_one_min": 0.01,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "Transceiver Enti"
+          },
+          "230": {
+            "pid": 230,
+            "runtime_ms": 431044,
+            "invoked": 37841827,
+            "usecs": 11,
+            "cpu_five_sec": 0.07,
+            "cpu_one_min": 0.03,
+            "cpu_five_min": 0.02,
+            "tty": 0,
+            "process": "IP ARP Retry Age"
+          },
+          "273": {
+            "pid": 273,
+            "runtime_ms": 436438,
+            "invoked": 18987313,
+            "usecs": 22,
+            "cpu_five_sec": 0.07,
+            "cpu_one_min": 0.02,
+            "cpu_five_min": 0.01,
+            "tty": 0,
+            "process": "VRRS Main thread"
+          },
+          "285": {
+            "pid": 285,
+            "runtime_ms": 143252,
+            "invoked": 9487275,
+            "usecs": 15,
+            "cpu_five_sec": 0.07,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "Tunnel BGP"
+          },
+          "1": {
+            "pid": 1,
+            "runtime_ms": 2,
+            "invoked": 34,
+            "usecs": 58,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "Chunk Manager"
+          },
+          "2": {
+            "pid": 2,
+            "runtime_ms": 58272,
+            "invoked": 243084,
+            "usecs": 239,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "Load Meter"
+          },
+          "3": {
+            "pid": 3,
+            "runtime_ms": 0,
+            "invoked": 1,
+            "usecs": 0,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "PKI Trustpool"
+          },
+          "4": {
+            "pid": 4,
+            "runtime_ms": 16,
+            "invoked": 13,
+            "usecs": 1230,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "RF Slave Main Th"
+          },
+          "5": {
+            "pid": 5,
+            "runtime_ms": 0,
+            "invoked": 1,
+            "usecs": 0,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "Retransmission o"
+          },
+          "6": {
+            "pid": 6,
+            "runtime_ms": 0,
+            "invoked": 1,
+            "usecs": 0,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "IPC ISSU Dispatc"
+          },
+          "7": {
+            "pid": 7,
+            "runtime_ms": 0,
+            "invoked": 1,
+            "usecs": 0,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "EDDRI_MAIN"
+          },
+          "8": {
+            "pid": 8,
+            "runtime_ms": 0,
+            "invoked": 1,
+            "usecs": 0,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "RO Notify Timers"
+          },
+          "9": {
+            "pid": 9,
+            "runtime_ms": 705834,
+            "invoked": 185781,
+            "usecs": 3799,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.04,
+            "cpu_five_min": 0.05,
+            "tty": 0,
+            "process": "Check heaps"
+          },
+          "10": {
+            "pid": 10,
+            "runtime_ms": 3027,
+            "invoked": 20258,
+            "usecs": 149,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "Pool Manager"
+          },
+          "11": {
+            "pid": 11,
+            "runtime_ms": 0,
+            "invoked": 1,
+            "usecs": 0,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "DiscardQ Backgro"
+          },
+          "12": {
+            "pid": 12,
+            "runtime_ms": 0,
+            "invoked": 2,
+            "usecs": 0,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "Timers"
+          },
+          "13": {
+            "pid": 13,
+            "runtime_ms": 126,
+            "invoked": 18288,
+            "usecs": 6,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "WATCH_AFS"
+          },
+          "14": {
+            "pid": 14,
+            "runtime_ms": 551366,
+            "invoked": 11045526,
+            "usecs": 49,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.03,
+            "cpu_five_min": 0.02,
+            "tty": 0,
+            "process": "ARP Input"
+          },
+          "15": {
+            "pid": 15,
+            "runtime_ms": 24675,
+            "invoked": 1267848,
+            "usecs": 19,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "ARP Background"
+          },
+          "16": {
+            "pid": 16,
+            "runtime_ms": 0,
+            "invoked": 2,
+            "usecs": 0,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "ATM Idle Timer"
+          },
+          "17": {
+            "pid": 17,
+            "runtime_ms": 0,
+            "invoked": 1,
+            "usecs": 0,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "ATM ASYNC PROC"
+          },
+          "18": {
+            "pid": 18,
+            "runtime_ms": 1,
+            "invoked": 2,
+            "usecs": 500,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "DDR Timers"
+          },
+          "19": {
+            "pid": 19,
+            "runtime_ms": 0,
+            "invoked": 1,
+            "usecs": 0,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "CEF MIB API"
+          },
+          "20": {
+            "pid": 20,
+            "runtime_ms": 0,
+            "invoked": 2,
+            "usecs": 0,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "ATM AutoVC Perio"
+          },
+          "21": {
+            "pid": 21,
+            "runtime_ms": 0,
+            "invoked": 2,
+            "usecs": 0,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "ATM VC Auto Crea"
+          },
+          "22": {
+            "pid": 22,
+            "runtime_ms": 0,
+            "invoked": 1,
+            "usecs": 0,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "ifIndex Receive"
+          },
+          "23": {
+            "pid": 23,
+            "runtime_ms": 0,
+            "invoked": 2,
+            "usecs": 0,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "DB Lock Manager"
+          },
+          "24": {
+            "pid": 24,
+            "runtime_ms": 17445,
+            "invoked": 1215416,
+            "usecs": 14,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "GraphIt"
+          },
+          "25": {
+            "pid": 25,
+            "runtime_ms": 0,
+            "invoked": 1,
+            "usecs": 0,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "DB Notification"
+          },
+          "26": {
+            "pid": 26,
+            "runtime_ms": 200974,
+            "invoked": 12335155,
+            "usecs": 16,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.01,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "DB offload write"
+          },
+          "27": {
+            "pid": 27,
+            "runtime_ms": 12138,
+            "invoked": 607679,
+            "usecs": 19,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "IOSXE heartbeat"
+          },
+          "28": {
+            "pid": 28,
+            "runtime_ms": 1889,
+            "invoked": 243079,
+            "usecs": 7,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "IPC Event Notifi"
+          },
+          "29": {
+            "pid": 29,
+            "runtime_ms": 17821,
+            "invoked": 1186812,
+            "usecs": 15,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "IPC Mcast Pendin"
+          },
+          "30": {
+            "pid": 30,
+            "runtime_ms": 0,
+            "invoked": 1,
+            "usecs": 0,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "Platform appsess"
+          },
+          "31": {
+            "pid": 31,
+            "runtime_ms": 259,
+            "invoked": 20258,
+            "usecs": 12,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "IPC Dynamic Cach"
+          },
+          "32": {
+            "pid": 32,
+            "runtime_ms": 2003,
+            "invoked": 243079,
+            "usecs": 8,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "IPC Service NonC"
+          },
+          "33": {
+            "pid": 33,
+            "runtime_ms": 0,
+            "invoked": 1,
+            "usecs": 0,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "IPC Zone Manager"
+          },
+          "34": {
+            "pid": 34,
+            "runtime_ms": 18649,
+            "invoked": 1186812,
+            "usecs": 15,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "IPC Periodic Tim"
+          },
+          "35": {
+            "pid": 35,
+            "runtime_ms": 16666,
+            "invoked": 1186812,
+            "usecs": 14,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "IPC Deferred Por"
+          },
+          "36": {
+            "pid": 36,
+            "runtime_ms": 0,
+            "invoked": 1,
+            "usecs": 0,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "IPC Process leve"
+          },
+          "37": {
+            "pid": 37,
+            "runtime_ms": 0,
+            "invoked": 1,
+            "usecs": 0,
+            "cpu_five_sec": 0.0,
+            "cpu_one_min": 0.0,
+            "cpu_five_min": 0.0,
+            "tty": 0,
+            "process": "IPC Seat Manager"
+          }
+        }
+      }
+    }
+  ]
+}
