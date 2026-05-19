@@ -10,10 +10,16 @@ from muninn.tags import ParserTag
 
 
 class AccountInformation(TypedDict):
-    """Schema for the Account Information section."""
+    """Schema for the Account Information section.
 
-    smart_account: str
-    virtual_account: str
+    Both fields are optional: IOS-XE only prints the lines that have a
+    configured value, and devices that have never registered with Smart
+    Licensing report ``<none>`` (which this parser treats as "field
+    absent" and omits from the output).
+    """
+
+    smart_account: NotRequired[str]
+    virtual_account: NotRequired[str]
 
 
 class LicenseUsageEntry(TypedDict):
@@ -39,6 +45,11 @@ class ShowLicenseSummaryResult(TypedDict):
 # --- Section header markers ---
 _ACCOUNT_SECTION_RE = re.compile(r"^\s*Account\s+Information\s*:\s*$", re.IGNORECASE)
 _LICENSE_SECTION_RE = re.compile(r"^\s*License\s+Usage\s*:\s*$", re.IGNORECASE)
+
+# Placeholder values IOS-XE prints when a Smart Licensing account is not
+# configured. We omit the key entirely rather than carry the sentinel through
+# to structured output.
+_ACCOUNT_PLACEHOLDERS = frozenset({"<none>", "none"})
 
 # --- Account information patterns ---
 _SMART_ACCOUNT_RE = re.compile(
@@ -83,12 +94,16 @@ def _parse_account_information(lines: list[str], start: int) -> tuple[dict, int]
             break
 
         if match := _SMART_ACCOUNT_RE.match(line):
-            info["smart_account"] = match.group("value").strip()
+            value = match.group("value").strip()
+            if value.lower() not in _ACCOUNT_PLACEHOLDERS:
+                info["smart_account"] = value
             idx += 1
             continue
 
         if match := _VIRTUAL_ACCOUNT_RE.match(line):
-            info["virtual_account"] = match.group("value").strip()
+            value = match.group("value").strip()
+            if value.lower() not in _ACCOUNT_PLACEHOLDERS:
+                info["virtual_account"] = value
             idx += 1
             continue
 
