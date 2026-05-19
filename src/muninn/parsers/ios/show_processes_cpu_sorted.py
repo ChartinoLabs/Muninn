@@ -1,4 +1,4 @@
-"""Parser for 'show processes cpu sorted' command on IOS."""
+"""Parser for 'show processes cpu sorted' command on IOS/IOS-XE."""
 
 import re
 from typing import ClassVar, NotRequired, TypedDict, cast
@@ -150,8 +150,9 @@ def _parse_processes(lines: list[str]) -> dict[str, ProcessEntry]:
 
 
 @register(OS.CISCO_IOS, "show processes cpu sorted")
+@register(OS.CISCO_IOSXE, "show processes cpu sorted")
 class ShowProcessesCpuSortedParser(BaseParser[ShowProcessesCpuSortedResult]):
-    """Parser for 'show processes cpu sorted' on IOS."""
+    """Parser for 'show processes cpu sorted' on IOS/IOS-XE."""
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
 
