@@ -1,4 +1,4 @@
-"""Parser for 'show spanning-tree summary' command on IOS."""
+"""Parser for 'show spanning-tree summary' command on IOS and IOS-XE."""
 
 import re
 from typing import ClassVar, NotRequired, TypedDict, cast
@@ -33,11 +33,14 @@ _FEATURE_LABEL_MAP: dict[str, str] = {
     "etherchannel misconfig guard": "etherchannel_misconfig_guard",
     "extended system id": "extended_system_id",
     "portfast default": "portfast_default",
+    "portfast bpdu guard default": "portfast_bpdu_guard_default",
+    "portfast bpdu filter default": "portfast_bpdu_filter_default",
     "portfast edge bpdu guard default": "portfast_edge_bpdu_guard_default",
     "portfast edge bpdu filter default": "portfast_edge_bpdu_filter_default",
     "loopguard default": "loopguard_default",
     "pvst simulation default": "pvst_simulation_default",
     "bridge assurance": "bridge_assurance",
+    "bpdu sender conflict": "bpdu_sender_conflict",
     "uplinkfast": "uplinkfast",
     "backbonefast": "backbonefast",
 }
@@ -49,11 +52,14 @@ class StpDefaults(TypedDict):
     etherchannel_misconfig_guard: NotRequired[str]
     extended_system_id: NotRequired[str]
     portfast_default: NotRequired[str]
+    portfast_bpdu_guard_default: NotRequired[str]
+    portfast_bpdu_filter_default: NotRequired[str]
     portfast_edge_bpdu_guard_default: NotRequired[str]
     portfast_edge_bpdu_filter_default: NotRequired[str]
     loopguard_default: NotRequired[str]
     pvst_simulation_default: NotRequired[str]
     bridge_assurance: NotRequired[str]
+    bpdu_sender_conflict: NotRequired[str]
     uplinkfast: NotRequired[str]
     backbonefast: NotRequired[str]
 
@@ -229,8 +235,9 @@ def _process_line(line: str, result: dict) -> None:
 
 
 @register(OS.CISCO_IOS, "show spanning-tree summary")
+@register(OS.CISCO_IOSXE, "show spanning-tree summary")
 class ShowSpanningTreeSummaryParser(BaseParser[ShowSpanningTreeSummaryResult]):
-    """Parser for 'show spanning-tree summary' on IOS."""
+    """Parser for 'show spanning-tree summary' on IOS and IOS-XE."""
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset(
         {
