@@ -28,6 +28,11 @@ _SUMMARY_ROW_RE = re.compile(
     r"(?P<learning>\d+)\s+(?P<forwarding>\d+)\s+(?P<active>\d+)\s*$",
     re.IGNORECASE,
 )
+_TOTAL_ROW_RE = re.compile(
+    r"^Total\s+(?P<blocking>\d+)\s+(?P<listening>\d+)\s+"
+    r"(?P<learning>\d+)\s+(?P<forwarding>\d+)\s+(?P<active>\d+)\s*$",
+    re.IGNORECASE,
+)
 
 _FEATURE_LABEL_MAP: dict[str, str] = {
     "etherchannel misconfig guard": "etherchannel_misconfig_guard",
@@ -187,17 +192,34 @@ def _try_vlan_row(line: str, vlans: dict[str, VlanCounts]) -> bool:
 
 
 def _try_summary_row(line: str) -> VlanSummary | None:
-    """Attempt to parse the trailing `N vlans ...` totals row."""
+    """Attempt to parse the trailing totals row.
+
+    Matches both forms emitted by IOS / IOS-XE:
+
+    - ``N vlan[s] <counts>`` (one or more VLANs in the table).
+    - ``Total <counts>`` (no VLANs in the table; IOS-XE on platforms such as
+      the ISR 1100 emits this in place of the ``0 vlans`` row).
+    """
     match = _SUMMARY_ROW_RE.match(line)
-    if match is None:
+    if match is not None:
+        return {
+            "total_vlans": int(match.group("total")),
+            "blocking": int(match.group("blocking")),
+            "listening": int(match.group("listening")),
+            "learning": int(match.group("learning")),
+            "forwarding": int(match.group("forwarding")),
+            "stp_active": int(match.group("active")),
+        }
+    total_match = _TOTAL_ROW_RE.match(line)
+    if total_match is None:
         return None
     return {
-        "total_vlans": int(match.group("total")),
-        "blocking": int(match.group("blocking")),
-        "listening": int(match.group("listening")),
-        "learning": int(match.group("learning")),
-        "forwarding": int(match.group("forwarding")),
-        "stp_active": int(match.group("active")),
+        "total_vlans": 0,
+        "blocking": int(total_match.group("blocking")),
+        "listening": int(total_match.group("listening")),
+        "learning": int(total_match.group("learning")),
+        "forwarding": int(total_match.group("forwarding")),
+        "stp_active": int(total_match.group("active")),
     }
 
 
