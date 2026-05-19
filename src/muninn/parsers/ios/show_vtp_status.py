@@ -1,4 +1,4 @@
-"""Parser for 'show vtp status' command on IOS."""
+"""Parser for 'show vtp status' command on IOS and IOS-XE."""
 
 import re
 from typing import ClassVar, NotRequired, TypedDict, cast
@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
+from muninn.utils import canonical_interface_name
 
 
 class ShowVtpStatusResult(TypedDict):
@@ -17,12 +18,12 @@ class ShowVtpStatusResult(TypedDict):
     """
 
     vtp_version_running: int
-    domain_name: str
     operating_mode: str
     max_vlans: int
     existing_vlans: int
     configuration_revision: int
     vtp_version_capable: NotRequired[str]
+    domain_name: NotRequired[str]
     pruning_mode: NotRequired[str]
     traps_generation: NotRequired[str]
     device_id: NotRequired[str]
@@ -90,11 +91,18 @@ _INT_PATTERNS: list[tuple[re.Pattern[str], str]] = [
 
 
 def _try_string_patterns(stripped: str, result: dict) -> bool:
-    """Try single-group string patterns against a line."""
+    """Try single-group string patterns against a line.
+
+    Empty captures are treated as the field not being set (the field is
+    omitted from the result) so callers do not need to special-case empty
+    placeholders such as ``VTP Domain Name :``.
+    """
     for pattern, key in _STRING_PATTERNS:
         match = pattern.match(stripped)
         if match:
-            result[key] = match.group(1)
+            value = match.group(1)
+            if value:
+                result[key] = value
             return True
     return False
 
@@ -120,7 +128,9 @@ def _try_multi_group_patterns(stripped: str, result: dict) -> bool:
     match = _LOCAL_UPDATER_RE.match(stripped)
     if match:
         result["local_updater_id"] = match.group(1)
-        result["local_updater_interface"] = match.group(2)
+        result["local_updater_interface"] = canonical_interface_name(
+            match.group(2), os=OS.CISCO_IOS
+        )
         return True
 
     return False
@@ -172,7 +182,6 @@ def _parse_line(line: str, result: dict, in_md5: list[bool]) -> None:
 # Required fields that must be present in parsed output
 _REQUIRED_FIELDS = (
     "vtp_version_running",
-    "domain_name",
     "operating_mode",
     "max_vlans",
     "existing_vlans",
@@ -181,6 +190,7 @@ _REQUIRED_FIELDS = (
 
 
 @register(OS.CISCO_IOS, "show vtp status")
+@register(OS.CISCO_IOSXE, "show vtp status")
 class ShowVtpStatusParser(BaseParser["ShowVtpStatusResult"]):
     """Parser for 'show vtp status' command."""
 
