@@ -1,4 +1,4 @@
-"""Parser for 'show users' command on IOS."""
+"""Parser for 'show users' command on IOS and IOS-XE."""
 
 import re
 from typing import ClassVar, NotRequired, TypedDict
@@ -96,8 +96,9 @@ def _build_entry(match: re.Match[str]) -> tuple[str, str, UserEntry]:
 
 
 @register(OS.CISCO_IOS, "show users")
+@register(OS.CISCO_IOSXE, "show users")
 class ShowUsersParser(BaseParser[ShowUsersResult]):
-    """Parser for 'show users' on IOS.
+    """Parser for 'show users' on IOS and IOS-XE.
 
     Parses the user session table showing line, user, host, idle time,
     and location for each active terminal session.
