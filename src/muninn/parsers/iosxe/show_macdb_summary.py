@@ -267,6 +267,18 @@ class ShowMacdbSummaryParser(BaseParser[ShowMacdbSummaryResult]):
     @classmethod
     def _consume_line(cls, line: str, state: _ParseState) -> bool:
         """Process one non-blank input line, mutating ``state`` in place."""
+        # Once we are inside a per-client section, ``Software``/``Hardware``
+        # lines belong to that client, not the global software/hardware tables.
+        # Match the client header and client table first so they take priority
+        # over the global ``_TABLE_RE`` which would otherwise consume them.
+        if state.current_client is not None:
+            new_client = cls._try_client_header(line, state.registered_clients)
+            if new_client is not None:
+                state.current_client = new_client
+                return True
+            if cls._try_client_table(line, state.current_client):
+                return True
+
         if cls._process_global_line(
             line, state.clients, state.software, state.hardware, state.platform
         ):
@@ -279,8 +291,6 @@ class ShowMacdbSummaryParser(BaseParser[ShowMacdbSummaryResult]):
 
         if state.registered_count is None:
             return False
-        if cls._try_client_table(line, state.current_client):
-            return True
         new_client = cls._try_client_header(line, state.registered_clients)
         if new_client is not None:
             state.current_client = new_client
