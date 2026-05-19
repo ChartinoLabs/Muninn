@@ -1,0 +1,672 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show spanning-tree detail",
+  "schema": {
+    "name": "ShowSpanningTreeDetailResult",
+    "fields": {
+      "instances": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InstanceEntry",
+            "fields": {
+              "name": {
+                "type": "str",
+                "required": true
+              },
+              "protocol": {
+                "type": "str",
+                "required": true
+              },
+              "bridge_priority": {
+                "type": "int",
+                "required": true
+              },
+              "sys_id_ext": {
+                "type": "int",
+                "required": true
+              },
+              "bridge_address": {
+                "type": "str",
+                "required": true
+              },
+              "hello_time": {
+                "type": "int",
+                "required": true
+              },
+              "max_age": {
+                "type": "int",
+                "required": true
+              },
+              "forward_delay": {
+                "type": "int",
+                "required": true
+              },
+              "transmit_hold_count": {
+                "type": "int",
+                "required": false
+              },
+              "is_root": {
+                "type": "bool",
+                "required": true
+              },
+              "root_info": {
+                "type": {
+                  "name": "RootInfo",
+                  "fields": {
+                    "priority": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "address": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "cost": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "port_num": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "port_name": {
+                      "type": "str",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "topology_change_flag": {
+                "type": "bool",
+                "required": true
+              },
+              "topology_detected_flag": {
+                "type": "bool",
+                "required": true
+              },
+              "topology_changes": {
+                "type": "int",
+                "required": true
+              },
+              "last_change": {
+                "type": "str",
+                "required": true
+              },
+              "topology_change_from": {
+                "type": "str",
+                "required": false
+              },
+              "times": {
+                "type": {
+                  "name": "StpTimes",
+                  "fields": {
+                    "hold": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "topology_change": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "notification": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "hello": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "max_age": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "forward_delay": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": true
+              },
+              "timers": {
+                "type": {
+                  "name": "StpTimers",
+                  "fields": {
+                    "hello": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "topology_change": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "notification": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "aging": {
+                      "type": "int",
+                      "required": false
+                    }
+                  }
+                },
+                "required": true
+              },
+              "ports": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "PortEntry",
+                    "fields": {
+                      "name": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "port_num": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "status": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "extra_status": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "port_path_cost": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "port_priority": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "port_identifier": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "designated_root_priority": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "designated_root_address": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "designated_bridge_priority": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "designated_bridge_address": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "designated_port_id": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "designated_path_cost": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "timers": {
+                        "type": {
+                          "name": "PortTimers",
+                          "fields": {
+                            "message_age": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "forward_delay": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "hold": {
+                              "type": "int",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": true
+                      },
+                      "forwarding_transitions": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "link_type": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "link_type_extras": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": false
+                      },
+                      "peer": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "portfast_mode": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "loop_guard": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "bpdu": {
+                        "type": {
+                          "name": "PortBpdu",
+                          "fields": {
+                            "sent": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "received": {
+                              "type": "int",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Device with no STP instances (router-only platform such as ISR 1100)",
+      "input": "No spanning tree instance exists.\n",
+      "expected": {
+        "instances": {}
+      }
+    },
+    {
+      "name": "Live Catalyst 9300 STP root for VLAN0001 with one designated forwarding AppGigabitEthernet port (TAC-S1, captured from physical testbed)",
+      "input": "VLAN0001 is executing the rstp compatible Spanning Tree protocol\n  Bridge Identifier has priority 32768, sysid 1, address ac3a.6728.0f80\n  Configured hello time 2, max age 20, forward delay 15, transmit hold-count 6\n  We are the root of the spanning tree\n  Topology change flag not set, detected flag not set\n  Number of topology changes 21 last change occurred 1w6d ago\n          from GigabitEthernet1/0/5\n  Times:  hold 1, topology change 35, notification 2\n          hello 2, max age 20, forward delay 15\n  Timers: hello 0, topology change 0, notification 0, aging 300\n\n Port 65 (AppGigabitEthernet1/0/1) of VLAN0001 is designated forwarding\n   Port path cost 20000, Port priority 128, Port Identifier 128.65.\n   Designated root has priority 32769, address ac3a.6728.0f80\n   Designated bridge has priority 32769, address ac3a.6728.0f80\n   Designated port id is 128.65, designated path cost 0\n   Timers: message age 0, forward delay 0, hold 0\n   Number of transitions to forwarding state: 1\n   Link type is point-to-point by default\n   BPDU: sent 608135, received 0\n",
+      "expected": {
+        "instances": {
+          "VLAN0001": {
+            "name": "VLAN0001",
+            "protocol": "rstp",
+            "is_root": true,
+            "ports": {
+              "AppGigabitEthernet1/0/1": {
+                "name": "AppGigabitEthernet1/0/1",
+                "port_num": 65,
+                "status": "designated forwarding",
+                "port_path_cost": 20000,
+                "port_priority": 128,
+                "port_identifier": "128.65",
+                "designated_root_priority": 32769,
+                "designated_root_address": "ac3a.6728.0f80",
+                "designated_bridge_priority": 32769,
+                "designated_bridge_address": "ac3a.6728.0f80",
+                "designated_port_id": "128.65",
+                "designated_path_cost": 0,
+                "timers": {
+                  "message_age": 0,
+                  "forward_delay": 0,
+                  "hold": 0
+                },
+                "forwarding_transitions": 1,
+                "link_type": "point-to-point",
+                "bpdu": {
+                  "sent": 608135,
+                  "received": 0
+                }
+              }
+            },
+            "bridge_priority": 32768,
+            "sys_id_ext": 1,
+            "bridge_address": "ac3a.6728.0f80",
+            "hello_time": 2,
+            "max_age": 20,
+            "forward_delay": 15,
+            "transmit_hold_count": 6,
+            "topology_change_flag": false,
+            "topology_detected_flag": false,
+            "topology_changes": 21,
+            "last_change": "1w6d",
+            "topology_change_from": "GigabitEthernet1/0/5",
+            "times": {
+              "hold": 1,
+              "topology_change": 35,
+              "notification": 2,
+              "hello": 2,
+              "max_age": 20,
+              "forward_delay": 15
+            },
+            "timers": {
+              "hello": 0,
+              "topology_change": 0,
+              "notification": 0,
+              "aging": 300
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "MSTP root with two Port-channel ports including a broken PVST-sim inconsistent boundary",
+      "input": "MST0 is executing the mstp compatible Spanning Tree protocol\n  Bridge Identifier has priority 32768, sysid 0, address d8b1.90ff.c889\n  Configured hello time 10, max age 40, forward delay 30, transmit hold-count 20\n  We are the root of the spanning tree\n  Topology change flag not set, detected flag not set\n  Number of topology changes 3 last change occurred 03:09:48 ago\n          from Port-channel24\n  Times:  hold 1, topology change 70, notification 10\n          hello 10, max age 40, forward delay 30\n  Timers: hello 0, topology change 0, notification 0\n\n Port 2390 (Port-channel14) of MST0 is broken  (PVST Sim. Inconsistent)\n   Port path cost 6660, Port priority 128, Port Identifier 128.2390.\n   Designated root has priority 32768, address d8b1.90ff.c889\n   Designated bridge has priority 32768, address d8b1.90ff.c889\n   Designated port id is 128.2390, designated path cost 0\n   Timers: message age 0, forward delay 0, hold 0\n   Number of transitions to forwarding state: 0\n   Link type is point-to-point by default, Boundary PVST\n   Loop guard is enabled by default on the port\n   BPDU: sent 138231, received 167393\n\n Port 2400 (Port-channel24) of MST0 is designated forwarding\n   Port path cost 6660, Port priority 128, Port Identifier 128.2400.\n   Designated root has priority 32768, address d8b1.90ff.c889\n   Designated bridge has priority 32768, address d8b1.90ff.c889\n   Designated port id is 128.2400, designated path cost 0\n   Timers: message age 0, forward delay 0, hold 0\n   Number of transitions to forwarding state: 1\n   Link type is point-to-point by default, Boundary PVST\n   Loop guard is enabled by default on the port\n   BPDU: sent 1099019, received 2191582\n",
+      "expected": {
+        "instances": {
+          "MST0": {
+            "name": "MST0",
+            "protocol": "mstp",
+            "is_root": true,
+            "ports": {
+              "Port-channel14": {
+                "name": "Port-channel14",
+                "port_num": 2390,
+                "status": "broken",
+                "extra_status": "PVST Sim. Inconsistent",
+                "port_path_cost": 6660,
+                "port_priority": 128,
+                "port_identifier": "128.2390",
+                "designated_root_priority": 32768,
+                "designated_root_address": "d8b1.90ff.c889",
+                "designated_bridge_priority": 32768,
+                "designated_bridge_address": "d8b1.90ff.c889",
+                "designated_port_id": "128.2390",
+                "designated_path_cost": 0,
+                "timers": {
+                  "message_age": 0,
+                  "forward_delay": 0,
+                  "hold": 0
+                },
+                "forwarding_transitions": 0,
+                "link_type": "point-to-point",
+                "link_type_extras": [
+                  "Boundary PVST"
+                ],
+                "loop_guard": "enabled",
+                "bpdu": {
+                  "sent": 138231,
+                  "received": 167393
+                }
+              },
+              "Port-channel24": {
+                "name": "Port-channel24",
+                "port_num": 2400,
+                "status": "designated forwarding",
+                "port_path_cost": 6660,
+                "port_priority": 128,
+                "port_identifier": "128.2400",
+                "designated_root_priority": 32768,
+                "designated_root_address": "d8b1.90ff.c889",
+                "designated_bridge_priority": 32768,
+                "designated_bridge_address": "d8b1.90ff.c889",
+                "designated_port_id": "128.2400",
+                "designated_path_cost": 0,
+                "timers": {
+                  "message_age": 0,
+                  "forward_delay": 0,
+                  "hold": 0
+                },
+                "forwarding_transitions": 1,
+                "link_type": "point-to-point",
+                "link_type_extras": [
+                  "Boundary PVST"
+                ],
+                "loop_guard": "enabled",
+                "bpdu": {
+                  "sent": 1099019,
+                  "received": 2191582
+                }
+              }
+            },
+            "bridge_priority": 32768,
+            "sys_id_ext": 0,
+            "bridge_address": "d8b1.90ff.c889",
+            "hello_time": 10,
+            "max_age": 40,
+            "forward_delay": 30,
+            "transmit_hold_count": 20,
+            "topology_change_flag": false,
+            "topology_detected_flag": false,
+            "topology_changes": 3,
+            "last_change": "03:09:48",
+            "topology_change_from": "Port-channel24",
+            "times": {
+              "hold": 1,
+              "topology_change": 70,
+              "notification": 10,
+              "hello": 10,
+              "max_age": 40,
+              "forward_delay": 30
+            },
+            "timers": {
+              "hello": 0,
+              "topology_change": 0,
+              "notification": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Rapid PVST with two VLANs - one root, one with a non-root current root and Peer is STP link annotation",
+      "input": "VLAN0100 is executing the rstp compatible Spanning Tree protocol\n  Bridge Identifier has priority 24576, sysid 100, address 3820.56ff.76db\n  Configured hello time 2, max age 20, forward delay 15, transmit hold-count 6\n  We are the root of the spanning tree\n  Topology change flag set, detected flag not set\n  Number of topology changes 1 last change occurred 00:00:34 ago\n          from Port-channel12\n  Times:  hold 1, topology change 35, notification 2\n          hello 2, max age 20, forward delay 15\n  Timers: hello 0, topology change 0, notification 0, aging 300\n\n Port 2388 (Port-channel12) of VLAN0100 is designated forwarding\n   Port path cost 3, Port priority 128, Port Identifier 128.2388.\n   Designated root has priority 24676, address 3820.56ff.76db\n   Designated bridge has priority 24676, address 3820.56ff.76db\n   Designated port id is 128.2388, designated path cost 0\n   Timers: message age 0, forward delay 0, hold 0\n   Number of transitions to forwarding state: 1\n   Link type is point-to-point by default\n   BPDU: sent 34, received 0\n\nVLAN0201 is executing the rstp compatible Spanning Tree protocol\n  Bridge Identifier has priority 28672, sysid 201, address ecbd.1dff.5f89\n  Configured hello time 2, max age 20, forward delay 15, transmit hold-count 6\n  Current root has priority 24777, address 58bf.eaff.e5b6\n  Root port is 2390 (Port-channel14), cost of root path is 3\n  Topology change flag set, detected flag not set\n  Number of topology changes 1 last change occurred 00:00:14 ago\n          from Port-channel14\n  Times:  hold 1, topology change 35, notification 2\n          hello 2, max age 20, forward delay 15\n  Timers: hello 0, topology change 21, notification 0, aging 300\n\n Port 5 (GigabitEthernet1/0/5) of VLAN0201 is designated forwarding\n   Port path cost 4, Port priority 128, Port Identifier 128.5.\n   Designated root has priority 24777, address 58bf.eaff.e5b6\n   Designated bridge has priority 28873, address ecbd.1dff.5f89\n   Designated port id is 128.5, designated path cost 3\n   Timers: message age 0, forward delay 0, hold 0\n   Number of transitions to forwarding state: 1\n   Link type is point-to-point by default, Peer is STP\n   BPDU: sent 20, received 4\n",
+      "expected": {
+        "instances": {
+          "VLAN0100": {
+            "name": "VLAN0100",
+            "protocol": "rstp",
+            "is_root": true,
+            "ports": {
+              "Port-channel12": {
+                "name": "Port-channel12",
+                "port_num": 2388,
+                "status": "designated forwarding",
+                "port_path_cost": 3,
+                "port_priority": 128,
+                "port_identifier": "128.2388",
+                "designated_root_priority": 24676,
+                "designated_root_address": "3820.56ff.76db",
+                "designated_bridge_priority": 24676,
+                "designated_bridge_address": "3820.56ff.76db",
+                "designated_port_id": "128.2388",
+                "designated_path_cost": 0,
+                "timers": {
+                  "message_age": 0,
+                  "forward_delay": 0,
+                  "hold": 0
+                },
+                "forwarding_transitions": 1,
+                "link_type": "point-to-point",
+                "bpdu": {
+                  "sent": 34,
+                  "received": 0
+                }
+              }
+            },
+            "bridge_priority": 24576,
+            "sys_id_ext": 100,
+            "bridge_address": "3820.56ff.76db",
+            "hello_time": 2,
+            "max_age": 20,
+            "forward_delay": 15,
+            "transmit_hold_count": 6,
+            "topology_change_flag": true,
+            "topology_detected_flag": false,
+            "topology_changes": 1,
+            "last_change": "00:00:34",
+            "topology_change_from": "Port-channel12",
+            "times": {
+              "hold": 1,
+              "topology_change": 35,
+              "notification": 2,
+              "hello": 2,
+              "max_age": 20,
+              "forward_delay": 15
+            },
+            "timers": {
+              "hello": 0,
+              "topology_change": 0,
+              "notification": 0,
+              "aging": 300
+            }
+          },
+          "VLAN0201": {
+            "name": "VLAN0201",
+            "protocol": "rstp",
+            "is_root": false,
+            "ports": {
+              "GigabitEthernet1/0/5": {
+                "name": "GigabitEthernet1/0/5",
+                "port_num": 5,
+                "status": "designated forwarding",
+                "port_path_cost": 4,
+                "port_priority": 128,
+                "port_identifier": "128.5",
+                "designated_root_priority": 24777,
+                "designated_root_address": "58bf.eaff.e5b6",
+                "designated_bridge_priority": 28873,
+                "designated_bridge_address": "ecbd.1dff.5f89",
+                "designated_port_id": "128.5",
+                "designated_path_cost": 3,
+                "timers": {
+                  "message_age": 0,
+                  "forward_delay": 0,
+                  "hold": 0
+                },
+                "forwarding_transitions": 1,
+                "link_type": "point-to-point",
+                "peer": "STP",
+                "bpdu": {
+                  "sent": 20,
+                  "received": 4
+                }
+              }
+            },
+            "bridge_priority": 28672,
+            "sys_id_ext": 201,
+            "bridge_address": "ecbd.1dff.5f89",
+            "hello_time": 2,
+            "max_age": 20,
+            "forward_delay": 15,
+            "transmit_hold_count": 6,
+            "root_info": {
+              "priority": 24777,
+              "address": "58bf.eaff.e5b6",
+              "port_num": 2390,
+              "port_name": "Port-channel14",
+              "cost": 3
+            },
+            "topology_change_flag": true,
+            "topology_detected_flag": false,
+            "topology_changes": 1,
+            "last_change": "00:00:14",
+            "topology_change_from": "Port-channel14",
+            "times": {
+              "hold": 1,
+              "topology_change": 35,
+              "notification": 2,
+              "hello": 2,
+              "max_age": 20,
+              "forward_delay": 15
+            },
+            "timers": {
+              "hello": 0,
+              "topology_change": 21,
+              "notification": 0,
+              "aging": 300
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Non-root VLAN with a designated edge-trunk port running in portfast mode",
+      "input": "VLAN0010 is executing the rstp compatible Spanning Tree protocol\n  Bridge Identifier has priority 32768, sysid 10, address 3820.56ff.76db\n  Configured hello time 2, max age 20, forward delay 15, transmit hold-count 6\n  Current root has priority 24586, address aabb.ccff.dd01\n  Root port is 12 (GigabitEthernet1/0/12), cost of root path is 4\n  Topology change flag not set, detected flag not set\n  Number of topology changes 5 last change occurred 2d04h ago\n          from GigabitEthernet1/0/24\n  Times:  hold 1, topology change 35, notification 2\n          hello 2, max age 20, forward delay 15\n  Timers: hello 0, topology change 0, notification 0, aging 300\n\n Port 24 (GigabitEthernet1/0/24) of VLAN0010 is designated forwarding\n   Port path cost 4, Port priority 128, Port Identifier 128.24.\n   Designated root has priority 24586, address aabb.ccff.dd01\n   Designated bridge has priority 32778, address 3820.56ff.76db\n   Designated port id is 128.24, designated path cost 4\n   Timers: message age 0, forward delay 0, hold 0\n   Number of transitions to forwarding state: 1\n   Link type is point-to-point by default\n   The port is in the portfast edge trunk mode\n   BPDU: sent 102, received 0\n",
+      "expected": {
+        "instances": {
+          "VLAN0010": {
+            "name": "VLAN0010",
+            "protocol": "rstp",
+            "is_root": false,
+            "ports": {
+              "GigabitEthernet1/0/24": {
+                "name": "GigabitEthernet1/0/24",
+                "port_num": 24,
+                "status": "designated forwarding",
+                "port_path_cost": 4,
+                "port_priority": 128,
+                "port_identifier": "128.24",
+                "designated_root_priority": 24586,
+                "designated_root_address": "aabb.ccff.dd01",
+                "designated_bridge_priority": 32778,
+                "designated_bridge_address": "3820.56ff.76db",
+                "designated_port_id": "128.24",
+                "designated_path_cost": 4,
+                "timers": {
+                  "message_age": 0,
+                  "forward_delay": 0,
+                  "hold": 0
+                },
+                "forwarding_transitions": 1,
+                "link_type": "point-to-point",
+                "portfast_mode": "edge trunk",
+                "bpdu": {
+                  "sent": 102,
+                  "received": 0
+                }
+              }
+            },
+            "bridge_priority": 32768,
+            "sys_id_ext": 10,
+            "bridge_address": "3820.56ff.76db",
+            "hello_time": 2,
+            "max_age": 20,
+            "forward_delay": 15,
+            "transmit_hold_count": 6,
+            "root_info": {
+              "priority": 24586,
+              "address": "aabb.ccff.dd01",
+              "port_num": 12,
+              "port_name": "GigabitEthernet1/0/12",
+              "cost": 4
+            },
+            "topology_change_flag": false,
+            "topology_detected_flag": false,
+            "topology_changes": 5,
+            "last_change": "2d04h",
+            "topology_change_from": "GigabitEthernet1/0/24",
+            "times": {
+              "hold": 1,
+              "topology_change": 35,
+              "notification": 2,
+              "hello": 2,
+              "max_age": 20,
+              "forward_delay": 15
+            },
+            "timers": {
+              "hello": 0,
+              "topology_change": 0,
+              "notification": 0,
+              "aging": 300
+            }
+          }
+        }
+      }
+    }
+  ]
+}
