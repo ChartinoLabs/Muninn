@@ -1,4 +1,4 @@
-"""Parser for 'show lldp' command on Cisco IOS."""
+"""Parser for 'show lldp' command on Cisco IOS and IOS-XE."""
 
 import re
 from typing import ClassVar, NotRequired, TypedDict
@@ -134,12 +134,14 @@ def _consume_line(line: str, result: ShowLldpResult, state: _ParseState) -> None
 
 
 @register(OS.CISCO_IOS, "show lldp")
+@register(OS.CISCO_IOSXE, "show lldp")
 class ShowLldpParser(BaseParser[ShowLldpResult]):
-    """Parser for 'show lldp' command on Cisco IOS.
+    """Parser for 'show lldp' command on Cisco IOS and IOS-XE.
 
     Parses global LLDP configuration. The command may report either that
     LLDP is not enabled (a single status line) or, when enabled, a block
-    of global LLDP timer/status fields.
+    of global LLDP timer/status fields. The output format is identical
+    across both IOS and IOS-XE platforms.
 
     Example output when enabled::
 
