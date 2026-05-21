@@ -118,6 +118,7 @@ def _build_mcast_stats(match: re.Match[str]) -> MulticastStats:
 
 
 @register(OS.CISCO_IOSXE, "show ip sla statistics")
+@register(OS.CISCO_IOSXE, r"show ip sla statistics (?P<probe_id>\d+)")
 class ShowIpSlaStatisticsParser(BaseParser[ShowIpSlaStatisticsResult]):
     """Parser for 'show ip sla statistics' on IOS-XE.
 
