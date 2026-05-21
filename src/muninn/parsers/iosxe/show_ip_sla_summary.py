@@ -49,8 +49,9 @@ class IpSlaOperation(TypedDict):
     """Schema for a single IP SLA operation row.
 
     Attributes:
-        operation_id: Numeric operation identifier (string-typed to match
-            the dict key).
+        operation_id: Numeric operation identifier (matches the dict
+            key when parsed as an integer; aligned with the sibling
+            ``show ip sla statistics`` parser).
         state: One of ``active``, ``inactive``, ``pending`` when the CLI
             prints a status marker on the ID. Omitted when no marker is
             present (older IOS-XE releases display only the digits).
@@ -67,7 +68,7 @@ class IpSlaOperation(TypedDict):
             is a placeholder.
     """
 
-    operation_id: str
+    operation_id: int
     state: NotRequired[str]
     operation_type: str
     destination: str
@@ -125,11 +126,16 @@ def _value_or_none(token: str) -> str | None:
     return None if token in _NA_LIKE_PLACEHOLDERS else token
 
 
-def _row_from_match(match: re.Match[str]) -> IpSlaOperation:
-    """Build an IpSlaOperation entry from a matched row."""
-    op_id = match.group("id")
-    row: dict[str, str] = {
-        "operation_id": op_id,
+def _row_from_match(match: re.Match[str]) -> tuple[str, IpSlaOperation]:
+    """Build an IpSlaOperation entry from a matched row.
+
+    Returns a ``(operation_id_str, entry)`` tuple so callers can use the
+    string form as a dict key while the entry stores ``operation_id`` as
+    an integer (matching the sibling ``show ip sla statistics`` parser).
+    """
+    op_id_str = match.group("id")
+    row: dict[str, object] = {
+        "operation_id": int(op_id_str),
         "operation_type": match.group("type"),
         "destination": match.group("destination"),
     }
@@ -148,7 +154,7 @@ def _row_from_match(match: re.Match[str]) -> IpSlaOperation:
         lr_value = _value_or_none(last_run)
         if lr_value is not None:
             row["last_run"] = lr_value
-    return cast(IpSlaOperation, row)
+    return op_id_str, cast(IpSlaOperation, row)
 
 
 @register(OS.CISCO_IOSXE, "show ip sla summary")
@@ -188,8 +194,8 @@ class ShowIpSlaSummaryParser(BaseParser[ShowIpSlaSummaryResult]):
             match = _ROW_RE.match(raw_line)
             if not match:
                 continue
-            row = _row_from_match(match)
-            operations[row["operation_id"]] = row
+            op_id_str, row = _row_from_match(match)
+            operations[op_id_str] = row
         if not saw_banner:
             msg = (
                 "Missing 'IPSLAs Latest Operation Summary' banner; output "
