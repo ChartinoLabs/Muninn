@@ -1,0 +1,94 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip sla statistics <probe-id>",
+  "schema": {
+    "name": "ShowIpSlaStatisticsResult",
+    "fields": {
+      "operations": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "IpSlaOperationEntry",
+            "fields": {
+              "operation_id": {
+                "type": "int",
+                "required": true
+              },
+              "latest_rtt": {
+                "type": "str",
+                "required": false
+              },
+              "type_of_operation": {
+                "type": "str",
+                "required": false
+              },
+              "latest_operation_start_time": {
+                "type": "str",
+                "required": false
+              },
+              "latest_operation_return_code": {
+                "type": "str",
+                "required": false
+              },
+              "latest_dns_rtt": {
+                "type": "str",
+                "required": false
+              },
+              "latest_tcp_connection_rtt": {
+                "type": "str",
+                "required": false
+              },
+              "latest_http_transaction_rtt": {
+                "type": "str",
+                "required": false
+              },
+              "number_of_successes": {
+                "type": "int",
+                "required": false
+              },
+              "number_of_failures": {
+                "type": "int",
+                "required": false
+              },
+              "operation_time_to_live": {
+                "type": "str",
+                "required": false
+              },
+              "multicast_stats": {
+                "type": {
+                  "name": "MulticastStats",
+                  "fields": {
+                    "oper_id": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "status": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "loss_sd": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "delay": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "destination": {
+                      "type": "str",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}

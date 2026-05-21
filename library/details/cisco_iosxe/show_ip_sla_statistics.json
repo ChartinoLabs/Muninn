@@ -1,0 +1,201 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip sla statistics",
+  "schema": {
+    "name": "ShowIpSlaStatisticsResult",
+    "fields": {
+      "operations": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "IpSlaOperationEntry",
+            "fields": {
+              "operation_id": {
+                "type": "int",
+                "required": true
+              },
+              "latest_rtt": {
+                "type": "str",
+                "required": false
+              },
+              "type_of_operation": {
+                "type": "str",
+                "required": false
+              },
+              "latest_operation_start_time": {
+                "type": "str",
+                "required": false
+              },
+              "latest_operation_return_code": {
+                "type": "str",
+                "required": false
+              },
+              "latest_dns_rtt": {
+                "type": "str",
+                "required": false
+              },
+              "latest_tcp_connection_rtt": {
+                "type": "str",
+                "required": false
+              },
+              "latest_http_transaction_rtt": {
+                "type": "str",
+                "required": false
+              },
+              "number_of_successes": {
+                "type": "int",
+                "required": false
+              },
+              "number_of_failures": {
+                "type": "int",
+                "required": false
+              },
+              "operation_time_to_live": {
+                "type": "str",
+                "required": false
+              },
+              "multicast_stats": {
+                "type": {
+                  "name": "MulticastStats",
+                  "fields": {
+                    "oper_id": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "status": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "loss_sd": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "delay": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "destination": {
+                      "type": "str",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple IP SLA operations including HTTP, multicast, and ICMP probes with varying return codes",
+      "input": "IPSLAs Latest Operation Statistics\n\nIPSLA operation id: 1\n        Latest RTT: NoConnection/Busy/Timeout\nLatest operation start time: 07:10:18 UTC Fri Oct 22 2021\nLatest operation return code: Timeout\nLatest DNS RTT: 0 ms\nLatest TCP Connection RTT: 2019 ms\nLatest HTTP Transaction RTT: 0 ms\nNumber of successes: 0\nNumber of failures: 11\nOperation time to live: Forever\n\n\n\nIPSLA operation id: 2\nType of operation: mcast\nLatest operation start time: 07:11:18 UTC Fri Oct 22 2021\nLatest operation return code: OK\n\noper-id        status               lossSD       delay                  destination\n60988531       OK                   0            3239998/3240718/3240998             10.50.10.100\n\nNumber of successes: 46\nNumber of failures: 0\nOperation time to live: Forever\n\n\n\nIPSLA operation id: 3\nType of operation: mcast\nLatest operation start time: 07:11:19 UTC Fri Oct 22 2021\nLatest operation return code: OK\n\noper-id        status               lossSD       delay                  destination\n393146530      OK                   0            3239/3240/3240                10.50.10.100\n\nNumber of successes: 24\nNumber of failures: 0\nOperation time to live: Forever\n\n\n\nIPSLA operation id: 50\n        Latest RTT: 6 milliseconds\nLatest operation start time: 07:11:19 UTC Fri Oct 22 2021\nLatest operation return code: OK\nNumber of successes: 24\nNumber of failures: 0\nOperation time to live: Forever\n\n\n\nIPSLA operation id: 51\n        Latest RTT: 11 milliseconds\nLatest operation start time: 07:11:19 UTC Fri Oct 22 2021\nLatest operation return code: OK\nNumber of successes: 47\nNumber of failures: 0\nOperation time to live: Forever\n\n\n\nIPSLA operation id: 52\n        Latest RTT: 11 milliseconds\nLatest operation start time: 07:11:19 UTC Fri Oct 22 2021\nLatest operation return code: OK\nNumber of successes: 24\nNumber of failures: 0\nOperation time to live: Forever\n\n\n\nIPSLA operation id: 53\n        Latest RTT: NoConnection/Busy/Timeout\nLatest operation start time: 07:10:19 UTC Fri Oct 22 2021\nLatest operation return code: No connection\nNumber of successes: 0\nNumber of failures: 23\nOperation time to live: Forever\n\n\n\nIPSLA operation id: 54\n        Latest RTT: 0 milliseconds\nLatest operation start time: 07:11:19 UTC Fri Oct 22 2021\nLatest operation return code: Socket connect error\nNumber of successes: 0\nNumber of failures: 24\nOperation time to live: Forever\n\n\n\nIPSLA operation id: 100\n        Latest RTT: 1 milliseconds\nLatest operation start time: 07:11:08 UTC Fri Oct 22 2021\nLatest operation return code: OK\nNumber of successes: 23\nNumber of failures: 0\nOperation time to live: Forever\n",
+      "expected": {
+        "operations": {
+          "1": {
+            "operation_id": 1,
+            "latest_rtt": "NoConnection/Busy/Timeout",
+            "latest_operation_start_time": "07:10:18 UTC Fri Oct 22 2021",
+            "latest_operation_return_code": "Timeout",
+            "latest_dns_rtt": "0 ms",
+            "latest_tcp_connection_rtt": "2019 ms",
+            "latest_http_transaction_rtt": "0 ms",
+            "number_of_successes": 0,
+            "number_of_failures": 11,
+            "operation_time_to_live": "Forever"
+          },
+          "2": {
+            "operation_id": 2,
+            "type_of_operation": "mcast",
+            "latest_operation_start_time": "07:11:18 UTC Fri Oct 22 2021",
+            "latest_operation_return_code": "OK",
+            "multicast_stats": {
+              "oper_id": 60988531,
+              "status": "OK",
+              "loss_sd": 0,
+              "delay": "3239998/3240718/3240998",
+              "destination": "10.50.10.100"
+            },
+            "number_of_successes": 46,
+            "number_of_failures": 0,
+            "operation_time_to_live": "Forever"
+          },
+          "3": {
+            "operation_id": 3,
+            "type_of_operation": "mcast",
+            "latest_operation_start_time": "07:11:19 UTC Fri Oct 22 2021",
+            "latest_operation_return_code": "OK",
+            "multicast_stats": {
+              "oper_id": 393146530,
+              "status": "OK",
+              "loss_sd": 0,
+              "delay": "3239/3240/3240",
+              "destination": "10.50.10.100"
+            },
+            "number_of_successes": 24,
+            "number_of_failures": 0,
+            "operation_time_to_live": "Forever"
+          },
+          "50": {
+            "operation_id": 50,
+            "latest_rtt": "6 milliseconds",
+            "latest_operation_start_time": "07:11:19 UTC Fri Oct 22 2021",
+            "latest_operation_return_code": "OK",
+            "number_of_successes": 24,
+            "number_of_failures": 0,
+            "operation_time_to_live": "Forever"
+          },
+          "51": {
+            "operation_id": 51,
+            "latest_rtt": "11 milliseconds",
+            "latest_operation_start_time": "07:11:19 UTC Fri Oct 22 2021",
+            "latest_operation_return_code": "OK",
+            "number_of_successes": 47,
+            "number_of_failures": 0,
+            "operation_time_to_live": "Forever"
+          },
+          "52": {
+            "operation_id": 52,
+            "latest_rtt": "11 milliseconds",
+            "latest_operation_start_time": "07:11:19 UTC Fri Oct 22 2021",
+            "latest_operation_return_code": "OK",
+            "number_of_successes": 24,
+            "number_of_failures": 0,
+            "operation_time_to_live": "Forever"
+          },
+          "53": {
+            "operation_id": 53,
+            "latest_rtt": "NoConnection/Busy/Timeout",
+            "latest_operation_start_time": "07:10:19 UTC Fri Oct 22 2021",
+            "latest_operation_return_code": "No connection",
+            "number_of_successes": 0,
+            "number_of_failures": 23,
+            "operation_time_to_live": "Forever"
+          },
+          "54": {
+            "operation_id": 54,
+            "latest_rtt": "0 milliseconds",
+            "latest_operation_start_time": "07:11:19 UTC Fri Oct 22 2021",
+            "latest_operation_return_code": "Socket connect error",
+            "number_of_successes": 0,
+            "number_of_failures": 24,
+            "operation_time_to_live": "Forever"
+          },
+          "100": {
+            "operation_id": 100,
+            "latest_rtt": "1 milliseconds",
+            "latest_operation_start_time": "07:11:08 UTC Fri Oct 22 2021",
+            "latest_operation_return_code": "OK",
+            "number_of_successes": 23,
+            "number_of_failures": 0,
+            "operation_time_to_live": "Forever"
+          }
+        }
+      }
+    }
+  ]
+}
