@@ -1,4 +1,4 @@
-"""Parser for 'show errdisable detect' command on IOS."""
+"""Parser for 'show errdisable detect' command on IOS and IOS-XE."""
 
 import re
 from typing import ClassVar, TypedDict
@@ -37,8 +37,9 @@ class ShowErrdisableDetectResult(TypedDict):
 
 
 @register(OS.CISCO_IOS, "show errdisable detect")
+@register(OS.CISCO_IOSXE, "show errdisable detect")
 class ShowErrdisableDetectParser(BaseParser[ShowErrdisableDetectResult]):
-    """Parser for 'show errdisable detect' on IOS."""
+    """Parser for 'show errdisable detect' on IOS and IOS-XE."""
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset(
         {
