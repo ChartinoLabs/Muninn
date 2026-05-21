@@ -1,0 +1,247 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show memory platform",
+  "schema": {
+    "name": "ShowMemoryPlatformResult",
+    "fields": {
+      "virtual_memory_bytes": {
+        "type": "int",
+        "required": true
+      },
+      "pages_resident": {
+        "type": "int",
+        "required": true
+      },
+      "major_page_faults": {
+        "type": "int",
+        "required": true
+      },
+      "minor_page_faults": {
+        "type": "int",
+        "required": true
+      },
+      "architecture": {
+        "type": "str",
+        "required": false
+      },
+      "memory_kb": {
+        "type": {
+          "name": "MemoryKbBlock",
+          "fields": {
+            "physical": {
+              "type": "int",
+              "required": false
+            },
+            "total": {
+              "type": "int",
+              "required": false
+            },
+            "used": {
+              "type": "int",
+              "required": false
+            },
+            "free": {
+              "type": "int",
+              "required": false
+            },
+            "active": {
+              "type": "int",
+              "required": false
+            },
+            "inactive": {
+              "type": "int",
+              "required": false
+            },
+            "inact_dirty": {
+              "type": "int",
+              "required": false
+            },
+            "inact_clean": {
+              "type": "int",
+              "required": false
+            },
+            "dirty": {
+              "type": "int",
+              "required": false
+            },
+            "anonpages": {
+              "type": "int",
+              "required": false
+            },
+            "bounce": {
+              "type": "int",
+              "required": false
+            },
+            "cached": {
+              "type": "int",
+              "required": false
+            },
+            "commit_limit": {
+              "type": "int",
+              "required": false
+            },
+            "committed_as": {
+              "type": "int",
+              "required": false
+            },
+            "high_total": {
+              "type": "int",
+              "required": false
+            },
+            "high_free": {
+              "type": "int",
+              "required": false
+            },
+            "low_total": {
+              "type": "int",
+              "required": false
+            },
+            "low_free": {
+              "type": "int",
+              "required": false
+            },
+            "mapped": {
+              "type": "int",
+              "required": false
+            },
+            "nfs_unstable": {
+              "type": "int",
+              "required": false
+            },
+            "page_tables": {
+              "type": "int",
+              "required": false
+            },
+            "slab": {
+              "type": "int",
+              "required": false
+            },
+            "writeback": {
+              "type": "int",
+              "required": false
+            },
+            "hugepages_total": {
+              "type": "int",
+              "required": false
+            },
+            "hugepages_free": {
+              "type": "int",
+              "required": false
+            },
+            "hugepages_rsvd": {
+              "type": "int",
+              "required": false
+            },
+            "hugepage_size": {
+              "type": "int",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "swap_kb": {
+        "type": {
+          "name": "SwapKbBlock",
+          "fields": {
+            "total": {
+              "type": "int",
+              "required": false
+            },
+            "used": {
+              "type": "int",
+              "required": false
+            },
+            "free": {
+              "type": "int",
+              "required": false
+            },
+            "cached": {
+              "type": "int",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "buffers_kb": {
+        "type": "int",
+        "required": false
+      },
+      "load_average": {
+        "type": {
+          "name": "LoadAverageBlock",
+          "fields": {
+            "one_min": {
+              "type": "float",
+              "required": false
+            },
+            "five_min": {
+              "type": "float",
+              "required": false
+            },
+            "fifteen_min": {
+              "type": "float",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output captured from an ISR 1100 / Catalyst 9300 testbed device",
+      "input": "Virtual memory   : 24663146496\n  Pages resident   : 934874\n  Major page faults: 11383\n  Minor page faults: 112726047\n\n  Architecture     : x86_64\n  Memory (kB)\n    Physical       : 15985428\n    Total          : 15985428\n    Used           : 3152504\n    Free           : 12832924\n    Active         : 354068\n    Inactive       : 4451448\n    Inact-dirty    : 0\n    Inact-clean    : 0\n    Dirty          : 0\n    AnonPages      : 1384396\n    Bounce         : 0\n    Cached         : 2432516\n    Commit Limit   : 7861640\n    Committed As   : 4201712\n    High Total     : 0\n    High Free      : 0\n    Low Total      : 15985428\n    Low Free       : 12762084\n    Mapped         : 688864\n    NFS Unstable   : 0\n    Page Tables    : 26964\n    Slab           : 433848\n    Writeback      : 0\n    HugePages Total: 128\n    HugePages Free : 0\n    HugePages Rsvd : 0\n    HugePage Size  : 2048\n\n  Swap (kB)\n    Total          : 0\n    Used           : 0\n    Free           : 0\n    Cached         : 0\n\n  Buffers (kB)     : 988732\n\n  Load Average\n    1-Min          : 1.52\n    5-Min          : 1.37\n    15-Min         : 1.36\n",
+      "expected": {
+        "virtual_memory_bytes": 24663146496,
+        "pages_resident": 934874,
+        "major_page_faults": 11383,
+        "minor_page_faults": 112726047,
+        "architecture": "x86_64",
+        "buffers_kb": 988732,
+        "memory_kb": {
+          "physical": 15985428,
+          "total": 15985428,
+          "used": 3152504,
+          "free": 12832924,
+          "active": 354068,
+          "inactive": 4451448,
+          "inact_dirty": 0,
+          "inact_clean": 0,
+          "dirty": 0,
+          "anonpages": 1384396,
+          "bounce": 0,
+          "cached": 2432516,
+          "commit_limit": 7861640,
+          "committed_as": 4201712,
+          "high_total": 0,
+          "high_free": 0,
+          "low_total": 15985428,
+          "low_free": 12762084,
+          "mapped": 688864,
+          "nfs_unstable": 0,
+          "page_tables": 26964,
+          "slab": 433848,
+          "writeback": 0,
+          "hugepages_total": 128,
+          "hugepages_free": 0,
+          "hugepages_rsvd": 0,
+          "hugepage_size": 2048
+        },
+        "swap_kb": {
+          "total": 0,
+          "used": 0,
+          "free": 0,
+          "cached": 0
+        },
+        "load_average": {
+          "one_min": 1.52,
+          "five_min": 1.37,
+          "fifteen_min": 1.36
+        }
+      }
+    }
+  ]
+}
