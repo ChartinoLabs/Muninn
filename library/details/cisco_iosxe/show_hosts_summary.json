@@ -1,0 +1,47 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show hosts summary",
+  "schema": {
+    "name": "ShowHostsSummaryResult",
+    "fields": {
+      "default_domain": {
+        "type": "str",
+        "required": false
+      },
+      "domain_list": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": false
+      },
+      "name_servers": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": true
+      },
+      "local_cache_entries": {
+        "type": "int",
+        "required": true
+      },
+      "dynamic_cache_entries": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Resolver configured with default domain and unresolved name-server sentinel; empty local and dynamic DNS caches",
+      "input": "Default domain is chrisjhart.net\nName servers are 255.255.255.255\nLocal cache entries: 0\nDynamic cache entries: 0\n",
+      "expected": {
+        "name_servers": [],
+        "default_domain": "chrisjhart.net",
+        "local_cache_entries": 0,
+        "dynamic_cache_entries": 0
+      }
+    }
+  ]
+}
