@@ -1,4 +1,4 @@
-"""Parser for 'show ip route summary' command on IOS."""
+"""Parser for 'show ip route summary' command on IOS and IOS-XE."""
 
 import re
 from typing import ClassVar, NotRequired, TypedDict, cast
@@ -245,6 +245,7 @@ def _attach_ospf_subdetail(
 
 
 @register(OS.CISCO_IOS, "show ip route summary")
+@register(OS.CISCO_IOSXE, "show ip route summary")
 class ShowIpRouteSummaryParser(BaseParser["ShowIpRouteSummaryResult"]):
     """Parser for 'show ip route summary' command.
 
