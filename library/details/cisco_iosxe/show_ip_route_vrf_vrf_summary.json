@@ -1,0 +1,170 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip route vrf <vrf> summary",
+  "schema": {
+    "name": "ShowIpRouteVrfSummaryResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ShowIpRouteSummaryResult",
+            "fields": {
+              "routing_table": {
+                "type": {
+                  "name": "RoutingTableInfo",
+                  "fields": {
+                    "name": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "maximum_paths": {
+                      "type": "int",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "route_sources": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "RouteSourceEntry",
+                    "fields": {
+                      "networks": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "subnets": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "replicates": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "overhead": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "memory_bytes": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "ospf": {
+                        "type": {
+                          "name": "OspfSubdetail",
+                          "fields": {
+                            "intra_area": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "inter_area": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "external_1": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "external_2": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "nssa_external_1": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "nssa_external_2": {
+                              "type": "int",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "bgp": {
+                        "type": {
+                          "name": "BgpSubdetail",
+                          "fields": {
+                            "external": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "internal": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "local": {
+                              "type": "int",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "isis": {
+                        "type": {
+                          "name": "IsisSubdetail",
+                          "fields": {
+                            "level_1": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "level_2": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "inter_area": {
+                              "type": "int",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              },
+              "total": {
+                "type": {
+                  "name": "TotalEntry",
+                  "fields": {
+                    "networks": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "subnets": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "replicates": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "overhead": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "memory_bytes": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}
