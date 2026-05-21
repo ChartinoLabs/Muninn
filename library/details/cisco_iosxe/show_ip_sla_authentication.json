@@ -1,0 +1,26 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip sla authentication",
+  "schema": {
+    "name": "ShowIpSlaAuthenticationResult",
+    "fields": {
+      "authentication_enabled": {
+        "type": "bool",
+        "required": true
+      },
+      "key_chain": {
+        "type": "str",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "show ip sla authentication output on TAC-R2 with IP SLA control-message authentication disabled",
+      "input": "IP SLAs control message authentication is disabled.\n",
+      "expected": {
+        "authentication_enabled": false
+      }
+    }
+  ]
+}
