@@ -1,4 +1,4 @@
-"""Parser for 'show interfaces status' command on IOS."""
+"""Parser for 'show interfaces status' command on IOS / IOS-XE."""
 
 import re
 from typing import ClassVar, NotRequired, TypedDict, cast
@@ -152,14 +152,17 @@ def _parse_data_line(line: str) -> tuple[str, InterfaceStatusEntry] | None:
 
 
 @register(OS.CISCO_IOS, "show interfaces status")
+@register(OS.CISCO_IOSXE, "show interfaces status")
 class ShowInterfacesStatusParser(BaseParser[ShowInterfacesStatusResult]):
-    """Parser for 'show interfaces status' on IOS.
+    """Parser for 'show interfaces status' on IOS / IOS-XE.
 
-    Parses the columnar status table emitted by Cisco IOS, returning a
-    mapping keyed by canonical interface name. Handles terminal-wrapped
-    Type-column continuations (long media descriptors like
-    ``10/100/1000BaseTX`` or ``SFP-10GBase-LR`` are commonly pushed onto
-    the following line by 80-column wrapping).
+    Parses the columnar status table emitted by Cisco IOS and IOS-XE,
+    returning a mapping keyed by canonical interface name. Handles
+    terminal-wrapped Type-column continuations (long media descriptors
+    like ``10/100/1000BaseTX`` or ``SFP-10GBase-LR`` are commonly pushed
+    onto the following line by 80-column wrapping). Both platforms emit
+    the same five-column format (Port/Name/Status/Vlan/Duplex/Speed plus
+    optional Type), so a single implementation serves both.
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.INTERFACES})
