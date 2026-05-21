@@ -1,7 +1,7 @@
 """Parser for 'show interfaces counters' command on IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import ClassVar, Literal, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -43,10 +43,12 @@ class DirectionCounters(TypedDict):
 class InterfaceCounters(TypedDict):
     """Per-interface counters with optional input and output sections.
 
-    Both ``input`` and ``output`` are :class:`NotRequired` because the IOS-XE
-    command can be invoked with directional filters (e.g.
-    ``show interfaces counters input``) that emit only one of the two
-    sections.
+    Both ``input`` and ``output`` are :class:`NotRequired` so the schema
+    remains valid if a device emits only one of the two columnar blocks
+    (for example, the trailing block is truncated by paging or only one
+    section is present in a vendor-modified variant of the command).
+    The standard ``show interfaces counters`` invocation always emits
+    both blocks.
     """
 
     input: NotRequired[DirectionCounters]
@@ -88,11 +90,9 @@ class ShowInterfacesCountersParser(BaseParser[ShowInterfacesCountersResult]):
     contains a port token followed by the four counters.
 
     The parser returns a mapping keyed by canonical interface name. Each
-    entry carries an optional ``input`` and/or ``output`` sub-dict.
-    Directional filters (``show interfaces counters input`` /
-    ``show interfaces counters output``) emit only one of the two blocks;
-    the schema accommodates that by marking both sub-dicts as
-    :class:`NotRequired`.
+    entry carries an ``input`` and an ``output`` sub-dict. Both are
+    marked :class:`NotRequired` to keep the schema valid when only one
+    of the two columnar blocks is present in the supplied output.
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.INTERFACES})
@@ -111,8 +111,8 @@ class ShowInterfacesCountersParser(BaseParser[ShowInterfacesCountersResult]):
         Raises:
             ValueError: If no interface rows are present in the output.
         """
-        interfaces: dict[str, dict[str, DirectionCounters]] = {}
-        direction: str | None = None
+        interfaces: dict[str, InterfaceCounters] = {}
+        direction: Literal["input", "output"] | None = None
 
         for raw_line in output.splitlines():
             line = raw_line.rstrip()
@@ -139,4 +139,4 @@ class ShowInterfacesCountersParser(BaseParser[ShowInterfacesCountersResult]):
             msg = "No interfaces found in 'show interfaces counters' output"
             raise ValueError(msg)
 
-        return cast(ShowInterfacesCountersResult, {"interfaces": interfaces})
+        return {"interfaces": interfaces}
