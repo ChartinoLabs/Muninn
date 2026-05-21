@@ -1,0 +1,48 @@
+{
+    "http_server": {
+        "enabled": true,
+        "port": 80,
+        "active_supplementary_listener_ports": [
+            21111
+        ],
+        "authentication_method": "local",
+        "auth_retry_count": 0,
+        "auth_retry_time_window_minutes": 0,
+        "digest_algorithm": "md5",
+        "access_class": "0",
+        "file_upload_enabled": false,
+        "max_concurrent_connections": 300,
+        "max_secondary_connections": 50,
+        "server_idle_timeout_seconds": 180,
+        "server_life_timeout_seconds": 180,
+        "server_session_idle_timeout_seconds": 600,
+        "max_requests_per_connection": 25,
+        "server_linger_time_seconds": 60,
+        "active_session_modules": "ALL"
+    },
+    "http_secure_server": {
+        "capability_present": true,
+        "enabled": true,
+        "port": 443,
+        "ciphersuite": [
+            "dhe-aes-cbc-sha2",
+            "dhe-aes-gcm-sha2",
+            "ecdhe-rsa-aes-cbc-sha2",
+            "ecdhe-rsa-aes-gcm-sha2",
+            "ecdhe-ecdsa-aes-gcm-sha2",
+            "tls13-aes128-gcm-sha256",
+            "tls13-aes256-gcm-sha384",
+            "tls13-chacha20-poly1305-sha256"
+        ],
+        "tls_versions": [
+            "TLSv1.3",
+            "TLSv1.2"
+        ],
+        "client_authentication_enabled": false,
+        "piv_authentication_enabled": false,
+        "piv_authorization_only_enabled": false,
+        "trustpoint": "TP-self-signed-3341558060",
+        "ecdhe_curve": "secp256r1",
+        "active_session_modules": "ALL"
+    }
+}
