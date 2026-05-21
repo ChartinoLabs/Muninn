@@ -1,0 +1,860 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show interfaces counters",
+  "schema": {
+    "name": "ShowInterfacesCountersResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceCounters",
+            "fields": {
+              "input": {
+                "type": {
+                  "name": "DirectionCounters",
+                  "fields": {
+                    "octets": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "ucast_pkts": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "mcast_pkts": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "bcast_pkts": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "output": {
+                "type": {
+                  "type": "ref",
+                  "name": "DirectionCounters"
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic 'show interfaces counters' output from a Catalyst 9300 stack member with 48 GigabitEthernet ports, 8 TenGigabitEthernet uplinks, and an AppGigabitEthernet container interface. Exercises both the input (InOctets/InUcastPkts/InMcastPkts/InBcastPkts) and output (OutOctets/OutUcastPkts/OutMcastPkts/OutBcastPkts) sections, including rows with non-zero values, all-zero rows, and the abbreviated port-token forms (Gi, Te, Ap) that require canonicalization.",
+      "input": "Port               InOctets    InUcastPkts    InMcastPkts    InBcastPkts\nGi1/0/1            97559269         363756         452232           4159\nGi1/0/2              547171              0           1269              1\nGi1/0/3                   0              0              0              0\nGi1/0/4                   0              0              0              0\nGi1/0/5              546303              0           1267              1\nGi1/0/6                   0              0              0              0\nGi1/0/7                   0              0              0              0\nGi1/0/8                   0              0              0              0\nGi1/0/9                   0              0              0              0\nGi1/0/10                  0              0              0              0\nGi1/0/11                  0              0              0              0\nGi1/0/12                  0              0              0              0\nGi1/0/13                  0              0              0              0\nGi1/0/14                  0              0              0              0\nGi1/0/15                  0              0              0              0\nGi1/0/16                  0              0              0              0\nGi1/0/17                  0              0              0              0\nGi1/0/18                  0              0              0              0\nGi1/0/19                  0              0              0              0\nGi1/0/20                  0              0              0              0\nGi1/0/21                  0              0              0              0\nGi1/0/22                  0              0              0              0\nGi1/0/23                  0              0              0              0\nGi1/0/24                  0              0              0              0\nGi1/0/25                  0              0              0              0\nGi1/0/26                  0              0              0              0\nGi1/0/27                  0              0              0              0\nGi1/0/28                  0              0              0              0\nGi1/0/29                  0              0              0              0\nGi1/0/30                  0              0              0              0\nGi1/0/31                  0              0              0              0\nGi1/0/32                  0              0              0              0\nGi1/0/33                  0              0              0              0\nGi1/0/34                  0              0              0              0\nGi1/0/35                  0              0              0              0\nGi1/0/36                  0              0              0              0\nGi1/0/37                  0              0              0              0\nGi1/0/38                  0              0              0              0\nGi1/0/39                  0              0              0              0\nGi1/0/40                  0              0              0              0\nGi1/0/41                  0              0              0              0\nGi1/0/42                  0              0              0              0\nGi1/0/43                  0              0              0              0\nGi1/0/44                  0              0              0              0\nGi1/0/45                  0              0              0              0\nGi1/0/46                  0              0              0              0\nGi1/0/47                  0              0              0              0\nGi1/0/48             542652              0           1251              1\nTe1/1/1                   0              0              0              0\nTe1/1/2                   0              0              0              0\nTe1/1/3                   0              0              0              0\nTe1/1/4                   0              0              0              0\nTe1/1/5                   0              0              0              0\nTe1/1/6                   0              0              0              0\nTe1/1/7                   0              0              0              0\nTe1/1/8                   0              0              0              0\nAp1/0/1                   0              0              0              0\n\nPort              OutOctets   OutUcastPkts   OutMcastPkts   OutBcastPkts\nGi1/0/1            97618691         363747         453372           4173\nGi1/0/2             4240316           6695          25236            292\nGi1/0/3                   0              0              0              0\nGi1/0/4                   0              0              0              0\nGi1/0/5             4140335           6698          39261              0\nGi1/0/6                   0              0              0              0\nGi1/0/7                   0              0              0              0\nGi1/0/8                   0              0              0              0\nGi1/0/9                   0              0              0              0\nGi1/0/10                  0              0              0              0\nGi1/0/11                  0              0              0              0\nGi1/0/12                  0              0              0              0\nGi1/0/13                  0              0              0              0\nGi1/0/14                  0              0              0              0\nGi1/0/15                  0              0              0              0\nGi1/0/16                  0              0              0              0\nGi1/0/17                  0              0              0              0\nGi1/0/18                  0              0              0              0\nGi1/0/19                  0              0              0              0\nGi1/0/20                  0              0              0              0\nGi1/0/21                  0              0              0              0\nGi1/0/22                  0              0              0              0\nGi1/0/23                  0              0              0              0\nGi1/0/24                  0              0              0              0\nGi1/0/25                  0              0              0              0\nGi1/0/26                  0              0              0              0\nGi1/0/27                  0              0              0              0\nGi1/0/28                  0              0              0              0\nGi1/0/29                  0              0              0              0\nGi1/0/30                  0              0              0              0\nGi1/0/31                  0              0              0              0\nGi1/0/32                  0              0              0              0\nGi1/0/33                  0              0              0              0\nGi1/0/34                  0              0              0              0\nGi1/0/35                  0              0              0              0\nGi1/0/36                  0              0              0              0\nGi1/0/37                  0              0              0              0\nGi1/0/38                  0              0              0              0\nGi1/0/39                  0              0              0              0\nGi1/0/40                  0              0              0              0\nGi1/0/41                  0              0              0              0\nGi1/0/42                  0              0              0              0\nGi1/0/43                  0              0              0              0\nGi1/0/44                  0              0              0              0\nGi1/0/45                  0              0              0              0\nGi1/0/46                  0              0              0              0\nGi1/0/47                  0              0              0              0\nGi1/0/48            4112941           6697          39188              0\nTe1/1/1                   0              0              0              0\nTe1/1/2                   0              0              0              0\nTe1/1/3                   0              0              0              0\nTe1/1/4                   0              0              0              0\nTe1/1/5                   0              0              0              0\nTe1/1/6                   0              0              0              0\nTe1/1/7                   0              0              0              0\nTe1/1/8                   0              0              0              0\nAp1/0/1            75034462         121639         711909              0\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1/0/1": {
+            "input": {
+              "octets": 97559269,
+              "ucast_pkts": 363756,
+              "mcast_pkts": 452232,
+              "bcast_pkts": 4159
+            },
+            "output": {
+              "octets": 97618691,
+              "ucast_pkts": 363747,
+              "mcast_pkts": 453372,
+              "bcast_pkts": 4173
+            }
+          },
+          "GigabitEthernet1/0/2": {
+            "input": {
+              "octets": 547171,
+              "ucast_pkts": 0,
+              "mcast_pkts": 1269,
+              "bcast_pkts": 1
+            },
+            "output": {
+              "octets": 4240316,
+              "ucast_pkts": 6695,
+              "mcast_pkts": 25236,
+              "bcast_pkts": 292
+            }
+          },
+          "GigabitEthernet1/0/3": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/4": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/5": {
+            "input": {
+              "octets": 546303,
+              "ucast_pkts": 0,
+              "mcast_pkts": 1267,
+              "bcast_pkts": 1
+            },
+            "output": {
+              "octets": 4140335,
+              "ucast_pkts": 6698,
+              "mcast_pkts": 39261,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/6": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/7": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/8": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/9": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/10": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/11": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/12": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/13": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/14": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/15": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/16": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/17": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/18": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/19": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/20": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/21": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/22": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/23": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/24": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/25": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/26": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/27": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/28": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/29": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/30": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/31": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/32": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/33": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/34": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/35": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/36": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/37": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/38": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/39": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/40": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/41": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/42": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/43": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/44": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/45": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/46": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/47": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "GigabitEthernet1/0/48": {
+            "input": {
+              "octets": 542652,
+              "ucast_pkts": 0,
+              "mcast_pkts": 1251,
+              "bcast_pkts": 1
+            },
+            "output": {
+              "octets": 4112941,
+              "ucast_pkts": 6697,
+              "mcast_pkts": 39188,
+              "bcast_pkts": 0
+            }
+          },
+          "TenGigabitEthernet1/1/1": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "TenGigabitEthernet1/1/2": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "TenGigabitEthernet1/1/3": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "TenGigabitEthernet1/1/4": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "TenGigabitEthernet1/1/5": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "TenGigabitEthernet1/1/6": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "TenGigabitEthernet1/1/7": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "TenGigabitEthernet1/1/8": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            }
+          },
+          "AppGigabitEthernet1/0/1": {
+            "input": {
+              "octets": 0,
+              "ucast_pkts": 0,
+              "mcast_pkts": 0,
+              "bcast_pkts": 0
+            },
+            "output": {
+              "octets": 75034462,
+              "ucast_pkts": 121639,
+              "mcast_pkts": 711909,
+              "bcast_pkts": 0
+            }
+          }
+        }
+      }
+    }
+  ]
+}
