@@ -1,0 +1,132 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show mka policy",
+  "schema": {
+    "name": "ShowMkaPolicyResult",
+    "fields": {
+      "send_secure_announcements": {
+        "type": "str",
+        "required": false
+      },
+      "policies": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "MkaPolicyEntry",
+            "fields": {
+              "key_server_priority": {
+                "type": "int",
+                "required": true
+              },
+              "delay_protect": {
+                "type": "str",
+                "required": true
+              },
+              "confidentiality_offset": {
+                "type": "int",
+                "required": true
+              },
+              "sak_rekey_on_live_peer_loss": {
+                "type": "str",
+                "required": true
+              },
+              "include_icv_indicator": {
+                "type": "str",
+                "required": true
+              },
+              "cipher_suites": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": true
+              },
+              "interfaces_applied": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "TAC-R2 testbed showing only the built-in default policy with two cipher suites",
+      "input": "MKA Policy defaults :\n         Send-Secure-Announcements: DISABLED\n\nMKA Policy Summary...\n\nCodes : CO - Confidentiality Offset, ICVIND - Include ICV-Indicator,\n        SAKR OLPL - SAK-Rekey On-Live-Peer-Loss,\n        DP - Delay Protect, KS Prio - Key Server Priority\n\nPolicy            KS   DP    CO SAKR  ICVIND Cipher          Interfaces\nName              Prio          OLPL         Suite(s)        Applied\n===============================================================================\n*DEFAULT POLICY*  0    FALSE 0  FALSE TRUE   GCM-AES-128\n                                             GCM-AES-256\n",
+      "expected": {
+        "send_secure_announcements": "DISABLED",
+        "policies": {
+          "DEFAULT POLICY": {
+            "key_server_priority": 0,
+            "delay_protect": "FALSE",
+            "confidentiality_offset": 0,
+            "sak_rekey_on_live_peer_loss": "FALSE",
+            "include_icv_indicator": "TRUE",
+            "cipher_suites": [
+              "GCM-AES-128",
+              "GCM-AES-256"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "Catalyst switch with default policy plus two user-configured policies applied to interfaces, exercising wrapped interface continuation rows",
+      "input": "MKA Policy Summary...\n\nCodes : CO - Confidentiality Offset, ICVIND - Include ICV-Indicator,\n        SAKR OLPL - SAK-Rekey On-Live-Peer-Loss,\n        DP - Delay Protect, KS Prio - Key Server Priority\n\nPolicy            KS   DP    CO SAKR  ICVIND Cipher          Interfaces\nName              Prio          OLPL         Suite(s)        Applied\n===============================================================================\n*DEFAULT POLICY*  0    FALSE 0  FALSE TRUE   GCM-AES-128\n                                             GCM-AES-256\n\nMACSEC_POLICY_1   0    FALSE 0  FALSE TRUE   GCM-AES-256     Te0/0/0    Te0/0/1\n\nmacsec            0    FALSE 30 FALSE TRUE   GCM-AES-128     Te1/0/48       Fo1/1/2\n                                                             Gi2/0/12       Gi2/0/22\n                                                             Te3/0/46       Te3/0/48\n",
+      "expected": {
+        "policies": {
+          "DEFAULT POLICY": {
+            "key_server_priority": 0,
+            "delay_protect": "FALSE",
+            "confidentiality_offset": 0,
+            "sak_rekey_on_live_peer_loss": "FALSE",
+            "include_icv_indicator": "TRUE",
+            "cipher_suites": [
+              "GCM-AES-128",
+              "GCM-AES-256"
+            ]
+          },
+          "MACSEC_POLICY_1": {
+            "key_server_priority": 0,
+            "delay_protect": "FALSE",
+            "confidentiality_offset": 0,
+            "sak_rekey_on_live_peer_loss": "FALSE",
+            "include_icv_indicator": "TRUE",
+            "cipher_suites": [
+              "GCM-AES-256"
+            ],
+            "interfaces_applied": [
+              "TenGigabitEthernet0/0/0",
+              "TenGigabitEthernet0/0/1"
+            ]
+          },
+          "macsec": {
+            "key_server_priority": 0,
+            "delay_protect": "FALSE",
+            "confidentiality_offset": 30,
+            "sak_rekey_on_live_peer_loss": "FALSE",
+            "include_icv_indicator": "TRUE",
+            "cipher_suites": [
+              "GCM-AES-128"
+            ],
+            "interfaces_applied": [
+              "TenGigabitEthernet1/0/48",
+              "FortyGigabitEthernet1/1/2",
+              "GigabitEthernet2/0/12",
+              "GigabitEthernet2/0/22",
+              "TenGigabitEthernet3/0/46",
+              "TenGigabitEthernet3/0/48"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

@@ -4,28 +4,16 @@
   "schema": {
     "name": "ShowMacAddressTableCountResult",
     "fields": {
-      "vlans": {
-        "type": {
-          "type": "dict",
-          "key": "str",
-          "value": {
-            "name": "VlanMacCount",
-            "fields": {
-              "dynamic_address_count": {
-                "type": "int",
-                "required": true
-              },
-              "static_address_count": {
-                "type": "int",
-                "required": true
-              },
-              "total_mac_addresses": {
-                "type": "int",
-                "required": true
-              }
-            }
-          }
-        },
+      "total_dynamic_address_count": {
+        "type": "int",
+        "required": true
+      },
+      "total_static_address_count": {
+        "type": "int",
+        "required": true
+      },
+      "total_mac_address_in_use": {
+        "type": "int",
         "required": true
       },
       "total_mac_address_space_available": {
@@ -34,5 +22,25 @@
       }
     }
   },
-  "examples": []
+  "examples": [
+    {
+      "name": "Basic MAC address-table count summary captured from TAC-R2 testbed device (no MAC address space available footer)",
+      "input": "Total Dynamic Address Count  : 0\nTotal Static  Address Count  : 0\nTotal Mac Address In Use     : 0\n",
+      "expected": {
+        "total_dynamic_address_count": 0,
+        "total_static_address_count": 0,
+        "total_mac_address_in_use": 0
+      }
+    },
+    {
+      "name": "MAC address-table count summary captured from TAC-S1 testbed device including the Total Mac Address Space Available footer",
+      "input": "Total Dynamic Address Count  : 0\nTotal Static  Address Count  : 0\nTotal Mac Address In Use     : 0\nTotal Mac Address Space Available: 32764\n",
+      "expected": {
+        "total_dynamic_address_count": 0,
+        "total_static_address_count": 0,
+        "total_mac_address_in_use": 0,
+        "total_mac_address_space_available": 32764
+      }
+    }
+  ]
 }
