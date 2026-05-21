@@ -1,9 +1,18 @@
-"""Parser for 'show ip route vrf * summary' command on IOS-XE.
+"""Parser for 'show ip route vrf <name> summary' command on IOS-XE.
 
-This command emits the equivalent of 'show ip route summary' once per VRF
-configured on the device.  The output of each VRF block is identical in
-format to 'show ip route summary', so the per-VRF parsing logic is reused
-from that parser.
+This parser handles both forms of the command:
+
+* ``show ip route vrf * summary`` — IOS-XE wildcard shorthand that emits one
+  ``show ip route summary``-style block per VRF configured on the device.
+* ``show ip route vrf <name> summary`` — explicit per-VRF form (e.g.
+  ``show ip route vrf RED summary``) that emits a single block for the
+  requested VRF.
+
+In both cases the per-VRF block format is identical to
+``show ip route summary``, so the per-VRF parsing logic is reused from that
+parser.  The parser iterates over every ``IP routing table name is ...``
+header it finds, so the single-VRF and multi-VRF forms share the same code
+path and simply produce a ``vrfs`` mapping with one or many entries.
 """
 
 import re
@@ -22,11 +31,11 @@ from muninn.parsers.ios.show_ip_route_summary import (
 from muninn.registry import register
 from muninn.tags import ParserTag
 
-__all__ = ["ShowIpRouteVrfAllSummaryParser"]
+__all__ = ["ShowIpRouteVrfSummaryParser"]
 
 
-class ShowIpRouteVrfAllSummaryResult(TypedDict):
-    """Schema for 'show ip route vrf * summary' parsed output on IOS-XE."""
+class ShowIpRouteVrfSummaryResult(TypedDict):
+    """Schema for 'show ip route vrf <name> summary' parsed output on IOS-XE."""
 
     vrfs: dict[str, ShowIpRouteSummaryResult]
 
@@ -99,13 +108,19 @@ def _parse_vrf_block(block_lines: list[str]) -> ShowIpRouteSummaryResult:
     return result
 
 
-@register(OS.CISCO_IOSXE, "show ip route vrf * summary")
-class ShowIpRouteVrfAllSummaryParser(
-    BaseParser["ShowIpRouteVrfAllSummaryResult"],
+@register(OS.CISCO_IOSXE, r"show ip route vrf (?P<vrf>\S+) summary")
+class ShowIpRouteVrfSummaryParser(
+    BaseParser["ShowIpRouteVrfSummaryResult"],
 ):
-    """Parser for 'show ip route vrf * summary' on IOS-XE.
+    """Parser for 'show ip route vrf <name> summary' on IOS-XE.
 
-    Example output::
+    Handles both ``show ip route vrf * summary`` (all VRFs, the IOS-XE
+    wildcard shorthand) and ``show ip route vrf <name> summary`` (a single
+    explicit VRF such as ``RED``, ``BLUE``, ``Mgmt-intf``, etc.).  The
+    registration uses a regex so any VRF name token — including ``*`` — is
+    accepted.
+
+    Example output (multi-VRF wildcard form)::
 
         IP routing table name is default (0x0)
         IP routing table maximum-paths is 32
@@ -118,7 +133,8 @@ class ShowIpRouteVrfAllSummaryParser(
         ...
 
     Each VRF block is parsed using the same logic as 'show ip route summary'
-    and keyed by the VRF name in the returned ``vrfs`` mapping.
+    and keyed by the VRF name in the returned ``vrfs`` mapping.  For an
+    explicit per-VRF invocation the result simply contains a single entry.
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset(
@@ -126,8 +142,8 @@ class ShowIpRouteVrfAllSummaryParser(
     )
 
     @classmethod
-    def parse(cls, output: str) -> ShowIpRouteVrfAllSummaryResult:
-        """Parse 'show ip route vrf * summary' output.
+    def parse(cls, output: str) -> ShowIpRouteVrfSummaryResult:
+        """Parse 'show ip route vrf <name> summary' output.
 
         Args:
             output: Raw CLI output from the command.
