@@ -1,0 +1,58 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip sla summary",
+  "schema": {
+    "name": "ShowIpSlaSummaryResult",
+    "fields": {
+      "operations": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "IpSlaOperation",
+            "fields": {
+              "operation_id": {
+                "type": "int",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": false
+              },
+              "operation_type": {
+                "type": "str",
+                "required": true
+              },
+              "destination": {
+                "type": "str",
+                "required": true
+              },
+              "stats": {
+                "type": "str",
+                "required": false
+              },
+              "return_code": {
+                "type": "str",
+                "required": false
+              },
+              "last_run": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "show ip sla summary output from TAC-R2 with no IP SLA operations configured (header-only table)",
+      "input": "IPSLAs Latest Operation Summary\nCodes: * active, ^ inactive, ~ pending\nAll Stats are in milliseconds. Stats with u are in microseconds\n\nID           Type        Destination       Stats       Return      Last\n                                                       Code        Run\n-----------------------------------------------------------------------\n",
+      "expected": {
+        "operations": {}
+      }
+    }
+  ]
+}
