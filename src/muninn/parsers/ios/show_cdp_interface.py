@@ -1,4 +1,4 @@
-"""Parser for 'show cdp interface' command on IOS."""
+"""Parser for 'show cdp interface' command on Cisco IOS and IOS-XE."""
 
 import re
 from typing import ClassVar, NotRequired, TypedDict, cast
@@ -118,8 +118,9 @@ def _try_match_attribute(line: str, entry: CdpInterfaceEntry) -> bool:
 
 
 @register(OS.CISCO_IOS, "show cdp interface")
+@register(OS.CISCO_IOSXE, "show cdp interface")
 class ShowCdpInterfaceParser(BaseParser[ShowCdpInterfaceResult]):
-    """Parser for 'show cdp interface' on Cisco IOS.
+    """Parser for 'show cdp interface' on Cisco IOS and IOS-XE.
 
     Output consists of a block per CDP-enabled interface followed by a
     footer with aggregate counts. Each interface block looks like::
@@ -136,7 +137,7 @@ class ShowCdpInterfaceParser(BaseParser[ShowCdpInterfaceResult]):
 
     @classmethod
     def parse(cls, output: str) -> ShowCdpInterfaceResult:
-        """Parse 'show cdp interface' output on Cisco IOS.
+        """Parse 'show cdp interface' output on Cisco IOS and IOS-XE.
 
         Args:
             output: Raw CLI output from the command.
