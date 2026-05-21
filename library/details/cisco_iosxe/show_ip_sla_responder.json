@@ -1,0 +1,37 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip sla responder",
+  "schema": {
+    "name": "ShowIpSlaResponderResult",
+    "fields": {
+      "general_responder_enabled": {
+        "type": "bool",
+        "required": true
+      },
+      "general_responder_control_port": {
+        "type": "int",
+        "required": false
+      },
+      "general_responder_control_v2_port": {
+        "type": "int",
+        "required": false
+      },
+      "permanent_port_responder_enabled": {
+        "type": "bool",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show ip sla responder output with both responders disabled",
+      "input": "General IP SLA Responder on Control port 1967\n        General IP SLA Responder on Control V2 port 1167\nGeneral IP SLA Responder is: Disabled\n\n        Permanent Port IP SLA Responder\nPermanent Port IP SLA Responder is: Disabled\n",
+      "expected": {
+        "general_responder_control_port": 1967,
+        "general_responder_control_v2_port": 1167,
+        "general_responder_enabled": false,
+        "permanent_port_responder_enabled": false
+      }
+    }
+  ]
+}
