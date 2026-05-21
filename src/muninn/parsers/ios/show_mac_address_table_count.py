@@ -66,9 +66,8 @@ def _try_count_line(line: str, current_entry: dict[str, int]) -> bool:
 
 
 @register(OS.CISCO_IOS, "show mac address-table count")
-@register(OS.CISCO_IOSXE, "show mac address-table count")
 class ShowMacAddressTableCountParser(BaseParser[ShowMacAddressTableCountResult]):
-    """Parser for 'show mac address-table count' command on IOS/IOS-XE."""
+    """Parser for 'show mac address-table count' command on IOS."""
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset(
         {ParserTag.MAC, ParserTag.SWITCHING, ParserTag.VLAN}
