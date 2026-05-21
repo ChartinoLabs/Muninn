@@ -73,28 +73,34 @@ def _parse_section(lines: list[str]) -> dict[str, IsakmpSaEntry]:
     return entries
 
 
-def _split_sections(output: str) -> tuple[list[str], list[str]]:
+def _split_sections(output: str) -> tuple[list[str], list[str], bool, bool]:
     """Split raw output into IPv4 and IPv6 sections.
 
     Returns:
-        Tuple of (ipv4 section lines, ipv6 section lines). Either list
-        may be empty if its header is absent from the output.
+        Tuple of (ipv4 section lines, ipv6 section lines, ipv4 header
+        seen, ipv6 header seen). The header-seen flags distinguish
+        "section header absent" from "section header present but
+        contains no entries" — both produce an empty list of lines.
     """
     ipv4_lines: list[str] = []
     ipv6_lines: list[str] = []
+    ipv4_seen = False
+    ipv6_seen = False
     current: list[str] | None = None
 
     for line in output.splitlines():
         if _IPV4_HEADER_RE.match(line):
             current = ipv4_lines
+            ipv4_seen = True
             continue
         if _IPV6_HEADER_RE.match(line):
             current = ipv6_lines
+            ipv6_seen = True
             continue
         if current is not None:
             current.append(line)
 
-    return ipv4_lines, ipv6_lines
+    return ipv4_lines, ipv6_lines, ipv4_seen, ipv6_seen
 
 
 @register(OS.CISCO_IOSXE, "show crypto isakmp sa")
@@ -123,8 +129,8 @@ class ShowCryptoIsakmpSaParser(BaseParser[ShowCryptoIsakmpSaResult]):
                 present in the output (indicates the output is not
                 from this command).
         """
-        ipv4_lines, ipv6_lines = _split_sections(output)
-        if not ipv4_lines and not ipv6_lines:
+        ipv4_lines, ipv6_lines, ipv4_seen, ipv6_seen = _split_sections(output)
+        if not ipv4_seen and not ipv6_seen:
             msg = "No IPv4 or IPv6 Crypto ISAKMP SA section header found in output"
             raise ValueError(msg)
 
