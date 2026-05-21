@@ -1,5 +1,5 @@
 {
-  "os": "cisco_ios",
+  "os": "cisco_iosxe",
   "command": "show line",
   "schema": {
     "name": "ShowLineResult",
@@ -104,14 +104,15 @@
   },
   "examples": [
     {
-      "name": "show line output from a Catalyst 3750-X stack with two active vty sessions",
-      "input": "Tty Typ     Tx/Rx    A Modem  Roty AccO AccI   Uses   Noise  Overruns   Int\n     0 CTY              -    -      -    -    -      0       0     0/0       -\n*    1 VTY              -    -      -    -    -   7535       0     0/0       -\n*    2 VTY              -    -      -    -    -   4470       0     0/0       -\n     3 VTY              -    -      -    -    -   1321       0     0/0       -\n     4 VTY              -    -      -    -    -    578       0     0/0       -\n     5 VTY              -    -      -    -    -    218       0     0/0       -\n     6 VTY              -    -      -    -    -     29       0     0/0       -\n     7 VTY              -    -      -    -    -      4       0     0/0       -\n     8 VTY              -    -      -    -    -      0       0     0/0       -\n     9 VTY              -    -      -    -    -      0       0     0/0       -\n    10 VTY              -    -      -    -    -      0       0     0/0       -\n    11 VTY              -    -      -    -    -      0       0     0/0       -\n    12 VTY              -    -      -    -    -      0       0     0/0       -\n    13 VTY              -    -      -    -    -      0       0     0/0       -\n    14 VTY              -    -      -    -    -      0       0     0/0       -\n    15 VTY              -    -      -    -    -      0       0     0/0       -\n    16 VTY              -    -      -    -    -      0       0     0/0       -\n",
+      "name": "show line output from TAC-R2 with console, AUX, and multiple VTY lines plus a range of inactive lines",
+      "input": "Tty Line Typ     Tx/Rx    A Modem  Roty AccO AccI  Uses  Noise Overruns  Int\n*     0    0 CTY              -    -      -    -    -     0      0    0/0      -\n      1    1 AUX   9600/9600  -    -      -    -    -     0      0    0/0      -\n*   866  866 VTY              -    -      -    -    -     4      0    0/0      -\n*   867  867 VTY              -    -      -    -    -   319      0    0/0      -\n    868  868 VTY              -    -      -    -    -    53      0    0/0      -\n    869  869 VTY              -    -      -    -    -    20      0    0/0      -\n    870  870 VTY              -    -      -    -    -    11      0    0/0      -\n    871  871 VTY              -    -      -    -    -     8      0    0/0      -\n    872  872 VTY              -    -      -    -    -     5      0    0/0      -\n    873  873 VTY              -    -      -    -    -     4      0    0/0      -\n    874  874 VTY              -    -      -    -    -     4      0    0/0      -\n    875  875 VTY              -    -      -    -    -     4      0    0/0      -\n    876  876 VTY              -    -      -    -    -     3      0    0/0      -\n    877  877 VTY              -    -      -    -    -     2      0    0/0      -\n    878  878 VTY              -    -      -    -    -     2      0    0/0      -\n    879  879 VTY              -    -      -    -    -     2      0    0/0      -\n    880  880 VTY              -    -      -    -    -     2      0    0/0      -\n    881  881 VTY              -    -      -    -    -     2      0    0/0      -\n\nLine(s) not in async mode -or- with no hardware support:\n2-865\n",
       "expected": {
         "lines": {
           "0": {
             "tty": 0,
+            "line": 0,
             "type": "CTY",
-            "active": false,
+            "active": true,
             "uses": 0,
             "noise": 0,
             "hardware_overruns": 0,
@@ -119,60 +120,89 @@
           },
           "1": {
             "tty": 1,
+            "line": 1,
+            "type": "AUX",
+            "active": false,
+            "uses": 0,
+            "noise": 0,
+            "hardware_overruns": 0,
+            "software_overruns": 0,
+            "tx_speed": 9600,
+            "rx_speed": 9600
+          },
+          "866": {
+            "tty": 866,
+            "line": 866,
             "type": "VTY",
             "active": true,
-            "uses": 7535,
+            "uses": 4,
             "noise": 0,
             "hardware_overruns": 0,
             "software_overruns": 0
           },
-          "2": {
-            "tty": 2,
+          "867": {
+            "tty": 867,
+            "line": 867,
             "type": "VTY",
             "active": true,
-            "uses": 4470,
+            "uses": 319,
             "noise": 0,
             "hardware_overruns": 0,
             "software_overruns": 0
           },
-          "3": {
-            "tty": 3,
+          "868": {
+            "tty": 868,
+            "line": 868,
             "type": "VTY",
             "active": false,
-            "uses": 1321,
+            "uses": 53,
             "noise": 0,
             "hardware_overruns": 0,
             "software_overruns": 0
           },
-          "4": {
-            "tty": 4,
+          "869": {
+            "tty": 869,
+            "line": 869,
             "type": "VTY",
             "active": false,
-            "uses": 578,
+            "uses": 20,
             "noise": 0,
             "hardware_overruns": 0,
             "software_overruns": 0
           },
-          "5": {
-            "tty": 5,
+          "870": {
+            "tty": 870,
+            "line": 870,
             "type": "VTY",
             "active": false,
-            "uses": 218,
+            "uses": 11,
             "noise": 0,
             "hardware_overruns": 0,
             "software_overruns": 0
           },
-          "6": {
-            "tty": 6,
+          "871": {
+            "tty": 871,
+            "line": 871,
             "type": "VTY",
             "active": false,
-            "uses": 29,
+            "uses": 8,
             "noise": 0,
             "hardware_overruns": 0,
             "software_overruns": 0
           },
-          "7": {
-            "tty": 7,
+          "872": {
+            "tty": 872,
+            "line": 872,
+            "type": "VTY",
+            "active": false,
+            "uses": 5,
+            "noise": 0,
+            "hardware_overruns": 0,
+            "software_overruns": 0
+          },
+          "873": {
+            "tty": 873,
+            "line": 873,
             "type": "VTY",
             "active": false,
             "uses": 4,
@@ -180,86 +210,91 @@
             "hardware_overruns": 0,
             "software_overruns": 0
           },
-          "8": {
-            "tty": 8,
+          "874": {
+            "tty": 874,
+            "line": 874,
             "type": "VTY",
             "active": false,
-            "uses": 0,
+            "uses": 4,
             "noise": 0,
             "hardware_overruns": 0,
             "software_overruns": 0
           },
-          "9": {
-            "tty": 9,
+          "875": {
+            "tty": 875,
+            "line": 875,
             "type": "VTY",
             "active": false,
-            "uses": 0,
+            "uses": 4,
             "noise": 0,
             "hardware_overruns": 0,
             "software_overruns": 0
           },
-          "10": {
-            "tty": 10,
+          "876": {
+            "tty": 876,
+            "line": 876,
             "type": "VTY",
             "active": false,
-            "uses": 0,
+            "uses": 3,
             "noise": 0,
             "hardware_overruns": 0,
             "software_overruns": 0
           },
-          "11": {
-            "tty": 11,
+          "877": {
+            "tty": 877,
+            "line": 877,
             "type": "VTY",
             "active": false,
-            "uses": 0,
+            "uses": 2,
             "noise": 0,
             "hardware_overruns": 0,
             "software_overruns": 0
           },
-          "12": {
-            "tty": 12,
+          "878": {
+            "tty": 878,
+            "line": 878,
             "type": "VTY",
             "active": false,
-            "uses": 0,
+            "uses": 2,
             "noise": 0,
             "hardware_overruns": 0,
             "software_overruns": 0
           },
-          "13": {
-            "tty": 13,
+          "879": {
+            "tty": 879,
+            "line": 879,
             "type": "VTY",
             "active": false,
-            "uses": 0,
+            "uses": 2,
             "noise": 0,
             "hardware_overruns": 0,
             "software_overruns": 0
           },
-          "14": {
-            "tty": 14,
+          "880": {
+            "tty": 880,
+            "line": 880,
             "type": "VTY",
             "active": false,
-            "uses": 0,
+            "uses": 2,
             "noise": 0,
             "hardware_overruns": 0,
             "software_overruns": 0
           },
-          "15": {
-            "tty": 15,
+          "881": {
+            "tty": 881,
+            "line": 881,
             "type": "VTY",
             "active": false,
-            "uses": 0,
+            "uses": 2,
             "noise": 0,
             "hardware_overruns": 0,
             "software_overruns": 0
-          },
-          "16": {
-            "tty": 16,
-            "type": "VTY",
-            "active": false,
-            "uses": 0,
-            "noise": 0,
-            "hardware_overruns": 0,
-            "software_overruns": 0
+          }
+        },
+        "inactive_line_ranges": {
+          "2": {
+            "start": 2,
+            "end": 865
           }
         }
       }
