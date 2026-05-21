@@ -1,0 +1,224 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip http server status",
+  "schema": {
+    "name": "ShowIpHttpServerStatusResult",
+    "fields": {
+      "http_server": {
+        "type": {
+          "name": "HttpServerStatus",
+          "fields": {
+            "enabled": {
+              "type": "bool",
+              "required": true
+            },
+            "port": {
+              "type": "int",
+              "required": false
+            },
+            "active_supplementary_listener_ports": {
+              "type": {
+                "type": "list",
+                "items": "int"
+              },
+              "required": false
+            },
+            "authentication_method": {
+              "type": "str",
+              "required": false
+            },
+            "auth_retry_count": {
+              "type": "int",
+              "required": false
+            },
+            "auth_retry_time_window_minutes": {
+              "type": "int",
+              "required": false
+            },
+            "digest_algorithm": {
+              "type": "str",
+              "required": false
+            },
+            "access_class": {
+              "type": "str",
+              "required": false
+            },
+            "ipv4_access_class": {
+              "type": "str",
+              "required": false
+            },
+            "ipv6_access_class": {
+              "type": "str",
+              "required": false
+            },
+            "base_path": {
+              "type": "str",
+              "required": false
+            },
+            "file_upload_enabled": {
+              "type": "bool",
+              "required": false
+            },
+            "upload_path": {
+              "type": "str",
+              "required": false
+            },
+            "help_root": {
+              "type": "str",
+              "required": false
+            },
+            "max_concurrent_connections": {
+              "type": "int",
+              "required": false
+            },
+            "max_secondary_connections": {
+              "type": "int",
+              "required": false
+            },
+            "server_idle_timeout_seconds": {
+              "type": "int",
+              "required": false
+            },
+            "server_life_timeout_seconds": {
+              "type": "int",
+              "required": false
+            },
+            "server_session_idle_timeout_seconds": {
+              "type": "int",
+              "required": false
+            },
+            "max_requests_per_connection": {
+              "type": "int",
+              "required": false
+            },
+            "server_linger_time_seconds": {
+              "type": "int",
+              "required": false
+            },
+            "active_session_modules": {
+              "type": "str",
+              "required": false
+            }
+          }
+        },
+        "required": true
+      },
+      "http_secure_server": {
+        "type": {
+          "name": "HttpSecureServerStatus",
+          "fields": {
+            "enabled": {
+              "type": "bool",
+              "required": true
+            },
+            "capability_present": {
+              "type": "bool",
+              "required": false
+            },
+            "port": {
+              "type": "int",
+              "required": false
+            },
+            "ciphersuite": {
+              "type": {
+                "type": "list",
+                "items": "str"
+              },
+              "required": false
+            },
+            "tls_versions": {
+              "type": {
+                "type": "list",
+                "items": "str"
+              },
+              "required": false
+            },
+            "client_authentication_enabled": {
+              "type": "bool",
+              "required": false
+            },
+            "piv_authentication_enabled": {
+              "type": "bool",
+              "required": false
+            },
+            "piv_authorization_only_enabled": {
+              "type": "bool",
+              "required": false
+            },
+            "trustpoint": {
+              "type": "str",
+              "required": false
+            },
+            "peer_validation_trustpoint": {
+              "type": "str",
+              "required": false
+            },
+            "ecdhe_curve": {
+              "type": "str",
+              "required": false
+            },
+            "active_session_modules": {
+              "type": "str",
+              "required": false
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "show ip http server status output from an IOS-XE device (TAC-R2)",
+      "input": "HTTP server status: Enabled\nHTTP server port: 80\nHTTP server active supplementary listener ports: 21111\nHTTP server authentication method: local\nHTTP server auth-retry 0 time-window 0\nHTTP server digest algorithm: md5\nHTTP server access class: 0\nHTTP server IPv4 access class: None\nHTTP server IPv6 access class: None\nHTTP server base path:\nHTTP File Upload status: Disabled\nHTTP server upload path:\nHTTP server help root:\nMaximum number of concurrent server connections allowed: 300\nMaximum number of secondary server connections allowed: 50\nServer idle time-out: 180 seconds\nServer life time-out: 180 seconds\nServer session idle time-out: 600 seconds\nMaximum number of requests allowed on a connection: 25\nServer linger time : 60 seconds\nHTTP server active session modules: ALL\nHTTP secure server capability: Present\nHTTP secure server status: Enabled\nHTTP secure server port: 443\nHTTP secure server ciphersuite:  dhe-aes-cbc-sha2 dhe-aes-gcm-sha2\n        ecdhe-rsa-aes-cbc-sha2 ecdhe-rsa-aes-gcm-sha2 ecdhe-ecdsa-aes-gcm-sha2\n        tls13-aes128-gcm-sha256 tls13-aes256-gcm-sha384\n        tls13-chacha20-poly1305-sha256\nHTTP secure server TLS version:  TLSv1.3 TLSv1.2\nHTTP secure server client authentication: Disabled\nHTTP secure server PIV authentication: Disabled\nHTTP secure server PIV authorization only: Disabled\nHTTP secure server trustpoint: TP-self-signed-3341558060\nHTTP secure server peer validation trustpoint:\nHTTP secure server ECDHE curve: secp256r1\nHTTP secure server active session modules: ALL\n",
+      "expected": {
+        "http_server": {
+          "enabled": true,
+          "port": 80,
+          "active_supplementary_listener_ports": [
+            21111
+          ],
+          "authentication_method": "local",
+          "auth_retry_count": 0,
+          "auth_retry_time_window_minutes": 0,
+          "digest_algorithm": "md5",
+          "access_class": "0",
+          "file_upload_enabled": false,
+          "max_concurrent_connections": 300,
+          "max_secondary_connections": 50,
+          "server_idle_timeout_seconds": 180,
+          "server_life_timeout_seconds": 180,
+          "server_session_idle_timeout_seconds": 600,
+          "max_requests_per_connection": 25,
+          "server_linger_time_seconds": 60,
+          "active_session_modules": "ALL"
+        },
+        "http_secure_server": {
+          "capability_present": true,
+          "enabled": true,
+          "port": 443,
+          "ciphersuite": [
+            "dhe-aes-cbc-sha2",
+            "dhe-aes-gcm-sha2",
+            "ecdhe-rsa-aes-cbc-sha2",
+            "ecdhe-rsa-aes-gcm-sha2",
+            "ecdhe-ecdsa-aes-gcm-sha2",
+            "tls13-aes128-gcm-sha256",
+            "tls13-aes256-gcm-sha384",
+            "tls13-chacha20-poly1305-sha256"
+          ],
+          "tls_versions": [
+            "TLSv1.3",
+            "TLSv1.2"
+          ],
+          "client_authentication_enabled": false,
+          "piv_authentication_enabled": false,
+          "piv_authorization_only_enabled": false,
+          "trustpoint": "TP-self-signed-3341558060",
+          "ecdhe_curve": "secp256r1",
+          "active_session_modules": "ALL"
+        }
+      }
+    }
+  ]
+}
