@@ -1,0 +1,189 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show macdb summary",
+  "schema": {
+    "name": "ShowMacdbSummaryResult",
+    "fields": {
+      "clients": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ClientCounter",
+            "fields": {
+              "count": {
+                "type": "int",
+                "required": true
+              },
+              "failures": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "software": {
+        "type": {
+          "name": "TableCounters",
+          "fields": {
+            "interfaces": {
+              "type": "int",
+              "required": true
+            },
+            "mac_addresses": {
+              "type": "int",
+              "required": true
+            },
+            "forwarding_entities": {
+              "type": "int",
+              "required": true
+            },
+            "active_count": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "hardware": {
+        "type": {
+          "type": "ref",
+          "name": "TableCounters"
+        },
+        "required": true
+      },
+      "platform": {
+        "type": {
+          "name": "PlatformCounters",
+          "fields": {
+            "mac_reserve_count": {
+              "type": "int",
+              "required": true
+            },
+            "mac_reserve_fail": {
+              "type": "int",
+              "required": true
+            },
+            "mac_active_count": {
+              "type": "int",
+              "required": true
+            },
+            "mac_smf_count": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "registered_clients_count": {
+        "type": "int",
+        "required": true
+      },
+      "registered_clients": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RegisteredClient",
+            "fields": {
+              "id": {
+                "type": "int",
+                "required": true
+              },
+              "software": {
+                "type": {
+                  "name": "ClientForwarding",
+                  "fields": {
+                    "forwarding_entities": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "active_count": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": true
+              },
+              "hardware": {
+                "type": {
+                  "type": "ref",
+                  "name": "ClientForwarding"
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "MACDB summary from TAC-R2 with one registered VRRS client and zero counters",
+      "input": "MACDB summary statistics\n\n    Client registrations         :      1   Failures :      0\n    Client reservations          :      0   Failures :      0\n    Client activations           :      0   Failures :      0\n    Client deactivations         :      0   Failures :      0\n    Client releases              :      0   Failures :      0\n\n    Software interfaces          :      0\n    Software MAC addresses       :      0\n    Software forwarding entities :      0\n    Software active count        :      0\n\n    Hardware interfaces          :      0\n    Hardware MAC addresses       :      0\n    Hardware forwarding entities :      0\n    Hardware active count        :      0\n\n    Platform MAC reserve count   :      0\n    Platform MAC reserve fail    :      0\n    Platform MAC active count    :      0\n    Platform MAC smf count       :      0\n\n    Number of registered clients :      1\n\n  VRRS                        ID :      1\n\n    Software forwarding entities :      0\n    Software active count        :      0\n\n    Hardware forwarding entities :      0\n    Hardware active count        :      0\n",
+      "expected": {
+        "clients": {
+          "registrations": {
+            "count": 1,
+            "failures": 0
+          },
+          "reservations": {
+            "count": 0,
+            "failures": 0
+          },
+          "activations": {
+            "count": 0,
+            "failures": 0
+          },
+          "deactivations": {
+            "count": 0,
+            "failures": 0
+          },
+          "releases": {
+            "count": 0,
+            "failures": 0
+          }
+        },
+        "software": {
+          "interfaces": 0,
+          "mac_addresses": 0,
+          "forwarding_entities": 0,
+          "active_count": 0
+        },
+        "hardware": {
+          "interfaces": 0,
+          "mac_addresses": 0,
+          "forwarding_entities": 0,
+          "active_count": 0
+        },
+        "platform": {
+          "mac_reserve_count": 0,
+          "mac_reserve_fail": 0,
+          "mac_active_count": 0,
+          "mac_smf_count": 0
+        },
+        "registered_clients_count": 1,
+        "registered_clients": {
+          "VRRS": {
+            "id": 1,
+            "software": {
+              "forwarding_entities": 0,
+              "active_count": 0
+            },
+            "hardware": {
+              "forwarding_entities": 0,
+              "active_count": 0
+            }
+          }
+        }
+      }
+    }
+  ]
+}
