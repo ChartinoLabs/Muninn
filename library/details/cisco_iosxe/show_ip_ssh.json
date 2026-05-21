@@ -1,0 +1,168 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip ssh",
+  "schema": {
+    "name": "ShowIpSshResult",
+    "fields": {
+      "ssh_enabled": {
+        "type": "bool",
+        "required": true
+      },
+      "version": {
+        "type": "str",
+        "required": false
+      },
+      "authentication_methods": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": false
+      },
+      "authentication_publickey_algorithms": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": false
+      },
+      "hostkey_algorithms": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": false
+      },
+      "encryption_algorithms": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": false
+      },
+      "mac_algorithms": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": false
+      },
+      "kex_algorithms": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": false
+      },
+      "authentication_timeout_seconds": {
+        "type": "int",
+        "required": false
+      },
+      "authentication_retries": {
+        "type": "int",
+        "required": false
+      },
+      "minimum_diffie_hellman_key_size_bits": {
+        "type": "int",
+        "required": false
+      },
+      "hostkeys": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "HostKeyEntry",
+            "fields": {
+              "name": {
+                "type": "str",
+                "required": false
+              },
+              "algorithm": {
+                "type": "str",
+                "required": false
+              },
+              "key": {
+                "type": "str",
+                "required": false
+              },
+              "modulus_size_bits": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "show ip ssh output from a physical testbed device (TAC-R2)",
+      "input": "SSH Enabled - version 2.0\nAuthentication methods:publickey,keyboard-interactive,password\nAuthentication Publickey\nAlgorithms:ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,ssh-ed255\n19,x509v3-ecdsa-sha2-nistp256,x509v3-ecdsa-sha2-nistp384,x509v3-ecdsa-sha2-nistp\n521,rsa-sha2-256,rsa-sha2-512,x509v3-rsa2048-sha256\nHostkey\nAlgorithms:ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,rsa-sha2-\n512,rsa-sha2-256\nEncryption\nAlgorithms:chacha20-poly1305@openssh.com,aes128-gcm@openssh.com,aes256-gcm@opens\nsh.com,aes128-gcm,aes256-gcm,aes128-ctr,aes192-ctr,aes256-ctr\nMAC\nAlgorithms:hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,hmac-sha2\n-256,hmac-sha2-512\nKEX\nAlgorithms:curve25519-sha256,curve25519-sha256@libssh.org,ecdh-sha2-nistp256,ecd\nh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group14-sha256,diffie-hellman-\ngroup16-sha512\nAuthentication timeout: 120 secs; Authentication retries: 3\nMinimum expected Diffie Hellman key size : 2048 bits\nIOS Keys in SECSH format(ssh-rsa, base64 encoded): TP-self-signed-3341558060\nModulus Size : 2048 bits\nssh-rsa <KEY DATA REDACTED>\nIOS Keys in SECSH format(ssh-ec, base64 encoded): NONE\n",
+      "expected": {
+        "ssh_enabled": true,
+        "version": "2.0",
+        "authentication_methods": [
+          "publickey",
+          "keyboard-interactive",
+          "password"
+        ],
+        "authentication_publickey_algorithms": [
+          "ecdsa-sha2-nistp256",
+          "ecdsa-sha2-nistp384",
+          "ecdsa-sha2-nistp521",
+          "ssh-ed25519",
+          "x509v3-ecdsa-sha2-nistp256",
+          "x509v3-ecdsa-sha2-nistp384",
+          "x509v3-ecdsa-sha2-nistp521",
+          "rsa-sha2-256",
+          "rsa-sha2-512",
+          "x509v3-rsa2048-sha256"
+        ],
+        "hostkey_algorithms": [
+          "ecdsa-sha2-nistp256",
+          "ecdsa-sha2-nistp384",
+          "ecdsa-sha2-nistp521",
+          "rsa-sha2-512",
+          "rsa-sha2-256"
+        ],
+        "encryption_algorithms": [
+          "chacha20-poly1305@openssh.com",
+          "aes128-gcm@openssh.com",
+          "aes256-gcm@openssh.com",
+          "aes128-gcm",
+          "aes256-gcm",
+          "aes128-ctr",
+          "aes192-ctr",
+          "aes256-ctr"
+        ],
+        "mac_algorithms": [
+          "hmac-sha2-256-etm@openssh.com",
+          "hmac-sha2-512-etm@openssh.com",
+          "hmac-sha2-256",
+          "hmac-sha2-512"
+        ],
+        "kex_algorithms": [
+          "curve25519-sha256",
+          "curve25519-sha256@libssh.org",
+          "ecdh-sha2-nistp256",
+          "ecdh-sha2-nistp384",
+          "ecdh-sha2-nistp521",
+          "diffie-hellman-group14-sha256",
+          "diffie-hellman-group16-sha512"
+        ],
+        "authentication_timeout_seconds": 120,
+        "authentication_retries": 3,
+        "minimum_diffie_hellman_key_size_bits": 2048,
+        "hostkeys": {
+          "ssh-rsa": {
+            "name": "TP-self-signed-3341558060",
+            "modulus_size_bits": 2048,
+            "algorithm": "ssh-rsa"
+          }
+        }
+      }
+    }
+  ]
+}
