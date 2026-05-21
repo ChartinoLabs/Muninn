@@ -1,0 +1,143 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show mka sessions",
+  "schema": {
+    "name": "ShowMkaSessionsResult",
+    "fields": {
+      "total_mka_sessions": {
+        "type": "int",
+        "required": true
+      },
+      "secured_sessions": {
+        "type": "int",
+        "required": true
+      },
+      "pending_sessions": {
+        "type": "int",
+        "required": true
+      },
+      "sessions": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "MkaSessionEntry",
+            "fields": {
+              "interface": {
+                "type": "str",
+                "required": true
+              },
+              "local_tx_sci": {
+                "type": "str",
+                "required": true
+              },
+              "policy_name": {
+                "type": "str",
+                "required": true
+              },
+              "inherited": {
+                "type": "str",
+                "required": true
+              },
+              "key_server": {
+                "type": "str",
+                "required": true
+              },
+              "port_id": {
+                "type": "str",
+                "required": true
+              },
+              "peer_rx_sci": {
+                "type": "str",
+                "required": true
+              },
+              "macsec_peers": {
+                "type": "str",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "ckn": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Live device with no MKA sessions established (TAC-R2 testbed)",
+      "input": "Total MKA Sessions....... 0\n      Secured Sessions... 0\n      Pending Sessions... 0\n\n====================================================================================================\nInterface       Local-TxSCI          Policy-Name       Inherited          Key-Server\nPort-ID         Peer-RxSCI           MACsec-Peers      Status             CKN\n====================================================================================================\n",
+      "expected": {
+        "total_mka_sessions": 0,
+        "secured_sessions": 0,
+        "pending_sessions": 0,
+        "sessions": {}
+      }
+    },
+    {
+      "name": "Two MKA sessions on subinterfaces with no peer responding yet",
+      "input": "Total MKA Sessions....... 2\n      Secured Sessions... 2\n      Pending Sessions... 0\n\n====================================================================================================\nInterface      Local-TxSCI         Policy-Name      Inherited         Key-Server\nPort-ID        Peer-RxSCI          MACsec-Peers     Status            CKN\n====================================================================================================\nHu1/0/3.5      f87a.4125.2702/008b *DEFAULT POLICY* NO                NO\n139            ecce.1346.f902/008d 0                Secured, no peer  90\n\nHu1/0/3.6      f87a.4125.2702/008c *DEFAULT POLICY* NO                NO\n140            ecce.1346.f902/008e 0                Secured, no peer  90\n",
+      "expected": {
+        "total_mka_sessions": 2,
+        "secured_sessions": 2,
+        "pending_sessions": 0,
+        "sessions": {
+          "HundredGigabitEthernet1/0/3.5": {
+            "interface": "HundredGigabitEthernet1/0/3.5",
+            "local_tx_sci": "f87a.4125.2702/008b",
+            "policy_name": "*DEFAULT POLICY*",
+            "inherited": "NO",
+            "key_server": "NO",
+            "port_id": "139",
+            "peer_rx_sci": "ecce.1346.f902/008d",
+            "macsec_peers": "0",
+            "status": "Secured, no peer",
+            "ckn": "90"
+          },
+          "HundredGigabitEthernet1/0/3.6": {
+            "interface": "HundredGigabitEthernet1/0/3.6",
+            "local_tx_sci": "f87a.4125.2702/008c",
+            "policy_name": "*DEFAULT POLICY*",
+            "inherited": "NO",
+            "key_server": "NO",
+            "port_id": "140",
+            "peer_rx_sci": "ecce.1346.f902/008e",
+            "macsec_peers": "0",
+            "status": "Secured, no peer",
+            "ckn": "90"
+          }
+        }
+      }
+    },
+    {
+      "name": "One fully-established MKA session with a connected peer (Secured status, MACsec-Peers=1)",
+      "input": "Total MKA Sessions....... 1\n      Secured Sessions... 1\n      Pending Sessions... 0\n\n====================================================================================================\nInterface      Local-TxSCI         Policy-Name      Inherited         Key-Server\nPort-ID        Peer-RxSCI          MACsec-Peers     Status            CKN\n====================================================================================================\nHu2/6/0/39     70b3.171e.b282/0103 *DEFAULT POLICY* NO                NO\n259            00a7.42ce.d57f/0074 1                Secured           10\n",
+      "expected": {
+        "total_mka_sessions": 1,
+        "secured_sessions": 1,
+        "pending_sessions": 0,
+        "sessions": {
+          "HundredGigabitEthernet2/6/0/39": {
+            "interface": "HundredGigabitEthernet2/6/0/39",
+            "local_tx_sci": "70b3.171e.b282/0103",
+            "policy_name": "*DEFAULT POLICY*",
+            "inherited": "NO",
+            "key_server": "NO",
+            "port_id": "259",
+            "peer_rx_sci": "00a7.42ce.d57f/0074",
+            "macsec_peers": "1",
+            "status": "Secured",
+            "ckn": "10"
+          }
+        }
+      }
+    }
+  ]
+}
