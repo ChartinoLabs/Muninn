@@ -359,8 +359,9 @@ def _process_line(
 
 @register(OS.CISCO_IOS, "show boot")
 @register(OS.CISCO_IOSXE, "show boot")
+@register(OS.CISCO_IOSXE, "show boot system")
 class ShowBootParser(BaseParser[ShowBootResult]):
-    """Parser for 'show boot' command.
+    """Parser for 'show boot' / 'show boot system' command.
 
     Handles two output formats:
       - Variable format (Cat 9k, ASR 1k, Cat 9400/9500)
