@@ -1,0 +1,85 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show etherchannel summary",
+  "schema": {
+    "name": "ShowEtherchannelSummaryResult",
+    "fields": {
+      "num_channel_groups": {
+        "type": "int",
+        "required": true
+      },
+      "num_aggregators": {
+        "type": "int",
+        "required": true
+      },
+      "port_channels": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PortChannelEntry",
+            "fields": {
+              "port_channel": {
+                "type": "str",
+                "required": true
+              },
+              "port_channel_status": {
+                "type": "str",
+                "required": true
+              },
+              "layer": {
+                "type": "str",
+                "required": true
+              },
+              "protocol": {
+                "type": "str",
+                "required": false
+              },
+              "members": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "MemberPort",
+                    "fields": {
+                      "status": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "interface": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "No channel-groups in use; output includes flag legend appendix below the table",
+      "input": "Flags:  D - down        P/bndl - bundled in port-channel\n        I - stand-alone s/susp - suspended\n        H - Hot-standby (LACP only)\n        R - Layer3      S - Layer2\n        U - in use      f - failed to allocate aggregator\n\n        M - not in use, minimum links not met\n        u - unsuitable for bundling\n        w - waiting to be aggregated\n        d - default port\n\n\nNumber of channel-groups in use: 0\nNumber of aggregators:           0\n\nGroup  Port-channel  Protocol    Ports\n------+-------------+-----------+-----------------------------------------------\n\nRU - L3 port-channel UP State\nSU - L2 port-channel UP state\nP/bndl -  Bundled\nS/susp  - Suspended\n",
+      "expected": {
+        "num_channel_groups": 0,
+        "num_aggregators": 0,
+        "port_channels": {}
+      }
+    },
+    {
+      "name": "No channel-groups in use; flag legend includes Auto LAG flag",
+      "input": "Flags:  D - down        P - bundled in port-channel\n        I - stand-alone s - suspended\n        H - Hot-standby (LACP only)\n        R - Layer3      S - Layer2\n        U - in use      f - failed to allocate aggregator\n\n        M - not in use, minimum links not met\n        u - unsuitable for bundling\n        w - waiting to be aggregated\n        d - default port\n\n        A - formed by Auto LAG\n\n\nNumber of channel-groups in use: 0\nNumber of aggregators:           0\n\nGroup  Port-channel  Protocol    Ports\n------+-------------+-----------+-----------------------------------------------\n",
+      "expected": {
+        "num_channel_groups": 0,
+        "num_aggregators": 0,
+        "port_channels": {}
+      }
+    }
+  ]
+}
