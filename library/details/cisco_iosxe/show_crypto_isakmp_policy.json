@@ -1,0 +1,86 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show crypto isakmp policy",
+  "schema": {
+    "name": "ShowCryptoIsakmpPolicyResult",
+    "fields": {
+      "default_ike_policy": {
+        "type": "bool",
+        "required": true
+      },
+      "policies": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "Policy",
+            "fields": {
+              "priority": {
+                "type": "int",
+                "required": true
+              },
+              "encryption_algorithm": {
+                "type": "str",
+                "required": true
+              },
+              "hash_algorithm": {
+                "type": "str",
+                "required": true
+              },
+              "authentication_method": {
+                "type": "str",
+                "required": true
+              },
+              "diffie_hellman_group": {
+                "type": "int",
+                "required": true
+              },
+              "diffie_hellman_group_description": {
+                "type": "str",
+                "required": false
+              },
+              "lifetime_seconds": {
+                "type": "int",
+                "required": true
+              },
+              "volume_limit": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Default IKE policy with two protection suites (RSA-Sig and Pre-Shared Key) captured from a physical IOS-XE testbed device",
+      "input": "Default IKE policy\nProtection suite of priority 65513\n        encryption algorithm:   AES - Advanced Encryption Standard (128 bit\nkeys).\n        hash algorithm:         Secure Hash Standard\n        authentication method:  Rivest-Shamir-Adleman Signature\n        Diffie-Hellman group:   #14 (2048 bit)\n        lifetime:               86400 seconds, no volume limit\nProtection suite of priority 65514\n        encryption algorithm:   AES - Advanced Encryption Standard (128 bit\nkeys).\n        hash algorithm:         Secure Hash Standard\n        authentication method:  Pre-Shared Key\n        Diffie-Hellman group:   #14 (2048 bit)\n        lifetime:               86400 seconds, no volume limit\n",
+      "expected": {
+        "default_ike_policy": true,
+        "policies": {
+          "65513": {
+            "priority": 65513,
+            "encryption_algorithm": "AES - Advanced Encryption Standard (128 bit keys).",
+            "hash_algorithm": "Secure Hash Standard",
+            "authentication_method": "Rivest-Shamir-Adleman Signature",
+            "diffie_hellman_group": 14,
+            "diffie_hellman_group_description": "2048 bit",
+            "lifetime_seconds": 86400
+          },
+          "65514": {
+            "priority": 65514,
+            "encryption_algorithm": "AES - Advanced Encryption Standard (128 bit keys).",
+            "hash_algorithm": "Secure Hash Standard",
+            "authentication_method": "Pre-Shared Key",
+            "diffie_hellman_group": 14,
+            "diffie_hellman_group_description": "2048 bit",
+            "lifetime_seconds": 86400
+          }
+        }
+      }
+    }
+  ]
+}
