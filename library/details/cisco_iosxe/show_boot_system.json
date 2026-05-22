@@ -1,0 +1,106 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show boot system",
+  "schema": {
+    "name": "ShowBootResult",
+    "fields": {
+      "switches": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "BootEntry",
+            "fields": {
+              "boot_path_list": {
+                "type": "str",
+                "required": false
+              },
+              "config_file": {
+                "type": "str",
+                "required": false
+              },
+              "private_config_file": {
+                "type": "str",
+                "required": false
+              },
+              "enable_break": {
+                "type": "bool",
+                "required": false
+              },
+              "manual_boot": {
+                "type": "bool",
+                "required": false
+              },
+              "allow_dev_key": {
+                "type": "bool",
+                "required": false
+              },
+              "helper_path_list": {
+                "type": "str",
+                "required": false
+              },
+              "auto_upgrade": {
+                "type": "bool",
+                "required": false
+              },
+              "auto_upgrade_path": {
+                "type": "str",
+                "required": false
+              },
+              "boot_optimization": {
+                "type": "bool",
+                "required": false
+              },
+              "nvram_buffer_size": {
+                "type": "int",
+                "required": false
+              },
+              "config_download_timeout": {
+                "type": "int",
+                "required": false
+              },
+              "config_download_via_dhcp": {
+                "type": "str",
+                "required": false
+              },
+              "boot_mode": {
+                "type": "str",
+                "required": false
+              },
+              "ipxe_timeout": {
+                "type": "int",
+                "required": false
+              },
+              "baud": {
+                "type": "int",
+                "required": false
+              },
+              "configuration_register": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Catalyst 9300 stack section format with single switch (TAC-S1)",
+      "input": "---------------------------\nSwitch 1\n---------------------------\nCurrent Boot Variables:\nBOOT variable = flash:packages.conf;\n\nBoot Variables on next reload:\nBOOT variable = flash:packages.conf;\nManual Boot = no\nEnable Break = no\nBoot Mode = DEVICE\niPXE Timeout = 0\n",
+      "expected": {
+        "switches": {
+          "1": {
+            "boot_path_list": "flash:packages.conf",
+            "manual_boot": false,
+            "enable_break": false,
+            "boot_mode": "DEVICE",
+            "ipxe_timeout": 0
+          }
+        }
+      }
+    }
+  ]
+}
