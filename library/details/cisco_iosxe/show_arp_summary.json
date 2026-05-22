@@ -1,0 +1,114 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show arp summary",
+  "schema": {
+    "name": "ShowArpSummaryResult",
+    "fields": {
+      "total_entries": {
+        "type": "int",
+        "required": true
+      },
+      "dynamic_entries": {
+        "type": "int",
+        "required": false
+      },
+      "incomplete_entries": {
+        "type": "int",
+        "required": false
+      },
+      "interface_entries": {
+        "type": "int",
+        "required": false
+      },
+      "static_entries": {
+        "type": "int",
+        "required": false
+      },
+      "alias_entries": {
+        "type": "int",
+        "required": false
+      },
+      "simple_application_entries": {
+        "type": "int",
+        "required": false
+      },
+      "application_alias_entries": {
+        "type": "int",
+        "required": false
+      },
+      "application_timer_entries": {
+        "type": "int",
+        "required": false
+      },
+      "learn_arp": {
+        "type": {
+          "name": "LearnArpLimits",
+          "fields": {
+            "maximum_limit": {
+              "type": "int",
+              "required": false
+            },
+            "maximum_configured_limit": {
+              "type": "int",
+              "required": false
+            },
+            "entry_threshold": {
+              "type": "int",
+              "required": false
+            },
+            "permit_threshold": {
+              "type": "int",
+              "required": false
+            },
+            "total_entries": {
+              "type": "int",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "interface_entry_counts": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": "int"
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Show arp summary output with per-interface entry counts and Learn ARP limits",
+      "input": "Total number of entries in the ARP table: 19.\nTotal number of Dynamic ARP entries: 12.\nTotal number of Incomplete ARP entries: 0.\nTotal number of Interface ARP entries: 7.\nTotal number of Static ARP entries: 0.\nTotal number of Alias ARP entries: 0.\nTotal number of Simple Application ARP entries: 0.\nTotal number of Application Alias ARP entries: 0.\nTotal number of Application Timer ARP entries: 0.\nMaximum limit of Learn ARP entry : 25600.\nMaximum configured Learn ARP entry limit : 25600.\nLearn ARP Entry Threshold is 20480 and Permit Threshold is 24320.\nTotal number of Learn ARP entries: 12.\nInterface              Entry Count\nGi0/0/1.10                       1\nGi0/0/1.20                       1\nGi0/0/2.10                       2\nGi0/0/2.20                       2\nGigabitEthernet0/0/2             2\nGigabitEthernet0/0/1             1\nGigabitEthernet0/0/0            10\n",
+      "expected": {
+        "total_entries": 19,
+        "dynamic_entries": 12,
+        "incomplete_entries": 0,
+        "interface_entries": 7,
+        "static_entries": 0,
+        "alias_entries": 0,
+        "simple_application_entries": 0,
+        "application_alias_entries": 0,
+        "application_timer_entries": 0,
+        "learn_arp": {
+          "maximum_limit": 25600,
+          "maximum_configured_limit": 25600,
+          "entry_threshold": 20480,
+          "permit_threshold": 24320,
+          "total_entries": 12
+        },
+        "interface_entry_counts": {
+          "GigabitEthernet0/0/1.10": 1,
+          "GigabitEthernet0/0/1.20": 1,
+          "GigabitEthernet0/0/2.10": 2,
+          "GigabitEthernet0/0/2.20": 2,
+          "GigabitEthernet0/0/2": 2,
+          "GigabitEthernet0/0/1": 1,
+          "GigabitEthernet0/0/0": 10
+        }
+      }
+    }
+  ]
+}
