@@ -1,0 +1,95 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show crypto ipsec profile",
+  "schema": {
+    "name": "ShowCryptoIpsecProfileResult",
+    "fields": {
+      "profiles": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "IpsecProfile",
+            "fields": {
+              "name": {
+                "type": "str",
+                "required": true
+              },
+              "security_association_lifetime_kilobytes": {
+                "type": "int",
+                "required": false
+              },
+              "security_association_lifetime_seconds": {
+                "type": "int",
+                "required": false
+              },
+              "dualstack": {
+                "type": "bool",
+                "required": false
+              },
+              "responder_only": {
+                "type": "bool",
+                "required": false
+              },
+              "pfs": {
+                "type": "bool",
+                "required": false
+              },
+              "mixed_mode": {
+                "type": "str",
+                "required": false
+              },
+              "transform_sets": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "TransformSet",
+                    "fields": {
+                      "transforms": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "show crypto ipsec profile output from an IOS-XE testbed device (TAC-R2)",
+      "input": "IPSEC profile default\n        Security association lifetime: 4608000 kilobytes/3600 seconds\n        Dualstack (Y/N): N\n\n        Responder-Only (Y/N): N\n        PFS (Y/N): N\n        Mixed-mode : Disabled\n        Transform sets={\n                default:  { esp-aes esp-sha-hmac  } ,\n        }\n",
+      "expected": {
+        "profiles": {
+          "default": {
+            "name": "default",
+            "security_association_lifetime_kilobytes": 4608000,
+            "security_association_lifetime_seconds": 3600,
+            "dualstack": false,
+            "responder_only": false,
+            "pfs": false,
+            "mixed_mode": "Disabled",
+            "transform_sets": {
+              "default": {
+                "transforms": [
+                  "esp-aes",
+                  "esp-sha-hmac"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
