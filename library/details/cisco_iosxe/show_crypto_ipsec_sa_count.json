@@ -1,0 +1,42 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show crypto ipsec sa count",
+  "schema": {
+    "name": "ShowCryptoIpsecSaCountResult",
+    "fields": {
+      "total": {
+        "type": "int",
+        "required": true
+      },
+      "active": {
+        "type": "int",
+        "required": true
+      },
+      "rekeying": {
+        "type": "int",
+        "required": true
+      },
+      "unused": {
+        "type": "int",
+        "required": true
+      },
+      "invalid": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Show crypto ipsec sa count output from TAC-R2 with all counters at zero",
+      "input": "IPsec SA total: 0, active: 0, rekeying: 0, unused: 0, invalid: 0\n",
+      "expected": {
+        "total": 0,
+        "active": 0,
+        "rekeying": 0,
+        "unused": 0,
+        "invalid": 0
+      }
+    }
+  ]
+}
