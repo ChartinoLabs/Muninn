@@ -1,4 +1,4 @@
-"""Parser for 'show etherchannel summary' command on IOS."""
+"""Parser for 'show etherchannel summary' command on IOS / IOS-XE."""
 
 import re
 from typing import ClassVar, NotRequired, TypedDict, cast
@@ -158,8 +158,9 @@ def _validate_required_fields(
 
 
 @register(OS.CISCO_IOS, "show etherchannel summary")
+@register(OS.CISCO_IOSXE, "show etherchannel summary")
 class ShowEtherchannelSummaryParser(BaseParser[ShowEtherchannelSummaryResult]):
-    """Parser for 'show etherchannel summary' command.
+    """Parser for 'show etherchannel summary' command on IOS / IOS-XE.
 
     Example output:
         Group  Port-channel  Protocol    Ports
