@@ -114,6 +114,7 @@ _RAPID_RESULT_MAP: dict[str, str] = {
 }
 
 
+@register(OS.NOKIA_SROS, r"ping (?P<destination>\S+)")
 @register(OS.NOKIA_SROS, "ping")
 class PingParser(BaseParser[PingResult]):
     """Parser for ``ping`` on Nokia SR OS.
