@@ -1,0 +1,46 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show crypto isakmp key",
+  "schema": {
+    "name": "ShowCryptoIsakmpKeyResult",
+    "fields": {
+      "keys": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "IsakmpKeyEntry",
+              "fields": {
+                "keyring": {
+                  "type": "str",
+                  "required": true
+                },
+                "hostname_or_address": {
+                  "type": "str",
+                  "required": true
+                },
+                "preshared_key": {
+                  "type": "str",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Header-only output indicating no ISAKMP preshared keys are configured, captured from a physical IOS-XE testbed device",
+      "input": "Keyring      Hostname/Address                            Preshared Key\n",
+      "expected": {
+        "keys": {}
+      }
+    }
+  ]
+}

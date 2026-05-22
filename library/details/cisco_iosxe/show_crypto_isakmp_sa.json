@@ -1,0 +1,62 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show crypto isakmp sa",
+  "schema": {
+    "name": "ShowCryptoIsakmpSaResult",
+    "fields": {
+      "ipv4_sa": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "IsakmpSaEntry",
+            "fields": {
+              "dst": {
+                "type": "str",
+                "required": true
+              },
+              "src": {
+                "type": "str",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "conn_id": {
+                "type": "int",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "ipv6_sa": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "ref",
+            "name": "IsakmpSaEntry"
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "show crypto isakmp sa output with no active SAs in either address family",
+      "input": "IPv4 Crypto ISAKMP SA\ndst             src             state          conn-id status\n\nIPv6 Crypto ISAKMP SA\n",
+      "expected": {
+        "ipv4_sa": {},
+        "ipv6_sa": {}
+      }
+    }
+  ]
+}

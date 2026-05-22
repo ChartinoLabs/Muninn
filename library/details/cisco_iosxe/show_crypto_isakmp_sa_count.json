@@ -1,0 +1,37 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show crypto isakmp sa count",
+  "schema": {
+    "name": "ShowCryptoIsakmpSaCountResult",
+    "fields": {
+      "active": {
+        "type": "int",
+        "required": true
+      },
+      "standby": {
+        "type": "int",
+        "required": true
+      },
+      "negotiating": {
+        "type": "int",
+        "required": true
+      },
+      "dead": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "show crypto isakmp sa count output from TAC-R2 with all counters at zero",
+      "input": "Active ISAKMP SA's: 0\nStandby ISAKMP SA's: 0\nCurrently being negotiated ISAKMP SA's: 0\nDead ISAKMP SA's: 0\n",
+      "expected": {
+        "active": 0,
+        "standby": 0,
+        "negotiating": 0,
+        "dead": 0
+      }
+    }
+  ]
+}
