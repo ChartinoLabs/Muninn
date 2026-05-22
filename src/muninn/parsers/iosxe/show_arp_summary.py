@@ -1,7 +1,7 @@
 """Parser for 'show arp summary' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -11,28 +11,40 @@ from muninn.utils import canonical_interface_name
 
 
 class LearnArpLimits(TypedDict):
-    """Schema for Learn ARP entry limit configuration."""
+    """Schema for Learn ARP entry limit configuration.
 
-    maximum_limit: int
-    maximum_configured_limit: int
-    entry_threshold: int
-    permit_threshold: int
-    total_entries: int
+    Every field is ``NotRequired`` because each Learn ARP line is emitted
+    independently by the device (and the whole block is absent unless the
+    Learn ARP feature is configured).
+    """
+
+    maximum_limit: NotRequired[int]
+    maximum_configured_limit: NotRequired[int]
+    entry_threshold: NotRequired[int]
+    permit_threshold: NotRequired[int]
+    total_entries: NotRequired[int]
 
 
 class ShowArpSummaryResult(TypedDict):
-    """Schema for 'show arp summary' parsed output."""
+    """Schema for 'show arp summary' parsed output.
+
+    Only ``total_entries`` (the ARP-table total, which the parser asserts is
+    present) and ``interface_entry_counts`` (always initialized) are
+    required.  Every other per-kind counter and the ``learn_arp`` block is
+    written only when the corresponding line is present in device output,
+    which varies by IOS-XE release and feature configuration.
+    """
 
     total_entries: int
-    dynamic_entries: int
-    incomplete_entries: int
-    interface_entries: int
-    static_entries: int
-    alias_entries: int
-    simple_application_entries: int
-    application_alias_entries: int
-    application_timer_entries: int
-    learn_arp: LearnArpLimits
+    dynamic_entries: NotRequired[int]
+    incomplete_entries: NotRequired[int]
+    interface_entries: NotRequired[int]
+    static_entries: NotRequired[int]
+    alias_entries: NotRequired[int]
+    simple_application_entries: NotRequired[int]
+    application_alias_entries: NotRequired[int]
+    application_timer_entries: NotRequired[int]
+    learn_arp: NotRequired[LearnArpLimits]
     interface_entry_counts: dict[str, int]
 
 
