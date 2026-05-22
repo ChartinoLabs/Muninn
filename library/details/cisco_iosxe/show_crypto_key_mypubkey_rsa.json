@@ -1,0 +1,117 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show crypto key mypubkey rsa",
+  "schema": {
+    "name": "ShowCryptoKeyMypubkeyRsaResult",
+    "fields": {
+      "keys": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RsaKeyEntry",
+            "fields": {
+              "key_name": {
+                "type": "str",
+                "required": true
+              },
+              "key_type": {
+                "type": "str",
+                "required": true
+              },
+              "generated_at": {
+                "type": "str",
+                "required": true
+              },
+              "usage": {
+                "type": "str",
+                "required": true
+              },
+              "exportable": {
+                "type": "bool",
+                "required": true
+              },
+              "key_size_bits": {
+                "type": "int",
+                "required": false
+              },
+              "key_data": {
+                "type": "str",
+                "required": false
+              },
+              "storage_device": {
+                "type": "str",
+                "required": false
+              },
+              "cryptographic_device": {
+                "type": "str",
+                "required": false
+              },
+              "temporary": {
+                "type": "bool",
+                "required": false
+              },
+              "redundancy_enabled": {
+                "type": "bool",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Public RSA keys including self-signed, temporary, and SUDI keys on IOS-XE",
+      "input": "% Key pair was generated at: 01:29:46 UTC May 1 2026\nKey name: TP-self-signed-3341558060\nKey type: RSA KEYS      2048 bits\n Storage Device: private-config\n Usage: General Purpose Key\n Key is not exportable. Redundancy enabled.\n Key Data:\n  <KEY DATA REDACTED>\n% Key pair was generated at: 01:31:43 UTC May 1 2026\nKey name: TAC-R2.chrisjhart.net\nKey type: RSA KEYS      4096 bits\n Storage Device: private-config\n Usage: General Purpose Key\n Key is not exportable. Redundancy enabled.\n Key Data:\n  <KEY DATA REDACTED>\n% Key pair was generated at: 02:13:00 UTC May 1 2026\nKey name: TP-self-signed-3341558060.server\nKey type: RSA KEYS      2176 bits\nTemporary key\n Usage: Encryption Key\n Key is not exportable.\n Key Data:\n  <KEY DATA REDACTED>\n% Key pair was generated at: 02:13:06 UTC May 1 2026\nKey name: CISCO_IDEVID_SUDI\nKey type: RSA KEYS      2048 bits\n On Cryptographic Device: act2 (label=act2, key index=24)\n Usage: General Purpose Key\n Key is not exportable.\n Key Data:\n  <KEY DATA REDACTED>\n",
+      "expected": {
+        "keys": {
+          "TP-self-signed-3341558060": {
+            "generated_at": "01:29:46 UTC May 1 2026",
+            "key_name": "TP-self-signed-3341558060",
+            "key_type": "RSA KEYS",
+            "key_size_bits": 2048,
+            "storage_device": "private-config",
+            "usage": "General Purpose Key",
+            "exportable": false,
+            "redundancy_enabled": true,
+            "key_data": "<KEY DATA REDACTED>"
+          },
+          "TAC-R2.chrisjhart.net": {
+            "generated_at": "01:31:43 UTC May 1 2026",
+            "key_name": "TAC-R2.chrisjhart.net",
+            "key_type": "RSA KEYS",
+            "key_size_bits": 4096,
+            "storage_device": "private-config",
+            "usage": "General Purpose Key",
+            "exportable": false,
+            "redundancy_enabled": true,
+            "key_data": "<KEY DATA REDACTED>"
+          },
+          "TP-self-signed-3341558060.server": {
+            "generated_at": "02:13:00 UTC May 1 2026",
+            "key_name": "TP-self-signed-3341558060.server",
+            "key_type": "RSA KEYS",
+            "key_size_bits": 2176,
+            "temporary": true,
+            "usage": "Encryption Key",
+            "exportable": false,
+            "key_data": "<KEY DATA REDACTED>"
+          },
+          "CISCO_IDEVID_SUDI": {
+            "generated_at": "02:13:06 UTC May 1 2026",
+            "key_name": "CISCO_IDEVID_SUDI",
+            "key_type": "RSA KEYS",
+            "key_size_bits": 2048,
+            "cryptographic_device": "act2 (label=act2, key index=24)",
+            "usage": "General Purpose Key",
+            "exportable": false,
+            "key_data": "<KEY DATA REDACTED>"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show cdp interface",
+  "schema": {
+    "name": "ShowCdpInterfaceResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "CdpInterfaceEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "line_protocol": {
+                "type": "str",
+                "required": true
+              },
+              "encapsulation": {
+                "type": "str",
+                "required": false
+              },
+              "send_interval_seconds": {
+                "type": "int",
+                "required": false
+              },
+              "holdtime_seconds": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "cdp_enabled_interfaces": {
+        "type": "int",
+        "required": false
+      },
+      "interfaces_up": {
+        "type": "int",
+        "required": false
+      },
+      "interfaces_down": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "CDP interface listing from an IOS-XE router (TAC-R2) showing routed, 802.1Q-trunk, and dot1q subinterface CDP timers with an aggregate summary footer",
+      "input": "GigabitEthernet0/0/0 is up, line protocol is up\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 240 seconds\nGigabitEthernet0/0/1 is down, line protocol is down\n  Encapsulation 802.1Q Virtual LAN, Vlan ID  1.\n  Sending CDP packets every 60 seconds\n  Holdtime is 240 seconds\nGigabitEthernet0/0/1.10 is down, line protocol is down\n  Encapsulation 802.1Q Virtual LAN, Vlan ID  10.\n  Sending CDP packets every 60 seconds\n  Holdtime is 240 seconds\nGigabitEthernet0/0/1.20 is down, line protocol is down\n  Encapsulation 802.1Q Virtual LAN, Vlan ID  20.\n  Sending CDP packets every 60 seconds\n  Holdtime is 240 seconds\nGigabitEthernet0/0/2 is up, line protocol is up\n  Encapsulation 802.1Q Virtual LAN, Vlan ID  1.\n  Sending CDP packets every 60 seconds\n  Holdtime is 240 seconds\nGigabitEthernet0/0/2.10 is up, line protocol is up\n  Encapsulation 802.1Q Virtual LAN, Vlan ID  10.\n  Sending CDP packets every 60 seconds\n  Holdtime is 240 seconds\nGigabitEthernet0/0/2.20 is up, line protocol is up\n  Encapsulation 802.1Q Virtual LAN, Vlan ID  20.\n  Sending CDP packets every 60 seconds\n  Holdtime is 240 seconds\nGigabitEthernet0/0/3 is administratively down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 240 seconds\nGigabitEthernet0/0/4 is administratively down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 240 seconds\nGigabitEthernet0/0/5 is administratively down, line protocol is down\n  Encapsulation ARPA\n  Sending CDP packets every 60 seconds\n  Holdtime is 240 seconds\n\n cdp enabled interfaces : 10\n interfaces up          : 4\n interfaces down        : 6\n",
+      "expected": {
+        "cdp_enabled_interfaces": 10,
+        "interfaces_up": 4,
+        "interfaces_down": 6,
+        "interfaces": {
+          "GigabitEthernet0/0/0": {
+            "status": "up",
+            "line_protocol": "up",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 240
+          },
+          "GigabitEthernet0/0/1": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "802.1Q Virtual LAN, Vlan ID  1.",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 240
+          },
+          "GigabitEthernet0/0/1.10": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "802.1Q Virtual LAN, Vlan ID  10.",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 240
+          },
+          "GigabitEthernet0/0/1.20": {
+            "status": "down",
+            "line_protocol": "down",
+            "encapsulation": "802.1Q Virtual LAN, Vlan ID  20.",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 240
+          },
+          "GigabitEthernet0/0/2": {
+            "status": "up",
+            "line_protocol": "up",
+            "encapsulation": "802.1Q Virtual LAN, Vlan ID  1.",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 240
+          },
+          "GigabitEthernet0/0/2.10": {
+            "status": "up",
+            "line_protocol": "up",
+            "encapsulation": "802.1Q Virtual LAN, Vlan ID  10.",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 240
+          },
+          "GigabitEthernet0/0/2.20": {
+            "status": "up",
+            "line_protocol": "up",
+            "encapsulation": "802.1Q Virtual LAN, Vlan ID  20.",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 240
+          },
+          "GigabitEthernet0/0/3": {
+            "status": "administratively down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 240
+          },
+          "GigabitEthernet0/0/4": {
+            "status": "administratively down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 240
+          },
+          "GigabitEthernet0/0/5": {
+            "status": "administratively down",
+            "line_protocol": "down",
+            "encapsulation": "ARPA",
+            "send_interval_seconds": 60,
+            "holdtime_seconds": 240
+          }
+        }
+      }
+    }
+  ]
+}
