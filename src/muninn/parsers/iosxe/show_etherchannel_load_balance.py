@@ -11,7 +11,6 @@ from muninn.tags import ParserTag
 _PROTOCOL_RE = re.compile(r"^\s*(?P<protocol>Non-IP|IPv4|IPv6)\s*:\s*(?P<address>.+)$")
 
 _CONFIG_HEADER = "EtherChannel Load-Balancing Configuration"
-_PER_PROTOCOL_HEADER = "EtherChannel Load-Balancing Addresses Used Per-Protocol"
 
 
 class ProtocolEntry(TypedDict):
