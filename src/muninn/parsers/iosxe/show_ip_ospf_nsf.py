@@ -75,7 +75,7 @@ def _try_restart_and_handle(line: str, entry: dict) -> bool:
         entry["handle"] = match.group("handle")
         entry["router_id"] = match.group("router_id")
         checkpoint = match.group("checkpoint_router_id")
-        if checkpoint != "0.0.0.0":
+        if checkpoint != "0.0.0.0":  # nosec B104
             entry["checkpoint_router_id"] = checkpoint
         return True
 
