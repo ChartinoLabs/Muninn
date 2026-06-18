@@ -1,0 +1,153 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show crypto pki trustpoint status",
+  "schema": {
+    "name": "ShowCryptoPkiTrustpointStatusResult",
+    "fields": {
+      "trustpoints": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "TrustpointEntry",
+            "fields": {
+              "name": {
+                "type": "str",
+                "required": true
+              },
+              "certificates": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "CertificateInfo",
+                    "fields": {
+                      "subject_name": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "fingerprint_md5": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "fingerprint_sha1": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "state": {
+                "type": {
+                  "name": "TrustpointState",
+                  "fields": {
+                    "keys_generated": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "issuing_ca_authenticated": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "certificate_requests": {
+                      "type": "str",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show crypto pki trustpoint status with multiple trustpoints",
+      "input": "Trustpoint TP-self-signed-4032138694:\n  Issuing CA certificate configured:\n    Subject Name:\n     cn=IOS-Self-Signed-Certificate-4032138694\n    Fingerprint MD5: 59570F0F FF433CFE 9D67FB99 F65D6FF4\n    Fingerprint SHA1: 35242059 349E5C9E 65CB24E8 FF5F6F25 7E938FFF\n  Router General Purpose certificate configured:\n    Subject Name:\n     cn=IOS-Self-Signed-Certificate-4032138694\n    Fingerprint MD5: 59570F0F FF433CFE 9D67FB99 F65D6FF4\n    Fingerprint SHA1: 35242059 349E5C9E 65CB24E8 FF5F6F25 7E938FFF\n  State:\n    Keys generated ............. Yes (General Purpose, non-exportable)\n    Issuing CA authenticated ....... Yes\n    Certificate request(s) ..... Yes\n\n\nTrustpoint SLA-TrustPoint:\n  Issuing CA certificate configured:\n    Subject Name:\n     cn=Cisco Licensing Root CA,o=Cisco\n    Fingerprint MD5: 1468DC18 250BDFCF 769C29DF E1F7E5A8\n    Fingerprint SHA1: 5CA95FB6 E2980EC1 5AFB681B BB7E62B5 AD3FA8B8\n  State:\n    Keys generated ............. Yes (General Purpose, non-exportable)\n    Issuing CA authenticated ....... Yes\n    Certificate request(s) ..... None\n\n\nTrustpoint CISCO_IDEVID_SUDI:\n  Issuing CA certificate configured:\n    Subject Name:\n     o=Cisco,cn=High Assurance SUDI CA\n    Fingerprint MD5: E6897BC6 27D7C558 A2330EC7 C2D7A10B\n    Fingerprint SHA1: F81D5550 D67DCD1D D11192B5 7F8FDE09 A4A569B7\n  Router General Purpose certificate configured:\n    Subject Name:\n     cn=C9300-48U,ou=ACT-2 Lite SUDI,o=Cisco,serialNumber=PID:C9300-48U SN:FCW2419C0LC\n    Fingerprint MD5: 04FCE6C7 F25C319C 59DF59E8 DBBC407B\n    Fingerprint SHA1: 5C5016A4 A5E306DD C840392F 84F19663 4745B3BA\n  State:\n    Keys generated ............. Yes (General Purpose, non-exportable)\n    Issuing CA authenticated ....... Yes\n    Certificate request(s) ..... Yes\n\n\nTrustpoint CISCO_IDEVID_SUDI0:\n  Issuing CA certificate configured:\n    Subject Name:\n     cn=Cisco Manufacturing CA SHA2,o=Cisco\n    Fingerprint MD5: 3D5C1E5A 1C7C4AB0 0A28EF6D 57D9A3A1\n    Fingerprint SHA1: 30AD0581 3CB0F1B8 14D542C8 54C75A0E 3A0D4C4F\n  Router General Purpose certificate configured:\n    Subject Name:\n     cn=C9300-48U,ou=ACT-2 Lite SUDI,o=Cisco,serialNumber=PID:C9300-48U SN:FCW2419C0LC\n    Fingerprint MD5: 4B5B9BD0 2CEF3DB4 5EFF2DCA 09C3CA28\n    Fingerprint SHA1: 7890CCD9 38FFE6E9 F2BF35F0 82CE1F23 5EA3EA3D\n  State:\n    Keys generated ............. Yes (General Purpose, non-exportable)\n    Issuing CA authenticated ....... Yes\n    Certificate request(s) ..... Yes\n",
+      "expected": {
+        "trustpoints": {
+          "TP-self-signed-4032138694": {
+            "name": "TP-self-signed-4032138694",
+            "certificates": {
+              "issuing_ca": {
+                "fingerprint_md5": "59570F0F FF433CFE 9D67FB99 F65D6FF4",
+                "fingerprint_sha1": "35242059 349E5C9E 65CB24E8 FF5F6F25 7E938FFF",
+                "subject_name": "cn=IOS-Self-Signed-Certificate-4032138694"
+              },
+              "router_general_purpose": {
+                "fingerprint_md5": "59570F0F FF433CFE 9D67FB99 F65D6FF4",
+                "fingerprint_sha1": "35242059 349E5C9E 65CB24E8 FF5F6F25 7E938FFF",
+                "subject_name": "cn=IOS-Self-Signed-Certificate-4032138694"
+              }
+            },
+            "state": {
+              "keys_generated": "Yes (General Purpose, non-exportable)",
+              "issuing_ca_authenticated": "Yes",
+              "certificate_requests": "Yes"
+            }
+          },
+          "SLA-TrustPoint": {
+            "name": "SLA-TrustPoint",
+            "certificates": {
+              "issuing_ca": {
+                "fingerprint_md5": "1468DC18 250BDFCF 769C29DF E1F7E5A8",
+                "fingerprint_sha1": "5CA95FB6 E2980EC1 5AFB681B BB7E62B5 AD3FA8B8",
+                "subject_name": "cn=Cisco Licensing Root CA,o=Cisco"
+              }
+            },
+            "state": {
+              "keys_generated": "Yes (General Purpose, non-exportable)",
+              "issuing_ca_authenticated": "Yes"
+            }
+          },
+          "CISCO_IDEVID_SUDI": {
+            "name": "CISCO_IDEVID_SUDI",
+            "certificates": {
+              "issuing_ca": {
+                "fingerprint_md5": "E6897BC6 27D7C558 A2330EC7 C2D7A10B",
+                "fingerprint_sha1": "F81D5550 D67DCD1D D11192B5 7F8FDE09 A4A569B7",
+                "subject_name": "o=Cisco,cn=High Assurance SUDI CA"
+              },
+              "router_general_purpose": {
+                "fingerprint_md5": "04FCE6C7 F25C319C 59DF59E8 DBBC407B",
+                "fingerprint_sha1": "5C5016A4 A5E306DD C840392F 84F19663 4745B3BA",
+                "subject_name": "cn=C9300-48U,ou=ACT-2 Lite SUDI,o=Cisco,serialNumber=PID:C9300-48U SN:FCW2419C0LC"
+              }
+            },
+            "state": {
+              "keys_generated": "Yes (General Purpose, non-exportable)",
+              "issuing_ca_authenticated": "Yes",
+              "certificate_requests": "Yes"
+            }
+          },
+          "CISCO_IDEVID_SUDI0": {
+            "name": "CISCO_IDEVID_SUDI0",
+            "certificates": {
+              "issuing_ca": {
+                "fingerprint_md5": "3D5C1E5A 1C7C4AB0 0A28EF6D 57D9A3A1",
+                "fingerprint_sha1": "30AD0581 3CB0F1B8 14D542C8 54C75A0E 3A0D4C4F",
+                "subject_name": "cn=Cisco Manufacturing CA SHA2,o=Cisco"
+              },
+              "router_general_purpose": {
+                "fingerprint_md5": "4B5B9BD0 2CEF3DB4 5EFF2DCA 09C3CA28",
+                "fingerprint_sha1": "7890CCD9 38FFE6E9 F2BF35F0 82CE1F23 5EA3EA3D",
+                "subject_name": "cn=C9300-48U,ou=ACT-2 Lite SUDI,o=Cisco,serialNumber=PID:C9300-48U SN:FCW2419C0LC"
+              }
+            },
+            "state": {
+              "keys_generated": "Yes (General Purpose, non-exportable)",
+              "issuing_ca_authenticated": "Yes",
+              "certificate_requests": "Yes"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
