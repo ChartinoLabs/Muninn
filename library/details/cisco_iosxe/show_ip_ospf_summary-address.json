@@ -1,0 +1,28 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip ospf summary-address",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Basic output with multiple OSPF processes and no summary addresses configured",
+      "input": "OSPF Router with ID (192.0.2.3) (Process ID 1)\n\n\n                Base Topology (MTID 0)\n\n\n            OSPF Router with ID (203.0.113.3) (Process ID 20)\n\n\n                Base Topology (MTID 0)\n\n\n            OSPF Router with ID (198.51.100.3) (Process ID 10)\n\n\n                Base Topology (MTID 0)\n",
+      "expected": {
+        "1": {
+          "router_id": "192.0.2.3",
+          "addresses": {},
+          "mtid": 0
+        },
+        "20": {
+          "router_id": "203.0.113.3",
+          "addresses": {},
+          "mtid": 0
+        },
+        "10": {
+          "router_id": "198.51.100.3",
+          "addresses": {},
+          "mtid": 0
+        }
+      }
+    }
+  ]
+}
