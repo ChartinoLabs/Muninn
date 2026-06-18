@@ -1,0 +1,30 @@
+Extended IP access list IP-Adm-V4-Int-ACL-global
+    10 permit tcp any any eq www
+    20 permit tcp any any eq 443
+Extended IP access list implicit_deny
+    10 deny ip any any
+Extended IP access list implicit_permit
+    10 permit ip any any
+Extended IP access list meraki-fqdn-dns
+Extended IP access list preauth_v4
+    10 permit udp any any eq domain
+    20 permit tcp any any eq domain
+    30 permit udp any eq bootps any
+    40 permit udp any any eq bootpc
+    50 permit udp any eq bootpc any
+    60 deny ip any any
+IPv6 access list implicit_deny_v6
+    deny ipv6 any any sequence 10
+IPv6 access list implicit_permit_v6
+    permit ipv6 any any sequence 10
+IPv6 access list preauth_v6
+    permit udp any any eq domain sequence 10
+    permit tcp any any eq domain sequence 20
+    permit icmp any any nd-ns sequence 30
+    permit icmp any any nd-na sequence 40
+    permit icmp any any router-solicitation sequence 50
+    permit icmp any any router-advertisement sequence 60
+    permit icmp any any redirect sequence 70
+    permit udp any eq 547 any eq 546 sequence 80
+    permit udp any eq 546 any eq 547 sequence 90
+    deny ipv6 any any sequence 100

@@ -1,0 +1,442 @@
+{
+    "access_lists": {
+        "IP-Adm-V4-Int-ACL-global": {
+            "type": "Extended IP access list",
+            "entries": {
+                "10": {
+                    "sequence": 10,
+                    "action": "permit",
+                    "line": "permit tcp any any eq www",
+                    "parsed": {
+                        "protocol": "tcp",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "destination_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "www"
+                            ]
+                        }
+                    }
+                },
+                "20": {
+                    "sequence": 20,
+                    "action": "permit",
+                    "line": "permit tcp any any eq 443",
+                    "parsed": {
+                        "protocol": "tcp",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "destination_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "443"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "implicit_deny": {
+            "type": "Extended IP access list",
+            "entries": {
+                "10": {
+                    "sequence": 10,
+                    "action": "deny",
+                    "line": "deny ip any any",
+                    "parsed": {
+                        "protocol": "ip",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "destination": {
+                            "kind": "any"
+                        }
+                    }
+                }
+            }
+        },
+        "implicit_permit": {
+            "type": "Extended IP access list",
+            "entries": {
+                "10": {
+                    "sequence": 10,
+                    "action": "permit",
+                    "line": "permit ip any any",
+                    "parsed": {
+                        "protocol": "ip",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "destination": {
+                            "kind": "any"
+                        }
+                    }
+                }
+            }
+        },
+        "meraki-fqdn-dns": {
+            "type": "Extended IP access list",
+            "entries": {}
+        },
+        "preauth_v4": {
+            "type": "Extended IP access list",
+            "entries": {
+                "10": {
+                    "sequence": 10,
+                    "action": "permit",
+                    "line": "permit udp any any eq domain",
+                    "parsed": {
+                        "protocol": "udp",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "destination_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "domain"
+                            ]
+                        }
+                    }
+                },
+                "20": {
+                    "sequence": 20,
+                    "action": "permit",
+                    "line": "permit tcp any any eq domain",
+                    "parsed": {
+                        "protocol": "tcp",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "destination_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "domain"
+                            ]
+                        }
+                    }
+                },
+                "30": {
+                    "sequence": 30,
+                    "action": "permit",
+                    "line": "permit udp any eq bootps any",
+                    "parsed": {
+                        "protocol": "udp",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "source_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "bootps"
+                            ]
+                        },
+                        "destination": {
+                            "kind": "any"
+                        }
+                    }
+                },
+                "40": {
+                    "sequence": 40,
+                    "action": "permit",
+                    "line": "permit udp any any eq bootpc",
+                    "parsed": {
+                        "protocol": "udp",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "destination_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "bootpc"
+                            ]
+                        }
+                    }
+                },
+                "50": {
+                    "sequence": 50,
+                    "action": "permit",
+                    "line": "permit udp any eq bootpc any",
+                    "parsed": {
+                        "protocol": "udp",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "source_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "bootpc"
+                            ]
+                        },
+                        "destination": {
+                            "kind": "any"
+                        }
+                    }
+                },
+                "60": {
+                    "sequence": 60,
+                    "action": "deny",
+                    "line": "deny ip any any",
+                    "parsed": {
+                        "protocol": "ip",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "destination": {
+                            "kind": "any"
+                        }
+                    }
+                }
+            }
+        },
+        "implicit_deny_v6": {
+            "type": "IPv6 access list",
+            "entries": {
+                "10": {
+                    "sequence": 10,
+                    "action": "deny",
+                    "line": "deny ipv6 any any",
+                    "parsed": {
+                        "protocol": "ipv6",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "destination": {
+                            "kind": "any"
+                        }
+                    }
+                }
+            }
+        },
+        "implicit_permit_v6": {
+            "type": "IPv6 access list",
+            "entries": {
+                "10": {
+                    "sequence": 10,
+                    "action": "permit",
+                    "line": "permit ipv6 any any",
+                    "parsed": {
+                        "protocol": "ipv6",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "destination": {
+                            "kind": "any"
+                        }
+                    }
+                }
+            }
+        },
+        "preauth_v6": {
+            "type": "IPv6 access list",
+            "entries": {
+                "10": {
+                    "sequence": 10,
+                    "action": "permit",
+                    "line": "permit udp any any eq domain",
+                    "parsed": {
+                        "protocol": "udp",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "destination_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "domain"
+                            ]
+                        }
+                    }
+                },
+                "20": {
+                    "sequence": 20,
+                    "action": "permit",
+                    "line": "permit tcp any any eq domain",
+                    "parsed": {
+                        "protocol": "tcp",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "destination_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "domain"
+                            ]
+                        }
+                    }
+                },
+                "30": {
+                    "sequence": 30,
+                    "action": "permit",
+                    "line": "permit icmp any any nd-ns",
+                    "parsed": {
+                        "protocol": "icmp",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "extra": [
+                            "nd-ns"
+                        ]
+                    }
+                },
+                "40": {
+                    "sequence": 40,
+                    "action": "permit",
+                    "line": "permit icmp any any nd-na",
+                    "parsed": {
+                        "protocol": "icmp",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "extra": [
+                            "nd-na"
+                        ]
+                    }
+                },
+                "50": {
+                    "sequence": 50,
+                    "action": "permit",
+                    "line": "permit icmp any any router-solicitation",
+                    "parsed": {
+                        "protocol": "icmp",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "extra": [
+                            "router-solicitation"
+                        ]
+                    }
+                },
+                "60": {
+                    "sequence": 60,
+                    "action": "permit",
+                    "line": "permit icmp any any router-advertisement",
+                    "parsed": {
+                        "protocol": "icmp",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "icmp_message": "router-advertisement"
+                    }
+                },
+                "70": {
+                    "sequence": 70,
+                    "action": "permit",
+                    "line": "permit icmp any any redirect",
+                    "parsed": {
+                        "protocol": "icmp",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "extra": [
+                            "redirect"
+                        ]
+                    }
+                },
+                "80": {
+                    "sequence": 80,
+                    "action": "permit",
+                    "line": "permit udp any eq 547 any eq 546",
+                    "parsed": {
+                        "protocol": "udp",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "source_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "547"
+                            ]
+                        },
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "destination_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "546"
+                            ]
+                        }
+                    }
+                },
+                "90": {
+                    "sequence": 90,
+                    "action": "permit",
+                    "line": "permit udp any eq 546 any eq 547",
+                    "parsed": {
+                        "protocol": "udp",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "source_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "546"
+                            ]
+                        },
+                        "destination": {
+                            "kind": "any"
+                        },
+                        "destination_port": {
+                            "operator": "eq",
+                            "ports": [
+                                "547"
+                            ]
+                        }
+                    }
+                },
+                "100": {
+                    "sequence": 100,
+                    "action": "deny",
+                    "line": "deny ipv6 any any",
+                    "parsed": {
+                        "protocol": "ipv6",
+                        "source": {
+                            "kind": "any"
+                        },
+                        "destination": {
+                            "kind": "any"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
