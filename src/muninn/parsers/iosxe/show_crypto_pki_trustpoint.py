@@ -36,8 +36,8 @@ class TrustpointEntry(TypedDict):
     """
 
     subject_name: dict[str, str]
-    serial_number_hex: str
-    status: str
+    serial_number_hex: NotRequired[str]
+    status: NotRequired[str]
     key_label: NotRequired[str]
 
 
