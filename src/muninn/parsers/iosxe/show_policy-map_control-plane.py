@@ -2,7 +2,7 @@
 
 import re
 from dataclasses import dataclass, field
-from typing import ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -281,7 +281,7 @@ def _handle_police_counters(state: _ParserState, line: str) -> bool:
             actions=actions,
             bps=0,
         )
-        state.current_police[counter_type] = counters
+        cast(dict[str, Any], state.current_police)[counter_type] = counters
         return True
 
     if state.last_counter_type is not None and (m := _ACTION_LINE.match(line)):

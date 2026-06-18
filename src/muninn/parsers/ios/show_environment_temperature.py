@@ -1,7 +1,7 @@
 """Parser for 'show environment temperature' command on IOS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -166,7 +166,7 @@ class ShowEnvironmentTemperatureParser(
             sensor_match = _SENSOR_VALUE.match(line)
             if sensor_match and switches:
                 sensor_type = sensor_match.group("sensor").lower()
-                current_switch = list(switches.values())[-1]
+                current_switch = cast(dict[str, Any], list(switches.values())[-1])
                 sensor_entry, idx = _parse_sensor(lines, idx)
                 current_switch[sensor_type] = sensor_entry
                 continue

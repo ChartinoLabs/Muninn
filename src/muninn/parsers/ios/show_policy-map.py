@@ -2,7 +2,7 @@
 
 import re
 from dataclasses import dataclass, field
-from typing import ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -206,7 +206,9 @@ def _parse_police_line(line: str, state: _ParseState) -> bool:
     action_match = _POLICE_ACTION.match(line)
     if action_match:
         action_type = action_match.group("action_type").replace("-", "_")
-        state.current_class.police[action_type] = action_match.group("action")
+        cast(dict[str, Any], state.current_class.police)[action_type] = (
+            action_match.group("action")
+        )
         return True
 
     stats_match = _POLICE_STATS.match(line)
