@@ -110,6 +110,45 @@ class ShowIpBgpLabelsParser(BaseParser[ShowIpBgpLabelsResult]):
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.BGP, ParserTag.MPLS})
 
     @classmethod
+    def _process_line(
+        cls,
+        line: str,
+        prefixes: dict[str, dict[str, LabelEntry]],
+        current_network: str | None,
+    ) -> str | None:
+        """Process a single data line, returning the active network prefix."""
+        network = _try_route_line(line, prefixes)
+        if network is not None:
+            return network
+
+        m = _WRAPPED_NET_RE.match(line)
+        if m:
+            return m.group("network")
+
+        if current_network is not None:
+            _try_continuation_line(line, prefixes, current_network)
+
+        return current_network
+
+    @classmethod
+    def _build_result(
+        cls,
+        prefixes: dict[str, dict[str, LabelEntry]],
+    ) -> ShowIpBgpLabelsResult:
+        """Validate parsed prefixes and transform into the result schema."""
+        if not prefixes:
+            msg = "No BGP label routes found in output"
+            raise ValueError(msg)
+
+        result: dict[str, dict[str, PrefixEntry]] = {
+            "prefixes": {
+                network: {"next_hops": next_hops}
+                for network, next_hops in prefixes.items()
+            }
+        }
+        return cast(ShowIpBgpLabelsResult, result)
+
+    @classmethod
     def parse(cls, output: str) -> ShowIpBgpLabelsResult:
         """Parse 'show ip bgp labels' output into structured data."""
         prefixes: dict[str, dict[str, LabelEntry]] = {}
@@ -125,27 +164,6 @@ class ShowIpBgpLabelsParser(BaseParser[ShowIpBgpLabelsResult]):
             if not line.strip():
                 continue
 
-            network = _try_route_line(line, prefixes)
-            if network is not None:
-                current_network = network
-                continue
+            current_network = cls._process_line(line, prefixes, current_network)
 
-            m = _WRAPPED_NET_RE.match(line)
-            if m:
-                current_network = m.group("network")
-                continue
-
-            if current_network is not None:
-                _try_continuation_line(line, prefixes, current_network)
-
-        if not prefixes:
-            msg = "No BGP label routes found in output"
-            raise ValueError(msg)
-
-        result: dict[str, dict[str, PrefixEntry]] = {
-            "prefixes": {
-                network: {"next_hops": next_hops}
-                for network, next_hops in prefixes.items()
-            }
-        }
-        return cast(ShowIpBgpLabelsResult, result)
+        return cls._build_result(prefixes)
