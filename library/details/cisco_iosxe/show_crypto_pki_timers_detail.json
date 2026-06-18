@@ -1,0 +1,37 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show crypto pki timers detail",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Basic PKI timers with session cleanup and trustpool timers",
+      "input": "PKI Timers\n|       14:10.984  (2026-06-18T00:19:35Z)\n  |       14:10.984  (2026-06-18T00:19:35Z) SESSION CLEANUP\nTrustpool Timers\n|1041d20:20:16.086  (2029-04-24T20:25:41Z)\n  |1041d20:20:16.086  (2029-04-24T20:25:41Z) TRUSTPOOL\n",
+      "expected": {
+        "PKI Timers": {
+          "next_expiry": {
+            "countdown": "14:10.984",
+            "absolute": "2026-06-18T00:19:35Z"
+          },
+          "timers": {
+            "SESSION CLEANUP": {
+              "countdown": "14:10.984",
+              "absolute": "2026-06-18T00:19:35Z"
+            }
+          }
+        },
+        "Trustpool Timers": {
+          "next_expiry": {
+            "countdown": "1041d20:20:16.086",
+            "absolute": "2029-04-24T20:25:41Z"
+          },
+          "timers": {
+            "TRUSTPOOL": {
+              "countdown": "1041d20:20:16.086",
+              "absolute": "2029-04-24T20:25:41Z"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
