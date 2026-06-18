@@ -210,6 +210,7 @@ def _parse_key_block(block_lines: list[str]) -> RsaKeyEntry | None:
     return _finalize_entry(entry, key_data_lines)
 
 
+@register(OS.CISCO_IOSXE, "show crypto key mypubkey all")
 @register(OS.CISCO_IOSXE, "show crypto key mypubkey rsa")
 class ShowCryptoKeyMypubkeyRsaParser(BaseParser[ShowCryptoKeyMypubkeyRsaResult]):
     """Parser for 'show crypto key mypubkey rsa' on IOS-XE."""
