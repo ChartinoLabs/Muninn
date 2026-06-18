@@ -135,6 +135,8 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         "iosxe/show_ip_route/004_route_flags/expected.json",
         "iosxe/show_ip_route/005_mixed_protocols_summary_null0/expected.json",
         "iosxe/show_ip_route/006_simple_connected_with_timestamp/expected.json",
+        # next_hops is a list-of-dicts; no natural unique key for ECMP entries.
+        "iosxe/show_ip_route_ospf/001_basic/expected.json",
         "iosxe/show_ipv6_route/001_default_vrf_ecmp/expected.json",
         "iosxe/show_ipv6_route/002_vrf_with_tags/expected.json",
         "iosxe/show_ipv6_route/003_vrf1_isis_rip/expected.json",
