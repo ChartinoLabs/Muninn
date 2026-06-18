@@ -1,0 +1,91 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip ospf nsr",
+  "schema": {
+    "name": "ShowIpOspfNsrResult",
+    "fields": {
+      "rp_role": {
+        "type": "str",
+        "required": true
+      },
+      "operating_mode": {
+        "type": "str",
+        "required": true
+      },
+      "redundancy_state": {
+        "type": "str",
+        "required": true
+      },
+      "peer_redundancy_state": {
+        "type": "str",
+        "required": true
+      },
+      "checkpoint_peer_status": {
+        "type": "str",
+        "required": true
+      },
+      "checkpoint_messages": {
+        "type": "str",
+        "required": true
+      },
+      "issu_negotiation": {
+        "type": "str",
+        "required": false
+      },
+      "issu_versions": {
+        "type": "str",
+        "required": false
+      },
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ProcessEntry",
+            "fields": {
+              "router_id": {
+                "type": "str",
+                "required": true
+              },
+              "nsr_status": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "OSPF NSR status with three processes in simplex mode (C9300 live device)",
+      "input": "Active RP\n Operating in simplex mode\n Redundancy state: ACTIVE\n Peer redundancy state: DISABLED\n Checkpoint peer not ready\n Checkpoint messages enabled\n ISSU negotiation not complete\n ISSU versions not compatible\n\n Routing Process \"ospf 1\" with ID 192.0.2.3\n NSR not configured\n\n Routing Process \"ospf 20\" with ID 203.0.113.3\n NSR not configured\n\n Routing Process \"ospf 10\" with ID 198.51.100.3\n NSR not configured\n",
+      "expected": {
+        "rp_role": "Active RP",
+        "operating_mode": "simplex",
+        "redundancy_state": "ACTIVE",
+        "peer_redundancy_state": "DISABLED",
+        "checkpoint_peer_status": "not ready",
+        "checkpoint_messages": "enabled",
+        "issu_negotiation": "not complete",
+        "issu_versions": "not compatible",
+        "processes": {
+          "1": {
+            "router_id": "192.0.2.3",
+            "nsr_status": "not configured"
+          },
+          "20": {
+            "router_id": "203.0.113.3",
+            "nsr_status": "not configured"
+          },
+          "10": {
+            "router_id": "198.51.100.3",
+            "nsr_status": "not configured"
+          }
+        }
+      }
+    }
+  ]
+}
