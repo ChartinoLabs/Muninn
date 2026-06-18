@@ -1,0 +1,120 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip ospf request-list",
+  "schema": {
+    "name": "ShowIpOspfRequestListResult",
+    "fields": {
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "OspfProcessRequestList",
+            "fields": {
+              "router_id": {
+                "type": "str",
+                "required": true
+              },
+              "neighbors": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "name": "RequestListEntry",
+                      "fields": {
+                        "address": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "request_list_size": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "maximum_list_size": {
+                          "type": "int",
+                          "required": true
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show ip ospf request-list output with multiple OSPF processes",
+      "input": "OSPF Router with ID (192.0.2.3) (Process ID 1)\n\n Neighbor 192.0.2.4, interface GigabitEthernet1/0/1 address 10.0.2.2\n Request list size 0, maximum list size 0\n\n Neighbor 192.0.2.1, interface GigabitEthernet1/0/2 address 10.0.3.1\n Request list size 0, maximum list size 1\n\n            OSPF Router with ID (203.0.113.3) (Process ID 20)\n\n Neighbor 203.0.113.4, interface GigabitEthernet1/0/1.20 address 10.20.2.2\n Request list size 0, maximum list size 0\n\n Neighbor 203.0.113.1, interface GigabitEthernet1/0/2.20 address 10.20.3.1\n Request list size 0, maximum list size 1\n\n            OSPF Router with ID (198.51.100.3) (Process ID 10)\n\n Neighbor 198.51.100.1, interface GigabitEthernet1/0/2.10 address 10.10.3.1\n Request list size 0, maximum list size 1\n\n Neighbor 198.51.100.4, interface GigabitEthernet1/0/1.10 address 10.10.2.2\n Request list size 0, maximum list size 0\n",
+      "expected": {
+        "processes": {
+          "1": {
+            "router_id": "192.0.2.3",
+            "neighbors": {
+              "GigabitEthernet1/0/1": {
+                "192.0.2.4": {
+                  "address": "10.0.2.2",
+                  "request_list_size": 0,
+                  "maximum_list_size": 0
+                }
+              },
+              "GigabitEthernet1/0/2": {
+                "192.0.2.1": {
+                  "address": "10.0.3.1",
+                  "request_list_size": 0,
+                  "maximum_list_size": 1
+                }
+              }
+            }
+          },
+          "20": {
+            "router_id": "203.0.113.3",
+            "neighbors": {
+              "GigabitEthernet1/0/1.20": {
+                "203.0.113.4": {
+                  "address": "10.20.2.2",
+                  "request_list_size": 0,
+                  "maximum_list_size": 0
+                }
+              },
+              "GigabitEthernet1/0/2.20": {
+                "203.0.113.1": {
+                  "address": "10.20.3.1",
+                  "request_list_size": 0,
+                  "maximum_list_size": 1
+                }
+              }
+            }
+          },
+          "10": {
+            "router_id": "198.51.100.3",
+            "neighbors": {
+              "GigabitEthernet1/0/2.10": {
+                "198.51.100.1": {
+                  "address": "10.10.3.1",
+                  "request_list_size": 0,
+                  "maximum_list_size": 1
+                }
+              },
+              "GigabitEthernet1/0/1.10": {
+                "198.51.100.4": {
+                  "address": "10.10.2.2",
+                  "request_list_size": 0,
+                  "maximum_list_size": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
