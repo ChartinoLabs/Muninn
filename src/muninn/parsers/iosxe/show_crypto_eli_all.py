@@ -88,7 +88,7 @@ _DH_CALCS_RE = re.compile(
 
 # crypto engine 1:Software Crypto Engine
 _CRYPTO_ENGINE_SUMMARY_RE = re.compile(
-    r"^\s*crypto\s+engine\s+(?P<id>\d+)\s*:\s*(?P<name>.+?)\s*$",
+    r"^\s*crypto\s+engine\s+\d+\s*:\s*(?P<name>.+?)\s*$",
     re.IGNORECASE,
 )
 
