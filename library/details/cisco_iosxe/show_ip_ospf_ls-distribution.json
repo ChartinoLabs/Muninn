@@ -1,0 +1,51 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip ospf ls-distribution",
+  "schema": {
+    "name": "ShowIpOspfLsDistributionResult",
+    "fields": {
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ProcessEntry",
+            "fields": {
+              "router_id": {
+                "type": "str",
+                "required": true
+              },
+              "ls_distribution_enabled": {
+                "type": "bool",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple OSPF processes with LS distribution disabled (C9300 live device)",
+      "input": "OSPF Router with ID (192.0.2.3) (Process ID 1)\nOSPF LS Distribution is Disabled\n\n            OSPF Router with ID (203.0.113.3) (Process ID 20)\nOSPF LS Distribution is Disabled\n\n            OSPF Router with ID (198.51.100.3) (Process ID 10)\nOSPF LS Distribution is Disabled\n",
+      "expected": {
+        "processes": {
+          "1": {
+            "router_id": "192.0.2.3",
+            "ls_distribution_enabled": false
+          },
+          "20": {
+            "router_id": "203.0.113.3",
+            "ls_distribution_enabled": false
+          },
+          "10": {
+            "router_id": "198.51.100.3",
+            "ls_distribution_enabled": false
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show dot1x statistics",
+  "schema": {
+    "name": "ShowDot1xStatisticsResult",
+    "fields": {
+      "rx_start": {
+        "type": "int",
+        "required": false
+      },
+      "rx_logoff": {
+        "type": "int",
+        "required": false
+      },
+      "rx_resp": {
+        "type": "int",
+        "required": false
+      },
+      "rx_resp_id": {
+        "type": "int",
+        "required": false
+      },
+      "rx_req": {
+        "type": "int",
+        "required": false
+      },
+      "rx_invalid": {
+        "type": "int",
+        "required": false
+      },
+      "rx_len_err": {
+        "type": "int",
+        "required": false
+      },
+      "rx_total": {
+        "type": "int",
+        "required": false
+      },
+      "tx_start": {
+        "type": "int",
+        "required": false
+      },
+      "tx_logoff": {
+        "type": "int",
+        "required": false
+      },
+      "tx_resp": {
+        "type": "int",
+        "required": false
+      },
+      "tx_req": {
+        "type": "int",
+        "required": false
+      },
+      "re_tx_req": {
+        "type": "int",
+        "required": false
+      },
+      "re_tx_req_fail": {
+        "type": "int",
+        "required": false
+      },
+      "tx_req_id": {
+        "type": "int",
+        "required": false
+      },
+      "re_tx_req_id": {
+        "type": "int",
+        "required": false
+      },
+      "re_tx_req_id_fail": {
+        "type": "int",
+        "required": false
+      },
+      "tx_total": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic dot1x global statistics with all counters at zero.",
+      "input": "Dot1x Global Statistics for\n--------------------------------------------\nRxStart = 0     RxLogoff = 0    RxResp = 0      RxRespID = 0\nRxReq = 0       RxInvalid = 0   RxLenErr = 0\nRxTotal = 0\n\nTxStart = 0     TxLogoff = 0    TxResp = 0\nTxReq = 0       ReTxReq = 0     ReTxReqFail = 0\nTxReqID = 0         ReTxReqID = 0       ReTxReqIDFail = 0\nTxTotal = 0\n",
+      "expected": {
+        "rx_start": 0,
+        "rx_logoff": 0,
+        "rx_resp": 0,
+        "rx_resp_id": 0,
+        "rx_req": 0,
+        "rx_invalid": 0,
+        "rx_len_err": 0,
+        "rx_total": 0,
+        "tx_start": 0,
+        "tx_logoff": 0,
+        "tx_resp": 0,
+        "tx_req": 0,
+        "re_tx_req": 0,
+        "re_tx_req_fail": 0,
+        "tx_req_id": 0,
+        "re_tx_req_id": 0,
+        "re_tx_req_id_fail": 0,
+        "tx_total": 0
+      }
+    }
+  ]
+}
