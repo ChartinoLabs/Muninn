@@ -42,7 +42,7 @@ class AreaSummaryEntry(TypedDict):
     """Database summary for a single OSPF area."""
 
     lsa_types: dict[str, LsaCountEntry]
-    subtotal: LsaCountEntry
+    subtotal: NotRequired[LsaCountEntry]
     prefixes_redistributed_type_7: NotRequired[int]
 
 
@@ -50,7 +50,7 @@ class ProcessSummaryEntry(TypedDict):
     """Database summary for an entire OSPF process."""
 
     lsa_types: dict[str, LsaCountEntry]
-    total: LsaCountEntry
+    total: NotRequired[LsaCountEntry]
     non_self: NotRequired[int]
     prefixes_redistributed_type_5: NotRequired[int]
 
