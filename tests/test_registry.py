@@ -78,8 +78,8 @@ class TestRegisterDecorator:
 
         assert ShowVersionParser.os is OS.CISCO_NXOS
         assert ShowVersionParser.command == "show version"
-        assert len(ShowVersionParser._muninn_registrations) == 1
-        registration = ShowVersionParser._muninn_registrations[0]
+        assert len(ShowVersionParser._muninn_registrations) == 1  # ty: ignore[unresolved-attribute]
+        registration = ShowVersionParser._muninn_registrations[0]  # ty: ignore[unresolved-attribute]
         assert registration.os is OS.CISCO_NXOS
         assert registration.command == "  SHOW VERSION  "
         assert registration.doc_template is None
