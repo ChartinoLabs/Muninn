@@ -1,0 +1,43 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip ospf max-metric",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Basic output with three OSPF processes, none originating max-metric LSAs",
+      "input": "OSPF Router with ID (192.0.2.3) (Process ID 1)\n\n\n                Base Topology (MTID 0)\n\n Start time: 00:55:14.937, Time elapsed: 6w5d\n Router is not originating router-LSAs with maximum metric\n\n\n            OSPF Router with ID (203.0.113.3) (Process ID 20)\n\n\n                Base Topology (MTID 0)\n\n Start time: 00:55:15.350, Time elapsed: 6w5d\n Router is not originating router-LSAs with maximum metric\n\n\n            OSPF Router with ID (198.51.100.3) (Process ID 10)\n\n\n                Base Topology (MTID 0)\n\n Start time: 00:55:14.437, Time elapsed: 6w5d\n Router is not originating router-LSAs with maximum metric\n",
+      "expected": {
+        "1": {
+          "router_id": "192.0.2.3",
+          "topologies": {
+            "0": {
+              "max_metric_active": false,
+              "start_time": "00:55:14.937",
+              "time_elapsed": "6w5d"
+            }
+          }
+        },
+        "20": {
+          "router_id": "203.0.113.3",
+          "topologies": {
+            "0": {
+              "max_metric_active": false,
+              "start_time": "00:55:15.350",
+              "time_elapsed": "6w5d"
+            }
+          }
+        },
+        "10": {
+          "router_id": "198.51.100.3",
+          "topologies": {
+            "0": {
+              "max_metric_active": false,
+              "start_time": "00:55:14.437",
+              "time_elapsed": "6w5d"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
