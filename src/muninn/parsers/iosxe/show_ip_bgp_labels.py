@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS, IPV4_PREFIX
 from muninn.registry import register
 from muninn.tags import ParserTag
 
@@ -13,19 +14,19 @@ _HEADER_RE = re.compile(r"^\s*Network\s+Next\s+Hop\s+In\s+label/Out\s+label")
 
 # Route line: indented network/prefix, next hop, and label pair
 _ROUTE_RE = re.compile(
-    r"^\s+(?P<network>\d\S+/\d+)"
+    rf"^\s+(?P<network>{IPV4_PREFIX})"
     r"\s+"
-    r"(?P<next_hop>\d\S+)"
+    rf"(?P<next_hop>{IPV4_ADDRESS})"
     r"\s+"
     r"(?P<in_label>\S+)/(?P<out_label>\S+)"
 )
 
 # Wrapped network line: only the network prefix, no data columns
-_WRAPPED_NET_RE = re.compile(r"^\s+(?P<network>\d\S+/\d+)\s*$")
+_WRAPPED_NET_RE = re.compile(rf"^\s+(?P<network>{IPV4_PREFIX})\s*$")
 
 # Continuation line: deeply indented next hop + labels (no network)
 _CONTINUATION_RE = re.compile(
-    r"^\s+(?P<next_hop>\d\S+)" r"\s+" r"(?P<in_label>\S+)/(?P<out_label>\S+)"
+    rf"^\s+(?P<next_hop>{IPV4_ADDRESS})" r"\s+" r"(?P<in_label>\S+)/(?P<out_label>\S+)"
 )
 
 
