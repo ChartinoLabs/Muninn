@@ -1,0 +1,148 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip route ospf",
+  "schema": {
+    "name": "ShowIpRouteOspfResult",
+    "fields": {
+      "vrf": {
+        "type": "str",
+        "required": true
+      },
+      "routes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RouteEntry",
+            "fields": {
+              "network": {
+                "type": "str",
+                "required": true
+              },
+              "mask": {
+                "type": "str",
+                "required": true
+              },
+              "type": {
+                "type": "str",
+                "required": false
+              },
+              "type_code": {
+                "type": "str",
+                "required": false
+              },
+              "next_hops": {
+                "type": {
+                  "type": "list",
+                  "items": {
+                    "name": "NextHopEntry",
+                    "fields": {
+                      "next_hop": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "admin_distance": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "metric": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "age": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "outgoing_interface": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic OSPF routes with intra-area entries across two next-hops",
+      "input": "Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP\n       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area\n       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2\n       E1 - OSPF external type 1, E2 - OSPF external type 2, m - OMP\n       n - NAT, Ni - NAT inside, No - NAT outside, Nd - NAT DIA\n       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2\n       ia - IS-IS inter area, * - candidate default, U - per-user static route\n       H - NHRP, G - NHRP registered, g - NHRP registration summary\n       o - ODR, P - periodic downloaded static route, l - LISP\n       a - application route\n       + - replicated route, % - next hop override, p - overrides from PfR\n       & - replicated local route overrides by connected\n\nGateway of last resort is not set\n\n      10.0.0.0/8 is variably subnetted, 6 subnets, 2 masks\nO        10.0.1.0/30 [110/2] via 10.0.3.1, 2w1d, GigabitEthernet1/0/2\nO        10.0.4.0/30 [110/2] via 10.0.2.2, 1w5d, GigabitEthernet1/0/1\n      192.0.2.0/32 is subnetted, 4 subnets\nO        192.0.2.1 [110/2] via 10.0.3.1, 2w4d, GigabitEthernet1/0/2\nO        192.0.2.2 [110/3] via 10.0.3.1, 2w1d, GigabitEthernet1/0/2\nO        192.0.2.4 [110/2] via 10.0.2.2, 1w5d, GigabitEthernet1/0/1\n",
+      "expected": {
+        "vrf": "default",
+        "routes": {
+          "10.0.1.0/30": {
+            "network": "10.0.1.0",
+            "mask": "30",
+            "next_hops": [
+              {
+                "next_hop": "10.0.3.1",
+                "admin_distance": 110,
+                "metric": 2,
+                "age": "2w1d",
+                "outgoing_interface": "GigabitEthernet1/0/2"
+              }
+            ]
+          },
+          "10.0.4.0/30": {
+            "network": "10.0.4.0",
+            "mask": "30",
+            "next_hops": [
+              {
+                "next_hop": "10.0.2.2",
+                "admin_distance": 110,
+                "metric": 2,
+                "age": "1w5d",
+                "outgoing_interface": "GigabitEthernet1/0/1"
+              }
+            ]
+          },
+          "192.0.2.1/32": {
+            "network": "192.0.2.1",
+            "mask": "32",
+            "next_hops": [
+              {
+                "next_hop": "10.0.3.1",
+                "admin_distance": 110,
+                "metric": 2,
+                "age": "2w4d",
+                "outgoing_interface": "GigabitEthernet1/0/2"
+              }
+            ]
+          },
+          "192.0.2.2/32": {
+            "network": "192.0.2.2",
+            "mask": "32",
+            "next_hops": [
+              {
+                "next_hop": "10.0.3.1",
+                "admin_distance": 110,
+                "metric": 3,
+                "age": "2w1d",
+                "outgoing_interface": "GigabitEthernet1/0/2"
+              }
+            ]
+          },
+          "192.0.2.4/32": {
+            "network": "192.0.2.4",
+            "mask": "32",
+            "next_hops": [
+              {
+                "next_hop": "10.0.2.2",
+                "admin_distance": 110,
+                "metric": 2,
+                "age": "1w5d",
+                "outgoing_interface": "GigabitEthernet1/0/1"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
