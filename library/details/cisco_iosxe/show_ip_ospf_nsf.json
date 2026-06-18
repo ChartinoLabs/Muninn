@@ -1,0 +1,104 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip ospf nsf",
+  "schema": {
+    "name": "ShowIpOspfNsfResult",
+    "fields": {
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "NsfProcessEntry",
+            "fields": {
+              "ietf_nsf_helper": {
+                "type": "bool",
+                "required": true
+              },
+              "cisco_nsf_helper": {
+                "type": "bool",
+                "required": true
+              },
+              "restart_state": {
+                "type": "str",
+                "required": true
+              },
+              "router_id": {
+                "type": "str",
+                "required": true
+              },
+              "checkpoint_router_id": {
+                "type": "str",
+                "required": false
+              },
+              "handle": {
+                "type": "str",
+                "required": false
+              },
+              "config_wait_timer_interval": {
+                "type": "int",
+                "required": true
+              },
+              "config_wait_timer_running": {
+                "type": "bool",
+                "required": true
+              },
+              "dbase_wait_timer_interval": {
+                "type": "int",
+                "required": true
+              },
+              "dbase_wait_timer_running": {
+                "type": "bool",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show ip ospf nsf output with multiple OSPF processes",
+      "input": "Routing Process \"ospf 1\"\n IETF NSF helper support enabled\n Cisco NSF helper support enabled\n  OSPF restart state is NO_RESTART\n  Handle 131095731431392, Router ID 192.0.2.3, checkpoint Router ID 0.0.0.0\n  Config wait timer interval 10, timer not running\n  Dbase wait timer interval 120, timer not running\n Routing Process \"ospf 20\"\n IETF NSF helper support enabled\n Cisco NSF helper support enabled\n  OSPF restart state is NO_RESTART\n  Handle 131095734539928, Router ID 203.0.113.3, checkpoint Router ID 0.0.0.0\n  Config wait timer interval 10, timer not running\n  Dbase wait timer interval 120, timer not running\n Routing Process \"ospf 10\"\n IETF NSF helper support enabled\n Cisco NSF helper support enabled\n  OSPF restart state is NO_RESTART\n  Handle 131095729865232, Router ID 198.51.100.3, checkpoint Router ID 0.0.0.0\n  Config wait timer interval 10, timer not running\n  Dbase wait timer interval 120, timer not running\n",
+      "expected": {
+        "processes": {
+          "1": {
+            "ietf_nsf_helper": true,
+            "cisco_nsf_helper": true,
+            "restart_state": "NO_RESTART",
+            "handle": "131095731431392",
+            "router_id": "192.0.2.3",
+            "config_wait_timer_interval": 10,
+            "config_wait_timer_running": false,
+            "dbase_wait_timer_interval": 120,
+            "dbase_wait_timer_running": false
+          },
+          "20": {
+            "ietf_nsf_helper": true,
+            "cisco_nsf_helper": true,
+            "restart_state": "NO_RESTART",
+            "handle": "131095734539928",
+            "router_id": "203.0.113.3",
+            "config_wait_timer_interval": 10,
+            "config_wait_timer_running": false,
+            "dbase_wait_timer_interval": 120,
+            "dbase_wait_timer_running": false
+          },
+          "10": {
+            "ietf_nsf_helper": true,
+            "cisco_nsf_helper": true,
+            "restart_state": "NO_RESTART",
+            "handle": "131095729865232",
+            "router_id": "198.51.100.3",
+            "config_wait_timer_interval": 10,
+            "config_wait_timer_running": false,
+            "dbase_wait_timer_interval": 120,
+            "dbase_wait_timer_running": false
+          }
+        }
+      }
+    }
+  ]
+}
