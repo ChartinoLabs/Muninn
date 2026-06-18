@@ -1,0 +1,44 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip ospf database dist-ls-pending",
+  "schema": {
+    "name": "ShowIpOspfDatabaseDistLsPendingResult",
+    "fields": {
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ProcessEntry",
+            "fields": {
+              "router_id": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with multiple OSPF processes and no pending LSAs",
+      "input": "OSPF Router with ID (192.0.2.3) (Process ID 1)\n\n            OSPF Router with ID (203.0.113.3) (Process ID 20)\n\n            OSPF Router with ID (198.51.100.3) (Process ID 10)\n",
+      "expected": {
+        "processes": {
+          "1": {
+            "router_id": "192.0.2.3"
+          },
+          "20": {
+            "router_id": "203.0.113.3"
+          },
+          "10": {
+            "router_id": "198.51.100.3"
+          }
+        }
+      }
+    }
+  ]
+}
