@@ -51,7 +51,7 @@ _STATE_LABEL_MAP: dict[str, str] = {
 class CertificateInfo(TypedDict):
     """Schema for a configured certificate within a trustpoint."""
 
-    subject_name: str
+    subject_name: NotRequired[str]
     fingerprint_md5: NotRequired[str]
     fingerprint_sha1: NotRequired[str]
 
