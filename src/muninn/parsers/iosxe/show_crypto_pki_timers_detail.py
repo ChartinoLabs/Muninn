@@ -31,7 +31,7 @@ class TimerEntry(TypedDict):
 class SectionEntry(TypedDict):
     """A timer section (e.g. PKI Timers, Trustpool Timers)."""
 
-    next_expiry: TimerEntry
+    next_expiry: NotRequired[TimerEntry]
     timers: NotRequired[dict[str, TimerEntry]]
 
 
