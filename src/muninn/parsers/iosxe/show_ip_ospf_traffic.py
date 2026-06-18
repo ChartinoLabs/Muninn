@@ -138,17 +138,11 @@ _GLOBAL_RCVD_DETAIL2_RE = re.compile(
     r"(\d+)\s+link state updates,\s+(\d+)\s+link state acks"
 )
 _GLOBAL_SENT_TOTAL_RE = re.compile(r"Sent:\s+(\d+)\s+total")
-_GLOBAL_SENT_DETAIL_RE = re.compile(
-    r"(\d+)\s+hello,\s+(\d+)\s+database desc,\s+(\d+)\s+link state req"
-)
-_GLOBAL_SENT_DETAIL2_RE = re.compile(
-    r"(\d+)\s+link state updates,\s+(\d+)\s+link state acks"
-)
 _PROCESS_HEADER_RE = re.compile(
     rf"OSPF Router with ID \(({IPV4_ADDRESS})\) \(Process ID (\d+)\)"
 )
 _QUEUE_HEADER_RE = re.compile(r"OSPF queue statistics for process ID (\d+):")
-_INTERFACE_RE = re.compile(r"^\s*Interface\s+([A-Z]\S+)", re.MULTILINE)
+_INTERFACE_RE = re.compile(r"^\s*Interface\s+([A-Z]\S+)")
 _INTF_CLEARING_RE = re.compile(r"Last clearing of interface traffic counters (.+)")
 _PACKET_LINE_RE = re.compile(r"((?:RX|TX)\s+\S+(?:\s+\S+)?)\s+(\d+)\s+(\d+)")
 _HEADER_ERROR_RE = re.compile(r"([A-Za-z][A-Za-z /]+?)\s+(\d+)")
