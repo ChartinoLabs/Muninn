@@ -1,0 +1,267 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show crypto ikev2 stats",
+  "schema": {
+    "name": "ShowCryptoIkev2StatsResult",
+    "fields": {
+      "system_resource_limit": {
+        "type": "int",
+        "required": true
+      },
+      "max_ikev2_sas": {
+        "type": "int",
+        "required": true
+      },
+      "max_in_negotiation_incoming": {
+        "type": "int",
+        "required": true
+      },
+      "max_in_negotiation_outgoing": {
+        "type": "int",
+        "required": true
+      },
+      "incoming_sa": {
+        "type": {
+          "name": "SaCountEntry",
+          "fields": {
+            "total": {
+              "type": "int",
+              "required": true
+            },
+            "active": {
+              "type": "int",
+              "required": true
+            },
+            "negotiating": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "outgoing_sa": {
+        "type": {
+          "type": "ref",
+          "name": "SaCountEntry"
+        },
+        "required": true
+      },
+      "incoming_requests": {
+        "type": {
+          "name": "RequestEntry",
+          "fields": {
+            "total": {
+              "type": "int",
+              "required": true
+            },
+            "accepted": {
+              "type": "int",
+              "required": true
+            },
+            "rejected": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "outgoing_requests": {
+        "type": {
+          "type": "ref",
+          "name": "RequestEntry"
+        },
+        "required": true
+      },
+      "rejected_requests": {
+        "type": {
+          "name": "RejectedRequestEntry",
+          "fields": {
+            "total": {
+              "type": "int",
+              "required": true
+            },
+            "rsrc_low": {
+              "type": "int",
+              "required": true
+            },
+            "sa_limit": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "packets_dropped_at_dispatch": {
+        "type": "int",
+        "required": true
+      },
+      "incoming_requests_dropped_low_q": {
+        "type": "int",
+        "required": true
+      },
+      "cookie_challenged": {
+        "type": {
+          "name": "CookieChallengedEntry",
+          "fields": {
+            "total": {
+              "type": "int",
+              "required": true
+            },
+            "accepted": {
+              "type": "int",
+              "required": true
+            },
+            "rejected": {
+              "type": "int",
+              "required": true
+            },
+            "rejected_no_cookie": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "deleted_sessions_cert_revoked": {
+        "type": "int",
+        "required": true
+      },
+      "init_sa_rejected_queue_limit": {
+        "type": "int",
+        "required": true
+      },
+      "sa_strength_enforcement_rejects": {
+        "type": {
+          "name": "SaStrengthEntry",
+          "fields": {
+            "incoming": {
+              "type": "int",
+              "required": true
+            },
+            "outgoing": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "quantum_resistance": {
+        "type": {
+          "name": "QuantumResistanceEntry",
+          "fields": {
+            "total": {
+              "type": "int",
+              "required": true
+            },
+            "manual": {
+              "type": "int",
+              "required": true
+            },
+            "dynamic": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": false
+      },
+      "ppk_identity_mismatch": {
+        "type": "int",
+        "required": false
+      },
+      "ppk_retrieve_failure": {
+        "type": {
+          "name": "PpkFailureEntry",
+          "fields": {
+            "all": {
+              "type": "int",
+              "required": true
+            },
+            "with_ppk_required": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": false
+      },
+      "ppk_authentication_failure": {
+        "type": {
+          "type": "ref",
+          "name": "PpkFailureEntry"
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output from 'show crypto ikev2 stats' with all counters at zero except max negotiation limits.",
+      "input": "--------------------------------------------------------------------------------\n                          Crypto IKEv2 SA Statistics\n--------------------------------------------------------------------------------\nSystem Resource Limit:   0        Max IKEv2 SAs: 0        Max in nego(in/out):\n40/400\nTotal incoming IKEv2 SA Count:    0        active:        0        negotiating:\n0\nTotal outgoing IKEv2 SA Count:    0        active:        0        negotiating:\n0\nIncoming IKEv2 Requests: 0        accepted:      0        rejected:    0\nOutgoing IKEv2 Requests: 0        accepted:      0        rejected:    0\nRejected IKEv2 Requests: 0        rsrc low:      0        SA limit:    0\nIKEv2 packets dropped at dispatch: 0\nIncoming Requests dropped as LOW Q limit reached : 0\nIncoming IKEV2 Cookie Challenged Requests: 0\n    accepted: 0        rejected: 0        rejected no cookie: 0\nTotal Deleted sessions of Cert Revoked Peers: 0\nTotal init sa request rejected due to queue limit : 0\nSA Strength Enforcement Rejects - incoming:        0 outgoing:        0\nSessions with Quantum Resistance: 0        Manual: 0        Dynamic: 0\nPPK Identity Mismatch: 0\nPPK Retrieve Failure    -    ALL:      0        With PPK Required:    0\nPPK Authentication Failure - ALL:      0        With PPK Required:    0\n",
+      "expected": {
+        "system_resource_limit": 0,
+        "max_ikev2_sas": 0,
+        "max_in_negotiation_incoming": 40,
+        "max_in_negotiation_outgoing": 400,
+        "incoming_sa": {
+          "total": 0,
+          "active": 0,
+          "negotiating": 0
+        },
+        "outgoing_sa": {
+          "total": 0,
+          "active": 0,
+          "negotiating": 0
+        },
+        "incoming_requests": {
+          "total": 0,
+          "accepted": 0,
+          "rejected": 0
+        },
+        "outgoing_requests": {
+          "total": 0,
+          "accepted": 0,
+          "rejected": 0
+        },
+        "rejected_requests": {
+          "total": 0,
+          "rsrc_low": 0,
+          "sa_limit": 0
+        },
+        "packets_dropped_at_dispatch": 0,
+        "incoming_requests_dropped_low_q": 0,
+        "cookie_challenged": {
+          "total": 0,
+          "accepted": 0,
+          "rejected": 0,
+          "rejected_no_cookie": 0
+        },
+        "deleted_sessions_cert_revoked": 0,
+        "init_sa_rejected_queue_limit": 0,
+        "sa_strength_enforcement_rejects": {
+          "incoming": 0,
+          "outgoing": 0
+        },
+        "quantum_resistance": {
+          "total": 0,
+          "manual": 0,
+          "dynamic": 0
+        },
+        "ppk_identity_mismatch": 0,
+        "ppk_retrieve_failure": {
+          "all": 0,
+          "with_ppk_required": 0
+        },
+        "ppk_authentication_failure": {
+          "all": 0,
+          "with_ppk_required": 0
+        }
+      }
+    }
+  ]
+}
