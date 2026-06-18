@@ -156,6 +156,9 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         "iosxe/show_track/002_multiple_track_types/expected.json",
         "iosxe/show_version/001_c3850_stack/expected.json",
         "iosxe/show_version/003_c9300_switch/expected.json",
+        # entries uses list-of-dicts; no natural unique key for redundancy history
+        # events (timestamps repeat heavily).
+        "iosxe/show_redundancy_history_reverse/001_basic/expected.json",
         # --- Cisco IOS-XR ---
         "cisco_iosxr/show_ip_route/001_ospf_ecmp_connected/expected.json",
         "cisco_iosxr/show_ip_route/002_mixed_protocols_ecmp/expected.json",
