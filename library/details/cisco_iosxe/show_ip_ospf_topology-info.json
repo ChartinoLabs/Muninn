@@ -1,0 +1,159 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip ospf topology-info",
+  "schema": {
+    "name": "ShowIpOspfTopologyInfoResult",
+    "fields": {
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ProcessEntry",
+            "fields": {
+              "router_id": {
+                "type": "str",
+                "required": true
+              },
+              "topology": {
+                "type": {
+                  "name": "TopologyEntry",
+                  "fields": {
+                    "mtid": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "topology_priority": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "originating_max_metric": {
+                      "type": "bool",
+                      "required": true
+                    },
+                    "num_transit_capable_areas": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "spf_timers": {
+                      "type": {
+                        "name": "SpfTimers",
+                        "fields": {
+                          "initial_delay_ms": {
+                            "type": "int",
+                            "required": true
+                          },
+                          "min_hold_ms": {
+                            "type": "int",
+                            "required": true
+                          },
+                          "max_wait_ms": {
+                            "type": "int",
+                            "required": true
+                          }
+                        }
+                      },
+                      "required": true
+                    },
+                    "areas": {
+                      "type": {
+                        "type": "dict",
+                        "key": "str",
+                        "value": {
+                          "name": "AreaEntry",
+                          "fields": {
+                            "spf_last_executed": {
+                              "type": "str",
+                              "required": false
+                            },
+                            "spf_executions": {
+                              "type": "int",
+                              "required": false
+                            }
+                          }
+                        }
+                      },
+                      "required": false
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multi-process OSPF topology info with SPF timers and area details",
+      "input": "OSPF Router with ID (192.0.2.3) (Process ID 1)\n\n\n                Base Topology (MTID 0)\n\n Topology priority is 64\n Router is not originating router-LSAs with maximum metric\n Number of areas transit capable is 0\n Initial SPF schedule delay 50 msecs\n Minimum hold time between two consecutive SPFs 200 msecs\n Maximum wait time between two consecutive SPFs 5000 msecs\n    Area BACKBONE(0)\n        SPF algorithm last executed 1w5d ago\n        SPF algorithm executed 282 times\n        Area ranges are\n\n            OSPF Router with ID (203.0.113.3) (Process ID 20)\n\n\n                Base Topology (MTID 0)\n\n Topology priority is 64\n Router is not originating router-LSAs with maximum metric\n Number of areas transit capable is 0\n Initial SPF schedule delay 50 msecs\n Minimum hold time between two consecutive SPFs 200 msecs\n Maximum wait time between two consecutive SPFs 5000 msecs\n    Area BACKBONE(0)\n        SPF algorithm last executed 1w5d ago\n        SPF algorithm executed 327 times\n        Area ranges are\n\n            OSPF Router with ID (198.51.100.3) (Process ID 10)\n\n\n                Base Topology (MTID 0)\n\n Topology priority is 64\n Router is not originating router-LSAs with maximum metric\n Number of areas transit capable is 0\n Initial SPF schedule delay 50 msecs\n Minimum hold time between two consecutive SPFs 200 msecs\n Maximum wait time between two consecutive SPFs 5000 msecs\n    Area BACKBONE(0)\n        SPF algorithm last executed 1w5d ago\n        SPF algorithm executed 325 times\n        Area ranges are\n",
+      "expected": {
+        "processes": {
+          "1": {
+            "router_id": "192.0.2.3",
+            "topology": {
+              "mtid": 0,
+              "topology_priority": 64,
+              "originating_max_metric": false,
+              "num_transit_capable_areas": 0,
+              "spf_timers": {
+                "initial_delay_ms": 50,
+                "min_hold_ms": 200,
+                "max_wait_ms": 5000
+              },
+              "areas": {
+                "BACKBONE(0)": {
+                  "spf_last_executed": "1w5d",
+                  "spf_executions": 282
+                }
+              }
+            }
+          },
+          "20": {
+            "router_id": "203.0.113.3",
+            "topology": {
+              "mtid": 0,
+              "topology_priority": 64,
+              "originating_max_metric": false,
+              "num_transit_capable_areas": 0,
+              "spf_timers": {
+                "initial_delay_ms": 50,
+                "min_hold_ms": 200,
+                "max_wait_ms": 5000
+              },
+              "areas": {
+                "BACKBONE(0)": {
+                  "spf_last_executed": "1w5d",
+                  "spf_executions": 327
+                }
+              }
+            }
+          },
+          "10": {
+            "router_id": "198.51.100.3",
+            "topology": {
+              "mtid": 0,
+              "topology_priority": 64,
+              "originating_max_metric": false,
+              "num_transit_capable_areas": 0,
+              "spf_timers": {
+                "initial_delay_ms": 50,
+                "min_hold_ms": 200,
+                "max_wait_ms": 5000
+              },
+              "areas": {
+                "BACKBONE(0)": {
+                  "spf_last_executed": "1w5d",
+                  "spf_executions": 325
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
