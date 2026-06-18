@@ -1,0 +1,76 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip bgp labels",
+  "schema": {
+    "name": "ShowIpBgpLabelsResult",
+    "fields": {
+      "prefixes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PrefixEntry",
+            "fields": {
+              "next_hops": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "LabelEntry",
+                    "fields": {
+                      "in_label": {
+                        "type": "str | int",
+                        "required": false
+                      },
+                      "out_label": {
+                        "type": "str | int",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show ip bgp labels output with wrapped network line",
+      "input": "Network          Next Hop      In label/Out label\n   192.0.2.1/32     192.0.2.1       nolabel/nolabel\n   192.0.2.2/32     192.0.2.2       nolabel/nolabel\n   192.0.2.3/32     0.0.0.0         nolabel/nolabel\n   192.0.2.4/32     192.0.2.4       nolabel/nolabel\n   198.51.100.200/32\n                   192.0.2.2       nolabel/nolabel\n",
+      "expected": {
+        "prefixes": {
+          "192.0.2.1/32": {
+            "next_hops": {
+              "192.0.2.1": {}
+            }
+          },
+          "192.0.2.2/32": {
+            "next_hops": {
+              "192.0.2.2": {}
+            }
+          },
+          "192.0.2.3/32": {
+            "next_hops": {
+              "0.0.0.0": {}
+            }
+          },
+          "192.0.2.4/32": {
+            "next_hops": {
+              "192.0.2.4": {}
+            }
+          },
+          "198.51.100.200/32": {
+            "next_hops": {
+              "192.0.2.2": {}
+            }
+          }
+        }
+      }
+    }
+  ]
+}
