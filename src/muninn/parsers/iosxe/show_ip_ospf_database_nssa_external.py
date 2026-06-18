@@ -113,7 +113,7 @@ def _try_forward_address(line: str, entry: dict[str, object]) -> bool:
     """Handle forward address with placeholder omission."""
     m = _FORWARD_ADDR_RE.match(line)
     if m:
-        if m.group(1) != "0.0.0.0":
+        if m.group(1) != "0.0.0.0":  # nosec B104
             entry["forward_address"] = m.group(1)
         return True
     return False
