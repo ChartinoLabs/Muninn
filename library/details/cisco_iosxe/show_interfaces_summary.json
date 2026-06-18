@@ -1,0 +1,275 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show interfaces summary",
+  "schema": {
+    "name": "ShowInterfacesSummaryResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceSummaryEntry",
+            "fields": {
+              "is_up": {
+                "type": "bool",
+                "required": true
+              },
+              "ihq": {
+                "type": "int",
+                "required": false
+              },
+              "iqd": {
+                "type": "int",
+                "required": false
+              },
+              "ohq": {
+                "type": "int",
+                "required": false
+              },
+              "oqd": {
+                "type": "int",
+                "required": false
+              },
+              "rx_rate_bps": {
+                "type": "int",
+                "required": false
+              },
+              "rx_rate_pps": {
+                "type": "int",
+                "required": false
+              },
+              "tx_rate_bps": {
+                "type": "int",
+                "required": false
+              },
+              "tx_rate_pps": {
+                "type": "int",
+                "required": false
+              },
+              "throttle_count": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show interfaces summary output with mix of up/down interfaces and sub-interfaces",
+      "input": " *: interface is up\n IHQ: pkts in input hold queue     IQD: pkts dropped from input queue\n OHQ: pkts in output hold queue    OQD: pkts dropped from output queue\n RXBS: rx rate (bits/sec)          RXPS: rx rate (pkts/sec)\n TXBS: tx rate (bits/sec)          TXPS: tx rate (pkts/sec)\n TRTL: throttle count\n\n  Interface                   IHQ       IQD       OHQ       OQD      RXBS      RXPS      TXBS      TXPS      TRTL\n-----------------------------------------------------------------------------------------------------------------\n  Vlan1                         0         0         0         0         0         0         0         0         0\n* GigabitEthernet0/0            0   1477690         0         0     16000        24      1000         1         0\n* GigabitEthernet1/0/1          0         0         0         0         0         0         0         0         0\n* Gi1/0/1.10                    -         -         -         -         -         -         -         -         -\n* Gi1/0/1.20                    -         -         -         -         -         -         -         -         -\n* GigabitEthernet1/0/2          0         0         0         0         0         0         0         0         0\n* Gi1/0/2.10                    -         -         -         -         -         -         -         -         -\n* Gi1/0/2.20                    -         -         -         -         -         -         -         -         -\n  GigabitEthernet1/0/3          0         0         0         0         0         0         0         0         0\n  GigabitEthernet1/0/4          0         0         0         0         0         0         0         0         0\n  GigabitEthernet1/0/5          0         0         0         0         0         0         0         0         0\n  GigabitEthernet1/0/6          0         0         0         0         0         0         0         0         0\n  GigabitEthernet1/0/7          0         0         0         0         0         0         0         0         0\n  GigabitEthernet1/0/8          0         0         0         0         0         0         0         0         0\n  GigabitEthernet1/0/9          0         0         0         0         0         0         0         0         0\n  GigabitEthernet1/0/10         0         0         0         0         0         0         0         0         0\n  GigabitEthernet1/0/11         0         0         0         0         0         0         0         0         0\n  GigabitEthernet1/0/12         0         0         0         0         0         0         0         0         0\n  GigabitEthernet1/0/13         0         0         0         0         0         0         0         0         0\n  GigabitEthernet1/0/14         0         0         0         0         0         0         0         0         0\n",
+      "expected": {
+        "interfaces": {
+          "Vlan1": {
+            "is_up": false,
+            "ihq": 0,
+            "iqd": 0,
+            "ohq": 0,
+            "oqd": 0,
+            "rx_rate_bps": 0,
+            "rx_rate_pps": 0,
+            "tx_rate_bps": 0,
+            "tx_rate_pps": 0,
+            "throttle_count": 0
+          },
+          "GigabitEthernet0/0": {
+            "is_up": true,
+            "ihq": 0,
+            "iqd": 1477690,
+            "ohq": 0,
+            "oqd": 0,
+            "rx_rate_bps": 16000,
+            "rx_rate_pps": 24,
+            "tx_rate_bps": 1000,
+            "tx_rate_pps": 1,
+            "throttle_count": 0
+          },
+          "GigabitEthernet1/0/1": {
+            "is_up": true,
+            "ihq": 0,
+            "iqd": 0,
+            "ohq": 0,
+            "oqd": 0,
+            "rx_rate_bps": 0,
+            "rx_rate_pps": 0,
+            "tx_rate_bps": 0,
+            "tx_rate_pps": 0,
+            "throttle_count": 0
+          },
+          "GigabitEthernet1/0/1.10": {
+            "is_up": true
+          },
+          "GigabitEthernet1/0/1.20": {
+            "is_up": true
+          },
+          "GigabitEthernet1/0/2": {
+            "is_up": true,
+            "ihq": 0,
+            "iqd": 0,
+            "ohq": 0,
+            "oqd": 0,
+            "rx_rate_bps": 0,
+            "rx_rate_pps": 0,
+            "tx_rate_bps": 0,
+            "tx_rate_pps": 0,
+            "throttle_count": 0
+          },
+          "GigabitEthernet1/0/2.10": {
+            "is_up": true
+          },
+          "GigabitEthernet1/0/2.20": {
+            "is_up": true
+          },
+          "GigabitEthernet1/0/3": {
+            "is_up": false,
+            "ihq": 0,
+            "iqd": 0,
+            "ohq": 0,
+            "oqd": 0,
+            "rx_rate_bps": 0,
+            "rx_rate_pps": 0,
+            "tx_rate_bps": 0,
+            "tx_rate_pps": 0,
+            "throttle_count": 0
+          },
+          "GigabitEthernet1/0/4": {
+            "is_up": false,
+            "ihq": 0,
+            "iqd": 0,
+            "ohq": 0,
+            "oqd": 0,
+            "rx_rate_bps": 0,
+            "rx_rate_pps": 0,
+            "tx_rate_bps": 0,
+            "tx_rate_pps": 0,
+            "throttle_count": 0
+          },
+          "GigabitEthernet1/0/5": {
+            "is_up": false,
+            "ihq": 0,
+            "iqd": 0,
+            "ohq": 0,
+            "oqd": 0,
+            "rx_rate_bps": 0,
+            "rx_rate_pps": 0,
+            "tx_rate_bps": 0,
+            "tx_rate_pps": 0,
+            "throttle_count": 0
+          },
+          "GigabitEthernet1/0/6": {
+            "is_up": false,
+            "ihq": 0,
+            "iqd": 0,
+            "ohq": 0,
+            "oqd": 0,
+            "rx_rate_bps": 0,
+            "rx_rate_pps": 0,
+            "tx_rate_bps": 0,
+            "tx_rate_pps": 0,
+            "throttle_count": 0
+          },
+          "GigabitEthernet1/0/7": {
+            "is_up": false,
+            "ihq": 0,
+            "iqd": 0,
+            "ohq": 0,
+            "oqd": 0,
+            "rx_rate_bps": 0,
+            "rx_rate_pps": 0,
+            "tx_rate_bps": 0,
+            "tx_rate_pps": 0,
+            "throttle_count": 0
+          },
+          "GigabitEthernet1/0/8": {
+            "is_up": false,
+            "ihq": 0,
+            "iqd": 0,
+            "ohq": 0,
+            "oqd": 0,
+            "rx_rate_bps": 0,
+            "rx_rate_pps": 0,
+            "tx_rate_bps": 0,
+            "tx_rate_pps": 0,
+            "throttle_count": 0
+          },
+          "GigabitEthernet1/0/9": {
+            "is_up": false,
+            "ihq": 0,
+            "iqd": 0,
+            "ohq": 0,
+            "oqd": 0,
+            "rx_rate_bps": 0,
+            "rx_rate_pps": 0,
+            "tx_rate_bps": 0,
+            "tx_rate_pps": 0,
+            "throttle_count": 0
+          },
+          "GigabitEthernet1/0/10": {
+            "is_up": false,
+            "ihq": 0,
+            "iqd": 0,
+            "ohq": 0,
+            "oqd": 0,
+            "rx_rate_bps": 0,
+            "rx_rate_pps": 0,
+            "tx_rate_bps": 0,
+            "tx_rate_pps": 0,
+            "throttle_count": 0
+          },
+          "GigabitEthernet1/0/11": {
+            "is_up": false,
+            "ihq": 0,
+            "iqd": 0,
+            "ohq": 0,
+            "oqd": 0,
+            "rx_rate_bps": 0,
+            "rx_rate_pps": 0,
+            "tx_rate_bps": 0,
+            "tx_rate_pps": 0,
+            "throttle_count": 0
+          },
+          "GigabitEthernet1/0/12": {
+            "is_up": false,
+            "ihq": 0,
+            "iqd": 0,
+            "ohq": 0,
+            "oqd": 0,
+            "rx_rate_bps": 0,
+            "rx_rate_pps": 0,
+            "tx_rate_bps": 0,
+            "tx_rate_pps": 0,
+            "throttle_count": 0
+          },
+          "GigabitEthernet1/0/13": {
+            "is_up": false,
+            "ihq": 0,
+            "iqd": 0,
+            "ohq": 0,
+            "oqd": 0,
+            "rx_rate_bps": 0,
+            "rx_rate_pps": 0,
+            "tx_rate_bps": 0,
+            "tx_rate_pps": 0,
+            "throttle_count": 0
+          },
+          "GigabitEthernet1/0/14": {
+            "is_up": false,
+            "ihq": 0,
+            "iqd": 0,
+            "ohq": 0,
+            "oqd": 0,
+            "rx_rate_bps": 0,
+            "rx_rate_pps": 0,
+            "tx_rate_bps": 0,
+            "tx_rate_pps": 0,
+            "throttle_count": 0
+          }
+        }
+      }
+    }
+  ]
+}
