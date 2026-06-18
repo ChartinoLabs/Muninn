@@ -1,0 +1,290 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip ospf <process-id>",
+  "schema": {
+    "name": "ShowIpOspfResult",
+    "fields": {
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "OspfProcessEntry",
+            "fields": {
+              "router_id": {
+                "type": "str",
+                "required": true
+              },
+              "vrf": {
+                "type": "str",
+                "required": false
+              },
+              "domain_id": {
+                "type": "str",
+                "required": false
+              },
+              "domain_id_type": {
+                "type": "str",
+                "required": false
+              },
+              "is_abr": {
+                "type": "bool",
+                "required": false
+              },
+              "is_asbr": {
+                "type": "bool",
+                "required": false
+              },
+              "bfd_enabled": {
+                "type": "bool",
+                "required": false
+              },
+              "reference_bandwidth_mbps": {
+                "type": "int",
+                "required": false
+              },
+              "spf_timers": {
+                "type": {
+                  "name": "SpfTimers",
+                  "fields": {
+                    "initial_delay_ms": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "min_hold_ms": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "max_wait_ms": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "lsa_throttle": {
+                "type": {
+                  "name": "LsaThrottle",
+                  "fields": {
+                    "initial_delay_ms": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "min_hold_ms": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "max_wait_ms": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "min_arrival_ms": {
+                      "type": "int",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "lsa_group_pacing_secs": {
+                "type": "int",
+                "required": false
+              },
+              "interface_flood_pacing_timer_ms": {
+                "type": "int",
+                "required": false
+              },
+              "retransmission_pacing_timer_ms": {
+                "type": "int",
+                "required": false
+              },
+              "incremental_spf_enabled": {
+                "type": "bool",
+                "required": false
+              },
+              "per_prefix_distribution_enabled": {
+                "type": "bool",
+                "required": false
+              },
+              "event_log_enabled": {
+                "type": "bool",
+                "required": false
+              },
+              "event_log_max_events": {
+                "type": "int",
+                "required": false
+              },
+              "event_log_mode": {
+                "type": "str",
+                "required": false
+              },
+              "num_external_lsa": {
+                "type": "int",
+                "required": false
+              },
+              "external_lsa_checksum": {
+                "type": "str",
+                "required": false
+              },
+              "num_opaque_as_lsa": {
+                "type": "int",
+                "required": false
+              },
+              "opaque_as_lsa_checksum": {
+                "type": "str",
+                "required": false
+              },
+              "num_dcbitless_external_opaque_as_lsa": {
+                "type": "int",
+                "required": false
+              },
+              "num_donotage_external_opaque_as_lsa": {
+                "type": "int",
+                "required": false
+              },
+              "num_areas": {
+                "type": "int",
+                "required": false
+              },
+              "num_normal_areas": {
+                "type": "int",
+                "required": false
+              },
+              "num_stub_areas": {
+                "type": "int",
+                "required": false
+              },
+              "num_nssa_areas": {
+                "type": "int",
+                "required": false
+              },
+              "num_transit_capable_areas": {
+                "type": "int",
+                "required": false
+              },
+              "external_flood_list_length": {
+                "type": "int",
+                "required": false
+              },
+              "nsf_ietf_helper": {
+                "type": "bool",
+                "required": false
+              },
+              "nsf_cisco_helper": {
+                "type": "bool",
+                "required": false
+              },
+              "adjacency_limit_initial": {
+                "type": "int",
+                "required": false
+              },
+              "adjacency_limit_max": {
+                "type": "int",
+                "required": false
+              },
+              "max_lsa_allowed": {
+                "type": "int",
+                "required": false
+              },
+              "current_non_self_lsa": {
+                "type": "int",
+                "required": false
+              },
+              "max_lsa_warning_threshold_pct": {
+                "type": "int",
+                "required": false
+              },
+              "max_lsa_ignore_time_mins": {
+                "type": "int",
+                "required": false
+              },
+              "max_lsa_reset_time_mins": {
+                "type": "int",
+                "required": false
+              },
+              "max_lsa_ignore_count_allowed": {
+                "type": "int",
+                "required": false
+              },
+              "max_lsa_current_ignore_count": {
+                "type": "int",
+                "required": false
+              },
+              "areas": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "AreaEntry",
+                    "fields": {
+                      "area_type": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "num_interfaces": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "num_loopback_interfaces": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "authentication": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "spf_last_executed": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "spf_executions": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "num_lsa": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "lsa_checksum_sum": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "num_opaque_link_lsa": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "opaque_link_lsa_checksum": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "num_dcbitless_lsa": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "num_indication_lsa": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "num_donotage_lsa": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "flood_list_length": {
+                        "type": "int",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}
