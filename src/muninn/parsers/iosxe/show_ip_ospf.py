@@ -594,6 +594,7 @@ def _parse_process(
 
 
 @register(OS.CISCO_IOSXE, "show ip ospf")
+@register(OS.CISCO_IOSXE, r"show ip ospf (?P<process_id>\d+)")
 class ShowIpOspfParser(BaseParser[ShowIpOspfResult]):
     """Parser for 'show ip ospf' command.
 
