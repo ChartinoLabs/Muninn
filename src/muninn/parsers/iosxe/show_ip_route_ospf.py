@@ -22,7 +22,7 @@ _TYPE_MAP: dict[str, str] = {
 # --- Regex patterns ---
 
 _GATEWAY_NOT_SET_RE = re.compile(r"^Gateway of last resort is not set\s*$")
-_GATEWAY_RE = re.compile(r"^Gateway of last resort is (\S+) to network (\S+)\s*$")
+_GATEWAY_RE = re.compile(r"^Gateway of last resort is \S+ to network \S+\s*$")
 
 _VRF_RE = re.compile(r"^Routing Table:\s*(\S+)\s*$")
 
