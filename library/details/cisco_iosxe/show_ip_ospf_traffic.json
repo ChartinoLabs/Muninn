@@ -1,0 +1,582 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip ospf traffic",
+  "schema": {
+    "name": "ShowIpOspfTrafficResult",
+    "fields": {
+      "global_counters": {
+        "type": {
+          "name": "GlobalCounters",
+          "fields": {
+            "last_clearing": {
+              "type": "str",
+              "required": true
+            },
+            "received_total": {
+              "type": "int",
+              "required": true
+            },
+            "received_checksum_errors": {
+              "type": "int",
+              "required": true
+            },
+            "received_hello": {
+              "type": "int",
+              "required": true
+            },
+            "received_database_desc": {
+              "type": "int",
+              "required": true
+            },
+            "received_link_state_req": {
+              "type": "int",
+              "required": true
+            },
+            "received_link_state_updates": {
+              "type": "int",
+              "required": true
+            },
+            "received_link_state_acks": {
+              "type": "int",
+              "required": true
+            },
+            "sent_total": {
+              "type": "int",
+              "required": true
+            },
+            "sent_hello": {
+              "type": "int",
+              "required": true
+            },
+            "sent_database_desc": {
+              "type": "int",
+              "required": true
+            },
+            "sent_link_state_req": {
+              "type": "int",
+              "required": true
+            },
+            "sent_link_state_updates": {
+              "type": "int",
+              "required": true
+            },
+            "sent_link_state_acks": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ProcessQueueStats",
+            "fields": {
+              "router_id": {
+                "type": "str",
+                "required": true
+              },
+              "input_queue": {
+                "type": {
+                  "name": "QueueStats",
+                  "fields": {
+                    "limit": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "drops": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "max_delay": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "max_size": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "max_size_invalid": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "max_size_hello": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "max_size_db_des": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "max_size_ls_req": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "max_size_ls_upd": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "max_size_ls_ack": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "current_size": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "current_size_invalid": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "current_size_hello": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "current_size_db_des": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "current_size_ls_req": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "current_size_ls_upd": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "current_size_ls_ack": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": true
+              },
+              "update_queue": {
+                "type": {
+                  "type": "ref",
+                  "name": "QueueStats"
+                },
+                "required": true
+              },
+              "output_queue": {
+                "type": {
+                  "type": "ref",
+                  "name": "QueueStats"
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceStats",
+            "fields": {
+              "last_clearing": {
+                "type": "str",
+                "required": true
+              },
+              "rx_invalid": {
+                "type": {
+                  "name": "InterfacePacketCounters",
+                  "fields": {
+                    "packets": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "bytes": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": true
+              },
+              "rx_hello": {
+                "type": {
+                  "type": "ref",
+                  "name": "InterfacePacketCounters"
+                },
+                "required": true
+              },
+              "rx_db_des": {
+                "type": {
+                  "type": "ref",
+                  "name": "InterfacePacketCounters"
+                },
+                "required": true
+              },
+              "rx_ls_req": {
+                "type": {
+                  "type": "ref",
+                  "name": "InterfacePacketCounters"
+                },
+                "required": true
+              },
+              "rx_ls_upd": {
+                "type": {
+                  "type": "ref",
+                  "name": "InterfacePacketCounters"
+                },
+                "required": true
+              },
+              "rx_ls_ack": {
+                "type": {
+                  "type": "ref",
+                  "name": "InterfacePacketCounters"
+                },
+                "required": true
+              },
+              "tx_failed": {
+                "type": {
+                  "type": "ref",
+                  "name": "InterfacePacketCounters"
+                },
+                "required": true
+              },
+              "tx_hello": {
+                "type": {
+                  "type": "ref",
+                  "name": "InterfacePacketCounters"
+                },
+                "required": true
+              },
+              "tx_db_des": {
+                "type": {
+                  "type": "ref",
+                  "name": "InterfacePacketCounters"
+                },
+                "required": true
+              },
+              "tx_ls_req": {
+                "type": {
+                  "type": "ref",
+                  "name": "InterfacePacketCounters"
+                },
+                "required": true
+              },
+              "tx_ls_upd": {
+                "type": {
+                  "type": "ref",
+                  "name": "InterfacePacketCounters"
+                },
+                "required": true
+              },
+              "tx_ls_ack": {
+                "type": {
+                  "type": "ref",
+                  "name": "InterfacePacketCounters"
+                },
+                "required": true
+              },
+              "header_errors": {
+                "type": {
+                  "name": "InterfaceHeaderErrors",
+                  "fields": {
+                    "length": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "instance_id": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "checksum": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "auth_type": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "version": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "no_virtual_link": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "area_mismatch": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "no_sham_link": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "self": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "duplicate_id": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "hello": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "mtu_mismatch": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "nbr_ignored": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "lls": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "unknown_neighbor": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "auth_failure": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "deleted": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "length_mismatch": {
+                      "type": "int",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "lsa_errors": {
+                "type": {
+                  "name": "InterfaceLsaErrors",
+                  "fields": {
+                    "type": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "length": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "data": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "checksum": {
+                      "type": "int",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic OSPF traffic statistics with global counters, one process queue, and two interfaces",
+      "input": "OSPF statistics:\n  Last clearing of OSPF traffic counters never\n  Rcvd: 1844481 total, 0 checksum errors\n        1808469 hello, 43 database desc, 18 link state req\n        20458 link state updates, 15463 link state acks\n  Sent: 1865644 total\n        1828640 hello, 58 database desc, 12 link state req\n        18732 link state updates, 18221 link state acks\n\n\n\n            OSPF Router with ID (192.0.2.3) (Process ID 1)\n\nOSPF queue statistics for process ID 1:\n\n                   InputQ     UpdateQ    OutputQ\n  Limit            0          200        0\n  Drops            0          0          0\n  Max delay  21         1          1\n  Max size         2          2          2\n    Invalid        0          0          0\n    Hello          2          0          0\n    DB des         0          0          1\n    LS req         0          1          1\n    LS upd         0          1          0\n    LS ack         0          0          0\n  Current size     0          0          0\n    Invalid        0          0          0\n    Hello          0          0          0\n    DB des         0          0          0\n    LS req         0          0          0\n    LS upd         0          0          0\n    LS ack         0          0          0\n\n\nInterface statistics:\n\n\n    Interface GigabitEthernet1/0/1\n\nLast clearing of interface traffic counters never\n\nOSPF packets received/sent\n  Type          Packets              Bytes\n  RX Invalid    0                    0\n  RX Hello      435418               20900044\n  RX DB des     11                   412\n  RX LS req     5                    348\n  RX LS upd     3064                 301008\n  RX LS ack     4151                 211924\n  TX Failed     0                    0\n  TX Hello      435502               34840160\n  TX DB des     14                   1132\n  TX LS req     3                    156\n  TX LS upd     4532                 424552\n  TX LS ack     3009                 216312\n\nOSPF header errors\n  Length 0, Instance ID 0, Checksum 0, Auth Type 0,\n  Version 0, No Virtual Link 0, Area Mismatch 0,\n  No Sham Link 0, Self 0, Duplicate ID 0,\n  Hello 0, MTU Mismatch 0, Nbr Ignored 0,\n  LLS 0, Unknown Neighbor 0, Auth Failure 0,\n  Deleted 0, Length Mismatch 0\n\nOSPF LSA errors\n  Type 0, Length 0, Data 0, Checksum 0\n\n\n    Interface GigabitEthernet1/0/2\n\nLast clearing of interface traffic counters never\n\nOSPF packets received/sent\n  Type          Packets              Bytes\n  RX Invalid    0                    0\n  RX Hello      921105               44213040\n  RX DB des     16                   852\n  RX LS req     7                    532\n  RX LS upd     10218                985440\n  RX LS ack     6531                 417984\n  TX Failed     0                    0\n  TX Hello      921188               73695040\n  TX DB des     22                   1720\n  TX LS req     5                    260\n  TX LS upd     8420                 802600\n  TX LS ack     6302                 478552\n\nOSPF header errors\n  Length 0, Instance ID 0, Checksum 0, Auth Type 0,\n  Version 0, No Virtual Link 0, Area Mismatch 0,\n  No Sham Link 0, Self 0, Duplicate ID 0,\n  Hello 0, MTU Mismatch 0, Nbr Ignored 0,\n  LLS 0, Unknown Neighbor 0, Auth Failure 0,\n  Deleted 0, Length Mismatch 0\n\nOSPF LSA errors\n  Type 0, Length 0, Data 0, Checksum 0\n",
+      "expected": {
+        "global_counters": {
+          "last_clearing": "never",
+          "received_total": 1844481,
+          "received_checksum_errors": 0,
+          "received_hello": 1808469,
+          "received_database_desc": 43,
+          "received_link_state_req": 18,
+          "received_link_state_updates": 20458,
+          "received_link_state_acks": 15463,
+          "sent_total": 1865644,
+          "sent_hello": 1828640,
+          "sent_database_desc": 58,
+          "sent_link_state_req": 12,
+          "sent_link_state_updates": 18732,
+          "sent_link_state_acks": 18221
+        },
+        "processes": {
+          "1": {
+            "router_id": "192.0.2.3",
+            "input_queue": {
+              "limit": 0,
+              "drops": 0,
+              "max_delay": 21,
+              "max_size": 2,
+              "max_size_invalid": 0,
+              "max_size_hello": 2,
+              "max_size_db_des": 0,
+              "max_size_ls_req": 0,
+              "max_size_ls_upd": 0,
+              "max_size_ls_ack": 0,
+              "current_size": 0,
+              "current_size_invalid": 0,
+              "current_size_hello": 0,
+              "current_size_db_des": 0,
+              "current_size_ls_req": 0,
+              "current_size_ls_upd": 0,
+              "current_size_ls_ack": 0
+            },
+            "update_queue": {
+              "limit": 200,
+              "drops": 0,
+              "max_delay": 1,
+              "max_size": 2,
+              "max_size_invalid": 0,
+              "max_size_hello": 0,
+              "max_size_db_des": 0,
+              "max_size_ls_req": 1,
+              "max_size_ls_upd": 1,
+              "max_size_ls_ack": 0,
+              "current_size": 0,
+              "current_size_invalid": 0,
+              "current_size_hello": 0,
+              "current_size_db_des": 0,
+              "current_size_ls_req": 0,
+              "current_size_ls_upd": 0,
+              "current_size_ls_ack": 0
+            },
+            "output_queue": {
+              "limit": 0,
+              "drops": 0,
+              "max_delay": 1,
+              "max_size": 2,
+              "max_size_invalid": 0,
+              "max_size_hello": 0,
+              "max_size_db_des": 1,
+              "max_size_ls_req": 1,
+              "max_size_ls_upd": 0,
+              "max_size_ls_ack": 0,
+              "current_size": 0,
+              "current_size_invalid": 0,
+              "current_size_hello": 0,
+              "current_size_db_des": 0,
+              "current_size_ls_req": 0,
+              "current_size_ls_upd": 0,
+              "current_size_ls_ack": 0
+            }
+          }
+        },
+        "interfaces": {
+          "GigabitEthernet1/0/1": {
+            "last_clearing": "never",
+            "rx_invalid": {
+              "packets": 0,
+              "bytes": 0
+            },
+            "rx_hello": {
+              "packets": 435418,
+              "bytes": 20900044
+            },
+            "rx_db_des": {
+              "packets": 11,
+              "bytes": 412
+            },
+            "rx_ls_req": {
+              "packets": 5,
+              "bytes": 348
+            },
+            "rx_ls_upd": {
+              "packets": 3064,
+              "bytes": 301008
+            },
+            "rx_ls_ack": {
+              "packets": 4151,
+              "bytes": 211924
+            },
+            "tx_failed": {
+              "packets": 0,
+              "bytes": 0
+            },
+            "tx_hello": {
+              "packets": 435502,
+              "bytes": 34840160
+            },
+            "tx_db_des": {
+              "packets": 14,
+              "bytes": 1132
+            },
+            "tx_ls_req": {
+              "packets": 3,
+              "bytes": 156
+            },
+            "tx_ls_upd": {
+              "packets": 4532,
+              "bytes": 424552
+            },
+            "tx_ls_ack": {
+              "packets": 3009,
+              "bytes": 216312
+            }
+          },
+          "GigabitEthernet1/0/2": {
+            "last_clearing": "never",
+            "rx_invalid": {
+              "packets": 0,
+              "bytes": 0
+            },
+            "rx_hello": {
+              "packets": 921105,
+              "bytes": 44213040
+            },
+            "rx_db_des": {
+              "packets": 16,
+              "bytes": 852
+            },
+            "rx_ls_req": {
+              "packets": 7,
+              "bytes": 532
+            },
+            "rx_ls_upd": {
+              "packets": 10218,
+              "bytes": 985440
+            },
+            "rx_ls_ack": {
+              "packets": 6531,
+              "bytes": 417984
+            },
+            "tx_failed": {
+              "packets": 0,
+              "bytes": 0
+            },
+            "tx_hello": {
+              "packets": 921188,
+              "bytes": 73695040
+            },
+            "tx_db_des": {
+              "packets": 22,
+              "bytes": 1720
+            },
+            "tx_ls_req": {
+              "packets": 5,
+              "bytes": 260
+            },
+            "tx_ls_upd": {
+              "packets": 8420,
+              "bytes": 802600
+            },
+            "tx_ls_ack": {
+              "packets": 6302,
+              "bytes": 478552
+            }
+          }
+        }
+      }
+    }
+  ]
+}
