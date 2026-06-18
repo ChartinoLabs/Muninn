@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 from muninn.tags import ParserTag
 
@@ -58,7 +59,7 @@ _LS_SEQ_RE = re.compile(r"^\s*LS Seq Number:\s*(\S+)\s*$")
 _CHECKSUM_RE = re.compile(r"^\s*Checksum:\s*(\S+)\s*$")
 _LENGTH_RE = re.compile(r"^\s*Length:\s*(\d+)\s*$")
 _NETWORK_MASK_RE = re.compile(r"^\s*Network Mask:\s*/(\d+)\s*$")
-_NETWORK_MASK_DOTTED_RE = re.compile(r"^\s*Network Mask:\s*(\d+\.\d+\.\d+\.\d+)\s*$")
+_NETWORK_MASK_DOTTED_RE = re.compile(rf"^\s*Network Mask:\s*({IPV4_ADDRESS})\s*$")
 _METRIC_TYPE_RE = re.compile(
     r"^\s*Metric Type:\s*(\d+)\s*"
     r"\(.*\)\s*$"
