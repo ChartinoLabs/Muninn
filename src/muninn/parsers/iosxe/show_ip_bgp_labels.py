@@ -31,19 +31,22 @@ _CONTINUATION_RE = re.compile(
 
 
 class LabelEntry(TypedDict):
-    """Schema for a single BGP label entry keyed by next hop."""
+    """Schema for a single next-hop label binding."""
 
     in_label: NotRequired[str | int]
     out_label: NotRequired[str | int]
 
 
+class PrefixEntry(TypedDict):
+    """Schema for a single BGP prefix with its next-hop label bindings."""
+
+    next_hops: dict[str, LabelEntry]
+
+
 class ShowIpBgpLabelsResult(TypedDict):
-    """Schema for 'show ip bgp labels' parsed output.
+    """Schema for 'show ip bgp labels' parsed output."""
 
-    Outer dict is keyed by network prefix, inner dict by next hop.
-    """
-
-    routes: dict[str, dict[str, LabelEntry]]
+    prefixes: dict[str, PrefixEntry]
 
 
 def _parse_label(value: str) -> str | int:
@@ -68,16 +71,16 @@ def _build_label_entry(in_label_str: str, out_label_str: str) -> LabelEntry:
 
 def _try_route_line(
     line: str,
-    routes: dict[str, dict[str, LabelEntry]],
+    prefixes: dict[str, dict[str, LabelEntry]],
 ) -> str | None:
     """Try to parse a full route line. Return network if matched."""
     m = _ROUTE_RE.match(line)
     if not m:
         return None
     network = m.group("network")
-    if network not in routes:
-        routes[network] = {}
-    routes[network][m.group("next_hop")] = _build_label_entry(
+    if network not in prefixes:
+        prefixes[network] = {}
+    prefixes[network][m.group("next_hop")] = _build_label_entry(
         m.group("in_label"), m.group("out_label")
     )
     return network
@@ -85,16 +88,16 @@ def _try_route_line(
 
 def _try_continuation_line(
     line: str,
-    routes: dict[str, dict[str, LabelEntry]],
+    prefixes: dict[str, dict[str, LabelEntry]],
     current_network: str,
 ) -> bool:
     """Try to parse a continuation line. Return True if matched."""
     m = _CONTINUATION_RE.match(line)
     if not m:
         return False
-    if current_network not in routes:
-        routes[current_network] = {}
-    routes[current_network][m.group("next_hop")] = _build_label_entry(
+    if current_network not in prefixes:
+        prefixes[current_network] = {}
+    prefixes[current_network][m.group("next_hop")] = _build_label_entry(
         m.group("in_label"), m.group("out_label")
     )
     return True
@@ -109,7 +112,7 @@ class ShowIpBgpLabelsParser(BaseParser[ShowIpBgpLabelsResult]):
     @classmethod
     def parse(cls, output: str) -> ShowIpBgpLabelsResult:
         """Parse 'show ip bgp labels' output into structured data."""
-        routes: dict[str, dict[str, LabelEntry]] = {}
+        prefixes: dict[str, dict[str, LabelEntry]] = {}
         current_network: str | None = None
         in_table = False
 
@@ -122,7 +125,7 @@ class ShowIpBgpLabelsParser(BaseParser[ShowIpBgpLabelsResult]):
             if not line.strip():
                 continue
 
-            network = _try_route_line(line, routes)
+            network = _try_route_line(line, prefixes)
             if network is not None:
                 current_network = network
                 continue
@@ -133,10 +136,16 @@ class ShowIpBgpLabelsParser(BaseParser[ShowIpBgpLabelsResult]):
                 continue
 
             if current_network is not None:
-                _try_continuation_line(line, routes, current_network)
+                _try_continuation_line(line, prefixes, current_network)
 
-        if not routes:
+        if not prefixes:
             msg = "No BGP label routes found in output"
             raise ValueError(msg)
 
-        return cast(ShowIpBgpLabelsResult, {"routes": routes})
+        result: dict[str, dict[str, PrefixEntry]] = {
+            "prefixes": {
+                network: {"next_hops": next_hops}
+                for network, next_hops in prefixes.items()
+            }
+        }
+        return cast(ShowIpBgpLabelsResult, result)
