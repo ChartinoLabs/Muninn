@@ -1,0 +1,49 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show etherchannel load-balance",
+  "schema": {
+    "name": "ShowEtherchannelLoadBalanceResult",
+    "fields": {
+      "method": {
+        "type": "str",
+        "required": true
+      },
+      "per_protocol": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ProtocolEntry",
+            "fields": {
+              "address": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show etherchannel load-balance output with src-mac method",
+      "input": "EtherChannel Load-Balancing Configuration:\n        src-mac\n\nEtherChannel Load-Balancing Addresses Used Per-Protocol:\nNon-IP: Source MAC address\n  IPv4: Source MAC address\n  IPv6: Source MAC address\n",
+      "expected": {
+        "method": "src-mac",
+        "per_protocol": {
+          "Non-IP": {
+            "address": "Source MAC address"
+          },
+          "IPv4": {
+            "address": "Source MAC address"
+          },
+          "IPv6": {
+            "address": "Source MAC address"
+          }
+        }
+      }
+    }
+  ]
+}
