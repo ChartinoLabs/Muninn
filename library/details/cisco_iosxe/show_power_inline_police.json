@@ -1,0 +1,258 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show power inline police",
+  "schema": {
+    "name": "ShowPowerInlinePoliceResult",
+    "fields": {
+      "modules": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ModuleEntry",
+            "fields": {
+              "available": {
+                "type": "float",
+                "required": true
+              },
+              "used": {
+                "type": "float",
+                "required": true
+              },
+              "remaining": {
+                "type": "float",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfacePoliceEntry",
+            "fields": {
+              "admin_state": {
+                "type": "str",
+                "required": true
+              },
+              "oper_state": {
+                "type": "str",
+                "required": true
+              },
+              "admin_police": {
+                "type": "str",
+                "required": false
+              },
+              "oper_police": {
+                "type": "str",
+                "required": false
+              },
+              "cutoff_power": {
+                "type": "float",
+                "required": false
+              },
+              "oper_power": {
+                "type": "float",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output from show power inline police with module summary and all ports in off/none state",
+      "input": "Module   Available     Used     Remaining\n          (Watts)     (Watts)    (Watts)\n------   ---------   --------   ---------\n1           857.0        0.0       857.0\nInterface Admin  Oper       Admin      Oper       Cutoff Oper\n          State  State      Police     Police     Power  Power\n--------- ------ ---------- ---------- ---------- ------ -----\nGi1/0/1   auto   off        none       n/a        n/a    n/a\nGi1/0/2   auto   off        none       n/a        n/a    n/a\nGi1/0/3   auto   off        none       n/a        n/a    n/a\nGi1/0/4   auto   off        none       n/a        n/a    n/a\nGi1/0/5   auto   off        none       n/a        n/a    n/a\nGi1/0/6   auto   off        none       n/a        n/a    n/a\nGi1/0/7   auto   off        none       n/a        n/a    n/a\nGi1/0/8   auto   off        none       n/a        n/a    n/a\nGi1/0/9   auto   off        none       n/a        n/a    n/a\nGi1/0/10  auto   off        none       n/a        n/a    n/a\nGi1/0/11  auto   off        none       n/a        n/a    n/a\nGi1/0/12  auto   off        none       n/a        n/a    n/a\nGi1/0/13  auto   off        none       n/a        n/a    n/a\nGi1/0/14  auto   off        none       n/a        n/a    n/a\nGi1/0/15  auto   off        none       n/a        n/a    n/a\nGi1/0/16  auto   off        none       n/a        n/a    n/a\nGi1/0/17  auto   off        none       n/a        n/a    n/a\nGi1/0/18  auto   off        none       n/a        n/a    n/a\nGi1/0/19  auto   off        none       n/a        n/a    n/a\nGi1/0/20  auto   off        none       n/a        n/a    n/a\nGi1/0/21  auto   off        none       n/a        n/a    n/a\nGi1/0/22  auto   off        none       n/a        n/a    n/a\nGi1/0/23  auto   off        none       n/a        n/a    n/a\nGi1/0/24  auto   off        none       n/a        n/a    n/a\nGi1/0/25  auto   off        none       n/a        n/a    n/a\nGi1/0/26  auto   off        none       n/a        n/a    n/a\nGi1/0/27  auto   off        none       n/a        n/a    n/a\nGi1/0/28  auto   off        none       n/a        n/a    n/a\nGi1/0/29  auto   off        none       n/a        n/a    n/a\nGi1/0/30  auto   off        none       n/a        n/a    n/a\nGi1/0/31  auto   off        none       n/a        n/a    n/a\nGi1/0/32  auto   off        none       n/a        n/a    n/a\nGi1/0/33  auto   off        none       n/a        n/a    n/a\nGi1/0/34  auto   off        none       n/a        n/a    n/a\nGi1/0/35  auto   off        none       n/a        n/a    n/a\nGi1/0/36  auto   off        none       n/a        n/a    n/a\nGi1/0/37  auto   off        none       n/a        n/a    n/a\nGi1/0/38  auto   off        none       n/a        n/a    n/a\nGi1/0/39  auto   off        none       n/a        n/a    n/a\nGi1/0/40  auto   off        none       n/a        n/a    n/a\nGi1/0/41  auto   off        none       n/a        n/a    n/a\nGi1/0/42  auto   off        none       n/a        n/a    n/a\nGi1/0/43  auto   off        none       n/a        n/a    n/a\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet1/0/1": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/2": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/3": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/4": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/5": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/6": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/7": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/8": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/9": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/10": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/11": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/12": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/13": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/14": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/15": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/16": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/17": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/18": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/19": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/20": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/21": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/22": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/23": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/24": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/25": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/26": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/27": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/28": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/29": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/30": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/31": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/32": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/33": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/34": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/35": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/36": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/37": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/38": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/39": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/40": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/41": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/42": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          },
+          "GigabitEthernet1/0/43": {
+            "admin_state": "auto",
+            "oper_state": "off"
+          }
+        },
+        "modules": {
+          "1": {
+            "available": 857.0,
+            "used": 0.0,
+            "remaining": 857.0
+          }
+        }
+      }
+    }
+  ]
+}
