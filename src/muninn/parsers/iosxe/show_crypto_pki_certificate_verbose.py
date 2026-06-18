@@ -439,6 +439,7 @@ def _extract_trustpoint(entry: dict) -> str:
 
 
 @register(OS.CISCO_IOSXE, "show crypto pki certificate verbose")
+@register(OS.CISCO_IOSXE, "show crypto pki certificates verbose")
 class ShowCryptoPkiCertificateVerboseParser(
     BaseParser["ShowCryptoPkiCertificateVerboseResult"],
 ):
