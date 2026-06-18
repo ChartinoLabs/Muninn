@@ -48,7 +48,7 @@ class InterfaceStatsEntry(TypedDict):
     """Stats for a single interface.
 
     Each key in ``switching_paths`` is a normalized switching-path name
-    (e.g. ``"Processor"``, ``"Route cache"``, ``"Distributed cache"``,
+    (e.g. ``"Processor"``, ``"Route Cache"``, ``"Distributed Cache"``,
     ``"Total"``).
     """
 
