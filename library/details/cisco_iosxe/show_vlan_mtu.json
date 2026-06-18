@@ -1,0 +1,58 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show vlan mtu",
+  "schema": {
+    "name": "ShowVlanMtuResult",
+    "fields": {
+      "vlans": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VlanMtuEntry",
+            "fields": {
+              "vlan_id": {
+                "type": "int",
+                "required": true
+              },
+              "svi_mtu": {
+                "type": "int",
+                "required": false
+              },
+              "min_mtu": {
+                "type": "int",
+                "required": true
+              },
+              "max_mtu": {
+                "type": "int",
+                "required": true
+              },
+              "mtu_mismatch": {
+                "type": "bool",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Live device output from TAC-S1 with single VLAN entry",
+      "input": "VLAN    SVI_MTU    MinMTU(port)      MaxMTU(port)     MTU_Mismatch\n---- ------------- ----------------  ---------------  ------------\n1    1500          1500              1500              No\n",
+      "expected": {
+        "vlans": {
+          "1": {
+            "vlan_id": 1,
+            "min_mtu": 1500,
+            "max_mtu": 1500,
+            "mtu_mismatch": false,
+            "svi_mtu": 1500
+          }
+        }
+      }
+    }
+  ]
+}
