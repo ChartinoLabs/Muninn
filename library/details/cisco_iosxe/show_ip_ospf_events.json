@@ -1,0 +1,333 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip ospf events",
+  "schema": {
+    "name": "ShowIpOspfEventsResult",
+    "fields": {
+      "router_id": {
+        "type": "str",
+        "required": true
+      },
+      "process_id": {
+        "type": "int",
+        "required": true
+      },
+      "events": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "EventEntry",
+            "fields": {
+              "timestamp": {
+                "type": "str",
+                "required": true
+              },
+              "action": {
+                "type": "str",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "lsa_type": {
+                "type": "int",
+                "required": true
+              },
+              "lsid": {
+                "type": "str",
+                "required": true
+              },
+              "adv_router": {
+                "type": "str",
+                "required": false
+              },
+              "sequence": {
+                "type": "str",
+                "required": true
+              },
+              "age": {
+                "type": "int",
+                "required": true
+              },
+              "area": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show ip ospf events output with mixed Rcv and Generate events",
+      "input": "OSPF Router with ID (192.0.2.3) (Process ID 1)\n\n1    Jun 17 23:51:32.265: Rcv Unchanged Type-1 LSA, LSID 192.0.2.1, Adv-Rtr\n192.0.2.1, Seq# 800003CE, Age 1, Area 0\n2    Jun 17 23:50:18.065: Generate Changed Type-2 LSA, LSID 10.0.3.2, Seq#\n80000318, Age 0, Area 0\n3    Jun 17 23:50:18.065: Generate Changed Type-1 LSA, LSID 192.0.2.3, Seq#\n80000850, Age 0, Area 0\n4    Jun 17 23:43:31.107: Rcv Unchanged Type-2 LSA, LSID 10.0.2.2, Adv-Rtr\n192.0.2.4, Seq# 8000080D, Age 1, Area 0\n5    Jun 17 23:43:31.107: Rcv Unchanged Type-1 LSA, LSID 192.0.2.4, Adv-Rtr\n192.0.2.4, Seq# 800003CC, Age 1, Area 0\n6    Jun 17 23:39:05.115: Rcv Unchanged Type-2 LSA, LSID 10.0.1.2, Adv-Rtr\n192.0.2.2, Seq# 80000332, Age 2, Area 0\n7    Jun 17 23:39:05.115: Rcv Unchanged Type-1 LSA, LSID 192.0.2.2, Adv-Rtr\n192.0.2.2, Seq# 800008FA, Age 2, Area 0\n8    Jun 17 23:17:30.409: Rcv Unchanged Type-1 LSA, LSID 192.0.2.1, Adv-Rtr\n192.0.2.1, Seq# 800003CD, Age 1, Area 0\n9    Jun 17 23:16:51.023: Generate Changed Type-2 LSA, LSID 10.0.3.2, Seq#\n80000317, Age 0, Area 0\n10   Jun 17 23:16:51.023: Generate Changed Type-1 LSA, LSID 192.0.2.3, Seq#\n8000084F, Age 0, Area 0\n11   Jun 17 23:09:29.251: Rcv Unchanged Type-2 LSA, LSID 10.0.2.2, Adv-Rtr\n192.0.2.4, Seq# 8000080C, Age 1, Area 0\n12   Jun 17 23:09:29.251: Rcv Unchanged Type-1 LSA, LSID 192.0.2.4, Adv-Rtr\n192.0.2.4, Seq# 800003CB, Age 1, Area 0\n13   Jun 17 23:05:43.195: Rcv Unchanged Type-2 LSA, LSID 10.0.1.2, Adv-Rtr\n192.0.2.2, Seq# 80000331, Age 2, Area 0\n14   Jun 17 23:05:43.195: Rcv Unchanged Type-1 LSA, LSID 192.0.2.2, Adv-Rtr\n192.0.2.2, Seq# 800008F9, Age 2, Area 0\n15   Jun 17 22:43:29.576: Rcv Unchanged Type-1 LSA, LSID 192.0.2.1, Adv-Rtr\n192.0.2.1, Seq# 800003CC, Age 1, Area 0\n16   Jun 17 22:43:13.742: Generate Changed Type-2 LSA, LSID 10.0.3.2, Seq#\n80000316, Age 0, Area 0\n17   Jun 17 22:43:13.742: Generate Changed Type-1 LSA, LSID 192.0.2.3, Seq#\n8000084E, Age 0, Area 0\n18   Jun 17 22:35:26.372: Rcv Unchanged Type-2 LSA, LSID 10.0.2.2, Adv-Rtr\n192.0.2.4, Seq# 8000080B, Age 1, Area 0\n19   Jun 17 22:35:26.372: Rcv Unchanged Type-1 LSA, LSID 192.0.2.4, Adv-Rtr\n192.0.2.4, Seq# 800003CA, Age 1, Area 0\n20   Jun 17 22:32:05.915: Rcv Unchanged Type-2 LSA, LSID 10.0.1.2, Adv-Rtr\n192.0.2.2, Seq# 80000330, Age 2, Area 0\n21   Jun 17 22:32:05.915: Rcv Unchanged Type-1 LSA, LSID 192.0.2.2, Adv-Rtr\n192.0.2.2, Seq# 800008F8, Age 2, Area 0\n22   Jun 17 22:10:02.063: Generate Changed Type-2 LSA, LSID 10.0.3.2, Seq#\n80000315, Age 0, Area 0\n23   Jun 17 22:10:02.063: Generate Changed Type-1 LSA, LSID 192.0.2.3, Seq#\n8000084D, Age 0, Area 0\n24   Jun 17 22:09:58.440: Rcv Unchanged Type-1 LSA, LSID 192.0.2.1, Adv-Rtr\n192.0.2.1, Seq# 800003CB, Age 1, Area 0\n",
+      "expected": {
+        "router_id": "192.0.2.3",
+        "process_id": 1,
+        "events": {
+          "1": {
+            "timestamp": "Jun 17 23:51:32.265",
+            "action": "Rcv",
+            "status": "Unchanged",
+            "lsa_type": 1,
+            "lsid": "192.0.2.1",
+            "sequence": "800003CE",
+            "age": 1,
+            "area": "0",
+            "adv_router": "192.0.2.1"
+          },
+          "2": {
+            "timestamp": "Jun 17 23:50:18.065",
+            "action": "Generate",
+            "status": "Changed",
+            "lsa_type": 2,
+            "lsid": "10.0.3.2",
+            "sequence": "80000318",
+            "age": 0,
+            "area": "0"
+          },
+          "3": {
+            "timestamp": "Jun 17 23:50:18.065",
+            "action": "Generate",
+            "status": "Changed",
+            "lsa_type": 1,
+            "lsid": "192.0.2.3",
+            "sequence": "80000850",
+            "age": 0,
+            "area": "0"
+          },
+          "4": {
+            "timestamp": "Jun 17 23:43:31.107",
+            "action": "Rcv",
+            "status": "Unchanged",
+            "lsa_type": 2,
+            "lsid": "10.0.2.2",
+            "sequence": "8000080D",
+            "age": 1,
+            "area": "0",
+            "adv_router": "192.0.2.4"
+          },
+          "5": {
+            "timestamp": "Jun 17 23:43:31.107",
+            "action": "Rcv",
+            "status": "Unchanged",
+            "lsa_type": 1,
+            "lsid": "192.0.2.4",
+            "sequence": "800003CC",
+            "age": 1,
+            "area": "0",
+            "adv_router": "192.0.2.4"
+          },
+          "6": {
+            "timestamp": "Jun 17 23:39:05.115",
+            "action": "Rcv",
+            "status": "Unchanged",
+            "lsa_type": 2,
+            "lsid": "10.0.1.2",
+            "sequence": "80000332",
+            "age": 2,
+            "area": "0",
+            "adv_router": "192.0.2.2"
+          },
+          "7": {
+            "timestamp": "Jun 17 23:39:05.115",
+            "action": "Rcv",
+            "status": "Unchanged",
+            "lsa_type": 1,
+            "lsid": "192.0.2.2",
+            "sequence": "800008FA",
+            "age": 2,
+            "area": "0",
+            "adv_router": "192.0.2.2"
+          },
+          "8": {
+            "timestamp": "Jun 17 23:17:30.409",
+            "action": "Rcv",
+            "status": "Unchanged",
+            "lsa_type": 1,
+            "lsid": "192.0.2.1",
+            "sequence": "800003CD",
+            "age": 1,
+            "area": "0",
+            "adv_router": "192.0.2.1"
+          },
+          "9": {
+            "timestamp": "Jun 17 23:16:51.023",
+            "action": "Generate",
+            "status": "Changed",
+            "lsa_type": 2,
+            "lsid": "10.0.3.2",
+            "sequence": "80000317",
+            "age": 0,
+            "area": "0"
+          },
+          "10": {
+            "timestamp": "Jun 17 23:16:51.023",
+            "action": "Generate",
+            "status": "Changed",
+            "lsa_type": 1,
+            "lsid": "192.0.2.3",
+            "sequence": "8000084F",
+            "age": 0,
+            "area": "0"
+          },
+          "11": {
+            "timestamp": "Jun 17 23:09:29.251",
+            "action": "Rcv",
+            "status": "Unchanged",
+            "lsa_type": 2,
+            "lsid": "10.0.2.2",
+            "sequence": "8000080C",
+            "age": 1,
+            "area": "0",
+            "adv_router": "192.0.2.4"
+          },
+          "12": {
+            "timestamp": "Jun 17 23:09:29.251",
+            "action": "Rcv",
+            "status": "Unchanged",
+            "lsa_type": 1,
+            "lsid": "192.0.2.4",
+            "sequence": "800003CB",
+            "age": 1,
+            "area": "0",
+            "adv_router": "192.0.2.4"
+          },
+          "13": {
+            "timestamp": "Jun 17 23:05:43.195",
+            "action": "Rcv",
+            "status": "Unchanged",
+            "lsa_type": 2,
+            "lsid": "10.0.1.2",
+            "sequence": "80000331",
+            "age": 2,
+            "area": "0",
+            "adv_router": "192.0.2.2"
+          },
+          "14": {
+            "timestamp": "Jun 17 23:05:43.195",
+            "action": "Rcv",
+            "status": "Unchanged",
+            "lsa_type": 1,
+            "lsid": "192.0.2.2",
+            "sequence": "800008F9",
+            "age": 2,
+            "area": "0",
+            "adv_router": "192.0.2.2"
+          },
+          "15": {
+            "timestamp": "Jun 17 22:43:29.576",
+            "action": "Rcv",
+            "status": "Unchanged",
+            "lsa_type": 1,
+            "lsid": "192.0.2.1",
+            "sequence": "800003CC",
+            "age": 1,
+            "area": "0",
+            "adv_router": "192.0.2.1"
+          },
+          "16": {
+            "timestamp": "Jun 17 22:43:13.742",
+            "action": "Generate",
+            "status": "Changed",
+            "lsa_type": 2,
+            "lsid": "10.0.3.2",
+            "sequence": "80000316",
+            "age": 0,
+            "area": "0"
+          },
+          "17": {
+            "timestamp": "Jun 17 22:43:13.742",
+            "action": "Generate",
+            "status": "Changed",
+            "lsa_type": 1,
+            "lsid": "192.0.2.3",
+            "sequence": "8000084E",
+            "age": 0,
+            "area": "0"
+          },
+          "18": {
+            "timestamp": "Jun 17 22:35:26.372",
+            "action": "Rcv",
+            "status": "Unchanged",
+            "lsa_type": 2,
+            "lsid": "10.0.2.2",
+            "sequence": "8000080B",
+            "age": 1,
+            "area": "0",
+            "adv_router": "192.0.2.4"
+          },
+          "19": {
+            "timestamp": "Jun 17 22:35:26.372",
+            "action": "Rcv",
+            "status": "Unchanged",
+            "lsa_type": 1,
+            "lsid": "192.0.2.4",
+            "sequence": "800003CA",
+            "age": 1,
+            "area": "0",
+            "adv_router": "192.0.2.4"
+          },
+          "20": {
+            "timestamp": "Jun 17 22:32:05.915",
+            "action": "Rcv",
+            "status": "Unchanged",
+            "lsa_type": 2,
+            "lsid": "10.0.1.2",
+            "sequence": "80000330",
+            "age": 2,
+            "area": "0",
+            "adv_router": "192.0.2.2"
+          },
+          "21": {
+            "timestamp": "Jun 17 22:32:05.915",
+            "action": "Rcv",
+            "status": "Unchanged",
+            "lsa_type": 1,
+            "lsid": "192.0.2.2",
+            "sequence": "800008F8",
+            "age": 2,
+            "area": "0",
+            "adv_router": "192.0.2.2"
+          },
+          "22": {
+            "timestamp": "Jun 17 22:10:02.063",
+            "action": "Generate",
+            "status": "Changed",
+            "lsa_type": 2,
+            "lsid": "10.0.3.2",
+            "sequence": "80000315",
+            "age": 0,
+            "area": "0"
+          },
+          "23": {
+            "timestamp": "Jun 17 22:10:02.063",
+            "action": "Generate",
+            "status": "Changed",
+            "lsa_type": 1,
+            "lsid": "192.0.2.3",
+            "sequence": "8000084D",
+            "age": 0,
+            "area": "0"
+          },
+          "24": {
+            "timestamp": "Jun 17 22:09:58.440",
+            "action": "Rcv",
+            "status": "Unchanged",
+            "lsa_type": 1,
+            "lsid": "192.0.2.1",
+            "sequence": "800003CB",
+            "age": 1,
+            "area": "0",
+            "adv_router": "192.0.2.1"
+          }
+        }
+      }
+    }
+  ]
+}
