@@ -1,0 +1,225 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip ospf database database-summary",
+  "schema": null,
+  "examples": [
+    {
+      "name": "Basic output with two OSPF processes, each with a single area",
+      "input": "OSPF Router with ID (192.0.2.3) (Process ID 1)\n\nArea 0 database summary\n  LSA Type      Count    Delete   Maxage\n  Router        4        0        0\n  Network       3        0        0\n  Summary Net   0        0        0\n  Summary ASBR  0        0        0\n  Type-7 Ext    0        0        0\n    Prefixes redistributed in Type-7  0\n  Opaque Link   0        0        0\n  Opaque Area   0        0        0\n  Subtotal      7        0        0\n\nProcess 1 database summary\n  LSA Type      Count    Delete   Maxage\n  Router        4        0        0\n  Network       3        0        0\n  Summary Net   0        0        0\n  Summary ASBR  0        0        0\n  Type-7 Ext    0        0        0\n  Opaque Link   0        0        0\n  Opaque Area   0        0        0\n  Type-5 Ext    0        0        0\n      Prefixes redistributed in Type-5  0\n  Opaque AS     0        0        0\n  Total         7        0        0\n  Non-self      5\n\n            OSPF Router with ID (203.0.113.3) (Process ID 20)\n\nArea 0 database summary\n  LSA Type      Count    Delete   Maxage\n  Router        4        0        0\n  Network       4        0        0\n  Summary Net   0        0        0\n  Summary ASBR  0        0        0\n  Type-7 Ext    0        0        0\n    Prefixes redistributed in Type-7  0\n  Opaque Link   0        0        0\n  Opaque Area   0        0        0\n  Subtotal      8        0        0\n\nProcess 20 database summary\n  LSA Type      Count    Delete   Maxage\n  Router        4        0        0\n  Network       4        0        0\n  Summary Net   0        0        0\n  Summary ASBR  0        0        0\n  Type-7 Ext    0        0        0\n  Opaque Link   0        0        0\n  Opaque Area   0        0        0\n  Type-5 Ext    0        0        0\n      Prefixes redistributed in Type-5  0\n  Opaque AS     0        0        0\n  Total         8        0        0\n  Non-self      6\n",
+      "expected": {
+        "1": {
+          "router_id": "192.0.2.3",
+          "areas": {
+            "0": {
+              "lsa_types": {
+                "Router": {
+                  "count": 4,
+                  "delete": 0,
+                  "maxage": 0
+                },
+                "Network": {
+                  "count": 3,
+                  "delete": 0,
+                  "maxage": 0
+                },
+                "Summary Net": {
+                  "count": 0,
+                  "delete": 0,
+                  "maxage": 0
+                },
+                "Summary ASBR": {
+                  "count": 0,
+                  "delete": 0,
+                  "maxage": 0
+                },
+                "Type-7 Ext": {
+                  "count": 0,
+                  "delete": 0,
+                  "maxage": 0
+                },
+                "Opaque Link": {
+                  "count": 0,
+                  "delete": 0,
+                  "maxage": 0
+                },
+                "Opaque Area": {
+                  "count": 0,
+                  "delete": 0,
+                  "maxage": 0
+                }
+              },
+              "subtotal": {
+                "count": 7,
+                "delete": 0,
+                "maxage": 0
+              },
+              "prefixes_redistributed_type_7": 0
+            }
+          },
+          "process_summary": {
+            "lsa_types": {
+              "Router": {
+                "count": 4,
+                "delete": 0,
+                "maxage": 0
+              },
+              "Network": {
+                "count": 3,
+                "delete": 0,
+                "maxage": 0
+              },
+              "Summary Net": {
+                "count": 0,
+                "delete": 0,
+                "maxage": 0
+              },
+              "Summary ASBR": {
+                "count": 0,
+                "delete": 0,
+                "maxage": 0
+              },
+              "Type-7 Ext": {
+                "count": 0,
+                "delete": 0,
+                "maxage": 0
+              },
+              "Opaque Link": {
+                "count": 0,
+                "delete": 0,
+                "maxage": 0
+              },
+              "Opaque Area": {
+                "count": 0,
+                "delete": 0,
+                "maxage": 0
+              },
+              "Type-5 Ext": {
+                "count": 0,
+                "delete": 0,
+                "maxage": 0
+              },
+              "Opaque AS": {
+                "count": 0,
+                "delete": 0,
+                "maxage": 0
+              }
+            },
+            "total": {
+              "count": 7,
+              "delete": 0,
+              "maxage": 0
+            },
+            "prefixes_redistributed_type_5": 0,
+            "non_self": 5
+          }
+        },
+        "20": {
+          "router_id": "203.0.113.3",
+          "areas": {
+            "0": {
+              "lsa_types": {
+                "Router": {
+                  "count": 4,
+                  "delete": 0,
+                  "maxage": 0
+                },
+                "Network": {
+                  "count": 4,
+                  "delete": 0,
+                  "maxage": 0
+                },
+                "Summary Net": {
+                  "count": 0,
+                  "delete": 0,
+                  "maxage": 0
+                },
+                "Summary ASBR": {
+                  "count": 0,
+                  "delete": 0,
+                  "maxage": 0
+                },
+                "Type-7 Ext": {
+                  "count": 0,
+                  "delete": 0,
+                  "maxage": 0
+                },
+                "Opaque Link": {
+                  "count": 0,
+                  "delete": 0,
+                  "maxage": 0
+                },
+                "Opaque Area": {
+                  "count": 0,
+                  "delete": 0,
+                  "maxage": 0
+                }
+              },
+              "subtotal": {
+                "count": 8,
+                "delete": 0,
+                "maxage": 0
+              },
+              "prefixes_redistributed_type_7": 0
+            }
+          },
+          "process_summary": {
+            "lsa_types": {
+              "Router": {
+                "count": 4,
+                "delete": 0,
+                "maxage": 0
+              },
+              "Network": {
+                "count": 4,
+                "delete": 0,
+                "maxage": 0
+              },
+              "Summary Net": {
+                "count": 0,
+                "delete": 0,
+                "maxage": 0
+              },
+              "Summary ASBR": {
+                "count": 0,
+                "delete": 0,
+                "maxage": 0
+              },
+              "Type-7 Ext": {
+                "count": 0,
+                "delete": 0,
+                "maxage": 0
+              },
+              "Opaque Link": {
+                "count": 0,
+                "delete": 0,
+                "maxage": 0
+              },
+              "Opaque Area": {
+                "count": 0,
+                "delete": 0,
+                "maxage": 0
+              },
+              "Type-5 Ext": {
+                "count": 0,
+                "delete": 0,
+                "maxage": 0
+              },
+              "Opaque AS": {
+                "count": 0,
+                "delete": 0,
+                "maxage": 0
+              }
+            },
+            "total": {
+              "count": 8,
+              "delete": 0,
+              "maxage": 0
+            },
+            "prefixes_redistributed_type_5": 0,
+            "non_self": 6
+          }
+        }
+      }
+    }
+  ]
+}
