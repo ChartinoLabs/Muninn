@@ -5,12 +5,13 @@ from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS
 from muninn.registry import register
 from muninn.tags import ParserTag
 
 # Header line: OSPF Router with ID (X.X.X.X) (Process ID N)
 _PROCESS_HEADER_RE = re.compile(
-    r"OSPF Router with ID \((?P<router_id>\S+)\)"
+    rf"OSPF Router with ID \((?P<router_id>{IPV4_ADDRESS})\)"
     r" \(Process ID (?P<process_id>\d+)\)"
 )
 
