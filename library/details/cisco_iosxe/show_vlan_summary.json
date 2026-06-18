@@ -1,0 +1,32 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show vlan summary",
+  "schema": {
+    "name": "ShowVlanSummaryResult",
+    "fields": {
+      "existing_vlans": {
+        "type": "int",
+        "required": true
+      },
+      "vtp_vlans": {
+        "type": "int",
+        "required": false
+      },
+      "extended_vlans": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show vlan summary output with 5 VLANs",
+      "input": "Number of existing VLANs               : 5\n Number of existing VTP VLANs          : 5\n Number of existing extended VLANS     : 0\n",
+      "expected": {
+        "existing_vlans": 5,
+        "vtp_vlans": 5,
+        "extended_vlans": 0
+      }
+    }
+  ]
+}
