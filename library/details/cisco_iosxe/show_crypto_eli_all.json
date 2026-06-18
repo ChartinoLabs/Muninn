@@ -1,0 +1,299 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show crypto eli all",
+  "schema": {
+    "name": "ShowCryptoEliAllResult",
+    "fields": {
+      "hardware_encryption": {
+        "type": "str",
+        "required": true
+      },
+      "number_of_crypto_engines": {
+        "type": "int",
+        "required": true
+      },
+      "engines": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "CryptoEngineEntry",
+            "fields": {
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "capabilities": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              },
+              "ike_sessions": {
+                "type": {
+                  "name": "SessionCounters",
+                  "fields": {
+                    "active": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "max": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "failed": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "created": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "ikev2_sessions": {
+                "type": {
+                  "type": "ref",
+                  "name": "SessionCounters"
+                },
+                "required": false
+              },
+              "ipsec_sessions": {
+                "type": {
+                  "type": "ref",
+                  "name": "SessionCounters"
+                },
+                "required": false
+              },
+              "dh_sessions": {
+                "type": {
+                  "name": "DHSessionCounters",
+                  "fields": {
+                    "active": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "active_phase1": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "active_phase2": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "max": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "failed": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "created": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "ssl_support": {
+                "type": "bool",
+                "required": false
+              },
+              "ssl_versions": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              },
+              "max_ssl_connections": {
+                "type": "int",
+                "required": false
+              },
+              "ssl_namespace": {
+                "type": "int",
+                "required": false
+              },
+              "cipher_suites": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "list",
+                    "items": "str"
+                  }
+                },
+                "required": false
+              },
+              "dh_usage": {
+                "type": {
+                  "name": "DHUsage",
+                  "fields": {
+                    "in_use": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "freeing": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "free": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "dh_pregeneration": {
+        "type": {
+          "name": "DHPregeneration",
+          "fields": {
+            "count": {
+              "type": "int",
+              "required": true
+            },
+            "lifetime_seconds": {
+              "type": "int",
+              "required": true
+            },
+            "calculations": {
+              "type": {
+                "name": "DHCalculations",
+                "fields": {
+                  "p1": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "ss": {
+                    "type": "int",
+                    "required": true
+                  }
+                }
+              },
+              "required": false
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show crypto eli all output with two engines and SSL details",
+      "input": "Hardware Encryption : INACTIVE\n Number of crypto engines = 2\n\n CryptoEngine Software Crypto Engine details: state = Active\n Capability    : IPPCP, DES, 3DES, AES, SEAL, GCM, GMAC, Manual IPsec key,\nOSPFv3 manual keying, RSA, P-256, P-384, P-521, IPv6, GDOI, FAILCLOSE, HA\n\n IKE-Session   :     0 active,   100 max, 0 failed, 0 created\n IKEv2-Session :     0 active,   100 max, 0 failed, 0 created\n DH            :     3 active(3/0),    50 max, 0 failed, 3 created\n IPSec-Session :     0 active,  1000 max, 0 failed, 0 created\n SSL support   : Yes\n SSL versions  : SSLv3.0, TLSv1.0, DTLSv1.0, DTLS-pre-rfc,\n                TLSv1.1, TLSv1.2\n Max SSL connec: 1000\n SSL namespace : 1\n\n SSLv3.0 suites:\n                TLS_RSA_WITH_3DES_EDE_CBC_SHA\n                TLS_RSA_WITH_AES_128_CBC_SHA\n                TLS_RSA_WITH_AES_256_CBC_SHA\n TLSv1.0 suites:\n                TLS_RSA_WITH_3DES_EDE_CBC_SHA\n                TLS_RSA_WITH_AES_128_CBC_SHA\n                TLS_RSA_WITH_AES_256_CBC_SHA\n DTLSv1.0 suite:\n                TLS_RSA_WITH_3DES_EDE_CBC_SHA\n                TLS_RSA_WITH_AES_128_CBC_SHA\n                TLS_RSA_WITH_AES_256_CBC_SHA\n\n CryptoEngine act2 details: state = Active\n Capability    : RSA\n\n\n Number of DH's pregenerated = 4\n DH lifetime = 86400 seconds\n DH calculations: P1 3, SS 0\n\ncrypto engine 1:Software Crypto Engine\n DH in use/freeing/free - 3/0/47\n",
+      "expected": {
+        "hardware_encryption": "INACTIVE",
+        "number_of_crypto_engines": 2,
+        "engines": {
+          "Software Crypto Engine": {
+            "state": "Active",
+            "capabilities": [
+              "IPPCP",
+              "DES",
+              "3DES",
+              "AES",
+              "SEAL",
+              "GCM",
+              "GMAC",
+              "Manual IPsec key",
+              "OSPFv3 manual keying",
+              "RSA",
+              "P-256",
+              "P-384",
+              "P-521",
+              "IPv6",
+              "GDOI",
+              "FAILCLOSE",
+              "HA"
+            ],
+            "ike_sessions": {
+              "active": 0,
+              "max": 100,
+              "failed": 0,
+              "created": 0
+            },
+            "ikev2_sessions": {
+              "active": 0,
+              "max": 100,
+              "failed": 0,
+              "created": 0
+            },
+            "dh_sessions": {
+              "active": 3,
+              "active_phase1": 3,
+              "active_phase2": 0,
+              "max": 50,
+              "failed": 0,
+              "created": 3
+            },
+            "ipsec_sessions": {
+              "active": 0,
+              "max": 1000,
+              "failed": 0,
+              "created": 0
+            },
+            "ssl_support": true,
+            "ssl_versions": [
+              "SSLv3.0",
+              "TLSv1.0",
+              "DTLSv1.0",
+              "DTLS-pre-rfc",
+              "TLSv1.1",
+              "TLSv1.2"
+            ],
+            "max_ssl_connections": 1000,
+            "ssl_namespace": 1,
+            "cipher_suites": {
+              "SSLv3.0": [
+                "TLS_RSA_WITH_3DES_EDE_CBC_SHA",
+                "TLS_RSA_WITH_AES_128_CBC_SHA",
+                "TLS_RSA_WITH_AES_256_CBC_SHA"
+              ],
+              "TLSv1.0": [
+                "TLS_RSA_WITH_3DES_EDE_CBC_SHA",
+                "TLS_RSA_WITH_AES_128_CBC_SHA",
+                "TLS_RSA_WITH_AES_256_CBC_SHA"
+              ],
+              "DTLSv1.0": [
+                "TLS_RSA_WITH_3DES_EDE_CBC_SHA",
+                "TLS_RSA_WITH_AES_128_CBC_SHA",
+                "TLS_RSA_WITH_AES_256_CBC_SHA"
+              ]
+            },
+            "dh_usage": {
+              "in_use": 3,
+              "freeing": 0,
+              "free": 47
+            }
+          },
+          "act2": {
+            "state": "Active",
+            "capabilities": [
+              "RSA"
+            ]
+          }
+        },
+        "dh_pregeneration": {
+          "count": 4,
+          "lifetime_seconds": 86400,
+          "calculations": {
+            "p1": 3,
+            "ss": 0
+          }
+        }
+      }
+    }
+  ]
+}
