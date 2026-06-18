@@ -4,6 +4,97 @@ All notable changes to Muninn are documented in this file.
 
 <!-- towncrier release notes start -->
 
+## 0.4.0 - 2026-06-17
+
+### Added Parsers
+
+- Added parser support for `show boot system` on Cisco IOS-XE. ([#985](https://github.com/ChartinoLabs/Muninn/pull/985))
+- Added parser support for `show cdp interface` on Cisco IOS-XE. ([#986](https://github.com/ChartinoLabs/Muninn/pull/986))
+- Added parser support for `show crypto ipsec profile` on Cisco IOS-XE. ([#987](https://github.com/ChartinoLabs/Muninn/pull/987))
+- Added parser support for `show crypto ipsec sa count` on Cisco IOS-XE. ([#988](https://github.com/ChartinoLabs/Muninn/pull/988))
+- Added parser support for `show crypto isakmp key` on Cisco IOS-XE. ([#989](https://github.com/ChartinoLabs/Muninn/pull/989))
+- Added parser support for `show crypto isakmp policy` on Cisco IOS-XE. ([#990](https://github.com/ChartinoLabs/Muninn/pull/990))
+- Added parser support for `show crypto isakmp sa` on Cisco IOS-XE. ([#991](https://github.com/ChartinoLabs/Muninn/pull/991))
+- Added parser support for `show crypto isakmp sa count` on Cisco IOS-XE. ([#992](https://github.com/ChartinoLabs/Muninn/pull/992))
+- Added parser support for `show crypto key mypubkey rsa` on Cisco IOS-XE. ([#993](https://github.com/ChartinoLabs/Muninn/pull/993))
+- Added parser support for `show errdisable detect` on Cisco IOS-XE. ([#994](https://github.com/ChartinoLabs/Muninn/pull/994))
+- Added parser support for `show etherchannel summary` on Cisco IOS-XE. ([#995](https://github.com/ChartinoLabs/Muninn/pull/995))
+- Added parser support for `show hosts summary` on Cisco IOS-XE. ([#996](https://github.com/ChartinoLabs/Muninn/pull/996))
+- Added parser support for `show interfaces counters` on Cisco IOS-XE. ([#997](https://github.com/ChartinoLabs/Muninn/pull/997))
+- Added parser support for `show interfaces status` on Cisco IOS-XE. ([#998](https://github.com/ChartinoLabs/Muninn/pull/998))
+- Added parser support for `show ip http server status` on Cisco IOS-XE. ([#999](https://github.com/ChartinoLabs/Muninn/pull/999))
+- Added parser support for `show ip route summary` on Cisco IOS-XE. ([#1000](https://github.com/ChartinoLabs/Muninn/pull/1000))
+- Added parser support for `show ip route vrf * summary` on Cisco IOS-XE. ([#1001](https://github.com/ChartinoLabs/Muninn/pull/1001))
+- Added parser support for `show ip sla authentication` on Cisco IOS-XE. ([#1002](https://github.com/ChartinoLabs/Muninn/pull/1002))
+- Added parser support for `show ip sla responder` on Cisco IOS-XE. ([#1003](https://github.com/ChartinoLabs/Muninn/pull/1003))
+- Added parser support for `show ip sla statistics` on Cisco IOS-XE. ([#1004](https://github.com/ChartinoLabs/Muninn/pull/1004))
+- Added parser support for `show ip sla summary` on Cisco IOS-XE. ([#1005](https://github.com/ChartinoLabs/Muninn/pull/1005))
+- Added parser support for `show ip ssh` on Cisco IOS-XE. ([#1006](https://github.com/ChartinoLabs/Muninn/pull/1006))
+- Added parser support for `show license summary` on Cisco IOS-XE. ([#1007](https://github.com/ChartinoLabs/Muninn/pull/1007))
+- Added parser support for `show line` on Cisco IOS-XE. ([#1008](https://github.com/ChartinoLabs/Muninn/pull/1008))
+- Added parser support for `show lldp` on Cisco IOS-XE. ([#1009](https://github.com/ChartinoLabs/Muninn/pull/1009))
+- Added parser support for `show lldp interface` on Cisco IOS-XE. ([#1010](https://github.com/ChartinoLabs/Muninn/pull/1010))
+- Added parser support for `show mac address-table count` on Cisco IOS-XE. ([#1011](https://github.com/ChartinoLabs/Muninn/pull/1011))
+- Added parser support for `show macdb summary` on Cisco IOS-XE. ([#1012](https://github.com/ChartinoLabs/Muninn/pull/1012))
+- Added parser support for `show memory platform` on Cisco IOS-XE. ([#1013](https://github.com/ChartinoLabs/Muninn/pull/1013))
+- Added parser support for `show mka policy` on Cisco IOS-XE. ([#1014](https://github.com/ChartinoLabs/Muninn/pull/1014))
+- Added parser support for `show mka sessions` on Cisco IOS-XE. ([#1015](https://github.com/ChartinoLabs/Muninn/pull/1015))
+- Added parser support for `show mka statistics` on Cisco IOS-XE. ([#1016](https://github.com/ChartinoLabs/Muninn/pull/1016))
+- Added parser support for `show ntp associations` on Cisco IOS-XE. ([#1017](https://github.com/ChartinoLabs/Muninn/pull/1017))
+- Added parser support for `show platform hardware qfp active datapath utilization summary` on Cisco IOS-XE. ([#1018](https://github.com/ChartinoLabs/Muninn/pull/1018))
+- Added parser support for `show processes memory platform sorted` on Cisco IOS-XE. ([#1019](https://github.com/ChartinoLabs/Muninn/pull/1019))
+- Added parser support for `show spanning-tree detail` on Cisco IOS-XE. ([#1020](https://github.com/ChartinoLabs/Muninn/pull/1020))
+- Added parser support for `show spanning-tree summary` on Cisco IOS-XE. ([#1021](https://github.com/ChartinoLabs/Muninn/pull/1021))
+- Added parser support for `show users` on Cisco IOS-XE. ([#1022](https://github.com/ChartinoLabs/Muninn/pull/1022))
+- Added parser support for `show users wide` on Cisco IOS-XE. ([#1023](https://github.com/ChartinoLabs/Muninn/pull/1023))
+- Added parser support for `show vlan brief` on Cisco IOS-XE. ([#1024](https://github.com/ChartinoLabs/Muninn/pull/1024))
+- Added parser support for `show vlans` on Cisco IOS-XE. ([#1025](https://github.com/ChartinoLabs/Muninn/pull/1025))
+- Added parser support for `show vtp counters` on Cisco IOS-XE. ([#1026](https://github.com/ChartinoLabs/Muninn/pull/1026))
+- Added parser support for `show vtp status` on Cisco IOS-XE. ([#1027](https://github.com/ChartinoLabs/Muninn/pull/1027))
+- Added parser support for `show controllers ethernet-controller` on Cisco IOS-XE. ([#1028](https://github.com/ChartinoLabs/Muninn/pull/1028))
+- Added parser support for `show processes cpu sorted` on Cisco IOS-XE. ([#1029](https://github.com/ChartinoLabs/Muninn/pull/1029))
+- Added parser support for `dir` and `dir <filesystem>` on Cisco IOS. ([#1030](https://github.com/ChartinoLabs/Muninn/pull/1030))
+- Added parser support for `dir flash:` on Cisco IOS (covered by stacked `dir <filesystem>` registration). ([#1031](https://github.com/ChartinoLabs/Muninn/pull/1031))
+- Added parser support for `show aaa method-lists accounting` on Cisco IOS. ([#1032](https://github.com/ChartinoLabs/Muninn/pull/1032))
+- Added parser support for `show aaa method-lists authentication` on Cisco IOS. ([#1033](https://github.com/ChartinoLabs/Muninn/pull/1033))
+- Added parser support for `show aaa method-lists authorization` on Cisco IOS. ([#1034](https://github.com/ChartinoLabs/Muninn/pull/1034))
+- Added parser support for `show boot` on Cisco IOS. ([#1035](https://github.com/ChartinoLabs/Muninn/pull/1035))
+- Added parser support for `show cdp` on Cisco IOS. ([#1036](https://github.com/ChartinoLabs/Muninn/pull/1036))
+- Added parser support for `show cdp interface` on Cisco IOS. ([#1037](https://github.com/ChartinoLabs/Muninn/pull/1037))
+- Added parser support for `show class-map` on Cisco IOS. ([#1038](https://github.com/ChartinoLabs/Muninn/pull/1038))
+- Added parser support for `show crypto key mypubkey rsa` on Cisco IOS. ([#1039](https://github.com/ChartinoLabs/Muninn/pull/1039))
+- Added parser support for `show debug condition` on Cisco IOS. ([#1040](https://github.com/ChartinoLabs/Muninn/pull/1040))
+- Added parser support for `show errdisable detect` on Cisco IOS. ([#1041](https://github.com/ChartinoLabs/Muninn/pull/1041))
+- Added parser support for `show errdisable flap-values` on Cisco IOS. ([#1042](https://github.com/ChartinoLabs/Muninn/pull/1042))
+- Added parser support for `show errdisable recovery` on Cisco IOS. ([#1043](https://github.com/ChartinoLabs/Muninn/pull/1043))
+- Added parser support for `show hosts` on Cisco IOS. ([#1044](https://github.com/ChartinoLabs/Muninn/pull/1044))
+- Added parser support for `show interfaces status` on Cisco IOS. ([#1045](https://github.com/ChartinoLabs/Muninn/pull/1045))
+- Added parser support for `show interfaces switchport` on Cisco IOS. ([#1046](https://github.com/ChartinoLabs/Muninn/pull/1046))
+- Added parser support for `show ip default-gateway` on Cisco IOS. ([#1047](https://github.com/ChartinoLabs/Muninn/pull/1047))
+- Added parser support for `show ip ssh` on Cisco IOS. ([#1048](https://github.com/ChartinoLabs/Muninn/pull/1048))
+- Added parser support for `show line` on Cisco IOS. ([#1049](https://github.com/ChartinoLabs/Muninn/pull/1049))
+- Added parser support for `show line console 0` on Cisco IOS. ([#1050](https://github.com/ChartinoLabs/Muninn/pull/1050))
+- Added parser support for `show lldp` on Cisco IOS. ([#1051](https://github.com/ChartinoLabs/Muninn/pull/1051))
+- Added parser support for `show lldp interface` on Cisco IOS. ([#1052](https://github.com/ChartinoLabs/Muninn/pull/1052))
+- Added parser support for `show mac address-table count` on Cisco IOS. ([#1053](https://github.com/ChartinoLabs/Muninn/pull/1053))
+- Added parser support for `show ntp associations` on Cisco IOS. ([#1054](https://github.com/ChartinoLabs/Muninn/pull/1054))
+- Added parser support for `show processes cpu sorted` on Cisco IOS. ([#1055](https://github.com/ChartinoLabs/Muninn/pull/1055))
+- Added parser support for `show snmp view` on Cisco IOS. ([#1056](https://github.com/ChartinoLabs/Muninn/pull/1056))
+- Added parser support for `show spanning-tree inconsistentports` on Cisco IOS. ([#1058](https://github.com/ChartinoLabs/Muninn/pull/1058))
+- Added parser support for `show spanning-tree summary` on Cisco IOS. ([#1059](https://github.com/ChartinoLabs/Muninn/pull/1059))
+- Added parser support for `show users wide` on Cisco IOS. ([#1060](https://github.com/ChartinoLabs/Muninn/pull/1060))
+- Added parser support for `show vtp counters` on Cisco IOS. ([#1061](https://github.com/ChartinoLabs/Muninn/pull/1061))
+- Added parser support for `show vtp interface` on Cisco IOS. ([#1062](https://github.com/ChartinoLabs/Muninn/pull/1062))
+- Added parser support for `show arp summary` on Cisco IOS-XE. ([#1144](https://github.com/ChartinoLabs/Muninn/pull/1144))
+
+### Internal
+
+- Relax mainline dependency version floors to true minimums, pin dev dependencies to exact versions, and add CI job to test lowest dependency bounds. ([#1161](https://github.com/ChartinoLabs/Muninn/pull/1161))
+- Centralized user-facing OS display names on each `OperatingSystem` subclass via a new `display_name` ClassVar. The docs site catalog now sources display names from these declarations instead of a hardcoded JS map, ensuring new platforms render with proper names (e.g. "Palo Alto PAN-OS") rather than internal slugs.
+- Parser library page now opens parser details in a modal dialog instead of an inline row expansion. Eliminates cursor-lag caused by table-layer recompositing on a 349-row table, and adds search input debouncing, batched row insertion, and a delegated click handler for additional responsiveness.
+- Updated Supported Platforms table and parser library OS labels to include Arista EOS, Juniper Junos, Palo Alto PAN-OS, Nokia SR OS, and Linux.
+
+
 ## 0.3.0 - 2026-05-09
 
 ### Added Parsers
