@@ -1,0 +1,92 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show redundancy state",
+  "schema": {
+    "name": "ShowRedundancyStateResult",
+    "fields": {
+      "my_state": {
+        "type": "str",
+        "required": true
+      },
+      "peer_state": {
+        "type": "str",
+        "required": true
+      },
+      "mode": {
+        "type": "str",
+        "required": true
+      },
+      "unit": {
+        "type": "str",
+        "required": true
+      },
+      "unit_id": {
+        "type": "int",
+        "required": true
+      },
+      "redundancy_mode_operational": {
+        "type": "str",
+        "required": true
+      },
+      "redundancy_mode_configured": {
+        "type": "str",
+        "required": true
+      },
+      "redundancy_state": {
+        "type": "str",
+        "required": true
+      },
+      "maintenance_mode": {
+        "type": "str",
+        "required": true
+      },
+      "manual_swact": {
+        "type": "str",
+        "required": true
+      },
+      "communications": {
+        "type": "str",
+        "required": true
+      },
+      "communications_reason": {
+        "type": "str",
+        "required": false
+      },
+      "client_count": {
+        "type": "int",
+        "required": true
+      },
+      "client_notification_tmr_milliseconds": {
+        "type": "int",
+        "required": true
+      },
+      "rf_debug_mask": {
+        "type": "str",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Simplex non-redundant system with active unit and disabled peer",
+      "input": "my state = 13 -ACTIVE\n     peer state = 1  -DISABLED\n           Mode = Simplex\n           Unit = Primary\n        Unit ID = 1\n\nRedundancy Mode (Operational) = Non-redundant\nRedundancy Mode (Configured)  = sso\nRedundancy State              = Non Redundant\n     Maintenance Mode = Disabled\n    Manual Swact = disabled (system is simplex (no peer unit))\n Communications = Down      Reason: Simplex mode\n\n   client count = 126\n client_notification_TMR = 30000 milliseconds\n           RF debug mask = 0x0\n",
+      "expected": {
+        "my_state": "ACTIVE",
+        "peer_state": "DISABLED",
+        "mode": "Simplex",
+        "unit": "Primary",
+        "unit_id": 1,
+        "redundancy_mode_operational": "Non-redundant",
+        "redundancy_mode_configured": "sso",
+        "redundancy_state": "Non Redundant",
+        "maintenance_mode": "Disabled",
+        "manual_swact": "disabled (system is simplex (no peer unit))",
+        "communications": "Down",
+        "communications_reason": "Simplex mode",
+        "client_count": 126,
+        "client_notification_tmr_milliseconds": 30000,
+        "rf_debug_mask": "0x0"
+      }
+    }
+  ]
+}
