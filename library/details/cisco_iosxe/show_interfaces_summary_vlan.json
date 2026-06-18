@@ -1,0 +1,32 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show interfaces summary vlan",
+  "schema": {
+    "name": "ShowInterfacesSummaryVlanResult",
+    "fields": {
+      "total": {
+        "type": "int",
+        "required": true
+      },
+      "configured_vlans": {
+        "type": {
+          "type": "list",
+          "items": "int"
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show interfaces summary vlan output with single VLAN",
+      "input": "Total number of Vlan interfaces: 1\n\nVlan interfaces configured:\n1\n",
+      "expected": {
+        "total": 1,
+        "configured_vlans": [
+          1
+        ]
+      }
+    }
+  ]
+}
