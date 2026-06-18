@@ -1,0 +1,70 @@
+{
+    "vrf": "default",
+    "routes": {
+        "10.0.1.0/30": {
+            "network": "10.0.1.0",
+            "mask": "30",
+            "next_hops": [
+                {
+                    "next_hop": "10.0.3.1",
+                    "admin_distance": 110,
+                    "metric": 2,
+                    "age": "2w1d",
+                    "outgoing_interface": "GigabitEthernet1/0/2"
+                }
+            ]
+        },
+        "10.0.4.0/30": {
+            "network": "10.0.4.0",
+            "mask": "30",
+            "next_hops": [
+                {
+                    "next_hop": "10.0.2.2",
+                    "admin_distance": 110,
+                    "metric": 2,
+                    "age": "1w5d",
+                    "outgoing_interface": "GigabitEthernet1/0/1"
+                }
+            ]
+        },
+        "192.0.2.1/32": {
+            "network": "192.0.2.1",
+            "mask": "32",
+            "next_hops": [
+                {
+                    "next_hop": "10.0.3.1",
+                    "admin_distance": 110,
+                    "metric": 2,
+                    "age": "2w4d",
+                    "outgoing_interface": "GigabitEthernet1/0/2"
+                }
+            ]
+        },
+        "192.0.2.2/32": {
+            "network": "192.0.2.2",
+            "mask": "32",
+            "next_hops": [
+                {
+                    "next_hop": "10.0.3.1",
+                    "admin_distance": 110,
+                    "metric": 3,
+                    "age": "2w1d",
+                    "outgoing_interface": "GigabitEthernet1/0/2"
+                }
+            ]
+        },
+        "192.0.2.4/32": {
+            "network": "192.0.2.4",
+            "mask": "32",
+            "next_hops": [
+                {
+                    "next_hop": "10.0.2.2",
+                    "admin_distance": 110,
+                    "metric": 2,
+                    "age": "1w5d",
+                    "outgoing_interface": "GigabitEthernet1/0/1"
+                }
+            ]
+        }
+    }
+}
