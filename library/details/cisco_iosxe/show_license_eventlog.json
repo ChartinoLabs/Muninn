@@ -1,0 +1,274 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show license eventlog",
+  "schema": {
+    "name": "ShowLicenseEventlogResult",
+    "fields": {
+      "events": {
+        "type": {
+          "type": "list",
+          "items": {
+            "name": "EventEntry",
+            "fields": {
+              "timestamp": {
+                "type": "str",
+                "required": true
+              },
+              "timezone": {
+                "type": "str",
+                "required": true
+              },
+              "event_type": {
+                "type": "str",
+                "required": true
+              },
+              "attributes": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": "str"
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show license eventlog output from a Catalyst 9300",
+      "input": "**** Event Log ****\n\n2021-09-10 14:03:56.089 UTC SAEVT_READY\n2021-09-10 14:03:56.089 UTC SAEVT_ENABLED\n2021-09-10 14:03:56.089 UTC SAEVT_EXPORT_FLAG exportAllowed=\"False\"\n2021-09-10 14:03:58.874 UTC SAEVT_HA_EVENT\neventType=\"SmartAgentEvtHArmfInitialize\"\n2021-09-10 14:03:58.876 UTC SAEVT_HA_CHASSIS_ROLE\nudi=\"PID:C9300-48U,SN:FCW2419C0LC\"\n2021-09-10 14:03:58.877 UTC SAEVT_HA_EVENT\neventType=\"SmartAgentEvtHAchkptRegister\"\n2021-09-10 14:03:59.848 UTC SAEVT_HA_ROLE udi=\"PID:C9300-48U,SN:FCW2419C0LC\"\nhaRole=\"Active\"\n2021-09-10 14:03:59.850 UTC SAEVT_HA_ROLE udi=\"PID:C9300-48U,SN:FCW2419C0LC\"\nhaRole=\"Active\"\n2021-09-10 14:03:59.870 UTC SAEVT_HA_CHASSIS_ROLE\nudi=\"PID:C9300-48U,SN:FCW2419C0LC\" haRole=\"Active\"\n2021-09-10 14:03:59.870 UTC SAEVT_HA_ROLE udi=\"PID:C9300-48U,SN:FCW2419C0LC\"\nhaRole=\"Active\"\n2021-09-10 14:03:59.898 UTC SAEVT_INIT_CONFIG_READ_BEGIN\n2021-09-10 14:04:19.821 UTC SAEVT_INIT_CONFIG_READ_DONE\n2021-09-10 14:04:19.919 UTC SAEVT_PLATFORM eventSource=\"INFRA_SL\"\neventName=\"INFRA_SL_EVLOG_OIR_ADD\" MSG=\"OIR Add evt 100 with slot-id 1\"\n2021-09-10 14:04:19.920 UTC SAEVT_HA_CONFIG\n2021-09-10 14:04:19.920 UTC SAEVT_HA_UDI udi=\"PID:C9300-48U,SN:FCW2419C0LC\"\nhaRole=\"Active\"\n2021-09-10 14:04:19.931 UTC SAEVT_LICENSE_USAGE count=\"0\" type=\"destroy\"\nentitlementTag=\"regid.2017-05.com.cisco.C9300_48P_NW_essentialsk9,1.0_26ac73af-4\n0c0-4522-8eb6-66c4f09126e9\"\n2021-09-10 14:04:19.940 UTC SAEVT_LICENSE_USAGE count=\"1\" type=\"total\"\nentitlementTag=\"regid.2017-05.com.cisco.C9300_48P_NW_essentialsk9,1.0_26ac73af-4\n0c0-4522-8eb6-66c4f09126e9\"\n2021-09-10 14:04:19.941 UTC SAEVT_STATE_EVAL remainingSeconds=\"7775908\"\n2021-09-10 14:04:19.941 UTC SAEVT_PLATFORM eventSource=\"INFRA_SL\"\neventName=\"INFRA_SL_EVLOG_LICENSE_REQUEST\" MSG=\"License network-essentials,\ndevice id C9300_48P, count req 1, inuse 0, reslt 0, hndl 2\"\n2021-09-10 14:04:19.943 UTC SAEVT_HA_EVENT eventType=\"SmartAgentSetNVPairs\"\n2021-09-10 14:04:20.232 UTC SAEVT_INIT_SYSTEM_INIT\n2021-09-10 14:04:21.233 UTC SAEVT_INIT_CRYPTO success=\"False\" error=\"Crypto\nInitialization has not been completed\"\n2021-09-10 14:04:51.236 UTC SAEVT_INIT_CRYPTO success=\"True\"\n2021-09-10 14:04:51.236 UTC SAEVT_EXPORT_FLAG exportAllowed=\"False\"\n2021-09-10 14:04:51.243 UTC SAEVT_COMM_RESTORED\n2021-09-10 14:04:51.256 UTC SAEVT_INIT_COMPLETE\n2021-09-10 14:05:51.242 UTC SAEVT_PRIVACY_CHANGED enabled=\"True\"\n2021-09-10 15:03:59.736 UTC SAEVT_PLATFORM eventSource=\"INFRA_SL\"\neventName=\"INFRA_SL_EVLOG_ERM_RESET\" MSG=\"ERM-Reset: Client 0, AP-GROUP group, 2\nfeatures air-network-advantage,air-dna-advantage\"\n2021-09-10 15:03:59.738 UTC SAEVT_ENDPOINT_USAGE count=\"0\"\nentitlementTag=\"regid.2018-06.com.cisco.DNA_NWStack,1.0_e7244e71-3ad5-4608-8bf0-\n",
+      "expected": {
+        "events": [
+          {
+            "timestamp": "2021-09-10 14:03:56.089",
+            "timezone": "UTC",
+            "event_type": "SAEVT_READY"
+          },
+          {
+            "timestamp": "2021-09-10 14:03:56.089",
+            "timezone": "UTC",
+            "event_type": "SAEVT_ENABLED"
+          },
+          {
+            "timestamp": "2021-09-10 14:03:56.089",
+            "timezone": "UTC",
+            "event_type": "SAEVT_EXPORT_FLAG",
+            "attributes": {
+              "exportAllowed": "False"
+            }
+          },
+          {
+            "timestamp": "2021-09-10 14:03:58.874",
+            "timezone": "UTC",
+            "event_type": "SAEVT_HA_EVENT",
+            "attributes": {
+              "eventType": "SmartAgentEvtHArmfInitialize"
+            }
+          },
+          {
+            "timestamp": "2021-09-10 14:03:58.876",
+            "timezone": "UTC",
+            "event_type": "SAEVT_HA_CHASSIS_ROLE",
+            "attributes": {
+              "udi": "PID:C9300-48U,SN:FCW2419C0LC"
+            }
+          },
+          {
+            "timestamp": "2021-09-10 14:03:58.877",
+            "timezone": "UTC",
+            "event_type": "SAEVT_HA_EVENT",
+            "attributes": {
+              "eventType": "SmartAgentEvtHAchkptRegister"
+            }
+          },
+          {
+            "timestamp": "2021-09-10 14:03:59.848",
+            "timezone": "UTC",
+            "event_type": "SAEVT_HA_ROLE",
+            "attributes": {
+              "udi": "PID:C9300-48U,SN:FCW2419C0LC",
+              "haRole": "Active"
+            }
+          },
+          {
+            "timestamp": "2021-09-10 14:03:59.850",
+            "timezone": "UTC",
+            "event_type": "SAEVT_HA_ROLE",
+            "attributes": {
+              "udi": "PID:C9300-48U,SN:FCW2419C0LC",
+              "haRole": "Active"
+            }
+          },
+          {
+            "timestamp": "2021-09-10 14:03:59.870",
+            "timezone": "UTC",
+            "event_type": "SAEVT_HA_CHASSIS_ROLE",
+            "attributes": {
+              "udi": "PID:C9300-48U,SN:FCW2419C0LC",
+              "haRole": "Active"
+            }
+          },
+          {
+            "timestamp": "2021-09-10 14:03:59.870",
+            "timezone": "UTC",
+            "event_type": "SAEVT_HA_ROLE",
+            "attributes": {
+              "udi": "PID:C9300-48U,SN:FCW2419C0LC",
+              "haRole": "Active"
+            }
+          },
+          {
+            "timestamp": "2021-09-10 14:03:59.898",
+            "timezone": "UTC",
+            "event_type": "SAEVT_INIT_CONFIG_READ_BEGIN"
+          },
+          {
+            "timestamp": "2021-09-10 14:04:19.821",
+            "timezone": "UTC",
+            "event_type": "SAEVT_INIT_CONFIG_READ_DONE"
+          },
+          {
+            "timestamp": "2021-09-10 14:04:19.919",
+            "timezone": "UTC",
+            "event_type": "SAEVT_PLATFORM",
+            "attributes": {
+              "eventSource": "INFRA_SL",
+              "eventName": "INFRA_SL_EVLOG_OIR_ADD",
+              "MSG": "OIR Add evt 100 with slot-id 1"
+            }
+          },
+          {
+            "timestamp": "2021-09-10 14:04:19.920",
+            "timezone": "UTC",
+            "event_type": "SAEVT_HA_CONFIG"
+          },
+          {
+            "timestamp": "2021-09-10 14:04:19.920",
+            "timezone": "UTC",
+            "event_type": "SAEVT_HA_UDI",
+            "attributes": {
+              "udi": "PID:C9300-48U,SN:FCW2419C0LC",
+              "haRole": "Active"
+            }
+          },
+          {
+            "timestamp": "2021-09-10 14:04:19.931",
+            "timezone": "UTC",
+            "event_type": "SAEVT_LICENSE_USAGE",
+            "attributes": {
+              "count": "0",
+              "type": "destroy",
+              "entitlementTag": "regid.2017-05.com.cisco.C9300_48P_NW_essentialsk9,1.0_26ac73af-4 0c0-4522-8eb6-66c4f09126e9"
+            }
+          },
+          {
+            "timestamp": "2021-09-10 14:04:19.940",
+            "timezone": "UTC",
+            "event_type": "SAEVT_LICENSE_USAGE",
+            "attributes": {
+              "count": "1",
+              "type": "total",
+              "entitlementTag": "regid.2017-05.com.cisco.C9300_48P_NW_essentialsk9,1.0_26ac73af-4 0c0-4522-8eb6-66c4f09126e9"
+            }
+          },
+          {
+            "timestamp": "2021-09-10 14:04:19.941",
+            "timezone": "UTC",
+            "event_type": "SAEVT_STATE_EVAL",
+            "attributes": {
+              "remainingSeconds": "7775908"
+            }
+          },
+          {
+            "timestamp": "2021-09-10 14:04:19.941",
+            "timezone": "UTC",
+            "event_type": "SAEVT_PLATFORM",
+            "attributes": {
+              "eventSource": "INFRA_SL",
+              "eventName": "INFRA_SL_EVLOG_LICENSE_REQUEST",
+              "MSG": "License network-essentials, device id C9300_48P, count req 1, inuse 0, reslt 0, hndl 2"
+            }
+          },
+          {
+            "timestamp": "2021-09-10 14:04:19.943",
+            "timezone": "UTC",
+            "event_type": "SAEVT_HA_EVENT",
+            "attributes": {
+              "eventType": "SmartAgentSetNVPairs"
+            }
+          },
+          {
+            "timestamp": "2021-09-10 14:04:20.232",
+            "timezone": "UTC",
+            "event_type": "SAEVT_INIT_SYSTEM_INIT"
+          },
+          {
+            "timestamp": "2021-09-10 14:04:21.233",
+            "timezone": "UTC",
+            "event_type": "SAEVT_INIT_CRYPTO",
+            "attributes": {
+              "success": "False",
+              "error": "Crypto Initialization has not been completed"
+            }
+          },
+          {
+            "timestamp": "2021-09-10 14:04:51.236",
+            "timezone": "UTC",
+            "event_type": "SAEVT_INIT_CRYPTO",
+            "attributes": {
+              "success": "True"
+            }
+          },
+          {
+            "timestamp": "2021-09-10 14:04:51.236",
+            "timezone": "UTC",
+            "event_type": "SAEVT_EXPORT_FLAG",
+            "attributes": {
+              "exportAllowed": "False"
+            }
+          },
+          {
+            "timestamp": "2021-09-10 14:04:51.243",
+            "timezone": "UTC",
+            "event_type": "SAEVT_COMM_RESTORED"
+          },
+          {
+            "timestamp": "2021-09-10 14:04:51.256",
+            "timezone": "UTC",
+            "event_type": "SAEVT_INIT_COMPLETE"
+          },
+          {
+            "timestamp": "2021-09-10 14:05:51.242",
+            "timezone": "UTC",
+            "event_type": "SAEVT_PRIVACY_CHANGED",
+            "attributes": {
+              "enabled": "True"
+            }
+          },
+          {
+            "timestamp": "2021-09-10 15:03:59.736",
+            "timezone": "UTC",
+            "event_type": "SAEVT_PLATFORM",
+            "attributes": {
+              "eventSource": "INFRA_SL",
+              "eventName": "INFRA_SL_EVLOG_ERM_RESET",
+              "MSG": "ERM-Reset: Client 0, AP-GROUP group, 2 features air-network-advantage,air-dna-advantage"
+            }
+          },
+          {
+            "timestamp": "2021-09-10 15:03:59.738",
+            "timezone": "UTC",
+            "event_type": "SAEVT_ENDPOINT_USAGE",
+            "attributes": {
+              "count": "0"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
