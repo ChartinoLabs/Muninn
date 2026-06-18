@@ -1,7 +1,7 @@
 """Parser for 'show logging' command on IOS/IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -511,7 +511,7 @@ def _build_result(
     log_buffer_size: int,
 ) -> ShowLoggingResult:
     """Assemble the final ShowLoggingResult from parsed sections."""
-    result: ShowLoggingResult = {
+    result: dict[str, Any] = {
         "syslog": syslog,
         "console_logging": config.get("console_logging", {"enabled": False}),
         "monitor_logging": config.get("monitor_logging", {}),
@@ -533,7 +533,7 @@ def _build_result(
     for key in optional_keys:
         if key in config:
             result[key] = config[key]
-    return result
+    return cast(ShowLoggingResult, result)
 
 
 @register(OS.CISCO_IOS, "show logging")

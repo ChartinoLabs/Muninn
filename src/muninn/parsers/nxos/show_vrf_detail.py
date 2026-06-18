@@ -114,7 +114,7 @@ class ShowVrfDetailParser(BaseParser[ShowVrfDetailResult]):
 
 
 def _parse_detail_line(
-    cls: type[ShowVrfDetailParser],
+    cls,  # noqa: ANN001
     line: str,
     entry: VrfDetailEntry,
 ) -> None:
