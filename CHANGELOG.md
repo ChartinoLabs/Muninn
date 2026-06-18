@@ -4,6 +4,66 @@ All notable changes to Muninn are documented in this file.
 
 <!-- towncrier release notes start -->
 
+## 0.5.0 - 2026-06-17
+
+### Added Parsers
+
+- Added parser support for `show license eventlog` on Cisco IOS-XE. ([#1162](https://github.com/ChartinoLabs/Muninn/pull/1162))
+- Added parser support for `show ip ospf events` on Cisco IOS-XE. ([#1163](https://github.com/ChartinoLabs/Muninn/pull/1163))
+- Added parser support for `show redundancy history reverse` on Cisco IOS-XE. ([#1164](https://github.com/ChartinoLabs/Muninn/pull/1164))
+- Added parser support for `show ip ospf traffic` on Cisco IOS-XE. ([#1165](https://github.com/ChartinoLabs/Muninn/pull/1165))
+- Added parser support for `show interfaces stats` on Cisco IOS-XE. ([#1166](https://github.com/ChartinoLabs/Muninn/pull/1166))
+- Added parser support for `show crypto pki certificate verbose` on Cisco IOS-XE. ([#1168](https://github.com/ChartinoLabs/Muninn/pull/1168))
+- Added parser support for `show crypto pki certificate pem` on Cisco IOS-XE. ([#1170](https://github.com/ChartinoLabs/Muninn/pull/1170))
+- Added parser support for `show interfaces summary` on Cisco IOS-XE. ([#1172](https://github.com/ChartinoLabs/Muninn/pull/1172))
+- Added parser support for `show ip ospf database database-summary detail` on Cisco IOS-XE. ([#1173](https://github.com/ChartinoLabs/Muninn/pull/1173))
+- Added parser support for `show crypto key mypubkey all` on Cisco IOS-XE. ([#1174](https://github.com/ChartinoLabs/Muninn/pull/1174))
+- Added parser support for `show crypto pki trustpoint status` on Cisco IOS-XE. ([#1175](https://github.com/ChartinoLabs/Muninn/pull/1175))
+- Added parser support for `show ip ospf database database-summary` on Cisco IOS-XE. ([#1176](https://github.com/ChartinoLabs/Muninn/pull/1176))
+- Added parser support for `show power inline police` on Cisco IOS-XE. ([#1177](https://github.com/ChartinoLabs/Muninn/pull/1177))
+- Added parser support for `show ip ospf <process-id>` on Cisco IOS-XE. ([#1178](https://github.com/ChartinoLabs/Muninn/pull/1178))
+- Added parser support for `show crypto pki trustpoint` on Cisco IOS-XE. ([#1179](https://github.com/ChartinoLabs/Muninn/pull/1179))
+- Added parser support for `show crypto pki trustpoints` on Cisco IOS-XE. ([#1180](https://github.com/ChartinoLabs/Muninn/pull/1180))
+- Added parser support for `show processes cpu history` on Cisco IOS-XE. ([#1181](https://github.com/ChartinoLabs/Muninn/pull/1181))
+- Added parser support for `show ip ospf topology-info` on Cisco IOS-XE. ([#1182](https://github.com/ChartinoLabs/Muninn/pull/1182))
+- Added parser support for `show crypto eli all` on Cisco IOS-XE. ([#1183](https://github.com/ChartinoLabs/Muninn/pull/1183))
+- Added parser support for `show access-lists` on Cisco IOS-XE. ([#1184](https://github.com/ChartinoLabs/Muninn/pull/1184))
+- Added parser support for `show crypto ikev2 stats` on Cisco IOS-XE. ([#1185](https://github.com/ChartinoLabs/Muninn/pull/1185))
+- Added parser support for `show ip ospf nsf` on Cisco IOS-XE. ([#1186](https://github.com/ChartinoLabs/Muninn/pull/1186))
+- Added parser support for `show ip route ospf` on Cisco IOS-XE. ([#1187](https://github.com/ChartinoLabs/Muninn/pull/1187))
+- Added parser support for `show ip ospf request-list` on Cisco IOS-XE. ([#1188](https://github.com/ChartinoLabs/Muninn/pull/1188))
+- Added parser support for `show etherchannel auto` on Cisco IOS-XE. ([#1189](https://github.com/ChartinoLabs/Muninn/pull/1189))
+- Added parser support for `show ip ospf nsr` on Cisco IOS-XE. ([#1190](https://github.com/ChartinoLabs/Muninn/pull/1190))
+- Added parser support for `show redundancy state` on Cisco IOS-XE. ([#1191](https://github.com/ChartinoLabs/Muninn/pull/1191))
+- Added parser support for `show crypto pki counters` on Cisco IOS-XE. ([#1192](https://github.com/ChartinoLabs/Muninn/pull/1192))
+- Added parser support for `show ip ospf flood-list` on Cisco IOS-XE. ([#1193](https://github.com/ChartinoLabs/Muninn/pull/1193))
+- Added parser support for `show ip ospf max-metric` on Cisco IOS-XE. ([#1194](https://github.com/ChartinoLabs/Muninn/pull/1194))
+- Added parser support for `show crypto pki certificate storage` on Cisco IOS-XE. ([#1195](https://github.com/ChartinoLabs/Muninn/pull/1195))
+- Added parser support for `show dot1x statistics` on Cisco IOS-XE. ([#1196](https://github.com/ChartinoLabs/Muninn/pull/1196))
+- Added parser support for `show ip ospf retransmission-list` on Cisco IOS-XE. ([#1197](https://github.com/ChartinoLabs/Muninn/pull/1197))
+- Added parser support for `show ip bgp labels` on Cisco IOS-XE. ([#1198](https://github.com/ChartinoLabs/Muninn/pull/1198))
+- Added parser support for `show crypto pki timers detail` on Cisco IOS-XE. ([#1199](https://github.com/ChartinoLabs/Muninn/pull/1199))
+- Added parser support for `show etherchannel load-balance` on Cisco IOS-XE. ([#1200](https://github.com/ChartinoLabs/Muninn/pull/1200))
+- Added parser support for `show ip ospf fast-reroute` on Cisco IOS-XE. ([#1201](https://github.com/ChartinoLabs/Muninn/pull/1201))
+- Added parser support for `show ip ospf ls-distribution` on Cisco IOS-XE. ([#1202](https://github.com/ChartinoLabs/Muninn/pull/1202))
+- Added parser support for `show ip ospf summary-address` on Cisco IOS-XE. ([#1203](https://github.com/ChartinoLabs/Muninn/pull/1203))
+- Added parser support for `show interfaces summary vlan` on Cisco IOS-XE. ([#1204](https://github.com/ChartinoLabs/Muninn/pull/1204))
+- Added parser support for `show ip ospf database asbr-summary` on Cisco IOS-XE. ([#1205](https://github.com/ChartinoLabs/Muninn/pull/1205))
+- Added parser support for `show ip ospf database dist-ls-pending` on Cisco IOS-XE. ([#1206](https://github.com/ChartinoLabs/Muninn/pull/1206))
+- Added parser support for `show ip ospf database external` on Cisco IOS-XE. ([#1207](https://github.com/ChartinoLabs/Muninn/pull/1207))
+- Added parser support for `show ip ospf database nssa-external` on Cisco IOS-XE. ([#1208](https://github.com/ChartinoLabs/Muninn/pull/1208))
+- Added parser support for `show ip ospf database opaque-area` on Cisco IOS-XE. ([#1209](https://github.com/ChartinoLabs/Muninn/pull/1209))
+- Added parser support for `show ip ospf database opaque-as` on Cisco IOS-XE. ([#1210](https://github.com/ChartinoLabs/Muninn/pull/1210))
+- Added parser support for `show ip ospf database opaque-link` on Cisco IOS-XE. ([#1211](https://github.com/ChartinoLabs/Muninn/pull/1211))
+- Added parser support for `show ip ospf database summary` on Cisco IOS-XE. ([#1212](https://github.com/ChartinoLabs/Muninn/pull/1212))
+- Added parser support for `show vlan mtu` on Cisco IOS-XE. ([#1213](https://github.com/ChartinoLabs/Muninn/pull/1213))
+- Added parser support for `show vlan summary` on Cisco IOS-XE. ([#1214](https://github.com/ChartinoLabs/Muninn/pull/1214))
+
+### Internal
+
+- Bumped ty from 0.0.37 to 0.0.49 and resolved stricter TypedDict key checking errors. ([#1159](https://github.com/ChartinoLabs/Muninn/pull/1159))
+
+
 ## 0.4.0 - 2026-06-17
 
 ### Added Parsers
