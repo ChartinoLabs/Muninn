@@ -438,7 +438,6 @@ def _extract_trustpoint(entry: dict) -> str:
     return raw.split()[0].strip(",") if raw else ""
 
 
-@register(OS.CISCO_IOSXE, "show crypto pki certificate verbose")
 @register(OS.CISCO_IOSXE, "show crypto pki certificates verbose")
 class ShowCryptoPkiCertificateVerboseParser(
     BaseParser["ShowCryptoPkiCertificateVerboseResult"],
