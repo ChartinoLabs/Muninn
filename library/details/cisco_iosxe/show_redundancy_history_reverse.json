@@ -1,0 +1,214 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show redundancy history reverse",
+  "schema": {
+    "name": "ShowRedundancyHistoryReverseResult",
+    "fields": {
+      "entries": {
+        "type": {
+          "type": "list",
+          "items": {
+            "name": "HistoryEntry",
+            "fields": {
+              "timestamp": {
+                "type": "str",
+                "required": true
+              },
+              "message": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Redundancy history with RF events and client add/remove entries",
+      "input": "00:59:29 client removed: <unknown client>\n00:59:29 client added: <unknown client>(4200) seq=551\n00:59:26 client removed: <unknown client>\n00:59:26 client added: <unknown client>(4200) seq=551\n00:59:23 client removed: <unknown client>\n00:59:23 client added: <unknown client>(4200) seq=551\n00:59:20 client removed: <unknown client>\n00:59:20 client added: <unknown client>(4200) seq=551\n00:00:21 System initialization complete\n00:00:18 RF_EVENT_SLAVE_STATUS_DONE(523) Last Slave(65000) op=7 rc=11\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) Last Slave(65000) op=7 rc=0\n00:00:18 RF_EVENT_SLAVE_STATUS_DONE(523) Slave(3) op=405 rc=7\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) IPNAT_HA_SSO HA(33023) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) FQDN(33017) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) swc(33016) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) OPENDNS(33006) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) NGWC_SGTC(10012) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) Maintenance Mode(33002) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) mDNS HA(24115) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) RSVP SYNC(24112) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) NGWC L2VPN AC RF Client(10011)\nop=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) Online Diag HA(4056) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) DSENSOR(253) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) MCPRP Virtual-instance RF\nClien(1346) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) MLD Snooping(521) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) Smart_Agent_RF_Client(1376) op=7\nrc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) PASSWD RF Client(4058) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) ONEP(4060) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) IOS Config ROLLBACK(4021) op=7\nrc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) IOS Config ARCHIVE(4020) op=7\nrc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) IOS Config SHELL(4022) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) Keystore(1001) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) CTS HA(1000) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) LAN-Switch PAgP/LACP(510) op=7\nrc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) ISSU Test Client(4005) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) DHCPv6 Server(149) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) DHCPv6 Relay(148) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) WSMAN(161) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) PKI RF Client(131) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) CRYPTO RSA(130) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) SISF table(515) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) Port Security(508) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) Igmp Snooping(506) op=7 rc=0\n00:00:18 RF_STATUS_REDUNDANCY_MODE_CHANGE(405) SmartPower rf client(516) op=7\nrc=0\n",
+      "expected": {
+        "entries": [
+          {
+            "timestamp": "00:59:29",
+            "message": "client removed: <unknown client>"
+          },
+          {
+            "timestamp": "00:59:29",
+            "message": "client added: <unknown client>(4200) seq=551"
+          },
+          {
+            "timestamp": "00:59:26",
+            "message": "client removed: <unknown client>"
+          },
+          {
+            "timestamp": "00:59:26",
+            "message": "client added: <unknown client>(4200) seq=551"
+          },
+          {
+            "timestamp": "00:59:23",
+            "message": "client removed: <unknown client>"
+          },
+          {
+            "timestamp": "00:59:23",
+            "message": "client added: <unknown client>(4200) seq=551"
+          },
+          {
+            "timestamp": "00:59:20",
+            "message": "client removed: <unknown client>"
+          },
+          {
+            "timestamp": "00:59:20",
+            "message": "client added: <unknown client>(4200) seq=551"
+          },
+          {
+            "timestamp": "00:00:21",
+            "message": "System initialization complete"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_EVENT_SLAVE_STATUS_DONE(523) Last Slave(65000) op=7 rc=11"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) Last Slave(65000) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_EVENT_SLAVE_STATUS_DONE(523) Slave(3) op=405 rc=7"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) IPNAT_HA_SSO HA(33023) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) FQDN(33017) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) swc(33016) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) OPENDNS(33006) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) NGWC_SGTC(10012) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) Maintenance Mode(33002) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) mDNS HA(24115) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) RSVP SYNC(24112) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) NGWC L2VPN AC RF Client(10011) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) Online Diag HA(4056) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) DSENSOR(253) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) MCPRP Virtual-instance RF Clien(1346) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) MLD Snooping(521) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) Smart_Agent_RF_Client(1376) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) PASSWD RF Client(4058) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) ONEP(4060) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) IOS Config ROLLBACK(4021) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) IOS Config ARCHIVE(4020) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) IOS Config SHELL(4022) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) Keystore(1001) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) CTS HA(1000) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) LAN-Switch PAgP/LACP(510) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) ISSU Test Client(4005) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) DHCPv6 Server(149) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) DHCPv6 Relay(148) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) WSMAN(161) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) PKI RF Client(131) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) CRYPTO RSA(130) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) SISF table(515) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) Port Security(508) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) Igmp Snooping(506) op=7 rc=0"
+          },
+          {
+            "timestamp": "00:00:18",
+            "message": "RF_STATUS_REDUNDANCY_MODE_CHANGE(405) SmartPower rf client(516) op=7 rc=0"
+          }
+        ]
+      }
+    }
+  ]
+}
