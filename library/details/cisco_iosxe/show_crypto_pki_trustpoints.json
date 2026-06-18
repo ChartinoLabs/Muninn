@@ -1,0 +1,100 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show crypto pki trustpoints",
+  "schema": {
+    "name": "ShowCryptoPkiTrustpointsResult",
+    "fields": {
+      "trustpoints": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "TrustpointEntry",
+            "fields": {
+              "subject_name": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": "str"
+                },
+                "required": false
+              },
+              "serial_number": {
+                "type": "str",
+                "required": false
+              },
+              "status": {
+                "type": "str",
+                "required": false
+              },
+              "key_label": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show crypto pki trustpoints output with multiple trustpoints",
+      "input": "Trustpoint TP-self-signed-4032138694:\n    Subject Name:\n    cn=IOS-Self-Signed-Certificate-4032138694\n          Serial Number (hex): 01\n    Persistent self-signed certificate trust point\n    Using key label TP-self-signed-4032138694\n\n\nTrustpoint SLA-TrustPoint:\n    Subject Name:\n    cn=Cisco Licensing Root CA\n    o=Cisco\n          Serial Number (hex): 01\n    Certificate configured.\n\n\nTrustpoint CISCO_IDEVID_SUDI:\n    Subject Name:\n    o=Cisco\n    cn=High Assurance SUDI CA\n          Serial Number (hex): 0A6475524CD8617C62\n    Certificate configured.\n\n\nTrustpoint CISCO_IDEVID_SUDI0:\n    Subject Name:\n    cn=Cisco Root CA 2099\n    o=Cisco\n          Serial Number (hex): 019A335878CE16C1C1\n    Certificate configured.\n\n\nTrustpoint CISCO_IDEVID_CMCA2_SUDI:\n    Subject Name:\n    cn=Cisco Manufacturing CA SHA2\n    o=Cisco\n          Serial Number (hex): 02\n    Certificate configured.\n\n\nTrustpoint CISCO_IDEVID_CMCA2_SUDI0:\n    Subject Name:\n    cn=Cisco Root CA M2\n    o=Cisco\n          Serial Number (hex): 01\n    Certificate configured.\n\n\nTrustpoint CISCO_IDEVID_CMCA_SUDI:\n    Subject Name:\n",
+      "expected": {
+        "trustpoints": {
+          "TP-self-signed-4032138694": {
+            "serial_number": "01",
+            "status": "Persistent self-signed certificate trust point",
+            "key_label": "TP-self-signed-4032138694",
+            "subject_name": {
+              "cn": "IOS-Self-Signed-Certificate-4032138694"
+            }
+          },
+          "SLA-TrustPoint": {
+            "serial_number": "01",
+            "status": "Certificate configured.",
+            "subject_name": {
+              "cn": "Cisco Licensing Root CA",
+              "o": "Cisco"
+            }
+          },
+          "CISCO_IDEVID_SUDI": {
+            "serial_number": "0A6475524CD8617C62",
+            "status": "Certificate configured.",
+            "subject_name": {
+              "o": "Cisco",
+              "cn": "High Assurance SUDI CA"
+            }
+          },
+          "CISCO_IDEVID_SUDI0": {
+            "serial_number": "019A335878CE16C1C1",
+            "status": "Certificate configured.",
+            "subject_name": {
+              "cn": "Cisco Root CA 2099",
+              "o": "Cisco"
+            }
+          },
+          "CISCO_IDEVID_CMCA2_SUDI": {
+            "serial_number": "02",
+            "status": "Certificate configured.",
+            "subject_name": {
+              "cn": "Cisco Manufacturing CA SHA2",
+              "o": "Cisco"
+            }
+          },
+          "CISCO_IDEVID_CMCA2_SUDI0": {
+            "serial_number": "01",
+            "status": "Certificate configured.",
+            "subject_name": {
+              "cn": "Cisco Root CA M2",
+              "o": "Cisco"
+            }
+          },
+          "CISCO_IDEVID_CMCA_SUDI": {}
+        }
+      }
+    }
+  ]
+}
