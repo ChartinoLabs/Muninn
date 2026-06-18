@@ -1,0 +1,62 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show crypto pki certificate storage",
+  "schema": {
+    "name": "ShowCryptoPkiCertificateStorageResult",
+    "fields": {
+      "trustpoints": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "TrustpointEntry",
+            "fields": {
+              "storage": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic output with multiple trustpoints showing nvram and keypair storage",
+      "input": "TP-self-signed-4032138694 - certificates will be stored in nvram:\nSLA-TrustPoint - certificates will be stored in nvram:\nTrustpool - certificates will be stored in nvram:\nCISCO_IDEVID_SUDI - certificates will be stored with corresponding keypairs\nCISCO_IDEVID_SUDI0 - certificates will be stored in nvram:\nCISCO_IDEVID_CMCA2_SUDI - certificates will be stored in nvram:\nCISCO_IDEVID_CMCA2_SUDI0 - certificates will be stored in nvram:\nCISCO_IDEVID_CMCA_SUDI - certificates will be stored in nvram:\nCISCO_IDEVID_CMCA_SUDI0 - certificates will be stored in nvram:\n",
+      "expected": {
+        "trustpoints": {
+          "TP-self-signed-4032138694": {
+            "storage": "in nvram:"
+          },
+          "SLA-TrustPoint": {
+            "storage": "in nvram:"
+          },
+          "Trustpool": {
+            "storage": "in nvram:"
+          },
+          "CISCO_IDEVID_SUDI": {
+            "storage": "with corresponding keypairs"
+          },
+          "CISCO_IDEVID_SUDI0": {
+            "storage": "in nvram:"
+          },
+          "CISCO_IDEVID_CMCA2_SUDI": {
+            "storage": "in nvram:"
+          },
+          "CISCO_IDEVID_CMCA2_SUDI0": {
+            "storage": "in nvram:"
+          },
+          "CISCO_IDEVID_CMCA_SUDI": {
+            "storage": "in nvram:"
+          },
+          "CISCO_IDEVID_CMCA_SUDI0": {
+            "storage": "in nvram:"
+          }
+        }
+      }
+    }
+  ]
+}

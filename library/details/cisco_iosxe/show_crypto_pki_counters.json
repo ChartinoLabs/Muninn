@@ -1,0 +1,77 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show crypto pki counters",
+  "schema": {
+    "name": "ShowCryptoPkiCountersResult",
+    "fields": {
+      "pki_sessions_started": {
+        "type": "int",
+        "required": true
+      },
+      "pki_sessions_ended": {
+        "type": "int",
+        "required": true
+      },
+      "pki_sessions_active": {
+        "type": "int",
+        "required": true
+      },
+      "successful_validations": {
+        "type": "int",
+        "required": true
+      },
+      "failed_validations": {
+        "type": "int",
+        "required": true
+      },
+      "bypassed_validations": {
+        "type": "int",
+        "required": true
+      },
+      "pending_validations": {
+        "type": "int",
+        "required": true
+      },
+      "crls_checked": {
+        "type": "int",
+        "required": true
+      },
+      "crl_fetch_attempts": {
+        "type": "int",
+        "required": true
+      },
+      "crl_failed_attempts": {
+        "type": "int",
+        "required": true
+      },
+      "crl_rejected_busy_fetching": {
+        "type": "int",
+        "required": true
+      },
+      "aaa_authorizations": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Basic show crypto pki counters output with session, validation, CRL, and AAA counters",
+      "input": "PKI Sessions Started: 590\nPKI Sessions Ended: 590\nPKI Sessions Active: 0\nSuccessful Validations: 3\nFailed Validations: 0\nBypassed Validations: 0\nPending Validations: 0\nCRLs checked: 0\nCRL - fetch attempts: 0\nCRL - failed attempts: 0\nCRL - rejected busy fetching: 0\nAAA authorizations: 0\n",
+      "expected": {
+        "pki_sessions_started": 590,
+        "pki_sessions_ended": 590,
+        "pki_sessions_active": 0,
+        "successful_validations": 3,
+        "failed_validations": 0,
+        "bypassed_validations": 0,
+        "pending_validations": 0,
+        "crls_checked": 0,
+        "crl_fetch_attempts": 0,
+        "crl_failed_attempts": 0,
+        "crl_rejected_busy_fetching": 0,
+        "aaa_authorizations": 0
+      }
+    }
+  ]
+}
