@@ -1,0 +1,35 @@
+{
+    "ios_xr_version": "7.11.21",
+    "sections": {
+        "/": {
+            "additions": [
+                "telemetry model-driven"
+            ],
+            "removals": [
+                "vrf BGP_ADD_TEST"
+            ]
+        },
+        "telemetry model-driven": {
+            "removals": [
+                "sensor-group BGP_PATHS"
+            ],
+            "additions": [
+                "sensor-group BGP_ADJ_RIB_IN",
+                "subscription BGP_ROUTES_SUB"
+            ]
+        },
+        "telemetry model-driven/sensor-group BGP_ADJ_RIB_IN": {
+            "additions": [
+                "sensor-path /bgp/instances/instance/instance-active/vrfs/vrf/afs/af/advertised-paths/advertised-path"
+            ],
+            "removals": [
+                "sensor-path Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/vrfs/vrf/afs/af/advertised-paths/advertised-path"
+            ]
+        },
+        "telemetry model-driven/subscription BGP_ROUTES_SUB": {
+            "removals": [
+                "sensor-group-id BGP_PATHS sample-interval 30000"
+            ]
+        }
+    }
+}

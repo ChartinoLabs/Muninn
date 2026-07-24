@@ -1,0 +1,69 @@
+Tag 65000:
+IS-IS Level-1 Link State Database:
+LSPID                 LSP Seq Num  LSP Checksum  LSP Holdtime/Rcvd      ATT/P/OL
+ROUTER-A.00-00        \
+                    * 0x00001234   0xABCD                1100/*         0/0/1
+  Area Address: 49.0001
+  NLPID:        0xCC 0x8E
+  Topology:     IPv4 (0x0)
+                IPv6 (0x2)
+  Router ID:    10.255.255.1
+  Router CAP:   10.255.255.1, D:0, S:0
+    Segment Routing: I:1 V:0, SRGB Base: 16000 Range: 8000
+    Segment Routing Local Block: SRLB Base: 15000 Range: 1000
+    SRv6 Oflag:0
+    Node-MSD
+      MSD: 16
+  Hostname: ROUTER-A
+  IP Address:   10.255.255.1
+  Metric: 10         IP 10.255.255.1/32
+  Metric: 100        IP 10.0.1.0/30
+  Metric: 10         IP 10.0.1.4/30
+  IPv6 Address: 2001:db8::1
+  IPv6 Router ID: 2001:db8::1
+  Metric: 10         IPv6 (MT-IPv6) 2001:db8::1/128
+  Metric: 0          IPv6 (MT-IPv6) fd00:1:1::/48
+  SRv6 Locator: (MT-IPv6) fd00:1:1::/48 Metric:0 Algorithm:0
+    End SID: fd00:1:1:: uN (PSP/USD)
+      SID Structure:
+        Block Length: 32, Node-ID Length: 16, Func-Length: 0, Args-Length: 80
+IS-IS Level-2 Link State Database:
+LSPID                 LSP Seq Num  LSP Checksum  LSP Holdtime/Rcvd      ATT/P/OL
+ROUTER-B.00-00        0x00005678   0xEF01                 643/1200      0/0/0
+  Area Address: 49.0001
+  TLV Code: 14 Length: 2 (Unsupported)
+  NLPID:        0xCC 0x8E
+  Topology:     IPv4 (0x0)
+                IPv6 (0x2)
+  Router ID:    10.255.255.2
+  IP Address:   10.255.255.2
+  IPv6 Address: 2001:db8::2
+  Hostname: ROUTER-B
+  Router CAP:   10.255.255.2, D:0, S:0
+    Segment Routing: I:1 V:0, SRGB Base: 16000 Range: 8000
+  Metric: 100        IS-Extended ROUTER-C.00
+  Metric: 10         IS-Extended ROUTER-C.00
+  Metric: 10         IS (MT-IPv6) ROUTER-C.00
+  Metric: 100        IP 10.0.2.0/30
+  Metric: 10         IP 10.0.2.4/30
+  Metric: 0          IP 10.255.255.2/32
+  Metric: 0          IPv6 (MT-IPv6) 2001:db8::2/128
+  Metric: 10         IPv6 (MT-IPv6) fd00:2:1:100::/64
+ROUTER-C.00-00        0x00009ABC   0x1234                 940/1200      0/0/0
+  Area Address: 49.0001
+  NLPID:        0xCC 0x8E
+  Topology:     IPv4 (0x0)
+                IPv6 (0x2)
+  Router ID:    10.255.255.3
+  IP Address:   10.255.255.3
+  IPv6 Address: 2001:db8::3
+  Hostname: ROUTER-C
+  Metric: 10         IS-Extended ROUTER-B.00
+  Metric: 100        IS-Extended ROUTER-B.00
+  Metric: 10         IS (MT-IPv6) ROUTER-B.00
+  Metric: 10         IS (MT-IPv6) ROUTER-B.00
+  Metric: 100        IP 10.0.3.0/30
+  Metric: 10         IP 10.0.3.4/30
+  Metric: 0          IP 10.255.255.3/32
+  Metric: 0          IPv6 (MT-IPv6) 2001:db8::3/128
+  Metric: 1          IPv6 (MT-IPv6) fd00:3:1::/48
