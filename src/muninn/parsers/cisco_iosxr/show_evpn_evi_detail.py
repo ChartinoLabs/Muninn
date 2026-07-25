@@ -112,7 +112,7 @@ def _set_str(key: str) -> _FieldHandler:
     """Create a handler that sets a string field from group 1."""
 
     def handler(m: re.Match[str], entry: EvpnEviDetailEntry) -> None:
-        entry[key] = m.group(1).strip()  # type: ignore[literal-required]
+        entry[key] = m.group(1).strip()  # type: ignore[literal-required]  # ty: ignore[invalid-key]
 
     return handler
 
@@ -121,7 +121,7 @@ def _set_int(key: str) -> _FieldHandler:
     """Create a handler that sets an integer field from group 1."""
 
     def handler(m: re.Match[str], entry: EvpnEviDetailEntry) -> None:
-        entry[key] = int(m.group(1))  # type: ignore[literal-required]
+        entry[key] = int(m.group(1))  # type: ignore[literal-required]  # ty: ignore[invalid-key]
 
     return handler
 
@@ -132,7 +132,7 @@ def _set_non_none(key: str) -> _FieldHandler:
     def handler(m: re.Match[str], entry: EvpnEviDetailEntry) -> None:
         val = m.group(1).strip()
         if val.lower() != "none":
-            entry[key] = val  # type: ignore[literal-required]
+            entry[key] = val  # type: ignore[literal-required]  # ty: ignore[invalid-key]
 
     return handler
 

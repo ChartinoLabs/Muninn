@@ -213,4 +213,4 @@ class ShowLptsPifibHardwarePoliceLocationParser(
         if has_statistics:
             result["statistics"] = cast(StatisticsEntry, statistics)
 
-        return cast(ShowLptsPifibHardwarePoliceLocationResult, result)
+        return result

@@ -665,31 +665,41 @@ class ShowIsisDatabaseDetailParser(BaseParser["ShowIsisDatabaseDetailResult"]):
         for line in output.splitlines():
             if not line.strip():
                 continue
-
-            if _handle_structural_line(line, state):
-                continue
-
-            if _handle_lsp_header(line, state):
-                continue
-
-            if _handle_continuation_data(line, state):
-                continue
-
-            if _handle_topology(line, state):
-                continue
-
-            if state.current_lsp is not None:
-                (
-                    _parse_sr_pending_state(line, state)
-                    or _parse_sr_router_cap(line, state.current_lsp)
-                    or _parse_srv6_tlv(line, state)
-                    or _parse_identity_tlv(line, state.current_lsp)
-                    or _parse_capability_tlv(line, state.current_lsp)
-                    or _parse_metric_tlv(line, state.current_lsp)
-                )
+            cls._process_line(line, state)
 
         if not state.levels:
             msg = "No IS-IS LSP entries found in output"
             raise ValueError(msg)
 
         return {"tag": state.tag, "levels": state.levels}
+
+    @classmethod
+    def _process_line(cls, line: str, state: _ParseState) -> None:
+        """Dispatch a single non-empty line to the appropriate handler."""
+        if _handle_structural_line(line, state):
+            return
+
+        if _handle_lsp_header(line, state):
+            return
+
+        if _handle_continuation_data(line, state):
+            return
+
+        if _handle_topology(line, state):
+            return
+
+        if state.current_lsp is not None:
+            cls._try_lsp_content_handlers(line, state)
+
+    @classmethod
+    def _try_lsp_content_handlers(cls, line: str, state: _ParseState) -> None:
+        """Try LSP content handlers (SR, SRv6, identity, capability, metric)."""
+        assert state.current_lsp is not None  # noqa: S101  # nosec B101
+        (
+            _parse_sr_pending_state(line, state)
+            or _parse_sr_router_cap(line, state.current_lsp)
+            or _parse_srv6_tlv(line, state)
+            or _parse_identity_tlv(line, state.current_lsp)
+            or _parse_capability_tlv(line, state.current_lsp)
+            or _parse_metric_tlv(line, state.current_lsp)
+        )

@@ -88,8 +88,8 @@ class _ParseState:
 
     def _append_rt(self, afi_safi: str) -> None:
         """Add the pending RT value to the appropriate AF and direction list."""
-        assert self.pending_rt is not None  # noqa: S101
-        assert self.current_vrf is not None  # noqa: S101
+        assert self.pending_rt is not None  # noqa: S101  # nosec B101
+        assert self.current_vrf is not None  # noqa: S101  # nosec B101
         vrf_entry = self.vrfs[self.current_vrf]
         af_dict = vrf_entry["address_families"]
         if afi_safi not in af_dict:

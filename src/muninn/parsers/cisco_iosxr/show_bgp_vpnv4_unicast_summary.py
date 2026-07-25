@@ -10,7 +10,7 @@ with an ``address_families`` key containing a ``"default"`` entry (since
 no explicit Address Family header is present in this output).
 """
 
-from typing import ClassVar
+from typing import ClassVar, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -51,4 +51,4 @@ class ShowBgpVpnv4UnicastSummaryParser(BaseParser["ShowBgpSummaryResult"]):
         Raises:
             ValueError: If required fields cannot be parsed from the output.
         """
-        return ShowBgpSummaryParser.parse(output)
+        return cast(ShowBgpSummaryResult, ShowBgpSummaryParser.parse(output))

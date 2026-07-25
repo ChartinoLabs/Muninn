@@ -5,7 +5,7 @@ and numeric limits (e.g., VPLS max MAC addresses).
 """
 
 import re
-from typing import ClassVar, TypedDict
+from typing import ClassVar, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -240,4 +240,4 @@ class ShowL2vpnForwardingCapabilityParser(
             msg = "No L2FIB platform capability data found in output"
             raise ValueError(msg)
 
-        return result  # type: ignore[return-value]
+        return cast(ShowL2vpnForwardingCapabilityResult, result)

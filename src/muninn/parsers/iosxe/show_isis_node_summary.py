@@ -86,7 +86,6 @@ class ShowIsisNodeSummaryParser(BaseParser["ShowIsisNodeSummaryResult"]):
 
         for line in output.splitlines():
             stripped = line.strip()
-
             if not stripped:
                 continue
 
@@ -96,13 +95,31 @@ class ShowIsisNodeSummaryParser(BaseParser["ShowIsisNodeSummaryResult"]):
                 all_tags.setdefault(current_tag, {})
                 continue
 
-            node_match = _NODE_PATTERN.match(stripped)
-            if node_match and current_tag is not None:
-                level_key = f"level-{node_match.group('level')}"
-                system_id = node_match.group("system_id")
-                all_tags[current_tag].setdefault(level_key, [])
-                all_tags[current_tag][level_key].append(system_id)
+            if current_tag is not None:
+                cls._handle_node_line(stripped, all_tags, current_tag)
 
+        return cls._build_result(all_tags)
+
+    @classmethod
+    def _handle_node_line(
+        cls,
+        stripped: str,
+        all_tags: dict[str, dict[str, list[str]]],
+        current_tag: str,
+    ) -> None:
+        """Process a potential node information line."""
+        node_match = _NODE_PATTERN.match(stripped)
+        if node_match:
+            level_key = f"level-{node_match.group('level')}"
+            system_id = node_match.group("system_id")
+            all_tags[current_tag].setdefault(level_key, [])
+            all_tags[current_tag][level_key].append(system_id)
+
+    @classmethod
+    def _build_result(
+        cls, all_tags: dict[str, dict[str, list[str]]]
+    ) -> "ShowIsisNodeSummaryResult":
+        """Validate and build the final result from collected tags."""
         if not all_tags or not any(
             nodes for levels in all_tags.values() for nodes in levels.values()
         ):
@@ -111,11 +128,9 @@ class ShowIsisNodeSummaryParser(BaseParser["ShowIsisNodeSummaryResult"]):
 
         result_tags: dict[str, dict[str, IsisNodeLevelSummary]] = {}
         for tag, levels in all_tags.items():
-            result_tags[tag] = {}
-            for level_key, nodes in levels.items():
-                result_tags[tag][level_key] = {
-                    "nodes": nodes,
-                    "node_count": len(nodes),
-                }
+            result_tags[tag] = {
+                level_key: {"nodes": nodes, "node_count": len(nodes)}
+                for level_key, nodes in levels.items()
+            }
 
         return cast(ShowIsisNodeSummaryResult, {"tags": result_tags})

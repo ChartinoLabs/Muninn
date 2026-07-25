@@ -95,6 +95,35 @@ class ShowConfigurationRollbackChangesParser(
             removals.append(config_line)
 
     @classmethod
+    def _parse_action(cls, stripped: str) -> tuple[str, str]:
+        """Determine action and config line content from a stripped line."""
+        if stripped.startswith("no "):
+            return "remove", stripped[3:]
+        return "add", stripped
+
+    @classmethod
+    def _handle_config_line(
+        cls,
+        line: str,
+        sections: dict[str, SectionChanges],
+        section_stack: list[tuple[int, str]],
+    ) -> None:
+        """Process a configuration change line, updating sections and stack."""
+        indent = cls._count_indent(line)
+        stripped = line.strip()
+
+        while section_stack and section_stack[-1][0] >= indent:
+            section_stack.pop()
+
+        action, config_line = cls._parse_action(stripped)
+
+        key = cls._section_key(section_stack)
+        cls._record_change(sections, key, action, config_line)
+
+        if action == "add":
+            section_stack.append((indent, config_line))
+
+    @classmethod
     def parse(cls, output: str) -> "ShowConfigurationRollbackChangesResult":
         """Parse 'show configuration rollback changes last' output.
 
@@ -113,7 +142,6 @@ class ShowConfigurationRollbackChangesParser(
         config_started = False
 
         for line in output.splitlines():
-            # Extract version from the IOS XR Configuration header
             version_match = cls._VERSION_RE.match(line)
             if version_match:
                 ios_xr_version = version_match.group("version")
@@ -123,34 +151,12 @@ class ShowConfigurationRollbackChangesParser(
             if cls._is_skippable(line, config_started):
                 continue
 
-            # Section close marker (standalone !)
             if cls._SECTION_CLOSE_RE.match(line):
                 if section_stack:
                     section_stack.pop()
                 continue
 
-            # Determine indent and adjust section stack
-            indent = cls._count_indent(line)
-            stripped = line.strip()
-
-            while section_stack and section_stack[-1][0] >= indent:
-                section_stack.pop()
-
-            # Determine action and config line content
-            if stripped.startswith("no "):
-                action = "remove"
-                config_line = stripped[3:]
-            else:
-                action = "add"
-                config_line = stripped
-
-            # Record the change in the current section
-            key = cls._section_key(section_stack)
-            cls._record_change(sections, key, action, config_line)
-
-            # Push additions as potential parent sections
-            if action == "add":
-                section_stack.append((indent, config_line))
+            cls._handle_config_line(line, sections, section_stack)
 
         if not ios_xr_version:
             msg = "No IOS XR Configuration version header found in output"

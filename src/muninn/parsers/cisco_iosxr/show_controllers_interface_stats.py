@@ -185,4 +185,4 @@ class ShowControllersInterfaceStatsParser(
         if "egress" in sections:
             result["egress"] = cls._parse_section(sections["egress"])
 
-        return cast(ShowControllersInterfaceStatsResult, result)
+        return result

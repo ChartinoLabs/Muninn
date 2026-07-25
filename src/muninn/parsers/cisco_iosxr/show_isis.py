@@ -262,14 +262,10 @@ class ShowIsisParser(BaseParser["ShowIsisResult"]):
         cls, line: str, stripped: str, state: _ParseState
     ) -> bool:
         """Dispatch to active section handlers. Returns True if consumed."""
-        if (state.in_manual_area or state.in_routing_area) and cls._handle_area_address(
-            line, stripped, state
-        ):
+        if cls._try_area_handler(line, stripped, state):
             return True
 
-        if state.section == "topologies" and cls._handle_topology_section(
-            line, stripped, state
-        ):
+        if cls._try_topology_handler(line, stripped, state):
             return True
 
         if state.in_sr_mpls and cls._handle_sr_mpls_line(line, state):
@@ -279,6 +275,22 @@ class ShowIsisParser(BaseParser["ShowIsisResult"]):
             return True
 
         return state.in_interfaces and cls._handle_interface_line(line, state)
+
+    @classmethod
+    def _try_area_handler(cls, line: str, stripped: str, state: _ParseState) -> bool:
+        """Try area address handler if in an area section."""
+        if not (state.in_manual_area or state.in_routing_area):
+            return False
+        return cls._handle_area_address(line, stripped, state)
+
+    @classmethod
+    def _try_topology_handler(
+        cls, line: str, stripped: str, state: _ParseState
+    ) -> bool:
+        """Try topology section handler if in topologies section."""
+        if state.section != "topologies":
+            return False
+        return cls._handle_topology_section(line, stripped, state)
 
     @classmethod
     def _handle_new_instance(cls, m: re.Match[str], state: _ParseState) -> None:
@@ -335,9 +347,9 @@ class ShowIsisParser(BaseParser["ShowIsisResult"]):
         """Handle area address collection. Returns True if line consumed."""
         if _AREA_ADDRESS_PATTERN.match(line):
             if state.in_manual_area:
-                state.current["manual_area_addresses"].append(stripped)  # type: ignore[index]
+                state.current["manual_area_addresses"].append(stripped)  # type: ignore[index]  # ty: ignore[not-subscriptable]
             elif state.in_routing_area:
-                state.current["routing_area_addresses"].append(stripped)  # type: ignore[index]
+                state.current["routing_area_addresses"].append(stripped)  # type: ignore[index]  # ty: ignore[not-subscriptable]
             return True
         state.in_manual_area = False
         state.in_routing_area = False
@@ -378,7 +390,7 @@ class ShowIsisParser(BaseParser["ShowIsisResult"]):
     def _handle_topology_content(cls, line: str, state: _ParseState) -> bool:
         """Handle content within an active topology. Returns True if consumed."""
         topo = state.current_topology
-        assert topo is not None  # noqa: S101
+        assert topo is not None  # noqa: S101  # nosec B101
 
         if _RIB_CONNECTED_PATTERN.match(line):
             topo["rib_connected"] = True
@@ -419,7 +431,7 @@ class ShowIsisParser(BaseParser["ShowIsisResult"]):
     def _handle_level_content(cls, line: str, state: _ParseState) -> bool:
         """Handle metric style/metric/TE within a level. Returns True if consumed."""
         entry = state.current_level_entry
-        assert entry is not None  # noqa: S101
+        assert entry is not None  # noqa: S101  # nosec B101
 
         m = _METRIC_STYLE_PATTERN.match(line)
         if m:
@@ -458,14 +470,14 @@ class ShowIsisParser(BaseParser["ShowIsisResult"]):
         """Handle SRv6 section lines. Returns True if consumed."""
         if stripped == "Configured locators:":
             state.in_srv6_locators = True
-            if "srv6" not in state.current:  # type: ignore[operator]
-                state.current["srv6"] = IsisSrv6(locators={})  # type: ignore[index]
+            if "srv6" not in state.current:  # type: ignore[operator]  # ty: ignore[unsupported-operator]
+                state.current["srv6"] = IsisSrv6(locators={})  # type: ignore[index]  # ty: ignore[invalid-assignment]
             return True
         if state.in_srv6_locators:
             m = _SRV6_LOCATOR_PATTERN.match(line)
             if m:
                 name = m.group("name")
-                state.current["srv6"]["locators"][name] = IsisSrv6Locator(  # type: ignore[index]
+                state.current["srv6"]["locators"][name] = IsisSrv6Locator(  # type: ignore[index]  # ty: ignore[not-subscriptable]
                     status=m.group("status")
                 )
                 return True
@@ -477,7 +489,7 @@ class ShowIsisParser(BaseParser["ShowIsisResult"]):
         m = _INTERFACE_PATTERN.match(line)
         if m:
             name = canonical_interface_name(m.group("name"), os=OS.CISCO_IOSXR)
-            state.current["interfaces"][name] = IsisInterface(  # type: ignore[index]
+            state.current["interfaces"][name] = IsisInterface(  # type: ignore[index]  # ty: ignore[not-subscriptable]
                 running_state=m.group("running_state"),
                 config_state=m.group("config_state"),
             )
@@ -490,7 +502,7 @@ class ShowIsisParser(BaseParser["ShowIsisResult"]):
     ) -> None:
         """Handle top-level instance fields and section headers."""
         current = state.current
-        assert current is not None  # noqa: S101
+        assert current is not None  # noqa: S101  # nosec B101
 
         if cls._handle_section_headers(line, stripped, state):
             return
@@ -550,13 +562,13 @@ class ShowIsisParser(BaseParser["ShowIsisResult"]):
         for pattern, key in _STR_FIELD_PATTERNS:
             m = pattern.match(line)
             if m:
-                current[key] = m.group("val")  # type: ignore[literal-required]
+                current[key] = m.group("val")  # type: ignore[literal-required]  # ty: ignore[invalid-key]
                 return
 
         for pattern, key in _INT_FIELD_PATTERNS:
             m = pattern.match(line)
             if m:
-                current[key] = int(m.group("val"))  # type: ignore[literal-required]
+                current[key] = int(m.group("val"))  # type: ignore[literal-required]  # ty: ignore[invalid-key]
                 return
 
         m = _LSP_FULL_PATTERN.match(line)
