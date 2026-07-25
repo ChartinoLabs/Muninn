@@ -1,7 +1,7 @@
 """Parser for 'show macsec mka session' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -155,6 +155,28 @@ class ShowMacsecMkaSessionParser(
     )
 
     @classmethod
+    def _process_line(
+        cls,
+        stripped: str,
+        result: dict[str, SessionEntry],
+        pending: dict[str, str] | None,
+    ) -> dict[str, str] | None:
+        """Process a single non-empty, non-header line."""
+        m = _SESSION_LINE1.match(stripped)
+        if m:
+            return _process_session_match(m, result, pending)
+
+        if pending is not None:
+            cm = _CONTINUATION.match(stripped)
+            if cm:
+                _flush_pending(
+                    pending, result, cm.group("psk_eap"), cm.group("ckn") or ""
+                )
+                return None
+
+        return pending
+
+    @classmethod
     def parse(cls, output: str) -> "ShowMacsecMkaSessionResult":
         """Parse 'show macsec mka session' output.
 
@@ -173,21 +195,9 @@ class ShowMacsecMkaSessionParser(
                 continue
             if _NODE_PATTERN.match(stripped) or _SKIP_PATTERN.match(stripped):
                 continue
-
-            m = _SESSION_LINE1.match(stripped)
-            if m:
-                pending = _process_session_match(m, result, pending)
-                continue
-
-            if pending is not None:
-                cm = _CONTINUATION.match(stripped)
-                if cm:
-                    _flush_pending(
-                        pending, result, cm.group("psk_eap"), cm.group("ckn") or ""
-                    )
-                    pending = None
+            pending = cls._process_line(stripped, result, pending)
 
         if pending is not None:
             _flush_pending(pending, result)
 
-        return cast(ShowMacsecMkaSessionResult, result)
+        return result
