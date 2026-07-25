@@ -1,0 +1,114 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show isis interface brief",
+  "schema": {
+    "name": "ShowIsisInterfaceBriefResult",
+    "fields": {
+      "instances": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "InterfaceBriefEntry",
+              "fields": {
+                "all_ok": {
+                  "type": "str",
+                  "required": true
+                },
+                "clns_state": {
+                  "type": "str",
+                  "required": false
+                },
+                "mtu": {
+                  "type": "int",
+                  "required": false
+                },
+                "adjacencies_l1": {
+                  "type": "int",
+                  "required": false
+                },
+                "adjacencies_l2": {
+                  "type": "int",
+                  "required": false
+                },
+                "priority_l1": {
+                  "type": "int",
+                  "required": false
+                },
+                "priority_l2": {
+                  "type": "int",
+                  "required": false
+                },
+                "adj_topos_running": {
+                  "type": "int",
+                  "required": false
+                },
+                "adj_topos_configured": {
+                  "type": "int",
+                  "required": false
+                },
+                "adv_topos_running": {
+                  "type": "int",
+                  "required": false
+                },
+                "adv_topos_configured": {
+                  "type": "int",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "IS-IS interface brief with empty instance and populated instance containing loopback and LAN interfaces",
+      "input": "show isis interface brief\nMon Apr 10 05:15:25.005 UTC\n\nIS-IS CORE Interfaces\n    Interface      All     Adjs    Adj Topos  Adv Topos  CLNS   MTU    Prio\n                   OK    L1   L2    Run/Cfg    Run/Cfg                L1   L2\n-----------------  ---  ---------  ---------  ---------  ----  ----  --------\n\nIS-IS ACCESS Interfaces\n    Interface      All     Adjs    Adj Topos  Adv Topos  CLNS   MTU    Prio\n                   OK    L1   L2    Run/Cfg    Run/Cfg                L1   L2\n-----------------  ---  ---------  ---------  ---------  ----  ----  --------\nLo0                Yes    -    0      2/2        2/2     Up    1500    -    -\nGi0/0/0/0          Yes    -    1      2/2        2/2     Up    1497    -   64\nGi0/0/0/1          Yes    -    1      2/2        2/2     Up    1497    -   64\n",
+      "expected": {
+        "instances": {
+          "CORE": {},
+          "ACCESS": {
+            "Loopback0": {
+              "all_ok": "Yes",
+              "clns_state": "Up",
+              "mtu": 1500,
+              "adjacencies_l2": 0,
+              "adj_topos_running": 2,
+              "adj_topos_configured": 2,
+              "adv_topos_running": 2,
+              "adv_topos_configured": 2
+            },
+            "GigabitEthernet0/0/0/0": {
+              "all_ok": "Yes",
+              "clns_state": "Up",
+              "mtu": 1497,
+              "adjacencies_l2": 1,
+              "priority_l2": 64,
+              "adj_topos_running": 2,
+              "adj_topos_configured": 2,
+              "adv_topos_running": 2,
+              "adv_topos_configured": 2
+            },
+            "GigabitEthernet0/0/0/1": {
+              "all_ok": "Yes",
+              "clns_state": "Up",
+              "mtu": 1497,
+              "adjacencies_l2": 1,
+              "priority_l2": 64,
+              "adj_topos_running": 2,
+              "adj_topos_configured": 2,
+              "adv_topos_running": 2,
+              "adv_topos_configured": 2
+            }
+          }
+        }
+      }
+    }
+  ]
+}
