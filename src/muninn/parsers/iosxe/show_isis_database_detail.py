@@ -32,6 +32,56 @@ class IsisIpv6ReachabilityEntry(TypedDict):
     mt: NotRequired[str]
 
 
+class RouterCapEntry(TypedDict):
+    """Schema for Router Capability TLV."""
+
+    address: str
+    d_flag: int
+    s_flag: int
+
+
+class SrGlobalBlock(TypedDict):
+    """Schema for Segment Routing Global Block (SRGB)."""
+
+    base: int
+    range: int
+
+
+class SrLocalBlock(TypedDict):
+    """Schema for Segment Routing Local Block (SRLB)."""
+
+    base: int
+    range: int
+
+
+class SidStructureEntry(TypedDict):
+    """Schema for SRv6 SID Structure."""
+
+    block_length: int
+    node_id_length: int
+    func_length: int
+    args_length: int
+
+
+class Srv6EndSidEntry(TypedDict):
+    """Schema for an SRv6 End SID entry."""
+
+    sid: str
+    behavior: str
+    flavors: NotRequired[str]
+    sid_structure: NotRequired[SidStructureEntry]
+
+
+class Srv6LocatorEntry(TypedDict):
+    """Schema for an SRv6 Locator entry."""
+
+    prefix: str
+    metric: int
+    algorithm: int
+    mt: NotRequired[str]
+    end_sids: NotRequired[list[Srv6EndSidEntry]]
+
+
 class IsisLspEntry(TypedDict):
     """Schema for a single IS-IS LSP entry."""
 
@@ -51,6 +101,11 @@ class IsisLspEntry(TypedDict):
     ipv6_address: NotRequired[str]
     ipv6_router_id: NotRequired[str]
     hostname: NotRequired[str]
+    router_cap: NotRequired[RouterCapEntry]
+    sr_srgb: NotRequired[SrGlobalBlock]
+    sr_srlb: NotRequired[SrLocalBlock]
+    node_msd: NotRequired[int]
+    srv6_locators: NotRequired[list[Srv6LocatorEntry]]
     is_neighbors: NotRequired[list[IsisIsNeighborEntry]]
     ip_reachability: NotRequired[list[IsisIpReachabilityEntry]]
     ipv6_reachability: NotRequired[list[IsisIpv6ReachabilityEntry]]
@@ -131,6 +186,53 @@ _METRIC_IP = re.compile(r"^\s+Metric:\s+(?P<metric>\d+)\s+IP\s+(?P<prefix>\S+)\s
 _METRIC_IPV6 = re.compile(
     r"^\s+Metric:\s+(?P<metric>\d+)\s+"
     r"IPv6\s+(?:\((?P<mt>[^)]+)\)\s+)?(?P<prefix>\S+)\s*$"
+)
+
+# SR/SRv6 TLV patterns
+# "  Router CAP:   10.255.255.1, D:0, S:0"
+_ROUTER_CAP = re.compile(
+    r"^\s+Router CAP:\s+(?P<address>\S+),\s+D:(?P<d>\d),\s+S:(?P<s>\d)\s*$"
+)
+
+# "    Segment Routing: I:1 V:0, SRGB Base: 16000 Range: 8000"
+_SR_SRGB = re.compile(
+    r"^\s+Segment Routing:\s+I:\d+\s+V:\d+,\s+SRGB Base:\s+(?P<base>\d+)\s+"
+    r"Range:\s+(?P<range>\d+)\s*$"
+)
+
+# "    Segment Routing Local Block: SRLB Base: 15000 Range: 1000"
+_SR_SRLB = re.compile(
+    r"^\s+Segment Routing Local Block:\s+SRLB Base:\s+(?P<base>\d+)\s+"
+    r"Range:\s+(?P<range>\d+)\s*$"
+)
+
+# "    Node-MSD"
+_NODE_MSD_HEADER = re.compile(r"^\s+Node-MSD\s*$")
+
+# "      MSD: 16"
+_MSD_VALUE = re.compile(r"^\s+MSD:\s+(?P<msd>\d+)\s*$")
+
+# "  SRv6 Locator: (MT-IPv6) fd00:1:1::/48 Metric:0 Algorithm:0"
+_SRV6_LOCATOR = re.compile(
+    r"^\s+SRv6 Locator:\s+(?:\((?P<mt>[^)]+)\)\s+)?(?P<prefix>\S+)\s+"
+    r"Metric:(?P<metric>\d+)\s+Algorithm:(?P<algo>\d+)\s*$"
+)
+
+# "    End SID: fd00:1:1:: uN (PSP/USD)"
+_END_SID = re.compile(
+    r"^\s+End SID:\s+(?P<sid>\S+)\s+(?P<behavior>\S+)"
+    r"(?:\s+\((?P<flavors>[^)]+)\))?\s*$"
+)
+
+# "      SID Structure:"
+_SID_STRUCTURE_HEADER = re.compile(r"^\s+SID Structure:\s*$")
+
+# "        Block Length: 32, Node-ID Length: 16, Func-Length: 0, Args-Length: 80"
+_SID_STRUCTURE_DATA = re.compile(
+    r"^\s+Block Length:\s+(?P<block>\d+),\s+"
+    r"Node-ID Length:\s+(?P<node_id>\d+),\s+"
+    r"Func-Length:\s+(?P<func>\d+),\s+"
+    r"Args-Length:\s+(?P<args>\d+)\s*$"
 )
 
 
@@ -260,6 +362,10 @@ class _ParseState:
         "current_lsp",
         "pending_lsp_id",
         "in_topology_block",
+        "in_node_msd",
+        "in_sid_structure",
+        "current_locator",
+        "current_end_sid",
     )
 
     def __init__(self) -> None:
@@ -269,6 +375,10 @@ class _ParseState:
         self.current_lsp: IsisLspEntry | None = None
         self.pending_lsp_id: str | None = None
         self.in_topology_block: bool = False
+        self.in_node_msd: bool = False
+        self.in_sid_structure: bool = False
+        self.current_locator: Srv6LocatorEntry | None = None
+        self.current_end_sid: Srv6EndSidEntry | None = None
 
     def ensure_level(self) -> str:
         """Ensure a level context exists, defaulting to Level-2."""
@@ -282,6 +392,10 @@ class _ParseState:
         self.current_lsp = None
         self.pending_lsp_id = None
         self.in_topology_block = False
+        self.in_node_msd = False
+        self.in_sid_structure = False
+        self.current_locator = None
+        self.current_end_sid = None
 
 
 def _handle_structural_line(line: str, state: _ParseState) -> bool:
@@ -328,6 +442,10 @@ def _handle_lsp_header(line: str, state: _ParseState) -> bool:
         state.levels[level][lsp_id] = state.current_lsp
         state.pending_lsp_id = None
         state.in_topology_block = False
+        state.in_node_msd = False
+        state.in_sid_structure = False
+        state.current_locator = None
+        state.current_end_sid = None
         return True
 
     cont_start = _LSP_CONT_START_PATTERN.match(line)
@@ -389,13 +507,137 @@ def _handle_topology(line: str, state: _ParseState) -> bool:
     return False
 
 
+def _parse_sr_pending_state(line: str, state: _ParseState) -> bool:
+    """Handle state-dependent SR TLV lines (SID structure data, MSD value).
+
+    Returns True if matched and consumed.
+    """
+    lsp = state.current_lsp
+    if lsp is None:
+        return False
+
+    if state.in_sid_structure:
+        sid_data = _SID_STRUCTURE_DATA.match(line)
+        if sid_data:
+            structure: SidStructureEntry = {
+                "block_length": int(sid_data.group("block")),
+                "node_id_length": int(sid_data.group("node_id")),
+                "func_length": int(sid_data.group("func")),
+                "args_length": int(sid_data.group("args")),
+            }
+            if state.current_end_sid is not None:
+                state.current_end_sid["sid_structure"] = structure
+            state.in_sid_structure = False
+            return True
+        state.in_sid_structure = False
+
+    if state.in_node_msd:
+        msd_match = _MSD_VALUE.match(line)
+        if msd_match:
+            lsp["node_msd"] = int(msd_match.group("msd"))
+            state.in_node_msd = False
+            return True
+        state.in_node_msd = False
+
+    return False
+
+
+def _parse_sr_router_cap(line: str, lsp: IsisLspEntry) -> bool:
+    """Try to parse Router CAP and SR block TLV fields. Returns True if matched."""
+    cap_match = _ROUTER_CAP.match(line)
+    if cap_match:
+        lsp["router_cap"] = {
+            "address": cap_match.group("address"),
+            "d_flag": int(cap_match.group("d")),
+            "s_flag": int(cap_match.group("s")),
+        }
+        return True
+
+    srgb_match = _SR_SRGB.match(line)
+    if srgb_match:
+        lsp["sr_srgb"] = {
+            "base": int(srgb_match.group("base")),
+            "range": int(srgb_match.group("range")),
+        }
+        return True
+
+    srlb_match = _SR_SRLB.match(line)
+    if srlb_match:
+        lsp["sr_srlb"] = {
+            "base": int(srlb_match.group("base")),
+            "range": int(srlb_match.group("range")),
+        }
+        return True
+
+    return False
+
+
+def _parse_srv6_end_sid(line: str, state: _ParseState) -> bool:
+    """Try to parse an SRv6 End SID line. Returns True if matched."""
+    end_sid_match = _END_SID.match(line)
+    if not end_sid_match:
+        return False
+
+    end_sid: Srv6EndSidEntry = {
+        "sid": end_sid_match.group("sid"),
+        "behavior": end_sid_match.group("behavior"),
+    }
+    flavors = end_sid_match.group("flavors")
+    if flavors:
+        end_sid["flavors"] = flavors
+    if state.current_locator is not None:
+        if "end_sids" not in state.current_locator:
+            state.current_locator["end_sids"] = []
+        state.current_locator["end_sids"].append(end_sid)
+    state.current_end_sid = end_sid
+    return True
+
+
+def _parse_srv6_tlv(line: str, state: _ParseState) -> bool:
+    """Try to parse SRv6 locator and related fields. Returns True if matched."""
+    lsp = state.current_lsp
+    if lsp is None:
+        return False
+
+    if _NODE_MSD_HEADER.match(line):
+        state.in_node_msd = True
+        return True
+
+    loc_match = _SRV6_LOCATOR.match(line)
+    if loc_match:
+        locator: Srv6LocatorEntry = {
+            "prefix": loc_match.group("prefix"),
+            "metric": int(loc_match.group("metric")),
+            "algorithm": int(loc_match.group("algo")),
+        }
+        mt_val = loc_match.group("mt")
+        if mt_val:
+            locator["mt"] = mt_val
+        if "srv6_locators" not in lsp:
+            lsp["srv6_locators"] = []
+        lsp["srv6_locators"].append(locator)
+        state.current_locator = locator
+        state.current_end_sid = None
+        return True
+
+    if _parse_srv6_end_sid(line, state):
+        return True
+
+    if _SID_STRUCTURE_HEADER.match(line):
+        state.in_sid_structure = True
+        return True
+
+    return False
+
+
 @register(OS.CISCO_IOSXE, "show isis database detail")
 class ShowIsisDatabaseDetailParser(BaseParser["ShowIsisDatabaseDetailResult"]):
     """Parser for 'show isis database detail' command on IOS-XE.
 
     Parses the IS-IS link state database detail output including LSP headers
     and TLV contents (area address, NLPID, topology, router ID, hostname,
-    IS neighbors, IP reachability, and IPv6 reachability).
+    IS neighbors, IP reachability, IPv6 reachability, Router CAP,
+    Segment Routing SRGB/SRLB, Node-MSD, and SRv6 locators).
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset(
@@ -438,7 +680,10 @@ class ShowIsisDatabaseDetailParser(BaseParser["ShowIsisDatabaseDetailResult"]):
 
             if state.current_lsp is not None:
                 (
-                    _parse_identity_tlv(line, state.current_lsp)
+                    _parse_sr_pending_state(line, state)
+                    or _parse_sr_router_cap(line, state.current_lsp)
+                    or _parse_srv6_tlv(line, state)
+                    or _parse_identity_tlv(line, state.current_lsp)
                     or _parse_capability_tlv(line, state.current_lsp)
                     or _parse_metric_tlv(line, state.current_lsp)
                 )

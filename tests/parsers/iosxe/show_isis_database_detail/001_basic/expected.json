@@ -20,6 +20,20 @@
           "IPv6 (0x2)"
         ],
         "router_id": "10.255.255.1",
+        "router_cap": {
+          "address": "10.255.255.1",
+          "d_flag": 0,
+          "s_flag": 0
+        },
+        "sr_srgb": {
+          "base": 16000,
+          "range": 8000
+        },
+        "sr_srlb": {
+          "base": 15000,
+          "range": 1000
+        },
+        "node_msd": 16,
         "hostname": "ROUTER-A",
         "ip_address": "10.255.255.1",
         "ip_reachability": [
@@ -49,6 +63,27 @@
             "metric": 0,
             "mt": "MT-IPv6"
           }
+        ],
+        "srv6_locators": [
+          {
+            "prefix": "fd00:1:1::/48",
+            "metric": 0,
+            "algorithm": 0,
+            "mt": "MT-IPv6",
+            "end_sids": [
+              {
+                "sid": "fd00:1:1::",
+                "behavior": "uN",
+                "flavors": "PSP/USD",
+                "sid_structure": {
+                  "block_length": 32,
+                  "node_id_length": 16,
+                  "func_length": 0,
+                  "args_length": 80
+                }
+              }
+            ]
+          }
         ]
       }
     },
@@ -74,6 +109,15 @@
         "ip_address": "10.255.255.2",
         "ipv6_address": "2001:db8::2",
         "hostname": "ROUTER-B",
+        "router_cap": {
+          "address": "10.255.255.2",
+          "d_flag": 0,
+          "s_flag": 0
+        },
+        "sr_srgb": {
+          "base": 16000,
+          "range": 8000
+        },
         "is_neighbors": [
           {
             "neighbor_id": "ROUTER-C.00",
