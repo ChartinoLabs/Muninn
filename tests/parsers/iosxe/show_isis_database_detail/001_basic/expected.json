@@ -1,0 +1,233 @@
+{
+  "tag": "65000",
+  "levels": {
+    "Level-1": {
+      "ROUTER-A.00-00": {
+        "sequence_number": "0x00001234",
+        "checksum": "0xABCD",
+        "holdtime": 1100,
+        "att": 0,
+        "p_bit": 0,
+        "ol": 1,
+        "is_local": true,
+        "area_address": "49.0001",
+        "nlpid": [
+          "0xCC",
+          "0x8E"
+        ],
+        "topologies": [
+          "IPv4 (0x0)",
+          "IPv6 (0x2)"
+        ],
+        "router_id": "10.255.255.1",
+        "router_cap": {
+          "address": "10.255.255.1",
+          "d_flag": 0,
+          "s_flag": 0
+        },
+        "sr_srgb": {
+          "base": 16000,
+          "range": 8000
+        },
+        "sr_srlb": {
+          "base": 15000,
+          "range": 1000
+        },
+        "node_msd": 16,
+        "hostname": "ROUTER-A",
+        "ip_address": "10.255.255.1",
+        "ip_reachability": [
+          {
+            "prefix": "10.255.255.1/32",
+            "metric": 10
+          },
+          {
+            "prefix": "10.0.1.0/30",
+            "metric": 100
+          },
+          {
+            "prefix": "10.0.1.4/30",
+            "metric": 10
+          }
+        ],
+        "ipv6_address": "2001:db8::1",
+        "ipv6_router_id": "2001:db8::1",
+        "ipv6_reachability": [
+          {
+            "prefix": "2001:db8::1/128",
+            "metric": 10,
+            "mt": "MT-IPv6"
+          },
+          {
+            "prefix": "fd00:1:1::/48",
+            "metric": 0,
+            "mt": "MT-IPv6"
+          }
+        ],
+        "srv6_locators": [
+          {
+            "prefix": "fd00:1:1::/48",
+            "metric": 0,
+            "algorithm": 0,
+            "mt": "MT-IPv6",
+            "end_sids": [
+              {
+                "sid": "fd00:1:1::",
+                "behavior": "uN",
+                "flavors": "PSP/USD",
+                "sid_structure": {
+                  "block_length": 32,
+                  "node_id_length": 16,
+                  "func_length": 0,
+                  "args_length": 80
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "Level-2": {
+      "ROUTER-B.00-00": {
+        "sequence_number": "0x00005678",
+        "checksum": "0xEF01",
+        "holdtime": 643,
+        "att": 0,
+        "p_bit": 0,
+        "ol": 0,
+        "holdtime_received": 1200,
+        "area_address": "49.0001",
+        "nlpid": [
+          "0xCC",
+          "0x8E"
+        ],
+        "topologies": [
+          "IPv4 (0x0)",
+          "IPv6 (0x2)"
+        ],
+        "router_id": "10.255.255.2",
+        "ip_address": "10.255.255.2",
+        "ipv6_address": "2001:db8::2",
+        "hostname": "ROUTER-B",
+        "router_cap": {
+          "address": "10.255.255.2",
+          "d_flag": 0,
+          "s_flag": 0
+        },
+        "sr_srgb": {
+          "base": 16000,
+          "range": 8000
+        },
+        "is_neighbors": [
+          {
+            "neighbor_id": "ROUTER-C.00",
+            "metric": 100
+          },
+          {
+            "neighbor_id": "ROUTER-C.00",
+            "metric": 10
+          },
+          {
+            "neighbor_id": "ROUTER-C.00",
+            "metric": 10,
+            "mt": "MT-IPv6"
+          }
+        ],
+        "ip_reachability": [
+          {
+            "prefix": "10.0.2.0/30",
+            "metric": 100
+          },
+          {
+            "prefix": "10.0.2.4/30",
+            "metric": 10
+          },
+          {
+            "prefix": "10.255.255.2/32",
+            "metric": 0
+          }
+        ],
+        "ipv6_reachability": [
+          {
+            "prefix": "2001:db8::2/128",
+            "metric": 0,
+            "mt": "MT-IPv6"
+          },
+          {
+            "prefix": "fd00:2:1:100::/64",
+            "metric": 10,
+            "mt": "MT-IPv6"
+          }
+        ]
+      },
+      "ROUTER-C.00-00": {
+        "sequence_number": "0x00009ABC",
+        "checksum": "0x1234",
+        "holdtime": 940,
+        "att": 0,
+        "p_bit": 0,
+        "ol": 0,
+        "holdtime_received": 1200,
+        "area_address": "49.0001",
+        "nlpid": [
+          "0xCC",
+          "0x8E"
+        ],
+        "topologies": [
+          "IPv4 (0x0)",
+          "IPv6 (0x2)"
+        ],
+        "router_id": "10.255.255.3",
+        "ip_address": "10.255.255.3",
+        "ipv6_address": "2001:db8::3",
+        "hostname": "ROUTER-C",
+        "is_neighbors": [
+          {
+            "neighbor_id": "ROUTER-B.00",
+            "metric": 10
+          },
+          {
+            "neighbor_id": "ROUTER-B.00",
+            "metric": 100
+          },
+          {
+            "neighbor_id": "ROUTER-B.00",
+            "metric": 10,
+            "mt": "MT-IPv6"
+          },
+          {
+            "neighbor_id": "ROUTER-B.00",
+            "metric": 10,
+            "mt": "MT-IPv6"
+          }
+        ],
+        "ip_reachability": [
+          {
+            "prefix": "10.0.3.0/30",
+            "metric": 100
+          },
+          {
+            "prefix": "10.0.3.4/30",
+            "metric": 10
+          },
+          {
+            "prefix": "10.255.255.3/32",
+            "metric": 0
+          }
+        ],
+        "ipv6_reachability": [
+          {
+            "prefix": "2001:db8::3/128",
+            "metric": 0,
+            "mt": "MT-IPv6"
+          },
+          {
+            "prefix": "fd00:3:1::/48",
+            "metric": 1,
+            "mt": "MT-IPv6"
+          }
+        ]
+      }
+    }
+  }
+}

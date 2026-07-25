@@ -161,6 +161,9 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         # entries uses list-of-dicts; no natural unique key for redundancy history
         # events (timestamps repeat heavily).
         "iosxe/show_redundancy_history_reverse/001_basic/expected.json",
+        # is_neighbors/ip_reachability/ipv6_reachability use list-of-dicts; no natural
+        # unique key (multiple parallel links to same neighbor with different metrics).
+        "iosxe/show_isis_database_detail/001_basic/expected.json",
         # --- Cisco IOS-XR ---
         # routes uses list-of-dicts; no natural unique key for multiple BGP paths
         # (same network with multipath/ECMP entries and different next-hops).
