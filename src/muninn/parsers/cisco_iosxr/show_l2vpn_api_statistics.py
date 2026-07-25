@@ -49,9 +49,9 @@ class ShowL2vpnApiStatisticsResult(TypedDict):
         size_min: Minimum bulk size.
         size_max: Maximum bulk size.
         size_avg: Average bulk size.
-        avg_time_all_ms: Avg time for all calls in ms, or None.
-        avg_time_ok_ms: Avg time for OK calls in ms, or None.
-        avg_time_fail_ms: Avg time for failed calls in ms, or None.
+        avg_time_all_ms: Avg time for all calls in ms. Absent when no data.
+        avg_time_ok_ms: Avg time for OK calls in ms. Absent when no data.
+        avg_time_fail_ms: Avg time for failed calls in ms. Absent when no data.
         last_success: Last successful call detail.
         last_bulk_fail: Last bulk failure detail.
         last_indv_fail: Last individual failure detail.
@@ -70,9 +70,9 @@ class ShowL2vpnApiStatisticsResult(TypedDict):
     size_min: int
     size_max: int
     size_avg: int
-    avg_time_all_ms: float | None
-    avg_time_ok_ms: float | None
-    avg_time_fail_ms: float | None
+    avg_time_all_ms: NotRequired[float]
+    avg_time_ok_ms: NotRequired[float]
+    avg_time_fail_ms: NotRequired[float]
     last_success: CallDetailEntry
     last_bulk_fail: CallDetailEntry
     last_indv_fail: CallDetailEntry
