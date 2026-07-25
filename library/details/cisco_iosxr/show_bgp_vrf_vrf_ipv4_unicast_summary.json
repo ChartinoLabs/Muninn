@@ -1,0 +1,146 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show bgp vrf <vrf> ipv4 unicast summary",
+  "schema": {
+    "name": "ShowBgpVrfSummaryResult",
+    "fields": {
+      "vrf": {
+        "type": "str",
+        "required": true
+      },
+      "router_id": {
+        "type": "str",
+        "required": true
+      },
+      "local_as": {
+        "type": "str",
+        "required": true
+      },
+      "state": {
+        "type": "str",
+        "required": false
+      },
+      "route_distinguisher": {
+        "type": "str",
+        "required": false
+      },
+      "vrf_id": {
+        "type": "str",
+        "required": false
+      },
+      "nsr_enabled": {
+        "type": "bool",
+        "required": false
+      },
+      "table_state": {
+        "type": "str",
+        "required": false
+      },
+      "table_id": {
+        "type": "str",
+        "required": false
+      },
+      "rd_version": {
+        "type": "int",
+        "required": false
+      },
+      "main_routing_table_version": {
+        "type": "int",
+        "required": false
+      },
+      "nsr_initial_initsync_version": {
+        "type": "str",
+        "required": false
+      },
+      "nsr_issu_sync_group_versions": {
+        "type": "str",
+        "required": false
+      },
+      "operation_mode": {
+        "type": "str",
+        "required": false
+      },
+      "process": {
+        "type": {
+          "name": "ProcessEntry",
+          "fields": {
+            "rcv_tbl_ver": {
+              "type": "int",
+              "required": true
+            },
+            "brib_rib": {
+              "type": "int",
+              "required": true
+            },
+            "label_ver": {
+              "type": "int",
+              "required": true
+            },
+            "import_ver": {
+              "type": "int",
+              "required": true
+            },
+            "send_tbl_ver": {
+              "type": "int",
+              "required": true
+            },
+            "standby_ver": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": false
+      },
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "NeighborEntry",
+            "fields": {
+              "spk": {
+                "type": "int",
+                "required": true
+              },
+              "remote_as": {
+                "type": "str",
+                "required": true
+              },
+              "msg_rcvd": {
+                "type": "int",
+                "required": true
+              },
+              "msg_sent": {
+                "type": "int",
+                "required": true
+              },
+              "tbl_ver": {
+                "type": "int",
+                "required": true
+              },
+              "in_queue": {
+                "type": "int",
+                "required": true
+              },
+              "out_queue": {
+                "type": "int",
+                "required": true
+              },
+              "up_down": {
+                "type": "str",
+                "required": true
+              },
+              "state_pfxrcd": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}
