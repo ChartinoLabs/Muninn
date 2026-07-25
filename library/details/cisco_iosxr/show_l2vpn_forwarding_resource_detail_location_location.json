@@ -1,0 +1,50 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show l2vpn forwarding resource detail location <location>",
+  "schema": {
+    "name": "ShowL2vpnForwardingResourceDetailResult",
+    "fields": {
+      "summary_state": {
+        "type": "str",
+        "required": true
+      },
+      "shared_memory": {
+        "type": {
+          "name": "SharedMemoryResource",
+          "fields": {
+            "mode": {
+              "type": "str",
+              "required": true
+            },
+            "current_available_bytes": {
+              "type": "int",
+              "required": true
+            },
+            "max_available_bytes": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "hardware_resources": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "HardwareResource",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}
