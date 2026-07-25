@@ -1,0 +1,132 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show l2vpn api-statistics <subsystem> detail <mode> api <api-name>",
+  "schema": {
+    "name": "ShowL2vpnApiStatisticsResult",
+    "fields": {
+      "subsystem": {
+        "type": "str",
+        "required": true
+      },
+      "api_name": {
+        "type": "str",
+        "required": true
+      },
+      "mode": {
+        "type": "str",
+        "required": true
+      },
+      "calls_all": {
+        "type": "int",
+        "required": true
+      },
+      "calls_ok": {
+        "type": "int",
+        "required": true
+      },
+      "calls_fail": {
+        "type": "int",
+        "required": true
+      },
+      "size_min": {
+        "type": "int",
+        "required": true
+      },
+      "size_max": {
+        "type": "int",
+        "required": true
+      },
+      "size_avg": {
+        "type": "int",
+        "required": true
+      },
+      "avg_time_all_ms": {
+        "type": "float",
+        "required": false
+      },
+      "avg_time_ok_ms": {
+        "type": "float",
+        "required": false
+      },
+      "avg_time_fail_ms": {
+        "type": "float",
+        "required": false
+      },
+      "last_success": {
+        "type": {
+          "name": "CallDetailEntry",
+          "fields": {
+            "timestamp": {
+              "type": "str",
+              "required": true
+            },
+            "bulk": {
+              "type": "int",
+              "required": false
+            },
+            "time_ms": {
+              "type": "float | None",
+              "required": false
+            },
+            "result_code": {
+              "type": "str",
+              "required": false
+            },
+            "result_text": {
+              "type": "str",
+              "required": false
+            },
+            "info": {
+              "type": "str | None",
+              "required": false
+            }
+          }
+        },
+        "required": true
+      },
+      "last_bulk_fail": {
+        "type": {
+          "type": "ref",
+          "name": "CallDetailEntry"
+        },
+        "required": true
+      },
+      "last_indv_fail": {
+        "type": {
+          "type": "ref",
+          "name": "CallDetailEntry"
+        },
+        "required": true
+      },
+      "last_long_call": {
+        "type": {
+          "type": "ref",
+          "name": "CallDetailEntry"
+        },
+        "required": true
+      },
+      "longest_call": {
+        "type": {
+          "type": "ref",
+          "name": "CallDetailEntry"
+        },
+        "required": true
+      },
+      "smallest_bulk": {
+        "type": {
+          "type": "ref",
+          "name": "CallDetailEntry"
+        },
+        "required": true
+      },
+      "largest_bulk": {
+        "type": {
+          "type": "ref",
+          "name": "CallDetailEntry"
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}
