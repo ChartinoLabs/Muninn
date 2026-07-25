@@ -118,7 +118,7 @@ _HOSTNAME = re.compile(r"^\s+Hostname:\s+(?P<hostname>\S+)\s*$")
 # "  Metric: 10         IS (MT-IPv6) ROUTER-C.00"
 _METRIC_IS = re.compile(
     r"^\s+Metric:\s+(?P<metric>\d+)\s+"
-    r"(?P<type>IS-Extended|IS\s+\((?P<mt>[^)]+)\))\s+"
+    r"(?:IS-Extended|IS\s+\((?P<mt>[^)]+)\))\s+"
     r"(?P<neighbor>\S+)\s*$"
 )
 
