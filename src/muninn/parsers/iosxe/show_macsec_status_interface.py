@@ -13,7 +13,7 @@ class TransmitSA(TypedDict):
     """Schema for MACsec Transmit SA details."""
 
     next_pn: int
-    delay_protect_an: NotRequired[str]
+    delay_protect_an: NotRequired[int]
     delay_protect_next_pn: NotRequired[int]
 
 
@@ -179,9 +179,9 @@ class _TransmitState:
         """Build the TransmitSA TypedDict."""
         sa: TransmitSA = {"next_pn": self.next_pn}
         if self.delay_an is not None and self.delay_an.upper() != "NA":
-            sa["delay_protect_an"] = self.delay_an
-        if self.delay_next_pn is not None:
-            sa["delay_protect_next_pn"] = self.delay_next_pn
+            sa["delay_protect_an"] = int(self.delay_an)
+            if self.delay_next_pn is not None:
+                sa["delay_protect_next_pn"] = self.delay_next_pn
         return sa
 
 
