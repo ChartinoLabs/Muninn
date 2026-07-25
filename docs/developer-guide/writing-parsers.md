@@ -108,18 +108,10 @@ Use nested dictionaries for hierarchical data rather than composite string keys:
 
 ```python
 # Preferred
-{
-    "GigabitEthernet0/1": {
-        "groups": {
-            "5": {"state": "Active", "priority": 110}
-        }
-    }
-}
+{"GigabitEthernet0/1": {"groups": {"5": {"state": "Active", "priority": 110}}}}
 
 # Avoid - composite key encodes multiple dimensions
-{
-    "GigabitEthernet0/1|5": {"state": "Active", "priority": 110}
-}
+{"GigabitEthernet0/1|5": {"state": "Active", "priority": 110}}
 ```
 
 ### Multi-OS Parsers
@@ -130,8 +122,7 @@ A single parser class can be registered for multiple operating systems by stacki
 @register(OS.CISCO_NXOS, "show clock")
 @register(OS.CISCO_IOS, "show clock")
 @register(OS.CISCO_IOSXE, "show clock")
-class ShowClockParser(BaseParser[ShowClockResult]):
-    ...
+class ShowClockParser(BaseParser[ShowClockResult]): ...
 ```
 
 When a parser covers multiple operating systems, place the file under the OS directory you consider the primary target. There's no need to duplicate the file across OS directories. If a different OS later needs divergent parsing logic, that's when you'd create a separate parser file under the other OS directory.
