@@ -1,0 +1,302 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show isis interface",
+  "schema": {
+    "name": "ShowIsisInterfaceResult",
+    "fields": {
+      "instances": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "IsisInterfaceEntry",
+              "fields": {
+                "state": {
+                  "type": "str",
+                  "required": true
+                },
+                "adjacency_formation": {
+                  "type": "str",
+                  "required": false
+                },
+                "prefix_advertisement": {
+                  "type": "str",
+                  "required": false
+                },
+                "circuit_type": {
+                  "type": "str",
+                  "required": false
+                },
+                "circuit_type_configured": {
+                  "type": "str",
+                  "required": false
+                },
+                "media_type": {
+                  "type": "str",
+                  "required": false
+                },
+                "circuit_number": {
+                  "type": "int",
+                  "required": false
+                },
+                "extended_circuit_number": {
+                  "type": "int",
+                  "required": false
+                },
+                "bandwidth": {
+                  "type": "int",
+                  "required": false
+                },
+                "ipv4_bfd": {
+                  "type": "str",
+                  "required": false
+                },
+                "ipv6_bfd": {
+                  "type": "str",
+                  "required": false
+                },
+                "bfd_min_interval": {
+                  "type": "int",
+                  "required": false
+                },
+                "bfd_multiplier": {
+                  "type": "int",
+                  "required": false
+                },
+                "level2_adjacency_count": {
+                  "type": "int",
+                  "required": false
+                },
+                "level2_hello_interval": {
+                  "type": "str",
+                  "required": false
+                },
+                "level2_hello_multiplier": {
+                  "type": "int",
+                  "required": false
+                },
+                "level1_adjacency_count": {
+                  "type": "int",
+                  "required": false
+                },
+                "level1_hello_interval": {
+                  "type": "str",
+                  "required": false
+                },
+                "level1_hello_multiplier": {
+                  "type": "int",
+                  "required": false
+                },
+                "clns_protocol_state": {
+                  "type": "str",
+                  "required": false
+                },
+                "clns_mtu": {
+                  "type": "int",
+                  "required": false
+                },
+                "clns_snpa": {
+                  "type": "str",
+                  "required": false
+                },
+                "topologies": {
+                  "type": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "name": "IsisTopologyEntry",
+                      "fields": {
+                        "enabled": {
+                          "type": "bool",
+                          "required": true
+                        },
+                        "adjacency_formation": {
+                          "type": "str",
+                          "required": false
+                        },
+                        "prefix_advertisement": {
+                          "type": "str",
+                          "required": false
+                        },
+                        "metric_l1": {
+                          "type": "int",
+                          "required": false
+                        },
+                        "metric_l2": {
+                          "type": "int",
+                          "required": false
+                        },
+                        "weight_l1": {
+                          "type": "int",
+                          "required": false
+                        },
+                        "weight_l2": {
+                          "type": "int",
+                          "required": false
+                        },
+                        "ldp_sync_l1": {
+                          "type": "str",
+                          "required": false
+                        },
+                        "ldp_sync_l2": {
+                          "type": "str",
+                          "required": false
+                        },
+                        "frr_l1": {
+                          "type": "str",
+                          "required": false
+                        },
+                        "frr_l2": {
+                          "type": "str",
+                          "required": false
+                        }
+                      }
+                    }
+                  },
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "IS-IS interfaces with loopback passive, LAN, P2P sub-interface, and disabled interface",
+      "input": "Tue Jul  7 22:59:37.802 EDT\n\nIS-IS 64512 Interfaces\n\nLoopback0                   Enabled\n  Adjacency Formation:      Disabled (Passive in IS-IS cfg)\n  Prefix Advertisement:     Enabled\n  Bandwidth:                0\n\n  Circuit Type:             level-2-only (Configured: level-1-2)\n  Media Type:               Loop\n  Circuit Number:           0\n\n  IPv4 Unicast Topology:    Enabled\n    Adjacency Formation:    Disabled (Intf passive in IS-IS cfg)\n    Prefix Advertisement:   Running\n          Policy (L1/L2):   -/-\n    Metric (L1/L2):         0/0\n    Metric fallback:\n      Bandwidth (L1/L2):    Inactive/Inactive\n      Anomaly (L1/L2):      Inactive/Inactive\n    Weight (L1/L2):         0/0\n    MPLS Max Label Stack:   0/0/0/0 (PRI/BKP/SRTE/SRAT)\n    MPLS LDP Sync (L1/L2):  Disabled/Disabled\n    FRR (L1/L2):            L1 Not Enabled     L2 Not Enabled\n      FRR Type:             None               None\n  IPv6 Unicast Topology:    Enabled\n    Adjacency Formation:    Disabled (Intf passive in IS-IS cfg)\n    Prefix Advertisement:   Running\n          Policy (L1/L2):   -/-\n    Metric (L1/L2):         0/0\n    Metric fallback:\n      Bandwidth (L1/L2):    Inactive/Inactive\n      Anomaly (L1/L2):      Inactive/Inactive\n    Weight (L1/L2):         0/0\n    MPLS Max Label Stack:   0/0/0/0 (PRI/BKP/SRTE/SRAT)\n    MPLS LDP Sync (L1/L2):  Disabled/Disabled\n    FRR (L1/L2):            L1 Not Enabled     L2 Not Enabled\n      FRR Type:             None               None\n\n  IPv4 Address Family:      Enabled\n    Protocol State:         Up\n    Forwarding Address(es): Unknown (Intf passive in IS-IS cfg)\n    Global Prefix(es):      192.0.2.1/32 (0)\n  IPv6 Address Family:      Enabled\n    Protocol State:         Up\n    Forwarding Address(es): Unknown (Intf passive in IS-IS cfg)\n    Global Prefix(es):      2001:db8::1/128 (0)\n\n  PME Link Delays and Loss: -\n\nHundredGigE0/0/0/0          Enabled\n  Adjacency Formation:      Disabled (No cfg topology can participate)\n  Prefix Advertisement:     Disabled (No cfg topology can participate)\n  RSI SRLG:                 Registered\n  Bandwidth:                100000000\n\n  Circuit Type:             level-2-only (Configured: level-1-2)\n  Media Type:               LAN\n  Circuit Number:           0\n\n  CLNS I/O\n    Protocol State:         Up\n    MTU:                    9195\n    SNPA:                   aabb.cc00.0100\n    Layer-2 Multicast:\n      All Level-2 ISs:      Listening\n\n  IPv4 Unicast Topology:    Disabled (Not cfg on the intf)\n  IPv6 Unicast Topology:    Enabled\n    Adjacency Formation:    Disabled (Not up in intf protocol stack)\n    Prefix Advertisement:   Disabled (Not up in intf protocol stack)\n          Policy (L1/L2):   -/-\n    Metric (L1/L2):         10/10\n    Metric fallback:\n      Bandwidth (L1/L2):    Inactive/Inactive\n      Anomaly (L1/L2):      Inactive/Inactive\n    Weight (L1/L2):         0/0\n    MPLS Max Label Stack:   1/3/7/7 (PRI/BKP/SRTE/SRAT)\n    MPLS LDP Sync (L1/L2):  Disabled/Disabled\n    FRR (L1/L2):            L1 Not Enabled     L2 Not Enabled\n      FRR Type:             None               None\n\n  IPv4 Address Family:      Disabled (No topology enabled which uses IPv4)\n  IPv6 Address Family:      Enabled\n    Protocol State:         Down (IPv6 absent in intf protocol stack)\n    Forwarding Address(es): Unknown (IPv6 absent in intf protocol stack)\n    Global Prefix(es):      None (No global addresses are configured)\n\n  PME Link Delays and Loss: -\n\nHundredGigE0/0/0/0.10      Enabled\n  Adjacency Formation:      Enabled\n  Prefix Advertisement:     Enabled\n  IPv4 BFD:                 Disabled\n  IPv6 BFD:                 Disabled\n  BFD Min Interval:         150\n  BFD Multiplier:           3\n  RSI SRLG:                 Registered\n  Bandwidth:                100000000\n\n  Circuit Type:             level-2-only (Configured: level-1-2)\n  Media Type:               P2P\n  Circuit Number:           0\n  Extended Circuit Number:  170\n  Last IIH Received:        22:59:37 (0.89 sec ago), 9195 octets\n  Last IIH Sent:            22:59:34 (3.22 sec ago), 9195 octets\n  Sending next P2P IIH in:  4 s\n\n  Level-2\n    Adjacency Count:        1\n    LSP Pacing Interval:    33 ms\n    PSNP Entry Queue Size:  0\n    Hello Interval:         10 s\n    Hello Multiplier:       3\n\n  CLNS I/O\n    Protocol State:         Up\n    MTU:                    9195\n    SNPA:                   aabb.cc00.0100\n    Layer-2 Multicast:\n      All ISs:              Listening\n\n  IPv4 Unicast Topology:    Enabled\n    Adjacency Formation:    Running\n    Prefix Advertisement:   Running\n          Policy (L1/L2):   -/-\n    Metric (L1/L2):         100/100\n    Metric fallback:\n      Bandwidth (L1/L2):    Inactive/Inactive\n      Anomaly (L1/L2):      Inactive/Inactive\n    Weight (L1/L2):         0/0\n    MPLS Max Label Stack:   1/3/10/10 (PRI/BKP/SRTE/SRAT)\n    MPLS LDP Sync (L1/L2):  Disabled/Disabled\n    FRR (L1/L2):            L1 Not Enabled     L2 Not Enabled\n      FRR Type:             None               None\n  IPv6 Unicast Topology:    Enabled\n    Adjacency Formation:    Running\n    Prefix Advertisement:   Running\n          Policy (L1/L2):   -/-\n    Metric (L1/L2):         10/10\n    Metric fallback:\n      Bandwidth (L1/L2):    Inactive/Inactive\n      Anomaly (L1/L2):      Inactive/Inactive\n    Weight (L1/L2):         0/0\n    MPLS Max Label Stack:   1/3/10/10 (PRI/BKP/SRTE/SRAT)\n    MPLS LDP Sync (L1/L2):  Disabled/Disabled\n    FRR (L1/L2):            L1 Not Enabled     L2 Not Enabled\n      FRR Type:             None               None\n\n  IPv4 Address Family:      Enabled\n    Protocol State:         Up\n    Forwarding Address(es): 198.51.100.1\n    Global Prefix(es):      198.51.100.0/30 (0)\n  IPv6 Address Family:      Enabled\n    Protocol State:         Up\n    Forwarding Address(es): fe80::aabb:ccff:fe00:100\n    Global Prefix(es):      2001:db8:1:100::/64 (0)\n\n  LSP Transmission is:      idle\n  LSP Transmit Timer in:    0 ms\n  LSP Burst Size:           10 LSPs in the next 0 ms\n  LSP Rexmit Queue Size:    0\n  Adjacency Up:             15:50:45.951\n  Received CSNP complete:   15:50:46.460\n  LSP Pacing Start:         15:50:46.460\n\n  Flood speed optimization: Disabled\n\n  PME Link Delays and Loss: -\n\nTenGigE0/0/0/20             Disabled (No topologies cfg on the intf)\n",
+      "expected": {
+        "instances": {
+          "64512": {
+            "Loopback0": {
+              "state": "Enabled",
+              "adjacency_formation": "Disabled (Passive in IS-IS cfg)",
+              "prefix_advertisement": "Enabled",
+              "bandwidth": 0,
+              "circuit_type": "level-2-only",
+              "circuit_type_configured": "level-1-2",
+              "media_type": "Loop",
+              "circuit_number": 0,
+              "topologies": {
+                "IPv4 Unicast": {
+                  "enabled": true,
+                  "adjacency_formation": "Disabled (Intf passive in IS-IS cfg)",
+                  "prefix_advertisement": "Running",
+                  "metric_l1": 0,
+                  "metric_l2": 0,
+                  "weight_l1": 0,
+                  "weight_l2": 0,
+                  "ldp_sync_l1": "Disabled",
+                  "ldp_sync_l2": "Disabled",
+                  "frr_l1": "Not Enabled",
+                  "frr_l2": "Not Enabled"
+                },
+                "IPv6 Unicast": {
+                  "enabled": true,
+                  "adjacency_formation": "Disabled (Intf passive in IS-IS cfg)",
+                  "prefix_advertisement": "Running",
+                  "metric_l1": 0,
+                  "metric_l2": 0,
+                  "weight_l1": 0,
+                  "weight_l2": 0,
+                  "ldp_sync_l1": "Disabled",
+                  "ldp_sync_l2": "Disabled",
+                  "frr_l1": "Not Enabled",
+                  "frr_l2": "Not Enabled"
+                }
+              }
+            },
+            "HundredGigabitEthernet0/0/0/0": {
+              "state": "Enabled",
+              "adjacency_formation": "Disabled (No cfg topology can participate)",
+              "prefix_advertisement": "Disabled (No cfg topology can participate)",
+              "bandwidth": 100000000,
+              "circuit_type": "level-2-only",
+              "circuit_type_configured": "level-1-2",
+              "media_type": "LAN",
+              "circuit_number": 0,
+              "clns_protocol_state": "Up",
+              "clns_mtu": 9195,
+              "clns_snpa": "aabb.cc00.0100",
+              "topologies": {
+                "IPv4 Unicast": {
+                  "enabled": false
+                },
+                "IPv6 Unicast": {
+                  "enabled": true,
+                  "adjacency_formation": "Disabled (Not up in intf protocol stack)",
+                  "prefix_advertisement": "Disabled (Not up in intf protocol stack)",
+                  "metric_l1": 10,
+                  "metric_l2": 10,
+                  "weight_l1": 0,
+                  "weight_l2": 0,
+                  "ldp_sync_l1": "Disabled",
+                  "ldp_sync_l2": "Disabled",
+                  "frr_l1": "Not Enabled",
+                  "frr_l2": "Not Enabled"
+                }
+              }
+            },
+            "HundredGigabitEthernet0/0/0/0.10": {
+              "state": "Enabled",
+              "adjacency_formation": "Enabled",
+              "prefix_advertisement": "Enabled",
+              "ipv4_bfd": "Disabled",
+              "ipv6_bfd": "Disabled",
+              "bfd_min_interval": 150,
+              "bfd_multiplier": 3,
+              "bandwidth": 100000000,
+              "circuit_type": "level-2-only",
+              "circuit_type_configured": "level-1-2",
+              "media_type": "P2P",
+              "circuit_number": 0,
+              "extended_circuit_number": 170,
+              "level2_adjacency_count": 1,
+              "level2_hello_interval": "10 s",
+              "level2_hello_multiplier": 3,
+              "clns_protocol_state": "Up",
+              "clns_mtu": 9195,
+              "clns_snpa": "aabb.cc00.0100",
+              "topologies": {
+                "IPv4 Unicast": {
+                  "enabled": true,
+                  "adjacency_formation": "Running",
+                  "prefix_advertisement": "Running",
+                  "metric_l1": 100,
+                  "metric_l2": 100,
+                  "weight_l1": 0,
+                  "weight_l2": 0,
+                  "ldp_sync_l1": "Disabled",
+                  "ldp_sync_l2": "Disabled",
+                  "frr_l1": "Not Enabled",
+                  "frr_l2": "Not Enabled"
+                },
+                "IPv6 Unicast": {
+                  "enabled": true,
+                  "adjacency_formation": "Running",
+                  "prefix_advertisement": "Running",
+                  "metric_l1": 10,
+                  "metric_l2": 10,
+                  "weight_l1": 0,
+                  "weight_l2": 0,
+                  "ldp_sync_l1": "Disabled",
+                  "ldp_sync_l2": "Disabled",
+                  "frr_l1": "Not Enabled",
+                  "frr_l2": "Not Enabled"
+                }
+              }
+            },
+            "TenGigE0/0/0/20": {
+              "state": "Disabled (No topologies cfg on the intf)"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show install inactive",
+  "schema": {
+    "name": "ShowInstallInactiveResult",
+    "fields": {
+      "sdrs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SdrInfo",
+            "fields": {
+              "inactive_packages": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "ASR9K with single SDR and one inactive package",
+      "input": "\nDefault Profile:\n    SDRs:\n    Owner\n    Inactive Packages:\n\tdisk0:asr9k-diags-3.7.2\n",
+      "expected": {
+        "sdrs": {
+          "Owner": {
+            "inactive_packages": [
+              "disk0:asr9k-diags-3.7.2"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

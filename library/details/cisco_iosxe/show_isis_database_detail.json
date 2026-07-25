@@ -1,0 +1,533 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show isis database detail",
+  "schema": {
+    "name": "ShowIsisDatabaseDetailResult",
+    "fields": {
+      "tag": {
+        "type": "str",
+        "required": true
+      },
+      "levels": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "IsisLspEntry",
+              "fields": {
+                "sequence_number": {
+                  "type": "str",
+                  "required": true
+                },
+                "checksum": {
+                  "type": "str",
+                  "required": true
+                },
+                "holdtime": {
+                  "type": "int",
+                  "required": true
+                },
+                "holdtime_received": {
+                  "type": "int",
+                  "required": false
+                },
+                "att": {
+                  "type": "int",
+                  "required": true
+                },
+                "p_bit": {
+                  "type": "int",
+                  "required": true
+                },
+                "ol": {
+                  "type": "int",
+                  "required": true
+                },
+                "is_local": {
+                  "type": "bool",
+                  "required": false
+                },
+                "area_address": {
+                  "type": "str",
+                  "required": false
+                },
+                "nlpid": {
+                  "type": {
+                    "type": "list",
+                    "items": "str"
+                  },
+                  "required": false
+                },
+                "topologies": {
+                  "type": {
+                    "type": "list",
+                    "items": "str"
+                  },
+                  "required": false
+                },
+                "router_id": {
+                  "type": "str",
+                  "required": false
+                },
+                "ip_address": {
+                  "type": "str",
+                  "required": false
+                },
+                "ipv6_address": {
+                  "type": "str",
+                  "required": false
+                },
+                "ipv6_router_id": {
+                  "type": "str",
+                  "required": false
+                },
+                "hostname": {
+                  "type": "str",
+                  "required": false
+                },
+                "router_cap": {
+                  "type": {
+                    "name": "RouterCapEntry",
+                    "fields": {
+                      "address": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "d_flag": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "s_flag": {
+                        "type": "int",
+                        "required": true
+                      }
+                    }
+                  },
+                  "required": false
+                },
+                "sr_srgb": {
+                  "type": {
+                    "name": "SrGlobalBlock",
+                    "fields": {
+                      "base": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "range": {
+                        "type": "int",
+                        "required": true
+                      }
+                    }
+                  },
+                  "required": false
+                },
+                "sr_srlb": {
+                  "type": {
+                    "name": "SrLocalBlock",
+                    "fields": {
+                      "base": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "range": {
+                        "type": "int",
+                        "required": true
+                      }
+                    }
+                  },
+                  "required": false
+                },
+                "node_msd": {
+                  "type": "int",
+                  "required": false
+                },
+                "srv6_locators": {
+                  "type": {
+                    "type": "list",
+                    "items": {
+                      "name": "Srv6LocatorEntry",
+                      "fields": {
+                        "prefix": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "metric": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "algorithm": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "mt": {
+                          "type": "str",
+                          "required": false
+                        },
+                        "end_sids": {
+                          "type": {
+                            "type": "list",
+                            "items": {
+                              "name": "Srv6EndSidEntry",
+                              "fields": {
+                                "sid": {
+                                  "type": "str",
+                                  "required": true
+                                },
+                                "behavior": {
+                                  "type": "str",
+                                  "required": true
+                                },
+                                "flavors": {
+                                  "type": "str",
+                                  "required": false
+                                },
+                                "sid_structure": {
+                                  "type": {
+                                    "name": "SidStructureEntry",
+                                    "fields": {
+                                      "block_length": {
+                                        "type": "int",
+                                        "required": true
+                                      },
+                                      "node_id_length": {
+                                        "type": "int",
+                                        "required": true
+                                      },
+                                      "func_length": {
+                                        "type": "int",
+                                        "required": true
+                                      },
+                                      "args_length": {
+                                        "type": "int",
+                                        "required": true
+                                      }
+                                    }
+                                  },
+                                  "required": false
+                                }
+                              }
+                            }
+                          },
+                          "required": false
+                        }
+                      }
+                    }
+                  },
+                  "required": false
+                },
+                "is_neighbors": {
+                  "type": {
+                    "type": "list",
+                    "items": {
+                      "name": "IsisIsNeighborEntry",
+                      "fields": {
+                        "neighbor_id": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "metric": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "mt": {
+                          "type": "str",
+                          "required": false
+                        }
+                      }
+                    }
+                  },
+                  "required": false
+                },
+                "ip_reachability": {
+                  "type": {
+                    "type": "list",
+                    "items": {
+                      "name": "IsisIpReachabilityEntry",
+                      "fields": {
+                        "prefix": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "metric": {
+                          "type": "int",
+                          "required": true
+                        }
+                      }
+                    }
+                  },
+                  "required": false
+                },
+                "ipv6_reachability": {
+                  "type": {
+                    "type": "list",
+                    "items": {
+                      "name": "IsisIpv6ReachabilityEntry",
+                      "fields": {
+                        "prefix": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "metric": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "mt": {
+                          "type": "str",
+                          "required": false
+                        }
+                      }
+                    }
+                  },
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "IS-IS database detail with Level-1 and Level-2 LSPs including SR and SRv6",
+      "input": "Tag 65000:\nIS-IS Level-1 Link State Database:\nLSPID                 LSP Seq Num  LSP Checksum  LSP Holdtime/Rcvd      ATT/P/OL\nROUTER-A.00-00        \\\n                    * 0x00001234   0xABCD                1100/*         0/0/1\n  Area Address: 49.0001\n  NLPID:        0xCC 0x8E\n  Topology:     IPv4 (0x0)\n                IPv6 (0x2)\n  Router ID:    10.255.255.1\n  Router CAP:   10.255.255.1, D:0, S:0\n    Segment Routing: I:1 V:0, SRGB Base: 16000 Range: 8000\n    Segment Routing Local Block: SRLB Base: 15000 Range: 1000\n    SRv6 Oflag:0\n    Node-MSD\n      MSD: 16\n  Hostname: ROUTER-A\n  IP Address:   10.255.255.1\n  Metric: 10         IP 10.255.255.1/32\n  Metric: 100        IP 10.0.1.0/30\n  Metric: 10         IP 10.0.1.4/30\n  IPv6 Address: 2001:db8::1\n  IPv6 Router ID: 2001:db8::1\n  Metric: 10         IPv6 (MT-IPv6) 2001:db8::1/128\n  Metric: 0          IPv6 (MT-IPv6) fd00:1:1::/48\n  SRv6 Locator: (MT-IPv6) fd00:1:1::/48 Metric:0 Algorithm:0\n    End SID: fd00:1:1:: uN (PSP/USD)\n      SID Structure:\n        Block Length: 32, Node-ID Length: 16, Func-Length: 0, Args-Length: 80\nIS-IS Level-2 Link State Database:\nLSPID                 LSP Seq Num  LSP Checksum  LSP Holdtime/Rcvd      ATT/P/OL\nROUTER-B.00-00        0x00005678   0xEF01                 643/1200      0/0/0\n  Area Address: 49.0001\n  TLV Code: 14 Length: 2 (Unsupported)\n  NLPID:        0xCC 0x8E\n  Topology:     IPv4 (0x0)\n                IPv6 (0x2)\n  Router ID:    10.255.255.2\n  IP Address:   10.255.255.2\n  IPv6 Address: 2001:db8::2\n  Hostname: ROUTER-B\n  Router CAP:   10.255.255.2, D:0, S:0\n    Segment Routing: I:1 V:0, SRGB Base: 16000 Range: 8000\n  Metric: 100        IS-Extended ROUTER-C.00\n  Metric: 10         IS-Extended ROUTER-C.00\n  Metric: 10         IS (MT-IPv6) ROUTER-C.00\n  Metric: 100        IP 10.0.2.0/30\n  Metric: 10         IP 10.0.2.4/30\n  Metric: 0          IP 10.255.255.2/32\n  Metric: 0          IPv6 (MT-IPv6) 2001:db8::2/128\n  Metric: 10         IPv6 (MT-IPv6) fd00:2:1:100::/64\nROUTER-C.00-00        0x00009ABC   0x1234                 940/1200      0/0/0\n  Area Address: 49.0001\n  NLPID:        0xCC 0x8E\n  Topology:     IPv4 (0x0)\n                IPv6 (0x2)\n  Router ID:    10.255.255.3\n  IP Address:   10.255.255.3\n  IPv6 Address: 2001:db8::3\n  Hostname: ROUTER-C\n  Metric: 10         IS-Extended ROUTER-B.00\n  Metric: 100        IS-Extended ROUTER-B.00\n  Metric: 10         IS (MT-IPv6) ROUTER-B.00\n  Metric: 10         IS (MT-IPv6) ROUTER-B.00\n  Metric: 100        IP 10.0.3.0/30\n  Metric: 10         IP 10.0.3.4/30\n  Metric: 0          IP 10.255.255.3/32\n  Metric: 0          IPv6 (MT-IPv6) 2001:db8::3/128\n  Metric: 1          IPv6 (MT-IPv6) fd00:3:1::/48\n",
+      "expected": {
+        "tag": "65000",
+        "levels": {
+          "Level-1": {
+            "ROUTER-A.00-00": {
+              "sequence_number": "0x00001234",
+              "checksum": "0xABCD",
+              "holdtime": 1100,
+              "att": 0,
+              "p_bit": 0,
+              "ol": 1,
+              "is_local": true,
+              "area_address": "49.0001",
+              "nlpid": [
+                "0xCC",
+                "0x8E"
+              ],
+              "topologies": [
+                "IPv4 (0x0)",
+                "IPv6 (0x2)"
+              ],
+              "router_id": "10.255.255.1",
+              "router_cap": {
+                "address": "10.255.255.1",
+                "d_flag": 0,
+                "s_flag": 0
+              },
+              "sr_srgb": {
+                "base": 16000,
+                "range": 8000
+              },
+              "sr_srlb": {
+                "base": 15000,
+                "range": 1000
+              },
+              "node_msd": 16,
+              "hostname": "ROUTER-A",
+              "ip_address": "10.255.255.1",
+              "ip_reachability": [
+                {
+                  "prefix": "10.255.255.1/32",
+                  "metric": 10
+                },
+                {
+                  "prefix": "10.0.1.0/30",
+                  "metric": 100
+                },
+                {
+                  "prefix": "10.0.1.4/30",
+                  "metric": 10
+                }
+              ],
+              "ipv6_address": "2001:db8::1",
+              "ipv6_router_id": "2001:db8::1",
+              "ipv6_reachability": [
+                {
+                  "prefix": "2001:db8::1/128",
+                  "metric": 10,
+                  "mt": "MT-IPv6"
+                },
+                {
+                  "prefix": "fd00:1:1::/48",
+                  "metric": 0,
+                  "mt": "MT-IPv6"
+                }
+              ],
+              "srv6_locators": [
+                {
+                  "prefix": "fd00:1:1::/48",
+                  "metric": 0,
+                  "algorithm": 0,
+                  "mt": "MT-IPv6",
+                  "end_sids": [
+                    {
+                      "sid": "fd00:1:1::",
+                      "behavior": "uN",
+                      "flavors": "PSP/USD",
+                      "sid_structure": {
+                        "block_length": 32,
+                        "node_id_length": 16,
+                        "func_length": 0,
+                        "args_length": 80
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "Level-2": {
+            "ROUTER-B.00-00": {
+              "sequence_number": "0x00005678",
+              "checksum": "0xEF01",
+              "holdtime": 643,
+              "att": 0,
+              "p_bit": 0,
+              "ol": 0,
+              "holdtime_received": 1200,
+              "area_address": "49.0001",
+              "nlpid": [
+                "0xCC",
+                "0x8E"
+              ],
+              "topologies": [
+                "IPv4 (0x0)",
+                "IPv6 (0x2)"
+              ],
+              "router_id": "10.255.255.2",
+              "ip_address": "10.255.255.2",
+              "ipv6_address": "2001:db8::2",
+              "hostname": "ROUTER-B",
+              "router_cap": {
+                "address": "10.255.255.2",
+                "d_flag": 0,
+                "s_flag": 0
+              },
+              "sr_srgb": {
+                "base": 16000,
+                "range": 8000
+              },
+              "is_neighbors": [
+                {
+                  "neighbor_id": "ROUTER-C.00",
+                  "metric": 100
+                },
+                {
+                  "neighbor_id": "ROUTER-C.00",
+                  "metric": 10
+                },
+                {
+                  "neighbor_id": "ROUTER-C.00",
+                  "metric": 10,
+                  "mt": "MT-IPv6"
+                }
+              ],
+              "ip_reachability": [
+                {
+                  "prefix": "10.0.2.0/30",
+                  "metric": 100
+                },
+                {
+                  "prefix": "10.0.2.4/30",
+                  "metric": 10
+                },
+                {
+                  "prefix": "10.255.255.2/32",
+                  "metric": 0
+                }
+              ],
+              "ipv6_reachability": [
+                {
+                  "prefix": "2001:db8::2/128",
+                  "metric": 0,
+                  "mt": "MT-IPv6"
+                },
+                {
+                  "prefix": "fd00:2:1:100::/64",
+                  "metric": 10,
+                  "mt": "MT-IPv6"
+                }
+              ]
+            },
+            "ROUTER-C.00-00": {
+              "sequence_number": "0x00009ABC",
+              "checksum": "0x1234",
+              "holdtime": 940,
+              "att": 0,
+              "p_bit": 0,
+              "ol": 0,
+              "holdtime_received": 1200,
+              "area_address": "49.0001",
+              "nlpid": [
+                "0xCC",
+                "0x8E"
+              ],
+              "topologies": [
+                "IPv4 (0x0)",
+                "IPv6 (0x2)"
+              ],
+              "router_id": "10.255.255.3",
+              "ip_address": "10.255.255.3",
+              "ipv6_address": "2001:db8::3",
+              "hostname": "ROUTER-C",
+              "is_neighbors": [
+                {
+                  "neighbor_id": "ROUTER-B.00",
+                  "metric": 10
+                },
+                {
+                  "neighbor_id": "ROUTER-B.00",
+                  "metric": 100
+                },
+                {
+                  "neighbor_id": "ROUTER-B.00",
+                  "metric": 10,
+                  "mt": "MT-IPv6"
+                },
+                {
+                  "neighbor_id": "ROUTER-B.00",
+                  "metric": 10,
+                  "mt": "MT-IPv6"
+                }
+              ],
+              "ip_reachability": [
+                {
+                  "prefix": "10.0.3.0/30",
+                  "metric": 100
+                },
+                {
+                  "prefix": "10.0.3.4/30",
+                  "metric": 10
+                },
+                {
+                  "prefix": "10.255.255.3/32",
+                  "metric": 0
+                }
+              ],
+              "ipv6_reachability": [
+                {
+                  "prefix": "2001:db8::3/128",
+                  "metric": 0,
+                  "mt": "MT-IPv6"
+                },
+                {
+                  "prefix": "fd00:3:1::/48",
+                  "metric": 1,
+                  "mt": "MT-IPv6"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

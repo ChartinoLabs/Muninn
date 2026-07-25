@@ -1,0 +1,174 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show vrf all",
+  "schema": {
+    "name": "ShowVrfAllResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfSummaryEntry",
+            "fields": {
+              "route_distinguisher": {
+                "type": "str",
+                "required": false
+              },
+              "address_families": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "VrfAddressFamilyTargets",
+                    "fields": {
+                      "import_route_targets": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": true
+                      },
+                      "export_route_targets": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple VRFs with mixed RD settings and IPv4/IPv6 route targets",
+      "input": "Mon Jan  8 14:22:31.456 UTC\nVRF                  RD                  RT                         AFI   SAFI\nCUSTOMER_A           65000:1001\n                                         import  65000:1001          IPV4\nUnicast\n                                         export  65000:1001          IPV4\nUnicast\n                                         import  65000:1001          IPV6\nUnicast\n                                         export  65000:1001          IPV6\nUnicast\nCUSTOMER_B           not set\n                                         import  65000:1002          IPV4\nUnicast\n                                         export  65000:1002          IPV4\nUnicast\n                                         import  65000:1002          IPV6\nUnicast\n                                         export  65000:1002          IPV6\nUnicast\nDATA                 not set\n                                         import  65000:999           IPV4\nUnicast\n                                         export  65000:999           IPV4\nUnicast\n                                         import  65000:999           IPV6\nUnicast\n                                         export  65000:999           IPV6\nUnicast\nMANAGEMENT           65000:100\n                                         import  65000:101           IPV6\nUnicast\n                                         export  65000:101           IPV6\nUnicast\nOOB_MGMT             not set\nSERVICES             not set\n                                         import  65000:902           IPV4\nUnicast\n                                         import  65000:902           IPV6\nUnicast\nTRANSPORT            65000:901\n                                         import  65000:901           IPV4\nUnicast\n                                         import  65000:901           IPV6\nUnicast\nmanagement           not set\n",
+      "expected": {
+        "vrfs": {
+          "CUSTOMER_A": {
+            "address_families": {
+              "ipv4_unicast": {
+                "import_route_targets": [
+                  "65000:1001"
+                ],
+                "export_route_targets": [
+                  "65000:1001"
+                ]
+              },
+              "ipv6_unicast": {
+                "import_route_targets": [
+                  "65000:1001"
+                ],
+                "export_route_targets": [
+                  "65000:1001"
+                ]
+              }
+            },
+            "route_distinguisher": "65000:1001"
+          },
+          "CUSTOMER_B": {
+            "address_families": {
+              "ipv4_unicast": {
+                "import_route_targets": [
+                  "65000:1002"
+                ],
+                "export_route_targets": [
+                  "65000:1002"
+                ]
+              },
+              "ipv6_unicast": {
+                "import_route_targets": [
+                  "65000:1002"
+                ],
+                "export_route_targets": [
+                  "65000:1002"
+                ]
+              }
+            }
+          },
+          "DATA": {
+            "address_families": {
+              "ipv4_unicast": {
+                "import_route_targets": [
+                  "65000:999"
+                ],
+                "export_route_targets": [
+                  "65000:999"
+                ]
+              },
+              "ipv6_unicast": {
+                "import_route_targets": [
+                  "65000:999"
+                ],
+                "export_route_targets": [
+                  "65000:999"
+                ]
+              }
+            }
+          },
+          "MANAGEMENT": {
+            "address_families": {
+              "ipv6_unicast": {
+                "import_route_targets": [
+                  "65000:101"
+                ],
+                "export_route_targets": [
+                  "65000:101"
+                ]
+              }
+            },
+            "route_distinguisher": "65000:100"
+          },
+          "OOB_MGMT": {
+            "address_families": {}
+          },
+          "SERVICES": {
+            "address_families": {
+              "ipv4_unicast": {
+                "import_route_targets": [
+                  "65000:902"
+                ],
+                "export_route_targets": []
+              },
+              "ipv6_unicast": {
+                "import_route_targets": [
+                  "65000:902"
+                ],
+                "export_route_targets": []
+              }
+            }
+          },
+          "TRANSPORT": {
+            "address_families": {
+              "ipv4_unicast": {
+                "import_route_targets": [
+                  "65000:901"
+                ],
+                "export_route_targets": []
+              },
+              "ipv6_unicast": {
+                "import_route_targets": [
+                  "65000:901"
+                ],
+                "export_route_targets": []
+              }
+            },
+            "route_distinguisher": "65000:901"
+          },
+          "management": {
+            "address_families": {}
+          }
+        }
+      }
+    }
+  ]
+}

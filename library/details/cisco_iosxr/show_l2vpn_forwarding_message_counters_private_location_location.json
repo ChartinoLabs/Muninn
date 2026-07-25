@@ -1,0 +1,125 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show l2vpn forwarding message counters private location <location>",
+  "schema": {
+    "name": "ShowL2vpnForwardingMessageCountersResult",
+    "fields": {
+      "message_counters": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "MessageCounterEntry",
+            "fields": {
+              "count": {
+                "type": "int",
+                "required": true
+              },
+              "info1": {
+                "type": "str",
+                "required": true
+              },
+              "info2": {
+                "type": "str",
+                "required": true
+              },
+              "time": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "event_trace_history": {
+        "type": {
+          "type": "list",
+          "items": {
+            "name": "EventTraceEntry",
+            "fields": {
+              "time": {
+                "type": "str",
+                "required": true
+              },
+              "event": {
+                "type": "str",
+                "required": true
+              },
+              "info1": {
+                "type": "str",
+                "required": true
+              },
+              "info2": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "event_trace_total_events": {
+        "type": "int",
+        "required": true
+      },
+      "round_trip_delays": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RoundTripDelayTable",
+            "fields": {
+              "unit": {
+                "type": "str",
+                "required": true
+              },
+              "entries": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "RoundTripDelayEntry",
+                    "fields": {
+                      "minimum": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "maximum": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "average": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "count": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "zeros": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "object": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "action": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}

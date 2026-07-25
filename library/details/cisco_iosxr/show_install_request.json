@@ -1,0 +1,47 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show install request",
+  "schema": {
+    "name": "ShowInstallRequestResult",
+    "fields": {
+      "in_progress": {
+        "type": "bool",
+        "required": true
+      },
+      "last_operation": {
+        "type": {
+          "name": "LastOperationEntry",
+          "fields": {
+            "operation_id": {
+              "type": "int",
+              "required": true
+            },
+            "request": {
+              "type": "str",
+              "required": true
+            },
+            "state": {
+              "type": "str",
+              "required": true
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "No operation in progress with last operation details",
+      "input": "No install operation in progress\n\nLast operation performed:\nOperation Id : 76\nRequest      : Install remove\nState        : Success\n\n",
+      "expected": {
+        "in_progress": false,
+        "last_operation": {
+          "operation_id": 76,
+          "request": "Install remove",
+          "state": "Success"
+        }
+      }
+    }
+  ]
+}
