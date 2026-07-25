@@ -1,0 +1,457 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show isis neighbors detail",
+  "schema": {
+    "name": "ShowIsisNeighborsDetailResult",
+    "fields": {
+      "tags": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "IsisNeighborDetail",
+              "fields": {
+                "interfaces": {
+                  "type": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "name": "IsisInterfaceDetail",
+                      "fields": {
+                        "adjacencies": {
+                          "type": {
+                            "type": "dict",
+                            "key": "str",
+                            "value": {
+                              "name": "IsisAdjacencyDetail",
+                              "fields": {
+                                "ip_address": {
+                                  "type": "str",
+                                  "required": true
+                                },
+                                "state": {
+                                  "type": "str",
+                                  "required": true
+                                },
+                                "holdtime": {
+                                  "type": "int",
+                                  "required": true
+                                },
+                                "circuit_id": {
+                                  "type": "str",
+                                  "required": true
+                                },
+                                "area_addresses": {
+                                  "type": {
+                                    "type": "list",
+                                    "items": "str"
+                                  },
+                                  "required": true
+                                },
+                                "snpa": {
+                                  "type": "str",
+                                  "required": true
+                                },
+                                "ipv6_addresses": {
+                                  "type": {
+                                    "type": "list",
+                                    "items": "str"
+                                  },
+                                  "required": false
+                                },
+                                "ipv6_global_address": {
+                                  "type": "str",
+                                  "required": false
+                                },
+                                "state_changed": {
+                                  "type": "str",
+                                  "required": true
+                                },
+                                "format": {
+                                  "type": "str",
+                                  "required": true
+                                },
+                                "remote_tid": {
+                                  "type": {
+                                    "type": "list",
+                                    "items": "int"
+                                  },
+                                  "required": true
+                                },
+                                "local_tid": {
+                                  "type": {
+                                    "type": "list",
+                                    "items": "int"
+                                  },
+                                  "required": true
+                                },
+                                "interface_name": {
+                                  "type": "str",
+                                  "required": true
+                                },
+                                "neighbor_circuit_id": {
+                                  "type": "int",
+                                  "required": true
+                                },
+                                "adjacency_sids": {
+                                  "type": {
+                                    "type": "dict",
+                                    "key": "str",
+                                    "value": {
+                                      "name": "AdjacencySid",
+                                      "fields": {
+                                        "level": {
+                                          "type": "int",
+                                          "required": true
+                                        },
+                                        "f_flag": {
+                                          "type": "int",
+                                          "required": true
+                                        },
+                                        "b_flag": {
+                                          "type": "int",
+                                          "required": true
+                                        },
+                                        "v_flag": {
+                                          "type": "int",
+                                          "required": true
+                                        },
+                                        "l_flag": {
+                                          "type": "int",
+                                          "required": true
+                                        },
+                                        "s_flag": {
+                                          "type": "int",
+                                          "required": true
+                                        },
+                                        "p_flag": {
+                                          "type": "int",
+                                          "required": true
+                                        },
+                                        "weight": {
+                                          "type": "int",
+                                          "required": true
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "required": false
+                                },
+                                "srv6_endx_sids": {
+                                  "type": {
+                                    "type": "dict",
+                                    "key": "str",
+                                    "value": {
+                                      "name": "Srv6EndxSid",
+                                      "fields": {
+                                        "b_flag": {
+                                          "type": "int",
+                                          "required": true
+                                        },
+                                        "s_flag": {
+                                          "type": "int",
+                                          "required": true
+                                        },
+                                        "p_flag": {
+                                          "type": "int",
+                                          "required": true
+                                        },
+                                        "weight": {
+                                          "type": "int",
+                                          "required": true
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "required": false
+                                },
+                                "adj_sync": {
+                                  "type": "str",
+                                  "required": false
+                                }
+                              }
+                            }
+                          },
+                          "required": true
+                        }
+                      }
+                    }
+                  },
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multi-neighbor IS-IS detail output with SR and SRv6 adjacency SIDs",
+      "input": "Tag 64512:\nSystem Id       Type Interface     IP Address      State Holdtime Circuit Id\nROUTER-A        L2   Te0/0/0.10   198.51.100.1    UP    29       00\n  Area Address(es): 49.0001\n  SNPA: aabb.cc00.0100\n  IPv6 Address(es): FE80::1:1\n  IPv6 Global Address: 2001:db8:1:1::1\n  State Changed: 5w0d\n  Format: Phase V\n  Remote TID: 0, 2\n  Local TID:  0, 2\n  Interface name: TenGigabitEthernet0/0/0.10\n  Neighbor Circuit Id: 160\n  L(2) Adjacency SID Value:6023 f:0 b:0 v:1 l:1 s:0 p:0 weight:0\n  L(2) Adjacency SID Value:6000 f:0 b:1 v:1 l:1 s:0 p:0 weight:0\n  SRv6 End.X SID 2001:db8:cafe:e000::/64 b:0 s:0 p:0 weight:0\n  Adj sync: Full\nROUTER-A        L2   Te0/0/0.20   198.51.100.2    UP    22       00\n  Area Address(es): 49.0001\n  SNPA: aabb.cc00.0100\n  IPv6 Address(es): FE80::1:1\n  IPv6 Global Address: 2001:db8:1:2::1\n  State Changed: 5w0d\n  Format: Phase V\n  Remote TID: 0, 2\n  Local TID:  0, 2\n  Interface name: TenGigabitEthernet0/0/0.20\n  Neighbor Circuit Id: 161\n  L(2) Adjacency SID Value:6021 f:0 b:0 v:1 l:1 s:0 p:0 weight:0\n  L(2) Adjacency SID Value:6020 f:0 b:1 v:1 l:1 s:0 p:0 weight:0\n  SRv6 End.X SID 2001:db8:cafe:e001::/64 b:0 s:0 p:0 weight:0\n  Adj sync: Full\nROUTER-B        L2   Te0/0/4.10   198.51.100.3    UP    29       00\n  Area Address(es): 49.0001\n  SNPA: aabb.cc00.0200\n  IPv6 Address(es): FE80::2:1\n  IPv6 Global Address: 2001:db8:2:1::1\n  State Changed: 5w0d\n  Format: Phase V\n  Remote TID: 0, 2\n  Local TID:  0, 2\n  Interface name: TenGigabitEthernet0/0/4.10\n  Neighbor Circuit Id: 152\n  L(2) Adjacency SID Value:6025 f:0 b:0 v:1 l:1 s:0 p:0 weight:0\n  L(2) Adjacency SID Value:6024 f:0 b:1 v:1 l:1 s:0 p:0 weight:0\n  SRv6 End.X SID 2001:db8:cafe:e002::/64 b:0 s:0 p:0 weight:0\n  Adj sync: Full\nROUTER-B        L2   Te0/0/4.20   198.51.100.4    UP    25       00\n  Area Address(es): 49.0001\n  SNPA: aabb.cc00.0200\n  IPv6 Address(es): FE80::2:1\n  IPv6 Global Address: 2001:db8:2:2::1\n  State Changed: 5w0d\n  Format: Phase V\n  Remote TID: 0, 2\n  Local TID:  0, 2\n  Interface name: TenGigabitEthernet0/0/4.20\n  Neighbor Circuit Id: 153\n  L(2) Adjacency SID Value:6028 f:0 b:0 v:1 l:1 s:0 p:0 weight:0\n  L(2) Adjacency SID Value:6006 f:0 b:1 v:1 l:1 s:0 p:0 weight:0\n  SRv6 End.X SID 2001:db8:cafe:e003::/64 b:0 s:0 p:0 weight:0\n  Adj sync: Full\n\nTag null:\n",
+      "expected": {
+        "tags": {
+          "64512": {
+            "ROUTER-A": {
+              "interfaces": {
+                "TenGigabitEthernet0/0/0.10": {
+                  "adjacencies": {
+                    "L2": {
+                      "ip_address": "198.51.100.1",
+                      "state": "UP",
+                      "holdtime": 29,
+                      "circuit_id": "00",
+                      "area_addresses": [
+                        "49.0001"
+                      ],
+                      "snpa": "aabb.cc00.0100",
+                      "ipv6_addresses": [
+                        "FE80::1:1"
+                      ],
+                      "ipv6_global_address": "2001:db8:1:1::1",
+                      "state_changed": "5w0d",
+                      "format": "Phase V",
+                      "remote_tid": [
+                        0,
+                        2
+                      ],
+                      "local_tid": [
+                        0,
+                        2
+                      ],
+                      "interface_name": "TenGigabitEthernet0/0/0.10",
+                      "neighbor_circuit_id": 160,
+                      "adjacency_sids": {
+                        "6023": {
+                          "level": 2,
+                          "f_flag": 0,
+                          "b_flag": 0,
+                          "v_flag": 1,
+                          "l_flag": 1,
+                          "s_flag": 0,
+                          "p_flag": 0,
+                          "weight": 0
+                        },
+                        "6000": {
+                          "level": 2,
+                          "f_flag": 0,
+                          "b_flag": 1,
+                          "v_flag": 1,
+                          "l_flag": 1,
+                          "s_flag": 0,
+                          "p_flag": 0,
+                          "weight": 0
+                        }
+                      },
+                      "srv6_endx_sids": {
+                        "2001:db8:cafe:e000::/64": {
+                          "b_flag": 0,
+                          "s_flag": 0,
+                          "p_flag": 0,
+                          "weight": 0
+                        }
+                      },
+                      "adj_sync": "Full"
+                    }
+                  }
+                },
+                "TenGigabitEthernet0/0/0.20": {
+                  "adjacencies": {
+                    "L2": {
+                      "ip_address": "198.51.100.2",
+                      "state": "UP",
+                      "holdtime": 22,
+                      "circuit_id": "00",
+                      "area_addresses": [
+                        "49.0001"
+                      ],
+                      "snpa": "aabb.cc00.0100",
+                      "ipv6_addresses": [
+                        "FE80::1:1"
+                      ],
+                      "ipv6_global_address": "2001:db8:1:2::1",
+                      "state_changed": "5w0d",
+                      "format": "Phase V",
+                      "remote_tid": [
+                        0,
+                        2
+                      ],
+                      "local_tid": [
+                        0,
+                        2
+                      ],
+                      "interface_name": "TenGigabitEthernet0/0/0.20",
+                      "neighbor_circuit_id": 161,
+                      "adjacency_sids": {
+                        "6021": {
+                          "level": 2,
+                          "f_flag": 0,
+                          "b_flag": 0,
+                          "v_flag": 1,
+                          "l_flag": 1,
+                          "s_flag": 0,
+                          "p_flag": 0,
+                          "weight": 0
+                        },
+                        "6020": {
+                          "level": 2,
+                          "f_flag": 0,
+                          "b_flag": 1,
+                          "v_flag": 1,
+                          "l_flag": 1,
+                          "s_flag": 0,
+                          "p_flag": 0,
+                          "weight": 0
+                        }
+                      },
+                      "srv6_endx_sids": {
+                        "2001:db8:cafe:e001::/64": {
+                          "b_flag": 0,
+                          "s_flag": 0,
+                          "p_flag": 0,
+                          "weight": 0
+                        }
+                      },
+                      "adj_sync": "Full"
+                    }
+                  }
+                }
+              }
+            },
+            "ROUTER-B": {
+              "interfaces": {
+                "TenGigabitEthernet0/0/4.10": {
+                  "adjacencies": {
+                    "L2": {
+                      "ip_address": "198.51.100.3",
+                      "state": "UP",
+                      "holdtime": 29,
+                      "circuit_id": "00",
+                      "area_addresses": [
+                        "49.0001"
+                      ],
+                      "snpa": "aabb.cc00.0200",
+                      "ipv6_addresses": [
+                        "FE80::2:1"
+                      ],
+                      "ipv6_global_address": "2001:db8:2:1::1",
+                      "state_changed": "5w0d",
+                      "format": "Phase V",
+                      "remote_tid": [
+                        0,
+                        2
+                      ],
+                      "local_tid": [
+                        0,
+                        2
+                      ],
+                      "interface_name": "TenGigabitEthernet0/0/4.10",
+                      "neighbor_circuit_id": 152,
+                      "adjacency_sids": {
+                        "6025": {
+                          "level": 2,
+                          "f_flag": 0,
+                          "b_flag": 0,
+                          "v_flag": 1,
+                          "l_flag": 1,
+                          "s_flag": 0,
+                          "p_flag": 0,
+                          "weight": 0
+                        },
+                        "6024": {
+                          "level": 2,
+                          "f_flag": 0,
+                          "b_flag": 1,
+                          "v_flag": 1,
+                          "l_flag": 1,
+                          "s_flag": 0,
+                          "p_flag": 0,
+                          "weight": 0
+                        }
+                      },
+                      "srv6_endx_sids": {
+                        "2001:db8:cafe:e002::/64": {
+                          "b_flag": 0,
+                          "s_flag": 0,
+                          "p_flag": 0,
+                          "weight": 0
+                        }
+                      },
+                      "adj_sync": "Full"
+                    }
+                  }
+                },
+                "TenGigabitEthernet0/0/4.20": {
+                  "adjacencies": {
+                    "L2": {
+                      "ip_address": "198.51.100.4",
+                      "state": "UP",
+                      "holdtime": 25,
+                      "circuit_id": "00",
+                      "area_addresses": [
+                        "49.0001"
+                      ],
+                      "snpa": "aabb.cc00.0200",
+                      "ipv6_addresses": [
+                        "FE80::2:1"
+                      ],
+                      "ipv6_global_address": "2001:db8:2:2::1",
+                      "state_changed": "5w0d",
+                      "format": "Phase V",
+                      "remote_tid": [
+                        0,
+                        2
+                      ],
+                      "local_tid": [
+                        0,
+                        2
+                      ],
+                      "interface_name": "TenGigabitEthernet0/0/4.20",
+                      "neighbor_circuit_id": 153,
+                      "adjacency_sids": {
+                        "6028": {
+                          "level": 2,
+                          "f_flag": 0,
+                          "b_flag": 0,
+                          "v_flag": 1,
+                          "l_flag": 1,
+                          "s_flag": 0,
+                          "p_flag": 0,
+                          "weight": 0
+                        },
+                        "6006": {
+                          "level": 2,
+                          "f_flag": 0,
+                          "b_flag": 1,
+                          "v_flag": 1,
+                          "l_flag": 1,
+                          "s_flag": 0,
+                          "p_flag": 0,
+                          "weight": 0
+                        }
+                      },
+                      "srv6_endx_sids": {
+                        "2001:db8:cafe:e003::/64": {
+                          "b_flag": 0,
+                          "s_flag": 0,
+                          "p_flag": 0,
+                          "weight": 0
+                        }
+                      },
+                      "adj_sync": "Full"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
