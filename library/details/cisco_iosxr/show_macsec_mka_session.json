@@ -1,0 +1,29 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show macsec mka session",
+  "schema": null,
+  "examples": [
+    {
+      "name": "MACsec MKA session detail with two secured sessions on a single node",
+      "input": "\nNODE: node0_0_CPU0\n================================================================================\n===============\n   Interface-Name        Local-TxSCI       #Peers   Status   Key-Server\nPSK/EAP      CKN\n================================================================================\n===============\n   Te0/0/0/20.20    3488.18ce.c4f4/0082     1      Secured      YES\nPRIMARY      1A\n   Te0/0/0/24.20    3488.18ce.c4f8/0082     1      Secured      NO\nPRIMARY      1A\n\n",
+      "expected": {
+        "TenGigabitEthernet0/0/0/20.20": {
+          "local_tx_sci": "3488.18ce.c4f4/0082",
+          "peers": 1,
+          "status": "Secured",
+          "key_server": true,
+          "psk_eap": "PRIMARY",
+          "ckn": "1A"
+        },
+        "TenGigabitEthernet0/0/0/24.20": {
+          "local_tx_sci": "3488.18ce.c4f8/0082",
+          "peers": 1,
+          "status": "Secured",
+          "key_server": false,
+          "psk_eap": "PRIMARY",
+          "ckn": "1A"
+        }
+      }
+    }
+  ]
+}
