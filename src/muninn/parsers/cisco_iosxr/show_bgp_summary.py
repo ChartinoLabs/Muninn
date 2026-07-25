@@ -172,6 +172,19 @@ def _parse_process_line(line: str) -> ProcessEntry | None:
     }
 
 
+def _safe_int(value: str) -> int:
+    """Convert a string to int, treating non-numeric placeholders as 0.
+
+    IOS-XR displays ``--`` for numeric fields (TblVer, MsgRcvd, MsgSent, etc.)
+    when a BGP neighbor is not in Established state.  This helper treats any
+    non-numeric token as 0.
+    """
+    try:
+        return int(value)
+    except ValueError:
+        return 0
+
+
 def _complete_neighbor(
     neighbors: dict[str, NeighborEntry],
     address: str,
@@ -187,13 +200,13 @@ def _complete_neighbor(
     if len(tokens) < min_tokens:
         return
     neighbors[address] = {
-        "spk": int(tokens[0]),
+        "spk": _safe_int(tokens[0]),
         "remote_as": tokens[1],
-        "msg_rcvd": int(tokens[2]),
-        "msg_sent": int(tokens[3]),
-        "tbl_ver": int(tokens[4]),
-        "in_queue": int(tokens[5]),
-        "out_queue": int(tokens[6]),
+        "msg_rcvd": _safe_int(tokens[2]),
+        "msg_sent": _safe_int(tokens[3]),
+        "tbl_ver": _safe_int(tokens[4]),
+        "in_queue": _safe_int(tokens[5]),
+        "out_queue": _safe_int(tokens[6]),
         "up_down": tokens[7],
         "state_pfxrcd": " ".join(tokens[8:]),
     }
@@ -240,8 +253,12 @@ def _parse_neighbors(lines: list[str]) -> dict[str, NeighborEntry]:
     """Parse neighbor table lines.
 
     Handles IOS-XR wrapping patterns:
-    - Full line: all fields on one line
+    - Full line: all fields on one line (wide terminal / short addresses)
     - Address wrap: long IPv6 address alone on one line, data on next line(s)
+
+    On wide terminals (``terminal width 0``), IPv6 addresses that would
+    normally appear alone on a line are followed by all data fields on the
+    same line.  The parser handles both formats uniformly.
     """
     neighbors: dict[str, NeighborEntry] = {}
     current_addr: str | None = None
@@ -255,8 +272,11 @@ def _parse_neighbors(lines: list[str]) -> dict[str, NeighborEntry]:
             current_tokens = []
             continue
 
-        # Detect if this is a non-indented line (new neighbor) or continuation
-        if line[0] not in (" ", "\t"):
+        # Detect if this is a non-indented line (new neighbor) or continuation.
+        # Use lstrip("\r") to handle raw SSH captures that may include
+        # carriage-return characters before the indentation whitespace.
+        leading = line.lstrip("\r")
+        if not leading or leading[0] not in (" ", "\t"):
             _flush_neighbor(neighbors, current_addr, current_tokens)
             tokens = stripped.split()
             current_addr = tokens[0]
