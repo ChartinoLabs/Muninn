@@ -1,0 +1,94 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show isis hostname",
+  "schema": {
+    "name": "ShowIsisHostnameResult",
+    "fields": {
+      "instances": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "IsisHostnameEntry",
+              "fields": {
+                "level": {
+                  "type": "int",
+                  "required": false
+                },
+                "hostname": {
+                  "type": "str",
+                  "required": true
+                },
+                "local": {
+                  "type": "bool",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "IS-IS hostname table with multiple instances, local system entries, and mixed levels",
+      "input": "R2#show isis hostname\nLevel  System ID      Dynamic Hostname  (VRF1)\n 2     7777.77ff.eeee R7\n     * 2222.22ff.4444 R2\nLevel  System ID      Dynamic Hostname  (test)\n 2     9999.99ff.3333 R9\n 2     8888.88ff.1111 R8\n 2     7777.77ff.eeee R7\n 2     5555.55ff.aaaa R5\n 2     3333.33ff.6666 R3\n 1     1111.11ff.2222 R1\n     * 2222.22ff.4444 R2\n",
+      "expected": {
+        "instances": {
+          "VRF1": {
+            "7777.77ff.eeee": {
+              "level": 2,
+              "hostname": "R7",
+              "local": false
+            },
+            "2222.22ff.4444": {
+              "hostname": "R2",
+              "local": true
+            }
+          },
+          "test": {
+            "9999.99ff.3333": {
+              "level": 2,
+              "hostname": "R9",
+              "local": false
+            },
+            "8888.88ff.1111": {
+              "level": 2,
+              "hostname": "R8",
+              "local": false
+            },
+            "7777.77ff.eeee": {
+              "level": 2,
+              "hostname": "R7",
+              "local": false
+            },
+            "5555.55ff.aaaa": {
+              "level": 2,
+              "hostname": "R5",
+              "local": false
+            },
+            "3333.33ff.6666": {
+              "level": 2,
+              "hostname": "R3",
+              "local": false
+            },
+            "1111.11ff.2222": {
+              "level": 1,
+              "hostname": "R1",
+              "local": false
+            },
+            "2222.22ff.4444": {
+              "hostname": "R2",
+              "local": true
+            }
+          }
+        }
+      }
+    }
+  ]
+}
