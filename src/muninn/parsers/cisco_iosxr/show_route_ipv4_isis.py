@@ -1,7 +1,7 @@
 """Parser for 'show route ipv4 isis' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -84,6 +84,42 @@ def _is_skippable(line: str) -> bool:
     return False
 
 
+def _process_continuation(
+    match: re.Match[str],
+    current_route_key: str | None,
+    routes: dict[str, IsisRoute],
+) -> None:
+    """Append a continuation next-hop to the current route."""
+    if current_route_key and current_route_key in routes:
+        nexthop = _build_nexthop(match)
+        routes[current_route_key]["next_hops"].append(nexthop)
+
+
+def _process_route(
+    match: re.Match[str],
+    routes: dict[str, IsisRoute],
+) -> str:
+    """Process an IS-IS route line, returning the route key."""
+    prefix = match.group("prefix")
+    mask = int(match.group("mask"))
+    route_key = f"{prefix}/{mask}"
+    protocol = re.sub(r"\s+", " ", match.group("protocol").strip())
+
+    nexthop = _build_nexthop(match)
+
+    if route_key in routes:
+        routes[route_key]["next_hops"].append(nexthop)
+    else:
+        routes[route_key] = IsisRoute(
+            prefix=prefix,
+            mask=mask,
+            protocol=protocol,
+            next_hops=[nexthop],
+        )
+
+    return route_key
+
+
 @register(OS.CISCO_IOSXR, "show route ipv4 isis")
 class ShowRouteIpv4IsisParser(BaseParser[ShowRouteIpv4IsisResult]):
     """Parser for 'show route ipv4 isis' on Cisco IOS-XR.
@@ -113,45 +149,21 @@ class ShowRouteIpv4IsisParser(BaseParser[ShowRouteIpv4IsisResult]):
         current_route_key: str | None = None
 
         for line in output.splitlines():
-            if not line.strip():
+            if not line.strip() or _is_skippable(line):
                 continue
 
-            if _is_skippable(line):
-                continue
-
-            # Continuation next-hop (indented)
             cont = _CONTINUATION_PATTERN.match(line)
             if cont:
-                if current_route_key and current_route_key in routes:
-                    nexthop = _build_nexthop(cont)
-                    routes[current_route_key]["next_hops"].append(nexthop)
+                _process_continuation(cont, current_route_key, routes)
                 continue
 
-            # IS-IS route line
             route_match = _ISIS_ROUTE_PATTERN.match(line)
             if route_match:
-                prefix = route_match.group("prefix")
-                mask = int(route_match.group("mask"))
-                route_key = f"{prefix}/{mask}"
-                protocol = re.sub(r"\s+", " ", route_match.group("protocol").strip())
-
-                nexthop = _build_nexthop(route_match)
-
-                if route_key in routes:
-                    routes[route_key]["next_hops"].append(nexthop)
-                else:
-                    routes[route_key] = IsisRoute(
-                        prefix=prefix,
-                        mask=mask,
-                        protocol=protocol,
-                        next_hops=[nexthop],
-                    )
-
-                current_route_key = route_key
+                current_route_key = _process_route(route_match, routes)
                 continue
 
         if not routes:
             msg = "No IS-IS routes found in output"
             raise ValueError(msg)
 
-        return cast(ShowRouteIpv4IsisResult, ShowRouteIpv4IsisResult(routes=routes))
+        return ShowRouteIpv4IsisResult(routes=routes)
