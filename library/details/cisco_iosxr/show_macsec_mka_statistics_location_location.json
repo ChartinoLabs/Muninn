@@ -1,0 +1,418 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show macsec mka statistics location <location>",
+  "schema": {
+    "name": "ShowMacsecMkaStatisticsLocationResult",
+    "fields": {
+      "mka_global_statistics": {
+        "type": {
+          "name": "MkaGlobalStatistics",
+          "fields": {
+            "session_totals": {
+              "type": {
+                "name": "MkaSessionTotals",
+                "fields": {
+                  "secured": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "reauthentication_attempts": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "deleted_secured": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "keepalive_timeouts": {
+                    "type": "int",
+                    "required": true
+                  }
+                }
+              },
+              "required": true
+            },
+            "ca_statistics": {
+              "type": {
+                "name": "CaStatistics",
+                "fields": {
+                  "pairwise_caks_derived": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "pairwise_cak_rekeys": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "group_caks_generated": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "group_caks_received": {
+                    "type": "int",
+                    "required": true
+                  }
+                }
+              },
+              "required": true
+            },
+            "sa_statistics": {
+              "type": {
+                "name": "SaStatistics",
+                "fields": {
+                  "saks_generated": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "saks_rekeyed": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "saks_received": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "sak_responses_received": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "ppk_tuple_generated": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "ppk_retrieved": {
+                    "type": "int",
+                    "required": true
+                  }
+                }
+              },
+              "required": true
+            },
+            "mkpdu_statistics": {
+              "type": {
+                "name": "MkpduStatistics",
+                "fields": {
+                  "validated_and_rx": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "rx": {
+                    "type": {
+                      "name": "MkpduRxStatistics",
+                      "fields": {
+                        "distributed_sak": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "distributed_cak": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "distributed_ppk": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "ppk_capable": {
+                          "type": "int",
+                          "required": true
+                        }
+                      }
+                    },
+                    "required": true
+                  },
+                  "transmitted": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "tx": {
+                    "type": {
+                      "name": "MkpduTxStatistics",
+                      "fields": {
+                        "distributed_sak": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "distributed_cak": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "distributed_ppk": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "ppk_capable": {
+                          "type": "int",
+                          "required": true
+                        }
+                      }
+                    },
+                    "required": true
+                  }
+                }
+              },
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "mka_error_counters": {
+        "type": {
+          "name": "MkaErrorCounters",
+          "fields": {
+            "session_failures": {
+              "type": {
+                "name": "SessionFailures",
+                "fields": {
+                  "bring_up_failures": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "reauthentication_failures": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "duplicate_auth_mgr_handle": {
+                    "type": "int",
+                    "required": true
+                  }
+                }
+              },
+              "required": true
+            },
+            "sak_failures": {
+              "type": {
+                "name": "SakFailures",
+                "fields": {
+                  "sak_generation": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "hash_key_generation": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "sak_encryption_wrap": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "sak_decryption_unwrap": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "sak_cipher_mismatch": {
+                    "type": "int",
+                    "required": true
+                  }
+                }
+              },
+              "required": true
+            },
+            "ppk_failures": {
+              "type": {
+                "name": "PpkFailures",
+                "fields": {
+                  "ppk_id_nak": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "ppk_id_expired": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "ppk_id_null_received": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "ppk_id_mismatched": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "ppk_request_timeout": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "ppk_tuple_failure": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "ppk_retrieval_failure": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "ppk_retry_failure": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "ppk_tid_mismatch": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "ppk_identity_not_found": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "ppk_hash_key_generation": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "ppk_id_encryption_wrap": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "ppk_id_decryption_unwrap": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "ppk_aipc_conn_down_fail": {
+                    "type": "int",
+                    "required": true
+                  }
+                }
+              },
+              "required": true
+            },
+            "ca_failures": {
+              "type": {
+                "name": "CaFailures",
+                "fields": {
+                  "group_cak_generation": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "group_cak_encryption_wrap": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "group_cak_decryption_unwrap": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "pairwise_cak_derivation": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "ckn_derivation": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "ick_derivation": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "kek_derivation": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "invalid_peer_macsec_capability": {
+                    "type": "int",
+                    "required": true
+                  }
+                }
+              },
+              "required": true
+            },
+            "macsec_failures": {
+              "type": {
+                "name": "MacsecFailures",
+                "fields": {
+                  "rx_sc_creation": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "tx_sc_creation": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "rx_sa_installation": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "tx_sa_installation": {
+                    "type": "int",
+                    "required": true
+                  }
+                }
+              },
+              "required": true
+            },
+            "mkpdu_failures": {
+              "type": {
+                "name": "MkpduFailures",
+                "fields": {
+                  "mkpdu_tx": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "mkpdu_rx_icv_validation": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "mkpdu_rx_packet_validation": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "mkpdu_rx_bad_peer_mn": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "mkpdu_rx_non_recent_peerlist_mn": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "mkpdu_rx_drop_sakuse_kn_mismatch": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "mkpdu_rx_drop_sakuse_rx_not_set": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "mkpdu_rx_drop_sakuse_key_mi_mismatch": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "mkpdu_rx_drop_sakuse_an_not_in_use": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "mkpdu_rx_drop_sakuse_ks_rx_tx_not_set": {
+                    "type": "int",
+                    "required": true
+                  }
+                }
+              },
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "iox_global_statistics": {
+        "type": {
+          "name": "IoxGlobalStatistics",
+          "fields": {
+            "mkpdus_rx_idb_not_found": {
+              "type": "int",
+              "required": true
+            },
+            "mkpdus_rx_invalid_ckn": {
+              "type": "int",
+              "required": true
+            },
+            "mkpdus_tx_invalid_idb": {
+              "type": "int",
+              "required": true
+            },
+            "mkpdus_tx_pkt_build_fail": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}
