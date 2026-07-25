@@ -1,0 +1,70 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show macsec policy",
+  "schema": {
+    "name": "ShowMacsecPolicyResult",
+    "fields": {
+      "total_policies": {
+        "type": "int",
+        "required": true
+      },
+      "policies": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "MacsecPolicyEntry",
+            "fields": {
+              "cipher_suite": {
+                "type": "str",
+                "required": true
+              },
+              "key_server_priority": {
+                "type": "int",
+                "required": true
+              },
+              "window_size": {
+                "type": "int",
+                "required": true
+              },
+              "conf_offset": {
+                "type": "int",
+                "required": true
+              },
+              "delay_protection": {
+                "type": "bool",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "MACsec policy table with two policies including default",
+      "input": "\nTotal Number of Policies = 2\n\n===============================================================================\nPolicy            Cipher              Key-Svr   Window    Conf      Delay\nname              Suite               Priority  Size      Offset    Protection\n===============================================================================\nDEFAULT-POLICY    GCM-AES-XPN-256     16        64        0         FALSE\n\nMACSEC_POLICY_1   GCM-AES-256         0         1024      0         FALSE\n\n",
+      "expected": {
+        "total_policies": 2,
+        "policies": {
+          "DEFAULT-POLICY": {
+            "cipher_suite": "GCM-AES-XPN-256",
+            "key_server_priority": 16,
+            "window_size": 64,
+            "conf_offset": 0,
+            "delay_protection": false
+          },
+          "MACSEC_POLICY_1": {
+            "cipher_suite": "GCM-AES-256",
+            "key_server_priority": 0,
+            "window_size": 1024,
+            "conf_offset": 0,
+            "delay_protection": false
+          }
+        }
+      }
+    }
+  ]
+}
