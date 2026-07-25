@@ -46,9 +46,7 @@ class ShowMplsInterfacesParser(BaseParser["ShowMplsInterfacesResult"]):
     interface name with LDP, tunnel, static, and enabled status.
     """
 
-    tags: ClassVar[frozenset[ParserTag]] = frozenset(
-        {ParserTag.MPLS, ParserTag.ROUTING}
-    )
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.MPLS})
 
     @classmethod
     def parse(cls, output: str) -> "ShowMplsInterfacesResult":
