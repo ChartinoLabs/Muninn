@@ -208,7 +208,9 @@ def _handle_local_tid(
 def _handle_interface_name(
     m: re.Match[str], details: dict[str, Any], _a: dict[str, Any], _s: dict[str, Any]
 ) -> None:
-    details["interface_name"] = m.group("value")
+    details["interface_name"] = canonical_interface_name(
+        m.group("value"), os=OS.CISCO_IOSXE
+    )
 
 
 def _handle_neighbor_cid(
