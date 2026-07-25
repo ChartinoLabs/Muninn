@@ -1,0 +1,315 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show isis adjacency",
+  "schema": {
+    "name": "ShowIsisAdjacencyResult",
+    "fields": {
+      "instances": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "type": "dict",
+              "key": "str",
+              "value": {
+                "type": "dict",
+                "key": "str",
+                "value": {
+                  "name": "IsisAdjacencyEntry",
+                  "fields": {
+                    "snpa": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "state": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "hold_time": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "uptime": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "nsf": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "ipv4_bfd": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "ipv6_bfd": {
+                      "type": "str",
+                      "required": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_adjacency_count": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "IS-IS Level-2 adjacencies with mixed short and long hostnames causing line wrapping",
+      "input": "Tue Jul  7 22:59:38.535 EDT\n\nIS-IS 64512 Level-2 adjacencies:\nSystem Id      Interface                SNPA           State Hold Changed  NSF IPv4 IPv6\n                                                                               BFD  BFD\nRouterA        Hu0/0/0/1.10            *PtoP*         Up    26   5w0d     Yes\nNone None\nRouterA        Hu0/0/0/1.20            *PtoP*         Up    27   5w0d     Yes\nNone None\nRouterA        Hu0/0/0/0.10            *PtoP*         Up    28   5w0d     Yes\nNone None\nRouterA        Hu0/0/0/0.20            *PtoP*         Up    25   5w0d     Yes\nNone None\nRouterB        Hu0/0/0/2.10            *PtoP*         Up    21   5w0d     Yes\nNone None\nRouterB        Hu0/0/0/2.20            *PtoP*         Up    28   5w0d     Yes\nNone None\nRouterB        Hu0/0/0/3.10            *PtoP*         Up    29   5w0d     Yes\nNone None\nRouterB        Hu0/0/0/3.20            *PtoP*         Up    23   5w0d     Yes\nNone None\nPE-C           Te0/0/0/21.10           *PtoP*         Up    22   4w0d\nYes None None\nPE-C           Te0/0/0/21.20           *PtoP*         Up    26   4w0d\nYes None None\nPE-D           Te0/0/0/20.10           *PtoP*         Up    22   5w0d\nYes None None\nPE-D           Te0/0/0/20.20           *PtoP*         Up    26   5w0d\nYes None None\nPE-E           Te0/0/0/24.10           *PtoP*         Up    27   5w0d\nYes None None\nPE-E           Te0/0/0/24.20           *PtoP*         Up    23   5w0d\nYes None None\n\nTotal adjacency count: 14\n",
+      "expected": {
+        "instances": {
+          "64512": {
+            "2": {
+              "RouterA": {
+                "HundredGigabitEthernet0/0/0/1.10": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 26,
+                  "uptime": "5w0d",
+                  "nsf": "Yes"
+                },
+                "HundredGigabitEthernet0/0/0/1.20": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 27,
+                  "uptime": "5w0d",
+                  "nsf": "Yes"
+                },
+                "HundredGigabitEthernet0/0/0/0.10": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 28,
+                  "uptime": "5w0d",
+                  "nsf": "Yes"
+                },
+                "HundredGigabitEthernet0/0/0/0.20": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 25,
+                  "uptime": "5w0d",
+                  "nsf": "Yes"
+                }
+              },
+              "RouterB": {
+                "HundredGigabitEthernet0/0/0/2.10": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 21,
+                  "uptime": "5w0d",
+                  "nsf": "Yes"
+                },
+                "HundredGigabitEthernet0/0/0/2.20": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 28,
+                  "uptime": "5w0d",
+                  "nsf": "Yes"
+                },
+                "HundredGigabitEthernet0/0/0/3.10": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 29,
+                  "uptime": "5w0d",
+                  "nsf": "Yes"
+                },
+                "HundredGigabitEthernet0/0/0/3.20": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 23,
+                  "uptime": "5w0d",
+                  "nsf": "Yes"
+                }
+              },
+              "PE-C": {
+                "TenGigabitEthernet0/0/0/21.10": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 22,
+                  "uptime": "4w0d",
+                  "nsf": "Yes"
+                },
+                "TenGigabitEthernet0/0/0/21.20": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 26,
+                  "uptime": "4w0d",
+                  "nsf": "Yes"
+                }
+              },
+              "PE-D": {
+                "TenGigabitEthernet0/0/0/20.10": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 22,
+                  "uptime": "5w0d",
+                  "nsf": "Yes"
+                },
+                "TenGigabitEthernet0/0/0/20.20": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 26,
+                  "uptime": "5w0d",
+                  "nsf": "Yes"
+                }
+              },
+              "PE-E": {
+                "TenGigabitEthernet0/0/0/24.10": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 27,
+                  "uptime": "5w0d",
+                  "nsf": "Yes"
+                },
+                "TenGigabitEthernet0/0/0/24.20": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 23,
+                  "uptime": "5w0d",
+                  "nsf": "Yes"
+                }
+              }
+            }
+          }
+        },
+        "total_adjacency_count": 14
+      }
+    },
+    {
+      "name": "IS-IS Level-2 adjacencies in single-line format (wide terminal)",
+      "input": "Tue Jul  8 10:15:22.101 EDT\n\nIS-IS 64512 Level-2 adjacencies:\nSystem Id      Interface                SNPA           State Hold Changed  NSF IPv4 IPv6\n                                                                                   BFD  BFD\nRouterA        Hu0/0/0/1.10            *PtoP*         Up    25   5w0d     Yes None None\nRouterA        Hu0/0/0/1.20            *PtoP*         Up    28   5w0d     Yes None None\nRouterA        Hu0/0/0/0.10            *PtoP*         Up    23   5w0d     Yes None None\nRouterB        Hu0/0/0/2.10            *PtoP*         Up    26   5w0d     Yes None None\nPE-C           Te0/0/0/21.10           *PtoP*         Up    22   4w0d     Yes None None\nPE-D           Te0/0/0/20.10           *PtoP*         Up    26   5w0d     Yes None None\nPE-E           Te0/0/0/24.10           *PtoP*         Up    26   5w0d     Yes None None\n\nTotal adjacency count: 7\n",
+      "expected": {
+        "instances": {
+          "64512": {
+            "2": {
+              "RouterA": {
+                "HundredGigabitEthernet0/0/0/1.10": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 25,
+                  "uptime": "5w0d",
+                  "nsf": "Yes"
+                },
+                "HundredGigabitEthernet0/0/0/1.20": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 28,
+                  "uptime": "5w0d",
+                  "nsf": "Yes"
+                },
+                "HundredGigabitEthernet0/0/0/0.10": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 23,
+                  "uptime": "5w0d",
+                  "nsf": "Yes"
+                }
+              },
+              "RouterB": {
+                "HundredGigabitEthernet0/0/0/2.10": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 26,
+                  "uptime": "5w0d",
+                  "nsf": "Yes"
+                }
+              },
+              "PE-C": {
+                "TenGigabitEthernet0/0/0/21.10": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 22,
+                  "uptime": "4w0d",
+                  "nsf": "Yes"
+                }
+              },
+              "PE-D": {
+                "TenGigabitEthernet0/0/0/20.10": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 26,
+                  "uptime": "5w0d",
+                  "nsf": "Yes"
+                }
+              },
+              "PE-E": {
+                "TenGigabitEthernet0/0/0/24.10": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 26,
+                  "uptime": "5w0d",
+                  "nsf": "Yes"
+                }
+              }
+            }
+          }
+        },
+        "total_adjacency_count": 7
+      }
+    },
+    {
+      "name": "IS-IS multi-level adjacencies with BFD session state",
+      "input": "Wed Jul  9 08:30:44.200 EDT\n\nIS-IS 100 Level-1 adjacencies:\nSystem Id      Interface                SNPA           State Hold Changed  NSF IPv4 IPv6\n                                                                                   BFD  BFD\nRouterA        Gi0/0/0/1                *PtoP*         Up    29   2w3d     Yes Up   None\nRouterB        Gi0/0/0/2                *PtoP*         Up    27   1w5d     No  Up   Up\n\nIS-IS 100 Level-2 adjacencies:\nSystem Id      Interface                SNPA           State Hold Changed  NSF IPv4 IPv6\n                                                                                   BFD  BFD\nRouterA        Gi0/0/0/1                *PtoP*         Up    29   2w3d     Yes None Up\nRouterC        Gi0/0/0/3                *PtoP*         Up    24   3w1d     Yes None None\n\nTotal adjacency count: 4\n",
+      "expected": {
+        "instances": {
+          "100": {
+            "1": {
+              "RouterA": {
+                "GigabitEthernet0/0/0/1": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 29,
+                  "uptime": "2w3d",
+                  "nsf": "Yes",
+                  "ipv4_bfd": "Up"
+                }
+              },
+              "RouterB": {
+                "GigabitEthernet0/0/0/2": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 27,
+                  "uptime": "1w5d",
+                  "nsf": "No",
+                  "ipv4_bfd": "Up",
+                  "ipv6_bfd": "Up"
+                }
+              }
+            },
+            "2": {
+              "RouterA": {
+                "GigabitEthernet0/0/0/1": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 29,
+                  "uptime": "2w3d",
+                  "nsf": "Yes",
+                  "ipv6_bfd": "Up"
+                }
+              },
+              "RouterC": {
+                "GigabitEthernet0/0/0/3": {
+                  "snpa": "*PtoP*",
+                  "state": "Up",
+                  "hold_time": 24,
+                  "uptime": "3w1d",
+                  "nsf": "Yes"
+                }
+              }
+            }
+          }
+        },
+        "total_adjacency_count": 4
+      }
+    }
+  ]
+}

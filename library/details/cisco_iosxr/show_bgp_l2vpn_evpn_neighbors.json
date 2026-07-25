@@ -1,0 +1,112 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show bgp l2vpn evpn neighbors",
+  "schema": null,
+  "examples": [
+    {
+      "name": "L2VPN EVPN neighbors with IPv4 and IPv6 peers, multiple address families",
+      "input": "Tue Jul  7 22:59:44.322 EDT\n\nBGP neighbor is 192.0.2.2\n Remote AS 64512, local AS 64512, internal link\n Description: SITE-A - RR\n Remote router ID 192.0.2.2\n Cluster ID 192.0.2.1\n  BGP state = Established, up for 5w0d\n  Previous State: Idle\n  Last Received Message: KeepAlive\n  NSR State: NSR Ready\n  Last read 00:00:18, Last read before reset 00:00:00\n  Hold time is 180, keepalive interval is 60 seconds\n  Configured hold time: 180, keepalive: 60, min acceptable hold time: 3\n  Last write 00:00:18, attempted 19, written 19\n  Second last write 00:01:18, attempted 19, written 19\n  Last write before reset 00:00:00, attempted 0, written 0\n  Second last write before reset 00:00:00, attempted 0, written 0\n  Last write pulse rcvd  Jul  7 22:59:25.938 last full not set pulse count 101844\n  Last write pulse rcvd before reset 00:00:00\n  Socket not armed for io, armed for read, armed for write\n  Last write thread event before reset 00:00:00, second last 00:00:00\n  Last KA expiry before reset 00:00:00, second last 00:00:00\n  Last KA error before reset 00:00:00, KA not sent 00:00:00\n  Last KA start before reset 00:00:00, second last 00:00:00\n  Precedence: internet\n  Non-stop routing is enabled\n  Multi-protocol capability received\n  Neighbor capabilities:\n    Route refresh: advertised (old + new) and received (old + new)\n    4-byte AS: advertised and received\n    Address family VPNv4 Unicast: advertised and received\n    Address family VPNv6 Unicast: advertised and received\n    Address family L2VPN EVPN: advertised and received\n  Received 50969 messages, 0 notifications, 0 in queue\n  Sent 50980 messages, 0 notifications, 0 in queue\n  Minimum time between advertisement runs is 0 secs\n  Inbound message logging enabled, 3 messages buffered\n  Outbound message logging enabled, 3 messages buffered\n\n For Address Family: VPNv4 Unicast\n  BGP neighbor version 376\n  Update group: 0.3 Filter-group: 0.1  No Refresh request being processed\n  Route-Reflector Client\n    Extended Nexthop Encoding: advertised and received\n  Route refresh request: received 0, sent 0\n  5 accepted prefixes, 0 are bestpaths\n  Exact no. of prefixes denied : 0.\n  Cumulative no. of prefixes denied: 0.\n  Prefix advertised 109, suppressed 0, withdrawn 42\n  AIGP is enabled\n  An EoR was not received during read-only mode\n  Last ack version 376, Last synced ack version 376\n  Outstanding version objects: current 0, max 5, refresh 0\n  Additional-paths operation: None\n  Send Multicast Attributes\n  Slow Peer State: Detection-only\n    Detected state: FALSE, Detection threshold: 300\n    Detection Count: 0, Recovery Count: 0\n\n For Address Family: L2VPN EVPN\n  BGP neighbor version 132\n  Update group: 0.3 Filter-group: 0.1  No Refresh request being processed\n  Route refresh request: received 0, sent 1\n  18 accepted prefixes, 15 are bestpaths\n  Exact no. of prefixes denied : 0.\n  Cumulative no. of prefixes denied: 0.\n  Prefix advertised 10, suppressed 0, withdrawn 0\n  AIGP is enabled\n  An EoR was not received during read-only mode\n  Last ack version 132, Last synced ack version 132\n  Outstanding version objects: current 0, max 2, refresh 0\n  Additional-paths operation: None\n  Send Multicast Attributes\n  Slow Peer State: Detection-only\n    Detected state: FALSE, Detection threshold: 300\n    Detection Count: 0, Recovery Count: 0\n\n  Connections established 1; dropped 0\n  Local host: 192.0.2.1, Local port: 16431, IF Handle: 0x00000000\n  Foreign host: 192.0.2.2, Foreign port: 179\n  Last reset 00:00:00\n\nBGP neighbor is 2001:db8::3\n Remote AS 64512, local AS 64512, internal link\n Remote router ID 198.51.100.3\n  BGP state = Established, up for 5w0d\n  Previous State: Idle\n  Last Received Message: KeepAlive\n  NSR State: NSR Ready\n  Last read 00:00:18, Last read before reset 00:00:00\n  Hold time is 180, keepalive interval is 60 seconds\n  Configured hold time: 180, keepalive: 60, min acceptable hold time: 3\n  Last write 00:00:18, attempted 19, written 19\n  Second last write 00:01:18, attempted 19, written 19\n  Last write before reset 00:00:00, attempted 0, written 0\n  Second last write before reset 00:00:00, attempted 0, written 0\n  Last write pulse rcvd  Jul  7 22:59:25.741 last full not set pulse count 101229\n  Last write pulse rcvd before reset 00:00:00\n  Socket not armed for io, armed for read, armed for write\n  Last write thread event before reset 00:00:00, second last 00:00:00\n  Last KA expiry before reset 00:00:00, second last 00:00:00\n  Last KA error before reset 00:00:00, KA not sent 00:00:00\n  Last KA start before reset 00:00:00, second last 00:00:00\n  Precedence: internet\n  Non-stop routing is enabled\n  Multi-protocol capability received\n  Neighbor capabilities:\n    Route refresh: advertised (old + new) and received (old + new)\n    4-byte AS: advertised and received\n    Address family VPNv4 Unicast: advertised and received\n    Address family VPNv6 Unicast: advertised and received\n    Address family L2VPN EVPN: advertised and received\n  Received 50958 messages, 0 notifications, 0 in queue\n  Sent 50890 messages, 0 notifications, 0 in queue\n  Minimum time between advertisement runs is 0 secs\n  Inbound message logging enabled, 3 messages buffered\n  Outbound message logging enabled, 3 messages buffered\n\n For Address Family: VPNv4 Unicast\n  BGP neighbor version 376\n  Update group: 0.1 Filter-group: 0.3  No Refresh request being processed\n  Encapsulation type SRv6\n    Extended Nexthop Encoding: advertised and received\n  Route refresh request: received 0, sent 0\n  Policy for outgoing advertisements is RRv6\n  6 accepted prefixes, 0 are bestpaths\n  Exact no. of prefixes denied : 0.\n  Cumulative no. of prefixes denied: 0.\n  Prefix advertised 29, suppressed 0, withdrawn 24\n  AIGP is enabled\n  An EoR was not received during read-only mode\n  Last ack version 376, Last synced ack version 376\n  Outstanding version objects: current 0, max 3, refresh 0\n  Additional-paths operation: None\n  Send Multicast Attributes\n  Slow Peer State: Detection-only\n    Detected state: FALSE, Detection threshold: 300\n    Detection Count: 0, Recovery Count: 0\n\n For Address Family: VPNv6 Unicast\n  BGP neighbor version 129\n  Update group: 0.1 Filter-group: 0.4  No Refresh request being processed\n  Route refresh request: received 0, sent 1\n  10 accepted prefixes, 1 are bestpaths\n  Exact no. of prefixes denied : 0.\n  Cumulative no. of prefixes denied: 0.\n  Prefix advertised 8, suppressed 0, withdrawn 1\n  AIGP is enabled\n  An EoR was not received during read-only mode\n  Last ack version 129, Last synced ack version 129\n  Outstanding version objects: current 0, max 2, refresh 0\n  Additional-paths operation: None\n  Send Multicast Attributes\n  Slow Peer State: Detection-only\n    Detected state: FALSE, Detection threshold: 300\n    Detection Count: 0, Recovery Count: 0\n\n For Address Family: L2VPN EVPN\n  BGP neighbor version 132\n  Update group: 0.1 Filter-group: 0.3  No Refresh request being processed\n  Route refresh request: received 0, sent 1\n  Policy for outgoing advertisements is LOCAL_PREF150\n  3 accepted prefixes, 0 are bestpaths\n  Exact no. of prefixes denied : 0.\n  Cumulative no. of prefixes denied: 0.\n  Prefix advertised 12, suppressed 0, withdrawn 0\n  AIGP is enabled\n  An EoR was not received during read-only mode\n  Last ack version 132, Last synced ack version 132\n  Outstanding version objects: current 0, max 2, refresh 0\n  Additional-paths operation: None\n  Send Multicast Attributes\n  Slow Peer State: Detection-only\n    Detected state: FALSE, Detection threshold: 300\n    Detection Count: 0, Recovery Count: 0\n\n  Connections established 1; dropped 0\n  Local host: 2001:db8::1, Local port: 37529, IF Handle: 0x00000000\n  Foreign host: 2001:db8::3, Foreign port: 179\n  Last reset 00:00:00\n",
+      "expected": {
+        "192.0.2.2": {
+          "remote_as": "64512",
+          "local_as": "64512",
+          "link_type": "internal",
+          "router_id": "192.0.2.2",
+          "state": "Established",
+          "hold_time": 180,
+          "keepalive_interval": 60,
+          "messages_received": 50969,
+          "messages_sent": 50980,
+          "notifications_received": 0,
+          "notifications_sent": 0,
+          "connections_established": 1,
+          "connections_dropped": 0,
+          "local_host": "192.0.2.1",
+          "local_port": 16431,
+          "foreign_host": "192.0.2.2",
+          "foreign_port": 179,
+          "address_families": {
+            "VPNv4 Unicast": {
+              "accepted_prefixes": 5,
+              "bestpaths": 0,
+              "prefixes_advertised": 109,
+              "prefixes_suppressed": 0,
+              "prefixes_withdrawn": 42,
+              "max_prefixes_allowed": 0,
+              "route_refresh_received": 0,
+              "route_refresh_sent": 0,
+              "is_route_reflector_client": true
+            },
+            "L2VPN EVPN": {
+              "accepted_prefixes": 18,
+              "bestpaths": 15,
+              "prefixes_advertised": 10,
+              "prefixes_suppressed": 0,
+              "prefixes_withdrawn": 0,
+              "max_prefixes_allowed": 0,
+              "route_refresh_received": 0,
+              "route_refresh_sent": 1
+            }
+          },
+          "description": "SITE-A - RR",
+          "up_time": "5w0d",
+          "cluster_id": "192.0.2.1"
+        },
+        "2001:db8::3": {
+          "remote_as": "64512",
+          "local_as": "64512",
+          "link_type": "internal",
+          "router_id": "198.51.100.3",
+          "state": "Established",
+          "hold_time": 180,
+          "keepalive_interval": 60,
+          "messages_received": 50958,
+          "messages_sent": 50890,
+          "notifications_received": 0,
+          "notifications_sent": 0,
+          "connections_established": 1,
+          "connections_dropped": 0,
+          "local_host": "2001:db8::1",
+          "local_port": 37529,
+          "foreign_host": "2001:db8::3",
+          "foreign_port": 179,
+          "address_families": {
+            "VPNv4 Unicast": {
+              "accepted_prefixes": 6,
+              "bestpaths": 0,
+              "prefixes_advertised": 29,
+              "prefixes_suppressed": 0,
+              "prefixes_withdrawn": 24,
+              "max_prefixes_allowed": 0,
+              "route_refresh_received": 0,
+              "route_refresh_sent": 0,
+              "outbound_policy": "RRv6"
+            },
+            "VPNv6 Unicast": {
+              "accepted_prefixes": 10,
+              "bestpaths": 1,
+              "prefixes_advertised": 8,
+              "prefixes_suppressed": 0,
+              "prefixes_withdrawn": 1,
+              "max_prefixes_allowed": 0,
+              "route_refresh_received": 0,
+              "route_refresh_sent": 1
+            },
+            "L2VPN EVPN": {
+              "accepted_prefixes": 3,
+              "bestpaths": 0,
+              "prefixes_advertised": 12,
+              "prefixes_suppressed": 0,
+              "prefixes_withdrawn": 0,
+              "max_prefixes_allowed": 0,
+              "route_refresh_received": 0,
+              "route_refresh_sent": 1,
+              "outbound_policy": "LOCAL_PREF150"
+            }
+          },
+          "up_time": "5w0d"
+        }
+      }
+    }
+  ]
+}
