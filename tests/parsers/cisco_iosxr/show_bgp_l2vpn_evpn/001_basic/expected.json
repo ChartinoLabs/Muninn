@@ -1,0 +1,194 @@
+{
+    "router_id": "198.51.100.1",
+    "local_as": "65001",
+    "main_routing_table_version": 256,
+    "route_distinguishers": {
+        "65001:100": {
+            "routes": [
+                {
+                    "status_codes": "*>",
+                    "network": "[1][0001.0100.aa00.bb00.0000][0]/120",
+                    "next_hop": "0.0.0.0",
+                    "weight": 0,
+                    "origin": "IGP"
+                },
+                {
+                    "status_codes": "*>i",
+                    "network": "[1][0002.0200.aa00.bb00.0000][0]/120",
+                    "next_hop": "198.51.100.2",
+                    "weight": 0,
+                    "origin": "IGP",
+                    "label": "C:200",
+                    "locprf": 100
+                },
+                {
+                    "status_codes": "*>i",
+                    "network": "[1][0002.0200.aa00.bb00.0000][4294967295]/120",
+                    "next_hop": "198.51.100.2",
+                    "weight": 0,
+                    "origin": "IGP",
+                    "locprf": 100
+                },
+                {
+                    "status_codes": "*>",
+                    "network": "[2][0][48][aabb.cc00.0001][0]/104",
+                    "next_hop": "0.0.0.0",
+                    "weight": 0,
+                    "origin": "IGP"
+                },
+                {
+                    "status_codes": "*>i",
+                    "network": "[2][0][48][aabb.cc00.0002][0]/104",
+                    "next_hop": "198.51.100.2",
+                    "weight": 0,
+                    "origin": "IGP",
+                    "locprf": 100
+                },
+                {
+                    "status_codes": "*>",
+                    "network": "[3][0][32][198.51.100.1]/80",
+                    "next_hop": "0.0.0.0",
+                    "weight": 0,
+                    "origin": "IGP"
+                },
+                {
+                    "status_codes": "*>i",
+                    "network": "[3][0][32][198.51.100.2]/80",
+                    "next_hop": "198.51.100.2",
+                    "weight": 0,
+                    "origin": "IGP",
+                    "label": "C:200",
+                    "locprf": 100
+                }
+            ],
+            "rd_version": 64,
+            "default_vrf": "100"
+        },
+        "65001:200": {
+            "routes": [
+                {
+                    "status_codes": "* i",
+                    "network": "[1][0001.aa00.0000.0000.0001][0]/120",
+                    "next_hop": "203.0.113.1",
+                    "weight": 0,
+                    "origin": "IGP",
+                    "label": "C:300",
+                    "locprf": 100
+                },
+                {
+                    "status_codes": "*>i",
+                    "network": "[1][0001.aa00.0000.0000.0001][0]/120",
+                    "next_hop": "203.0.113.1",
+                    "weight": 0,
+                    "origin": "IGP",
+                    "label": "C:300",
+                    "locprf": 100
+                },
+                {
+                    "status_codes": "* i",
+                    "network": "[1][0001.aa00.0000.0000.0001][0]/120",
+                    "next_hop": "2001:db8::1",
+                    "weight": 0,
+                    "origin": "IGP",
+                    "locprf": 100
+                },
+                {
+                    "status_codes": "*>",
+                    "network": "[1][0001.aa00.0000.0000.0002][0]/120",
+                    "next_hop": "0.0.0.0",
+                    "weight": 0,
+                    "origin": "IGP"
+                },
+                {
+                    "status_codes": "*>i",
+                    "network": "[2][0][48][aabb.cc00.0003][0]/104",
+                    "next_hop": "198.51.100.2",
+                    "weight": 0,
+                    "origin": "IGP",
+                    "locprf": 100
+                },
+                {
+                    "status_codes": "*>",
+                    "network": "[3][0][32][198.51.100.1]/80",
+                    "next_hop": "0.0.0.0",
+                    "weight": 0,
+                    "origin": "IGP"
+                },
+                {
+                    "status_codes": "*>i",
+                    "network": "[3][0][32][198.51.100.2]/80",
+                    "next_hop": "198.51.100.2",
+                    "weight": 0,
+                    "origin": "IGP",
+                    "label": "C:200",
+                    "locprf": 100
+                },
+                {
+                    "status_codes": "* i",
+                    "network": "[3][0][32][203.0.113.1]/80",
+                    "next_hop": "203.0.113.1",
+                    "weight": 0,
+                    "origin": "IGP",
+                    "label": "C:300",
+                    "locprf": 100
+                },
+                {
+                    "status_codes": "*>i",
+                    "network": "[3][0][32][203.0.113.1]/80",
+                    "next_hop": "203.0.113.1",
+                    "weight": 0,
+                    "origin": "IGP",
+                    "label": "C:300",
+                    "locprf": 100
+                },
+                {
+                    "status_codes": "* i",
+                    "network": "[3][0][32][203.0.113.1]/80",
+                    "next_hop": "2001:db8::1",
+                    "weight": 0,
+                    "origin": "IGP",
+                    "locprf": 100
+                }
+            ],
+            "rd_version": 128,
+            "default_vrf": "200"
+        },
+        "198.51.100.1:0": {
+            "routes": [
+                {
+                    "status_codes": "*>",
+                    "network": "[1][198.51.100.1:1][0001.0100.aa00.cc00.0000][4294967295]/184",
+                    "next_hop": "0.0.0.0",
+                    "weight": 0,
+                    "origin": "IGP"
+                },
+                {
+                    "status_codes": "*>",
+                    "network": "[4][0001.0100.aa00.bb00.0000][32][198.51.100.1]/128",
+                    "next_hop": "0.0.0.0",
+                    "weight": 0,
+                    "origin": "IGP"
+                },
+                {
+                    "status_codes": "*>i",
+                    "network": "[4][0001.aa00.0000.0000.0001][32][198.51.100.2]/128",
+                    "next_hop": "198.51.100.2",
+                    "weight": 0,
+                    "origin": "IGP",
+                    "locprf": 100
+                }
+            ],
+            "rd_version": 32,
+            "default_vrf": "ES:GLOBAL"
+        }
+    },
+    "generic_scan_interval": 60,
+    "nsr_enabled": true,
+    "table_state": "Active",
+    "table_id": "0x0",
+    "nsr_initial_initsync_version": "1 (Reached)",
+    "nsr_issu_sync_group_versions": "256/0",
+    "scan_interval": 60,
+    "total_prefixes": 16,
+    "total_paths": 20
+}
