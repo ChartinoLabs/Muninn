@@ -22,7 +22,7 @@ class IsisNeighborDetailEntry(TypedDict):
     ipv4_addresses: NotRequired[list[str]]
     ipv6_addresses: NotRequired[list[str]]
     topologies: list[str]
-    uptime: str
+    uptime: NotRequired[str]
 
 
 class ShowIsisNeighborsDetailResult(TypedDict):
@@ -202,7 +202,6 @@ class ShowIsisNeighborsDetailParser(BaseParser["ShowIsisNeighborsDetailResult"])
             "neighbor_type": match.group("type"),
             "area_addresses": [],
             "topologies": [],
-            "uptime": "",
         }
 
         ietf_nsf = match.group("ietf_nsf")
