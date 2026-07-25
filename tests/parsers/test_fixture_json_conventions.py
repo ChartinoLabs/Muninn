@@ -167,6 +167,7 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         # --- Cisco IOS-XR ---
         # routes uses list-of-dicts; no natural unique key for multiple BGP paths
         # (same network with multipath/ECMP entries and different next-hops).
+        "cisco_iosxr/show_bgp_vrf/001_basic/expected.json",
         "cisco_iosxr/show_bgp_l2vpn_evpn/001_basic/expected.json",
         "cisco_iosxr/show_ip_route/001_ospf_ecmp_connected/expected.json",
         "cisco_iosxr/show_ip_route/002_mixed_protocols_ecmp/expected.json",
