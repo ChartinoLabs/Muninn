@@ -1,0 +1,202 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show l2vpn xconnect summary location <location>",
+  "schema": {
+    "name": "ShowL2vpnXconnectSummaryResult",
+    "fields": {
+      "number_of_groups": {
+        "type": "int",
+        "required": true
+      },
+      "number_of_xconnects": {
+        "type": "int",
+        "required": true
+      },
+      "xconnect_states": {
+        "type": {
+          "name": "XconnectStates",
+          "fields": {
+            "up": {
+              "type": "int",
+              "required": true
+            },
+            "down": {
+              "type": "int",
+              "required": true
+            },
+            "unresolved": {
+              "type": "int",
+              "required": true
+            },
+            "partially_programmed": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "xconnect_types": {
+        "type": {
+          "name": "XconnectTypes",
+          "fields": {
+            "ac_pw": {
+              "type": "int",
+              "required": true
+            },
+            "ac_ac": {
+              "type": "int",
+              "required": true
+            },
+            "pw_pw": {
+              "type": "int",
+              "required": true
+            },
+            "monitor_session_pw": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "xconnect_ac_types": {
+        "type": {
+          "name": "XconnectAcTypes",
+          "fields": {
+            "ac_ip_tunnel": {
+              "type": "int",
+              "required": true
+            },
+            "ac_vlan_aware": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "number_of_admin_down_segments": {
+        "type": "int",
+        "required": true
+      },
+      "mp2mp_xconnects": {
+        "type": {
+          "name": "Mp2mpXconnects",
+          "fields": {
+            "total": {
+              "type": "int",
+              "required": true
+            },
+            "up": {
+              "type": "int",
+              "required": true
+            },
+            "down": {
+              "type": "int",
+              "required": true
+            },
+            "advertised": {
+              "type": "int",
+              "required": true
+            },
+            "non_advertised": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "ce_connections": {
+        "type": {
+          "name": "CeConnections",
+          "fields": {
+            "total": {
+              "type": "int",
+              "required": true
+            },
+            "advertised": {
+              "type": "int",
+              "required": true
+            },
+            "non_advertised": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "backup_pw": {
+        "type": {
+          "name": "BackupPw",
+          "fields": {
+            "configured": {
+              "type": "int",
+              "required": true
+            },
+            "up": {
+              "type": "int",
+              "required": true
+            },
+            "down": {
+              "type": "int",
+              "required": true
+            },
+            "admin_down": {
+              "type": "int",
+              "required": true
+            },
+            "unresolved": {
+              "type": "int",
+              "required": true
+            },
+            "standby": {
+              "type": "int",
+              "required": true
+            },
+            "standby_ready": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "backup_interface": {
+        "type": {
+          "name": "BackupInterface",
+          "fields": {
+            "configured": {
+              "type": "int",
+              "required": true
+            },
+            "up": {
+              "type": "int",
+              "required": true
+            },
+            "down": {
+              "type": "int",
+              "required": true
+            },
+            "admin_down": {
+              "type": "int",
+              "required": true
+            },
+            "unresolved": {
+              "type": "int",
+              "required": true
+            },
+            "standby": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}
