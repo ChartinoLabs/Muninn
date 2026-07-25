@@ -1,0 +1,14 @@
+!! Building configuration...
+!! IOS XR Configuration 7.11.21
+telemetry model-driven
+ no sensor-group BGP_PATHS
+ sensor-group BGP_ADJ_RIB_IN
+  sensor-path /bgp/instances/instance/instance-active/vrfs/vrf/afs/af/advertised-paths/advertised-path
+  no sensor-path Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/vrfs/vrf/afs/af/advertised-paths/advertised-path
+ !
+ subscription BGP_ROUTES_SUB
+  no sensor-group-id BGP_PATHS sample-interval 30000
+ !
+!
+no vrf BGP_ADD_TEST
+end
