@@ -1,0 +1,184 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show interface brief",
+  "schema": {
+    "name": "ShowInterfacesBriefResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceBriefEntry",
+            "fields": {
+              "interface_state": {
+                "type": "str",
+                "required": true
+              },
+              "line_protocol_state": {
+                "type": "str",
+                "required": true
+              },
+              "encapsulation_type": {
+                "type": "str",
+                "required": true
+              },
+              "mtu": {
+                "type": "int",
+                "required": true
+              },
+              "bandwidth_kbps": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "NCS-5500 with mixed interface types: Bundle-Ether, BVI, Loopback, Null, SRTE tunnel, MgmtEth, HundredGigE with sub-interfaces, TenGigE in up/down/admin-down states",
+      "input": "\n               Intf       Intf        LineP              Encap  MTU        BW\n               Name       State       State               Type (byte)    (Kbps)\n--------------------------------------------------------------------------------\n                BE6        down        down               ARPA  1514          0\n              BV100          up          up               ARPA  1514   10000000\n           BV105311        down        down               ARPA  1514   10000000\n                Lo0          up          up           Loopback  1500          0\n                Lo1          up          up           Loopback  1500          0\n                Nu0          up          up               Null  1500          0\n       srte_c_10011          up          up             TUNNEL  1500          0\n       srte_c_130_e        down        down             TUNNEL  1500          0\n     Mg0/RP0/CPU0/0          up          up               ARPA  1514    1000000\n     Mg0/RP1/CPU0/0  admin-down  admin-down               ARPA  1514          0\n         Hu0/0/0/10          up          up               ARPA  9212  100000000\n     Hu0/0/0/10.10          up          up             802.1Q  9216  100000000\n     Hu0/0/0/10.20          up          up             802.1Q  9216  100000000\n         Hu0/0/0/36  admin-down  admin-down               ARPA  9212  100000000\n          Te0/0/0/0          up          up               ARPA  9212   10000000\n      Te0/0/0/0.10          up          up             802.1Q  9216   10000000\n      Te0/0/0/0.20          up          up             802.1Q  9216   10000000\n          Te0/0/0/2        down        down               ARPA  9216   10000000\n          Te0/0/0/7  admin-down  admin-down               ARPA  9212   10000000\n",
+      "expected": {
+        "interfaces": {
+          "BE6": {
+            "interface_state": "down",
+            "line_protocol_state": "down",
+            "encapsulation_type": "ARPA",
+            "mtu": 1514,
+            "bandwidth_kbps": 0
+          },
+          "BV100": {
+            "interface_state": "up",
+            "line_protocol_state": "up",
+            "encapsulation_type": "ARPA",
+            "mtu": 1514,
+            "bandwidth_kbps": 10000000
+          },
+          "BV105311": {
+            "interface_state": "down",
+            "line_protocol_state": "down",
+            "encapsulation_type": "ARPA",
+            "mtu": 1514,
+            "bandwidth_kbps": 10000000
+          },
+          "Loopback0": {
+            "interface_state": "up",
+            "line_protocol_state": "up",
+            "encapsulation_type": "Loopback",
+            "mtu": 1500,
+            "bandwidth_kbps": 0
+          },
+          "Loopback1": {
+            "interface_state": "up",
+            "line_protocol_state": "up",
+            "encapsulation_type": "Loopback",
+            "mtu": 1500,
+            "bandwidth_kbps": 0
+          },
+          "Null0": {
+            "interface_state": "up",
+            "line_protocol_state": "up",
+            "encapsulation_type": "Null",
+            "mtu": 1500,
+            "bandwidth_kbps": 0
+          },
+          "srte_c_10011": {
+            "interface_state": "up",
+            "line_protocol_state": "up",
+            "encapsulation_type": "TUNNEL",
+            "mtu": 1500,
+            "bandwidth_kbps": 0
+          },
+          "srte_c_130_e": {
+            "interface_state": "down",
+            "line_protocol_state": "down",
+            "encapsulation_type": "TUNNEL",
+            "mtu": 1500,
+            "bandwidth_kbps": 0
+          },
+          "MgmtEth0/RP0/CPU0/0": {
+            "interface_state": "up",
+            "line_protocol_state": "up",
+            "encapsulation_type": "ARPA",
+            "mtu": 1514,
+            "bandwidth_kbps": 1000000
+          },
+          "MgmtEth0/RP1/CPU0/0": {
+            "interface_state": "admin-down",
+            "line_protocol_state": "admin-down",
+            "encapsulation_type": "ARPA",
+            "mtu": 1514,
+            "bandwidth_kbps": 0
+          },
+          "HundredGigabitEthernet0/0/0/10": {
+            "interface_state": "up",
+            "line_protocol_state": "up",
+            "encapsulation_type": "ARPA",
+            "mtu": 9212,
+            "bandwidth_kbps": 100000000
+          },
+          "HundredGigabitEthernet0/0/0/10.10": {
+            "interface_state": "up",
+            "line_protocol_state": "up",
+            "encapsulation_type": "802.1Q",
+            "mtu": 9216,
+            "bandwidth_kbps": 100000000
+          },
+          "HundredGigabitEthernet0/0/0/10.20": {
+            "interface_state": "up",
+            "line_protocol_state": "up",
+            "encapsulation_type": "802.1Q",
+            "mtu": 9216,
+            "bandwidth_kbps": 100000000
+          },
+          "HundredGigabitEthernet0/0/0/36": {
+            "interface_state": "admin-down",
+            "line_protocol_state": "admin-down",
+            "encapsulation_type": "ARPA",
+            "mtu": 9212,
+            "bandwidth_kbps": 100000000
+          },
+          "TenGigabitEthernet0/0/0/0": {
+            "interface_state": "up",
+            "line_protocol_state": "up",
+            "encapsulation_type": "ARPA",
+            "mtu": 9212,
+            "bandwidth_kbps": 10000000
+          },
+          "TenGigabitEthernet0/0/0/0.10": {
+            "interface_state": "up",
+            "line_protocol_state": "up",
+            "encapsulation_type": "802.1Q",
+            "mtu": 9216,
+            "bandwidth_kbps": 10000000
+          },
+          "TenGigabitEthernet0/0/0/0.20": {
+            "interface_state": "up",
+            "line_protocol_state": "up",
+            "encapsulation_type": "802.1Q",
+            "mtu": 9216,
+            "bandwidth_kbps": 10000000
+          },
+          "TenGigabitEthernet0/0/0/2": {
+            "interface_state": "down",
+            "line_protocol_state": "down",
+            "encapsulation_type": "ARPA",
+            "mtu": 9216,
+            "bandwidth_kbps": 10000000
+          },
+          "TenGigabitEthernet0/0/0/7": {
+            "interface_state": "admin-down",
+            "line_protocol_state": "admin-down",
+            "encapsulation_type": "ARPA",
+            "mtu": 9212,
+            "bandwidth_kbps": 10000000
+          }
+        }
+      }
+    }
+  ]
+}

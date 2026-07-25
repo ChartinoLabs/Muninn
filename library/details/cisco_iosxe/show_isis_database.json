@@ -1,0 +1,130 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show isis database",
+  "schema": {
+    "name": "ShowIsisDatabaseResult",
+    "fields": {
+      "tag": {
+        "type": "str",
+        "required": true
+      },
+      "levels": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "IsisLspEntry",
+              "fields": {
+                "sequence_number": {
+                  "type": "str",
+                  "required": true
+                },
+                "checksum": {
+                  "type": "str",
+                  "required": true
+                },
+                "holdtime": {
+                  "type": "int",
+                  "required": true
+                },
+                "holdtime_received": {
+                  "type": "int",
+                  "required": false
+                },
+                "att": {
+                  "type": "int",
+                  "required": true
+                },
+                "p_bit": {
+                  "type": "int",
+                  "required": true
+                },
+                "ol": {
+                  "type": "int",
+                  "required": true
+                },
+                "is_local": {
+                  "type": "bool",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "IS-IS database with Level-1 and Level-2 LSP entries",
+      "input": "Tag 1:\nIS-IS Level-1 Link State Database:\nLSPID                 LSP Seq Num  LSP Checksum  LSP Holdtime/Rcvd      ATT/P/OL\nR1.00-00            * 0x000005A8   0xCD13                 489/*         0/0/0\nR2-ASR.00-00          0x00000A64   0xE5D9                 725/1199      0/0/0\nR3-Fugazi.00-00       0x0000059C   0x6C7D                 704/1199      0/0/0\nR5.00-00              0x000005A1   0x81AD                 766/1198      0/0/0\nR6.00-00              0x00000400   0x2F1F                1175/1198      0/0/0\nIS-IS Level-2 Link State Database:\nLSPID                 LSP Seq Num  LSP Checksum  LSP Holdtime/Rcvd      ATT/P/OL\nR1.00-00            * 0x0000075F   0xDDD3                 530/*         0/0/0\n",
+      "expected": {
+        "tag": "1",
+        "levels": {
+          "Level-1": {
+            "R1.00-00": {
+              "sequence_number": "0x000005A8",
+              "checksum": "0xCD13",
+              "holdtime": 489,
+              "att": 0,
+              "p_bit": 0,
+              "ol": 0,
+              "is_local": true
+            },
+            "R2-ASR.00-00": {
+              "sequence_number": "0x00000A64",
+              "checksum": "0xE5D9",
+              "holdtime": 725,
+              "holdtime_received": 1199,
+              "att": 0,
+              "p_bit": 0,
+              "ol": 0
+            },
+            "R3-Fugazi.00-00": {
+              "sequence_number": "0x0000059C",
+              "checksum": "0x6C7D",
+              "holdtime": 704,
+              "holdtime_received": 1199,
+              "att": 0,
+              "p_bit": 0,
+              "ol": 0
+            },
+            "R5.00-00": {
+              "sequence_number": "0x000005A1",
+              "checksum": "0x81AD",
+              "holdtime": 766,
+              "holdtime_received": 1198,
+              "att": 0,
+              "p_bit": 0,
+              "ol": 0
+            },
+            "R6.00-00": {
+              "sequence_number": "0x00000400",
+              "checksum": "0x2F1F",
+              "holdtime": 1175,
+              "holdtime_received": 1198,
+              "att": 0,
+              "p_bit": 0,
+              "ol": 0
+            }
+          },
+          "Level-2": {
+            "R1.00-00": {
+              "sequence_number": "0x0000075F",
+              "checksum": "0xDDD3",
+              "holdtime": 530,
+              "att": 0,
+              "p_bit": 0,
+              "ol": 0,
+              "is_local": true
+            }
+          }
+        }
+      }
+    }
+  ]
+}
