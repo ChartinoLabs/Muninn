@@ -1,0 +1,62 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show isis neighbors",
+  "schema": {
+    "name": "ShowIsisNeighborsResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "IsisNeighborEntry",
+            "fields": {
+              "interfaces": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "IsisInterfaceEntry",
+                    "fields": {
+                      "adjacencies": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "IsisAdjacencyEntry",
+                            "fields": {
+                              "state": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "holdtime": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "circuit_id": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "ip_address": {
+                                "type": "str",
+                                "required": false
+                              }
+                            }
+                          }
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}
