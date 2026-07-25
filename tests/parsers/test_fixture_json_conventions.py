@@ -161,24 +161,14 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         # entries uses list-of-dicts; no natural unique key for redundancy history
         # events (timestamps repeat heavily).
         "iosxe/show_redundancy_history_reverse/001_basic/expected.json",
-        # is_neighbors/ip_reachability/ipv6_reachability use list-of-dicts; no natural
-        # unique key (multiple parallel links to same neighbor with different metrics).
-        "iosxe/show_isis_database_detail/001_basic/expected.json",
         # --- Cisco IOS-XR ---
         # routes uses list-of-dicts; no natural unique key for multiple BGP paths
         # (same network with multipath/ECMP entries and different next-hops).
         "cisco_iosxr/show_bgp_l2vpn_evpn/001_basic/expected.json",
-        "cisco_iosxr/show_bgp_vrf/001_basic/expected.json",
         "cisco_iosxr/show_ip_route/001_ospf_ecmp_connected/expected.json",
         "cisco_iosxr/show_ip_route/002_mixed_protocols_ecmp/expected.json",
         # log_entries uses list-of-dicts; no natural unique key for syslog messages.
         "cisco_iosxr/show_logging/001_basic/expected.json",
-        # is_neighbors/ip_reachability/ipv6_reachability use list-of-dicts; no natural
-        # unique key (multiple parallel links to same neighbor with different metrics).
-        "cisco_iosxr/show_isis_database_detail/001_basic/expected.json",
-        # ECMP next-hops have no natural unique key (same interface can appear with
-        # different next-hops in equal-cost multipath).
-        "cisco_iosxr/show_route_ipv4_isis/001_basic/expected.json",
         # --- NX-OS ---
         "nxos/show_bgp_all_dampening_flap-statistics/001_basic/expected.json",
         "nxos/show_bgp_vrf_all_all/001_basic/expected.json",

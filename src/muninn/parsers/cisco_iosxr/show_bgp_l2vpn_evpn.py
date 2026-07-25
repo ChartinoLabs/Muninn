@@ -556,7 +556,7 @@ class ShowBgpL2vpnEvpnParser(BaseParser["ShowBgpL2vpnEvpnResult"]):
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset(
-        {ParserTag.BGP, ParserTag.ROUTING, ParserTag.L2VPN}
+        {ParserTag.BGP, ParserTag.ROUTING}
     )
 
     @classmethod
