@@ -2,7 +2,7 @@
 
 import re
 from collections.abc import Callable
-from typing import Any, ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -159,6 +159,34 @@ def _try_affinity_trigger(line: str) -> str | None:
     return None
 
 
+def _try_db_line(
+    line: str,
+    db: dict[str, object],
+    delay_levels: dict[str, str],
+    current_level: str | None,
+) -> str | None:
+    """Try to match a database-section line. Returns updated current_level."""
+    m = _FLEX_ALGO_COUNT_PATTERN.match(line)
+    if m:
+        db["flex_algo_count"] = int(m.group("count"))
+        return current_level
+
+    m = _DELAY_METRIC_ADV_PATTERN.match(line)
+    if m:
+        db["use_delay_metric_advertisement"] = m.group("value").strip()
+        return current_level
+
+    m = _LEVEL_HEADER_PATTERN.match(line)
+    if m:
+        return f"level-{m.group('level')}"
+
+    m = _DELAY_METRIC_STATUS_PATTERN.match(line)
+    if m and current_level:
+        delay_levels[current_level] = m.group("value")
+
+    return current_level
+
+
 def _parse_database_section(lines: list[str], idx: int) -> tuple[FlexAlgoDatabase, int]:
     """Parse the Flex-Algo Database header section."""
     db: dict[str, object] = {}
@@ -176,36 +204,13 @@ def _parse_database_section(lines: list[str], idx: int) -> tuple[FlexAlgoDatabas
         if _FLEX_ALGO_ID_PATTERN.match(stripped) or _TAG_PATTERN.match(stripped):
             break
 
-        m = _FLEX_ALGO_COUNT_PATTERN.match(line)
-        if m:
-            db["flex_algo_count"] = int(m.group("count"))
-            idx += 1
-            continue
-
-        m = _DELAY_METRIC_ADV_PATTERN.match(line)
-        if m:
-            db["use_delay_metric_advertisement"] = m.group("value").strip()
-            idx += 1
-            continue
-
-        m = _LEVEL_HEADER_PATTERN.match(line)
-        if m:
-            current_level = f"level-{m.group('level')}"
-            idx += 1
-            continue
-
-        m = _DELAY_METRIC_STATUS_PATTERN.match(line)
-        if m and current_level:
-            delay_levels[current_level] = m.group("value")
-            idx += 1
-            continue
-
+        current_level = _try_db_line(line, db, delay_levels, current_level)
         idx += 1
 
     if delay_levels:
         db["delay_metric_levels"] = delay_levels
 
-    return FlexAlgoDatabase(**db), idx  # type: ignore[arg-type]
+    return cast(FlexAlgoDatabase, db), idx
 
 
 def _parse_flex_algo_entry(
@@ -241,11 +246,31 @@ def _parse_flex_algo_entry(
 
     # Flush final level
     if current_level and current_level_data:
-        levels[current_level] = FlexAlgoLevelDefinition(**current_level_data)  # type: ignore[arg-type]
+        levels[current_level] = cast(FlexAlgoLevelDefinition, dict(current_level_data))
 
     result: dict[str, object] = {"levels": levels}
     result.update(entry_fields)
-    return FlexAlgoDefinition(**result), idx  # type: ignore[arg-type]
+    return cast(FlexAlgoDefinition, result), idx
+
+
+def _try_entry_field_dispatch(line: str, entry_fields: dict[str, Any]) -> bool:
+    """Try to match entry-level (non-level-scoped) fields. Returns True if matched."""
+    m = _LOCAL_PRIORITY_PATTERN.match(line)
+    if m:
+        entry_fields["local_priority"] = int(m.group("value"))
+        return True
+
+    m = _FRR_DISABLED_PATTERN.match(line)
+    if m:
+        entry_fields["frr_disabled"] = _yes_no(m.group("value"))
+        return True
+
+    m = _MICROLOOP_DISABLED_PATTERN.match(line)
+    if m:
+        entry_fields["microloop_avoidance_disabled"] = _yes_no(m.group("value"))
+        return True
+
+    return False
 
 
 def _process_algo_line(
@@ -265,7 +290,9 @@ def _process_algo_line(
     m = _LEVEL_HEADER_PATTERN.match(line)
     if m:
         if current_level and current_level_data:
-            levels[current_level] = FlexAlgoLevelDefinition(**current_level_data)  # type: ignore[arg-type]
+            levels[current_level] = cast(
+                FlexAlgoLevelDefinition, dict(current_level_data)
+            )
             current_level_data.clear()
         return idx + 1, f"level-{m.group('level')}", None
 
@@ -283,22 +310,7 @@ def _process_algo_line(
     if _try_level_dispatch(line, current_level_data):
         return idx + 1, current_level, pending_affinity_type
 
-    # Entry-level fields (outside level scope)
-    m = _LOCAL_PRIORITY_PATTERN.match(line)
-    if m:
-        entry_fields["local_priority"] = int(m.group("value"))
-        return idx + 1, current_level, pending_affinity_type
-
-    m = _FRR_DISABLED_PATTERN.match(line)
-    if m:
-        entry_fields["frr_disabled"] = _yes_no(m.group("value"))
-        return idx + 1, current_level, pending_affinity_type
-
-    m = _MICROLOOP_DISABLED_PATTERN.match(line)
-    if m:
-        entry_fields["microloop_avoidance_disabled"] = _yes_no(m.group("value"))
-        return idx + 1, current_level, pending_affinity_type
-
+    _try_entry_field_dispatch(line, entry_fields)
     return idx + 1, current_level, pending_affinity_type
 
 
