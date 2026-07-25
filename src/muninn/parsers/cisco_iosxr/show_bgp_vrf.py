@@ -363,6 +363,20 @@ def _should_skip_route_line(stripped: str) -> bool:
     return bool(_PROCESSED_RE.match(stripped))
 
 
+def _handle_continuation_line(
+    line: str,
+    routes: list[RouteEntry],
+    current_status: str | None,
+    current_network: str | None,
+) -> None:
+    """Handle an indented data continuation line (next-hop on separate line)."""
+    if line[0] != " " or not current_network or not current_status:
+        return
+    data_tokens = line.strip().split()
+    if data_tokens:
+        _try_append_route(routes, current_status, current_network, data_tokens)
+
+
 def _parse_route_lines(lines: list[str]) -> list[RouteEntry]:
     """Parse route entry lines within a Route Distinguisher section.
 
@@ -376,14 +390,8 @@ def _parse_route_lines(lines: list[str]) -> list[RouteEntry]:
         if _should_skip_route_line(line.strip()):
             continue
 
-        # Indented data continuation line (next-hop info on separate line)
         if not _is_route_line(line):
-            if line[0] == " " and current_network and current_status:
-                data_tokens = line.strip().split()
-                if data_tokens:
-                    _try_append_route(
-                        routes, current_status, current_network, data_tokens
-                    )
+            _handle_continuation_line(line, routes, current_status, current_network)
             continue
 
         # Route line with status codes
@@ -586,7 +594,7 @@ def _apply_optional_fields(
     """Apply optional header fields and totals to the result dict."""
     for key, coerce in _OPTIONAL_HEADER_KEYS:
         if key in header:
-            result[key] = coerce(header[key])  # type: ignore[literal-required]
+            result[key] = coerce(header[key])  # type: ignore[literal-required]  # ty: ignore[invalid-key]
     if total_prefixes is not None:
         result["total_prefixes"] = total_prefixes
     if total_paths is not None:

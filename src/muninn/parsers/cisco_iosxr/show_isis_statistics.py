@@ -1,7 +1,7 @@
 """Parser for 'show isis statistics' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -394,8 +394,8 @@ class ShowIsisStatisticsParser(BaseParser["ShowIsisStatisticsResult"]):
             "pdu_counters": pdu_counters,
             "lsp_retransmissions": lsp_retransmissions or 0,
             "lsp_checksum_errors": lsp_checksum_errors or 0,
-            "update_queue": update_queue or dict(_EMPTY_QUEUE),
-            "input_queue": input_queue or dict(_EMPTY_QUEUE),
+            "update_queue": update_queue or cast(QueueStats, dict(_EMPTY_QUEUE)),
+            "input_queue": input_queue or cast(QueueStats, dict(_EMPTY_QUEUE)),
             "levels": levels,
             "interfaces": interfaces,
         }

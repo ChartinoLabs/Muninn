@@ -151,6 +151,46 @@ _RTD_DATA_LINE = re.compile(
 _SEPARATOR_LINE = re.compile(r"^\s*-{10,}\s*$")
 
 
+def _is_section_boundary(line: str) -> bool:
+    """Return True if line marks the end of a counter section."""
+    if _EVENT_TRACE_HEADER.search(line):
+        return True
+    return bool(_RTD_HEADER.match(line) or _PUNTING_HEADER.match(line))
+
+
+def _try_counter_line1(line: str) -> tuple[str, int, str] | None:
+    """Try both line-1 counter patterns. Returns (message, count, info1) or None."""
+    m = _COUNTER_LINE1.match(line)
+    if m:
+        return m.group("message").strip(), int(m.group("count")), m.group("info1")
+    m = _COUNTER_LINE1_NO_COLON.match(line)
+    if m:
+        return m.group("message").strip(), int(m.group("count")), m.group("info1")
+    return None
+
+
+def _try_counter_line2(
+    line: str,
+    pending_message: str,
+    pending_count: int,
+    pending_info1: str,
+    counters: dict[str, MessageCounterEntry],
+) -> bool:
+    """Try line-2 pattern and finalize the counter entry. Returns True if matched."""
+    m2 = _COUNTER_LINE2.match(line)
+    if not m2:
+        return False
+    entry: MessageCounterEntry = {
+        "count": pending_count,
+        "info1": pending_info1,
+        "info2": m2.group("info2"),
+    }
+    if m2.group("time"):
+        entry["time"] = m2.group("time")
+    counters[pending_message] = entry
+    return True
+
+
 def _parse_counter_section(
     lines: list[str],
     start: int,
@@ -168,43 +208,26 @@ def _parse_counter_section(
     while i < len(lines):
         line = lines[i]
 
-        # Stop at event trace or RTD sections
-        if _EVENT_TRACE_HEADER.search(line):
-            break
-        if _RTD_HEADER.match(line) or _PUNTING_HEADER.match(line):
+        if _is_section_boundary(line):
             break
 
-        # Try line 1 pattern (with colon)
-        m1 = _COUNTER_LINE1.match(line)
-        if m1:
-            pending_message = m1.group("message").strip()
-            pending_count = int(m1.group("count"))
-            pending_info1 = m1.group("info1")
+        # Try line 1 pattern (with or without colon)
+        line1_result = _try_counter_line1(line)
+        if line1_result and pending_message is None:
+            pending_message, pending_count, pending_info1 = line1_result
+            i += 1
+            continue
+        if line1_result and pending_message is not None:
+            # New counter line resets previous pending
+            pending_message, pending_count, pending_info1 = line1_result
             i += 1
             continue
 
-        # Try line 1 pattern (without colon, e.g., "messages received")
-        if pending_message is None:
-            m1_alt = _COUNTER_LINE1_NO_COLON.match(line)
-            if m1_alt:
-                pending_message = m1_alt.group("message").strip()
-                pending_count = int(m1_alt.group("count"))
-                pending_info1 = m1_alt.group("info1")
-                i += 1
-                continue
-
         # Try line 2 pattern (info2 + optional time)
         if pending_message is not None:
-            m2 = _COUNTER_LINE2.match(line)
-            if m2:
-                entry: MessageCounterEntry = {
-                    "count": pending_count,
-                    "info1": pending_info1,
-                    "info2": m2.group("info2"),
-                }
-                if m2.group("time"):
-                    entry["time"] = m2.group("time")
-                counters[pending_message] = entry
+            if _try_counter_line2(
+                line, pending_message, pending_count, pending_info1, counters
+            ):
                 pending_message = None
                 i += 1
                 continue

@@ -1,7 +1,7 @@
 """Parser for 'show bgp summary' command on Juniper Junos."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -267,4 +267,4 @@ class ShowBgpSummaryParser(BaseParser["ShowBgpSummaryResult"]):
         if tables:
             result["tables"] = tables
 
-        return cast(ShowBgpSummaryResult, result)
+        return result

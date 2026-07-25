@@ -75,21 +75,35 @@ class ShowInstallInactiveParser(BaseParser[ShowInstallInactiveResult]):
                 continue
 
             if in_sdrs:
-                if match := cls._SDR_NAME.match(line):
-                    current_sdr = match.group("sdr_name")
-                    sdrs[current_sdr] = SdrInfo(inactive_packages=[])
+                current_sdr = cls._handle_sdr_line(line, sdrs, current_sdr)
                 continue
 
             if in_packages and current_sdr is not None:
-                if match := cls._PACKAGE.match(line):
-                    sdrs[current_sdr]["inactive_packages"].append(
-                        match.group("package")
-                    )
-                else:
-                    in_packages = False
+                in_packages = cls._handle_package_line(line, sdrs, current_sdr)
 
         if not sdrs:
             msg = "No SDR information found in output"
             raise ValueError(msg)
 
         return ShowInstallInactiveResult(sdrs=sdrs)
+
+    @classmethod
+    def _handle_sdr_line(
+        cls, line: str, sdrs: dict[str, SdrInfo], current_sdr: str | None
+    ) -> str | None:
+        """Handle a line in the SDRs section, returning updated current_sdr."""
+        if match := cls._SDR_NAME.match(line):
+            sdr_name = match.group("sdr_name")
+            sdrs[sdr_name] = SdrInfo(inactive_packages=[])
+            return sdr_name
+        return current_sdr
+
+    @classmethod
+    def _handle_package_line(
+        cls, line: str, sdrs: dict[str, SdrInfo], current_sdr: str
+    ) -> bool:
+        """Handle a line in the packages section."""
+        if match := cls._PACKAGE.match(line):
+            sdrs[current_sdr]["inactive_packages"].append(match.group("package"))
+            return True
+        return False

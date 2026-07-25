@@ -229,6 +229,14 @@ class ShowIsisTopologyParser(BaseParser["ShowIsisTopologyResult"]):
                 systems, stripped, line, last_system_id, last_metric
             )
 
+        return cls._build_result(all_tags)
+
+    @classmethod
+    def _build_result(
+        cls,
+        all_tags: dict[str, dict[str, dict[str, IsisTopologySystem]]],
+    ) -> "ShowIsisTopologyResult":
+        """Build the final result from collected tags, raising if empty."""
         populated = {
             k: v for k, v in all_tags.items() if any(systems for systems in v.values())
         }

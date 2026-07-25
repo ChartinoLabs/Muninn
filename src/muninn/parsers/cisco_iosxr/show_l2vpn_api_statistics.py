@@ -7,7 +7,8 @@ name change.
 """
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from collections.abc import Mapping
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -266,6 +267,46 @@ def _parse_counters(
     )
 
 
+def _try_detail_header(line: str, entries: dict[str, CallDetailEntry]) -> str | None:
+    """Try to match a detail header line. Returns new current_key or None."""
+    m = _DETAIL_RE.match(line)
+    if not m:
+        return None
+    label = _normalize_label(m.group("label"))
+    key = _LABEL_TO_KEY.get(label)
+    if key:
+        entries[key] = _parse_detail_rest(m.group("rest").strip())
+    return key
+
+
+def _try_result_line(
+    line: str, entries: dict[str, CallDetailEntry], current_key: str | None
+) -> bool:
+    """Try to match a result sub-line. Returns True if matched."""
+    if not current_key or current_key not in entries:
+        return False
+    m = _RESULT_RE.match(line)
+    if not m:
+        return False
+    entries[current_key]["result_code"] = m.group("code")
+    entries[current_key]["result_text"] = m.group("text").strip()
+    return True
+
+
+def _try_info_line(
+    line: str, entries: dict[str, CallDetailEntry], current_key: str | None
+) -> bool:
+    """Try to match an info sub-line. Returns True if matched."""
+    if not current_key or current_key not in entries:
+        return False
+    m = _INFO_RE.match(line)
+    if not m:
+        return False
+    info_text = m.group("info").strip()
+    entries[current_key]["info"] = None if info_text == "None available" else info_text
+    return True
+
+
 def _parse_details(lines: list[str]) -> dict[str, CallDetailEntry]:
     """Parse detail entry blocks from output lines.
 
@@ -279,31 +320,15 @@ def _parse_details(lines: list[str]) -> dict[str, CallDetailEntry]:
     current_key: str | None = None
 
     for line in lines:
-        # Detail header
-        m = _DETAIL_RE.match(line)
-        if m:
-            label = _normalize_label(m.group("label"))
-            key = _LABEL_TO_KEY.get(label)
-            if key:
-                current_key = key
-                entries[key] = _parse_detail_rest(m.group("rest").strip())
+        new_key = _try_detail_header(line, entries)
+        if new_key is not None:
+            current_key = new_key
             continue
 
-        # Result sub-line
-        m = _RESULT_RE.match(line)
-        if m and current_key and current_key in entries:
-            entries[current_key]["result_code"] = m.group("code")
-            entries[current_key]["result_text"] = m.group("text").strip()
+        if _try_result_line(line, entries, current_key):
             continue
 
-        # Info sub-line
-        m = _INFO_RE.match(line)
-        if m and current_key and current_key in entries:
-            info_text = m.group("info").strip()
-            entries[current_key]["info"] = (
-                None if info_text == "None available" else info_text
-            )
-            continue
+        _try_info_line(line, entries, current_key)
 
     return entries
 
@@ -363,7 +388,7 @@ class ShowL2vpnApiStatisticsParser(
                 detail_entries[dk] = {"timestamp": "Never"}
 
         # Filter None values from detail entries
-        def _clean(d: dict) -> dict:
+        def _clean(d: Mapping[str, Any]) -> dict[str, Any]:
             return {k: v for k, v in d.items() if v is not None}
 
         result: dict = {
@@ -390,4 +415,4 @@ class ShowL2vpnApiStatisticsParser(
             result["avg_time_ok_ms"] = avg_ok
         if avg_fail is not None:
             result["avg_time_fail_ms"] = avg_fail
-        return result
+        return cast(ShowL2vpnApiStatisticsResult, result)

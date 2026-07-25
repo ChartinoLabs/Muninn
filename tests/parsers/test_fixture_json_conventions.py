@@ -176,6 +176,9 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         # is_neighbors/ip_reachability/ipv6_reachability use list-of-dicts; no natural
         # unique key (multiple parallel links to same neighbor with different metrics).
         "cisco_iosxr/show_isis_database_detail/001_basic/expected.json",
+        # event_trace_history uses list-of-dicts; no natural unique key for event
+        # trace entries (same event can repeat at the same timestamp).
+        "cisco_iosxr/show_l2vpn_forwarding_message_counters/001_basic/expected.json",
         # ECMP next-hops have no natural unique key (same interface can appear with
         # different next-hops in equal-cost multipath).
         "cisco_iosxr/show_route_ipv4_isis/001_basic/expected.json",

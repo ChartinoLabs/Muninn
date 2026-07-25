@@ -1,7 +1,7 @@
 """Parser for 'show mpls forwarding interface <interface> detail' on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -10,7 +10,7 @@ from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
 
 
-class MplsForwardingDetailEntry(TypedDict):
+class MplsForwardingDetailEntry(TypedDict, total=False):
     """Schema for a single MPLS forwarding table entry with detail."""
 
     outgoing_label: str
@@ -23,7 +23,7 @@ class MplsForwardingDetailEntry(TypedDict):
     priority: int
     label_stack: str
     nhid: str
-    encap_id: NotRequired[str]
+    encap_id: str
     path_idx: int
     backup_path_idx: int
     weight: int

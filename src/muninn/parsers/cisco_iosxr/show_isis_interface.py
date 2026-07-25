@@ -263,7 +263,7 @@ class ShowIsisInterfaceParser(BaseParser["ShowIsisInterfaceResult"]):
         """Parse a line within a topology section. Returns True if consumed."""
         stripped = line.strip()
         topo = state.topology
-        assert topo is not None  # noqa: S101
+        assert topo is not None  # noqa: S101  # nosec B101
 
         if stripped.startswith("Adjacency Formation:"):
             topo["adjacency_formation"] = stripped.split(":", 1)[1].strip()
@@ -310,29 +310,29 @@ class ShowIsisInterfaceParser(BaseParser["ShowIsisInterfaceResult"]):
     def _handle_level_line(cls, line: str, state: _ParseState) -> bool:
         """Parse a line within a Level section. Returns True if consumed."""
         intf = state.current_interface
-        assert intf is not None  # noqa: S101
+        assert intf is not None  # noqa: S101  # nosec B101
         lvl = state.current_level
-        assert lvl is not None  # noqa: S101
+        assert lvl is not None  # noqa: S101  # nosec B101
 
         adj_match = _ADJ_COUNT_PATTERN.match(line)
         if adj_match:
             count = int(adj_match.group("count"))
             key = f"level{lvl}_adjacency_count"
-            intf[key] = count  # type: ignore[literal-required]
+            intf[key] = count  # type: ignore[literal-required]  # ty: ignore[invalid-key]
             return True
 
         hello_int_match = _HELLO_INTERVAL_PATTERN.match(line)
         if hello_int_match:
             interval = hello_int_match.group("interval").strip()
             key = f"level{lvl}_hello_interval"
-            intf[key] = interval  # type: ignore[literal-required]
+            intf[key] = interval  # type: ignore[literal-required]  # ty: ignore[invalid-key]
             return True
 
         hello_mult_match = _HELLO_MULTIPLIER_PATTERN.match(line)
         if hello_mult_match:
             mult = int(hello_mult_match.group("multiplier"))
             key = f"level{lvl}_hello_multiplier"
-            intf[key] = mult  # type: ignore[literal-required]
+            intf[key] = mult  # type: ignore[literal-required]  # ty: ignore[invalid-key]
             return True
 
         # Section boundary exits level
@@ -347,7 +347,7 @@ class ShowIsisInterfaceParser(BaseParser["ShowIsisInterfaceResult"]):
         """Handle CLNS I/O, Level, and topology entry. Returns True if consumed."""
         stripped = line.strip()
         intf = state.current_interface
-        assert intf is not None  # noqa: S101
+        assert intf is not None  # noqa: S101  # nosec B101
 
         # Topology header
         topo_match = _TOPOLOGY_PATTERN.match(line)
@@ -384,7 +384,7 @@ class ShowIsisInterfaceParser(BaseParser["ShowIsisInterfaceResult"]):
     def _handle_clns_content(cls, line: str, stripped: str, state: _ParseState) -> bool:
         """Parse CLNS I/O section content. Returns True if consumed."""
         intf = state.current_interface
-        assert intf is not None  # noqa: S101
+        assert intf is not None  # noqa: S101  # nosec B101
 
         if stripped.startswith("Protocol State:"):
             intf["clns_protocol_state"] = stripped.split(":", 1)[1].strip()
@@ -425,16 +425,16 @@ class ShowIsisInterfaceParser(BaseParser["ShowIsisInterfaceResult"]):
         """Parse top-level interface fields."""
         stripped = line.strip()
         intf = state.current_interface
-        assert intf is not None  # noqa: S101
+        assert intf is not None  # noqa: S101  # nosec B101
 
         for prefix, key in cls._STR_FIELDS:
             if stripped.startswith(prefix):
-                intf[key] = stripped.split(":", 1)[1].strip()  # type: ignore[literal-required]
+                intf[key] = stripped.split(":", 1)[1].strip()  # type: ignore[literal-required]  # ty: ignore[invalid-key]
                 return
 
         for prefix, key in cls._INT_FIELDS:
             if stripped.startswith(prefix):
-                intf[key] = int(stripped.split(":", 1)[1].strip())  # type: ignore[literal-required]
+                intf[key] = int(stripped.split(":", 1)[1].strip())  # type: ignore[literal-required]  # ty: ignore[invalid-key]
                 return
 
         ct_match = _CIRCUIT_TYPE_PATTERN.match(line)

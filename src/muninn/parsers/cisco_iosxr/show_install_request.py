@@ -44,6 +44,13 @@ class ShowInstallRequestParser(BaseParser[ShowInstallRequestResult]):
     _REQUEST = re.compile(r"^Request\s*:\s*(?P<request>.+\S)")
     _STATE = re.compile(r"^State\s*:\s*(?P<state>.+\S)")
 
+    # Dispatch table: (pattern_attr, field_name, transform)
+    _LINE_MATCHERS: ClassVar[list[tuple[str, str, type]]] = [
+        ("_OPERATION_ID", "operation_id", int),
+        ("_REQUEST", "request", str),
+        ("_STATE", "state", str),
+    ]
+
     @classmethod
     def parse(cls, output: str) -> ShowInstallRequestResult:
         """Parse 'show install request' output on Cisco IOS-XR.
@@ -55,9 +62,11 @@ class ShowInstallRequestParser(BaseParser[ShowInstallRequestResult]):
             Parsed install request status with operation details.
         """
         in_progress = True
-        operation_id: int | None = None
-        request: str | None = None
-        state: str | None = None
+        fields: dict[str, str | int | None] = {
+            "operation_id": None,
+            "request": None,
+            "state": None,
+        }
 
         for line in output.splitlines():
             stripped = line.strip()
@@ -68,25 +77,32 @@ class ShowInstallRequestParser(BaseParser[ShowInstallRequestResult]):
                 in_progress = False
                 continue
 
-            if match := cls._OPERATION_ID.match(stripped):
-                operation_id = int(match.group("id"))
-                continue
+            cls._match_field(stripped, fields)
 
-            if match := cls._REQUEST.match(stripped):
-                request = match.group("request")
-                continue
+        return cls._build_result(in_progress, fields)
 
-            if match := cls._STATE.match(stripped):
-                state = match.group("state")
-                continue
+    @classmethod
+    def _match_field(cls, stripped: str, fields: dict[str, str | int | None]) -> None:
+        """Try each line matcher and store the first match into fields."""
+        for attr, field_name, transform in cls._LINE_MATCHERS:
+            pattern = getattr(cls, attr)
+            match = pattern.match(stripped)
+            if match:
+                fields[field_name] = transform(match.group(1))
+                return
 
+    @classmethod
+    def _build_result(
+        cls, in_progress: bool, fields: dict[str, str | int | None]
+    ) -> ShowInstallRequestResult:
+        """Assemble the final result dict from parsed fields."""
         result: dict[str, object] = {"in_progress": in_progress}
 
-        if operation_id is not None and request is not None and state is not None:
+        if all(fields[k] is not None for k in ("operation_id", "request", "state")):
             result["last_operation"] = LastOperationEntry(
-                operation_id=operation_id,
-                request=request,
-                state=state,
+                operation_id=cast(int, fields["operation_id"]),
+                request=cast(str, fields["request"]),
+                state=cast(str, fields["state"]),
             )
 
         return cast(ShowInstallRequestResult, result)
