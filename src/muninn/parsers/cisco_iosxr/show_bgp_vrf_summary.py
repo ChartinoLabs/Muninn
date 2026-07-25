@@ -9,9 +9,9 @@ the speaker process row, and an optional neighbor table.
 
 The output format is identical across all three command variants.
 
-This parser reuses the VRF block parsing logic from the sibling parser
-``show_bgp_vrf_all_ipv4_unicast_summary`` since the per-VRF output
-structure is the same.
+The per-VRF output structure mirrors the sibling parser
+``show_bgp_vrf_all_ipv4_unicast_summary``; parsing logic follows
+the same pattern (regex matchers, speaker/neighbor table extraction).
 """
 
 import re
