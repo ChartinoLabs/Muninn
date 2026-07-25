@@ -1,7 +1,7 @@
 """Parser for 'show macsec policy' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -116,8 +116,7 @@ class ShowMacsecPolicyParser(BaseParser["ShowMacsecPolicyResult"]):
             msg = "No MACsec policy count found in output"
             raise ValueError(msg)
 
-        result = ShowMacsecPolicyResult(
+        return ShowMacsecPolicyResult(
             total_policies=total_policies,
             policies=policies,
         )
-        return cast("ShowMacsecPolicyResult", result)
