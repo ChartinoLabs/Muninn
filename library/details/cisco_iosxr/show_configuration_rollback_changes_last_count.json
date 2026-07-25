@@ -1,0 +1,40 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show configuration rollback changes last <count>",
+  "schema": {
+    "name": "ShowConfigurationRollbackChangesResult",
+    "fields": {
+      "ios_xr_version": {
+        "type": "str",
+        "required": true
+      },
+      "sections": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "SectionChanges",
+            "fields": {
+              "additions": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              },
+              "removals": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}

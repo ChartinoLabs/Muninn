@@ -1,0 +1,141 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show isis topology",
+  "schema": {
+    "name": "ShowIsisTopologyResult",
+    "fields": {
+      "tags": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "type": "dict",
+              "key": "str",
+              "value": {
+                "name": "IsisTopologySystem",
+                "fields": {
+                  "is_local": {
+                    "type": "bool",
+                    "required": true
+                  },
+                  "paths": {
+                    "type": {
+                      "type": "dict",
+                      "key": "str",
+                      "value": {
+                        "name": "IsisTopologyPath",
+                        "fields": {
+                          "metric": {
+                            "type": "int",
+                            "required": true
+                          },
+                          "next_hop": {
+                            "type": "str",
+                            "required": true
+                          },
+                          "snpa": {
+                            "type": "str",
+                            "required": true
+                          }
+                        }
+                      }
+                    },
+                    "required": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_path_count": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "IS-IS topology with level-1/level-2 tables, ECMP paths, and local system entries",
+      "input": "Tag 64512:\nIS-IS TID 0 paths to level-1 routers\nSystem Id            Metric     Next-Hop             Interface   SNPA\nSITE-A               --\n\nIS-IS TID 0 paths to level-2 routers\nSystem Id            Metric     Next-Hop             Interface   SNPA\nCORE-3               20         CORE-2               Te0/0/0.20 ccd3.42b0.2134\n                                CORE-1               Te0/0/4.20 3488.18ce.c4f8\nCORE-2               10         CORE-2               Te0/0/0.20 ccd3.42b0.2134\nSITE-B               20         CORE-1               Te0/0/4.20 3488.18ce.c4f8\nSITE-C               20         CORE-1               Te0/0/4.20 3488.18ce.c4f8\nSITE-A               --\nCORE-1               10         CORE-1               Te0/0/4.20 3488.18ce.c4f8\n\nTag null:\n",
+      "expected": {
+        "tags": {
+          "64512": {
+            "TID 0 (level-1)": {
+              "SITE-A": {
+                "is_local": true,
+                "paths": {}
+              }
+            },
+            "TID 0 (level-2)": {
+              "CORE-3": {
+                "is_local": false,
+                "paths": {
+                  "TenGigabitEthernet0/0/0.20": {
+                    "metric": 20,
+                    "next_hop": "CORE-2",
+                    "snpa": "ccd3.42b0.2134"
+                  },
+                  "TenGigabitEthernet0/0/4.20": {
+                    "metric": 20,
+                    "next_hop": "CORE-1",
+                    "snpa": "3488.18ce.c4f8"
+                  }
+                }
+              },
+              "CORE-2": {
+                "is_local": false,
+                "paths": {
+                  "TenGigabitEthernet0/0/0.20": {
+                    "metric": 10,
+                    "next_hop": "CORE-2",
+                    "snpa": "ccd3.42b0.2134"
+                  }
+                }
+              },
+              "SITE-B": {
+                "is_local": false,
+                "paths": {
+                  "TenGigabitEthernet0/0/4.20": {
+                    "metric": 20,
+                    "next_hop": "CORE-1",
+                    "snpa": "3488.18ce.c4f8"
+                  }
+                }
+              },
+              "SITE-C": {
+                "is_local": false,
+                "paths": {
+                  "TenGigabitEthernet0/0/4.20": {
+                    "metric": 20,
+                    "next_hop": "CORE-1",
+                    "snpa": "3488.18ce.c4f8"
+                  }
+                }
+              },
+              "SITE-A": {
+                "is_local": true,
+                "paths": {}
+              },
+              "CORE-1": {
+                "is_local": false,
+                "paths": {
+                  "TenGigabitEthernet0/0/4.20": {
+                    "metric": 10,
+                    "next_hop": "CORE-1",
+                    "snpa": "3488.18ce.c4f8"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "total_path_count": 6
+      }
+    }
+  ]
+}

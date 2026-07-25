@@ -1,0 +1,324 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show evpn evi detail",
+  "schema": {
+    "name": "ShowEvpnEviDetailResult",
+    "fields": {
+      "evi_entries": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "EvpnEviDetailEntry",
+            "fields": {
+              "encapsulation": {
+                "type": "str",
+                "required": false
+              },
+              "bridge_domain": {
+                "type": "str",
+                "required": true
+              },
+              "evi_type": {
+                "type": "str",
+                "required": true
+              },
+              "stitching": {
+                "type": "str",
+                "required": false
+              },
+              "unicast_label": {
+                "type": "int",
+                "required": false
+              },
+              "multicast_label": {
+                "type": "int",
+                "required": false
+              },
+              "reroute_label": {
+                "type": "int",
+                "required": false
+              },
+              "flow_label": {
+                "type": "str",
+                "required": false
+              },
+              "dynamic_flow_label": {
+                "type": "str",
+                "required": false
+              },
+              "control_word": {
+                "type": "str",
+                "required": false
+              },
+              "e_tree": {
+                "type": "str",
+                "required": false
+              },
+              "route_policy_export": {
+                "type": "str",
+                "required": false
+              },
+              "forward_class": {
+                "type": "int",
+                "required": false
+              },
+              "advertise_macs": {
+                "type": "str",
+                "required": false
+              },
+              "advertise_bvi_macs": {
+                "type": "str",
+                "required": false
+              },
+              "aliasing": {
+                "type": "str",
+                "required": false
+              },
+              "uuf": {
+                "type": "str",
+                "required": false
+              },
+              "re_origination": {
+                "type": "str",
+                "required": false
+              },
+              "multicast": {
+                "type": {
+                  "name": "MulticastSettings",
+                  "fields": {
+                    "source_connected": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "igmp_snooping_proxy": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "mld_snooping_proxy": {
+                      "type": "str",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "bgp_implicit_import": {
+                "type": "str",
+                "required": false
+              },
+              "vrf_name": {
+                "type": "str",
+                "required": false
+              },
+              "preferred_nexthop_mode": {
+                "type": "str",
+                "required": false
+              },
+              "bvi_coupled_mode": {
+                "type": "str",
+                "required": false
+              },
+              "bvi_subnet_withheld_ipv4": {
+                "type": "str",
+                "required": false
+              },
+              "bvi_subnet_withheld_ipv6": {
+                "type": "str",
+                "required": false
+              },
+              "rd_config": {
+                "type": "str",
+                "required": false
+              },
+              "rd_auto": {
+                "type": "str",
+                "required": false
+              },
+              "rt_auto": {
+                "type": "str",
+                "required": false
+              },
+              "import_route_targets": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              },
+              "export_route_targets": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              },
+              "es_import_route_targets": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "EVPN EVI detail with multiple MPLS EVIs, varying RD/RT configs, and ES:GLOBAL entry",
+      "input": "Mon Jan  6 10:15:22.431 EST\n\nVPN-ID     Encap      Bridge Domain                Type\n---------- ---------- ---------------------------- -------------------\n22         MPLS       22                           EVPN\n   Stitching: Regular\n   Unicast Label  : 24002\n   Multicast Label: 24003\n   Reroute Label: 0\n   Flow Label: Y\n   Dynamic Flow Label: No\n   Control-Word: Enabled\n   E-Tree: Root\n   Route-policy Export: RPL_L2VPN_CLEAR\n   Forward-class: 0\n   Advertise MACs: Yes\n   Advertise BVI MACs: No\n   Aliasing: Enabled\n   UUF: Enabled\n   Re-origination: Enabled\n   Multicast:\n     Source connected   : No\n     IGMP-Snooping Proxy: No\n     MLD-Snooping Proxy : No\n   BGP Implicit Import: Enabled\n   VRF Name:\n   Preferred Nexthop Mode: Off\n   BVI Coupled Mode: No\n   BVI Subnet Withheld: ipv4 No, ipv6 No\n   RD Config: none\n   RD Auto  : (auto) 10.255.0.1:22\n   RT Auto  : 65100:22\n   Route Targets in Use           Type\n   ------------------------------ ---------------------\n   65100:22                       Import\n   65100:22                       Export\n\n56         MPLS       56                           EVPN\n   Stitching: Regular\n   Unicast Label  : 24004\n   Multicast Label: 24005\n   Reroute Label: 0\n   Flow Label: Y\n   Dynamic Flow Label: No\n   Control-Word: Enabled\n   E-Tree: Root\n   Route-policy Export: RPL_L2VPN_CLEAR\n   Forward-class: 0\n   Advertise MACs: Yes\n   Advertise BVI MACs: No\n   Aliasing: Enabled\n   UUF: Enabled\n   Re-origination: Enabled\n   Multicast:\n     Source connected   : No\n     IGMP-Snooping Proxy: No\n     MLD-Snooping Proxy : No\n   BGP Implicit Import: Enabled\n   VRF Name:\n   Preferred Nexthop Mode: Off\n   BVI Coupled Mode: No\n   BVI Subnet Withheld: ipv4 No, ipv6 No\n   RD Config: 65100:56\n   RD Auto  : (auto) 10.255.0.1:56\n   RT Auto  : 65100:56\n   Route Targets in Use           Type\n   ------------------------------ ---------------------\n   65100:56                       Both\n\n1010       MPLS       1010                         EVPN\n   Stitching: Regular\n   Unicast Label  : 24000\n   Multicast Label: 24001\n   Reroute Label: 0\n   Flow Label: Y\n   Dynamic Flow Label: No\n   Control-Word: Enabled\n   E-Tree: Root\n   Route-policy Export: RPL_L2VPN_CLEAR\n   Forward-class: 0\n   Advertise MACs: No\n   Advertise BVI MACs: No\n   Aliasing: Enabled\n   UUF: Enabled\n   Re-origination: Enabled\n   Multicast:\n     Source connected   : No\n     IGMP-Snooping Proxy: No\n     MLD-Snooping Proxy : No\n   BGP Implicit Import: Enabled\n   VRF Name:\n   Preferred Nexthop Mode: Off\n   BVI Coupled Mode: No\n   BVI Subnet Withheld: ipv4 No, ipv6 No\n   RD Config: 65100:1010\n   RD Auto  : (auto) 10.255.0.1:1010\n   RT Auto  : 65100:1010\n   Route Targets in Use           Type\n   ------------------------------ ---------------------\n   65100:1010                     Import\n   65100:1010                     Export\n\n65535      N/A        ES:GLOBAL                    Invalid\n   Stitching: Regular\n   E-Tree: Root\n   Forward-class: 0\n   Advertise MACs: No\n   Advertise BVI MACs: No\n   Aliasing: Enabled\n   UUF: Enabled\n   Re-origination: Enabled\n   Multicast:\n     Source connected   : No\n     IGMP-Snooping Proxy: No\n     MLD-Snooping Proxy : No\n   BGP Implicit Import: Enabled\n   VRF Name:\n   Preferred Nexthop Mode: Off\n   BVI Coupled Mode: No\n   BVI Subnet Withheld: ipv4 No, ipv6 No\n   RD Config: none\n   RD Auto  : (auto) 10.255.0.1:0\n   RT Auto  : none\n   Route Targets in Use           Type\n   ------------------------------ ---------------------\n   0101.0051.0022                 ES:Import\n   0101.0051.0056                 ES:Import\n   0111.0000.0000                 ES:Import\n",
+      "expected": {
+        "evi_entries": {
+          "22": {
+            "encapsulation": "MPLS",
+            "bridge_domain": "22",
+            "evi_type": "EVPN",
+            "stitching": "Regular",
+            "unicast_label": 24002,
+            "multicast_label": 24003,
+            "reroute_label": 0,
+            "flow_label": "Y",
+            "dynamic_flow_label": "No",
+            "control_word": "Enabled",
+            "e_tree": "Root",
+            "route_policy_export": "RPL_L2VPN_CLEAR",
+            "forward_class": 0,
+            "advertise_macs": "Yes",
+            "advertise_bvi_macs": "No",
+            "aliasing": "Enabled",
+            "uuf": "Enabled",
+            "re_origination": "Enabled",
+            "multicast": {
+              "source_connected": "No",
+              "igmp_snooping_proxy": "No",
+              "mld_snooping_proxy": "No"
+            },
+            "bgp_implicit_import": "Enabled",
+            "preferred_nexthop_mode": "Off",
+            "bvi_coupled_mode": "No",
+            "bvi_subnet_withheld_ipv4": "No",
+            "bvi_subnet_withheld_ipv6": "No",
+            "rd_auto": "(auto) 10.255.0.1:22",
+            "rt_auto": "65100:22",
+            "import_route_targets": [
+              "65100:22"
+            ],
+            "export_route_targets": [
+              "65100:22"
+            ]
+          },
+          "56": {
+            "encapsulation": "MPLS",
+            "bridge_domain": "56",
+            "evi_type": "EVPN",
+            "stitching": "Regular",
+            "unicast_label": 24004,
+            "multicast_label": 24005,
+            "reroute_label": 0,
+            "flow_label": "Y",
+            "dynamic_flow_label": "No",
+            "control_word": "Enabled",
+            "e_tree": "Root",
+            "route_policy_export": "RPL_L2VPN_CLEAR",
+            "forward_class": 0,
+            "advertise_macs": "Yes",
+            "advertise_bvi_macs": "No",
+            "aliasing": "Enabled",
+            "uuf": "Enabled",
+            "re_origination": "Enabled",
+            "multicast": {
+              "source_connected": "No",
+              "igmp_snooping_proxy": "No",
+              "mld_snooping_proxy": "No"
+            },
+            "bgp_implicit_import": "Enabled",
+            "preferred_nexthop_mode": "Off",
+            "bvi_coupled_mode": "No",
+            "bvi_subnet_withheld_ipv4": "No",
+            "bvi_subnet_withheld_ipv6": "No",
+            "rd_config": "65100:56",
+            "rd_auto": "(auto) 10.255.0.1:56",
+            "rt_auto": "65100:56",
+            "import_route_targets": [
+              "65100:56"
+            ],
+            "export_route_targets": [
+              "65100:56"
+            ]
+          },
+          "1010": {
+            "encapsulation": "MPLS",
+            "bridge_domain": "1010",
+            "evi_type": "EVPN",
+            "stitching": "Regular",
+            "unicast_label": 24000,
+            "multicast_label": 24001,
+            "reroute_label": 0,
+            "flow_label": "Y",
+            "dynamic_flow_label": "No",
+            "control_word": "Enabled",
+            "e_tree": "Root",
+            "route_policy_export": "RPL_L2VPN_CLEAR",
+            "forward_class": 0,
+            "advertise_macs": "No",
+            "advertise_bvi_macs": "No",
+            "aliasing": "Enabled",
+            "uuf": "Enabled",
+            "re_origination": "Enabled",
+            "multicast": {
+              "source_connected": "No",
+              "igmp_snooping_proxy": "No",
+              "mld_snooping_proxy": "No"
+            },
+            "bgp_implicit_import": "Enabled",
+            "preferred_nexthop_mode": "Off",
+            "bvi_coupled_mode": "No",
+            "bvi_subnet_withheld_ipv4": "No",
+            "bvi_subnet_withheld_ipv6": "No",
+            "rd_config": "65100:1010",
+            "rd_auto": "(auto) 10.255.0.1:1010",
+            "rt_auto": "65100:1010",
+            "import_route_targets": [
+              "65100:1010"
+            ],
+            "export_route_targets": [
+              "65100:1010"
+            ]
+          },
+          "65535": {
+            "bridge_domain": "ES:GLOBAL",
+            "evi_type": "Invalid",
+            "stitching": "Regular",
+            "e_tree": "Root",
+            "forward_class": 0,
+            "advertise_macs": "No",
+            "advertise_bvi_macs": "No",
+            "aliasing": "Enabled",
+            "uuf": "Enabled",
+            "re_origination": "Enabled",
+            "multicast": {
+              "source_connected": "No",
+              "igmp_snooping_proxy": "No",
+              "mld_snooping_proxy": "No"
+            },
+            "bgp_implicit_import": "Enabled",
+            "preferred_nexthop_mode": "Off",
+            "bvi_coupled_mode": "No",
+            "bvi_subnet_withheld_ipv4": "No",
+            "bvi_subnet_withheld_ipv6": "No",
+            "rd_auto": "(auto) 10.255.0.1:0",
+            "es_import_route_targets": [
+              "0101.0051.0022",
+              "0101.0051.0056",
+              "0111.0000.0000"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show l2vpn bridge-domain brief location <location>",
+  "schema": {
+    "name": "ShowL2vpnBridgeDomainBriefResult",
+    "fields": {
+      "bridge_domains": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "BridgeDomainEntry",
+            "fields": {
+              "bridge_group": {
+                "type": "str",
+                "required": true
+              },
+              "bridge_domain_name": {
+                "type": "str",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "num_acs": {
+                "type": "int",
+                "required": true
+              },
+              "num_acs_up": {
+                "type": "int",
+                "required": true
+              },
+              "num_pws": {
+                "type": "int",
+                "required": true
+              },
+              "num_pws_up": {
+                "type": "int",
+                "required": true
+              },
+              "num_pbbs": {
+                "type": "int",
+                "required": true
+              },
+              "num_pbbs_up": {
+                "type": "int",
+                "required": true
+              },
+              "num_vnis": {
+                "type": "int",
+                "required": true
+              },
+              "num_vnis_up": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}

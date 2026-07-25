@@ -1,0 +1,357 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show isis",
+  "schema": {
+    "name": "ShowIsisResult",
+    "fields": {
+      "instances": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "IsisInstance",
+            "fields": {
+              "instance_id": {
+                "type": "str",
+                "required": true
+              },
+              "system_id": {
+                "type": "str",
+                "required": true
+              },
+              "hostname": {
+                "type": "str",
+                "required": false
+              },
+              "is_levels": {
+                "type": "str",
+                "required": true
+              },
+              "manual_area_addresses": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": true
+              },
+              "routing_area_addresses": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": true
+              },
+              "multi_instance_id": {
+                "type": "int",
+                "required": true
+              },
+              "job_id": {
+                "type": "int",
+                "required": true
+              },
+              "pid": {
+                "type": "int",
+                "required": true
+              },
+              "respawn_count": {
+                "type": "int",
+                "required": true
+              },
+              "started": {
+                "type": "str",
+                "required": true
+              },
+              "null0_ready": {
+                "type": "str",
+                "required": true
+              },
+              "lsp_mtu": {
+                "type": "int",
+                "required": true
+              },
+              "lsp_full_level1": {
+                "type": "bool",
+                "required": true
+              },
+              "lsp_full_level2": {
+                "type": "bool",
+                "required": true
+              },
+              "non_stop_forwarding": {
+                "type": "str",
+                "required": true
+              },
+              "most_recent_startup_mode": {
+                "type": "str",
+                "required": true
+              },
+              "te_connection_status": {
+                "type": "str",
+                "required": true
+              },
+              "xtc_connection_status": {
+                "type": "str",
+                "required": true
+              },
+              "overload_bit": {
+                "type": "str",
+                "required": true
+              },
+              "maximum_metric": {
+                "type": "str",
+                "required": true
+              },
+              "topologies": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "IsisTopology",
+                    "fields": {
+                      "rib_connected": {
+                        "type": "bool",
+                        "required": true
+                      },
+                      "levels": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "IsisTopologyLevel",
+                            "fields": {
+                              "metric_style_generate": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "metric_style_accept": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "metric": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "te_enabled": {
+                                "type": "bool",
+                                "required": false
+                              }
+                            }
+                          }
+                        },
+                        "required": true
+                      },
+                      "redistributed_protocols": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": true
+                      },
+                      "distance": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "advertise_passive_only": {
+                        "type": "bool",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              },
+              "sr_mpls": {
+                "type": {
+                  "name": "IsisSrMpls",
+                  "fields": {
+                    "srlb_start": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "srlb_end": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "srgb_start": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "srgb_end": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "srv6": {
+                "type": {
+                  "name": "IsisSrv6",
+                  "fields": {
+                    "locators": {
+                      "type": {
+                        "type": "dict",
+                        "key": "str",
+                        "value": {
+                          "name": "IsisSrv6Locator",
+                          "fields": {
+                            "status": {
+                              "type": "str",
+                              "required": true
+                            }
+                          }
+                        }
+                      },
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "interfaces": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "IsisInterface",
+                    "fields": {
+                      "running_state": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "config_state": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "IS-IS instance overview with SR-MPLS, SRv6, and multiple topologies",
+      "input": "Tue Jul  7 22:59:37.055 EDT\n\nIS-IS Router: 64512\n  System Id: 1930.0000.2001\n  Hostname: ROUTER-A\n  IS Levels: level-2-only\n  Manual area address(es):\n    49.0001\n  Routing for area address(es):\n    49.0001\n  Multi-Instance Id: 0\n  Job Id: 1009\n  PID: 11709\n  Respawn count: 1\n  Started: Tue Jun 02 15:44:39 2026\n  Null0 ready: Tue Jun 02 15:44:39 2026\n  LSP MTU: 1492\n  LSP Full: level-1: No, level-2: No\n  Non-stop forwarding: Disabled\n  Most recent startup mode: Cold Restart\n  TE connection status: Up\n  XTC connection status: Up\n  Overload Bit: not configured\n  Maximum Metric: not configured\n  Topologies supported by IS-IS:\n    IPv4 Unicast\n      Rib connected\n      Level-2\n        Metric style (generate/accept): Wide/Wide\n        Metric: 10\n        TE Enabled\n      No protocols redistributed\n      Distance: 115\n      Advertise Passive Interface Prefixes Only: No\n    IPv6 Unicast\n      Rib connected\n      Level-2\n        Metric: 10\n      No protocols redistributed\n      Distance: 115\n      Advertise Passive Interface Prefixes Only: No\n  SR-MPLS:\n    SRLB allocated: 15000 - 15999\n    SRGB allocated: 16000 - 23999\n  SRv6:\n    Configured locators:\n      MAIN (Active)\n  Interfaces supported by IS-IS 64512:\n    Loopback0 is running passively (passive in configuration)\n    HundredGigE0/0/0/0 is disabled (active in configuration)\n    HundredGigE0/0/0/0.10 is running actively (active in configuration)\n    HundredGigE0/0/0/0.20 is running actively (active in configuration)\n    HundredGigE0/0/0/1 is disabled (active in configuration)\n    HundredGigE0/0/0/1.10 is running actively (active in configuration)\n    HundredGigE0/0/0/1.20 is running actively (active in configuration)\n    TenGigE0/0/0/20 is disabled (active in configuration)\n    TenGigE0/0/0/20.10 is running actively (active in configuration)\n    TenGigE0/0/0/20.20 is running actively (active in configuration)\n",
+      "expected": {
+        "instances": {
+          "64512": {
+            "instance_id": "64512",
+            "system_id": "1930.0000.2001",
+            "is_levels": "level-2-only",
+            "manual_area_addresses": [
+              "49.0001"
+            ],
+            "routing_area_addresses": [
+              "49.0001"
+            ],
+            "multi_instance_id": 0,
+            "job_id": 1009,
+            "pid": 11709,
+            "respawn_count": 1,
+            "started": "Tue Jun 02 15:44:39 2026",
+            "null0_ready": "Tue Jun 02 15:44:39 2026",
+            "lsp_mtu": 1492,
+            "lsp_full_level1": false,
+            "lsp_full_level2": false,
+            "non_stop_forwarding": "Disabled",
+            "most_recent_startup_mode": "Cold Restart",
+            "te_connection_status": "Up",
+            "xtc_connection_status": "Up",
+            "overload_bit": "not configured",
+            "maximum_metric": "not configured",
+            "topologies": {
+              "IPv4 Unicast": {
+                "rib_connected": true,
+                "levels": {
+                  "Level-2": {
+                    "metric": 10,
+                    "metric_style_generate": "Wide",
+                    "metric_style_accept": "Wide",
+                    "te_enabled": true
+                  }
+                },
+                "redistributed_protocols": [],
+                "distance": 115,
+                "advertise_passive_only": false
+              },
+              "IPv6 Unicast": {
+                "rib_connected": true,
+                "levels": {
+                  "Level-2": {
+                    "metric": 10
+                  }
+                },
+                "redistributed_protocols": [],
+                "distance": 115,
+                "advertise_passive_only": false
+              }
+            },
+            "interfaces": {
+              "Loopback0": {
+                "running_state": "running passively",
+                "config_state": "passive in configuration"
+              },
+              "HundredGigabitEthernet0/0/0/0": {
+                "running_state": "disabled",
+                "config_state": "active in configuration"
+              },
+              "HundredGigabitEthernet0/0/0/0.10": {
+                "running_state": "running actively",
+                "config_state": "active in configuration"
+              },
+              "HundredGigabitEthernet0/0/0/0.20": {
+                "running_state": "running actively",
+                "config_state": "active in configuration"
+              },
+              "HundredGigabitEthernet0/0/0/1": {
+                "running_state": "disabled",
+                "config_state": "active in configuration"
+              },
+              "HundredGigabitEthernet0/0/0/1.10": {
+                "running_state": "running actively",
+                "config_state": "active in configuration"
+              },
+              "HundredGigabitEthernet0/0/0/1.20": {
+                "running_state": "running actively",
+                "config_state": "active in configuration"
+              },
+              "TenGigE0/0/0/20": {
+                "running_state": "disabled",
+                "config_state": "active in configuration"
+              },
+              "TenGigE0/0/0/20.10": {
+                "running_state": "running actively",
+                "config_state": "active in configuration"
+              },
+              "TenGigE0/0/0/20.20": {
+                "running_state": "running actively",
+                "config_state": "active in configuration"
+              }
+            },
+            "hostname": "ROUTER-A",
+            "sr_mpls": {
+              "srlb_start": 15000,
+              "srlb_end": 15999,
+              "srgb_start": 16000,
+              "srgb_end": 23999
+            },
+            "srv6": {
+              "locators": {
+                "MAIN": {
+                  "status": "Active"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,349 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show isis statistics",
+  "schema": {
+    "name": "ShowIsisStatisticsResult",
+    "fields": {
+      "instance": {
+        "type": "str",
+        "required": true
+      },
+      "pdu_counters": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PduCounter",
+            "fields": {
+              "sent": {
+                "type": "int",
+                "required": true
+              },
+              "received": {
+                "type": "int",
+                "required": true
+              },
+              "dropped_on_input": {
+                "type": "int",
+                "required": false
+              },
+              "dropped_by_update": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "lsp_retransmissions": {
+        "type": "int",
+        "required": true
+      },
+      "lsp_checksum_errors": {
+        "type": "int",
+        "required": true
+      },
+      "update_queue": {
+        "type": {
+          "name": "QueueStats",
+          "fields": {
+            "current": {
+              "type": "int",
+              "required": true
+            },
+            "maximum": {
+              "type": "int",
+              "required": true
+            },
+            "high_water_mark": {
+              "type": "int",
+              "required": true
+            },
+            "total_traffic": {
+              "type": "int",
+              "required": true
+            },
+            "drops": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "input_queue": {
+        "type": {
+          "type": "ref",
+          "name": "QueueStats"
+        },
+        "required": true
+      },
+      "levels": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "LevelStats",
+            "fields": {
+              "lsps_sourced_new": {
+                "type": "int",
+                "required": true
+              },
+              "lsps_sourced_refresh": {
+                "type": "int",
+                "required": true
+              },
+              "ipv4_unicast": {
+                "type": {
+                  "name": "RouteCalculationStats",
+                  "fields": {
+                    "total": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "full_spf": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "periodic": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "partial_route_calc": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "next_hop_calculations": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": true
+              },
+              "ipv6_unicast": {
+                "type": {
+                  "type": "ref",
+                  "name": "RouteCalculationStats"
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceStats",
+            "fields": {
+              "passive": {
+                "type": "bool",
+                "required": false
+              },
+              "ptp_hellos_sent": {
+                "type": "int",
+                "required": false
+              },
+              "ptp_hellos_rcvd": {
+                "type": "int",
+                "required": false
+              },
+              "lsp_retransmissions": {
+                "type": "int",
+                "required": false
+              },
+              "levels": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "InterfaceLevelStats",
+                    "fields": {
+                      "hellos_sent": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "hellos_rcvd": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "dr_elections": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "lsps_sent": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "lsps_rcvd": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "csnps_sent": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "csnps_rcvd": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "psnps_sent": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "psnps_rcvd": {
+                        "type": "int",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "IS-IS statistics with global PDU counters, queue stats, route calculations, and mixed interface types",
+      "input": "Tue Jul  7 22:59:39.858 EDT\n\nIS-IS 64512 Packet and Event Statistics\n                                              Dropped        Dropped\n  Total PDUs       Sent       Received       On Input      By Update\n    Hello:      4878813        4879038              0              -\n    CSNP:            18             18              -              0\n    PSNP:        183519         211425              0              0\n    LSP:         212398         184794              0              0\n\n  LSP Retransmissions:           23\n  LSP Checksum Errors:           0\n\n  IS-IS Update Queue:            0/3455\n    High Water Mark:             15\n    Total Traffic:               396237\n    Drops:                       0\n  IS-IS Input Queue:             0/4000\n    High Water Mark:             15\n    Total Traffic:               5275305\n    Drops:                       0\n\n  Level-2\n    LSPs sourced (new/refresh):  40/11616\n    Route Calculations:\n      IPv4 Unicast Total:        3414\n        Full SPF Calculations:   3407\n          Periodic:              3385\n        Partial Route Calc:      5\n        Next Hop Calculations:   2\n      IPv6 Unicast Total:        3412\n        Full SPF Calculations:   3406\n          Periodic:              3385\n        Partial Route Calc:      5\n        Next Hop Calculations:   1\n\nLoopback0\n  Passive\n\nHundredGigE0/0/0/0\n  Level-2\n    Hellos (sent/rcvd):          0/0\n    %s DR Elections:             0\n    LSPs (sent/rcvd):            0/0\n    CSNPs (sent/rcvd):           0/0\n    PSNPs (sent/rcvd):           0/0\n\nHundredGigE0/0/0/0.10\n  PTP Hellos (sent/rcvd):        348519/348469\n    LSP Retransmissions:         0\n  Level-2\n    LSPs (sent/rcvd):            0/31627\n    CSNPs (sent/rcvd):           1/1\n    PSNPs (sent/rcvd):           31471/0\n\nHundredGigE0/0/0/1.10\n  PTP Hellos (sent/rcvd):        348590/348531\n    LSP Retransmissions:         0\n  Level-2\n    LSPs (sent/rcvd):            35599/14\n    CSNPs (sent/rcvd):           1/1\n    PSNPs (sent/rcvd):           2/35402\n\nTenGigE0/0/0/21.20\n  PTP Hellos (sent/rcvd):        348289/348365\n    LSP Retransmissions:         23\n  Level-2\n    LSPs (sent/rcvd):            38/2\n    CSNPs (sent/rcvd):           3/3\n    PSNPs (sent/rcvd):           0/3\n",
+      "expected": {
+        "instance": "64512",
+        "pdu_counters": {
+          "hello": {
+            "sent": 4878813,
+            "received": 4879038,
+            "dropped_on_input": 0
+          },
+          "csnp": {
+            "sent": 18,
+            "received": 18,
+            "dropped_by_update": 0
+          },
+          "psnp": {
+            "sent": 183519,
+            "received": 211425,
+            "dropped_on_input": 0,
+            "dropped_by_update": 0
+          },
+          "lsp": {
+            "sent": 212398,
+            "received": 184794,
+            "dropped_on_input": 0,
+            "dropped_by_update": 0
+          }
+        },
+        "lsp_retransmissions": 23,
+        "lsp_checksum_errors": 0,
+        "update_queue": {
+          "current": 0,
+          "maximum": 3455,
+          "high_water_mark": 15,
+          "total_traffic": 396237,
+          "drops": 0
+        },
+        "input_queue": {
+          "current": 0,
+          "maximum": 4000,
+          "high_water_mark": 15,
+          "total_traffic": 5275305,
+          "drops": 0
+        },
+        "levels": {
+          "2": {
+            "lsps_sourced_new": 40,
+            "lsps_sourced_refresh": 11616,
+            "ipv4_unicast": {
+              "total": 3414,
+              "full_spf": 3407,
+              "periodic": 3385,
+              "partial_route_calc": 5,
+              "next_hop_calculations": 2
+            },
+            "ipv6_unicast": {
+              "total": 3412,
+              "full_spf": 3406,
+              "periodic": 3385,
+              "partial_route_calc": 5,
+              "next_hop_calculations": 1
+            }
+          }
+        },
+        "interfaces": {
+          "Loopback0": {
+            "passive": true
+          },
+          "HundredGigabitEthernet0/0/0/0": {
+            "levels": {
+              "2": {
+                "hellos_sent": 0,
+                "hellos_rcvd": 0,
+                "dr_elections": 0,
+                "lsps_sent": 0,
+                "lsps_rcvd": 0,
+                "csnps_sent": 0,
+                "csnps_rcvd": 0,
+                "psnps_sent": 0,
+                "psnps_rcvd": 0
+              }
+            }
+          },
+          "HundredGigabitEthernet0/0/0/0.10": {
+            "ptp_hellos_sent": 348519,
+            "ptp_hellos_rcvd": 348469,
+            "lsp_retransmissions": 0,
+            "levels": {
+              "2": {
+                "lsps_sent": 0,
+                "lsps_rcvd": 31627,
+                "csnps_sent": 1,
+                "csnps_rcvd": 1,
+                "psnps_sent": 31471,
+                "psnps_rcvd": 0
+              }
+            }
+          },
+          "HundredGigabitEthernet0/0/0/1.10": {
+            "ptp_hellos_sent": 348590,
+            "ptp_hellos_rcvd": 348531,
+            "lsp_retransmissions": 0,
+            "levels": {
+              "2": {
+                "lsps_sent": 35599,
+                "lsps_rcvd": 14,
+                "csnps_sent": 1,
+                "csnps_rcvd": 1,
+                "psnps_sent": 2,
+                "psnps_rcvd": 35402
+              }
+            }
+          },
+          "TenGigE0/0/0/21.20": {
+            "ptp_hellos_sent": 348289,
+            "ptp_hellos_rcvd": 348365,
+            "lsp_retransmissions": 23,
+            "levels": {
+              "2": {
+                "lsps_sent": 38,
+                "lsps_rcvd": 2,
+                "csnps_sent": 3,
+                "csnps_rcvd": 3,
+                "psnps_sent": 0,
+                "psnps_rcvd": 3
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,190 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show macsec statistics interface <interface>",
+  "schema": {
+    "name": "ShowMacsecStatisticsInterfaceResult",
+    "fields": {
+      "interface": {
+        "type": "str",
+        "required": true
+      },
+      "secy_counters": {
+        "type": {
+          "name": "SecYCounters",
+          "fields": {
+            "ingress_untag_pkts": {
+              "type": "int",
+              "required": true
+            },
+            "ingress_no_tag_pkts": {
+              "type": "int",
+              "required": true
+            },
+            "ingress_bad_tag_pkts": {
+              "type": "int",
+              "required": true
+            },
+            "ingress_unknown_sci_pkts": {
+              "type": "int",
+              "required": true
+            },
+            "ingress_no_sci_pkts": {
+              "type": "int",
+              "required": true
+            },
+            "ingress_overrun_pkts": {
+              "type": "int",
+              "required": true
+            },
+            "ingress_validated_octets": {
+              "type": "int",
+              "required": true
+            },
+            "ingress_decrypted_octets": {
+              "type": "int",
+              "required": true
+            },
+            "egress_untag_pkts": {
+              "type": "int",
+              "required": true
+            },
+            "egress_too_long_pkts": {
+              "type": "int",
+              "required": true
+            },
+            "egress_protected_octets": {
+              "type": "int",
+              "required": true
+            },
+            "egress_encrypted_octets": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "controlled_port_counters": {
+        "type": {
+          "name": "ControlledPortCounters",
+          "fields": {
+            "if_in_octets": {
+              "type": "int",
+              "required": true
+            },
+            "if_in_packets": {
+              "type": "int",
+              "required": true
+            },
+            "if_in_discard": {
+              "type": "int",
+              "required": true
+            },
+            "if_in_errors": {
+              "type": "int",
+              "required": true
+            },
+            "if_out_octets": {
+              "type": "int",
+              "required": true
+            },
+            "if_out_packets": {
+              "type": "int",
+              "required": true
+            },
+            "if_out_errors": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "transmit_sc_counters": {
+        "type": {
+          "name": "TransmitSCCounters",
+          "fields": {
+            "sci": {
+              "type": "str",
+              "required": true
+            },
+            "out_pkts_protected": {
+              "type": "int",
+              "required": true
+            },
+            "out_pkts_encrypted": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": false
+      },
+      "transmit_sa_counters": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "TransmitSACounters",
+            "fields": {
+              "out_pkts_protected": {
+                "type": "int",
+                "required": true
+              },
+              "out_pkts_encrypted": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "receive_sa_counters": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ReceiveSACounters",
+            "fields": {
+              "in_pkts_unchecked": {
+                "type": "int",
+                "required": true
+              },
+              "in_pkts_delayed": {
+                "type": "int",
+                "required": true
+              },
+              "in_pkts_ok": {
+                "type": "int",
+                "required": true
+              },
+              "in_pkts_invalid": {
+                "type": "int",
+                "required": true
+              },
+              "in_pkts_not_valid": {
+                "type": "int",
+                "required": true
+              },
+              "in_pkts_not_using_sa": {
+                "type": "int",
+                "required": true
+              },
+              "in_pkts_unused_sa": {
+                "type": "int",
+                "required": true
+              },
+              "in_pkts_late": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": []
+}
