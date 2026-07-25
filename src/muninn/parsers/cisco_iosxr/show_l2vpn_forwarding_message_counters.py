@@ -85,13 +85,13 @@ class ShowL2vpnForwardingMessageCountersResult(TypedDict):
 
     Attributes:
         message_counters: Dict of message name to counter entry.
-        event_trace_history: Dict of sequential index to event entry.
+        event_trace_history: List of event trace entries in chronological order.
         event_trace_total_events: Total event count from the header.
         round_trip_delays: Dict of table name to delay statistics.
     """
 
     message_counters: dict[str, MessageCounterEntry]
-    event_trace_history: dict[str, EventTraceEntry]
+    event_trace_history: list[EventTraceEntry]
     event_trace_total_events: int
     round_trip_delays: dict[str, RoundTripDelayTable]
 
@@ -220,16 +220,15 @@ def _parse_event_trace(
     lines: list[str],
     start: int,
     total_events: int,
-) -> tuple[dict[str, EventTraceEntry], int]:
+) -> tuple[list[EventTraceEntry], int]:
     """Parse the event trace history section.
 
-    Returns events keyed by sequential index and the line index
+    Returns events as a list in chronological order and the line index
     where parsing stopped.
     """
-    events: dict[str, EventTraceEntry] = {}
+    events: list[EventTraceEntry] = []
     i = start
     found_data_separator = False
-    event_idx = 0
 
     while i < len(lines):
         line = lines[i]
@@ -248,13 +247,14 @@ def _parse_event_trace(
         evt_match = _EVENT_TRACE_LINE.match(line)
         if evt_match:
             found_data_separator = True
-            events[str(event_idx)] = EventTraceEntry(
-                time=evt_match.group("time"),
-                event=evt_match.group("event"),
-                info1=evt_match.group("info1"),
-                info2=evt_match.group("info2"),
+            events.append(
+                EventTraceEntry(
+                    time=evt_match.group("time"),
+                    event=evt_match.group("event"),
+                    info1=evt_match.group("info1"),
+                    info2=evt_match.group("info2"),
+                )
             )
-            event_idx += 1
 
         i += 1
 
@@ -434,7 +434,7 @@ class ShowL2vpnForwardingMessageCountersParser(
         message_counters, counter_end = _parse_counter_section(lines, 0)
 
         # Phase 2: Parse event trace history
-        event_trace_history: dict[str, EventTraceEntry] = {}
+        event_trace_history: list[EventTraceEntry] = []
         event_trace_total_events: int = 0
         rtd_start = counter_end
 
