@@ -157,8 +157,8 @@ _PTP_HELLOS = re.compile(
     r"(?P<sent>\d+)/(?P<rcvd>\d+)\s*$"
 )
 
-# Interface-level LSP Retransmissions
-_INTF_LSP_RETRANS = re.compile(r"^\s+LSP\s+Retransmissions:\s+(?P<value>\d+)\s*$")
+# Interface-level LSP Retransmissions (same pattern as global; context disambiguates)
+_INTF_LSP_RETRANS = _LSP_RETRANSMISSIONS
 
 # Interface level header: "  Level-2"
 _INTF_LEVEL_HEADER = re.compile(r"^\s+Level-(?P<level>[12])\s*$")
@@ -416,6 +416,38 @@ class ShowIsisStatisticsParser(BaseParser["ShowIsisStatisticsResult"]):
         interfaces: dict[str, InterfaceStats],
     ) -> int:
         """Process a single non-empty line. Returns the next idx."""
+        result = cls._try_global_counters(
+            line,
+            lines,
+            idx,
+            instance_out,
+            pdu_counters,
+            lsp_retrans_out,
+            lsp_chksum_out,
+            update_q_out,
+            input_q_out,
+            interfaces,
+        )
+        if result is not None:
+            return result
+
+        return cls._try_section_start(line, lines, idx, levels, interfaces)
+
+    @classmethod
+    def _try_global_counters(  # noqa: PLR0913
+        cls,
+        line: str,
+        lines: list[str],
+        idx: int,
+        instance_out: list[str | None],
+        pdu_counters: dict[str, PduCounter],
+        lsp_retrans_out: list[int | None],
+        lsp_chksum_out: list[int | None],
+        update_q_out: list[QueueStats | None],
+        input_q_out: list[QueueStats | None],
+        interfaces: dict[str, InterfaceStats],
+    ) -> int | None:
+        """Try to match global counter lines. Returns next idx or None."""
         m = _INSTANCE_HEADER.match(line)
         if m:
             instance_out[0] = m.group("instance")
@@ -442,6 +474,18 @@ class ShowIsisStatisticsParser(BaseParser["ShowIsisStatisticsResult"]):
         if m:
             return cls._handle_queue(m, lines, idx, update_q_out, input_q_out)
 
+        return None
+
+    @classmethod
+    def _try_section_start(
+        cls,
+        line: str,
+        lines: list[str],
+        idx: int,
+        levels: dict[str, LevelStats],
+        interfaces: dict[str, InterfaceStats],
+    ) -> int:
+        """Try to match a level or interface section start. Returns next idx."""
         m = _GLOBAL_LEVEL_HEADER.match(line)
         if m and not interfaces:
             level_id = m.group("level")
