@@ -67,11 +67,13 @@ class ShowBgpVrfResult(TypedDict):
     """Schema for 'show bgp vrf <vrf>' parsed output on IOS-XR."""
 
     vrf: str
+    state: str
     router_id: str
     local_as: str
     nsr_enabled: NotRequired[bool]
     table_state: NotRequired[str]
     table_id: NotRequired[str]
+    rd_version: NotRequired[int]
     rd: NotRequired[str]
     vrf_id: NotRequired[str]
     main_routing_table_version: int
@@ -110,7 +112,7 @@ _NSR_RE = re.compile(r"^Non-stop routing is (enabled|disabled)", re.I)
 _TABLE_STATE_RE = re.compile(r"^BGP table state:\s*(\S+)")
 
 # Table ID and RD version on same line
-_TABLE_ID_RE = re.compile(r"^Table ID:\s*(\S+)")
+_TABLE_ID_RE = re.compile(r"^Table ID:\s*(\S+)(?:\s+RD version:\s*(\d+))?")
 
 # Main routing table version
 _MAIN_RT_VERSION_RE = re.compile(r"^BGP main routing table version\s+(\d+)")
@@ -411,8 +413,9 @@ def _match_nsr(m: re.Match[str], fields: dict[str, object]) -> None:
 
 
 def _match_vrf_header(m: re.Match[str], fields: dict[str, object]) -> None:
-    """Store VRF name from header."""
+    """Store VRF name and state from header."""
     fields["vrf"] = m.group(1)
+    fields["state"] = m.group(2)
 
 
 def _match_header_rd(m: re.Match[str], fields: dict[str, object]) -> None:
@@ -425,10 +428,16 @@ def _match_vrf_id(m: re.Match[str], fields: dict[str, object]) -> None:
     fields["vrf_id"] = m.group(1)
 
 
+def _match_table_id(m: re.Match[str], fields: dict[str, object]) -> None:
+    """Store Table ID and optional RD version from header."""
+    fields["table_id"] = m.group(1)
+    if m.group(2) is not None:
+        fields["rd_version"] = int(m.group(2))
+
+
 # Table of (pattern, field_key, group_index, transform) for simple matches
 _SIMPLE_HEADER_MATCHERS: list[tuple[re.Pattern[str], str, int, type]] = [
     (_TABLE_STATE_RE, "table_state", 1, str),
-    (_TABLE_ID_RE, "table_id", 1, str),
     (_MAIN_RT_VERSION_RE, "main_routing_table_version", 1, int),
     (_NSR_INITSYNC_RE, "nsr_initial_initsync_version", 1, str),
     (_NSR_ISSU_RE, "nsr_issu_sync_group_versions", 1, str),
@@ -443,6 +452,7 @@ _CUSTOM_HEADER_MATCHERS: list[
     (_VRF_HEADER_RE, _match_vrf_header),
     (_HEADER_RD_RE, _match_header_rd),
     (_VRF_ID_RE, _match_vrf_id),
+    (_TABLE_ID_RE, _match_table_id),
 ]
 
 
@@ -559,6 +569,7 @@ _OPTIONAL_HEADER_KEYS: list[tuple[str, type]] = [
     ("nsr_enabled", bool),
     ("table_state", str),
     ("table_id", str),
+    ("rd_version", int),
     ("rd", str),
     ("vrf_id", str),
     ("nsr_initial_initsync_version", str),
@@ -638,9 +649,15 @@ class ShowBgpVrfParser(BaseParser["ShowBgpVrfResult"]):
         # Parse RD sections
         route_distinguishers = _build_rd_entries(rd_sections)
 
+        state = header.get("state")
+        if state is None:
+            msg = "Missing VRF state in BGP VRF header"
+            raise ValueError(msg)
+
         # Build result with required and optional fields
         result: ShowBgpVrfResult = {
             "vrf": str(vrf),
+            "state": str(state),
             "router_id": str(router_id),
             "local_as": str(local_as),
             "main_routing_table_version": int(str(main_rt_version)),
