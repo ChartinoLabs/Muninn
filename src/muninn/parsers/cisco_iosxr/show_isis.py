@@ -535,6 +535,7 @@ class ShowIsisParser(BaseParser["ShowIsisResult"]):
             return True
 
         if _INTERFACES_HEADER_PATTERN.match(line):
+            cls._save_pending_sr_mpls(state)
             state.in_interfaces = True
             state.in_sr_mpls = False
             state.in_srv6 = False
