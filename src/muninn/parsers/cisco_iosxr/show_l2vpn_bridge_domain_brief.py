@@ -11,6 +11,7 @@ from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import SEPARATOR_DASH_SPACE_RE
 from muninn.registry import register
 from muninn.tags import ParserTag
 
@@ -56,9 +57,6 @@ _BD_CONTINUATION_RE = re.compile(
     r"(?P<num_vnis>\d+)/(?P<num_vnis_up>\d+)\s*$"
 )
 
-# Separator line of dashes.
-_SEPARATOR_RE = re.compile(r"^[-\s]+$")
-
 
 @register(
     OS.CISCO_IOSXR,
@@ -97,7 +95,7 @@ class ShowL2vpnBridgeDomainBriefParser(
             # Skip empty lines, timestamp, legend, headers, separators
             if not stripped:
                 continue
-            if _SEPARATOR_RE.match(stripped):
+            if SEPARATOR_DASH_SPACE_RE.match(stripped):
                 continue
 
             # Try to match a new BD entry line
