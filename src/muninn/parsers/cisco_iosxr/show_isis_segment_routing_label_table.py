@@ -5,6 +5,7 @@ from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import SEPARATOR_DASH_SPACE_RE
 from muninn.registry import register
 from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
@@ -38,9 +39,8 @@ _INSTANCE_HEADER_PATTERN = re.compile(
     r"^IS-IS\s+(?P<instance>\S+)\s+IS\s+Label\s+Table\s*$"
 )
 
-# Column header and separator lines
+# Column header line
 _COLUMN_HEADER_PATTERN = re.compile(r"^Label\s+Prefix\s+Interface\s*$")
-_SEPARATOR_PATTERN = re.compile(r"^[-\s]+$")
 
 # Timestamp line (e.g., "Tue Jul  7 22:59:43.037 EDT")
 _TIMESTAMP_PATTERN = re.compile(r"^[A-Z][a-z]{2}\s+[A-Z][a-z]{2}\s+\d+")
@@ -58,7 +58,7 @@ def _is_skippable(line: str) -> bool:
         return True
     if _COLUMN_HEADER_PATTERN.match(line):
         return True
-    return bool(_SEPARATOR_PATTERN.match(line))
+    return bool(SEPARATOR_DASH_SPACE_RE.match(line))
 
 
 def _build_entry(match: re.Match[str]) -> IsisSegmentRoutingLabelEntry:
