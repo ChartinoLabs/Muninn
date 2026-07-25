@@ -91,8 +91,9 @@ def _insert_adjacency(
 
 
 @register(OS.CISCO_IOS, "show isis neighbors")
+@register(OS.CISCO_IOSXE, "show isis neighbors")
 class ShowIsisNeighborsParser(BaseParser["ShowIsisNeighborsResult"]):
-    """Parser for 'show isis neighbors' on IOS.
+    """Parser for 'show isis neighbors' on IOS/IOS-XE.
 
     Example output:
         System Id       Type Interface     IP Address      State Holdtime Circuit Id
