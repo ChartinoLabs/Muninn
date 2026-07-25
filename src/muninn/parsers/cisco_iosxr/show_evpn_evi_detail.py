@@ -325,7 +325,7 @@ class ShowEvpnEviDetailParser(BaseParser["ShowEvpnEviDetailResult"]):
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset(
         {
-            ParserTag.L2VPN,
+            ParserTag.VPN,
             ParserTag.MPLS,
         }
     )
