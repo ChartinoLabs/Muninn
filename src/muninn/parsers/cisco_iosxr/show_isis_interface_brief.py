@@ -13,15 +13,17 @@ from muninn.utils import canonical_interface_name
 class InterfaceBriefEntry(TypedDict):
     """Schema for a single IS-IS interface brief entry."""
 
-    type: str
+    all_ok: str
     clns_state: NotRequired[str]
     mtu: NotRequired[int]
     adjacencies_l1: NotRequired[int]
     adjacencies_l2: NotRequired[int]
     priority_l1: NotRequired[int]
     priority_l2: NotRequired[int]
-    configured_topologies: NotRequired[list[str]]
-    running_topologies: NotRequired[list[str]]
+    adj_topos_running: NotRequired[int]
+    adj_topos_configured: NotRequired[int]
+    adv_topos_running: NotRequired[int]
+    adv_topos_configured: NotRequired[int]
 
 
 class ShowIsisInterfaceBriefResult(TypedDict):
@@ -40,7 +42,7 @@ _INSTANCE_RE = re.compile(r"^IS-IS\s+(?P<instance>\S+)\s+Interfaces")
 # Interface data line.  The All-OK field (Yes/No) is always present;
 # remaining columns are optional (missing when interface is in error).
 _INTF_RE = re.compile(
-    r"^(?P<intf>\S+)\s+(?P<type>Yes|No)"
+    r"^(?P<intf>\S+)\s+(?P<all_ok>Yes|No)"
     r"(?:"
     r"\s+(?P<adj_l1>\S+)"
     r"\s+(?P<adj_l2>\S+)"
@@ -126,7 +128,7 @@ class ShowIsisInterfaceBriefParser(
     @classmethod
     def _build_entry(cls, match: re.Match[str]) -> InterfaceBriefEntry:
         """Build an InterfaceBriefEntry from a regex match."""
-        entry: InterfaceBriefEntry = {"type": match.group("type")}
+        entry: InterfaceBriefEntry = {"all_ok": match.group("all_ok")}
 
         # Remaining columns are only present when the line has full data
         if match.group("clns") is None:
@@ -153,14 +155,10 @@ class ShowIsisInterfaceBriefParser(
         if prio_l2 != "-":
             entry["priority_l2"] = int(prio_l2)
 
-        # Topology counts
-        entry["configured_topologies"] = [
-            f"adj:{match.group('adj_cfg')}",
-            f"adv:{match.group('adv_cfg')}",
-        ]
-        entry["running_topologies"] = [
-            f"adj:{match.group('adj_run')}",
-            f"adv:{match.group('adv_run')}",
-        ]
+        # Topology counts: adjacency and advertise, running vs configured
+        entry["adj_topos_running"] = int(match.group("adj_run"))
+        entry["adj_topos_configured"] = int(match.group("adj_cfg"))
+        entry["adv_topos_running"] = int(match.group("adv_run"))
+        entry["adv_topos_configured"] = int(match.group("adv_cfg"))
 
         return entry
