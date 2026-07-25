@@ -1,6 +1,5 @@
 """Parser for 'show sdr' command on Cisco IOS-XR."""
 
-import re
 from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
@@ -46,11 +45,6 @@ class ShowSdrParser(BaseParser[ShowSdrResult]):
     _COL_NODE_STATE = 37
     _COL_RED_STATE = 52
     _COL_PARTNER_NAME = 67
-
-    # Header line pattern to detect column positions dynamically.
-    _HEADER_RE = re.compile(
-        r"^Type\s+NodeName\s+NodeState\s+RedState\s+PartnerName\s*$"
-    )
 
     @classmethod
     def _parse_fixed_width_line(cls, line: str) -> tuple[str, ShowSdrNodeEntry] | None:
