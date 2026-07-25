@@ -1,0 +1,128 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show isis flex-algo",
+  "schema": {
+    "name": "ShowIsisFlexAlgoResult",
+    "fields": {
+      "tags": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": "muninn.parsers.iosxe.show_isis_flex-algo.FlexAlgoDatabase | muninn.parsers.iosxe.show_isis_flex-algo.FlexAlgoDefinition"
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "IS-IS Flex-Algo definitions with include-any and include-all affinities",
+      "input": "Tag 64512:\nIS-IS Flex-Algo Database\n Flex-Algo count: 6\n Use delay metric advertisement: Application, Legacy\n    IS-IS Level-1\n      Delay metric: Inactive\n    IS-IS Level-2\n      Delay metric: Inactive\n\nFlex-Algo 140:\n    IS-IS Level-1\n      Definition Priority: 128\n      Definition Source: ROUTER-A.00, (Local)\n      Definition Equal to Local: Yes\n      Definition Metric Type: IGP\n      Definition Include-any Affinity:\n       0x00000004\n      Definition Flex-Algo Prefix Metric: No\n      Disabled: No\n      Microloop Avoidance Timer Running: No\n    IS-IS Level-2\n      Definition Priority: 128\n      Definition Source: ROUTER-B.00\n      Definition Equal to Local: Yes\n      Definition Metric Type: IGP\n      Definition Include-any Affinity:\n       0x00000004\n      Definition Flex-Algo Prefix Metric: No\n      Disabled: No\n      Microloop Avoidance Timer Running: No\n   Local Priority: 128\n   FRR Disabled: No\n   Microloop Avoidance Disabled: No\n\nFlex-Algo 141:\n    IS-IS Level-1\n      Definition Priority: 128\n      Definition Source: ROUTER-A.00, (Local)\n      Definition Equal to Local: Yes\n      Definition Metric Type: IGP\n      Definition Include-any Affinity:\n       0x00000002\n      Definition Flex-Algo Prefix Metric: No\n      Disabled: No\n      Microloop Avoidance Timer Running: No\n    IS-IS Level-2\n      Definition Priority: 128\n      Definition Source: ROUTER-B.00\n      Definition Equal to Local: Yes\n      Definition Metric Type: IGP\n      Definition Include-any Affinity:\n       0x00000002\n      Definition Flex-Algo Prefix Metric: No\n      Disabled: No\n      Microloop Avoidance Timer Running: No\n   Local Priority: 128\n   FRR Disabled: No\n   Microloop Avoidance Disabled: No\n\nFlex-Algo 139:\n    IS-IS Level-1\n      Definition Priority: 128\n      Definition Source: ROUTER-A.00, (Local)\n      Definition Equal to Local: Yes\n      Definition Metric Type: IGP\n      Definition Include-all Affinity:\n       0x0000000C\n      Definition Flex-Algo Prefix Metric: No\n      Disabled: No\n      Microloop Avoidance Timer Running: No\n    IS-IS Level-2\n      Definition Priority: 128\n      Definition Source: ROUTER-B.00\n      Definition Equal to Local: Yes\n      Definition Metric Type: IGP\n      Definition Include-all Affinity:\n       0x0000000C\n      Definition Flex-Algo Prefix Metric: No\n      Disabled: No\n      Microloop Avoidance Timer Running: No\n   Local Priority: 128\n   FRR Disabled: No\n   Microloop Avoidance Disabled: No\n",
+      "expected": {
+        "tags": {
+          "64512": {
+            "database": {
+              "flex_algo_count": 6,
+              "use_delay_metric_advertisement": "Application, Legacy",
+              "delay_metric_levels": {
+                "level-1": "Inactive",
+                "level-2": "Inactive"
+              }
+            },
+            "140": {
+              "levels": {
+                "level-1": {
+                  "definition_priority": 128,
+                  "definition_source": "ROUTER-A.00",
+                  "definition_source_local": true,
+                  "definition_equal_to_local": true,
+                  "definition_metric_type": "IGP",
+                  "definition_include_any_affinity": "0x00000004",
+                  "definition_flex_algo_prefix_metric": false,
+                  "disabled": false,
+                  "microloop_avoidance_timer_running": false
+                },
+                "level-2": {
+                  "definition_priority": 128,
+                  "definition_source": "ROUTER-B.00",
+                  "definition_source_local": false,
+                  "definition_equal_to_local": true,
+                  "definition_metric_type": "IGP",
+                  "definition_include_any_affinity": "0x00000004",
+                  "definition_flex_algo_prefix_metric": false,
+                  "disabled": false,
+                  "microloop_avoidance_timer_running": false
+                }
+              },
+              "local_priority": 128,
+              "frr_disabled": false,
+              "microloop_avoidance_disabled": false
+            },
+            "141": {
+              "levels": {
+                "level-1": {
+                  "definition_priority": 128,
+                  "definition_source": "ROUTER-A.00",
+                  "definition_source_local": true,
+                  "definition_equal_to_local": true,
+                  "definition_metric_type": "IGP",
+                  "definition_include_any_affinity": "0x00000002",
+                  "definition_flex_algo_prefix_metric": false,
+                  "disabled": false,
+                  "microloop_avoidance_timer_running": false
+                },
+                "level-2": {
+                  "definition_priority": 128,
+                  "definition_source": "ROUTER-B.00",
+                  "definition_source_local": false,
+                  "definition_equal_to_local": true,
+                  "definition_metric_type": "IGP",
+                  "definition_include_any_affinity": "0x00000002",
+                  "definition_flex_algo_prefix_metric": false,
+                  "disabled": false,
+                  "microloop_avoidance_timer_running": false
+                }
+              },
+              "local_priority": 128,
+              "frr_disabled": false,
+              "microloop_avoidance_disabled": false
+            },
+            "139": {
+              "levels": {
+                "level-1": {
+                  "definition_priority": 128,
+                  "definition_source": "ROUTER-A.00",
+                  "definition_source_local": true,
+                  "definition_equal_to_local": true,
+                  "definition_metric_type": "IGP",
+                  "definition_include_all_affinity": "0x0000000C",
+                  "definition_flex_algo_prefix_metric": false,
+                  "disabled": false,
+                  "microloop_avoidance_timer_running": false
+                },
+                "level-2": {
+                  "definition_priority": 128,
+                  "definition_source": "ROUTER-B.00",
+                  "definition_source_local": false,
+                  "definition_equal_to_local": true,
+                  "definition_metric_type": "IGP",
+                  "definition_include_all_affinity": "0x0000000C",
+                  "definition_flex_algo_prefix_metric": false,
+                  "disabled": false,
+                  "microloop_avoidance_timer_running": false
+                }
+              },
+              "local_priority": 128,
+              "frr_disabled": false,
+              "microloop_avoidance_disabled": false
+            }
+          }
+        }
+      }
+    }
+  ]
+}
