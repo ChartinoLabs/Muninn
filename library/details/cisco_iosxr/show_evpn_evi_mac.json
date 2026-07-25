@@ -1,0 +1,131 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show evpn evi mac",
+  "schema": null,
+  "examples": [
+    {
+      "name": "EVPN EVI MAC table with MPLS and N/A encapsulations, PW and local nexthops",
+      "input": "Tue Jul  1 12:00:01.000 UTC\n\nVPN-ID     Encap      MAC address    IP address\nNexthop                                 Label    SID\n---------- ---------- -------------- ----------------------------------------\n--------------------------------------- --------\n---------------------------------------\n56         MPLS       0001.0001.0001 ::\nPW:198.51.100.1,56                      24004\n56         MPLS       0001.0001.0002 ::\nPW:198.51.100.1,56                      24004\n56         MPLS       0001.0001.0003 ::\n203.0.113.1                             24006\n56         MPLS       0001.0001.0004 ::\n203.0.113.1                             24006\n1010       MPLS       0001.0001.0003 ::\n203.0.113.1                             24000\n65535      N/A        0001.0001.0005 ::\nLocal                                   0\n",
+      "expected": {
+        "56": {
+          "0001.0001.0001": {
+            "ip_address": "::",
+            "nexthop": "PW:198.51.100.1,56",
+            "label": 24004,
+            "encapsulation": "MPLS"
+          },
+          "0001.0001.0002": {
+            "ip_address": "::",
+            "nexthop": "PW:198.51.100.1,56",
+            "label": 24004,
+            "encapsulation": "MPLS"
+          },
+          "0001.0001.0003": {
+            "ip_address": "::",
+            "nexthop": "203.0.113.1",
+            "label": 24006,
+            "encapsulation": "MPLS"
+          },
+          "0001.0001.0004": {
+            "ip_address": "::",
+            "nexthop": "203.0.113.1",
+            "label": 24006,
+            "encapsulation": "MPLS"
+          }
+        },
+        "1010": {
+          "0001.0001.0003": {
+            "ip_address": "::",
+            "nexthop": "203.0.113.1",
+            "label": 24000,
+            "encapsulation": "MPLS"
+          }
+        },
+        "65535": {
+          "0001.0001.0005": {
+            "ip_address": "::",
+            "nexthop": "Local",
+            "label": 0
+          }
+        }
+      }
+    },
+    {
+      "name": "EVPN EVI MAC table in single-line format (wide terminal output)",
+      "input": "Tue Jul  1 12:00:01.000 UTC\n\nVPN-ID     Encap      MAC address    IP address                               Nexthop                                 Label    SID\n---------- ---------- -------------- ---------------------------------------- --------------------------------------- -------- ---------------------------------------\n56         MPLS       0001.0001.0001 ::                                       PW:198.51.100.1,56                      24004\n56         MPLS       0001.0001.0002 ::                                       PW:198.51.100.1,56                      24004\n56         MPLS       0001.0001.0003 ::                                       203.0.113.1                             24006\n56         MPLS       0001.0001.0004 ::                                       203.0.113.1                             24006\n1010       MPLS       0001.0001.0003 ::                                       203.0.113.1                             24000\n65535      N/A        0001.0001.0005 ::                                       Local                                   0\n",
+      "expected": {
+        "56": {
+          "0001.0001.0001": {
+            "ip_address": "::",
+            "nexthop": "PW:198.51.100.1,56",
+            "label": 24004,
+            "encapsulation": "MPLS"
+          },
+          "0001.0001.0002": {
+            "ip_address": "::",
+            "nexthop": "PW:198.51.100.1,56",
+            "label": 24004,
+            "encapsulation": "MPLS"
+          },
+          "0001.0001.0003": {
+            "ip_address": "::",
+            "nexthop": "203.0.113.1",
+            "label": 24006,
+            "encapsulation": "MPLS"
+          },
+          "0001.0001.0004": {
+            "ip_address": "::",
+            "nexthop": "203.0.113.1",
+            "label": 24006,
+            "encapsulation": "MPLS"
+          }
+        },
+        "1010": {
+          "0001.0001.0003": {
+            "ip_address": "::",
+            "nexthop": "203.0.113.1",
+            "label": 24000,
+            "encapsulation": "MPLS"
+          }
+        },
+        "65535": {
+          "0001.0001.0005": {
+            "ip_address": "::",
+            "nexthop": "Local",
+            "label": 0
+          }
+        }
+      }
+    },
+    {
+      "name": "EVPN EVI MAC table in single-line format with SRv6 SID field populated",
+      "input": "Tue Jul  1 12:00:01.000 UTC\n\nVPN-ID     Encap      MAC address    IP address                               Nexthop                                 Label    SID\n---------- ---------- -------------- ---------------------------------------- --------------------------------------- -------- ---------------------------------------\n100        MPLS       0001.0001.0001 ::                                       203.0.113.2                             24010    fcbb:bb00:1::\n100        MPLS       0001.0001.0002 2001:db8::1                              203.0.113.3                             24011    fcbb:bb00:2::\n200        MPLS       0001.0001.0003 192.0.2.10                               PW:198.51.100.5,200                     24020\n",
+      "expected": {
+        "100": {
+          "0001.0001.0001": {
+            "ip_address": "::",
+            "nexthop": "203.0.113.2",
+            "label": 24010,
+            "encapsulation": "MPLS",
+            "sid": "fcbb:bb00:1::"
+          },
+          "0001.0001.0002": {
+            "ip_address": "2001:db8::1",
+            "nexthop": "203.0.113.3",
+            "label": 24011,
+            "encapsulation": "MPLS",
+            "sid": "fcbb:bb00:2::"
+          }
+        },
+        "200": {
+          "0001.0001.0003": {
+            "ip_address": "192.0.2.10",
+            "nexthop": "PW:198.51.100.5,200",
+            "label": 24020,
+            "encapsulation": "MPLS"
+          }
+        }
+      }
+    }
+  ]
+}
