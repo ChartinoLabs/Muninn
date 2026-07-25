@@ -20,6 +20,7 @@ class ParserTag(StrEnum):
     INTERFACES = "Interfaces"
     INVENTORY = "Inventory"
     ISIS = "IS-IS"
+    L2VPN = "L2VPN"
     LAG = "LAG"
     LLDP = "LLDP"
     LOGGING = "Logging"
