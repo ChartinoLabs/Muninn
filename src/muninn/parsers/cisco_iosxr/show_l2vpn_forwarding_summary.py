@@ -432,24 +432,24 @@ class ShowL2vpnForwardingSummaryParser(
         pwhe_mainport = cls._parse_pwhe_mainport(lines)
         evpn_mcast = cls._parse_evpn_multicast_replication(lines)
 
-        result: dict = {
-            "shared_memory": shared_memory,
-            "xconnect_entries": xconnect_entries,
-            "xconnects_down_due_to": xconnects_down,
-            "invalid_xid_drops": invalid_xid,
-            "exceeded_max_drops": exceeded_max,
-            "maximum_xids": max_xids,
-            "maximum_internal_ids": max_internal,
-            "p2p_xconnects": p2p,
-            "bridge_port_xconnects": bp,
-            "nexthops": nexthops,
-            "bridge_domains": bridge_domains,
-            "mac_statistics": mac_stats,
-            "ipmac_statistics": ipmac_stats,
-            "p2mp_ptree_entries": p2mp_ptree,
-            "pwhe_main_port_entries": pwhe_mainport,
-            "evpn_multicast_replication": evpn_mcast,
-        }
+        result = ShowL2vpnForwardingSummaryResult(
+            shared_memory=shared_memory,
+            xconnect_entries=xconnect_entries,
+            xconnects_down_due_to=xconnects_down,
+            invalid_xid_drops=invalid_xid,
+            exceeded_max_drops=exceeded_max,
+            maximum_xids=max_xids,
+            maximum_internal_ids=max_internal,
+            p2p_xconnects=p2p,
+            bridge_port_xconnects=bp,
+            nexthops=nexthops,
+            bridge_domains=bridge_domains,
+            mac_statistics=mac_stats,
+            ipmac_statistics=ipmac_stats,
+            p2mp_ptree_entries=p2mp_ptree,
+            pwhe_main_port_entries=pwhe_mainport,
+            evpn_multicast_replication=evpn_mcast,
+        )
         if evpn_e_tree_label is not None:
             result["evpn_e_tree_local_label"] = evpn_e_tree_label
         return result
@@ -606,7 +606,7 @@ class ShowL2vpnForwardingSummaryParser(
                     value = m.group("value")
                     key = cls._xid_name_to_key(name)
                     if key:
-                        result[key] = value  # type: ignore[literal-required]
+                        result[key] = value  # type: ignore
                 elif stripped and not stripped.startswith(" ") and ":" not in stripped:
                     break
                 elif stripped.startswith("Maximum internal IDs:"):
@@ -675,7 +675,7 @@ class ShowL2vpnForwardingSummaryParser(
                         "unbound": int(m.group("unbound")),
                         "pending_registration": int(m.group("pending")),
                     }
-                    result[nh_type] = nh_entry  # type: ignore[literal-required]
+                    result[nh_type] = nh_entry  # type: ignore
         return result
 
     @staticmethod
