@@ -1,0 +1,252 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show isis database summary",
+  "schema": {
+    "name": "ShowIsisDatabaseSummaryResult",
+    "fields": {
+      "instances": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InstanceSummary",
+            "fields": {
+              "fragment_zero": {
+                "type": {
+                  "name": "FragmentCounts",
+                  "fields": {
+                    "router_lsps": {
+                      "type": {
+                        "name": "LspCounts",
+                        "fields": {
+                          "active_l1": {
+                            "type": "int",
+                            "required": true
+                          },
+                          "active_l2": {
+                            "type": "int",
+                            "required": true
+                          },
+                          "active_total": {
+                            "type": "int",
+                            "required": true
+                          },
+                          "purged_l1": {
+                            "type": "int",
+                            "required": true
+                          },
+                          "purged_l2": {
+                            "type": "int",
+                            "required": true
+                          },
+                          "purged_total": {
+                            "type": "int",
+                            "required": true
+                          },
+                          "all_l1": {
+                            "type": "int",
+                            "required": true
+                          },
+                          "all_l2": {
+                            "type": "int",
+                            "required": true
+                          },
+                          "all_total": {
+                            "type": "int",
+                            "required": true
+                          }
+                        }
+                      },
+                      "required": true
+                    },
+                    "pseudo_node_lsps": {
+                      "type": {
+                        "type": "ref",
+                        "name": "LspCounts"
+                      },
+                      "required": true
+                    },
+                    "all_lsps": {
+                      "type": {
+                        "type": "ref",
+                        "name": "LspCounts"
+                      },
+                      "required": true
+                    }
+                  }
+                },
+                "required": true
+              },
+              "topologies": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "TopologyCounts",
+                    "fields": {
+                      "att_bit_set": {
+                        "type": {
+                          "type": "ref",
+                          "name": "LspCounts"
+                        },
+                        "required": true
+                      },
+                      "ovl_bit_set": {
+                        "type": {
+                          "type": "ref",
+                          "name": "LspCounts"
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              },
+              "all_fragments": {
+                "type": {
+                  "type": "ref",
+                  "name": "FragmentCounts"
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "IS-IS database summary with IPv4 and IPv6 topologies, OVL bit set on L2",
+      "input": "Tue Jul  7 22:59:42.440 EDT\n\nIS-IS 64512 Database Summary for all LSPs\n                              Active             Purged              All\n                         L1    L2   Total   L1    L2   Total   L1    L2   Total\n                        ----- ----- -----  ----- ----- -----  ----- ----- -----\nFragment 0 Counts\n           Router LSPs:     0     6     6      0     0     0      0     6     6\n      Pseudo-node LSPs:     0     0     0      0     0     0      0     0     0\n              All LSPs:     0     6     6      0     0     0      0     6     6\n\n  Per Topology\n    IPv4 Unicast\n      ATT bit set LSPs:     0     0     0      0     0     0      0     0     0\n      OVL bit set LSPs:     0     2     2      0     0     0      0     2     2\n\n  Per Topology\n    IPv6 Unicast\n      ATT bit set LSPs:     0     0     0      0     0     0      0     0     0\n      OVL bit set LSPs:     0     0     0      0     0     0      0     0     0\n\nAll Fragment Counts\n           Router LSPs:     0    13    13      0     0     0      0    13    13\n      Pseudo-node LSPs:     0     0     0      0     0     0      0     0     0\n              All LSPs:     0    13    13      0     0     0      0    13    13\n",
+      "expected": {
+        "instances": {
+          "64512": {
+            "fragment_zero": {
+              "router_lsps": {
+                "active_l1": 0,
+                "active_l2": 6,
+                "active_total": 6,
+                "purged_l1": 0,
+                "purged_l2": 0,
+                "purged_total": 0,
+                "all_l1": 0,
+                "all_l2": 6,
+                "all_total": 6
+              },
+              "pseudo_node_lsps": {
+                "active_l1": 0,
+                "active_l2": 0,
+                "active_total": 0,
+                "purged_l1": 0,
+                "purged_l2": 0,
+                "purged_total": 0,
+                "all_l1": 0,
+                "all_l2": 0,
+                "all_total": 0
+              },
+              "all_lsps": {
+                "active_l1": 0,
+                "active_l2": 6,
+                "active_total": 6,
+                "purged_l1": 0,
+                "purged_l2": 0,
+                "purged_total": 0,
+                "all_l1": 0,
+                "all_l2": 6,
+                "all_total": 6
+              }
+            },
+            "topologies": {
+              "IPv4 Unicast": {
+                "att_bit_set": {
+                  "active_l1": 0,
+                  "active_l2": 0,
+                  "active_total": 0,
+                  "purged_l1": 0,
+                  "purged_l2": 0,
+                  "purged_total": 0,
+                  "all_l1": 0,
+                  "all_l2": 0,
+                  "all_total": 0
+                },
+                "ovl_bit_set": {
+                  "active_l1": 0,
+                  "active_l2": 2,
+                  "active_total": 2,
+                  "purged_l1": 0,
+                  "purged_l2": 0,
+                  "purged_total": 0,
+                  "all_l1": 0,
+                  "all_l2": 2,
+                  "all_total": 2
+                }
+              },
+              "IPv6 Unicast": {
+                "att_bit_set": {
+                  "active_l1": 0,
+                  "active_l2": 0,
+                  "active_total": 0,
+                  "purged_l1": 0,
+                  "purged_l2": 0,
+                  "purged_total": 0,
+                  "all_l1": 0,
+                  "all_l2": 0,
+                  "all_total": 0
+                },
+                "ovl_bit_set": {
+                  "active_l1": 0,
+                  "active_l2": 0,
+                  "active_total": 0,
+                  "purged_l1": 0,
+                  "purged_l2": 0,
+                  "purged_total": 0,
+                  "all_l1": 0,
+                  "all_l2": 0,
+                  "all_total": 0
+                }
+              }
+            },
+            "all_fragments": {
+              "router_lsps": {
+                "active_l1": 0,
+                "active_l2": 13,
+                "active_total": 13,
+                "purged_l1": 0,
+                "purged_l2": 0,
+                "purged_total": 0,
+                "all_l1": 0,
+                "all_l2": 13,
+                "all_total": 13
+              },
+              "pseudo_node_lsps": {
+                "active_l1": 0,
+                "active_l2": 0,
+                "active_total": 0,
+                "purged_l1": 0,
+                "purged_l2": 0,
+                "purged_total": 0,
+                "all_l1": 0,
+                "all_l2": 0,
+                "all_total": 0
+              },
+              "all_lsps": {
+                "active_l1": 0,
+                "active_l2": 13,
+                "active_total": 13,
+                "purged_l1": 0,
+                "purged_l2": 0,
+                "purged_total": 0,
+                "all_l1": 0,
+                "all_l2": 13,
+                "all_total": 13
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
