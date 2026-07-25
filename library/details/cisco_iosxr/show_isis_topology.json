@@ -1,0 +1,170 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show isis topology",
+  "schema": {
+    "name": "ShowIsisTopologyResult",
+    "fields": {
+      "instances": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "type": "dict",
+              "key": "str",
+              "value": {
+                "name": "IsisTopologySystem",
+                "fields": {
+                  "is_local": {
+                    "type": "bool",
+                    "required": true
+                  },
+                  "paths": {
+                    "type": {
+                      "type": "dict",
+                      "key": "str",
+                      "value": {
+                        "name": "IsisTopologyPath",
+                        "fields": {
+                          "metric": {
+                            "type": "int",
+                            "required": true
+                          },
+                          "next_hop": {
+                            "type": "str",
+                            "required": true
+                          },
+                          "snpa": {
+                            "type": "str",
+                            "required": true
+                          }
+                        }
+                      }
+                    },
+                    "required": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_path_count": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "IS-IS topology with direct neighbors, ECMP paths, and local system entry",
+      "input": "Tue Jul  7 22:59:40.695 EDT\n\nIS-IS 64512 paths to IPv4 Unicast (Level-2) routers\nSystem Id          Metric    Next-Hop           Interface       SNPA\nRouterA            10        RouterA            Hu0/0/0/36.20  *PtoP*\nRouterA            10        RouterA            Hu0/0/0/37.20  *PtoP*\nRouterB            --\nRouterC            20        RouterD            Hu0/0/0/10.20  *PtoP*\nRouterC            20        RouterA            Hu0/0/0/36.20  *PtoP*\nRouterC            20        RouterD            Hu0/0/0/11.20  *PtoP*\nRouterC            20        RouterA            Hu0/0/0/37.20  *PtoP*\nRouterE            20        RouterD            Hu0/0/0/10.20  *PtoP*\nRouterE            20        RouterA            Hu0/0/0/36.20  *PtoP*\nRouterE            20        RouterD            Hu0/0/0/11.20  *PtoP*\nRouterE            20        RouterA            Hu0/0/0/37.20  *PtoP*\nRouterF            10        RouterF            Te0/0/0/4.20   *PtoP*\nRouterD            10        RouterD            Hu0/0/0/10.20  *PtoP*\nRouterD            10        RouterD            Hu0/0/0/11.20  *PtoP*\n",
+      "expected": {
+        "instances": {
+          "64512": {
+            "IPv4 Unicast (Level-2)": {
+              "RouterA": {
+                "is_local": false,
+                "paths": {
+                  "HundredGigabitEthernet0/0/0/36.20": {
+                    "metric": 10,
+                    "next_hop": "RouterA",
+                    "snpa": "*PtoP*"
+                  },
+                  "HundredGigabitEthernet0/0/0/37.20": {
+                    "metric": 10,
+                    "next_hop": "RouterA",
+                    "snpa": "*PtoP*"
+                  }
+                }
+              },
+              "RouterB": {
+                "is_local": true,
+                "paths": {}
+              },
+              "RouterC": {
+                "is_local": false,
+                "paths": {
+                  "HundredGigabitEthernet0/0/0/10.20": {
+                    "metric": 20,
+                    "next_hop": "RouterD",
+                    "snpa": "*PtoP*"
+                  },
+                  "HundredGigabitEthernet0/0/0/36.20": {
+                    "metric": 20,
+                    "next_hop": "RouterA",
+                    "snpa": "*PtoP*"
+                  },
+                  "HundredGigabitEthernet0/0/0/11.20": {
+                    "metric": 20,
+                    "next_hop": "RouterD",
+                    "snpa": "*PtoP*"
+                  },
+                  "HundredGigabitEthernet0/0/0/37.20": {
+                    "metric": 20,
+                    "next_hop": "RouterA",
+                    "snpa": "*PtoP*"
+                  }
+                }
+              },
+              "RouterE": {
+                "is_local": false,
+                "paths": {
+                  "HundredGigabitEthernet0/0/0/10.20": {
+                    "metric": 20,
+                    "next_hop": "RouterD",
+                    "snpa": "*PtoP*"
+                  },
+                  "HundredGigabitEthernet0/0/0/36.20": {
+                    "metric": 20,
+                    "next_hop": "RouterA",
+                    "snpa": "*PtoP*"
+                  },
+                  "HundredGigabitEthernet0/0/0/11.20": {
+                    "metric": 20,
+                    "next_hop": "RouterD",
+                    "snpa": "*PtoP*"
+                  },
+                  "HundredGigabitEthernet0/0/0/37.20": {
+                    "metric": 20,
+                    "next_hop": "RouterA",
+                    "snpa": "*PtoP*"
+                  }
+                }
+              },
+              "RouterF": {
+                "is_local": false,
+                "paths": {
+                  "TenGigabitEthernet0/0/0/4.20": {
+                    "metric": 10,
+                    "next_hop": "RouterF",
+                    "snpa": "*PtoP*"
+                  }
+                }
+              },
+              "RouterD": {
+                "is_local": false,
+                "paths": {
+                  "HundredGigabitEthernet0/0/0/10.20": {
+                    "metric": 10,
+                    "next_hop": "RouterD",
+                    "snpa": "*PtoP*"
+                  },
+                  "HundredGigabitEthernet0/0/0/11.20": {
+                    "metric": 10,
+                    "next_hop": "RouterD",
+                    "snpa": "*PtoP*"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "total_path_count": 13
+      }
+    }
+  ]
+}

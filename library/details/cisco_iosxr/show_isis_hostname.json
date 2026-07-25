@@ -1,0 +1,79 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show isis hostname",
+  "schema": {
+    "name": "ShowIsisHostnameResult",
+    "fields": {
+      "instances": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "IsisHostnameEntry",
+              "fields": {
+                "level": {
+                  "type": "int",
+                  "required": true
+                },
+                "hostname": {
+                  "type": "str",
+                  "required": true
+                },
+                "local": {
+                  "type": "bool",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "IS-IS hostname table with local system marked and multiple Level-2 entries",
+      "input": "Tue Jul  7 22:59:41.155 EDT\n\nIS-IS 64512 hostnames\nLevel  System ID      Dynamic Hostname\n 2   * 1930.0000.2001 RouterA\n 2     1920.0000.2002 RouterB\n 2     1920.0000.2003 RouterC\n 2     1920.0000.2052 RouterD\n 2     1920.0000.2051 RouterE\n 2     1920.0000.2053 RouterF\n",
+      "expected": {
+        "instances": {
+          "64512": {
+            "1930.0000.2001": {
+              "level": 2,
+              "hostname": "RouterA",
+              "local": true
+            },
+            "1920.0000.2002": {
+              "level": 2,
+              "hostname": "RouterB",
+              "local": false
+            },
+            "1920.0000.2003": {
+              "level": 2,
+              "hostname": "RouterC",
+              "local": false
+            },
+            "1920.0000.2052": {
+              "level": 2,
+              "hostname": "RouterD",
+              "local": false
+            },
+            "1920.0000.2051": {
+              "level": 2,
+              "hostname": "RouterE",
+              "local": false
+            },
+            "1920.0000.2053": {
+              "level": 2,
+              "hostname": "RouterF",
+              "local": false
+            }
+          }
+        }
+      }
+    }
+  ]
+}
