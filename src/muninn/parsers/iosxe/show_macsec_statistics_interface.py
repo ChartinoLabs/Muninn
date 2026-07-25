@@ -7,6 +7,7 @@ from muninn.os import OS
 from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
+from muninn.utils import canonical_interface_name
 
 
 class SecYCounters(TypedDict):
@@ -266,7 +267,9 @@ class ShowMacsecStatisticsInterfaceParser(
         """Process a single non-empty output line."""
         m = _HEADER_RE.match(line)
         if m:
-            state.interface = m.group("interface")
+            state.interface = canonical_interface_name(
+                m.group("interface"), os=OS.CISCO_IOSXE
+            )
             return
 
         if _check_section_header(line, state):
