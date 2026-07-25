@@ -1,0 +1,121 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show macsec status interface <interface>",
+  "schema": {
+    "name": "ShowMacsecStatusInterfaceResult",
+    "fields": {
+      "ciphers_supported": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": true
+      },
+      "cipher": {
+        "type": "str",
+        "required": true
+      },
+      "confidentiality_offset": {
+        "type": "int",
+        "required": true
+      },
+      "replay_window": {
+        "type": "int",
+        "required": true
+      },
+      "delay_protect_enable": {
+        "type": "bool",
+        "required": true
+      },
+      "access_control": {
+        "type": "str",
+        "required": true
+      },
+      "dot1q_in_clear": {
+        "type": "str",
+        "required": false
+      },
+      "include_sci": {
+        "type": "bool",
+        "required": true
+      },
+      "transmit_sc": {
+        "type": {
+          "name": "TransmitSC",
+          "fields": {
+            "sci": {
+              "type": "str",
+              "required": true
+            },
+            "transmitting": {
+              "type": "bool",
+              "required": true
+            },
+            "transmit_sa": {
+              "type": {
+                "name": "TransmitSA",
+                "fields": {
+                  "next_pn": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "delay_protect_an": {
+                    "type": "int",
+                    "required": false
+                  },
+                  "delay_protect_next_pn": {
+                    "type": "int",
+                    "required": false
+                  }
+                }
+              },
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "receive_sc": {
+        "type": {
+          "name": "ReceiveSC",
+          "fields": {
+            "sci": {
+              "type": "str",
+              "required": true
+            },
+            "receiving": {
+              "type": "bool",
+              "required": true
+            },
+            "receive_sa": {
+              "type": {
+                "name": "ReceiveSA",
+                "fields": {
+                  "next_pn": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "an": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "delay_protect_an": {
+                    "type": "int",
+                    "required": false
+                  },
+                  "delay_protect_lpn": {
+                    "type": "int",
+                    "required": false
+                  }
+                }
+              },
+              "required": true
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}
