@@ -66,6 +66,7 @@ class ShowIsisDatabaseDetailResult(TypedDict):
 
     instances: dict[str, dict[str, dict[str, IsisLspEntry]]]
     total_lsp_count: NotRequired[dict[str, int]]
+    local_lsp_count: NotRequired[dict[str, int]]
 
 
 # Database header: "IS-IS <instance> (Level-X) Link State Database"
@@ -90,6 +91,7 @@ _LSP_PATTERN = re.compile(
 # Total count line: "Total Level-2 LSP count: 13     Local Level-2 LSP count: 3"
 _TOTAL_PATTERN = re.compile(
     r"^\s*Total\s+(?P<level>Level-\d+)\s+LSP\s+count:\s+(?P<count>\d+)"
+    r"(?:\s+Local\s+(?:Level-\d+)\s+LSP\s+count:\s+(?P<local_count>\d+))?"
 )
 
 # TLV patterns - scalar fields
@@ -239,6 +241,19 @@ def _parse_metric_tlv(line: str, lsp: IsisLspEntry) -> bool:
     return False
 
 
+def _record_lsp_counts(
+    match: re.Match[str],
+    total_counts: dict[str, int],
+    local_counts: dict[str, int],
+) -> None:
+    """Record total and local LSP counts from a footer match."""
+    level = match.group("level")
+    total_counts[level] = int(match.group("count"))
+    local_raw = match.group("local_count")
+    if local_raw:
+        local_counts[level] = int(local_raw)
+
+
 @register(OS.CISCO_IOSXR, "show isis database detail")
 class ShowIsisDatabaseDetailParser(BaseParser["ShowIsisDatabaseDetailResult"]):
     """Parser for 'show isis database detail' command on IOS-XR.
@@ -270,6 +285,7 @@ class ShowIsisDatabaseDetailParser(BaseParser["ShowIsisDatabaseDetailResult"]):
         """
         instances: dict[str, dict[str, dict[str, IsisLspEntry]]] = {}
         total_lsp_count: dict[str, int] = {}
+        local_lsp_count: dict[str, int] = {}
         current_instance: str | None = None
         current_level: str | None = None
         current_lsp: IsisLspEntry | None = None
@@ -297,9 +313,7 @@ class ShowIsisDatabaseDetailParser(BaseParser["ShowIsisDatabaseDetailResult"]):
 
             total_match = _TOTAL_PATTERN.match(line)
             if total_match:
-                total_lsp_count[total_match.group("level")] = int(
-                    total_match.group("count")
-                )
+                _record_lsp_counts(total_match, total_lsp_count, local_lsp_count)
                 continue
 
             if current_lsp is not None:
@@ -313,9 +327,20 @@ class ShowIsisDatabaseDetailParser(BaseParser["ShowIsisDatabaseDetailResult"]):
             msg = "No IS-IS LSP entries found in output"
             raise ValueError(msg)
 
+        return cls._build_result(instances, total_lsp_count, local_lsp_count)
+
+    @staticmethod
+    def _build_result(
+        instances: dict[str, dict[str, dict[str, IsisLspEntry]]],
+        total_lsp_count: dict[str, int],
+        local_lsp_count: dict[str, int],
+    ) -> "ShowIsisDatabaseDetailResult":
+        """Assemble the final result dict from parsed components."""
         result: ShowIsisDatabaseDetailResult = {"instances": instances}
         if total_lsp_count:
             result["total_lsp_count"] = total_lsp_count
+        if local_lsp_count:
+            result["local_lsp_count"] = local_lsp_count
         return result
 
     @staticmethod
