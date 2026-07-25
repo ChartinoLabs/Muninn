@@ -13,8 +13,7 @@ If the command does not contain a named regex group (`(?P<...>)`), Muninn treats
 
 ```python
 @register(OS.CISCO_NXOS, "show ip bgp summary")
-class ShowIpBgpSummaryParser(BaseParser):
-    ...
+class ShowIpBgpSummaryParser(BaseParser): ...
 ```
 
 Literal registrations are normalized before lookup:
@@ -37,8 +36,7 @@ If the command contains at least one named regex group, Muninn treats it as a re
 
 ```python
 @register(OS.CISCO_IOS, r"show ip ospf (?P<process_id>\d+)")
-class ShowIpOspfProcessParser(BaseParser):
-    ...
+class ShowIpOspfProcessParser(BaseParser): ...
 ```
 
 This matches concrete commands like `show ip ospf 1` and `show ip ospf 100`.
@@ -70,6 +68,7 @@ If more than one regex pattern matches within the same source tier, Muninn raise
 # These both match "show ip ospf 5" - Muninn raises an error
 @register(OS.CISCO_IOS, r"show ip ospf (?P<token>\S+)")
 class GenericParser(BaseParser): ...
+
 
 @register(OS.CISCO_IOS, r"show ip ospf (?P<process_id>\d+)")
 class ProcessParser(BaseParser): ...
@@ -105,8 +104,7 @@ Complex patterns (optional groups, alternation, nested groups) require an explic
     r"show ip bgp(?: vrf (?P<vrf_name>\S+))? summary",
     doc_template="show ip bgp [vrf <vrf-name>] summary",
 )
-class ShowIpBgpSummaryParser(BaseParser):
-    ...
+class ShowIpBgpSummaryParser(BaseParser): ...
 ```
 
 Placeholder names in `doc_template` must align with named regex groups:
