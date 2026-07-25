@@ -251,14 +251,6 @@ def _identify_section(line: str) -> str | None:
     return None
 
 
-def _match_substring(norm: str, candidates: list[tuple[str, str]]) -> str | None:
-    """Match a normalized key against a list of (substring, field_name) pairs."""
-    for substring, field_name in candidates:
-        if substring in norm:
-            return field_name
-    return None
-
-
 # Mapping tables for substring-based dispatch.
 # Each entry is (substring_to_match, target_dict_key).
 # Order matters: more specific matches must come first.
