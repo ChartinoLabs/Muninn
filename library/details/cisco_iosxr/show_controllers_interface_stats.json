@@ -1,0 +1,165 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show controllers <interface> stats",
+  "schema": {
+    "name": "ShowControllersInterfaceStatsResult",
+    "fields": {
+      "interface": {
+        "type": "str",
+        "required": true
+      },
+      "ingress": {
+        "type": {
+          "name": "DirectionCounters",
+          "fields": {
+            "total_bytes": {
+              "type": "int",
+              "required": false
+            },
+            "good_bytes": {
+              "type": "int",
+              "required": false
+            },
+            "total_packets": {
+              "type": "int",
+              "required": false
+            },
+            "dot1q_frames": {
+              "type": "int",
+              "required": false
+            },
+            "pause_frames": {
+              "type": "int",
+              "required": false
+            },
+            "pkts_64_bytes": {
+              "type": "int",
+              "required": false
+            },
+            "pkts_65_127_bytes": {
+              "type": "int",
+              "required": false
+            },
+            "pkts_128_255_bytes": {
+              "type": "int",
+              "required": false
+            },
+            "pkts_256_511_bytes": {
+              "type": "int",
+              "required": false
+            },
+            "pkts_512_1023_bytes": {
+              "type": "int",
+              "required": false
+            },
+            "pkts_1024_1518_bytes": {
+              "type": "int",
+              "required": false
+            },
+            "pkts_1519_max_bytes": {
+              "type": "int",
+              "required": false
+            },
+            "good_pkts": {
+              "type": "int",
+              "required": false
+            },
+            "unicast_pkts": {
+              "type": "int",
+              "required": false
+            },
+            "multicast_pkts": {
+              "type": "int",
+              "required": false
+            },
+            "broadcast_pkts": {
+              "type": "int",
+              "required": false
+            },
+            "drop_overrun": {
+              "type": "int",
+              "required": false
+            },
+            "drop_underrun": {
+              "type": "int",
+              "required": false
+            },
+            "drop_abort": {
+              "type": "int",
+              "required": false
+            },
+            "drop_invalid_vlan": {
+              "type": "int",
+              "required": false
+            },
+            "drop_invalid_dmac": {
+              "type": "int",
+              "required": false
+            },
+            "drop_invalid_encap": {
+              "type": "int",
+              "required": false
+            },
+            "drop_other": {
+              "type": "int",
+              "required": false
+            },
+            "error_giant": {
+              "type": "int",
+              "required": false
+            },
+            "error_runt": {
+              "type": "int",
+              "required": false
+            },
+            "error_jabbers": {
+              "type": "int",
+              "required": false
+            },
+            "error_fragments": {
+              "type": "int",
+              "required": false
+            },
+            "error_crc": {
+              "type": "int",
+              "required": false
+            },
+            "error_collisions": {
+              "type": "int",
+              "required": false
+            },
+            "error_symbol": {
+              "type": "int",
+              "required": false
+            },
+            "error_other": {
+              "type": "int",
+              "required": false
+            },
+            "mib_giant": {
+              "type": "int",
+              "required": false
+            },
+            "mib_jabber": {
+              "type": "int",
+              "required": false
+            },
+            "mib_crc": {
+              "type": "int",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "egress": {
+        "type": {
+          "type": "ref",
+          "name": "DirectionCounters"
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": []
+}
