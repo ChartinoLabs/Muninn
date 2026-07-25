@@ -1,0 +1,150 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show macsec mka summary",
+  "schema": {
+    "name": "MacsecMkaSummaryResult",
+    "fields": {
+      "nodes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "MacsecMkaSessionEntry",
+              "fields": {
+                "status": {
+                  "type": "str",
+                  "required": true
+                },
+                "cipher_suite": {
+                  "type": "str",
+                  "required": true
+                },
+                "key_chain": {
+                  "type": "str",
+                  "required": true
+                },
+                "psk_eap": {
+                  "type": "str",
+                  "required": true
+                },
+                "ckn": {
+                  "type": "str",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_sessions": {
+        "type": "int",
+        "required": true
+      },
+      "secured_sessions": {
+        "type": "int",
+        "required": true
+      },
+      "pending_sessions": {
+        "type": "int",
+        "required": true
+      },
+      "suspended_sessions": {
+        "type": "int",
+        "required": true
+      },
+      "active_sessions": {
+        "type": "int",
+        "required": true
+      },
+      "node_names": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "MACsec MKA summary with two secured sessions on a single node",
+      "input": "Tue Jul  7 22:59:51.039 EDT\n\nNODE: node0_0_CPU0\n================================================================================\n========\n   Interface-Name     Status     Cipher-Suite       KeyChain       PSK/EAP\nCKN\n================================================================================\n========\n   Te0/0/0/20.20     Secured    GCM-AES-256        MACSEC_KC      PRIMARY\n1A\n   Te0/0/0/24.20     Secured    GCM-AES-256        MACSEC_KC      PRIMARY\n1A\n\nTotal MACSec Sessions  : 2\n    Secured Sessions   : 2\n    Pending Sessions   : 0\n    Suspended Sessions : 0\n     Active  Sessions : 0\n",
+      "expected": {
+        "nodes": {
+          "node0_0_CPU0": {
+            "TenGigabitEthernet0/0/0/20.20": {
+              "status": "Secured",
+              "cipher_suite": "GCM-AES-256",
+              "key_chain": "MACSEC_KC",
+              "psk_eap": "PRIMARY",
+              "ckn": "1A"
+            },
+            "TenGigabitEthernet0/0/0/24.20": {
+              "status": "Secured",
+              "cipher_suite": "GCM-AES-256",
+              "key_chain": "MACSEC_KC",
+              "psk_eap": "PRIMARY",
+              "ckn": "1A"
+            }
+          }
+        },
+        "total_sessions": 2,
+        "secured_sessions": 2,
+        "pending_sessions": 0,
+        "suspended_sessions": 0,
+        "active_sessions": 0,
+        "node_names": [
+          "node0_0_CPU0"
+        ]
+      }
+    },
+    {
+      "name": "MACsec MKA summary with zero sessions and no node header",
+      "input": "Tue Jul  7 22:59:51.444 EDT\n\nTotal MACSec Sessions  : 0\n    Secured Sessions   : 0\n    Pending Sessions   : 0\n    Suspended Sessions : 0\n     Active  Sessions : 0\n",
+      "expected": {
+        "nodes": {},
+        "total_sessions": 0,
+        "secured_sessions": 0,
+        "pending_sessions": 0,
+        "suspended_sessions": 0,
+        "active_sessions": 0
+      }
+    },
+    {
+      "name": "MACsec MKA summary with single-line format (wide terminal, CKN inline)",
+      "input": "Mon Jul  7 10:30:22.100 EDT\n\nNODE: node0_0_CPU0\n========================================================================================\n   Interface-Name     Status     Cipher-Suite       KeyChain       PSK/EAP      CKN\n========================================================================================\n   Te0/0/0/20.20     Secured    GCM-AES-256        KC_MACSEC      PRIMARY      1A\n   Te0/0/0/24.20     Secured    GCM-AES-256        KC_MACSEC      PRIMARY      1A\n\nTotal MACSec Sessions  : 2\n    Secured Sessions   : 2\n    Pending Sessions   : 0\n    Suspended Sessions : 0\n     Active  Sessions : 0\n",
+      "expected": {
+        "nodes": {
+          "node0_0_CPU0": {
+            "TenGigabitEthernet0/0/0/20.20": {
+              "status": "Secured",
+              "cipher_suite": "GCM-AES-256",
+              "key_chain": "KC_MACSEC",
+              "psk_eap": "PRIMARY",
+              "ckn": "1A"
+            },
+            "TenGigabitEthernet0/0/0/24.20": {
+              "status": "Secured",
+              "cipher_suite": "GCM-AES-256",
+              "key_chain": "KC_MACSEC",
+              "psk_eap": "PRIMARY",
+              "ckn": "1A"
+            }
+          }
+        },
+        "total_sessions": 2,
+        "secured_sessions": 2,
+        "pending_sessions": 0,
+        "suspended_sessions": 0,
+        "active_sessions": 0,
+        "node_names": [
+          "node0_0_CPU0"
+        ]
+      }
+    }
+  ]
+}
