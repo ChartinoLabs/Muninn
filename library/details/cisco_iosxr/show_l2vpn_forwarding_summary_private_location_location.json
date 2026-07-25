@@ -1,0 +1,458 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show l2vpn forwarding summary private location <location>",
+  "schema": {
+    "name": "ShowL2vpnForwardingSummaryResult",
+    "fields": {
+      "shared_memory": {
+        "type": {
+          "name": "SharedMemory",
+          "fields": {
+            "major_version_num": {
+              "type": "int",
+              "required": true
+            },
+            "minor_version_num": {
+              "type": "int",
+              "required": true
+            },
+            "shared_memory_timestamp": {
+              "type": "str",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "evpn_e_tree_local_label": {
+        "type": "str",
+        "required": false
+      },
+      "xconnect_entries": {
+        "type": {
+          "name": "XconnectEntries",
+          "fields": {
+            "total": {
+              "type": "int",
+              "required": true
+            },
+            "up": {
+              "type": "int",
+              "required": true
+            },
+            "down": {
+              "type": "int",
+              "required": true
+            },
+            "ac_pw_atom": {
+              "type": "int",
+              "required": true
+            },
+            "ac_pw_iid": {
+              "type": "int",
+              "required": true
+            },
+            "ac_pw_l2tpv2": {
+              "type": "int",
+              "required": true
+            },
+            "ac_pw_l2tpv3": {
+              "type": "int",
+              "required": true
+            },
+            "ac_pw_l2tpv3_ipv6": {
+              "type": "int",
+              "required": true
+            },
+            "ac_pw_atom_mpls": {
+              "type": "int",
+              "required": false
+            },
+            "ac_ac": {
+              "type": "int",
+              "required": true
+            },
+            "ac_bp": {
+              "type": "int",
+              "required": true
+            },
+            "pwhe_ac_bp": {
+              "type": "int",
+              "required": true
+            },
+            "ac_unknown": {
+              "type": "int",
+              "required": true
+            },
+            "pw_bp": {
+              "type": "int",
+              "required": true
+            },
+            "pw_unknown": {
+              "type": "int",
+              "required": true
+            },
+            "pbb_bp": {
+              "type": "int",
+              "required": true
+            },
+            "pbb_unknown": {
+              "type": "int",
+              "required": true
+            },
+            "evpn_bp": {
+              "type": "int",
+              "required": true
+            },
+            "evpn_unknown": {
+              "type": "int",
+              "required": true
+            },
+            "vni_bp": {
+              "type": "int",
+              "required": true
+            },
+            "vni_unknown": {
+              "type": "int",
+              "required": true
+            },
+            "monitor_session_pw": {
+              "type": "int",
+              "required": true
+            },
+            "monitor_session_unknown": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "xconnects_down_due_to": {
+        "type": {
+          "name": "XconnectsDownDueTo",
+          "fields": {
+            "aib": {
+              "type": "int",
+              "required": true
+            },
+            "l2vpn": {
+              "type": "int",
+              "required": true
+            },
+            "l3fib": {
+              "type": "int",
+              "required": true
+            },
+            "vpdn": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "invalid_xid_drops": {
+        "type": {
+          "name": "InvalidXidDrops",
+          "fields": {
+            "vpws_pw": {
+              "type": "int",
+              "required": true
+            },
+            "vpls_pw": {
+              "type": "int",
+              "required": true
+            },
+            "virtual_ac": {
+              "type": "int",
+              "required": true
+            },
+            "pbb": {
+              "type": "int",
+              "required": true
+            },
+            "evpn": {
+              "type": "int",
+              "required": true
+            },
+            "vni": {
+              "type": "int",
+              "required": true
+            },
+            "global_": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "exceeded_max_drops": {
+        "type": {
+          "name": "ExceededMaxDrops",
+          "fields": {
+            "vpls_pw": {
+              "type": "int",
+              "required": true
+            },
+            "bundle_ac": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "maximum_xids": {
+        "type": {
+          "name": "MaximumXids",
+          "fields": {
+            "vpws_pw": {
+              "type": "str",
+              "required": true
+            },
+            "vpls_pw": {
+              "type": "str",
+              "required": true
+            },
+            "virtual_ac": {
+              "type": "str",
+              "required": true
+            },
+            "pbb": {
+              "type": "str",
+              "required": true
+            },
+            "evpn": {
+              "type": "str",
+              "required": true
+            },
+            "vni": {
+              "type": "str",
+              "required": true
+            },
+            "global_": {
+              "type": "str",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "maximum_internal_ids": {
+        "type": {
+          "name": "MaximumInternalIds",
+          "fields": {
+            "vpls_pw": {
+              "type": "int",
+              "required": true
+            },
+            "bundle_ac": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "p2p_xconnects": {
+        "type": "int",
+        "required": true
+      },
+      "bridge_port_xconnects": {
+        "type": "int",
+        "required": true
+      },
+      "nexthops": {
+        "type": {
+          "name": "Nexthops",
+          "fields": {
+            "total": {
+              "type": "int",
+              "required": true
+            },
+            "mpls": {
+              "type": {
+                "name": "NexthopType",
+                "fields": {
+                  "bound": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "unbound": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "pending_registration": {
+                    "type": "int",
+                    "required": true
+                  }
+                }
+              },
+              "required": false
+            },
+            "p2mp_mldp": {
+              "type": {
+                "type": "ref",
+                "name": "NexthopType"
+              },
+              "required": false
+            },
+            "p2mp_te": {
+              "type": {
+                "type": "ref",
+                "name": "NexthopType"
+              },
+              "required": false
+            },
+            "internal_label": {
+              "type": {
+                "type": "ref",
+                "name": "NexthopType"
+              },
+              "required": false
+            },
+            "sr_te_bsid": {
+              "type": {
+                "type": "ref",
+                "name": "NexthopType"
+              },
+              "required": false
+            }
+          }
+        },
+        "required": true
+      },
+      "bridge_domains": {
+        "type": {
+          "name": "BridgeDomains",
+          "fields": {
+            "total": {
+              "type": "int",
+              "required": true
+            },
+            "with_routed_interface": {
+              "type": "int",
+              "required": true
+            },
+            "with_pbb_evpn_enabled": {
+              "type": "int",
+              "required": true
+            },
+            "with_evpn_enabled": {
+              "type": "int",
+              "required": true
+            },
+            "with_p2mp_enabled": {
+              "type": "int",
+              "required": true
+            },
+            "updates_dropped": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "mac_statistics": {
+        "type": {
+          "name": "MacStatistics",
+          "fields": {
+            "total": {
+              "type": "int",
+              "required": true
+            },
+            "static": {
+              "type": "int",
+              "required": true
+            },
+            "routed": {
+              "type": "int",
+              "required": true
+            },
+            "bmac": {
+              "type": "int",
+              "required": true
+            },
+            "source_bmac": {
+              "type": "int",
+              "required": true
+            },
+            "locally_learned": {
+              "type": "int",
+              "required": true
+            },
+            "remotely_learned": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "ipmac_statistics": {
+        "type": {
+          "name": "IpmacStatistics",
+          "fields": {
+            "total": {
+              "type": "int",
+              "required": true
+            },
+            "locally_learned_ipv4": {
+              "type": "int",
+              "required": true
+            },
+            "remotely_learned_ipv4": {
+              "type": "int",
+              "required": true
+            },
+            "locally_learned_ipv6": {
+              "type": "int",
+              "required": true
+            },
+            "remotely_learned_ipv6": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "p2mp_ptree_entries": {
+        "type": "int",
+        "required": true
+      },
+      "pwhe_main_port_entries": {
+        "type": "int",
+        "required": true
+      },
+      "evpn_multicast_replication": {
+        "type": {
+          "name": "EvpnMulticastReplication",
+          "fields": {
+            "total": {
+              "type": "int",
+              "required": true
+            },
+            "default": {
+              "type": "int",
+              "required": true
+            },
+            "stitching": {
+              "type": "int",
+              "required": true
+            },
+            "isid": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}
