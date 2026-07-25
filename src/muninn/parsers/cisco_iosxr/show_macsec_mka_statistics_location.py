@@ -180,14 +180,6 @@ class ShowMacsecMkaStatisticsLocationResult(TypedDict):
 _COUNTER_RE = re.compile(r"\.{2,}\s*(?P<value>\d+)\s*$")
 _QUOTED_COUNTER_RE = re.compile(r'^\s*"(?P<label>[^"]+)"\.{2,}\s*(?P<value>\d+)\s*$')
 
-# MKPDU quoted-label to key mapping
-_MKPDU_QUOTED_KEYS: dict[str, str] = {
-    "distributed sak": "distributed_sak",
-    "distributed cak": "distributed_cak",
-    "distributed ppk": "distributed_ppk",
-    "ppk capable": "ppk_capable",
-}
-
 
 def _extract_value(line: str) -> int | None:
     """Extract a numeric value from a counter line using dot separators."""
@@ -297,10 +289,14 @@ def _apply_quoted_mkpdu(
         return
     label = quoted.group("label").lower()
     qval = int(quoted.group("value"))
-    for pattern, attr in _MKPDU_QUOTED_KEYS.items():
-        if pattern in label:
-            target[attr] = qval  # type: ignore[literal-required]
-            break
+    if "distributed sak" in label:
+        target["distributed_sak"] = qval
+    elif "distributed cak" in label:
+        target["distributed_cak"] = qval
+    elif "distributed ppk" in label:
+        target["distributed_ppk"] = qval
+    elif "ppk capable" in label:
+        target["ppk_capable"] = qval
 
 
 def _build_global_statistics(
