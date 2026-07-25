@@ -1,0 +1,266 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show isis neighbors detail",
+  "schema": {
+    "name": "ShowIsisNeighborsDetailResult",
+    "fields": {
+      "instances": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "type": "dict",
+              "key": "str",
+              "value": {
+                "name": "IsisNeighborDetailEntry",
+                "fields": {
+                  "snpa": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "state": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "holdtime": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "neighbor_type": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "ietf_nsf": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "area_addresses": {
+                    "type": {
+                      "type": "list",
+                      "items": "str"
+                    },
+                    "required": true
+                  },
+                  "ipv4_addresses": {
+                    "type": {
+                      "type": "list",
+                      "items": "str"
+                    },
+                    "required": false
+                  },
+                  "ipv6_addresses": {
+                    "type": {
+                      "type": "list",
+                      "items": "str"
+                    },
+                    "required": false
+                  },
+                  "topologies": {
+                    "type": {
+                      "type": "list",
+                      "items": "str"
+                    },
+                    "required": true
+                  },
+                  "uptime": {
+                    "type": "str",
+                    "required": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_neighbor_count": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "IS-IS neighbors with detail showing area addresses, IPv4/IPv6 addresses, topologies, and uptime",
+      "input": "Tue Jul  7 22:59:43.662 EDT\n\nIS-IS 64512 neighbors:\nSystem Id      Interface        SNPA           State Holdtime Type IETF-NSF\nCORE-RTR-01    Hu0/0/0/1.10    *PtoP*         Up    26       L2   Capable\n  Area Address(es): 49.0001\n  IPv4 Address(es): 192.0.2.10*\n  IPv6 Address(es): fe80::1:1:1:10*\n  Topologies: 'IPv4 Unicast' 'IPv6 Unicast'\n  Uptime: 5w0d\nCORE-RTR-01    Hu0/0/0/1.20    *PtoP*         Up    22       L2   Capable\n  Area Address(es): 49.0001\n  IPv4 Address(es): 192.0.2.14*\n  IPv6 Address(es): fe80::1:1:1:14*\n  Topologies: 'IPv4 Unicast' 'IPv6 Unicast'\n  Uptime: 5w0d\nEDGE-RTR-01    Hu0/0/0/2.10    *PtoP*         Up    26       L2   Capable\n  Area Address(es): 49.0001\n  IPv4 Address(es): 198.51.100.2*\n  IPv6 Address(es): fe80::2:2:2:2*\n  Topologies: 'IPv4 Unicast' 'IPv6 Unicast'\n  Uptime: 5w0d\nEDGE-RTR-01    Hu0/0/0/2.20    *PtoP*         Up    23       L2   Capable\n  Area Address(es): 49.0001\n  IPv4 Address(es): 198.51.100.6*\n  IPv6 Address(es): fe80::2:2:2:6*\n  Topologies: 'IPv4 Unicast' 'IPv6 Unicast'\n  Uptime: 5w0d\nAGGR-SW-01     Te0/0/0/21.10   *PtoP*         Up    26       L2   Capable\n  Area Address(es): 49.0001\n  IPv4 Address(es): 203.0.113.2*\n  IPv6 Address(es): fe80::3:3:3:2*\n  Topologies: 'IPv4 Unicast' 'IPv6 Unicast'\n  Uptime: 4w0d\nAGGR-SW-01     Te0/0/0/21.20   *PtoP*         Up    29       L2   Capable\n  Area Address(es): 49.0001\n  IPv4 Address(es): 203.0.113.6*\n  IPv6 Address(es): fe80::3:3:3:6*\n  Topologies: 'IPv4 Unicast' 'IPv6 Unicast'\n  Uptime: 4w0d\nCORE-RTR-02    Hu0/0/0/37.10   *PtoP*         Up    27       L2   Capable\n  Area Address(es): 49.0001\n  IPv4 Address(es): 192.0.2.100*\n  Topologies: 'IPv4 Unicast'\n  Uptime: 5w0d\nCORE-RTR-02    Hu0/0/0/37.20   *PtoP*         Up    25       L2   Capable\n  Area Address(es): 49.0001\n  IPv4 Address(es): 192.0.2.104*\n  Topologies: 'IPv4 Unicast'\n  Uptime: 5w0d\n\nTotal neighbor count: 8\n",
+      "expected": {
+        "instances": {
+          "64512": {
+            "CORE-RTR-01": {
+              "HundredGigabitEthernet0/0/0/1.10": {
+                "snpa": "*PtoP*",
+                "state": "Up",
+                "holdtime": 26,
+                "neighbor_type": "L2",
+                "area_addresses": [
+                  "49.0001"
+                ],
+                "topologies": [
+                  "IPv4 Unicast",
+                  "IPv6 Unicast"
+                ],
+                "uptime": "5w0d",
+                "ietf_nsf": "Capable",
+                "ipv4_addresses": [
+                  "192.0.2.10"
+                ],
+                "ipv6_addresses": [
+                  "fe80::1:1:1:10"
+                ]
+              },
+              "HundredGigabitEthernet0/0/0/1.20": {
+                "snpa": "*PtoP*",
+                "state": "Up",
+                "holdtime": 22,
+                "neighbor_type": "L2",
+                "area_addresses": [
+                  "49.0001"
+                ],
+                "topologies": [
+                  "IPv4 Unicast",
+                  "IPv6 Unicast"
+                ],
+                "uptime": "5w0d",
+                "ietf_nsf": "Capable",
+                "ipv4_addresses": [
+                  "192.0.2.14"
+                ],
+                "ipv6_addresses": [
+                  "fe80::1:1:1:14"
+                ]
+              }
+            },
+            "EDGE-RTR-01": {
+              "HundredGigabitEthernet0/0/0/2.10": {
+                "snpa": "*PtoP*",
+                "state": "Up",
+                "holdtime": 26,
+                "neighbor_type": "L2",
+                "area_addresses": [
+                  "49.0001"
+                ],
+                "topologies": [
+                  "IPv4 Unicast",
+                  "IPv6 Unicast"
+                ],
+                "uptime": "5w0d",
+                "ietf_nsf": "Capable",
+                "ipv4_addresses": [
+                  "198.51.100.2"
+                ],
+                "ipv6_addresses": [
+                  "fe80::2:2:2:2"
+                ]
+              },
+              "HundredGigabitEthernet0/0/0/2.20": {
+                "snpa": "*PtoP*",
+                "state": "Up",
+                "holdtime": 23,
+                "neighbor_type": "L2",
+                "area_addresses": [
+                  "49.0001"
+                ],
+                "topologies": [
+                  "IPv4 Unicast",
+                  "IPv6 Unicast"
+                ],
+                "uptime": "5w0d",
+                "ietf_nsf": "Capable",
+                "ipv4_addresses": [
+                  "198.51.100.6"
+                ],
+                "ipv6_addresses": [
+                  "fe80::2:2:2:6"
+                ]
+              }
+            },
+            "AGGR-SW-01": {
+              "TenGigabitEthernet0/0/0/21.10": {
+                "snpa": "*PtoP*",
+                "state": "Up",
+                "holdtime": 26,
+                "neighbor_type": "L2",
+                "area_addresses": [
+                  "49.0001"
+                ],
+                "topologies": [
+                  "IPv4 Unicast",
+                  "IPv6 Unicast"
+                ],
+                "uptime": "4w0d",
+                "ietf_nsf": "Capable",
+                "ipv4_addresses": [
+                  "203.0.113.2"
+                ],
+                "ipv6_addresses": [
+                  "fe80::3:3:3:2"
+                ]
+              },
+              "TenGigabitEthernet0/0/0/21.20": {
+                "snpa": "*PtoP*",
+                "state": "Up",
+                "holdtime": 29,
+                "neighbor_type": "L2",
+                "area_addresses": [
+                  "49.0001"
+                ],
+                "topologies": [
+                  "IPv4 Unicast",
+                  "IPv6 Unicast"
+                ],
+                "uptime": "4w0d",
+                "ietf_nsf": "Capable",
+                "ipv4_addresses": [
+                  "203.0.113.6"
+                ],
+                "ipv6_addresses": [
+                  "fe80::3:3:3:6"
+                ]
+              }
+            },
+            "CORE-RTR-02": {
+              "HundredGigabitEthernet0/0/0/37.10": {
+                "snpa": "*PtoP*",
+                "state": "Up",
+                "holdtime": 27,
+                "neighbor_type": "L2",
+                "area_addresses": [
+                  "49.0001"
+                ],
+                "topologies": [
+                  "IPv4 Unicast"
+                ],
+                "uptime": "5w0d",
+                "ietf_nsf": "Capable",
+                "ipv4_addresses": [
+                  "192.0.2.100"
+                ]
+              },
+              "HundredGigabitEthernet0/0/0/37.20": {
+                "snpa": "*PtoP*",
+                "state": "Up",
+                "holdtime": 25,
+                "neighbor_type": "L2",
+                "area_addresses": [
+                  "49.0001"
+                ],
+                "topologies": [
+                  "IPv4 Unicast"
+                ],
+                "uptime": "5w0d",
+                "ietf_nsf": "Capable",
+                "ipv4_addresses": [
+                  "192.0.2.104"
+                ]
+              }
+            }
+          }
+        },
+        "total_neighbor_count": 8
+      }
+    }
+  ]
+}
