@@ -17,7 +17,7 @@ class MacsecMkaSessionEntry(TypedDict):
     cipher_suite: str
     key_chain: str
     psk_eap: str
-    ckn: str
+    ckn: NotRequired[str]
 
 
 class MacsecMkaSummaryResult(TypedDict):
@@ -117,13 +117,16 @@ def _add_session(
     if node_key not in nodes:
         nodes[node_key] = {}
 
-    nodes[node_key][interface] = MacsecMkaSessionEntry(
-        status=status,
-        cipher_suite=cipher_suite,
-        key_chain=key_chain,
-        psk_eap=psk_eap,
-        ckn=ckn,
-    )
+    session: MacsecMkaSessionEntry = {
+        "status": status,
+        "cipher_suite": cipher_suite,
+        "key_chain": key_chain,
+        "psk_eap": psk_eap,
+    }
+    if ckn:
+        session["ckn"] = ckn
+
+    nodes[node_key][interface] = session
 
 
 def _process_line(
