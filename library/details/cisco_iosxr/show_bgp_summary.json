@@ -333,6 +333,104 @@
           }
         }
       }
+    },
+    {
+      "name": "Wide terminal output with IPv6 neighbors on single line and non-established peers",
+      "input": "Tue Jul  8 10:15:22.101 EDT\n\nBGP instance 0: 'default'\n=========================\n\nAddress Family: VPNv4 Unicast\n-----------------------------\n\nBGP router identifier 198.51.100.1, local AS number 64512\nBGP generic scan interval 60 secs\nNon-stop routing is enabled\nBGP table state: Active\nTable ID: 0x0   RD version: 0\nBGP table nexthop route policy:\nBGP main routing table version 4096\nBGP NSR Initial initsync version 12 (Reached)\nBGP NSR/ISSU Sync-Group versions 4096/0\nBGP scan interval 60 secs\n\nBGP is operating in STANDALONE mode.\n\n\nProcess       RcvTblVer   bRIB/RIB   LabelVer  ImportVer  SendTblVer  StandbyVer\nSpeaker            4096       4096       4096       4096        4096        4096\n\nNeighbor                                Spk    AS MsgRcvd MsgSent   TblVer  InQ OutQ  Up/Down  St/PfxRcd\n198.51.100.2                              0 64512   50969   50980     4096    0    0     5w0d          5\n198.51.100.3                              0 64512   50924   50978     4096    0    0     5w0d          6\n2001:db8:20:1:5::5                        0 64512   50958   50890     4096    0    0     5w0d          6\n2001:db8:abcd:1234:5678:9abc:def0:1234    0 64512.1   82001   81997     4096    0    0     3w2d         12\n2001:db8:cafe:beef::1                     0 64513       0       0       --    0    0    never  Active\n198.51.100.10                             0 64514       0       0       --    0    0     3d4h  Idle\n",
+      "expected": {
+        "address_families": {
+          "VPNv4 Unicast": {
+            "router_id": "198.51.100.1",
+            "local_as": "64512",
+            "generic_scan_interval": 60,
+            "nsr_enabled": true,
+            "table_state": "Active",
+            "table_id": "0x0",
+            "rd_version": 0,
+            "main_routing_table_version": 4096,
+            "nsr_initial_initsync_version": "12 (Reached)",
+            "nsr_issu_sync_group_versions": "4096/0",
+            "scan_interval": 60,
+            "operation_mode": "STANDALONE",
+            "process": {
+              "rcv_tbl_ver": 4096,
+              "brib_rib": 4096,
+              "label_ver": 4096,
+              "import_ver": 4096,
+              "send_tbl_ver": 4096,
+              "standby_ver": 4096
+            },
+            "neighbors": {
+              "198.51.100.2": {
+                "spk": 0,
+                "remote_as": "64512",
+                "msg_rcvd": 50969,
+                "msg_sent": 50980,
+                "tbl_ver": 4096,
+                "in_queue": 0,
+                "out_queue": 0,
+                "up_down": "5w0d",
+                "state_pfxrcd": "5"
+              },
+              "198.51.100.3": {
+                "spk": 0,
+                "remote_as": "64512",
+                "msg_rcvd": 50924,
+                "msg_sent": 50978,
+                "tbl_ver": 4096,
+                "in_queue": 0,
+                "out_queue": 0,
+                "up_down": "5w0d",
+                "state_pfxrcd": "6"
+              },
+              "2001:db8:20:1:5::5": {
+                "spk": 0,
+                "remote_as": "64512",
+                "msg_rcvd": 50958,
+                "msg_sent": 50890,
+                "tbl_ver": 4096,
+                "in_queue": 0,
+                "out_queue": 0,
+                "up_down": "5w0d",
+                "state_pfxrcd": "6"
+              },
+              "2001:db8:abcd:1234:5678:9abc:def0:1234": {
+                "spk": 0,
+                "remote_as": "64512.1",
+                "msg_rcvd": 82001,
+                "msg_sent": 81997,
+                "tbl_ver": 4096,
+                "in_queue": 0,
+                "out_queue": 0,
+                "up_down": "3w2d",
+                "state_pfxrcd": "12"
+              },
+              "2001:db8:cafe:beef::1": {
+                "spk": 0,
+                "remote_as": "64513",
+                "msg_rcvd": 0,
+                "msg_sent": 0,
+                "tbl_ver": 0,
+                "in_queue": 0,
+                "out_queue": 0,
+                "up_down": "never",
+                "state_pfxrcd": "Active"
+              },
+              "198.51.100.10": {
+                "spk": 0,
+                "remote_as": "64514",
+                "msg_rcvd": 0,
+                "msg_sent": 0,
+                "tbl_ver": 0,
+                "in_queue": 0,
+                "out_queue": 0,
+                "up_down": "3d4h",
+                "state_pfxrcd": "Idle"
+              }
+            }
+          }
+        }
+      }
     }
   ]
 }
