@@ -1,4 +1,4 @@
-"""Parser for 'show interfaces brief' command on Cisco IOS-XR."""
+"""Parser for 'show interfaces brief' / 'show interface brief' on Cisco IOS-XR."""
 
 import re
 from typing import ClassVar, TypedDict, cast
@@ -30,8 +30,9 @@ class ShowInterfacesBriefResult(TypedDict):
 
 
 @register(OS.CISCO_IOSXR, "show interfaces brief")
+@register(OS.CISCO_IOSXR, "show interface brief")
 class ShowInterfacesBriefParser(BaseParser[ShowInterfacesBriefResult]):
-    """Parser for 'show interfaces brief' command on Cisco IOS-XR.
+    """Parser for 'show interfaces brief' / 'show interface brief' on IOS-XR.
 
     Parses the tabular interface summary output into a dict-of-dicts
     keyed by interface name.
