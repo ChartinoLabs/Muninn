@@ -172,7 +172,7 @@ class _ParseState:
             self.controlled[key] = value
         elif self.section == "tx_sc" and self.tx_sc is not None:
             if key in ("out_pkts_protected", "out_pkts_encrypted"):
-                self.tx_sc[key] = value  # type: ignore[literal-required]  # ty: ignore[invalid-key]
+                self.tx_sc[key] = value  # type: ignore[literal-required]
         elif self.section == "tx_sa" and self.current_tx_sa is not None:
             self.current_tx_sa[key] = value
         elif self.section == "rx_sa" and self.current_rx_sa is not None:
