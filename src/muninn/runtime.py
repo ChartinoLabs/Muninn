@@ -53,7 +53,7 @@ class MuninnRuntime:
         for value in vars(module).values():
             if not isinstance(value, type):
                 continue
-            if not issubclass(value, BaseParser):
+            if BaseParser not in value.__bases__:
                 continue
             if not hasattr(value, "_muninn_registrations"):
                 continue
