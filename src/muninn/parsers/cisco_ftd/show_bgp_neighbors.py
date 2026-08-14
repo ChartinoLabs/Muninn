@@ -4,8 +4,10 @@ Cisco FTD ``show bgp neighbors`` displays detailed information about each BGP
 neighbor including session state, timers, message counters, BFD/fall-over
 status, and per-address-family prefix statistics.
 
-The parser produces a dict keyed by neighbor IP address with operational
-state information for each peer.
+The parser produces a result containing a ``bgp_operational`` boolean
+indicating whether BGP is functioning (``False`` when the output contains
+"% BGP cannot run"), and a ``neighbors`` dict keyed by neighbor IP address
+with operational state information for each peer.
 """
 
 import re
@@ -37,7 +39,12 @@ class BgpNeighborEntry(TypedDict):
     graceful_restart: NotRequired[str]
 
 
-ShowBgpNeighborsResult = dict[str, BgpNeighborEntry]
+class ShowBgpNeighborsResult(TypedDict):
+    """Top-level result for 'show bgp neighbors' on Cisco FTD."""
+
+    bgp_operational: bool
+    neighbors: dict[str, BgpNeighborEntry]
+
 
 # ---------------------------------------------------------------------------
 # Regex patterns
@@ -190,18 +197,23 @@ class ShowBgpNeighborsParser(BaseParser[ShowBgpNeighborsResult]):
             output: Raw CLI output from the command.
 
         Returns:
-            Dict keyed by neighbor IP address with operational state info.
+            Result with ``bgp_operational`` flag and ``neighbors`` dict.
 
         Raises:
             ValueError: If no neighbor blocks are found in the output.
         """
+        bgp_operational = "% BGP cannot run" not in output
+
         blocks = _split_neighbor_blocks(output)
         if not blocks:
             msg = "No BGP neighbor data found in output"
             raise ValueError(msg)
 
-        result: ShowBgpNeighborsResult = {}
+        neighbors: dict[str, BgpNeighborEntry] = {}
         for ip, vrf, remote_as, link_type, lines in blocks:
-            result[ip] = _build_neighbor_entry(vrf, remote_as, link_type, lines)
+            neighbors[ip] = _build_neighbor_entry(vrf, remote_as, link_type, lines)
 
-        return result
+        return ShowBgpNeighborsResult(
+            bgp_operational=bgp_operational,
+            neighbors=neighbors,
+        )
