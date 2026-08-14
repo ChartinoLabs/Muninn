@@ -40,6 +40,69 @@ class ShowVersionParser(BaseParser[ShowVersionResult]):
     _LSP_VERSION = re.compile(r"^LSP version\s*:\s*(?P<lsp_version>\S+)")
     _VDB_VERSION = re.compile(r"^VDB version\s*:\s*(?P<vdb_version>\S+)")
 
+    # Ordered list of patterns to try against each line.
+    # Each entry maps a compiled regex to field names that need .strip().
+    _PATTERNS: ClassVar[list[tuple[re.Pattern[str], tuple[str, ...]]]] = []
+
+    _REQUIRED_FIELDS: ClassVar[list[str]] = [
+        "hostname",
+        "model",
+        "version",
+        "build",
+        "uuid",
+        "lsp_version",
+        "vdb_version",
+    ]
+
+    def __init_subclass__(cls, **kwargs: object) -> None:
+        """Populate _PATTERNS after class attributes are bound."""
+        super().__init_subclass__(**kwargs)
+
+    @classmethod
+    def _init_patterns(cls) -> list[tuple[re.Pattern[str], tuple[str, ...]]]:
+        """Build pattern list on first use (lazy class-level init)."""
+        return [
+            (cls._HOSTNAME, ("hostname",)),
+            (cls._MODEL_VERSION, ("model", "version", "build")),
+            (cls._UUID, ("uuid",)),
+            (cls._LSP_VERSION, ("lsp_version",)),
+            (cls._VDB_VERSION, ("vdb_version",)),
+        ]
+
+    @classmethod
+    def _extract_fields(cls, output: str) -> dict[str, str]:
+        """Extract all fields from raw CLI output using pattern matching."""
+        patterns = cls._init_patterns()
+        result: dict[str, str] = {}
+
+        for line in output.splitlines():
+            cls._match_line(line.strip(), patterns, result)
+
+        return result
+
+    @classmethod
+    def _match_line(
+        cls,
+        line: str,
+        patterns: list[tuple[re.Pattern[str], tuple[str, ...]]],
+        result: dict[str, str],
+    ) -> None:
+        """Try each pattern against a single line, storing matches."""
+        for pattern, fields in patterns:
+            match = pattern.match(line)
+            if match:
+                for field in fields:
+                    result[field] = match.group(field).strip()
+                return
+
+    @classmethod
+    def _validate(cls, result: dict[str, str]) -> None:
+        """Raise ValueError if any required fields are missing."""
+        missing = [f for f in cls._REQUIRED_FIELDS if f not in result]
+        if missing:
+            msg = f"Missing required fields: {', '.join(missing)}"
+            raise ValueError(msg)
+
     @classmethod
     def parse(cls, output: str) -> ShowVersionResult:
         """Parse 'show version' output on Cisco FTD.
@@ -53,37 +116,8 @@ class ShowVersionParser(BaseParser[ShowVersionResult]):
         Raises:
             ValueError: If required fields cannot be parsed.
         """
-        result: dict[str, str] = {}
-
-        for line in output.splitlines():
-            line = line.strip()
-
-            if match := cls._HOSTNAME.match(line):
-                result["hostname"] = match.group("hostname")
-            elif match := cls._MODEL_VERSION.match(line):
-                result["model"] = match.group("model").strip()
-                result["version"] = match.group("version")
-                result["build"] = match.group("build")
-            elif match := cls._UUID.match(line):
-                result["uuid"] = match.group("uuid")
-            elif match := cls._LSP_VERSION.match(line):
-                result["lsp_version"] = match.group("lsp_version")
-            elif match := cls._VDB_VERSION.match(line):
-                result["vdb_version"] = match.group("vdb_version")
-
-        required = [
-            "hostname",
-            "model",
-            "version",
-            "build",
-            "uuid",
-            "lsp_version",
-            "vdb_version",
-        ]
-        missing = [f for f in required if f not in result]
-        if missing:
-            msg = f"Missing required fields: {', '.join(missing)}"
-            raise ValueError(msg)
+        result = cls._extract_fields(output)
+        cls._validate(result)
 
         return ShowVersionResult(
             hostname=result["hostname"],
