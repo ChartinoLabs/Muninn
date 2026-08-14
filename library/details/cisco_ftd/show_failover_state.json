@@ -1,0 +1,68 @@
+{
+  "os": "cisco_ftd",
+  "command": "show failover state",
+  "schema": {
+    "name": "ShowFailoverStateResult",
+    "fields": {
+      "this_host": {
+        "type": {
+          "name": "FailoverHostEntry",
+          "fields": {
+            "role": {
+              "type": "str",
+              "required": true
+            },
+            "state": {
+              "type": "str",
+              "required": true
+            },
+            "last_failure_reason": {
+              "type": "str",
+              "required": false
+            },
+            "last_failure_time": {
+              "type": "str",
+              "required": false
+            }
+          }
+        },
+        "required": true
+      },
+      "other_host": {
+        "type": {
+          "type": "ref",
+          "name": "FailoverHostEntry"
+        },
+        "required": true
+      },
+      "configuration_state": {
+        "type": "str",
+        "required": true
+      },
+      "communication_state": {
+        "type": "str",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Failover state showing Primary/Active and Secondary/Standby Ready with interface failure",
+      "input": "\n               State          Last Failure Reason      Date/Time\nThis host  -   Primary\n               Active         None\nOther host -   Secondary\n               Standby Ready  Ifc Failure              11:48:35 UTC Aug 6 2026\n\n====Configuration State===\n\tSync Done\n====Communication State===\n\tMac set",
+      "expected": {
+        "this_host": {
+          "role": "Primary",
+          "state": "Active"
+        },
+        "other_host": {
+          "role": "Secondary",
+          "state": "Standby Ready",
+          "last_failure_reason": "Ifc Failure",
+          "last_failure_time": "11:48:35 UTC Aug 6 2026"
+        },
+        "configuration_state": "Sync Done",
+        "communication_state": "Mac set"
+      }
+    }
+  ]
+}
