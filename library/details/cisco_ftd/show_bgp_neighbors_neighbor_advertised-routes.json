@@ -1,0 +1,62 @@
+{
+  "os": "cisco_ftd",
+  "command": "show bgp neighbors <neighbor> advertised-routes",
+  "schema": {
+    "name": "ShowBgpNeighborsAdvertisedRoutesResult",
+    "fields": {
+      "bgp_operational": {
+        "type": "bool",
+        "required": true
+      },
+      "table_version": {
+        "type": "int",
+        "required": false
+      },
+      "router_id": {
+        "type": "str",
+        "required": false
+      },
+      "total_prefixes": {
+        "type": "int",
+        "required": true
+      },
+      "routes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RouteEntry",
+            "fields": {
+              "status_codes": {
+                "type": "str",
+                "required": true
+              },
+              "next_hop": {
+                "type": "str",
+                "required": true
+              },
+              "metric": {
+                "type": "int",
+                "required": false
+              },
+              "local_pref": {
+                "type": "int",
+                "required": false
+              },
+              "weight": {
+                "type": "int",
+                "required": true
+              },
+              "path": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}
