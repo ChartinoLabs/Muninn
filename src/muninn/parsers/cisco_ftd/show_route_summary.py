@@ -156,7 +156,9 @@ class ShowRouteSummaryParser(BaseParser["ShowRouteSummaryResult"]):
 
             internal_entry = cls._parse_internal_source(line)
             if internal_entry is not None:
-                source = _INTERNAL_SOURCE_RE.match(line.strip()).group("source").strip()  # type: ignore[union-attr]
+                m = _INTERNAL_SOURCE_RE.match(line.strip())
+                assert m is not None
+                source = m.group("source").strip()
                 route_sources[source] = internal_entry
                 last_source = source
                 continue
