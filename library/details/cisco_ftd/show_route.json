@@ -1,0 +1,849 @@
+{
+  "os": "cisco_ftd",
+  "command": "show route",
+  "schema": {
+    "name": "ShowRouteResult",
+    "fields": {
+      "gateway_of_last_resort": {
+        "type": "str | None",
+        "required": true
+      },
+      "routes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RouteEntry",
+            "fields": {
+              "code": {
+                "type": "str",
+                "required": true
+              },
+              "next_hops": {
+                "type": {
+                  "type": "list",
+                  "items": {
+                    "name": "NextHopEntry",
+                    "fields": {
+                      "next_hop": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "interface": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "admin_distance": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "metric": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "uptime": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Full routing table with BGP, connected, local, and static routes including ECMP paths",
+      "input": "\nCodes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP\n       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area \n       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2\n       E1 - OSPF external type 1, E2 - OSPF external type 2, V - VPN\n       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2\n       ia - IS-IS inter area, * - candidate default, U - per-user static route\n       o - ODR, P - periodic downloaded static route, + - replicated route\n       SI - Static InterVRF, BI - BGP InterVRF\nGateway of last resort is 172.16.2.135 to network 0.0.0.0\n\nB*       0.0.0.0 0.0.0.0 [20/0] via 172.16.2.135, 20:41:24\n                         [20/0] via 172.16.2.134, 20:41:24\n                         [20/0] via 172.16.2.133, 20:41:24\nC        192.168.1.0 255.255.255.0 is directly connected, HA\nL        192.168.1.1 255.255.255.255 is directly connected, HA\nB        198.51.100.0 255.255.255.0 [20/0] via 172.16.2.135, 20:41:24\n                               [20/0] via 172.16.2.134, 20:41:24\n                               [20/0] via 172.16.2.133, 20:41:24\nB        10.0.0.0 255.0.0.0 [20/0] via 172.16.1.4, 1w0d\n                            [20/0] via 172.16.1.3, 1w0d\n                            [20/0] via 172.16.1.2, 1w0d\n                            [20/0] via 172.16.1.1, 1w0d\nC        10.103.1.128 255.255.255.128 is directly connected, Tenant-Zone5\nL        10.103.1.129 255.255.255.255 is directly connected, Tenant-Zone5\nC        10.102.0.128 255.255.255.128 is directly connected, Tenant-Zone1\nL        10.102.0.129 255.255.255.255 is directly connected, Tenant-Zone1\nC        10.102.2.0 255.255.255.192 is directly connected, Tenant-Zone3\nL        10.102.2.1 255.255.255.255 is directly connected, Tenant-Zone3\nC        10.102.2.128 255.255.255.192 is directly connected, Tenant-Zone4\nL        10.102.2.129 255.255.255.255 is directly connected, Tenant-Zone4\nC        10.102.4.0 255.255.255.0 is directly connected, Tenant-Zone6\nL        10.102.4.1 255.255.255.255 is directly connected, Tenant-Zone6\nC        10.102.5.0 255.255.255.192 is directly connected, Tenant-Zone7\nL        10.102.5.1 255.255.255.255 is directly connected, Tenant-Zone7\nC        10.102.5.64 255.255.255.192 is directly connected, Tenant_Zone8\nL        10.102.5.65 255.255.255.255 is directly connected, Tenant_Zone8\nC        10.102.128.0 255.255.252.0 is directly connected, Tenant-Zone2\nL        10.102.128.1 255.255.255.255 is directly connected, Tenant-Zone2\nC        172.16.1.0 255.255.255.240 is directly connected, Inside\nL        172.16.1.5 255.255.255.255 is directly connected, Inside\nC        172.16.3.64 255.255.255.248 is directly connected, Corp-ADC-M1\nL        172.16.3.65 255.255.255.255 is directly connected, Corp-ADC-M1\nC        10.101.0.0 255.255.0.0 is directly connected, Corp-Guest\nL        10.101.0.1 255.255.255.255 is directly connected, Corp-Guest\nC        10.100.0.0 255.255.255.0 is directly connected, Guest-DNS\nL        10.100.0.1 255.255.255.255 is directly connected, Guest-DNS\nC        10.100.1.0 255.255.255.192 is directly connected, DMZ-Mgmt\nL        10.100.1.1 255.255.255.255 is directly connected, DMZ-Mgmt\nC        10.100.2.0 255.255.255.192 is directly connected, Corp-Jabber\nL        10.100.2.1 255.255.255.255 is directly connected, Corp-Jabber\nC        10.100.2.64 255.255.255.192 is directly connected, DMZ-Vendor1\nL        10.100.2.65 255.255.255.255 is directly connected, DMZ-Vendor1\nC        10.100.4.0 255.255.255.224 is directly connected, DMZ-Vendor2\nL        10.100.4.1 255.255.255.255 is directly connected, DMZ-Vendor2\nC        10.100.4.64 255.255.255.224 is directly connected, DMZ-Vendor3\nL        10.100.4.65 255.255.255.255 is directly connected, DMZ-Vendor3\nC        10.100.4.96 255.255.255.240 \n           is directly connected, DMZ-Partner1-Site1\nL        10.100.4.97 255.255.255.255 \n           is directly connected, DMZ-Partner1-Site1\nC        10.100.4.112 255.255.255.240 \n           is directly connected, DMZ-Partner1-Site2\nL        10.100.4.113 255.255.255.255 \n           is directly connected, DMZ-Partner1-Site2\nC        10.100.5.0 255.255.255.240 is directly connected, DMZ-Vendor5\nL        10.100.5.1 255.255.255.255 is directly connected, DMZ-Vendor5\nC        10.100.5.32 255.255.255.240 is directly connected, Corp-LTE-Out\nL        10.100.5.33 255.255.255.255 is directly connected, Corp-LTE-Out\nC        10.100.5.48 255.255.255.240 is directly connected, DMZ-Vendor6\nL        10.100.5.49 255.255.255.255 is directly connected, DMZ-Vendor6\nC        10.100.9.0 255.255.255.248 \n           is directly connected, DMZ-Partner2-Ckt1\nL        10.100.9.1 255.255.255.255 \n           is directly connected, DMZ-Partner2-Ckt1\nC        10.100.9.8 255.255.255.248 is directly connected, DMZ-Partner2-Ckt2\nL        10.100.9.9 255.255.255.255 is directly connected, DMZ-Partner2-Ckt2\nC        10.100.10.0 255.255.255.248 is directly connected, DMZ-Partner3-Ckt1\nL        10.100.10.1 255.255.255.255 is directly connected, DMZ-Partner3-Ckt1\nC        10.100.10.8 255.255.255.248 \n           is directly connected, DMZ-Partner3-Ckt2\nL        10.100.10.9 255.255.255.255 \n           is directly connected, DMZ-Partner3-Ckt2\nC        10.100.31.32 255.255.255.240 is directly connected, Tenant-WiFi-Guest\nL        10.100.31.38 255.255.255.255 is directly connected, Tenant-WiFi-Guest\nB        172.16.0.0 255.240.0.0 [20/0] via 172.16.1.4, 1w0d\n                                [20/0] via 172.16.1.3, 1w0d\n                                [20/0] via 172.16.1.2, 1w0d\n                                [20/0] via 172.16.1.1, 1w0d\nB        192.168.0.0 255.255.0.0 [20/0] via 172.16.1.4, 1w0d\n                                 [20/0] via 172.16.1.3, 1w0d\n                                 [20/0] via 172.16.1.2, 1w0d\n                                 [20/0] via 172.16.1.1, 1w0d\nS        172.16.9.0 255.255.192.0 [1/0] is directly connected, Null0\nC        172.16.2.128 255.255.255.192 is directly connected, outside\nL        172.16.2.182 255.255.255.255 is directly connected, outside\nC        172.16.4.0 255.255.254.0 is directly connected, Corp-LB-MM\nL        172.16.4.1 255.255.255.255 is directly connected, Corp-LB-MM\nC        172.16.5.0 255.255.254.0 is directly connected, Corp-LB-And\nL        172.16.5.1 255.255.255.255 \n           is directly connected, Corp-LB-And\nB        172.16.7.0 255.255.255.0 [20/0] via 172.16.1.4, 1w0d\n                                    [20/0] via 172.16.1.3, 1w0d\n                                    [20/0] via 172.16.1.2, 1w0d\n                                    [20/0] via 172.16.1.1, 1w0d\nB        172.16.8.0 255.255.252.0 [20/0] via 172.16.1.4, 1w0d\n                                    [20/0] via 172.16.1.3, 1w0d\n                                    [20/0] via 172.16.1.2, 1w0d\n                                    [20/0] via 172.16.1.1, 1w0d\nC        172.16.6.0 255.255.252.0 is directly connected, Corp-ADC-M2\nL        172.16.6.1 255.255.255.255 is directly connected, Corp-ADC-M2",
+      "expected": {
+        "gateway_of_last_resort": "172.16.2.135",
+        "routes": {
+          "0.0.0.0/0": {
+            "code": "B*",
+            "next_hops": [
+              {
+                "next_hop": "172.16.2.135",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "20:41:24"
+              },
+              {
+                "next_hop": "172.16.2.134",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "20:41:24"
+              },
+              {
+                "next_hop": "172.16.2.133",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "20:41:24"
+              }
+            ]
+          },
+          "192.168.1.0/24": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "HA"
+              }
+            ]
+          },
+          "192.168.1.1/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "HA"
+              }
+            ]
+          },
+          "198.51.100.0/24": {
+            "code": "B",
+            "next_hops": [
+              {
+                "next_hop": "172.16.2.135",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "20:41:24"
+              },
+              {
+                "next_hop": "172.16.2.134",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "20:41:24"
+              },
+              {
+                "next_hop": "172.16.2.133",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "20:41:24"
+              }
+            ]
+          },
+          "10.0.0.0/8": {
+            "code": "B",
+            "next_hops": [
+              {
+                "next_hop": "172.16.1.4",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "1w0d"
+              },
+              {
+                "next_hop": "172.16.1.3",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "1w0d"
+              },
+              {
+                "next_hop": "172.16.1.2",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "1w0d"
+              },
+              {
+                "next_hop": "172.16.1.1",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "1w0d"
+              }
+            ]
+          },
+          "10.103.1.128/25": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Tenant-Zone5"
+              }
+            ]
+          },
+          "10.103.1.129/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Tenant-Zone5"
+              }
+            ]
+          },
+          "10.102.0.128/25": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Tenant-Zone1"
+              }
+            ]
+          },
+          "10.102.0.129/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Tenant-Zone1"
+              }
+            ]
+          },
+          "10.102.2.0/26": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Tenant-Zone3"
+              }
+            ]
+          },
+          "10.102.2.1/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Tenant-Zone3"
+              }
+            ]
+          },
+          "10.102.2.128/26": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Tenant-Zone4"
+              }
+            ]
+          },
+          "10.102.2.129/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Tenant-Zone4"
+              }
+            ]
+          },
+          "10.102.4.0/24": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Tenant-Zone6"
+              }
+            ]
+          },
+          "10.102.4.1/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Tenant-Zone6"
+              }
+            ]
+          },
+          "10.102.5.0/26": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Tenant-Zone7"
+              }
+            ]
+          },
+          "10.102.5.1/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Tenant-Zone7"
+              }
+            ]
+          },
+          "10.102.5.64/26": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Tenant_Zone8"
+              }
+            ]
+          },
+          "10.102.5.65/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Tenant_Zone8"
+              }
+            ]
+          },
+          "10.102.128.0/22": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Tenant-Zone2"
+              }
+            ]
+          },
+          "10.102.128.1/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Tenant-Zone2"
+              }
+            ]
+          },
+          "172.16.1.0/28": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Inside"
+              }
+            ]
+          },
+          "172.16.1.5/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Inside"
+              }
+            ]
+          },
+          "172.16.3.64/29": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Corp-ADC-M1"
+              }
+            ]
+          },
+          "172.16.3.65/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Corp-ADC-M1"
+              }
+            ]
+          },
+          "10.101.0.0/16": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Corp-Guest"
+              }
+            ]
+          },
+          "10.101.0.1/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Corp-Guest"
+              }
+            ]
+          },
+          "10.100.0.0/24": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Guest-DNS"
+              }
+            ]
+          },
+          "10.100.0.1/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Guest-DNS"
+              }
+            ]
+          },
+          "10.100.1.0/26": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Mgmt"
+              }
+            ]
+          },
+          "10.100.1.1/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Mgmt"
+              }
+            ]
+          },
+          "10.100.2.0/26": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Corp-Jabber"
+              }
+            ]
+          },
+          "10.100.2.1/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Corp-Jabber"
+              }
+            ]
+          },
+          "10.100.2.64/26": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Vendor1"
+              }
+            ]
+          },
+          "10.100.2.65/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Vendor1"
+              }
+            ]
+          },
+          "10.100.4.0/27": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Vendor2"
+              }
+            ]
+          },
+          "10.100.4.1/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Vendor2"
+              }
+            ]
+          },
+          "10.100.4.64/27": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Vendor3"
+              }
+            ]
+          },
+          "10.100.4.65/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Vendor3"
+              }
+            ]
+          },
+          "10.100.4.96/28": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Partner1-Site1"
+              }
+            ]
+          },
+          "10.100.4.97/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Partner1-Site1"
+              }
+            ]
+          },
+          "10.100.4.112/28": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Partner1-Site2"
+              }
+            ]
+          },
+          "10.100.4.113/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Partner1-Site2"
+              }
+            ]
+          },
+          "10.100.5.0/28": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Vendor5"
+              }
+            ]
+          },
+          "10.100.5.1/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Vendor5"
+              }
+            ]
+          },
+          "10.100.5.32/28": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Corp-LTE-Out"
+              }
+            ]
+          },
+          "10.100.5.33/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Corp-LTE-Out"
+              }
+            ]
+          },
+          "10.100.5.48/28": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Vendor6"
+              }
+            ]
+          },
+          "10.100.5.49/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Vendor6"
+              }
+            ]
+          },
+          "10.100.9.0/29": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Partner2-Ckt1"
+              }
+            ]
+          },
+          "10.100.9.1/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Partner2-Ckt1"
+              }
+            ]
+          },
+          "10.100.9.8/29": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Partner2-Ckt2"
+              }
+            ]
+          },
+          "10.100.9.9/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Partner2-Ckt2"
+              }
+            ]
+          },
+          "10.100.10.0/29": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Partner3-Ckt1"
+              }
+            ]
+          },
+          "10.100.10.1/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Partner3-Ckt1"
+              }
+            ]
+          },
+          "10.100.10.8/29": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Partner3-Ckt2"
+              }
+            ]
+          },
+          "10.100.10.9/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "DMZ-Partner3-Ckt2"
+              }
+            ]
+          },
+          "10.100.31.32/28": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Tenant-WiFi-Guest"
+              }
+            ]
+          },
+          "10.100.31.38/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Tenant-WiFi-Guest"
+              }
+            ]
+          },
+          "172.16.0.0/12": {
+            "code": "B",
+            "next_hops": [
+              {
+                "next_hop": "172.16.1.4",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "1w0d"
+              },
+              {
+                "next_hop": "172.16.1.3",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "1w0d"
+              },
+              {
+                "next_hop": "172.16.1.2",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "1w0d"
+              },
+              {
+                "next_hop": "172.16.1.1",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "1w0d"
+              }
+            ]
+          },
+          "192.168.0.0/16": {
+            "code": "B",
+            "next_hops": [
+              {
+                "next_hop": "172.16.1.4",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "1w0d"
+              },
+              {
+                "next_hop": "172.16.1.3",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "1w0d"
+              },
+              {
+                "next_hop": "172.16.1.2",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "1w0d"
+              },
+              {
+                "next_hop": "172.16.1.1",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "1w0d"
+              }
+            ]
+          },
+          "172.16.9.0/18": {
+            "code": "S",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Null0",
+                "admin_distance": 1,
+                "metric": 0
+              }
+            ]
+          },
+          "172.16.2.128/26": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "outside"
+              }
+            ]
+          },
+          "172.16.2.182/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "outside"
+              }
+            ]
+          },
+          "172.16.4.0/23": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Corp-LB-MM"
+              }
+            ]
+          },
+          "172.16.4.1/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Corp-LB-MM"
+              }
+            ]
+          },
+          "172.16.5.0/23": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Corp-LB-And"
+              }
+            ]
+          },
+          "172.16.5.1/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Corp-LB-And"
+              }
+            ]
+          },
+          "172.16.7.0/24": {
+            "code": "B",
+            "next_hops": [
+              {
+                "next_hop": "172.16.1.4",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "1w0d"
+              },
+              {
+                "next_hop": "172.16.1.3",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "1w0d"
+              },
+              {
+                "next_hop": "172.16.1.2",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "1w0d"
+              },
+              {
+                "next_hop": "172.16.1.1",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "1w0d"
+              }
+            ]
+          },
+          "172.16.8.0/22": {
+            "code": "B",
+            "next_hops": [
+              {
+                "next_hop": "172.16.1.4",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "1w0d"
+              },
+              {
+                "next_hop": "172.16.1.3",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "1w0d"
+              },
+              {
+                "next_hop": "172.16.1.2",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "1w0d"
+              },
+              {
+                "next_hop": "172.16.1.1",
+                "admin_distance": 20,
+                "metric": 0,
+                "uptime": "1w0d"
+              }
+            ]
+          },
+          "172.16.6.0/22": {
+            "code": "C",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Corp-ADC-M2"
+              }
+            ]
+          },
+          "172.16.6.1/32": {
+            "code": "L",
+            "next_hops": [
+              {
+                "next_hop": "directly connected",
+                "interface": "Corp-ADC-M2"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
