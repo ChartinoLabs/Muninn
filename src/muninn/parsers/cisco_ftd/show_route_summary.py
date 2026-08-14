@@ -125,18 +125,35 @@ class ShowRouteSummaryParser(BaseParser["ShowRouteSummaryResult"]):
         return source, entry
 
     @classmethod
+    def _process_line(
+        cls,
+        line: str,
+        route_sources: dict[str, RouteSourceEntry],
+        last_source: str | None,
+    ) -> str | None:
+        """Process a single line, returning the updated last_source."""
+        if cls._parse_bgp_detail(line, last_source, route_sources):
+            return last_source
+
+        internal_entry = cls._parse_internal_source(line)
+        if internal_entry is not None:
+            m = _INTERNAL_SOURCE_RE.match(line.strip())
+            assert m is not None
+            source = m.group("source").strip()
+            route_sources[source] = internal_entry
+            return source
+
+        standard_result = cls._parse_standard_source(line)
+        if standard_result is not None:
+            source, entry = standard_result
+            route_sources[source] = entry
+            return source
+
+        return last_source
+
+    @classmethod
     def parse(cls, output: str) -> ShowRouteSummaryResult:
-        """Parse 'show route summary' output.
-
-        Args:
-            output: Raw CLI output from 'show route summary' command.
-
-        Returns:
-            Parsed data with maximum paths and route source information.
-
-        Raises:
-            ValueError: If the output cannot be parsed.
-        """
+        """Parse 'show route summary' output."""
         lines = output.splitlines()
         maximum_paths: int | None = None
         route_sources: dict[str, RouteSourceEntry] = {}
@@ -151,24 +168,7 @@ class ShowRouteSummaryParser(BaseParser["ShowRouteSummaryResult"]):
                 maximum_paths = int(m.group("max_paths"))
                 continue
 
-            if cls._parse_bgp_detail(line, last_source, route_sources):
-                continue
-
-            internal_entry = cls._parse_internal_source(line)
-            if internal_entry is not None:
-                m = _INTERNAL_SOURCE_RE.match(line.strip())
-                assert m is not None
-                source = m.group("source").strip()
-                route_sources[source] = internal_entry
-                last_source = source
-                continue
-
-            standard_result = cls._parse_standard_source(line)
-            if standard_result is not None:
-                source, entry = standard_result
-                route_sources[source] = entry
-                last_source = source
-                continue
+            last_source = cls._process_line(line, route_sources, last_source)
 
         if maximum_paths is None:
             msg = "Could not find 'IP routing table maximum-paths' in output"
