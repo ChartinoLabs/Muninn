@@ -86,6 +86,14 @@ class NokiaSROS(OperatingSystem):
     aliases = ("nokia_sros", "sros", "nokia", "sr-os", "sr_os")
 
 
+class CiscoFTD(OperatingSystem):
+    """Cisco Firewall Threat Defense (FTD appliances, virtual FTD)."""
+
+    name = "cisco_ftd"
+    display_name = "Cisco FTD"
+    aliases = ("ftd", "cisco_ftd", "firepower", "threat_defense", "fxos")
+
+
 class Linux(OperatingSystem):
     """Linux (including SONiC, Cumulus, FRR-based platforms)."""
 
@@ -113,6 +121,7 @@ class OS(Enum):
     ARISTA_EOS = AristaEOS
     JUNIPER_JUNOS = JuniperJunos
     PALOALTO_PANOS = PaloAltoPanOS
+    CISCO_FTD = CiscoFTD
     NOKIA_SROS = NokiaSROS
     LINUX = Linux
 
