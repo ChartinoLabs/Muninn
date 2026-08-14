@@ -1,0 +1,57 @@
+{
+  "os": "cisco_ftd",
+  "command": "show conn count",
+  "schema": {
+    "name": "ShowConnCountResult",
+    "fields": {
+      "in_use": {
+        "type": "int",
+        "required": true
+      },
+      "most_used": {
+        "type": "int",
+        "required": true
+      },
+      "preserve_connection": {
+        "type": {
+          "name": "PreserveConnectionStats",
+          "fields": {
+            "enabled": {
+              "type": "int",
+              "required": true
+            },
+            "in_effect": {
+              "type": "int",
+              "required": true
+            },
+            "most_enabled": {
+              "type": "int",
+              "required": true
+            },
+            "most_in_effect": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Connection count with Snort inspect preserve-connection statistics",
+      "input": "11 in use, 191 most used\nInspect Snort:\n\tpreserve-connection: 0 enabled, 0 in effect, 169 most enabled, 0 most in effect",
+      "expected": {
+        "in_use": 11,
+        "most_used": 191,
+        "preserve_connection": {
+          "enabled": 0,
+          "in_effect": 0,
+          "most_enabled": 169,
+          "most_in_effect": 0
+        }
+      }
+    }
+  ]
+}
