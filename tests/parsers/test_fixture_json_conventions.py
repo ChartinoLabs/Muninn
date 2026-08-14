@@ -164,6 +164,9 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         # is_neighbors/ip_reachability/ipv6_reachability use list-of-dicts; no natural
         # unique key (multiple parallel links to same neighbor with different metrics).
         "iosxe/show_isis_database_detail/001_basic/expected.json",
+        # --- Cisco FTD ---
+        # next_hops uses list-of-dicts; no natural unique key for ECMP entries.
+        "cisco_ftd/show_route_bgp/001_basic/expected.json",
         # --- Cisco IOS-XR ---
         # routes uses list-of-dicts; no natural unique key for multiple BGP paths
         # (same network with multipath/ECMP entries and different next-hops).
