@@ -135,7 +135,7 @@ def _parse_route_nexthop(rest: str) -> NextHopEntry | None:
     # Try [AD/metric] via next-hop
     m = _VIA_NEXTHOP_RE.search(rest)
     if m:
-        hop = {
+        hop: NextHopEntry = {
             "next_hop": m.group(3),
             "admin_distance": int(m.group(1)),
             "metric": int(m.group(2)),
