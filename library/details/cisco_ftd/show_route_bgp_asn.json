@@ -1,0 +1,57 @@
+{
+  "os": "cisco_ftd",
+  "command": "show route bgp <asn>",
+  "schema": {
+    "name": "ShowRouteBgpResult",
+    "fields": {
+      "gateway_of_last_resort": {
+        "type": "str",
+        "required": true
+      },
+      "routes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RouteEntry",
+            "fields": {
+              "code": {
+                "type": "str",
+                "required": true
+              },
+              "next_hops": {
+                "type": {
+                  "type": "list",
+                  "items": {
+                    "name": "NextHopEntry",
+                    "fields": {
+                      "next_hop": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "admin_distance": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "metric": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "uptime": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}
