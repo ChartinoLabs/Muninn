@@ -1,0 +1,338 @@
+{
+  "os": "cisco_ftd",
+  "command": "show interface ip brief",
+  "schema": {
+    "name": "ShowInterfaceIpBriefResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceBriefEntry",
+            "fields": {
+              "ip_address": {
+                "type": "str",
+                "required": true
+              },
+              "ok": {
+                "type": "str",
+                "required": true
+              },
+              "method": {
+                "type": "str",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "protocol": {
+                "type": "str",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Interface IP brief showing port-channels, management, and internal interfaces",
+      "input": "Interface                  IP-Address      OK?           Method Status      Protocol\nInternal-Data0/1           unassigned      YES           unset  up          up  \nPort-channel1              unassigned      YES           unset  up          up  \nPort-channel1.111          172.16.1.5    YES           manual up          up  \nPort-channel2              172.16.2.182  YES           manual up          up  \nPort-channel3              unassigned      YES           unset  up          up  \nPort-channel3.200          10.100.0.1      YES           manual up          up  \nPort-channel3.201          10.100.1.1      YES           manual up          up  \nPort-channel3.202          10.100.2.1      YES           manual up          up  \nPort-channel3.203          10.100.2.65     YES           manual up          up  \nPort-channel3.204          10.100.4.1      YES           manual up          up  \nPort-channel3.206          10.100.4.65     YES           manual up          up  \nPort-channel3.207          10.100.4.97     YES           manual up          up  \nPort-channel3.208          10.100.4.113    YES           manual up          up  \nPort-channel3.212          unassigned      YES           unset  admin down  down\nPort-channel3.217          10.101.0.1      YES           manual up          up  \nPort-channel3.230          172.16.4.1    YES           manual up          up  \nPort-channel3.231          172.16.5.1    YES           manual up          up  \nPort-channel3.233          172.16.3.65   YES           manual up          up  \nPort-channel3.234          172.16.6.1    YES           manual up          up  \nPort-channel3.240          10.100.5.1      YES           manual up          up  \nPort-channel3.242          10.100.5.33     YES           manual up          up  \nPort-channel3.243          10.100.5.49     YES           manual up          up  \nPort-channel3.244          10.100.9.1      YES           manual up          up  \nPort-channel3.245          10.100.9.9      YES           manual up          up  \nPort-channel3.246          10.100.10.1     YES           manual up          up  \nPort-channel3.247          10.100.10.9     YES           manual up          up  \nPort-channel3.361          10.100.31.38    YES           manual up          up  \nPort-channel3.3006         10.102.0.129     YES           manual up          up  \nPort-channel3.3007         10.102.128.1     YES           manual up          up  \nPort-channel3.3011         10.102.2.1       YES           manual up          up  \nPort-channel3.3012         10.102.2.129     YES           manual up          up  \nPort-channel3.3015         10.103.1.129      YES           manual up          up  \nPort-channel3.3017         10.102.4.1       YES           manual up          up  \nPort-channel3.3018         10.102.5.1       YES           manual up          up  \nPort-channel3.3019         10.102.5.65      YES           manual up          up  \nPort-channel48             192.168.1.1         YES           CONFIG up          up  \nInternal-Control1/1        unassigned      YES           unset  up          up  \nInternal-Data1/1           169.254.1.1     YES           unset  up          up  \nInternal-Data1/2           unassigned      YES           unset  up          up  \nManagement1/1              192.168.50.130   YES           unset  up          up  \nManagement1/2              unassigned      YES           unset  up          up",
+      "expected": {
+        "interfaces": {
+          "Internal-Data0/1": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "unset",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel1": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "unset",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel1.111": {
+            "ip_address": "172.16.1.5",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel2": {
+            "ip_address": "172.16.2.182",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "unset",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.200": {
+            "ip_address": "10.100.0.1",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.201": {
+            "ip_address": "10.100.1.1",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.202": {
+            "ip_address": "10.100.2.1",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.203": {
+            "ip_address": "10.100.2.65",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.204": {
+            "ip_address": "10.100.4.1",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.206": {
+            "ip_address": "10.100.4.65",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.207": {
+            "ip_address": "10.100.4.97",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.208": {
+            "ip_address": "10.100.4.113",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.212": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "unset",
+            "status": "admin down",
+            "protocol": "down"
+          },
+          "Port-channel3.217": {
+            "ip_address": "10.101.0.1",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.230": {
+            "ip_address": "172.16.4.1",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.231": {
+            "ip_address": "172.16.5.1",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.233": {
+            "ip_address": "172.16.3.65",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.234": {
+            "ip_address": "172.16.6.1",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.240": {
+            "ip_address": "10.100.5.1",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.242": {
+            "ip_address": "10.100.5.33",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.243": {
+            "ip_address": "10.100.5.49",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.244": {
+            "ip_address": "10.100.9.1",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.245": {
+            "ip_address": "10.100.9.9",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.246": {
+            "ip_address": "10.100.10.1",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.247": {
+            "ip_address": "10.100.10.9",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.361": {
+            "ip_address": "10.100.31.38",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.3006": {
+            "ip_address": "10.102.0.129",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.3007": {
+            "ip_address": "10.102.128.1",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.3011": {
+            "ip_address": "10.102.2.1",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.3012": {
+            "ip_address": "10.102.2.129",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.3015": {
+            "ip_address": "10.103.1.129",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.3017": {
+            "ip_address": "10.102.4.1",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.3018": {
+            "ip_address": "10.102.5.1",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel3.3019": {
+            "ip_address": "10.102.5.65",
+            "ok": "YES",
+            "method": "manual",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Port-channel48": {
+            "ip_address": "192.168.1.1",
+            "ok": "YES",
+            "method": "CONFIG",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Internal-Control1/1": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "unset",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Internal-Data1/1": {
+            "ip_address": "169.254.1.1",
+            "ok": "YES",
+            "method": "unset",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Internal-Data1/2": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "unset",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Management1/1": {
+            "ip_address": "192.168.50.130",
+            "ok": "YES",
+            "method": "unset",
+            "status": "up",
+            "protocol": "up"
+          },
+          "Management1/2": {
+            "ip_address": "unassigned",
+            "ok": "YES",
+            "method": "unset",
+            "status": "up",
+            "protocol": "up"
+          }
+        }
+      }
+    }
+  ]
+}
