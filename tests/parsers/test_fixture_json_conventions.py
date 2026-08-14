@@ -182,6 +182,9 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         # ECMP next-hops have no natural unique key (same interface can appear with
         # different next-hops in equal-cost multipath).
         "cisco_iosxr/show_route_ipv4_isis/001_basic/expected.json",
+        # --- Cisco FTD ---
+        # next_hops is a list-of-dicts; no natural unique key for ECMP entries.
+        "cisco_ftd/show_route/001_basic/expected.json",
         # --- NX-OS ---
         "nxos/show_bgp_all_dampening_flap-statistics/001_basic/expected.json",
         "nxos/show_bgp_vrf_all_all/001_basic/expected.json",
