@@ -1,0 +1,52 @@
+{
+  "os": "cisco_ftd",
+  "command": "show version",
+  "schema": {
+    "name": "ShowVersionResult",
+    "fields": {
+      "hostname": {
+        "type": "str",
+        "required": true
+      },
+      "model": {
+        "type": "str",
+        "required": true
+      },
+      "version": {
+        "type": "str",
+        "required": true
+      },
+      "build": {
+        "type": "str",
+        "required": true
+      },
+      "uuid": {
+        "type": "str",
+        "required": true
+      },
+      "lsp_version": {
+        "type": "str",
+        "required": true
+      },
+      "vdb_version": {
+        "type": "str",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "FTD version output showing model, version, UUID, and signature versions",
+      "input": "-------------------[ M2-4215-A ]--------------------\nModel                     : Cisco Firepower 4215 Threat Defense (79) Version 7.4.2.4 (Build 9)\nUUID                      : 87654321-dcba-4321-fe65-fedcba654321\nLSP version               : lsp-rel-20260406-1844\nVDB version               : 378\n----------------------------------------------------\n",
+      "expected": {
+        "hostname": "M2-4215-A",
+        "model": "Cisco Firepower 4215 Threat Defense (79)",
+        "version": "7.4.2.4",
+        "build": "9",
+        "uuid": "87654321-dcba-4321-fe65-fedcba654321",
+        "lsp_version": "lsp-rel-20260406-1844",
+        "vdb_version": "378"
+      }
+    }
+  ]
+}
