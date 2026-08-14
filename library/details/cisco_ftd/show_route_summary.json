@@ -1,0 +1,106 @@
+{
+  "os": "cisco_ftd",
+  "command": "show route summary",
+  "schema": {
+    "name": "ShowRouteSummaryResult",
+    "fields": {
+      "maximum_paths": {
+        "type": "int",
+        "required": true
+      },
+      "route_sources": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RouteSourceEntry",
+            "fields": {
+              "networks": {
+                "type": "int",
+                "required": true
+              },
+              "subnets": {
+                "type": "int",
+                "required": true
+              },
+              "replicates": {
+                "type": "int",
+                "required": true
+              },
+              "overhead": {
+                "type": "int",
+                "required": true
+              },
+              "memory_bytes": {
+                "type": "int",
+                "required": true
+              },
+              "external": {
+                "type": "int",
+                "required": false
+              },
+              "internal": {
+                "type": "int",
+                "required": false
+              },
+              "local": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Route summary showing connected, static, BGP, and internal sources",
+      "input": "\nIP routing table maximum-paths is 8\nRoute Source    Networks    Subnets     Replicates  Overhead    Memory (bytes)\nconnected       3           63          0           5808        19536\nstatic          1           0           0           88          296\nbgp 65001       5           2           0           2288        2072\n  External: 7 Internal: 0 Local: 0\ninternal        8                                               6688\nTotal           17          65          0           8184        28592\n",
+      "expected": {
+        "maximum_paths": 8,
+        "route_sources": {
+          "connected": {
+            "networks": 3,
+            "subnets": 63,
+            "replicates": 0,
+            "overhead": 5808,
+            "memory_bytes": 19536
+          },
+          "static": {
+            "networks": 1,
+            "subnets": 0,
+            "replicates": 0,
+            "overhead": 88,
+            "memory_bytes": 296
+          },
+          "bgp 65001": {
+            "networks": 5,
+            "subnets": 2,
+            "replicates": 0,
+            "overhead": 2288,
+            "memory_bytes": 2072,
+            "external": 7,
+            "internal": 0,
+            "local": 0
+          },
+          "internal": {
+            "networks": 8,
+            "subnets": 0,
+            "replicates": 0,
+            "overhead": 0,
+            "memory_bytes": 6688
+          },
+          "Total": {
+            "networks": 17,
+            "subnets": 65,
+            "replicates": 0,
+            "overhead": 8184,
+            "memory_bytes": 28592
+          }
+        }
+      }
+    }
+  ]
+}
