@@ -49,22 +49,18 @@ class ShowFailoverStateParser(BaseParser[ShowFailoverStateResult]):
     _COMM_STATE_RE = re.compile(r"^====Communication State===\s*$")
 
     @classmethod
-    def _parse_host_block(
+    def _find_state_match(
         cls, lines: list[str], start_idx: int
-    ) -> tuple[FailoverHostEntry, int]:
-        """Parse a host block starting at the host header line.
+    ) -> tuple[re.Match[str], int]:
+        """Skip blank lines after a host header and return the state match.
 
-        Returns the parsed entry and the index after the state line.
+        Returns the regex match object and the index of the state line.
+
+        Raises:
+            ValueError: If no state line is found or it cannot be parsed.
         """
-        host_match = cls._HOST_RE.match(lines[start_idx])
-        if not host_match:
-            msg = f"Expected host header at line {start_idx}"
-            raise ValueError(msg)
-
-        role = host_match.group("role")
         idx = start_idx + 1
 
-        # Find the state line (skip blank lines)
         while idx < len(lines) and not lines[idx].strip():
             idx += 1
 
@@ -77,20 +73,49 @@ class ShowFailoverStateParser(BaseParser[ShowFailoverStateResult]):
             msg = f"Cannot parse state line: {lines[idx]!r}"
             raise ValueError(msg)
 
-        entry: FailoverHostEntry = {
-            "role": role,
-            "state": state_match.group("state"),
-        }
+        return state_match, idx
+
+    @staticmethod
+    def _extract_failure_fields(state_match: re.Match[str]) -> dict[str, str]:
+        """Extract optional failure reason and time from a state match.
+
+        Returns a dict with 'last_failure_reason' and/or 'last_failure_time'
+        if present and non-empty.
+        """
+        fields: dict[str, str] = {}
 
         reason = state_match.group("reason")
         if reason and reason.strip() and reason.strip() != "None":
-            entry["last_failure_reason"] = reason.strip()
+            fields["last_failure_reason"] = reason.strip()
 
         time_str = state_match.group("time")
         if time_str and time_str.strip():
-            entry["last_failure_time"] = time_str.strip()
+            fields["last_failure_time"] = time_str.strip()
 
-        return entry, idx + 1
+        return fields
+
+    @classmethod
+    def _parse_host_block(
+        cls, lines: list[str], start_idx: int
+    ) -> tuple[FailoverHostEntry, int]:
+        """Parse a host block starting at the host header line.
+
+        Returns the parsed entry and the index after the state line.
+        """
+        host_match = cls._HOST_RE.match(lines[start_idx])
+        if not host_match:
+            msg = f"Expected host header at line {start_idx}"
+            raise ValueError(msg)
+
+        state_match, state_idx = cls._find_state_match(lines, start_idx)
+
+        entry: FailoverHostEntry = {
+            "role": host_match.group("role"),
+            "state": state_match.group("state"),
+            **cls._extract_failure_fields(state_match),
+        }
+
+        return entry, state_idx + 1
 
     @classmethod
     def _parse_section_value(cls, lines: list[str], start_idx: int) -> str:
