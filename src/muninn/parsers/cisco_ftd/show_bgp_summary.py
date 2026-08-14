@@ -27,6 +27,7 @@ class NeighborEntry(TypedDict):
 class ShowBgpSummaryResult(TypedDict):
     """Schema for 'show bgp summary' parsed output."""
 
+    bgp_operational: bool
     router_id: str
     local_as: int
     neighbors: dict[str, NeighborEntry]
@@ -182,6 +183,8 @@ class ShowBgpSummaryParser(BaseParser["ShowBgpSummaryResult"]):
         """
         lines = output.splitlines()
 
+        bgp_operational = "% BGP cannot run" not in output
+
         router_id, local_as = _find_router_id(lines)
         if router_id is None or local_as is None:
             msg = "Could not find BGP router identifier in output"
@@ -193,6 +196,7 @@ class ShowBgpSummaryParser(BaseParser["ShowBgpSummaryResult"]):
             raise ValueError(msg)
 
         return ShowBgpSummaryResult(
+            bgp_operational=bgp_operational,
             router_id=router_id,
             local_as=local_as,
             neighbors=neighbors,
