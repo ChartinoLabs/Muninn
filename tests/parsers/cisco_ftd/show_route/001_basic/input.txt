@@ -1,0 +1,111 @@
+
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area 
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, V - VPN
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route, + - replicated route
+       SI - Static InterVRF, BI - BGP InterVRF
+Gateway of last resort is 172.16.2.135 to network 0.0.0.0
+
+B*       0.0.0.0 0.0.0.0 [20/0] via 172.16.2.135, 20:41:24
+                         [20/0] via 172.16.2.134, 20:41:24
+                         [20/0] via 172.16.2.133, 20:41:24
+C        192.168.1.0 255.255.255.0 is directly connected, HA
+L        192.168.1.1 255.255.255.255 is directly connected, HA
+B        198.51.100.0 255.255.255.0 [20/0] via 172.16.2.135, 20:41:24
+                               [20/0] via 172.16.2.134, 20:41:24
+                               [20/0] via 172.16.2.133, 20:41:24
+B        10.0.0.0 255.0.0.0 [20/0] via 172.16.1.4, 1w0d
+                            [20/0] via 172.16.1.3, 1w0d
+                            [20/0] via 172.16.1.2, 1w0d
+                            [20/0] via 172.16.1.1, 1w0d
+C        10.103.1.128 255.255.255.128 is directly connected, Tenant-Zone5
+L        10.103.1.129 255.255.255.255 is directly connected, Tenant-Zone5
+C        10.102.0.128 255.255.255.128 is directly connected, Tenant-Zone1
+L        10.102.0.129 255.255.255.255 is directly connected, Tenant-Zone1
+C        10.102.2.0 255.255.255.192 is directly connected, Tenant-Zone3
+L        10.102.2.1 255.255.255.255 is directly connected, Tenant-Zone3
+C        10.102.2.128 255.255.255.192 is directly connected, Tenant-Zone4
+L        10.102.2.129 255.255.255.255 is directly connected, Tenant-Zone4
+C        10.102.4.0 255.255.255.0 is directly connected, Tenant-Zone6
+L        10.102.4.1 255.255.255.255 is directly connected, Tenant-Zone6
+C        10.102.5.0 255.255.255.192 is directly connected, Tenant-Zone7
+L        10.102.5.1 255.255.255.255 is directly connected, Tenant-Zone7
+C        10.102.5.64 255.255.255.192 is directly connected, Tenant_Zone8
+L        10.102.5.65 255.255.255.255 is directly connected, Tenant_Zone8
+C        10.102.128.0 255.255.252.0 is directly connected, Tenant-Zone2
+L        10.102.128.1 255.255.255.255 is directly connected, Tenant-Zone2
+C        172.16.1.0 255.255.255.240 is directly connected, Inside
+L        172.16.1.5 255.255.255.255 is directly connected, Inside
+C        172.16.3.64 255.255.255.248 is directly connected, Corp-ADC-M1
+L        172.16.3.65 255.255.255.255 is directly connected, Corp-ADC-M1
+C        10.101.0.0 255.255.0.0 is directly connected, Corp-Guest
+L        10.101.0.1 255.255.255.255 is directly connected, Corp-Guest
+C        10.100.0.0 255.255.255.0 is directly connected, Guest-DNS
+L        10.100.0.1 255.255.255.255 is directly connected, Guest-DNS
+C        10.100.1.0 255.255.255.192 is directly connected, DMZ-Mgmt
+L        10.100.1.1 255.255.255.255 is directly connected, DMZ-Mgmt
+C        10.100.2.0 255.255.255.192 is directly connected, Corp-Jabber
+L        10.100.2.1 255.255.255.255 is directly connected, Corp-Jabber
+C        10.100.2.64 255.255.255.192 is directly connected, DMZ-Vendor1
+L        10.100.2.65 255.255.255.255 is directly connected, DMZ-Vendor1
+C        10.100.4.0 255.255.255.224 is directly connected, DMZ-Vendor2
+L        10.100.4.1 255.255.255.255 is directly connected, DMZ-Vendor2
+C        10.100.4.64 255.255.255.224 is directly connected, DMZ-Vendor3
+L        10.100.4.65 255.255.255.255 is directly connected, DMZ-Vendor3
+C        10.100.4.96 255.255.255.240 
+           is directly connected, DMZ-Partner1-Site1
+L        10.100.4.97 255.255.255.255 
+           is directly connected, DMZ-Partner1-Site1
+C        10.100.4.112 255.255.255.240 
+           is directly connected, DMZ-Partner1-Site2
+L        10.100.4.113 255.255.255.255 
+           is directly connected, DMZ-Partner1-Site2
+C        10.100.5.0 255.255.255.240 is directly connected, DMZ-Vendor5
+L        10.100.5.1 255.255.255.255 is directly connected, DMZ-Vendor5
+C        10.100.5.32 255.255.255.240 is directly connected, Corp-LTE-Out
+L        10.100.5.33 255.255.255.255 is directly connected, Corp-LTE-Out
+C        10.100.5.48 255.255.255.240 is directly connected, DMZ-Vendor6
+L        10.100.5.49 255.255.255.255 is directly connected, DMZ-Vendor6
+C        10.100.9.0 255.255.255.248 
+           is directly connected, DMZ-Partner2-Ckt1
+L        10.100.9.1 255.255.255.255 
+           is directly connected, DMZ-Partner2-Ckt1
+C        10.100.9.8 255.255.255.248 is directly connected, DMZ-Partner2-Ckt2
+L        10.100.9.9 255.255.255.255 is directly connected, DMZ-Partner2-Ckt2
+C        10.100.10.0 255.255.255.248 is directly connected, DMZ-Partner3-Ckt1
+L        10.100.10.1 255.255.255.255 is directly connected, DMZ-Partner3-Ckt1
+C        10.100.10.8 255.255.255.248 
+           is directly connected, DMZ-Partner3-Ckt2
+L        10.100.10.9 255.255.255.255 
+           is directly connected, DMZ-Partner3-Ckt2
+C        10.100.31.32 255.255.255.240 is directly connected, Tenant-WiFi-Guest
+L        10.100.31.38 255.255.255.255 is directly connected, Tenant-WiFi-Guest
+B        172.16.0.0 255.240.0.0 [20/0] via 172.16.1.4, 1w0d
+                                [20/0] via 172.16.1.3, 1w0d
+                                [20/0] via 172.16.1.2, 1w0d
+                                [20/0] via 172.16.1.1, 1w0d
+B        192.168.0.0 255.255.0.0 [20/0] via 172.16.1.4, 1w0d
+                                 [20/0] via 172.16.1.3, 1w0d
+                                 [20/0] via 172.16.1.2, 1w0d
+                                 [20/0] via 172.16.1.1, 1w0d
+S        172.16.9.0 255.255.192.0 [1/0] is directly connected, Null0
+C        172.16.2.128 255.255.255.192 is directly connected, outside
+L        172.16.2.182 255.255.255.255 is directly connected, outside
+C        172.16.4.0 255.255.254.0 is directly connected, Corp-LB-MM
+L        172.16.4.1 255.255.255.255 is directly connected, Corp-LB-MM
+C        172.16.5.0 255.255.254.0 is directly connected, Corp-LB-And
+L        172.16.5.1 255.255.255.255 
+           is directly connected, Corp-LB-And
+B        172.16.7.0 255.255.255.0 [20/0] via 172.16.1.4, 1w0d
+                                    [20/0] via 172.16.1.3, 1w0d
+                                    [20/0] via 172.16.1.2, 1w0d
+                                    [20/0] via 172.16.1.1, 1w0d
+B        172.16.8.0 255.255.252.0 [20/0] via 172.16.1.4, 1w0d
+                                    [20/0] via 172.16.1.3, 1w0d
+                                    [20/0] via 172.16.1.2, 1w0d
+                                    [20/0] via 172.16.1.1, 1w0d
+C        172.16.6.0 255.255.252.0 is directly connected, Corp-ADC-M2
+L        172.16.6.1 255.255.255.255 is directly connected, Corp-ADC-M2
