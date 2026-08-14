@@ -77,6 +77,9 @@ _NONE_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset(
         "nxos/show_ip_ospf_interface/003_combined_ip_process_line/expected.json",
         "nxos/show_port-channel_summary/003_down_and_empty/expected.json",
         "paloalto_panos/show_system_info/001_pa_vm_basic/expected.json",
+        # "none" is a valid Linux filesystem device name (used for tmpfs/bind
+        # mounts), not a missing-value placeholder.
+        "cisco_ftd/show_disk/001_basic/expected.json",
     }
 )
 
