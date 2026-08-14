@@ -1,7 +1,7 @@
 """Parser for 'show failover' command on Cisco FTD."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -348,25 +348,25 @@ class ShowFailoverParser(BaseParser["ShowFailoverResult"]):
                 break
 
         result = ShowFailoverResult(
-            failover_enabled=header["failover_enabled"],  # type: ignore[arg-type]
-            failover_unit=header.get("failover_unit", ""),  # type: ignore[arg-type]
-            lan_interface_name=header.get("lan_interface_name", ""),  # type: ignore[arg-type]
-            lan_interface_id=header.get("lan_interface_id", ""),  # type: ignore[arg-type]
-            lan_interface_status=header.get("lan_interface_status", ""),  # type: ignore[arg-type]
-            reconnect_timeout=header.get("reconnect_timeout", ""),  # type: ignore[arg-type]
-            unit_poll_frequency=header.get("unit_poll_frequency", 0),  # type: ignore[arg-type]
-            unit_poll_holdtime=header.get("unit_poll_holdtime", 0),  # type: ignore[arg-type]
-            interface_poll_frequency=header.get("interface_poll_frequency", 0),  # type: ignore[arg-type]
-            interface_poll_holdtime=header.get("interface_poll_holdtime", 0),  # type: ignore[arg-type]
-            interface_policy=header.get("interface_policy", 0),  # type: ignore[arg-type]
-            monitored_interfaces=header.get("monitored_interfaces", 0),  # type: ignore[arg-type]
-            max_monitored_interfaces=header.get("max_monitored_interfaces", 0),  # type: ignore[arg-type]
-            failover_replication=header.get("failover_replication", ""),  # type: ignore[arg-type]
-            version_ours=header.get("version_ours", ""),  # type: ignore[arg-type]
-            version_mate=header.get("version_mate", ""),  # type: ignore[arg-type]
-            serial_ours=header.get("serial_ours", ""),  # type: ignore[arg-type]
-            serial_mate=header.get("serial_mate", ""),  # type: ignore[arg-type]
-            last_failover=header.get("last_failover", ""),  # type: ignore[arg-type]
+            failover_enabled=bool(header.get("failover_enabled", False)),
+            failover_unit=str(header.get("failover_unit", "")),
+            lan_interface_name=str(header.get("lan_interface_name", "")),
+            lan_interface_id=str(header.get("lan_interface_id", "")),
+            lan_interface_status=str(header.get("lan_interface_status", "")),
+            reconnect_timeout=str(header.get("reconnect_timeout", "")),
+            unit_poll_frequency=cast(int, header.get("unit_poll_frequency", 0)),
+            unit_poll_holdtime=cast(int, header.get("unit_poll_holdtime", 0)),
+            interface_poll_frequency=cast(int, header.get("interface_poll_frequency", 0)),
+            interface_poll_holdtime=cast(int, header.get("interface_poll_holdtime", 0)),
+            interface_policy=cast(int, header.get("interface_policy", 0)),
+            monitored_interfaces=cast(int, header.get("monitored_interfaces", 0)),
+            max_monitored_interfaces=cast(int, header.get("max_monitored_interfaces", 0)),
+            failover_replication=str(header.get("failover_replication", "")),
+            version_ours=str(header.get("version_ours", "")),
+            version_mate=str(header.get("version_mate", "")),
+            serial_ours=str(header.get("serial_ours", "")),
+            serial_mate=str(header.get("serial_mate", "")),
+            last_failover=str(header.get("last_failover", "")),
             this_host=this_host,
             other_host=other_host,
         )
