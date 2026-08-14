@@ -1,0 +1,32 @@
+{
+  "os": "cisco_ftd",
+  "command": "show cpu usage",
+  "schema": {
+    "name": "ShowCpuUsageResult",
+    "fields": {
+      "cpu_5_seconds_pct": {
+        "type": "int",
+        "required": true
+      },
+      "cpu_1_minute_pct": {
+        "type": "int",
+        "required": true
+      },
+      "cpu_5_minutes_pct": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "CPU utilization showing 5-second, 1-minute, and 5-minute averages",
+      "input": "\nCPU utilization for 5 seconds = 0%; 1 minute: 0%; 5 minutes: 0%\n",
+      "expected": {
+        "cpu_5_seconds_pct": 0,
+        "cpu_1_minute_pct": 0,
+        "cpu_5_minutes_pct": 0
+      }
+    }
+  ]
+}
