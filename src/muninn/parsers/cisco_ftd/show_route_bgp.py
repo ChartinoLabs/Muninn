@@ -73,6 +73,40 @@ def _build_next_hop(match: re.Match[str]) -> NextHopEntry:
     )
 
 
+def _handle_continuation(
+    line: str, routes: dict[str, RouteEntry], current_route_key: str | None
+) -> bool:
+    """Try to parse line as an ECMP continuation and append to current route.
+
+    Returns True if the line was consumed as a continuation.
+    """
+    cont_match = _CONTINUATION_PATTERN.match(line)
+    if cont_match and current_route_key and current_route_key in routes:
+        routes[current_route_key]["next_hops"].append(_build_next_hop(cont_match))
+        return True
+    return False
+
+
+def _handle_route(line: str, routes: dict[str, RouteEntry]) -> str | None:
+    """Try to parse line as a BGP route entry and update routes dict.
+
+    Returns the route key (CIDR prefix) if the line was consumed, else None.
+    """
+    route_match = _ROUTE_PATTERN.match(line)
+    if not route_match:
+        return None
+    network = route_match.group("network")
+    mask = route_match.group("mask")
+    prefix_len = _mask_to_prefix_length(mask)
+    key = f"{network}/{prefix_len}"
+    next_hop = _build_next_hop(route_match)
+    if key in routes:
+        routes[key]["next_hops"].append(next_hop)
+    else:
+        routes[key] = RouteEntry(code=route_match.group("code"), next_hops=[next_hop])
+    return key
+
+
 @register(
     OS.CISCO_FTD, r"show route bgp\s*(?P<asn>\d*)", doc_template="show route bgp <asn>"
 )
@@ -113,32 +147,13 @@ class ShowRouteBgpParser(BaseParser[ShowRouteBgpResult]):
                 continue
 
             # Check for ECMP continuation line
-            cont_match = _CONTINUATION_PATTERN.match(line)
-            if cont_match:
-                if current_route_key and current_route_key in routes:
-                    routes[current_route_key]["next_hops"].append(
-                        _build_next_hop(cont_match)
-                    )
+            if _handle_continuation(line, routes, current_route_key):
                 continue
 
             # Check for route line
-            route_match = _ROUTE_PATTERN.match(line)
-            if route_match:
-                network = route_match.group("network")
-                mask = route_match.group("mask")
-                prefix_len = _mask_to_prefix_length(mask)
-                current_route_key = f"{network}/{prefix_len}"
-                code = route_match.group("code")
-                next_hop = _build_next_hop(route_match)
-
-                if current_route_key in routes:
-                    routes[current_route_key]["next_hops"].append(next_hop)
-                else:
-                    routes[current_route_key] = RouteEntry(
-                        code=code,
-                        next_hops=[next_hop],
-                    )
-                continue
+            new_key = _handle_route(line, routes)
+            if new_key is not None:
+                current_route_key = new_key
 
         if not routes:
             msg = "No BGP routes found in output"
