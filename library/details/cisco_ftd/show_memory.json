@@ -1,0 +1,42 @@
+{
+  "os": "cisco_ftd",
+  "command": "show memory",
+  "schema": {
+    "name": "ShowMemoryResult",
+    "fields": {
+      "free_bytes": {
+        "type": "int",
+        "required": true
+      },
+      "free_pct": {
+        "type": "int",
+        "required": true
+      },
+      "used_bytes": {
+        "type": "int",
+        "required": true
+      },
+      "used_pct": {
+        "type": "int",
+        "required": true
+      },
+      "total_bytes": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Memory utilization showing free, used, and total bytes with percentages",
+      "input": "Free memory:       50102049799 bytes (70%)\nUsed memory:       21884890416 bytes (30%)\n-------------     ------------------\nTotal memory:      71986940215 bytes (100%)\n\nNote: Free memory is the free system memory. Additional memory may\n      be available from memory pools internal to the firewall process.\n      Use 'show memory detail' to see this information, but use it\n      with care since it may cause CPU hogs and packet loss under load.",
+      "expected": {
+        "free_bytes": 50102049799,
+        "free_pct": 70,
+        "used_bytes": 21884890416,
+        "used_pct": 30,
+        "total_bytes": 71986940215
+      }
+    }
+  ]
+}
