@@ -1,0 +1,823 @@
+{
+  "os": "cisco_ftd",
+  "command": "show failover",
+  "schema": {
+    "name": "ShowFailoverResult",
+    "fields": {
+      "failover_enabled": {
+        "type": "bool",
+        "required": true
+      },
+      "failover_unit": {
+        "type": "str",
+        "required": true
+      },
+      "lan_interface_name": {
+        "type": "str",
+        "required": true
+      },
+      "lan_interface_id": {
+        "type": "str",
+        "required": true
+      },
+      "lan_interface_status": {
+        "type": "str",
+        "required": true
+      },
+      "reconnect_timeout": {
+        "type": "str",
+        "required": true
+      },
+      "unit_poll_frequency": {
+        "type": "int",
+        "required": true
+      },
+      "unit_poll_holdtime": {
+        "type": "int",
+        "required": true
+      },
+      "interface_poll_frequency": {
+        "type": "int",
+        "required": true
+      },
+      "interface_poll_holdtime": {
+        "type": "int",
+        "required": true
+      },
+      "interface_policy": {
+        "type": "int",
+        "required": true
+      },
+      "monitored_interfaces": {
+        "type": "int",
+        "required": true
+      },
+      "max_monitored_interfaces": {
+        "type": "int",
+        "required": true
+      },
+      "failover_replication": {
+        "type": "str",
+        "required": true
+      },
+      "version_ours": {
+        "type": "str",
+        "required": true
+      },
+      "version_mate": {
+        "type": "str",
+        "required": true
+      },
+      "serial_ours": {
+        "type": "str",
+        "required": true
+      },
+      "serial_mate": {
+        "type": "str",
+        "required": true
+      },
+      "last_failover": {
+        "type": "str",
+        "required": true
+      },
+      "this_host": {
+        "type": {
+          "name": "HostInfo",
+          "fields": {
+            "role": {
+              "type": "str",
+              "required": true
+            },
+            "state": {
+              "type": "str",
+              "required": true
+            },
+            "active_time": {
+              "type": "int",
+              "required": true
+            },
+            "slots": {
+              "type": {
+                "type": "dict",
+                "key": "str",
+                "value": {
+                  "name": "SlotEntry",
+                  "fields": {
+                    "model": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "hw_rev": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "sw_rev": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "status": {
+                      "type": "str",
+                      "required": true
+                    }
+                  }
+                }
+              },
+              "required": true
+            },
+            "interfaces": {
+              "type": {
+                "type": "dict",
+                "key": "str",
+                "value": {
+                  "name": "InterfaceEntry",
+                  "fields": {
+                    "ip_address": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "status": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "monitored": {
+                      "type": "str",
+                      "required": true
+                    }
+                  }
+                }
+              },
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "other_host": {
+        "type": {
+          "type": "ref",
+          "name": "HostInfo"
+        },
+        "required": true
+      },
+      "stateful_failover_stats": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "StatefulObjectStats",
+            "fields": {
+              "xmit": {
+                "type": "int",
+                "required": true
+              },
+              "xerr": {
+                "type": "int",
+                "required": true
+              },
+              "rcv": {
+                "type": "int",
+                "required": true
+              },
+              "rerr": {
+                "type": "int",
+                "required": true
+              }
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Full failover status showing active/standby pair with monitored interfaces",
+      "input": "Failover On \nFailover unit Primary\nFailover LAN Interface: HA Port-channel48 (up)\nReconnect timeout 0:00:00\nUnit Poll frequency 1 seconds, holdtime 15 seconds\nInterface Poll frequency 5 seconds, holdtime 25 seconds\nInterface Policy 1\nMonitored Interfaces 4 of 1288 maximum\nMAC Address Move Notification Interval not set\nfailover replication http\nVersion: Ours 9.20(2)121, Mate 9.20(2)121\nSerial Number: Ours ABC1234XYZ2, Mate ABC1234XYZ1\nLast Failover at: 15:56:36 UTC Jul 1 2026\n\tThis host: Primary - Active \n\t\tActive time: 3801119 (sec)\n\t\tslot 0: FPR-4215 hw/sw rev (1.1/9.20(2)121) status (Up Sys)\n\t\t  Interface management (192.168.50.130): Normal (Monitored)\n\t\t  Interface eventing (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface Inside-PC (0.0.0.0): Normal (Waiting)\n\t\t  Interface Inside (172.16.1.5): Normal (Not-Monitored)\n\t\t  Interface outside (172.16.2.182): Normal (Waiting)\n\t\t  Interface DMZ-Corp (0.0.0.0): Normal (Waiting)\n\t\t  Interface Guest-DNS (10.100.0.1): Normal (Not-Monitored)\n\t\t  Interface DMZ-Mgmt (10.100.1.1): Normal (Not-Monitored)\n\t\t  Interface Corp-Jabber (10.100.2.1): Normal (Not-Monitored)\n\t\t  Interface DMZ-Vendor1 (10.100.2.65): Normal (Not-Monitored)\n\t\t  Interface DMZ-Vendor2 (10.100.4.1): Normal (Not-Monitored)\n\t\t  Interface DMZ-Vendor3 (10.100.4.65): Normal (Not-Monitored)\n\t\t  Interface DMZ-Partner1-Site1 (10.100.4.97): Normal (Not-Monitored)\n\t\t  Interface DMZ-Partner1-Site2 (10.100.4.113): Normal (Not-Monitored)\n\t\t  Interface DMZ-Vendor4 (0.0.0.0): Link Down (Not-Monitored)\n\t\t  Interface Corp-Guest (10.101.0.1): Normal (Not-Monitored)\n\t\t  Interface Corp-LB-MM (172.16.4.1): Normal (Not-Monitored)\n\t\t  Interface Corp-LB-And (172.16.5.1): Normal (Not-Monitored)\n\t\t  Interface Corp-ADC-M1 (172.16.3.65): Normal (Not-Monitored)\n\t\t  Interface Corp-ADC-M2 (172.16.6.1): Normal (Not-Monitored)\n\t\t  Interface DMZ-Vendor5 (10.100.5.1): Normal (Not-Monitored)\n\t\t  Interface Corp-LTE-Out (10.100.5.33): Normal (Not-Monitored)\n\t\t  Interface DMZ-Vendor6 (10.100.5.49): Normal (Not-Monitored)\n\t\t  Interface DMZ-Partner2-Ckt1 (10.100.9.1): Normal (Not-Monitored)\n\t\t  Interface DMZ-Partner2-Ckt2 (10.100.9.9): Normal (Not-Monitored)\n\t\t  Interface DMZ-Partner3-Ckt1 (10.100.10.1): Normal (Not-Monitored)\n\t\t  Interface DMZ-Partner3-Ckt2 (10.100.10.9): Normal (Not-Monitored)\n\t\t  Interface Tenant-WiFi-Guest (10.100.31.38): Normal (Not-Monitored)\n\t\t  Interface Tenant-Zone1 (10.102.0.129): Normal (Not-Monitored)\n\t\t  Interface Tenant-Zone2 (10.102.128.1): Normal (Not-Monitored)\n\t\t  Interface Tenant-Zone3 (10.102.2.1): Normal (Not-Monitored)\n\t\t  Interface Tenant-Zone4 (10.102.2.129): Normal (Not-Monitored)\n\t\t  Interface Tenant-Zone5 (10.103.1.129): Normal (Not-Monitored)\n\t\t  Interface Tenant-Zone6 (10.102.4.1): Normal (Not-Monitored)\n\t\t  Interface Tenant-Zone7 (10.102.5.1): Normal (Not-Monitored)\n\t\t  Interface Tenant_Zone8 (10.102.5.65): Normal (Not-Monitored)\n\t\tslot 1: snort rev (1.0)  status (up)\n\t\tslot 2: diskstatus rev (1.0)  status (up)\n\tOther host: Secondary - Standby Ready \n\t\tActive time: 964 (sec)\n\t\tslot 0: FPR-4215 hw/sw rev (1.1/9.20(2)121) status (Up Sys)\n\t\t  Interface management (192.168.50.131): Normal (Monitored)\n\t\t  Interface eventing (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface Inside-PC (0.0.0.0): Normal (Waiting)\n\t\t  Interface Inside (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface outside (0.0.0.0): Normal (Waiting)\n\t\t  Interface DMZ-Corp (0.0.0.0): Normal (Waiting)\n\t\t  Interface Guest-DNS (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface DMZ-Mgmt (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface Corp-Jabber (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface DMZ-Vendor1 (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface DMZ-Vendor2 (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface DMZ-Vendor3 (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface DMZ-Partner1-Site1 (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface DMZ-Partner1-Site2 (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface DMZ-Vendor4 (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface Corp-Guest (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface Corp-LB-MM (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface Corp-LB-And (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface Corp-ADC-M1 (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface Corp-ADC-M2 (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface DMZ-Vendor5 (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface Corp-LTE-Out (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface DMZ-Vendor6 (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface DMZ-Partner2-Ckt1 (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface DMZ-Partner2-Ckt2 (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface DMZ-Partner3-Ckt1 (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface DMZ-Partner3-Ckt2 (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface Tenant-WiFi-Guest (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface Tenant-Zone1 (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface Tenant-Zone2 (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface Tenant-Zone3 (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface Tenant-Zone4 (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface Tenant-Zone5 (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface Tenant-Zone6 (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface Tenant-Zone7 (0.0.0.0): Normal (Not-Monitored)\n\t\t  Interface Tenant_Zone8 (0.0.0.0): Normal (Not-Monitored)\n\t\tslot 1: snort rev (1.0)  status (up)\n\t\tslot 2: diskstatus rev (1.0)  status (up)\n\nStateful Failover Logical Update Statistics\n\tLink : HA Port-channel48 (up)\n\tStateful Obj \txmit       xerr       rcv        rerr      \n\tGeneral\t\t659482     0          622258     0         \n\tsys cmd  \t596827     0          596826     0         \n\tup time  \t0          0          0          0         \n\tRPC services  \t0          0          0          0         \n\tTCP conn \t3567       0          1516       0         \n\tUDP conn \t28933      0          14519      0         \n\tARP tbl  \t24955      0          7589       0         \n\tXlate_Timeout  \t0          0          0          0         \n\tIPv6 ND tbl  \t0          0          0          0         \n\tVPN IKEv1 SA \t0          0          0          0         \n\tVPN IKEv1 P2 \t0          0          0          0         \n\tVPN IKEv2 SA \t0          0          0          0         \n\tVPN IKEv2 P2 \t0          0          0          0         \n\tVPN CTCP upd \t0          0          0          0         \n\tVPN SDI upd \t0          0          0          0         \n\tVPN DHCP upd \t0          0          0          0         \n\tGTP PDP \t0          0          0          0         \n\tGTP PDPMCB \t0          0          0          0         \n\tSIP Session \t0          0          0          0         \n\tSIP Tx \t0          0          0          0         \n\tSIP Pinhole \t0          0          0          0         \n\tRoute Session \t1520       0          346        0         \n\tRouter ID \t2          0          0          0         \n\tCTS SGTNAME \t0          0          0          0         \n\tCTS PAC \t0          0          0          0         \n\tTrustSec-SXP \t0          0          0          0         \n\tIPv6 Route \t0          0          0          0         \n\tSTS Table \t0          0          0          0         \n\tUmbrella Device-ID \t0          0          0          0         \n\tRule DB B-Sync \t0          0          0          0         \n\tRule DB P-Sync \t3678       0          1462       0         \n\tRule DB Delete \t0          0          0          0         \n\n\tLogical Update Queue Information\n\t \t \tCur \tMax \tTotal\n\tRecv Q: \t0 \t10 \t1013539\n\tXmit Q: \t0 \t15 \t2972583",
+      "expected": {
+        "failover_enabled": true,
+        "failover_unit": "Primary",
+        "lan_interface_name": "HA",
+        "lan_interface_id": "Port-channel48",
+        "lan_interface_status": "up",
+        "reconnect_timeout": "0:00:00",
+        "unit_poll_frequency": 1,
+        "unit_poll_holdtime": 15,
+        "interface_poll_frequency": 5,
+        "interface_poll_holdtime": 25,
+        "interface_policy": 1,
+        "monitored_interfaces": 4,
+        "max_monitored_interfaces": 1288,
+        "failover_replication": "http",
+        "version_ours": "9.20(2)121",
+        "version_mate": "9.20(2)121",
+        "serial_ours": "ABC1234XYZ2",
+        "serial_mate": "ABC1234XYZ1",
+        "last_failover": "15:56:36 UTC Jul 1 2026",
+        "this_host": {
+          "role": "Primary",
+          "state": "Active",
+          "active_time": 3801119,
+          "slots": {
+            "0": {
+              "model": "FPR-4215",
+              "hw_rev": "1.1",
+              "sw_rev": "9.20(2)121",
+              "status": "Up Sys"
+            },
+            "1": {
+              "model": "snort",
+              "sw_rev": "1.0",
+              "status": "up"
+            },
+            "2": {
+              "model": "diskstatus",
+              "sw_rev": "1.0",
+              "status": "up"
+            }
+          },
+          "interfaces": {
+            "management": {
+              "ip_address": "192.168.50.130",
+              "status": "Normal",
+              "monitored": "Monitored"
+            },
+            "eventing": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Inside-PC": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Waiting"
+            },
+            "Inside": {
+              "ip_address": "172.16.1.5",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "outside": {
+              "ip_address": "172.16.2.182",
+              "status": "Normal",
+              "monitored": "Waiting"
+            },
+            "DMZ-Corp": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Waiting"
+            },
+            "Guest-DNS": {
+              "ip_address": "10.100.0.1",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Mgmt": {
+              "ip_address": "10.100.1.1",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Corp-Jabber": {
+              "ip_address": "10.100.2.1",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Vendor1": {
+              "ip_address": "10.100.2.65",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Vendor2": {
+              "ip_address": "10.100.4.1",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Vendor3": {
+              "ip_address": "10.100.4.65",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Partner1-Site1": {
+              "ip_address": "10.100.4.97",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Partner1-Site2": {
+              "ip_address": "10.100.4.113",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Vendor4": {
+              "ip_address": "0.0.0.0",
+              "status": "Link Down",
+              "monitored": "Not-Monitored"
+            },
+            "Corp-Guest": {
+              "ip_address": "10.101.0.1",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Corp-LB-MM": {
+              "ip_address": "172.16.4.1",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Corp-LB-And": {
+              "ip_address": "172.16.5.1",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Corp-ADC-M1": {
+              "ip_address": "172.16.3.65",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Corp-ADC-M2": {
+              "ip_address": "172.16.6.1",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Vendor5": {
+              "ip_address": "10.100.5.1",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Corp-LTE-Out": {
+              "ip_address": "10.100.5.33",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Vendor6": {
+              "ip_address": "10.100.5.49",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Partner2-Ckt1": {
+              "ip_address": "10.100.9.1",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Partner2-Ckt2": {
+              "ip_address": "10.100.9.9",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Partner3-Ckt1": {
+              "ip_address": "10.100.10.1",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Partner3-Ckt2": {
+              "ip_address": "10.100.10.9",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Tenant-WiFi-Guest": {
+              "ip_address": "10.100.31.38",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Tenant-Zone1": {
+              "ip_address": "10.102.0.129",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Tenant-Zone2": {
+              "ip_address": "10.102.128.1",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Tenant-Zone3": {
+              "ip_address": "10.102.2.1",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Tenant-Zone4": {
+              "ip_address": "10.102.2.129",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Tenant-Zone5": {
+              "ip_address": "10.103.1.129",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Tenant-Zone6": {
+              "ip_address": "10.102.4.1",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Tenant-Zone7": {
+              "ip_address": "10.102.5.1",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Tenant_Zone8": {
+              "ip_address": "10.102.5.65",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            }
+          }
+        },
+        "other_host": {
+          "role": "Secondary",
+          "state": "Standby Ready",
+          "active_time": 964,
+          "slots": {
+            "0": {
+              "model": "FPR-4215",
+              "hw_rev": "1.1",
+              "sw_rev": "9.20(2)121",
+              "status": "Up Sys"
+            },
+            "1": {
+              "model": "snort",
+              "sw_rev": "1.0",
+              "status": "up"
+            },
+            "2": {
+              "model": "diskstatus",
+              "sw_rev": "1.0",
+              "status": "up"
+            }
+          },
+          "interfaces": {
+            "management": {
+              "ip_address": "192.168.50.131",
+              "status": "Normal",
+              "monitored": "Monitored"
+            },
+            "eventing": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Inside-PC": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Waiting"
+            },
+            "Inside": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "outside": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Waiting"
+            },
+            "DMZ-Corp": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Waiting"
+            },
+            "Guest-DNS": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Mgmt": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Corp-Jabber": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Vendor1": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Vendor2": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Vendor3": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Partner1-Site1": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Partner1-Site2": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Vendor4": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Corp-Guest": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Corp-LB-MM": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Corp-LB-And": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Corp-ADC-M1": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Corp-ADC-M2": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Vendor5": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Corp-LTE-Out": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Vendor6": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Partner2-Ckt1": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Partner2-Ckt2": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Partner3-Ckt1": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "DMZ-Partner3-Ckt2": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Tenant-WiFi-Guest": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Tenant-Zone1": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Tenant-Zone2": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Tenant-Zone3": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Tenant-Zone4": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Tenant-Zone5": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Tenant-Zone6": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Tenant-Zone7": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            },
+            "Tenant_Zone8": {
+              "ip_address": "0.0.0.0",
+              "status": "Normal",
+              "monitored": "Not-Monitored"
+            }
+          }
+        },
+        "stateful_failover_stats": {
+          "General": {
+            "xmit": 659482,
+            "xerr": 0,
+            "rcv": 622258,
+            "rerr": 0
+          },
+          "sys cmd": {
+            "xmit": 596827,
+            "xerr": 0,
+            "rcv": 596826,
+            "rerr": 0
+          },
+          "up time": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "RPC services": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "TCP conn": {
+            "xmit": 3567,
+            "xerr": 0,
+            "rcv": 1516,
+            "rerr": 0
+          },
+          "UDP conn": {
+            "xmit": 28933,
+            "xerr": 0,
+            "rcv": 14519,
+            "rerr": 0
+          },
+          "ARP tbl": {
+            "xmit": 24955,
+            "xerr": 0,
+            "rcv": 7589,
+            "rerr": 0
+          },
+          "Xlate_Timeout": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "IPv6 ND tbl": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "VPN IKEv1 SA": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "VPN IKEv1 P2": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "VPN IKEv2 SA": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "VPN IKEv2 P2": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "VPN CTCP upd": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "VPN SDI upd": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "VPN DHCP upd": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "GTP PDP": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "GTP PDPMCB": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "SIP Session": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "SIP Tx": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "SIP Pinhole": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "Route Session": {
+            "xmit": 1520,
+            "xerr": 0,
+            "rcv": 346,
+            "rerr": 0
+          },
+          "Router ID": {
+            "xmit": 2,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "CTS SGTNAME": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "CTS PAC": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "TrustSec-SXP": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "IPv6 Route": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "STS Table": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "Umbrella Device-ID": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "Rule DB B-Sync": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          },
+          "Rule DB P-Sync": {
+            "xmit": 3678,
+            "xerr": 0,
+            "rcv": 1462,
+            "rerr": 0
+          },
+          "Rule DB Delete": {
+            "xmit": 0,
+            "xerr": 0,
+            "rcv": 0,
+            "rerr": 0
+          }
+        }
+      }
+    }
+  ]
+}
