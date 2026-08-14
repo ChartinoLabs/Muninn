@@ -1,0 +1,27 @@
+{
+  "os": "cisco_ftd",
+  "command": "show xlate count",
+  "schema": {
+    "name": "ShowXlateCountResult",
+    "fields": {
+      "in_use": {
+        "type": "int",
+        "required": true
+      },
+      "most_used": {
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "NAT translation count showing current and peak usage",
+      "input": "1 in use, 151 most used\n",
+      "expected": {
+        "in_use": 1,
+        "most_used": 151
+      }
+    }
+  ]
+}
