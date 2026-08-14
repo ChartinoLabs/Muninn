@@ -118,31 +118,75 @@ def _split_neighbor_blocks(output: str) -> list[tuple[str, str, int, str, list[s
     return blocks
 
 
+def _extract_version_and_id(stripped: str, fields: dict) -> bool:
+    """Extract BGP version and router ID from a line."""
+    if m := _BGP_VERSION_RE.search(stripped):
+        fields["bgp_version"] = int(m.group(1))
+        fields["router_id"] = m.group(2)
+        return True
+    return False
+
+
+def _extract_state(stripped: str, fields: dict) -> bool:
+    """Extract BGP session state from a line."""
+    if m := _BGP_STATE_RE.search(stripped):
+        fields["bgp_state"] = m.group(1)
+        return True
+    return False
+
+
+def _extract_timers(stripped: str, fields: dict) -> bool:
+    """Extract hold time and keepalive interval from a line."""
+    if "hold time is" not in stripped or "Configured" in stripped:
+        return False
+    if m := _HOLD_TIME_RE.search(stripped):
+        fields["hold_time"] = int(m.group(1))
+        fields["keepalive_interval"] = int(m.group(2))
+        return True
+    return False
+
+
+def _extract_connections(stripped: str, fields: dict) -> bool:
+    """Extract connection counters from a line."""
+    if m := _CONNECTIONS_RE.search(stripped):
+        fields["connections_established"] = int(m.group(1))
+        fields["connections_dropped"] = int(m.group(2))
+        return True
+    return False
+
+
+def _extract_features(stripped: str, fields: dict) -> bool:
+    """Extract BFD, fall-over, and graceful-restart status from a line."""
+    if _BFD_CONFIGURED_RE.search(stripped):
+        fields["bfd_configured"] = True
+        return True
+    if _FALL_OVER_RE.search(stripped):
+        fields["fall_over_configured"] = True
+        return True
+    if m := _GRACEFUL_RESTART_RE.search(stripped):
+        fields["graceful_restart"] = m.group(1)
+        return True
+    return False
+
+
+_SESSION_EXTRACTORS = (
+    _extract_version_and_id,
+    _extract_state,
+    _extract_timers,
+    _extract_connections,
+    _extract_features,
+)
+
+
 def _parse_session_fields(lines: list[str]) -> dict:
     """Extract session-level fields from the body lines of a neighbor block."""
     fields: dict = {}
 
     for line in lines:
         stripped = line.strip()
-
-        if m := _BGP_VERSION_RE.search(stripped):
-            fields["bgp_version"] = int(m.group(1))
-            fields["router_id"] = m.group(2)
-        elif m := _BGP_STATE_RE.search(stripped):
-            fields["bgp_state"] = m.group(1)
-        elif "hold time is" in stripped and "Configured" not in stripped:
-            if m := _HOLD_TIME_RE.search(stripped):
-                fields["hold_time"] = int(m.group(1))
-                fields["keepalive_interval"] = int(m.group(2))
-        elif m := _CONNECTIONS_RE.search(stripped):
-            fields["connections_established"] = int(m.group(1))
-            fields["connections_dropped"] = int(m.group(2))
-        elif _BFD_CONFIGURED_RE.search(stripped):
-            fields["bfd_configured"] = True
-        elif _FALL_OVER_RE.search(stripped):
-            fields["fall_over_configured"] = True
-        elif m := _GRACEFUL_RESTART_RE.search(stripped):
-            fields["graceful_restart"] = m.group(1)
+        for extractor in _SESSION_EXTRACTORS:
+            if extractor(stripped, fields):
+                break
 
     return fields
 
