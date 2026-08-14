@@ -1,0 +1,251 @@
+{
+  "os": "cisco_ftd",
+  "command": "show bgp summary",
+  "schema": {
+    "name": "ShowBgpSummaryResult",
+    "fields": {
+      "bgp_operational": {
+        "type": "bool",
+        "required": true
+      },
+      "router_id": {
+        "type": "str",
+        "required": true
+      },
+      "local_as": {
+        "type": "int",
+        "required": true
+      },
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "NeighborEntry",
+            "fields": {
+              "version": {
+                "type": "int",
+                "required": true
+              },
+              "remote_as": {
+                "type": "int",
+                "required": true
+              },
+              "msg_rcvd": {
+                "type": "int",
+                "required": true
+              },
+              "msg_sent": {
+                "type": "int",
+                "required": true
+              },
+              "table_version": {
+                "type": "int",
+                "required": true
+              },
+              "in_queue": {
+                "type": "int",
+                "required": true
+              },
+              "out_queue": {
+                "type": "int",
+                "required": true
+              },
+              "up_down": {
+                "type": "str",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": false
+              },
+              "prefixes_received": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "BGP summary with 7 neighbors in established and idle states",
+      "input": "BGP router identifier 172.16.6.1, local AS number 65001\nBGP table version is 111, main routing table version 111\n39 network entries using 7800 bytes of memory\n58 path entries using 4640 bytes of memory\n7 multipath network entries and 26 multipath paths\n8/5 BGP path/bestpath attribute entries using 1664 bytes of memory\n2 BGP AS-PATH entries using 64 bytes of memory\n0 BGP route-map cache entries using 0 bytes of memory\n0 BGP filter-list cache entries using 0 bytes of memory\nBGP using 14168 total bytes of memory\nBGP activity 46/7 prefixes, 85/27 paths, scan interval 60 secs\n\nNeighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd\n172.16.1.1    4        65002 691200  669802       111    0    0 1w0d  5\n172.16.1.2    4        65002 691204  669802       111    0    0 1w0d  5\n172.16.1.3    4        65002 691209  669814       111    0    0 1w0d  5\n172.16.1.4    4        65002 691199  669803       111    0    0 1w0d  5\n172.16.2.133  4        65003 93953   91053        111    0    0 1d02h  2\n172.16.2.134  4        65003 93954   91055        111    0    0 1d02h  2\n172.16.2.135  4        65003 93955   91055        111    0    0 1d02h  2",
+      "expected": {
+        "bgp_operational": true,
+        "local_as": 65001,
+        "neighbors": {
+          "172.16.1.1": {
+            "in_queue": 0,
+            "msg_rcvd": 691200,
+            "msg_sent": 669802,
+            "out_queue": 0,
+            "prefixes_received": 5,
+            "remote_as": 65002,
+            "table_version": 111,
+            "up_down": "1w0d",
+            "version": 4
+          },
+          "172.16.1.2": {
+            "in_queue": 0,
+            "msg_rcvd": 691204,
+            "msg_sent": 669802,
+            "out_queue": 0,
+            "prefixes_received": 5,
+            "remote_as": 65002,
+            "table_version": 111,
+            "up_down": "1w0d",
+            "version": 4
+          },
+          "172.16.1.3": {
+            "in_queue": 0,
+            "msg_rcvd": 691209,
+            "msg_sent": 669814,
+            "out_queue": 0,
+            "prefixes_received": 5,
+            "remote_as": 65002,
+            "table_version": 111,
+            "up_down": "1w0d",
+            "version": 4
+          },
+          "172.16.1.4": {
+            "in_queue": 0,
+            "msg_rcvd": 691199,
+            "msg_sent": 669803,
+            "out_queue": 0,
+            "prefixes_received": 5,
+            "remote_as": 65002,
+            "table_version": 111,
+            "up_down": "1w0d",
+            "version": 4
+          },
+          "172.16.2.133": {
+            "in_queue": 0,
+            "msg_rcvd": 93953,
+            "msg_sent": 91053,
+            "out_queue": 0,
+            "prefixes_received": 2,
+            "remote_as": 65003,
+            "table_version": 111,
+            "up_down": "1d02h",
+            "version": 4
+          },
+          "172.16.2.134": {
+            "in_queue": 0,
+            "msg_rcvd": 93954,
+            "msg_sent": 91055,
+            "out_queue": 0,
+            "prefixes_received": 2,
+            "remote_as": 65003,
+            "table_version": 111,
+            "up_down": "1d02h",
+            "version": 4
+          },
+          "172.16.2.135": {
+            "in_queue": 0,
+            "msg_rcvd": 93955,
+            "msg_sent": 91055,
+            "out_queue": 0,
+            "prefixes_received": 2,
+            "remote_as": 65003,
+            "table_version": 111,
+            "up_down": "1d02h",
+            "version": 4
+          }
+        },
+        "router_id": "172.16.6.1"
+      }
+    },
+    {
+      "name": "BGP summary when BGP is non-operational (router-id not configured), all neighbors Idle",
+      "input": "% BGP cannot run because the router-id is not configured\nBGP router identifier 0.0.0.0, local AS number 65001\nBGP table version is 47, main routing table version 47\n32 network entries using 6400 bytes of memory\n32 path entries using 2560 bytes of memory\n2/2 BGP path/bestpath attribute entries using 416 bytes of memory\n0 BGP route-map cache entries using 0 bytes of memory\n0 BGP filter-list cache entries using 0 bytes of memory\nBGP using 9376 total bytes of memory\nBGP activity 33/1 prefixes, 39/7 paths, scan interval 60 secs\n\nNeighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd\n172.16.1.1    4        65002 0       0              1    0    0 never  Idle\n172.16.1.2    4        65002 0       0              1    0    0 never  Idle\n172.16.1.3    4        65002 0       0              1    0    0 never  Idle\n172.16.1.4    4        65002 0       0              1    0    0 never  Idle\n172.16.2.133  4        65003 0       0              1    0    0 never  Idle\n172.16.2.134  4        65003 0       0              1    0    0 never  Idle\n172.16.2.135  4        65003 0       0              1    0    0 never  Idle",
+      "expected": {
+        "bgp_operational": false,
+        "local_as": 65001,
+        "neighbors": {
+          "172.16.1.1": {
+            "in_queue": 0,
+            "msg_rcvd": 0,
+            "msg_sent": 0,
+            "out_queue": 0,
+            "remote_as": 65002,
+            "state": "Idle",
+            "table_version": 1,
+            "up_down": "never",
+            "version": 4
+          },
+          "172.16.1.2": {
+            "in_queue": 0,
+            "msg_rcvd": 0,
+            "msg_sent": 0,
+            "out_queue": 0,
+            "remote_as": 65002,
+            "state": "Idle",
+            "table_version": 1,
+            "up_down": "never",
+            "version": 4
+          },
+          "172.16.1.3": {
+            "in_queue": 0,
+            "msg_rcvd": 0,
+            "msg_sent": 0,
+            "out_queue": 0,
+            "remote_as": 65002,
+            "state": "Idle",
+            "table_version": 1,
+            "up_down": "never",
+            "version": 4
+          },
+          "172.16.1.4": {
+            "in_queue": 0,
+            "msg_rcvd": 0,
+            "msg_sent": 0,
+            "out_queue": 0,
+            "remote_as": 65002,
+            "state": "Idle",
+            "table_version": 1,
+            "up_down": "never",
+            "version": 4
+          },
+          "172.16.2.133": {
+            "in_queue": 0,
+            "msg_rcvd": 0,
+            "msg_sent": 0,
+            "out_queue": 0,
+            "remote_as": 65003,
+            "state": "Idle",
+            "table_version": 1,
+            "up_down": "never",
+            "version": 4
+          },
+          "172.16.2.134": {
+            "in_queue": 0,
+            "msg_rcvd": 0,
+            "msg_sent": 0,
+            "out_queue": 0,
+            "remote_as": 65003,
+            "state": "Idle",
+            "table_version": 1,
+            "up_down": "never",
+            "version": 4
+          },
+          "172.16.2.135": {
+            "in_queue": 0,
+            "msg_rcvd": 0,
+            "msg_sent": 0,
+            "out_queue": 0,
+            "remote_as": 65003,
+            "state": "Idle",
+            "table_version": 1,
+            "up_down": "never",
+            "version": 4
+          }
+        },
+        "router_id": "0.0.0.0"
+      }
+    }
+  ]
+}
