@@ -356,11 +356,15 @@ class ShowFailoverParser(BaseParser["ShowFailoverResult"]):
             reconnect_timeout=str(header.get("reconnect_timeout", "")),
             unit_poll_frequency=cast(int, header.get("unit_poll_frequency", 0)),
             unit_poll_holdtime=cast(int, header.get("unit_poll_holdtime", 0)),
-            interface_poll_frequency=cast(int, header.get("interface_poll_frequency", 0)),
+            interface_poll_frequency=cast(
+                int, header.get("interface_poll_frequency", 0)
+            ),
             interface_poll_holdtime=cast(int, header.get("interface_poll_holdtime", 0)),
             interface_policy=cast(int, header.get("interface_policy", 0)),
             monitored_interfaces=cast(int, header.get("monitored_interfaces", 0)),
-            max_monitored_interfaces=cast(int, header.get("max_monitored_interfaces", 0)),
+            max_monitored_interfaces=cast(
+                int, header.get("max_monitored_interfaces", 0)
+            ),
             failover_replication=str(header.get("failover_replication", "")),
             version_ours=str(header.get("version_ours", "")),
             version_mate=str(header.get("version_mate", "")),
