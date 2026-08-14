@@ -13,8 +13,8 @@ class InterfaceEntry(TypedDict):
     """Schema for a single FTD interface entry."""
 
     nameif: NotRequired[str]
-    status: str
-    line_protocol: str
+    status: NotRequired[str]
+    line_protocol: NotRequired[str]
     hardware: NotRequired[str]
     bandwidth_kbps: NotRequired[int]
     mac_address: NotRequired[str]
@@ -259,7 +259,7 @@ def _parse_block(name: str, nameif: str, lines: list[str]) -> InterfaceEntry:
     _parse_properties(lines, entry)
     _parse_counters(lines, entry)
 
-    return InterfaceEntry(**entry)  # type: ignore[typeddict-item]
+    return InterfaceEntry(**entry)
 
 
 @register(OS.CISCO_FTD, "show interface detail")
