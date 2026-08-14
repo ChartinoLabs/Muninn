@@ -70,6 +70,61 @@ class ShowRouteSummaryParser(BaseParser["ShowRouteSummaryResult"]):
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.ROUTING})
 
     @classmethod
+    def _parse_bgp_detail(
+        cls,
+        line: str,
+        last_source: str | None,
+        route_sources: dict[str, RouteSourceEntry],
+    ) -> bool:
+        """Parse a BGP detail line and update the last source entry.
+
+        Returns True if the line was consumed.
+        """
+        m = _BGP_DETAIL_RE.match(line)
+        if m and last_source is not None and last_source in route_sources:
+            route_sources[last_source]["external"] = int(m.group("external"))
+            route_sources[last_source]["internal"] = int(m.group("internal"))
+            route_sources[last_source]["local"] = int(m.group("local"))
+            return True
+        return False
+
+    @classmethod
+    def _parse_internal_source(cls, line: str) -> RouteSourceEntry | None:
+        """Parse an internal source line (missing subnets/replicates/overhead).
+
+        Returns the entry if matched, None otherwise.
+        """
+        m = _INTERNAL_SOURCE_RE.match(line.strip())
+        if not m:
+            return None
+        return {
+            "networks": int(m.group("networks")),
+            "subnets": 0,
+            "replicates": 0,
+            "overhead": 0,
+            "memory_bytes": int(m.group("memory")),
+        }
+
+    @classmethod
+    def _parse_standard_source(cls, line: str) -> tuple[str, RouteSourceEntry] | None:
+        """Parse a standard route source line.
+
+        Returns a (source_name, entry) tuple if matched, None otherwise.
+        """
+        m = _ROUTE_SOURCE_RE.match(line.strip())
+        if not m:
+            return None
+        source = m.group("source").strip()
+        entry: RouteSourceEntry = {
+            "networks": int(m.group("networks")),
+            "subnets": int(m.group("subnets")),
+            "replicates": int(m.group("replicates")),
+            "overhead": int(m.group("overhead")),
+            "memory_bytes": int(m.group("memory")),
+        }
+        return source, entry
+
+    @classmethod
     def parse(cls, output: str) -> ShowRouteSummaryResult:
         """Parse 'show route summary' output.
 
@@ -88,49 +143,28 @@ class ShowRouteSummaryParser(BaseParser["ShowRouteSummaryResult"]):
         last_source: str | None = None
 
         for line in lines:
-            # Skip empty lines and header line
             if not line.strip() or line.strip().startswith("Route Source"):
                 continue
 
-            # Maximum paths
             m = _MAX_PATHS_RE.match(line.strip())
             if m:
                 maximum_paths = int(m.group("max_paths"))
                 continue
 
-            # BGP detail line (External/Internal/Local)
-            m = _BGP_DETAIL_RE.match(line)
-            if m and last_source is not None and last_source in route_sources:
-                route_sources[last_source]["external"] = int(m.group("external"))
-                route_sources[last_source]["internal"] = int(m.group("internal"))
-                route_sources[last_source]["local"] = int(m.group("local"))
+            if cls._parse_bgp_detail(line, last_source, route_sources):
                 continue
 
-            # Internal source (missing subnets/replicates/overhead columns)
-            m = _INTERNAL_SOURCE_RE.match(line.strip())
-            if m:
-                source = m.group("source").strip()
-                route_sources[source] = {
-                    "networks": int(m.group("networks")),
-                    "subnets": 0,
-                    "replicates": 0,
-                    "overhead": 0,
-                    "memory_bytes": int(m.group("memory")),
-                }
+            internal_entry = cls._parse_internal_source(line)
+            if internal_entry is not None:
+                source = _INTERNAL_SOURCE_RE.match(line.strip()).group("source").strip()  # type: ignore[union-attr]
+                route_sources[source] = internal_entry
                 last_source = source
                 continue
 
-            # Standard route source line
-            m = _ROUTE_SOURCE_RE.match(line.strip())
-            if m:
-                source = m.group("source").strip()
-                route_sources[source] = {
-                    "networks": int(m.group("networks")),
-                    "subnets": int(m.group("subnets")),
-                    "replicates": int(m.group("replicates")),
-                    "overhead": int(m.group("overhead")),
-                    "memory_bytes": int(m.group("memory")),
-                }
+            standard_result = cls._parse_standard_source(line)
+            if standard_result is not None:
+                source, entry = standard_result
+                route_sources[source] = entry
                 last_source = source
                 continue
 
