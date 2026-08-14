@@ -86,6 +86,58 @@ def _should_skip(stripped: str) -> bool:
     return False
 
 
+def _extract_as_path(path_and_origin: str) -> str | None:
+    """Extract the AS path from a combined path+origin string.
+
+    The origin code (i, e, or ?) may be a separate token or attached to the
+    last AS number. Returns the AS path without the origin, or None on failure.
+    """
+    path_tokens = path_and_origin.split()
+    if not path_tokens:
+        return None
+
+    origin = path_tokens[-1]
+    if origin in ("i", "e", "?"):
+        return " ".join(path_tokens[:-1])
+
+    # Origin might be attached to last AS number (no space)
+    last = path_tokens[-1]
+    if last[-1] in ("i", "e", "?"):
+        path_tokens[-1] = last[:-1]
+        return " ".join(t for t in path_tokens if t)
+
+    return " ".join(path_tokens)
+
+
+def _parse_numeric_fields(
+    numeric_parts: list[str],
+) -> tuple[int | None, int | None, int] | None:
+    """Parse metric, local_pref, and weight from numeric field groups.
+
+    The rightmost numeric part is weight, then locprf, then metric (right to
+    left). Returns (metric, local_pref, weight) or None if weight cannot be
+    parsed.
+    """
+    try:
+        weight = int(numeric_parts[-1])
+    except ValueError:
+        return None
+
+    metric: int | None = None
+    local_pref: int | None = None
+
+    if len(numeric_parts) >= 3:
+        metric = int(numeric_parts[-3])
+        local_pref = int(numeric_parts[-2])
+    elif len(numeric_parts) == 2:
+        # Ambiguous: could be (metric, weight) or (locprf, weight)
+        # In Cisco output, when only one field is present before weight,
+        # it's typically metric (appears left of locprf column)
+        metric = int(numeric_parts[-2])
+
+    return metric, local_pref, weight
+
+
 def _parse_rest_fields(rest: str) -> tuple[int | None, int | None, int, str] | None:
     """Parse the metric/locprf/weight/path fields from the right portion of a route.
 
@@ -106,50 +158,19 @@ def _parse_rest_fields(rest: str) -> tuple[int | None, int | None, int, str] | N
 
     # The last part contains the AS path and origin code: e.g. "65002 i"
     # All preceding parts are numeric fields (metric, locprf, weight)
-    path_and_origin = parts[-1]
     numeric_parts = parts[:-1]
-
-    # Extract origin code from the path (last single char: i, e, or ?)
-    path_tokens = path_and_origin.split()
-    if not path_tokens:
-        return None
-
-    origin = path_tokens[-1]
-    if origin in ("i", "e", "?"):
-        as_path = " ".join(path_tokens[:-1])
-    else:
-        # Origin might be attached to last AS number (no space)
-        last = path_tokens[-1]
-        if last[-1] in ("i", "e", "?"):
-            path_tokens[-1] = last[:-1]
-            as_path = " ".join(t for t in path_tokens if t)
-        else:
-            as_path = " ".join(path_tokens)
-
-    # Combine AS path with the origin code for the path field
-    path_str = as_path
-
-    # Parse numeric parts: the rightmost is weight, then locprf, then metric
     if not numeric_parts:
         return None
 
-    try:
-        weight = int(numeric_parts[-1])
-    except ValueError:
+    path_str = _extract_as_path(parts[-1])
+    if path_str is None:
         return None
 
-    metric: int | None = None
-    local_pref: int | None = None
+    numeric_result = _parse_numeric_fields(numeric_parts)
+    if numeric_result is None:
+        return None
 
-    if len(numeric_parts) >= 3:
-        metric = int(numeric_parts[-3])
-        local_pref = int(numeric_parts[-2])
-    elif len(numeric_parts) == 2:
-        # Ambiguous: could be (metric, weight) or (locprf, weight)
-        # In Cisco output, when only one field is present before weight,
-        # it's typically metric (appears left of locprf column)
-        metric = int(numeric_parts[-2])
-
+    metric, local_pref, weight = numeric_result
     return metric, local_pref, weight, path_str
 
 
