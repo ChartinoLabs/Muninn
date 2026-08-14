@@ -23,8 +23,9 @@ class RouteEntry(TypedDict):
 class ShowBgpNeighborsRoutesResult(TypedDict):
     """Schema for 'show bgp neighbors <ip> routes' parsed output."""
 
-    table_version: int
-    router_id: str
+    bgp_operational: bool
+    table_version: NotRequired[int]
+    router_id: NotRequired[str]
     total_prefixes: int
     routes: dict[str, RouteEntry]
 
@@ -38,6 +39,9 @@ _TABLE_VERSION_RE = re.compile(
 _COLUMN_HEADER_RE = re.compile(
     r"^\s*Network\s+Next\s*Hop\s+Metric\s+LocPrf\s+Weight\s+Path"
 )
+
+# --- BGP non-operational detection ---
+_BGP_CANNOT_RUN_RE = re.compile(r"^%\s*BGP cannot run")
 
 # --- Total prefixes ---
 _TOTAL_PREFIXES_RE = re.compile(r"^Total number of prefixes (\d+)\s*$")
@@ -184,6 +188,55 @@ def _parse_route_line(line: str) -> tuple[str, RouteEntry] | None:
     return network, entry
 
 
+class _ParseState:
+    """Mutable state container for iterative line parsing."""
+
+    table_version: int | None = None
+    router_id: str | None = None
+    total_prefixes: int | None = None
+    routes: dict[str, RouteEntry]
+    in_routes_section: bool = False
+    bgp_operational: bool = True
+
+    def __init__(self) -> None:
+        self.routes = {}
+
+
+def _process_line(state: _ParseState, line: str) -> None:
+    """Process a single line and update parse state."""
+    stripped = line.strip()
+
+    if _is_noise_line(stripped):
+        return
+
+    if _BGP_CANNOT_RUN_RE.match(stripped):
+        state.bgp_operational = False
+        return
+
+    header_match = _TABLE_VERSION_RE.match(stripped)
+    if header_match:
+        state.table_version = int(header_match.group(1))
+        state.router_id = header_match.group(2)
+        return
+
+    total_match = _TOTAL_PREFIXES_RE.match(stripped)
+    if total_match:
+        state.total_prefixes = int(total_match.group(1))
+        return
+
+    if _COLUMN_HEADER_RE.match(line):
+        state.in_routes_section = True
+        return
+
+    if _should_skip(stripped) or not state.in_routes_section:
+        return
+
+    result = _parse_route_line(line)
+    if result is not None:
+        network, entry = result
+        state.routes[network] = entry
+
+
 @register(OS.CISCO_FTD, r"show bgp neighbors (?P<neighbor_ip>\S+) routes")
 class ShowBgpNeighborsRoutesParser(BaseParser["ShowBgpNeighborsRoutesResult"]):
     """Parser for 'show bgp neighbors <ip> routes' on Cisco FTD."""
@@ -193,56 +246,32 @@ class ShowBgpNeighborsRoutesParser(BaseParser["ShowBgpNeighborsRoutesResult"]):
     @classmethod
     def parse(cls, output: str) -> ShowBgpNeighborsRoutesResult:
         """Parse 'show bgp neighbors <ip> routes' output."""
-        table_version: int | None = None
-        router_id: str | None = None
-        total_prefixes: int | None = None
-        routes: dict[str, RouteEntry] = {}
-        in_routes_section = False
+        state = _ParseState()
 
         for line in output.splitlines():
-            stripped = line.strip()
+            _process_line(state, line)
 
-            if _is_noise_line(stripped):
-                continue
+        if not state.bgp_operational:
+            return {
+                "bgp_operational": False,
+                "total_prefixes": state.total_prefixes
+                if state.total_prefixes is not None
+                else 0,
+                "routes": {},
+            }
 
-            # Parse header line
-            header_match = _TABLE_VERSION_RE.match(stripped)
-            if header_match:
-                table_version = int(header_match.group(1))
-                router_id = header_match.group(2)
-                continue
-
-            # Parse total prefixes
-            total_match = _TOTAL_PREFIXES_RE.match(stripped)
-            if total_match:
-                total_prefixes = int(total_match.group(1))
-                continue
-
-            # Detect column header to start route parsing
-            if _COLUMN_HEADER_RE.match(line):
-                in_routes_section = True
-                continue
-
-            if _should_skip(stripped) or not in_routes_section:
-                continue
-
-            # Parse route entry
-            result = _parse_route_line(line)
-            if result is not None:
-                network, entry = result
-                routes[network] = entry
-
-        if table_version is None or router_id is None:
+        if state.table_version is None or state.router_id is None:
             msg = "Could not parse BGP table version or router ID from output"
             raise ValueError(msg)
 
-        if total_prefixes is None:
+        if state.total_prefixes is None:
             msg = "Could not parse total number of prefixes from output"
             raise ValueError(msg)
 
         return {
-            "table_version": table_version,
-            "router_id": router_id,
-            "total_prefixes": total_prefixes,
-            "routes": routes,
+            "bgp_operational": True,
+            "table_version": state.table_version,
+            "router_id": state.router_id,
+            "total_prefixes": state.total_prefixes,
+            "routes": state.routes,
         }
