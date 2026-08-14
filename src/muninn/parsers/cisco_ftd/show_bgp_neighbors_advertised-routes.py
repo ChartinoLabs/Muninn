@@ -23,8 +23,9 @@ class RouteEntry(TypedDict):
 class ShowBgpNeighborsAdvertisedRoutesResult(TypedDict):
     """Schema for 'show bgp neighbors <ip> advertised-routes' parsed output."""
 
-    table_version: int
-    router_id: str
+    bgp_operational: bool
+    table_version: NotRequired[int]
+    router_id: NotRequired[str]
     total_prefixes: int
     routes: dict[str, RouteEntry]
 
@@ -278,6 +279,21 @@ class ShowBgpNeighborsAdvertisedRoutesParser(
     @classmethod
     def parse(cls, output: str) -> ShowBgpNeighborsAdvertisedRoutesResult:
         """Parse 'show bgp neighbors <neighbor> advertised-routes' output."""
+        # Detect non-operational BGP
+        if "% BGP cannot run" in output:
+            # Extract total_prefixes if present, default to 0
+            total = 0
+            for line in output.splitlines():
+                m = _TOTAL_PREFIXES_RE.match(line.strip())
+                if m:
+                    total = int(m.group(1))
+                    break
+            return {
+                "bgp_operational": False,
+                "total_prefixes": total,
+                "routes": {},
+            }
+
         table_version, router_id, total_prefixes, routes = _process_lines(
             output.splitlines()
         )
@@ -291,6 +307,7 @@ class ShowBgpNeighborsAdvertisedRoutesParser(
             raise ValueError(msg)
 
         return {
+            "bgp_operational": True,
             "table_version": table_version,
             "router_id": router_id,
             "total_prefixes": total_prefixes,
