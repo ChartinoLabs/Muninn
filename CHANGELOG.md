@@ -4,6 +4,105 @@ All notable changes to Muninn are documented in this file.
 
 <!-- towncrier release notes start -->
 
+## 0.6.0 - 2026-08-14
+
+### Added Parsers
+
+- Added parser support for `show arp` on Cisco FTD.
+- Added parser support for `show asp drop` on Cisco FTD.
+- Added parser support for `show bgp all evpn summary` on Cisco IOS-XR.
+- Added parser support for `show bgp l2vpn evpn neighbors` on Cisco IOS-XR.
+- Added parser support for `show bgp l2vpn evpn` on Cisco IOS-XR.
+- Added parser support for `show bgp neighbors <ip> advertised-routes` on Cisco FTD.
+- Added parser support for `show bgp neighbors <ip> routes` on Cisco FTD.
+- Added parser support for `show bgp neighbors` on Cisco FTD.
+- Added parser support for `show bgp summary` on Cisco FTD.
+- Added parser support for `show bgp vpnv4 unicast summary` on Cisco IOS-XR.
+- Added parser support for `show bgp vrf summary` on Cisco IOS-XR.
+- Added parser support for `show bgp vrf` on Cisco IOS-XR.
+- Added parser support for `show configuration rollback changes last` on Cisco IOS-XR.
+- Added parser support for `show conn count` on Cisco FTD.
+- Added parser support for `show controllers <interface> stats` on Cisco IOS-XR.
+- Added parser support for `show cpu core` on Cisco FTD.
+- Added parser support for `show cpu usage` on Cisco FTD.
+- Added parser support for `show disk` on Cisco FTD.
+- Added parser support for `show evpn evi detail` on Cisco IOS-XR.
+- Added parser support for `show evpn evi mac` on Cisco IOS-XR.
+- Added parser support for `show evpn evi` on Cisco IOS-XR.
+- Added parser support for `show failover state` on Cisco FTD.
+- Added parser support for `show failover` on Cisco FTD.
+- Added parser support for `show install inactive` on Cisco IOS-XR.
+- Added parser support for `show install request` on Cisco IOS-XR.
+- Added parser support for `show interface detail` on Cisco FTD.
+- Added parser support for `show interface ip brief` on Cisco FTD.
+- Added parser support for `show ip` on Cisco FTD.
+- Added parser support for `show isis adjacency` on Cisco IOS-XR.
+- Added parser support for `show isis database detail` on Cisco IOS-XE.
+- Added parser support for `show isis database detail` on Cisco IOS-XR.
+- Added parser support for `show isis database summary` on Cisco IOS-XR.
+- Added parser support for `show isis database` on Cisco IOS-XE.
+- Added parser support for `show isis flex-algo` on Cisco IOS-XE.
+- Added parser support for `show isis hostname` on Cisco IOS-XE.
+- Added parser support for `show isis hostname` on Cisco IOS-XR.
+- Added parser support for `show isis interface brief` on Cisco IOS-XR.
+- Added parser support for `show isis interface` on Cisco IOS-XR.
+- Added parser support for `show isis neighbors detail` on Cisco IOS-XE.
+- Added parser support for `show isis neighbors detail` on Cisco IOS-XR.
+- Added parser support for `show isis neighbors` on Cisco IOS-XE (cross-registered from IOS).
+- Added parser support for `show isis node summary` on Cisco IOS-XE.
+- Added parser support for `show isis segment-routing label table` on Cisco IOS-XR.
+- Added parser support for `show isis statistics` on Cisco IOS-XR.
+- Added parser support for `show isis topology` on Cisco IOS-XE.
+- Added parser support for `show isis topology` on Cisco IOS-XR.
+- Added parser support for `show isis` on Cisco IOS-XR.
+- Added parser support for `show l2vpn api statistics` on Cisco IOS-XR.
+- Added parser support for `show l2vpn bridge-domain brief location` on Cisco IOS-XR.
+- Added parser support for `show l2vpn capability` on Cisco IOS-XR.
+- Added parser support for `show l2vpn forwarding capability location` on Cisco IOS-XR.
+- Added parser support for `show l2vpn forwarding message counters private location` on Cisco IOS-XR.
+- Added parser support for `show l2vpn forwarding resource detail location` on Cisco IOS-XR.
+- Added parser support for `show l2vpn forwarding summary private location` on Cisco IOS-XR.
+- Added parser support for `show l2vpn xconnect summary location` on Cisco IOS-XR.
+- Added parser support for `show macsec mka session` on Cisco IOS-XR.
+- Added parser support for `show macsec mka statistics interface` on Cisco IOS-XR.
+- Added parser support for `show macsec mka statistics location` on Cisco IOS-XR.
+- Added parser support for `show macsec mka summary` on Cisco IOS-XR.
+- Added parser support for `show macsec policy` on Cisco IOS-XR.
+- Added parser support for `show macsec statistics interface` on Cisco IOS-XE.
+- Added parser support for `show macsec status interface` on Cisco IOS-XE.
+- Added parser support for `show memory` on Cisco FTD.
+- Added parser support for `show mpls forwarding interface detail` on Cisco IOS-XR.
+- Added parser support for `show mpls forwarding interface` on Cisco IOS-XR.
+- Added parser support for `show mpls interfaces` on Cisco IOS-XR.
+- Added parser support for `show route bgp` on Cisco FTD.
+- Added parser support for `show route ipv4 isis` on Cisco IOS-XR.
+- Added parser support for `show route summary` on Cisco FTD.
+- Added parser support for `show route` on Cisco FTD.
+- Added parser support for `show sdr` on Cisco IOS-XR.
+- Added parser support for `show version` on Cisco FTD.
+- Added parser support for `show vrf all` on Cisco IOS-XR.
+- Added parser support for `show xlate count` on Cisco FTD.
+
+### Updated Parsers
+
+- Added `show bgp summary wide terminal` parser for Cisco IOS-XR.
+- Added `show interface brief` (singular) as an alias for the existing `show interfaces brief` parser on Cisco IOS-XR.
+
+### Core Features
+
+- Added Cisco FTD (Firewall Threat Defense) as a supported platform.
+
+### Internal
+
+- Switched PyPI publishing to OIDC trusted publishing (no API token required). ([#1285](https://github.com/ChartinoLabs/Muninn/pull/1285))
+- Bump netutils from 1.17.2 to 1.17.3; update test fixtures for TenGigE canonicalization to TenGigabitEthernet.
+- Bump ruff from 0.15.20 to 0.16.0 and reformat markdown code blocks to match new formatter rules.
+- Bump ty from 0.0.50 to 0.0.63; remove unused ty suppression comment made redundant by improved type inference.
+- Pin netutils to >=1.17.2,<1.17.3 to fix lowest-deps CI failures caused by interface canonicalization changes in both older and newer versions.
+- Resolve all CI failures on main: fix ruff formatting, bandit assert suppressions, ty type errors, xenon complexity violations, and list-of-dicts test exemption.
+- Small change to parser discovery code to improve loading performance and reduce memory footprint
+
+
 ## 0.5.0 - 2026-06-17
 
 ### Added Parsers
