@@ -1,7 +1,9 @@
 """Parser for 'show network-clocks synchronization' command on IOS-XE."""
 
 import re
-from typing import ClassVar, Final, NotRequired, TypedDict, cast
+from typing import ClassVar, Final, TypedDict, cast
+
+from typing_extensions import NotRequired
 
 from muninn.os import OS
 from muninn.parser import BaseParser

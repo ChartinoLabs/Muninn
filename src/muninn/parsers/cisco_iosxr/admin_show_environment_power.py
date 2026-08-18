@@ -1,7 +1,9 @@
 """Parser for 'admin show environment power' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import ClassVar, TypedDict, cast
+
+from typing_extensions import NotRequired
 
 from muninn.os import OS
 from muninn.parser import BaseParser

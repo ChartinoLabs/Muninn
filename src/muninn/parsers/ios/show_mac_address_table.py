@@ -1,7 +1,9 @@
 """Parser for 'show mac address-table' command on IOS/IOS-XE."""
 
 import re
-from typing import ClassVar, Final, Literal, NotRequired, TypedDict
+from typing import ClassVar, Final, Literal, TypedDict
+
+from typing_extensions import NotRequired
 
 from muninn.os import OS
 from muninn.parser import BaseParser

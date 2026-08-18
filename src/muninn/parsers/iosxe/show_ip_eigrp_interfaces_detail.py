@@ -5,7 +5,9 @@ Also handles 'show ipv6 eigrp interfaces detail'.
 
 import re
 from collections.abc import Callable
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import ClassVar, TypedDict, cast
+
+from typing_extensions import NotRequired
 
 from muninn.os import OS
 from muninn.parser import BaseParser

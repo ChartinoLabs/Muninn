@@ -1,7 +1,9 @@
 """Parser for 'show ip ospf nsf' command on IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import ClassVar, TypedDict, cast
+
+from typing_extensions import NotRequired
 
 from muninn.os import OS
 from muninn.parser import BaseParser

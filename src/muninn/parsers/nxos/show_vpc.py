@@ -1,9 +1,10 @@
 """Parser for 'show vpc' command on NX-OS."""
 
 import re
-from typing import Any, ClassVar, NotRequired, TypedDict, cast
+from typing import Any, ClassVar, TypedDict, cast
 
 from netutils.interface import canonical_interface_name
+from typing_extensions import NotRequired
 
 from muninn.os import OS
 from muninn.parser import BaseParser

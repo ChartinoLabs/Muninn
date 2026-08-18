@@ -1,7 +1,9 @@
 """Parser for 'show avb domain' command on IOS-XE."""
 
 import re
-from typing import Any, ClassVar, NotRequired, TypedDict, cast
+from typing import Any, ClassVar, TypedDict, cast
+
+from typing_extensions import NotRequired
 
 from muninn.os import OS
 from muninn.parser import BaseParser
