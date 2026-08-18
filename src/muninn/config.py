@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from enum import StrEnum
+from enum import Enum
 from pathlib import Path
 from typing import TypeAlias, cast
 
@@ -16,7 +16,7 @@ from pydantic_settings import (
 )
 
 
-class ExecutionMode(StrEnum):
+class ExecutionMode(str, Enum):
     """Parser execution order and fallback behavior."""
 
     # Try the built-in parser first. If it raises or returns an invalid result,
