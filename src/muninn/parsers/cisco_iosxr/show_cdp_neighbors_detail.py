@@ -1,9 +1,10 @@
 """Parser for 'show cdp neighbors detail' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, TypedDict
 
 from netutils.interface import canonical_interface_name
+from typing_extensions import NotRequired
 
 from muninn.os import OS
 from muninn.parser import BaseParser

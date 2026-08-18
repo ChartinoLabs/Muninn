@@ -12,7 +12,9 @@ per-VRF metadata and a nested dict of neighbors keyed by address.
 
 import re
 from collections.abc import Callable
-from typing import Any, ClassVar, NotRequired, TypedDict
+from typing import Any, ClassVar, TypedDict
+
+from typing_extensions import NotRequired
 
 from muninn.os import OS
 from muninn.parser import BaseParser

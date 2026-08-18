@@ -1,7 +1,9 @@
 """Parser for 'show logging onboard rp active message detail' on IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, TypedDict
+
+from typing_extensions import NotRequired
 
 from muninn.os import OS
 from muninn.parser import BaseParser

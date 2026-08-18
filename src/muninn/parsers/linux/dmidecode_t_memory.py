@@ -1,7 +1,9 @@
 """Parser for 'dmidecode -t memory' command on Linux."""
 
 import re
-from typing import Any, ClassVar, NotRequired, TypedDict, cast
+from typing import Any, ClassVar, TypedDict, cast
+
+from typing_extensions import NotRequired
 
 from muninn.os import OS
 from muninn.parser import BaseParser

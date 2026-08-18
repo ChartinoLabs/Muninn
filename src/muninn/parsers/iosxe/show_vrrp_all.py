@@ -1,7 +1,9 @@
 """Parser for 'show vrrp all' and 'show vrrp detail' commands on IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict
+from typing import ClassVar, TypedDict
+
+from typing_extensions import NotRequired
 
 from muninn.os import OS
 from muninn.parser import BaseParser

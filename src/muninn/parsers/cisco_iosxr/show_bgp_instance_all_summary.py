@@ -14,7 +14,9 @@ multiple ``Address Family:`` sections.  Within each AF section, an optional
 
 import re
 from collections.abc import Callable
-from typing import Any, ClassVar, NotRequired, TypedDict, cast
+from typing import Any, ClassVar, TypedDict, cast
+
+from typing_extensions import NotRequired
 
 from muninn.os import OS
 from muninn.parser import BaseParser
