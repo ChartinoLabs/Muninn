@@ -4,6 +4,13 @@ All notable changes to Muninn are documented in this file.
 
 <!-- towncrier release notes start -->
 
+## 0.7.0 - 2026-08-18
+
+### Core Features
+
+- Lowered minimum Python version from 3.11 to 3.10. ([#1391](https://github.com/ChartinoLabs/Muninn/pull/1391))
+
+
 ## 0.6.0 - 2026-08-14
 
 ### Added Parsers
