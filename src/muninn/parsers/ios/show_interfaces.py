@@ -844,9 +844,7 @@ def _finalize_block(entry: dict, body: list[str], counter_lines: list[str]) -> N
         if tunnel:
             entry["tunnel"] = tunnel
     if has_pc:
-        pc = _parse_port_channel(body)
-        if pc:
-            entry["port_channel"] = pc
+        entry["port_channel"] = _parse_port_channel(body)
 
 
 def _parse_block(lines: list[str]) -> InterfaceEntry | None:

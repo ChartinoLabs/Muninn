@@ -598,7 +598,7 @@ def _parse_node(
     lines: list[str],
     start: int,
     node_id_match: re.Match[str],
-) -> tuple[str, NodeEntry, int] | None:
+) -> tuple[str, NodeEntry | None, int] | None:
     """Parse a single node block. Return (node_id, node, next_idx) or None."""
     node_id = node_id_match.group("node_id")
     idx = start + 1
@@ -608,7 +608,7 @@ def _parse_node(
 
     type_match = _NODE_TYPE.match(lines[idx].strip())
     if not type_match:
-        return node_id, cast(NodeEntry, {}), idx
+        return node_id, None, idx
 
     node: dict[str, object] = {
         "age_secs": int(type_match.group("age")),
@@ -674,7 +674,7 @@ class ShowTedDatabaseExtensiveParser(
             if parsed is None:
                 break
             node_id, node, idx = parsed
-            if node:
+            if node is not None:
                 nodes[node_id] = node
 
         if not nodes:

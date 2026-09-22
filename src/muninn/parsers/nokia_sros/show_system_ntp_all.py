@@ -113,7 +113,7 @@ class ShowSystemNtpAllParser(BaseParser[ShowSystemNtpAllResult]):
         return raw
 
     @classmethod
-    def _parse_status_section(cls, lines: list[str]) -> NtpStatusSection:
+    def _parse_status_section(cls, lines: list[str]) -> NtpStatusSection | None:
         """Extract NTP status key-value pairs from the status section lines."""
         raw_pairs: dict[str, str] = {}
         for line in lines:
@@ -128,6 +128,8 @@ class ShowSystemNtpAllParser(BaseParser[ShowSystemNtpAllResult]):
         for mapped_key, raw_val in raw_pairs.items():
             result[mapped_key] = cls._parse_status_value(mapped_key, raw_val)
 
+        if not result:
+            return None
         return cast(NtpStatusSection, result)
 
     @classmethod
@@ -214,7 +216,7 @@ class ShowSystemNtpAllParser(BaseParser[ShowSystemNtpAllResult]):
                 assoc_lines.append(line)
 
         status = cls._parse_status_section(status_lines)
-        if not status:
+        if status is None:
             msg = "No NTP status information found in output"
             raise ValueError(msg)
 

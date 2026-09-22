@@ -354,7 +354,7 @@ def _handle_route_line(
     if state.awaiting_data and not network:
         _apply_pending_state(path_entry, state)
 
-    if state.current_network and path_entry:
+    if state.current_network:
         _add_path_to_routes(target, state.current_network, path_entry)
 
 
