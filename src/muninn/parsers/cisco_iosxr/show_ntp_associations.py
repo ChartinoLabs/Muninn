@@ -10,20 +10,23 @@ from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
 
-# Tally codes are mapped by symbol, using the Cisco IOS/IOS-XE sibling
-# vocabulary.  Current IOS-XR prints
-#   * sys_peer, # selected, + candidate, - outlayer, x falseticker
-# while older releases print a relabelled legend for the same symbols
-#   * master (synced), # master (unsynced), + selected, - candidate
-# The symbol is the NTP selection state; the legend is documentation, so the
-# same symbol always yields the same value regardless of release.
-_TALLY_CODES: dict[str, str] = {
-    "*": "sys.peer",
+# Tally names come from the legend the device prints under the table, kept in
+# the device's own wording.  Current IOS-XR prints
+#   * sys_peer, # selected, + candidate, - outlayer, x falseticker, ~ configured
+# while older releases print
+#   * master (synced), # master (unsynced), + selected, - candidate, ~ configured
+# This fallback (current IOS-XR wording) is used only when no legend is printed.
+_DEFAULT_TALLY_NAMES: dict[str, str] = {
+    "*": "sys_peer",
     "#": "selected",
     "+": "candidate",
-    "-": "outlyer",
+    "-": "outlayer",
     "x": "falseticker",
 }
+
+# Legend line: comma-separated ``<symbol> <name>`` pairs, the first being ``*``.
+_LEGEND_RE = re.compile(r"^\s*\*\s+[^,]+(?:,\s*\S\s+[^,]+)+$")
+_LEGEND_ITEM_RE = re.compile(r"^(?P<symbol>\S)\s+(?P<name>.+)$")
 
 _DEFAULT_VRF = "default"
 
@@ -53,7 +56,9 @@ _PEER_RE = re.compile(
 class NtpPeerEntry(TypedDict):
     """Schema for a single NTP peer association entry on Cisco IOS-XR.
 
-    Field names mirror the Cisco IOS/IOS-XE sibling parser.  ``reach`` is the
+    Field names mirror the Cisco IOS/IOS-XE sibling parser.  ``tally`` is the
+    name the device's own printed legend gives the row's tally symbol, verbatim
+    (e.g. ``sys_peer``, ``outlayer``, ``master (synced)``).  ``reach`` is the
     decoded octal reachability register (0-255); ``reach_raw`` keeps the
     literal octal token as printed by the device.
     """
@@ -82,7 +87,22 @@ class ShowNtpAssociationsResult(TypedDict):
     vrfs: dict[str, dict[str, NtpPeerEntry]]
 
 
-def _build_entry(match: re.Match[str]) -> NtpPeerEntry:
+def _parse_legend(output: str) -> dict[str, str]:
+    """Return the tally symbol-to-name map from the printed legend, if any."""
+    for line in output.splitlines():
+        if not _LEGEND_RE.match(line.rstrip()):
+            continue
+        names: dict[str, str] = {}
+        for item in line.split(","):
+            item_match = _LEGEND_ITEM_RE.match(item.strip())
+            # ``~`` is the configured marker, reported as ``configured``.
+            if item_match and item_match.group("symbol") != "~":
+                names[item_match.group("symbol")] = item_match.group("name").strip()
+        return names
+    return _DEFAULT_TALLY_NAMES
+
+
+def _build_entry(match: re.Match[str], tally_names: dict[str, str]) -> NtpPeerEntry:
     """Build a peer entry from a matched association row."""
     reach_token = match.group("reach")
     entry: NtpPeerEntry = {
@@ -96,7 +116,7 @@ def _build_entry(match: re.Match[str]) -> NtpPeerEntry:
         "offset_ms": float(match.group("offset")),
         "dispersion_ms": float(match.group("disp")),
     }
-    tally = _TALLY_CODES.get(match.group("tally"))
+    tally = tally_names.get(match.group("tally"))
     if tally is not None:
         entry["tally"] = tally
     if match.group("config") == "~":
@@ -112,8 +132,9 @@ class ShowNtpAssociationsParser(BaseParser[ShowNtpAssociationsResult]):
     """Parser for 'show ntp associations' command on Cisco IOS-XR.
 
     Handles VRF-qualified peers whose rows wrap onto a second line.  Tally
-    symbols are decoded identically under both the current (``sys_peer``) and
-    legacy (``master (synced)``) legends.
+    symbols are named from the legend printed in the output, so the current
+    (``sys_peer``) and legacy (``master (synced)``) legends each yield their
+    own wording.
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
@@ -133,6 +154,7 @@ class ShowNtpAssociationsParser(BaseParser[ShowNtpAssociationsResult]):
         """
         vrfs: dict[str, dict[str, NtpPeerEntry]] = {}
         pending = ""
+        tally_names = _parse_legend(output)
 
         for raw_line in output.splitlines():
             line = f"{pending} {raw_line.strip()}" if pending else raw_line
@@ -144,7 +166,8 @@ class ShowNtpAssociationsParser(BaseParser[ShowNtpAssociationsResult]):
             if not match:
                 continue
             vrf = match.group("vrf") or _DEFAULT_VRF
-            vrfs.setdefault(vrf, {})[match.group("address")] = _build_entry(match)
+            entry = _build_entry(match, tally_names)
+            vrfs.setdefault(vrf, {})[entry["address"]] = entry
 
         if not vrfs:
             msg = "No NTP peer entries found in output"
