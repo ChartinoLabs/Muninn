@@ -1,0 +1,74 @@
+{
+    "protocols": {
+        "application": {
+            "protocol": "application",
+            "sending_updates_every_seconds": 0,
+            "invalid_after_seconds": 0,
+            "hold_down_seconds": 0,
+            "flushed_after_seconds": 0,
+            "maximum_path": 32,
+            "distance": {
+                "default": 4
+            }
+        },
+        "isis banana": {
+            "protocol": "isis",
+            "instance": "banana",
+            "redistributing": [
+                "isis banana"
+            ],
+            "maximum_path": 4,
+            "routing_for_networks": [
+                "TenGigabitEthernet0/0/26",
+                "TenGigabitEthernet0/0/27"
+            ],
+            "passive_interfaces": [
+                "Loopback0"
+            ],
+            "routing_information_sources": {
+                "10.60.6.3": {
+                    "distance": 115,
+                    "last_update": "05:56:34"
+                },
+                "10.60.6.2": {
+                    "distance": 115,
+                    "last_update": "05:56:34"
+                },
+                "10.60.6.4": {
+                    "distance": 115,
+                    "last_update": "05:56:34"
+                },
+                "10.60.6.9": {
+                    "distance": 115,
+                    "last_update": "05:56:34"
+                }
+            },
+            "distance": {
+                "default": 115
+            }
+        },
+        "bgp 9999": {
+            "protocol": "bgp",
+            "instance": "9999",
+            "igp_synchronization": false,
+            "automatic_route_summarization": false,
+            "maximum_path": 1,
+            "routing_information_sources": {
+                "10.60.6.3": {
+                    "distance": 200,
+                    "last_update": "12w5d"
+                },
+                "10.60.6.2": {
+                    "distance": 200,
+                    "last_update": "14w4d"
+                }
+            },
+            "distance": {
+                "external": 20,
+                "internal": 200,
+                "local": 200
+            }
+        }
+    },
+    "nsf_aware": true
+}

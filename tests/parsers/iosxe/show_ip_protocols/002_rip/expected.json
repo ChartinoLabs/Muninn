@@ -1,0 +1,72 @@
+{
+    "protocols": {
+        "application": {
+            "protocol": "application",
+            "sending_updates_every_seconds": 0,
+            "invalid_after_seconds": 0,
+            "hold_down_seconds": 0,
+            "flushed_after_seconds": 0,
+            "maximum_path": 32,
+            "distance": {
+                "default": 4
+            }
+        },
+        "rip": {
+            "protocol": "rip",
+            "output_delay_milliseconds": 50,
+            "incoming_metric_offset": {
+                "offset": 10,
+                "access_list": "21"
+            },
+            "sending_updates_every_seconds": 10,
+            "next_update_due_seconds": 8,
+            "invalid_after_seconds": 21,
+            "hold_down_seconds": 22,
+            "flushed_after_seconds": 23,
+            "default_redistribution_metric": 3,
+            "redistributing": [
+                "connected",
+                "static",
+                "rip"
+            ],
+            "neighbors": {
+                "10.1.2.2": {}
+            },
+            "default_send_version": "2",
+            "default_receive_version": "2",
+            "interfaces": {
+                "GigabitEthernet3.100": {
+                    "send_version": "2",
+                    "receive_version": "2",
+                    "triggered_rip": false,
+                    "key_chain": "1"
+                }
+            },
+            "automatic_network_summarization": false,
+            "address_summarization": [
+                "172.16.0.0/17 for GigabitEthernet3.100"
+            ],
+            "maximum_path": 4,
+            "routing_for_networks": [
+                "10.0.0.0"
+            ],
+            "passive_interfaces": [
+                "GigabitEthernet2.100"
+            ],
+            "routing_information_sources": {
+                "10.1.3.3": {
+                    "distance": 120,
+                    "last_update": "00:00:00"
+                },
+                "10.1.2.2": {
+                    "distance": 120,
+                    "last_update": "00:00:04"
+                }
+            },
+            "distance": {
+                "default": 120
+            }
+        }
+    },
+    "nsf_aware": true
+}
