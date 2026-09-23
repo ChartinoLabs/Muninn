@@ -117,7 +117,6 @@ _UNKNOWN_SENTINEL = "Unknown"
 
 
 @register(OS.CISCO_IOSXR, "show interfaces")
-@register(OS.CISCO_IOSXR, r"show interfaces (?P<interface>[A-Za-z][A-Za-z-]*\d\S*)")
 class ShowInterfacesParser(BaseParser[ShowInterfacesResult]):
     """Parser for 'show interfaces' command on Cisco IOS-XR.
 
