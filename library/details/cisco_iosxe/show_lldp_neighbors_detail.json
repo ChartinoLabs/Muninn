@@ -1,0 +1,300 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show lldp neighbors detail",
+  "schema": {
+    "name": "ShowLldpNeighborsDetailResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "type": "dict",
+              "key": "str",
+              "value": {
+                "name": "LldpNeighborDetailEntry",
+                "fields": {
+                  "chassis_id": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "port_id": {
+                    "type": "str",
+                    "required": true
+                  },
+                  "port_description": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "system_name": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "system_description": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "time_remaining": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "system_capabilities": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "enabled_capabilities": {
+                    "type": "str",
+                    "required": false
+                  },
+                  "management_addresses": {
+                    "type": {
+                      "type": "list",
+                      "items": "str"
+                    },
+                    "required": false
+                  },
+                  "auto_negotiation_supported": {
+                    "type": "bool",
+                    "required": false
+                  },
+                  "auto_negotiation_enabled": {
+                    "type": "bool",
+                    "required": false
+                  },
+                  "physical_media_capabilities": {
+                    "type": {
+                      "type": "list",
+                      "items": "str"
+                    },
+                    "required": false
+                  },
+                  "media_attachment_unit_type": {
+                    "type": "int",
+                    "required": false
+                  },
+                  "vlan_id": {
+                    "type": "int",
+                    "required": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_entries": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Single Cisco IP phone neighbor with LLDP-MED inventory, network policy and power blocks and no leading separator",
+      "input": "\nLocal Intf: Gi0/1/7\nChassis id: 10.10.0.1\nPort id: C8F9F9D61BC2:P1\nPort Description: SW PORT\nSystem Name: SEPC8F9F9D61BC2\n\nSystem Description:\nCisco IP Phone 7962G,V12, SCCP42.9-3-1ES27S\n\nTime remaining: 127 seconds\nSystem Capabilities: B,T\nEnabled Capabilities: B,T\nManagement Addresses:\n    IP: 10.10.0.1\nAuto Negotiation - supported, enabled\nPhysical media capabilities:\n    1000baseT(HD)\n    1000baseX(FD)\n    Symm, Asym Pause(FD)\n    Symm Pause(FD)\nMedia Attachment Unit type: 16\nVlan ID: - not advertised\n\nMED Information:\n\n    MED Codes:\n\n        (NP) Network Policy, (LI) Location Identification\n        (PS) Power Source Entity, (PD) Power Device\n        (IN) Inventory\n\n    H/W revision: 12\n    F/W revision: tnp62.8-3-1-21a.bin\n    S/W revision: SCCP42.9-3-1ES27S\n    Serial number: FCH1610A5S5\n    Manufacturer: Cisco Systems, Inc.\n    Model: CP-7962G\n    Capabilities: NP, PD, IN\n    Device type: Endpoint Class III\n    Network Policy(Voice): VLAN 10, tagged, Layer-2 priority: 5, DSCP: 46\n    Network Policy(Voice Signal): VLAN 10, tagged, Layer-2 priority: 4, DSCP: 32\n    PD device, Power source: Unknown, Power Priority: Unknown, Wattage: 6.3\n    Location - not advertised\n\nTotal entries displayed: 1\n",
+      "expected": {
+        "neighbors": {
+          "GigabitEthernet0/1/7": {
+            "10.10.0.1": {
+              "C8F9F9D61BC2:P1": {
+                "chassis_id": "10.10.0.1",
+                "port_id": "C8F9F9D61BC2:P1",
+                "time_remaining": 127,
+                "port_description": "SW PORT",
+                "system_name": "SEPC8F9F9D61BC2",
+                "system_description": "Cisco IP Phone 7962G,V12, SCCP42.9-3-1ES27S",
+                "system_capabilities": "B,T",
+                "enabled_capabilities": "B,T",
+                "management_addresses": [
+                  "10.10.0.1"
+                ],
+                "auto_negotiation_supported": true,
+                "auto_negotiation_enabled": true,
+                "physical_media_capabilities": [
+                  "1000baseT(HD)",
+                  "1000baseX(FD)",
+                  "Symm, Asym Pause(FD)",
+                  "Symm Pause(FD)"
+                ],
+                "media_attachment_unit_type": 16
+              }
+            }
+          }
+        },
+        "total_entries": 1
+      }
+    },
+    {
+      "name": "Single neighbor with IPv6 chassis id and management address, and system name and capabilities not advertised",
+      "input": "\n------------------------------------------------\nLocal Intf: Gi1/0/32\nChassis id: FE80::EC22:9A75:BBC7:71AF\nPort id: 222\nPort Description: Description\nSystem Name - not advertised\n\nSystem Description:\n{\"SN\":\"SN-NR\",\"Owner\":\"OWNER\"}\n\nTime remaining: 92 seconds\nSystem Capabilities - not advertised\nEnabled Capabilities - not advertised\nManagement Addresses:\n    IPV6: 0000:0000:0000:0000:0000:ffff:7f00:0001\nAuto Negotiation - not supported\nPhysical media capabilities - not advertised\nMedia Attachment Unit type - not advertised\nVlan ID: - not advertised\n\n\nTotal entries displayed: 1\n",
+      "expected": {
+        "neighbors": {
+          "GigabitEthernet1/0/32": {
+            "FE80::EC22:9A75:BBC7:71AF": {
+              "222": {
+                "chassis_id": "FE80::EC22:9A75:BBC7:71AF",
+                "port_id": "222",
+                "time_remaining": 92,
+                "port_description": "Description",
+                "system_description": "{\"SN\":\"SN-NR\",\"Owner\":\"OWNER\"}",
+                "management_addresses": [
+                  "0000:0000:0000:0000:0000:ffff:7f00:0001"
+                ],
+                "auto_negotiation_supported": false
+              }
+            }
+          }
+        },
+        "total_entries": 1
+      }
+    },
+    {
+      "name": "Single neighbor advertising only chassis and port id, with MED inventory, network policies and power not advertised",
+      "input": "\n------------------------------------------------\nLocal Intf: Gi1/0/19\nChassis id: 6400.33ff.4444\nPort id: 6400.33ff.4444\nPort Description - not advertised\nSystem Name - not advertised\nSystem Description - not advertised\n\nTime remaining: 3284 seconds\nSystem Capabilities - not advertised\nEnabled Capabilities - not advertised\nManagement Addresses - not advertised\nAuto Negotiation - supported, enabled\nPhysical media capabilities:\n    1000baseT(FD)\nMedia Attachment Unit type - not advertised\nVlan ID: - not advertised\n\nMED Information:\n\n    MED Codes:\n            (NP) Network Policy, (LI) Location Identification\n            (PS) Power Source Entity, (PD) Power Device\n            (IN) Inventory\n\n    Inventory information - not advertised\n    Capabilities:\n    Device type: Endpoint Class I\n    Network Policies - not advertised\n    Power requirements - not advertised\n    Location - not advertised\n\n\nTotal entries displayed: 1\n",
+      "expected": {
+        "neighbors": {
+          "GigabitEthernet1/0/19": {
+            "6400.33ff.4444": {
+              "6400.33ff.4444": {
+                "chassis_id": "6400.33ff.4444",
+                "port_id": "6400.33ff.4444",
+                "time_remaining": 3284,
+                "auto_negotiation_supported": true,
+                "auto_negotiation_enabled": true,
+                "physical_media_capabilities": [
+                  "1000baseT(FD)"
+                ]
+              }
+            }
+          }
+        },
+        "total_entries": 1
+      }
+    },
+    {
+      "name": "Four neighbors from the same Catalyst 3750-E chassis with multi-line system descriptions",
+      "input": "------------------------------------------------\nLocal Intf: Gi2/0/15\nChassis id: 843d.c6ff.f1b8\nPort id: Gi1/0/4\nPort Description: GigabitEthernet1/0/4\nSystem Name: R5\n\nSystem Description:\nCisco IOS Software, C3750E Software (C3750E-UNIVERSALK9-M), Version 12.2(58)SE2, RELEASE SOFTWARE (fc1)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2011 by Cisco Systems, Inc.\nCompiled Thu 21-Jul-11 01:23 by prod_rel_team\n\nTime remaining: 101 seconds\nSystem Capabilities: B,R\nEnabled Capabilities: B,R\nManagement Addresses:\n    IP: 10.9.1.1\nAuto Negotiation - supported, enabled\nPhysical media capabilities:\n    1000baseT(FD)\n    100base-TX(FD)\n    100base-TX(HD)\n    10base-T(FD)\n    10base-T(HD)\nMedia Attachment Unit type: 30\nVlan ID: 1\n\n------------------------------------------------\nLocal Intf: Gi1/0/16\nChassis id: 843d.c6ff.f1b8\nPort id: Gi1/0/2\nPort Description: GigabitEthernet1/0/2\nSystem Name: R5\n\nSystem Description:\nCisco IOS Software, C3750E Software (C3750E-UNIVERSALK9-M), Version 12.2(58)SE2, RELEASE SOFTWARE (fc1)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2011 by Cisco Systems, Inc.\nCompiled Thu 21-Jul-11 01:23 by prod_rel_team\n\nTime remaining: 99 seconds\nSystem Capabilities: B,R\nEnabled Capabilities: B,R\nManagement Addresses:\n    IP: 10.9.1.1\nAuto Negotiation - supported, enabled\nPhysical media capabilities:\n    1000baseT(FD)\n    100base-TX(FD)\n    100base-TX(HD)\n    10base-T(FD)\n    10base-T(HD)\nMedia Attachment Unit type: 30\nVlan ID: 1\n\n------------------------------------------------\nLocal Intf: Gi1/0/17\nChassis id: 843d.c6ff.f1b8\nPort id: Gi1/0/3\nPort Description: GigabitEthernet1/0/3\nSystem Name: R5\n\nSystem Description:\nCisco IOS Software, C3750E Software (C3750E-UNIVERSALK9-M), Version 12.2(58)SE2, RELEASE SOFTWARE (fc1)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2011 by Cisco Systems, Inc.\nCompiled Thu 21-Jul-11 01:23 by prod_rel_team\n\nTime remaining: 94 seconds\nSystem Capabilities: B,R\nEnabled Capabilities: B,R\nManagement Addresses:\n    IP: 10.9.1.1\nAuto Negotiation - supported, enabled\nPhysical media capabilities:\n    1000baseT(FD)\n    100base-TX(FD)\n    100base-TX(HD)\n    10base-T(FD)\n    10base-T(HD)\nMedia Attachment Unit type: 30\nVlan ID: 1\n\n------------------------------------------------\nLocal Intf: Gi1/0/15\nChassis id: 843d.c6ff.f1b8\nPort id: Gi1/0/1\nPort Description: GigabitEthernet1/0/1\nSystem Name: R5\n\nSystem Description:\nCisco IOS Software, C3750E Software (C3750E-UNIVERSALK9-M), Version 12.2(58)SE2, RELEASE SOFTWARE (fc1)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2011 by Cisco Systems, Inc.\nCompiled Thu 21-Jul-11 01:23 by prod_rel_team\n\nTime remaining: 98 seconds\nSystem Capabilities: B,R\nEnabled Capabilities: B,R\nManagement Addresses:\n    IP: 10.9.1.1\nAuto Negotiation - supported, enabled\nPhysical media capabilities:\n    1000baseT(FD)\n    100base-TX(FD)\n    100base-TX(HD)\n    10base-T(FD)\n    10base-T(HD)\nMedia Attachment Unit type: 30\nVlan ID: 1\n\n\nTotal entries displayed: 4\n",
+      "expected": {
+        "neighbors": {
+          "GigabitEthernet2/0/15": {
+            "843d.c6ff.f1b8": {
+              "GigabitEthernet1/0/4": {
+                "chassis_id": "843d.c6ff.f1b8",
+                "port_id": "GigabitEthernet1/0/4",
+                "time_remaining": 101,
+                "port_description": "GigabitEthernet1/0/4",
+                "system_name": "R5",
+                "system_description": "Cisco IOS Software, C3750E Software (C3750E-UNIVERSALK9-M), Version 12.2(58)SE2, RELEASE SOFTWARE (fc1)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2011 by Cisco Systems, Inc.\nCompiled Thu 21-Jul-11 01:23 by prod_rel_team",
+                "system_capabilities": "B,R",
+                "enabled_capabilities": "B,R",
+                "management_addresses": [
+                  "10.9.1.1"
+                ],
+                "auto_negotiation_supported": true,
+                "auto_negotiation_enabled": true,
+                "physical_media_capabilities": [
+                  "1000baseT(FD)",
+                  "100base-TX(FD)",
+                  "100base-TX(HD)",
+                  "10base-T(FD)",
+                  "10base-T(HD)"
+                ],
+                "media_attachment_unit_type": 30,
+                "vlan_id": 1
+              }
+            }
+          },
+          "GigabitEthernet1/0/16": {
+            "843d.c6ff.f1b8": {
+              "GigabitEthernet1/0/2": {
+                "chassis_id": "843d.c6ff.f1b8",
+                "port_id": "GigabitEthernet1/0/2",
+                "time_remaining": 99,
+                "port_description": "GigabitEthernet1/0/2",
+                "system_name": "R5",
+                "system_description": "Cisco IOS Software, C3750E Software (C3750E-UNIVERSALK9-M), Version 12.2(58)SE2, RELEASE SOFTWARE (fc1)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2011 by Cisco Systems, Inc.\nCompiled Thu 21-Jul-11 01:23 by prod_rel_team",
+                "system_capabilities": "B,R",
+                "enabled_capabilities": "B,R",
+                "management_addresses": [
+                  "10.9.1.1"
+                ],
+                "auto_negotiation_supported": true,
+                "auto_negotiation_enabled": true,
+                "physical_media_capabilities": [
+                  "1000baseT(FD)",
+                  "100base-TX(FD)",
+                  "100base-TX(HD)",
+                  "10base-T(FD)",
+                  "10base-T(HD)"
+                ],
+                "media_attachment_unit_type": 30,
+                "vlan_id": 1
+              }
+            }
+          },
+          "GigabitEthernet1/0/17": {
+            "843d.c6ff.f1b8": {
+              "GigabitEthernet1/0/3": {
+                "chassis_id": "843d.c6ff.f1b8",
+                "port_id": "GigabitEthernet1/0/3",
+                "time_remaining": 94,
+                "port_description": "GigabitEthernet1/0/3",
+                "system_name": "R5",
+                "system_description": "Cisco IOS Software, C3750E Software (C3750E-UNIVERSALK9-M), Version 12.2(58)SE2, RELEASE SOFTWARE (fc1)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2011 by Cisco Systems, Inc.\nCompiled Thu 21-Jul-11 01:23 by prod_rel_team",
+                "system_capabilities": "B,R",
+                "enabled_capabilities": "B,R",
+                "management_addresses": [
+                  "10.9.1.1"
+                ],
+                "auto_negotiation_supported": true,
+                "auto_negotiation_enabled": true,
+                "physical_media_capabilities": [
+                  "1000baseT(FD)",
+                  "100base-TX(FD)",
+                  "100base-TX(HD)",
+                  "10base-T(FD)",
+                  "10base-T(HD)"
+                ],
+                "media_attachment_unit_type": 30,
+                "vlan_id": 1
+              }
+            }
+          },
+          "GigabitEthernet1/0/15": {
+            "843d.c6ff.f1b8": {
+              "GigabitEthernet1/0/1": {
+                "chassis_id": "843d.c6ff.f1b8",
+                "port_id": "GigabitEthernet1/0/1",
+                "time_remaining": 98,
+                "port_description": "GigabitEthernet1/0/1",
+                "system_name": "R5",
+                "system_description": "Cisco IOS Software, C3750E Software (C3750E-UNIVERSALK9-M), Version 12.2(58)SE2, RELEASE SOFTWARE (fc1)\nTechnical Support: http://www.cisco.com/techsupport\nCopyright (c) 1986-2011 by Cisco Systems, Inc.\nCompiled Thu 21-Jul-11 01:23 by prod_rel_team",
+                "system_capabilities": "B,R",
+                "enabled_capabilities": "B,R",
+                "management_addresses": [
+                  "10.9.1.1"
+                ],
+                "auto_negotiation_supported": true,
+                "auto_negotiation_enabled": true,
+                "physical_media_capabilities": [
+                  "1000baseT(FD)",
+                  "100base-TX(FD)",
+                  "100base-TX(HD)",
+                  "10base-T(FD)",
+                  "10base-T(HD)"
+                ],
+                "media_attachment_unit_type": 30,
+                "vlan_id": 1
+              }
+            }
+          }
+        },
+        "total_entries": 4
+      }
+    }
+  ]
+}

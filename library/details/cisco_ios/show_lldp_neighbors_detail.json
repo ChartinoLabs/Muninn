@@ -55,6 +55,29 @@
                       "items": "str"
                     },
                     "required": false
+                  },
+                  "auto_negotiation_supported": {
+                    "type": "bool",
+                    "required": false
+                  },
+                  "auto_negotiation_enabled": {
+                    "type": "bool",
+                    "required": false
+                  },
+                  "physical_media_capabilities": {
+                    "type": {
+                      "type": "list",
+                      "items": "str"
+                    },
+                    "required": false
+                  },
+                  "media_attachment_unit_type": {
+                    "type": "int",
+                    "required": false
+                  },
+                  "vlan_id": {
+                    "type": "int",
+                    "required": false
                   }
                 }
               }
@@ -84,7 +107,18 @@
                 "port_description": "ge-0/0/0.0",
                 "system_description": "Juniper Networks, Inc. ex2200-24t-4g , version 12.3R9.4 Build date: 2015-02-12 11:25:30 UTC",
                 "system_capabilities": "B,R",
-                "enabled_capabilities": "B,R"
+                "enabled_capabilities": "B,R",
+                "auto_negotiation_supported": true,
+                "auto_negotiation_enabled": true,
+                "physical_media_capabilities": [
+                  "1000baseT(FD)",
+                  "Symm, Asym Pause(FD)",
+                  "100base-TX(FD)",
+                  "100base-TX(HD)",
+                  "10base-T(FD)",
+                  "10base-T(HD)"
+                ],
+                "vlan_id": 1
               }
             }
           },
@@ -101,7 +135,8 @@
                 "enabled_capabilities": "B",
                 "management_addresses": [
                   "192.168.1.81"
-                ]
+                ],
+                "auto_negotiation_supported": false
               }
             }
           },
@@ -118,7 +153,17 @@
                 "enabled_capabilities": "W",
                 "management_addresses": [
                   "192.168.1.40"
-                ]
+                ],
+                "auto_negotiation_supported": true,
+                "auto_negotiation_enabled": true,
+                "physical_media_capabilities": [
+                  "1000baseT(FD)",
+                  "100base-TX(FD)",
+                  "100base-TX(HD)",
+                  "10base-T(FD)",
+                  "10base-T(HD)"
+                ],
+                "media_attachment_unit_type": 30
               }
             }
           }
@@ -144,7 +189,9 @@
                 "enabled_capabilities": "B,R",
                 "management_addresses": [
                   "11.11.11.11"
-                ]
+                ],
+                "auto_negotiation_supported": false,
+                "vlan_id": 1
               }
             },
             "2222.0642.7333": {
@@ -159,7 +206,9 @@
                 "enabled_capabilities": "B,R",
                 "management_addresses": [
                   "33.33.33.3"
-                ]
+                ],
+                "auto_negotiation_supported": false,
+                "vlan_id": 1
               }
             }
           },
@@ -176,7 +225,17 @@
                 "enabled_capabilities": "B",
                 "management_addresses": [
                   "55.55.55.55"
-                ]
+                ],
+                "auto_negotiation_supported": true,
+                "auto_negotiation_enabled": true,
+                "physical_media_capabilities": [
+                  "1000baseT(FD)",
+                  "100base-TX(FD)",
+                  "100base-TX(HD)",
+                  "10base-T(FD)",
+                  "10base-T(HD)"
+                ],
+                "media_attachment_unit_type": 30
               }
             }
           },
@@ -185,7 +244,8 @@
               "g2": {
                 "chassis_id": "0022.1111.2222",
                 "port_id": "g2",
-                "time_remaining": 91
+                "time_remaining": 91,
+                "auto_negotiation_supported": false
               }
             }
           }
@@ -210,7 +270,18 @@
                 "enabled_capabilities": "B",
                 "management_addresses": [
                   "172.31.176.154"
-                ]
+                ],
+                "auto_negotiation_supported": true,
+                "auto_negotiation_enabled": true,
+                "physical_media_capabilities": [
+                  "1000baseT(FD)",
+                  "1000baseT(HD)",
+                  "100base-TX(FD)",
+                  "100base-TX(HD)",
+                  "10base-T(FD)",
+                  "10base-T(HD)"
+                ],
+                "media_attachment_unit_type": 30
               }
             }
           },
@@ -228,7 +299,18 @@
                 "management_addresses": [
                   "10.132.14.52",
                   "7DFF:7DFF:7DFF:7DFF:7DFF:7DFD"
-                ]
+                ],
+                "auto_negotiation_supported": true,
+                "auto_negotiation_enabled": true,
+                "physical_media_capabilities": [
+                  "1000baseT(FD)",
+                  "1000baseT(HD)",
+                  "100base-TX(FD)",
+                  "100base-TX(HD)",
+                  "10base-T(FD)",
+                  "10base-T(HD)"
+                ],
+                "media_attachment_unit_type": 16
               }
             }
           },
@@ -246,7 +328,18 @@
                 "management_addresses": [
                   "10.132.14.53",
                   "7DFF:7DFF:7DFF:7DFF:7DFF:7DFE"
-                ]
+                ],
+                "auto_negotiation_supported": true,
+                "auto_negotiation_enabled": true,
+                "physical_media_capabilities": [
+                  "1000baseT(FD)",
+                  "1000baseT(HD)",
+                  "100base-TX(FD)",
+                  "100base-TX(HD)",
+                  "10base-T(FD)",
+                  "10base-T(HD)"
+                ],
+                "media_attachment_unit_type": 30
               }
             }
           },
@@ -262,7 +355,16 @@
                 "enabled_capabilities": "B,S",
                 "management_addresses": [
                   "10.176.0.245"
-                ]
+                ],
+                "auto_negotiation_supported": true,
+                "auto_negotiation_enabled": true,
+                "physical_media_capabilities": [
+                  "100base-TX(FD)",
+                  "100base-TX(HD)",
+                  "10base-T(FD)",
+                  "10base-T(HD)"
+                ],
+                "media_attachment_unit_type": 16
               }
             }
           }
@@ -288,7 +390,18 @@
                 "enabled_capabilities": "B,R",
                 "management_addresses": [
                   "172.16.1.1"
-                ]
+                ],
+                "auto_negotiation_supported": true,
+                "auto_negotiation_enabled": true,
+                "physical_media_capabilities": [
+                  "1000baseT(FD)",
+                  "100base-TX(FD)",
+                  "100base-TX(HD)",
+                  "10base-T(FD)",
+                  "10base-T(HD)"
+                ],
+                "media_attachment_unit_type": 30,
+                "vlan_id": 1
               }
             }
           },
@@ -302,7 +415,16 @@
                 "system_name": "NEC IP Phone",
                 "system_description": "DT700 Series",
                 "system_capabilities": "B,T",
-                "enabled_capabilities": "B,T"
+                "enabled_capabilities": "B,T",
+                "auto_negotiation_supported": true,
+                "auto_negotiation_enabled": true,
+                "physical_media_capabilities": [
+                  "100base-TX(FD)",
+                  "100base-TX(HD)",
+                  "10base-T(FD)",
+                  "10base-T(HD)"
+                ],
+                "media_attachment_unit_type": 16
               }
             }
           }
@@ -325,7 +447,15 @@
                 "system_name": "Foo-BAR-TSC-101-G3",
                 "system_description": "QSC (foobar-10)",
                 "system_capabilities": "B,W,R,S",
-                "enabled_capabilities": "S"
+                "enabled_capabilities": "S",
+                "auto_negotiation_supported": true,
+                "auto_negotiation_enabled": true,
+                "physical_media_capabilities": [
+                  "1000baseT(FD)",
+                  "100base-TX(FD)",
+                  "Other/unknown"
+                ],
+                "media_attachment_unit_type": 29
               }
             }
           }
