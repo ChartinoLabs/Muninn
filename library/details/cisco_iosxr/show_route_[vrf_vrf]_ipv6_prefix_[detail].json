@@ -1,0 +1,230 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show route [vrf <vrf>] ipv6 <prefix> [detail]",
+  "schema": {
+    "name": "ShowRouteDetailResult",
+    "fields": {
+      "routes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "RouteDetail",
+            "fields": {
+              "prefix": {
+                "type": "str",
+                "required": true
+              },
+              "mask": {
+                "type": "int",
+                "required": true
+              },
+              "known_via": {
+                "type": "str",
+                "required": true
+              },
+              "distance": {
+                "type": "int",
+                "required": true
+              },
+              "metric": {
+                "type": "int",
+                "required": true
+              },
+              "candidate_default": {
+                "type": "bool",
+                "required": true
+              },
+              "labeled_sr": {
+                "type": "bool",
+                "required": true
+              },
+              "route_type": {
+                "type": "str",
+                "required": false
+              },
+              "tag": {
+                "type": "int",
+                "required": false
+              },
+              "installed": {
+                "type": "str",
+                "required": false
+              },
+              "installed_age": {
+                "type": "str",
+                "required": false
+              },
+              "paths": {
+                "type": {
+                  "type": "list",
+                  "items": {
+                    "name": "RouteDetailPath",
+                    "fields": {
+                      "next_hop": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "directly_connected": {
+                        "type": "bool",
+                        "required": true
+                      },
+                      "from_address": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "interface": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "attributes": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": false
+                      },
+                      "nexthop_vrf": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "nexthop_table": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "nexthop_address_family": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "table_id": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "metric": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "label": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "tunnel_id": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "binding_label": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "extended_communities_count": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "nhid": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "nhid_ref_count": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "path_grouping_id": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "srv6_headend": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "srv6_sid_list": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": false
+                      },
+                      "repair_nodes": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              },
+              "route_version": {
+                "type": "int",
+                "required": false
+              },
+              "local_label": {
+                "type": "str",
+                "required": false
+              },
+              "ip_precedence": {
+                "type": "str",
+                "required": false
+              },
+              "qos_group_id": {
+                "type": "str",
+                "required": false
+              },
+              "flow_tag": {
+                "type": "str",
+                "required": false
+              },
+              "fwd_class": {
+                "type": "str",
+                "required": false
+              },
+              "route_priority": {
+                "type": "str",
+                "required": false
+              },
+              "route_priority_value": {
+                "type": "int",
+                "required": false
+              },
+              "svd_type": {
+                "type": "str",
+                "required": false
+              },
+              "download_priority": {
+                "type": "int",
+                "required": false
+              },
+              "download_version": {
+                "type": "int",
+                "required": false
+              },
+              "redist_advertisers": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "RedistAdvertiser",
+                    "fields": {
+                      "protocol_id": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "client_id": {
+                        "type": "int",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}

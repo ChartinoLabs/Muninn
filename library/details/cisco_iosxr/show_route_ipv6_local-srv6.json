@@ -1,0 +1,357 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show route ipv6 local-srv6",
+  "schema": {
+    "name": "ShowRouteResult",
+    "fields": {
+      "routes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "Route",
+            "fields": {
+              "prefix": {
+                "type": "str",
+                "required": true
+              },
+              "mask": {
+                "type": "int",
+                "required": true
+              },
+              "protocol": {
+                "type": "str",
+                "required": true
+              },
+              "description": {
+                "type": "str",
+                "required": false
+              },
+              "next_hops": {
+                "type": {
+                  "type": "list",
+                  "items": {
+                    "name": "RouteNextHop",
+                    "fields": {
+                      "next_hop": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "nexthop_vrf": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "distance": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "metric": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "uptime": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "interface": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "directly_connected": {
+                        "type": "bool",
+                        "required": true
+                      },
+                      "is_backup": {
+                        "type": "bool",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "gateway_of_last_resort": {
+        "type": {
+          "name": "GatewayOfLastResort",
+          "fields": {
+            "next_hop": {
+              "type": "str",
+              "required": true
+            },
+            "network": {
+              "type": "str",
+              "required": true
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Local SRv6 endpoint routes with endpoint behaviour descriptions and next hops in VRFs",
+      "input": "show route ipv6 local-srv6\nWed Mar 15 08:35:31.551 UTC\n\nL    fc00:c000:1001::/48, SRv6 Endpoint uN (shift)\n      [0/0] via ::, 1d21h\nL    fc00:c000:1001::/64, SRv6 Endpoint uN (PSP/USD)\n      [0/0] via ::, 1d21h\nL    fc00:c001:1001::/48, SRv6 Endpoint uN (shift)\n      [0/0] via ::, 1d21h\nL    fc00:c001:1001::/64, SRv6 Endpoint uN (PSP/USD)\n      [0/0] via ::, 1d21h\nL    fc00:c000:1001:e000::/64, SRv6 Endpoint uDT4\n      [0/0] via ::ffff:0.0.0.0 (nexthop in vrf SRV6_L3VPN_BE), 1d21h\nL    fc00:c000:1001:e001::/64, SRv6 Endpoint uDT6\n      [0/0] via :: (nexthop in vrf SRV6_L3VPN_BE), 1d21h\nL    fc00:c000:1001:e004::/64, SRv6 Endpoint uDT4\n      [0/0] via ::ffff:0.0.0.0 (nexthop in vrf default), 1d21h\nL    fc00:c000:1001:e002::/64, SRv6 Endpoint uA (shift)\n      [0/0] via fe80::250:56ff:fe94:9ba5, 1d20h, GigabitEthernet0/0/0/0\nL    fc00:c000:1001:e002::/80, SRv6 Endpoint uA (PSP/USD)\n      [0/0] via fe80::250:56ff:fe94:9ba5, 1d20h, GigabitEthernet0/0/0/0\nL    fc00:c000:1001:e003::/64, SRv6 Endpoint uA (shift)\n      [0/0] via fe80::250:56ff:fe94:ac68, 1d20h, GigabitEthernet0/0/0/2\nL    fc00:c000:1001:e003::/80, SRv6 Endpoint uA (PSP/USD)\n      [0/0] via fe80::250:56ff:fe94:ac68, 1d20h, GigabitEthernet0/0/0/2\nL    fc00:c000:e002::/48, SRv6 Endpoint uA (shift)\n      [0/0] via fe80::250:56ff:fe94:9ba5, 1d20h, GigabitEthernet0/0/0/0\nL    fc00:c000:e002::/64, SRv6 Endpoint uA (PSP/USD)\n      [0/0] via fe80::250:56ff:fe94:9ba5, 1d20h, GigabitEthernet0/0/0/0\nL    fc00:c000:e003::/48, SRv6 Endpoint uA (shift)\n      [0/0] via fe80::250:56ff:fe94:ac68, 1d20h, GigabitEthernet0/0/0/2\nL    fc00:c000:e003::/64, SRv6 Endpoint uA (PSP/USD)\n      [0/0] via fe80::250:56ff:fe94:ac68, 1d20h, GigabitEthernet0/0/0/2\n",
+      "expected": {
+        "routes": {
+          "fc00:c000:1001::/48": {
+            "prefix": "fc00:c000:1001::",
+            "mask": 48,
+            "protocol": "L",
+            "description": "SRv6 Endpoint uN (shift)",
+            "next_hops": [
+              {
+                "next_hop": "::",
+                "distance": 0,
+                "metric": 0,
+                "uptime": "1d21h",
+                "directly_connected": false,
+                "is_backup": false
+              }
+            ]
+          },
+          "fc00:c000:1001::/64": {
+            "prefix": "fc00:c000:1001::",
+            "mask": 64,
+            "protocol": "L",
+            "description": "SRv6 Endpoint uN (PSP/USD)",
+            "next_hops": [
+              {
+                "next_hop": "::",
+                "distance": 0,
+                "metric": 0,
+                "uptime": "1d21h",
+                "directly_connected": false,
+                "is_backup": false
+              }
+            ]
+          },
+          "fc00:c001:1001::/48": {
+            "prefix": "fc00:c001:1001::",
+            "mask": 48,
+            "protocol": "L",
+            "description": "SRv6 Endpoint uN (shift)",
+            "next_hops": [
+              {
+                "next_hop": "::",
+                "distance": 0,
+                "metric": 0,
+                "uptime": "1d21h",
+                "directly_connected": false,
+                "is_backup": false
+              }
+            ]
+          },
+          "fc00:c001:1001::/64": {
+            "prefix": "fc00:c001:1001::",
+            "mask": 64,
+            "protocol": "L",
+            "description": "SRv6 Endpoint uN (PSP/USD)",
+            "next_hops": [
+              {
+                "next_hop": "::",
+                "distance": 0,
+                "metric": 0,
+                "uptime": "1d21h",
+                "directly_connected": false,
+                "is_backup": false
+              }
+            ]
+          },
+          "fc00:c000:1001:e000::/64": {
+            "prefix": "fc00:c000:1001:e000::",
+            "mask": 64,
+            "protocol": "L",
+            "description": "SRv6 Endpoint uDT4",
+            "next_hops": [
+              {
+                "next_hop": "::ffff:0.0.0.0",
+                "nexthop_vrf": "SRV6_L3VPN_BE",
+                "distance": 0,
+                "metric": 0,
+                "uptime": "1d21h",
+                "directly_connected": false,
+                "is_backup": false
+              }
+            ]
+          },
+          "fc00:c000:1001:e001::/64": {
+            "prefix": "fc00:c000:1001:e001::",
+            "mask": 64,
+            "protocol": "L",
+            "description": "SRv6 Endpoint uDT6",
+            "next_hops": [
+              {
+                "next_hop": "::",
+                "nexthop_vrf": "SRV6_L3VPN_BE",
+                "distance": 0,
+                "metric": 0,
+                "uptime": "1d21h",
+                "directly_connected": false,
+                "is_backup": false
+              }
+            ]
+          },
+          "fc00:c000:1001:e004::/64": {
+            "prefix": "fc00:c000:1001:e004::",
+            "mask": 64,
+            "protocol": "L",
+            "description": "SRv6 Endpoint uDT4",
+            "next_hops": [
+              {
+                "next_hop": "::ffff:0.0.0.0",
+                "nexthop_vrf": "default",
+                "distance": 0,
+                "metric": 0,
+                "uptime": "1d21h",
+                "directly_connected": false,
+                "is_backup": false
+              }
+            ]
+          },
+          "fc00:c000:1001:e002::/64": {
+            "prefix": "fc00:c000:1001:e002::",
+            "mask": 64,
+            "protocol": "L",
+            "description": "SRv6 Endpoint uA (shift)",
+            "next_hops": [
+              {
+                "next_hop": "fe80::250:56ff:fe94:9ba5",
+                "distance": 0,
+                "metric": 0,
+                "uptime": "1d20h",
+                "interface": "GigabitEthernet0/0/0/0",
+                "directly_connected": false,
+                "is_backup": false
+              }
+            ]
+          },
+          "fc00:c000:1001:e002::/80": {
+            "prefix": "fc00:c000:1001:e002::",
+            "mask": 80,
+            "protocol": "L",
+            "description": "SRv6 Endpoint uA (PSP/USD)",
+            "next_hops": [
+              {
+                "next_hop": "fe80::250:56ff:fe94:9ba5",
+                "distance": 0,
+                "metric": 0,
+                "uptime": "1d20h",
+                "interface": "GigabitEthernet0/0/0/0",
+                "directly_connected": false,
+                "is_backup": false
+              }
+            ]
+          },
+          "fc00:c000:1001:e003::/64": {
+            "prefix": "fc00:c000:1001:e003::",
+            "mask": 64,
+            "protocol": "L",
+            "description": "SRv6 Endpoint uA (shift)",
+            "next_hops": [
+              {
+                "next_hop": "fe80::250:56ff:fe94:ac68",
+                "distance": 0,
+                "metric": 0,
+                "uptime": "1d20h",
+                "interface": "GigabitEthernet0/0/0/2",
+                "directly_connected": false,
+                "is_backup": false
+              }
+            ]
+          },
+          "fc00:c000:1001:e003::/80": {
+            "prefix": "fc00:c000:1001:e003::",
+            "mask": 80,
+            "protocol": "L",
+            "description": "SRv6 Endpoint uA (PSP/USD)",
+            "next_hops": [
+              {
+                "next_hop": "fe80::250:56ff:fe94:ac68",
+                "distance": 0,
+                "metric": 0,
+                "uptime": "1d20h",
+                "interface": "GigabitEthernet0/0/0/2",
+                "directly_connected": false,
+                "is_backup": false
+              }
+            ]
+          },
+          "fc00:c000:e002::/48": {
+            "prefix": "fc00:c000:e002::",
+            "mask": 48,
+            "protocol": "L",
+            "description": "SRv6 Endpoint uA (shift)",
+            "next_hops": [
+              {
+                "next_hop": "fe80::250:56ff:fe94:9ba5",
+                "distance": 0,
+                "metric": 0,
+                "uptime": "1d20h",
+                "interface": "GigabitEthernet0/0/0/0",
+                "directly_connected": false,
+                "is_backup": false
+              }
+            ]
+          },
+          "fc00:c000:e002::/64": {
+            "prefix": "fc00:c000:e002::",
+            "mask": 64,
+            "protocol": "L",
+            "description": "SRv6 Endpoint uA (PSP/USD)",
+            "next_hops": [
+              {
+                "next_hop": "fe80::250:56ff:fe94:9ba5",
+                "distance": 0,
+                "metric": 0,
+                "uptime": "1d20h",
+                "interface": "GigabitEthernet0/0/0/0",
+                "directly_connected": false,
+                "is_backup": false
+              }
+            ]
+          },
+          "fc00:c000:e003::/48": {
+            "prefix": "fc00:c000:e003::",
+            "mask": 48,
+            "protocol": "L",
+            "description": "SRv6 Endpoint uA (shift)",
+            "next_hops": [
+              {
+                "next_hop": "fe80::250:56ff:fe94:ac68",
+                "distance": 0,
+                "metric": 0,
+                "uptime": "1d20h",
+                "interface": "GigabitEthernet0/0/0/2",
+                "directly_connected": false,
+                "is_backup": false
+              }
+            ]
+          },
+          "fc00:c000:e003::/64": {
+            "prefix": "fc00:c000:e003::",
+            "mask": 64,
+            "protocol": "L",
+            "description": "SRv6 Endpoint uA (PSP/USD)",
+            "next_hops": [
+              {
+                "next_hop": "fe80::250:56ff:fe94:ac68",
+                "distance": 0,
+                "metric": 0,
+                "uptime": "1d20h",
+                "interface": "GigabitEthernet0/0/0/2",
+                "directly_connected": false,
+                "is_backup": false
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
