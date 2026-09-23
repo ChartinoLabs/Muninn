@@ -95,8 +95,12 @@ _HELPER_ADDRESS_RE = re.compile(
     rf"^\s*Helper address(?:es)? (?:is|are) (?P<addr>not set|{IPV4_ADDRESS})\s*$"
 )
 
-# "                       10.68.56.119" (continuation of "Helper addresses are")
-_HELPER_CONTINUATION_RE = re.compile(rf"^\s+(?P<addr>{IPV4_ADDRESS})\s*$")
+# "                       10.68.56.119" or "      224.0.0.5 224.0.0.6": wrapped
+# continuation of the "Helper addresses are" or "Multicast reserved groups
+# joined" list on the preceding line
+_ADDRESS_CONTINUATION_RE = re.compile(
+    rf"^\s+(?P<addrs>{IPV4_ADDRESS}(?:\s+{IPV4_ADDRESS})*)\s*$"
+)
 
 # "  Directed broadcast forwarding is disabled"
 _DIRECTED_BCAST_RE = re.compile(
@@ -265,11 +269,6 @@ _OUTPUT_FEATURES_RE = re.compile(r"^\s*Output features:\s*(?P<features>.+?)\s*$"
 @register(OS.CISCO_IOS, "show ip interface")
 @register(OS.CISCO_IOSXE, "show ip interface")
 @register(
-    OS.CISCO_IOS,
-    r"show ip interface (?P<interface>[A-Za-z][A-Za-z-]* ?\d\S*)",
-    doc_template="show ip interface <interface>",
-)
-@register(
     OS.CISCO_IOSXE,
     r"show ip interface (?P<interface>[A-Za-z][A-Za-z-]* ?\d\S*)",
     doc_template="show ip interface <interface>",
@@ -321,11 +320,6 @@ class ShowIpInterfaceParser(BaseParser[ShowIpInterfaceResult]):
             addr = m.group("addr")
             if addr != "not set":
                 entry["helper_addresses"].append(addr)
-            return True
-
-        m = _HELPER_CONTINUATION_RE.match(line)
-        if m and entry["helper_addresses"]:
-            entry["helper_addresses"].append(m.group("addr"))
             return True
 
         return False
@@ -399,6 +393,15 @@ class ShowIpInterfaceParser(BaseParser[ShowIpInterfaceResult]):
 
         return False
 
+    @staticmethod
+    def _continuation_target(entry: InterfaceEntry, line: str) -> list[str] | None:
+        """Return the list a wrapped address line after ``line`` belongs to."""
+        if _HELPER_ADDRESS_RE.match(line):
+            return entry["helper_addresses"]
+        if _MULTICAST_GROUPS_RE.match(line):
+            return entry["multicast_groups"]
+        return None
+
     @classmethod
     def _apply_line(cls, entry: InterfaceEntry, line: str) -> None:
         """Match a single line against all known patterns and update entry."""
@@ -425,6 +428,7 @@ class ShowIpInterfaceParser(BaseParser[ShowIpInterfaceResult]):
         """
         interfaces: dict[str, InterfaceEntry] = {}
         current: InterfaceEntry | None = None
+        continuation: list[str] | None = None
 
         for raw_line in output.splitlines():
             header = _HEADER_RE.match(raw_line)
@@ -437,12 +441,19 @@ class ShowIpInterfaceParser(BaseParser[ShowIpInterfaceResult]):
                     header.group("protocol").lower(),
                 )
                 interfaces[name] = current
+                continuation = None
                 continue
 
             if current is None:
                 continue
 
+            cont = _ADDRESS_CONTINUATION_RE.match(raw_line)
+            if cont and continuation is not None:
+                continuation.extend(cont.group("addrs").split())
+                continue
+
             cls._apply_line(current, raw_line)
+            continuation = cls._continuation_target(current, raw_line)
 
         if not interfaces:
             msg = "No interfaces found in output"
