@@ -119,8 +119,9 @@ def _apply_section_line(entry: dict, section: str | None, line: str) -> None:
 
 
 @register(OS.CISCO_IOSXE, "show mpls ldp neighbor")
+@register(OS.CISCO_IOSXE, r"show mpls ldp neighbor vrf (?P<vrf>\S+)")
 class ShowMplsLdpNeighborParser(BaseParser["ShowMplsLdpNeighborResult"]):
-    """Parser for 'show mpls ldp neighbor' on IOS-XE.
+    """Parser for 'show mpls ldp neighbor [vrf <vrf>]' on IOS-XE.
 
     Parses each LDP session block into a dict keyed by peer LDP identifier.
     """
