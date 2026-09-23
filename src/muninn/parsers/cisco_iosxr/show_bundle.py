@@ -25,13 +25,15 @@ class LoadBalancingEntry(TypedDict):
 class LacpEntry(TypedDict):
     """Schema for the 'LACP' block of a bundle.
 
-    ``flap_suppression_timer_ms`` is omitted when the timer is ``Off``.
+    ``flap_suppression_timer_enabled`` is ``False`` when the timer is ``Off``,
+    in which case ``flap_suppression_timer_ms`` is omitted.
     """
 
     status: str
+    flap_suppression_timer_enabled: NotRequired[bool]
     flap_suppression_timer_ms: NotRequired[int]
-    cisco_extensions: NotRequired[str]
-    non_revertive: NotRequired[str]
+    cisco_extensions: NotRequired[bool]
+    non_revertive: NotRequired[bool]
 
 
 class MlacpEntry(TypedDict):
@@ -66,7 +68,8 @@ class MemberEntry(TypedDict):
 class BundleEntry(TypedDict):
     """Schema for a single bundle.
 
-    ``wait_while_timer_ms`` is omitted when the timer is ``Off``.
+    ``wait_while_timer_enabled`` is ``False`` when the timer is ``Off``, in
+    which case ``wait_while_timer_ms`` is omitted.
     ``members`` is keyed by device (``Local`` or the mLACP peer address),
     then by member interface, since the same interface name can appear on
     both the local device and the mLACP peer.
@@ -80,10 +83,11 @@ class BundleEntry(TypedDict):
     local_bandwidth_available_kbps: NotRequired[int]
     mac_address: NotRequired[str]
     mac_address_source: NotRequired[str]
-    inter_chassis_link: NotRequired[str]
+    inter_chassis_link: NotRequired[bool]
     minimum_active_links: NotRequired[int]
     minimum_active_bandwidth_kbps: NotRequired[int]
     maximum_active_links: NotRequired[int]
+    wait_while_timer_enabled: NotRequired[bool]
     wait_while_timer_ms: NotRequired[int]
     load_balancing: NotRequired[LoadBalancingEntry]
     lacp: NotRequired[LacpEntry]
@@ -150,6 +154,27 @@ def _text(key: str) -> Callable[[str], _Fields]:
     return lambda value: {key: value} if value and value != "None" else {}
 
 
+_BOOLS = {"Yes": True, "No": False, "Enabled": True, "Disabled": False}
+
+
+def _bool(key: str) -> Callable[[str], _Fields]:
+    """Build a handler storing Yes/No or Enabled/Disabled as a bool."""
+    return lambda value: {key: _BOOLS[value]} if value in _BOOLS else {}
+
+
+def _timer(key: str) -> Callable[[str], _Fields]:
+    """Build a handler for an 'Off' / '<n> ms' timer."""
+    ms = _ints(_MS_RE, f"{key}_ms")
+
+    def handler(value: str) -> _Fields:
+        if value == "Off":
+            return {f"{key}_enabled": False}
+        fields = ms(value)
+        return {f"{key}_enabled": True, **fields} if fields else {}
+
+    return handler
+
+
 def _mac(value: str) -> _Fields:
     """Split 'MAC address (source)' into address and source."""
     match = _MAC_RE.match(value)
@@ -173,12 +198,12 @@ _BUNDLE_FIELDS: dict[str, Callable[[str], _Fields]] = {
         "local_bandwidth_available_kbps",
     ),
     "mac address (source)": _mac,
-    "inter chassis link": _text("inter_chassis_link"),
+    "inter chassis link": _bool("inter_chassis_link"),
     "minimum active links / bandwidth": _ints(
         _MIN_ACTIVE_RE, "minimum_active_links", "minimum_active_bandwidth_kbps"
     ),
     "maximum active links": _ints(_INT_RE, "maximum_active_links"),
-    "wait while timer": _ints(_MS_RE, "wait_while_timer_ms"),
+    "wait while timer": _timer("wait_while_timer"),
 }
 
 # Bundle-level labels that open an indented block, mapped to the block key.
@@ -195,9 +220,9 @@ _SECTION_FIELDS: dict[str, Callable[[str], _Fields]] = {
     "link order signaling": _text("link_order_signaling"),
     "hash type": _text("hash_type"),
     "locality threshold": _text("locality_threshold"),
-    "flap suppression timer": _ints(_MS_RE, "flap_suppression_timer_ms"),
-    "cisco extensions": _text("cisco_extensions"),
-    "non revertive": _text("non_revertive"),
+    "flap suppression timer": _timer("flap_suppression_timer"),
+    "cisco extensions": _bool("cisco_extensions"),
+    "non revertive": _bool("non_revertive"),
     "iccp group": _ints(_INT_RE, "iccp_group"),
     "role": _text("role"),
     "foreign links <active/configured>": _ints(
