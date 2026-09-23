@@ -117,6 +117,7 @@ class ShowIpDhcpBindingParser(BaseParser[ShowIpDhcpBindingResult]):
             if cont and last is not None:
                 last["client_id"] += cont.group("cont").lower()
                 continue
+            last = None  # continuation lines only follow a row
 
             header = cls._HEADER_PATTERN.match(stripped)
             if header:
