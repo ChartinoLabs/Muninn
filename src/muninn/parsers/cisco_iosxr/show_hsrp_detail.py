@@ -39,7 +39,7 @@ class HsrpDetailGroupEntry(TypedDict):
     hold_time_msec: NotRequired[int]
     configured_hello_time_msec: NotRequired[int]
     configured_hold_time_msec: NotRequired[int]
-    next_hello_sent_in_sec: NotRequired[float]
+    next_hello_sent_in: NotRequired[str]
     minimum_delay_sec: NotRequired[int]
     reload_delay_sec: NotRequired[int]
     virtual_ip: NotRequired[str]
@@ -91,7 +91,8 @@ _TIMERS_RE = re.compile(
     r"\s+holdtime\s+(?P<hold>\d+)\s+msec$",
     re.IGNORECASE,
 )
-_NEXT_HELLO_RE = re.compile(r"^Next\s+hello\s+sent\s+in\s+(?P<secs>\d+(?:\.\d+)?)$")
+# No unit is printed (e.g. "2.594"), so the value is kept as-is.
+_NEXT_HELLO_RE = re.compile(r"^Next\s+hello\s+sent\s+in\s+(?P<value>\S+)$")
 _DELAY_RE = re.compile(
     r"^Minimum\s+delay\s+(?P<minimum>\d+)\s+sec,\s+reload\s+delay\s+(?P<reload>\d+)"
     r"\s+sec$"
@@ -151,7 +152,7 @@ def _on_timers(entry: dict, m: re.Match[str]) -> None:
 
 
 def _on_next_hello(entry: dict, m: re.Match[str]) -> None:
-    entry["next_hello_sent_in_sec"] = float(m.group("secs"))
+    entry["next_hello_sent_in"] = m.group("value")
 
 
 def _on_delay(entry: dict, m: re.Match[str]) -> None:
@@ -188,8 +189,7 @@ def _on_auth(entry: dict, m: re.Match[str]) -> None:
 
 def _on_state_changes(entry: dict, m: re.Match[str]) -> None:
     entry["state_changes"] = int(m.group("count"))
-    if m.group("last").lower() != "never":
-        entry["last_state_change"] = m.group("last")
+    entry["last_state_change"] = m.group("last")
 
 
 def _on_history(entry: dict, m: re.Match[str]) -> None:
@@ -204,9 +204,9 @@ def _on_history(entry: dict, m: re.Match[str]) -> None:
 
 
 def _on_coup_resign(entry: dict, m: re.Match[str]) -> None:
-    # "Never" means no such event; omit rather than store a sentinel.
-    if m.group("value") != "Never":
-        entry[f"last_{m.group('kind')}_{m.group('direction')}"] = m.group("value")
+    # "Never" is kept as printed: it means the event never happened, which
+    # differs from the line being absent (e.g. on slave groups).
+    entry[f"last_{m.group('kind')}_{m.group('direction')}"] = m.group("value")
 
 
 _LINE_HANDLERS: tuple[
