@@ -1,0 +1,46 @@
+{
+    "routes": {
+        "0.0.0.0/0": {
+            "prefix": "0.0.0.0",
+            "mask": 0,
+            "protocol": "S",
+            "candidate_default": true,
+            "next_hops": [
+                {
+                    "uptime": "3y15w",
+                    "interface": "Null0",
+                    "directly_connected": true,
+                    "is_backup": false
+                }
+            ]
+        },
+        "10.0.0.0/8": {
+            "prefix": "10.0.0.0",
+            "mask": 8,
+            "protocol": "B",
+            "candidate_default": false,
+            "next_hops": [
+                {
+                    "next_hop": "172.16.254.189",
+                    "distance": 20,
+                    "metric": 30,
+                    "uptime": "4d11h",
+                    "directly_connected": false,
+                    "is_backup": false
+                },
+                {
+                    "next_hop": "172.17.254.254",
+                    "distance": 20,
+                    "metric": 0,
+                    "uptime": "4d11h",
+                    "directly_connected": false,
+                    "is_backup": false
+                }
+            ]
+        }
+    },
+    "gateway_of_last_resort": {
+        "next_hop": "0.0.0.0",
+        "network": "0.0.0.0"
+    }
+}

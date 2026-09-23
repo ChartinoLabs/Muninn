@@ -1,0 +1,105 @@
+{
+    "routes": {
+        "0.0.0.0/0": {
+            "prefix": "0.0.0.0",
+            "mask": 0,
+            "protocol": "O E2",
+            "candidate_default": true,
+            "next_hops": [
+                {
+                    "next_hop": "172.16.0.88",
+                    "distance": 110,
+                    "metric": 1,
+                    "uptime": "3d00h",
+                    "interface": "Bundle-Ether1",
+                    "directly_connected": false,
+                    "is_backup": false
+                },
+                {
+                    "next_hop": "172.16.0.96",
+                    "distance": 110,
+                    "metric": 1,
+                    "uptime": "3d00h",
+                    "interface": "Bundle-Ether2",
+                    "directly_connected": false,
+                    "is_backup": false
+                }
+            ]
+        },
+        "10.4.1.1/32": {
+            "prefix": "10.4.1.1",
+            "mask": 32,
+            "protocol": "L",
+            "candidate_default": false,
+            "next_hops": [
+                {
+                    "uptime": "5w6d",
+                    "interface": "Loopback100",
+                    "directly_connected": true,
+                    "is_backup": false
+                }
+            ]
+        },
+        "10.1.1.0/24": {
+            "prefix": "10.1.1.0",
+            "mask": 24,
+            "protocol": "O",
+            "candidate_default": false,
+            "next_hops": [
+                {
+                    "next_hop": "172.16.0.88",
+                    "distance": 110,
+                    "metric": 66036,
+                    "uptime": "2d23h",
+                    "interface": "Bundle-Ether1",
+                    "directly_connected": false,
+                    "is_backup": false
+                },
+                {
+                    "next_hop": "172.16.0.96",
+                    "distance": 110,
+                    "metric": 66036,
+                    "uptime": "2d23h",
+                    "interface": "Bundle-Ether2",
+                    "directly_connected": false,
+                    "is_backup": false
+                }
+            ]
+        },
+        "10.10.10.21/32": {
+            "prefix": "10.10.10.21",
+            "mask": 32,
+            "protocol": "O E2",
+            "candidate_default": false,
+            "next_hops": [
+                {
+                    "next_hop": "172.16.0.88",
+                    "distance": 110,
+                    "metric": 1,
+                    "uptime": "3d04h",
+                    "interface": "Bundle-Ether1",
+                    "directly_connected": false,
+                    "is_backup": false
+                }
+            ]
+        },
+        "10.10.10.255/32": {
+            "prefix": "10.10.10.255",
+            "mask": 32,
+            "protocol": "L",
+            "candidate_default": false,
+            "next_hops": [
+                {
+                    "uptime": "5w6d",
+                    "interface": "Loopback2112",
+                    "directly_connected": true,
+                    "is_backup": false
+                }
+            ]
+        }
+    },
+    "gateway_of_last_resort": {
+        "next_hop": "172.16.0.88",
+        "network": "0.0.0.0"
+    }
+}
