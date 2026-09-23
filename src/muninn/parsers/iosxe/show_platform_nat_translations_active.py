@@ -1,4 +1,8 @@
-"""Parser for 'show platform nat translations active' command on IOS-XE."""
+"""Parser for NAT translation table commands on IOS and IOS-XE.
+
+Covers ``show ip nat translations`` (with optional ``vrf`` / ``verbose``) and
+``show platform nat translations active``.
+"""
 
 import re
 from typing import ClassVar, TypedDict, cast
@@ -257,7 +261,7 @@ class ShowPlatformNatTranslationsActiveParser(
             ValueError: If no NAT translation data is found.
         """
         translations: NatTranslationTree = {}
-        result: dict = {"translations": translations}
+        result = ShowPlatformNatTranslationsActiveResult(translations=translations)
         current: NatTranslationEntry | None = None
 
         for line in output.splitlines():
@@ -280,4 +284,4 @@ class ShowPlatformNatTranslationsActiveParser(
             msg = "No NAT translation data found in output"
             raise ValueError(msg)
 
-        return cast(ShowPlatformNatTranslationsActiveResult, result)
+        return result
