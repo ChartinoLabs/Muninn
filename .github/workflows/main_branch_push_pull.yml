@@ -78,6 +78,19 @@ jobs:
           python-version: "3.13"
       - name: Lint with ruff
         run: uv run ruff check .
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v7
+      - uses: ./.github/actions/setup-python-uv
+        with:
+          python-version: "3.13"
+      - name: Run pre-commit hooks
+        # ruff and xenon already run in their own jobs.
+        env:
+          SKIP: ruff-check,ruff-format,xenon
+        run: uv run pre-commit run --all-files --show-diff-on-failure
   security-scan:
     runs-on: ubuntu-latest
     steps:
