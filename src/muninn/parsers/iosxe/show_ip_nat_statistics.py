@@ -1,4 +1,4 @@
-"""Parser for 'show ip nat statistics' command on IOS-XE."""
+"""Parser for 'show ip nat statistics' command on IOS and IOS-XE."""
 
 import re
 from typing import ClassVar, TypedDict, cast
@@ -36,6 +36,24 @@ class NatPool(TypedDict):
     chains: NotRequired[str]
 
 
+class PortRange(TypedDict):
+    """Low/high port counters as printed (``lo:N hi:N``)."""
+
+    low: int
+    high: int
+
+
+class ReservedPortblockStats(TypedDict):
+    """Schema for the ``Reserved portblock stats`` block."""
+
+    tcp_ports_received_from_tpm: NotRequired[PortRange]
+    udp_ports_received_from_tpm: NotRequired[PortRange]
+    tcp_ports_available: NotRequired[PortRange]
+    udp_ports_available: NotRequired[PortRange]
+    tcp_ports_reserved_flag: NotRequired[int]
+    udp_ports_reserved_flag: NotRequired[int]
+
+
 class DynamicMapping(TypedDict):
     """Schema for a single ``[Id: N]`` dynamic mapping."""
 
@@ -61,7 +79,13 @@ class ShowIpNatStatisticsResult(TypedDict):
     misses: int
     cef_translated_packets: NotRequired[int]
     cef_punted_packets: NotRequired[int]
+    reserved_port_setting: NotRequired[str]
+    reserved_port_provisioned: NotRequired[str]
+    dynamic_overload_mappings_configured: NotRequired[int]
+    reserved_portblock_stats: NotRequired[ReservedPortblockStats]
     expired_translations: NotRequired[int]
+    # Keyed by direction, then by ``[Id: N]``; older IOS omits the id, in which
+    # case the mapping is keyed by its reference (e.g. ``access-list 1``).
     dynamic_mappings: NotRequired[dict[str, dict[str, DynamicMapping]]]
     pools: NotRequired[dict[str, NatPool]]
     total_doors: NotRequired[int]
@@ -83,7 +107,7 @@ class ShowIpNatStatisticsResult(TypedDict):
 # Top-level counter lines; every named group is an int except those in _STR_FIELDS.
 _SCALARS = (
     re.compile(
-        r"^Total active translations:\s*(?P<total_active_translations>\d+)\s*"
+        r"^Total (?:active )?translations:\s*(?P<total_active_translations>\d+)\s*"
         r"\((?P<static_translations>\d+) static,\s*"
         r"(?P<dynamic_translations>\d+) dynamic;\s*"
         r"(?P<extended_translations>\d+) extended\)"
@@ -96,6 +120,14 @@ _SCALARS = (
     re.compile(
         r"^CEF Translated packets:\s*(?P<cef_translated_packets>\d+),\s*"
         r"CEF Punted packets:\s*(?P<cef_punted_packets>\d+)"
+    ),
+    re.compile(
+        r"^Reserved port setting (?P<reserved_port_setting>\S+) "
+        r"provisioned (?P<reserved_port_provisioned>\S+)$"
+    ),
+    re.compile(
+        r"^Dynamic overload mapping configured:\s*"
+        r"(?P<dynamic_overload_mappings_configured>\d+)"
     ),
     re.compile(r"^Expired translations:\s*(?P<expired_translations>\d+)"),
     re.compile(r"^Total doors:\s*(?P<total_doors>\d+)"),
@@ -118,17 +150,35 @@ _SCALARS = (
     re.compile(r"^IP alias add fail:\s*(?P<ip_alias_add_fail>\d+)"),
     re.compile(r"^Limit entry add fail:\s*(?P<limit_entry_add_fail>\d+)"),
 )
-_STR_FIELDS = frozenset({"peak_occurred_ago"})
+_STR_FIELDS = frozenset(
+    {"peak_occurred_ago", "reserved_port_setting", "reserved_port_provisioned"}
+)
 
-_INTERFACE_SECTION = re.compile(r"^(?P<side>Outside|Inside) interfaces:$")
+# Reserved portblock stats
+# total tcp ports rcvd from tpm lo:0 hi:0
+# tcp ports reserved flag 0 udp ports reserved flag 0
+_PORTBLOCK_HEADER = re.compile(r"^Reserved portblock stats$")
+_PORTBLOCK_RANGE = re.compile(
+    r"^total (?P<proto>tcp|udp) ports (?P<kind>rcvd from tpm|available) "
+    r"lo:(?P<low>\d+) hi:(?P<high>\d+)$"
+)
+_PORTBLOCK_KINDS = {"rcvd from tpm": "received_from_tpm", "available": "available"}
+_PORTBLOCK_FLAGS = re.compile(
+    r"^tcp ports reserved flag (?P<tcp_ports_reserved_flag>\d+) "
+    r"udp ports reserved flag (?P<udp_ports_reserved_flag>\d+)$"
+)
+
+# Interfaces may follow on the header line (older IOS) or on later lines.
+_INTERFACE_SECTION = re.compile(r"^(?P<side>Outside|Inside) interfaces:(?P<inline>.*)$")
 _SECTION_END = re.compile(r"^(?:Dynamic mappings|nat-limit statistics):$")
 _DIRECTION = re.compile(r"^--\s+(?P<direction>\S+ \S+)$")
 
 # [Id: 1] access-list test-robot pool test-robot refcount 0
 # [Id: 3] access-list 99 interface Serial0/0 refcount 1
 # [Id: 4] route-map GENIE-MAP
+# access-list 1 pool net-208 refcount 2   (older IOS, no id)
 _MAPPING = re.compile(
-    r"^\[Id:\s*(?P<id>\d+)\]\s+(?P<kind>access-list|route-map)\s+(?P<name>\S+)"
+    r"^(?:\[Id:\s*(?P<id>\d+)\]\s+)?(?P<kind>access-list|route-map)\s+(?P<name>\S+)"
     r"(?:\s+pool\s+(?P<pool>\S+))?"
     r"(?:\s+interface\s+(?P<interface>\S+))?"
     r"(?:\s+refcount\s+(?P<refcount>\d+))?$"
@@ -176,6 +226,27 @@ def _try_scalars(line: str, result: dict) -> bool:
     return False
 
 
+def _try_portblock(line: str, result: dict) -> bool:
+    """Write ``Reserved portblock stats`` lines into *result*."""
+    if _PORTBLOCK_HEADER.match(line):
+        result.setdefault("reserved_portblock_stats", {})
+        return True
+    stats = result.get("reserved_portblock_stats")
+    if stats is None:
+        return False
+    if match := _PORTBLOCK_RANGE.match(line):
+        kind = _PORTBLOCK_KINDS[match.group("kind")]
+        stats[f"{match.group('proto')}_ports_{kind}"] = {
+            "low": int(match.group("low")),
+            "high": int(match.group("high")),
+        }
+        return True
+    if match := _PORTBLOCK_FLAGS.match(line):
+        stats.update({k: int(v) for k, v in match.groupdict().items()})
+        return True
+    return False
+
+
 def _add_mapping(match: re.Match[str], direction: str, result: dict) -> None:
     """Store a dynamic mapping under its direction and ``[Id]``."""
     mapping: dict = {match.group("kind").replace("-", "_"): match.group("name")}
@@ -188,7 +259,8 @@ def _add_mapping(match: re.Match[str], direction: str, result: dict) -> None:
     if match.group("refcount"):
         mapping["refcount"] = int(match.group("refcount"))
     mappings = result.setdefault("dynamic_mappings", {})
-    mappings.setdefault(direction, {})[match.group("id")] = mapping
+    key = match.group("id") or f"{match.group('kind')} {match.group('name')}"
+    mappings.setdefault(direction, {})[key] = mapping
 
 
 def _try_pool_detail(line: str, pool: dict) -> None:
@@ -217,10 +289,11 @@ def _start_pool(match: re.Match[str], result: dict) -> dict:
 
 def _add_interfaces(line: str, side: str, result: dict) -> None:
     """Append comma-separated interfaces to the inside/outside list."""
-    interfaces = result.setdefault(f"{side.lower()}_interfaces", [])
-    for name in line.split(","):
-        if name.strip():
-            interfaces.append(canonical_interface_name(name.strip(), os=OS.CISCO_IOSXE))
+    names = [name.strip() for name in line.split(",") if name.strip()]
+    if names:
+        result.setdefault(f"{side.lower()}_interfaces", []).extend(
+            canonical_interface_name(name, os=OS.CISCO_IOSXE) for name in names
+        )
 
 
 class _State:
@@ -236,7 +309,12 @@ def _parse_line(line: str, state: _State, result: dict) -> None:
     """Dispatch one stripped output line."""
     if match := _INTERFACE_SECTION.match(line):
         state.side = match.group("side")
-    elif _try_scalars(line, result) or _SECTION_END.match(line):
+        _add_interfaces(match.group("inline"), state.side, result)
+    elif (
+        _try_scalars(line, result)
+        or _try_portblock(line, result)
+        or _SECTION_END.match(line)
+    ):
         state.side = None
     elif state.side is not None:
         _add_interfaces(line, state.side, result)
@@ -251,9 +329,10 @@ def _parse_line(line: str, state: _State, result: dict) -> None:
         _try_pool_detail(line, state.pool)
 
 
+@register(OS.CISCO_IOS, "show ip nat statistics")
 @register(OS.CISCO_IOSXE, "show ip nat statistics")
 class ShowIpNatStatisticsParser(BaseParser[ShowIpNatStatisticsResult]):
-    """Parser for 'show ip nat statistics' on IOS-XE.
+    """Parser for 'show ip nat statistics' on IOS and IOS-XE.
 
     Example output::
 
