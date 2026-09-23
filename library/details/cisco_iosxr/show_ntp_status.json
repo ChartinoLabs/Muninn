@@ -1,0 +1,141 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show ntp status",
+  "schema": {
+    "name": "ShowNtpStatusResult",
+    "fields": {
+      "synchronized": {
+        "type": "bool",
+        "required": true
+      },
+      "stratum": {
+        "type": "int",
+        "required": true
+      },
+      "refid": {
+        "type": "str",
+        "required": false
+      },
+      "nominal_freq_hz": {
+        "type": "float",
+        "required": false
+      },
+      "actual_freq_hz": {
+        "type": "float",
+        "required": false
+      },
+      "precision_hz": {
+        "type": "int",
+        "required": false
+      },
+      "reftime": {
+        "type": "str",
+        "required": false
+      },
+      "reftime_date": {
+        "type": "str",
+        "required": false
+      },
+      "offset_ms": {
+        "type": "float",
+        "required": false
+      },
+      "root_delay_ms": {
+        "type": "float",
+        "required": false
+      },
+      "root_dispersion_ms": {
+        "type": "float",
+        "required": false
+      },
+      "peer_dispersion_ms": {
+        "type": "float",
+        "required": false
+      },
+      "loopfilter_state": {
+        "type": "str",
+        "required": false
+      },
+      "loopfilter_description": {
+        "type": "str",
+        "required": false
+      },
+      "drift": {
+        "type": "float",
+        "required": false
+      },
+      "poll_interval_seconds": {
+        "type": "int",
+        "required": false
+      },
+      "last_update_seconds_ago": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Synchronized clock at stratum 3 with full status including loopfilter state, drift, poll interval and last update age",
+      "input": "\nRP/0/RP0/CPU0:router# show ntp status\n\nTue Oct  7 11:22:54.023 EST\n\nClock is synchronized, stratum 3, reference is 192.168.128.5\nnominal freq is 1000.0000 Hz, actual freq is 1000.2725 Hz, precision is 2**24\nreference time is CC95463C.9B964367 (11:21:48.607 EST Tue Oct  7 2008)\nclock offset is -1.738 msec, root delay is 186.050 msec\nroot dispersion is 53.86 msec, peer dispersion is 0.09 msec\nloopfilter state is 'CTRL' (Normal Controlled Loop), drift is -0.0002724105 s/s\nsystem poll interval is 64, last update was 66 sec ago\n",
+      "expected": {
+        "synchronized": true,
+        "stratum": 3,
+        "refid": "192.168.128.5",
+        "nominal_freq_hz": 1000.0,
+        "actual_freq_hz": 1000.2725,
+        "precision_hz": 16777216,
+        "reftime": "CC95463C.9B964367",
+        "reftime_date": "11:21:48.607 EST Tue Oct  7 2008",
+        "offset_ms": -1.738,
+        "root_delay_ms": 186.05,
+        "root_dispersion_ms": 53.86,
+        "peer_dispersion_ms": 0.09,
+        "loopfilter_state": "CTRL",
+        "loopfilter_description": "Normal Controlled Loop",
+        "drift": -0.0002724105,
+        "poll_interval_seconds": 64,
+        "last_update_seconds_ago": 66
+      }
+    },
+    {
+      "name": "Synchronized clock at stratum 4 from an older release that omits the loopfilter and poll interval lines",
+      "input": "\nRP/0/RP0/CPU0:router# show ntp status\n\nClock is synchronized, stratum 4, reference is 172.19.69.1\nnominal freq is 1000.0000 Hz, actual freq is 999.9988 Hz, precision is 2**26\nreference time is C54C131B.9EECF6CA (07:26:19.620 UTC Mon Nov 24 2008)\nclock offset is 66.3685 msec, root delay is 7.80 msec\nroot dispersion is 950.04 msec, peer dispersion is 3.38 msec\n",
+      "expected": {
+        "synchronized": true,
+        "stratum": 4,
+        "refid": "172.19.69.1",
+        "nominal_freq_hz": 1000.0,
+        "actual_freq_hz": 999.9988,
+        "precision_hz": 67108864,
+        "reftime": "C54C131B.9EECF6CA",
+        "reftime_date": "07:26:19.620 UTC Mon Nov 24 2008",
+        "offset_ms": 66.3685,
+        "root_delay_ms": 7.8,
+        "root_dispersion_ms": 950.04,
+        "peer_dispersion_ms": 3.38
+      }
+    },
+    {
+      "name": "Unsynchronized clock at stratum 16 with no reference clock, never-set loopfilter and never-updated poll status",
+      "input": "\nRP/0/RP0/CPU0:iosxrv9000-1#show ntp status\nMon Nov  5 23:23:09.761 UTC\n\nClock is unsynchronized, stratum 16, no reference clock\nnominal freq is 1000000000.0000 Hz, actual freq is 1000000000.0000 Hz, precision is 2**23\nreference time is 00000000.00000000 (00:00:00.000 UTC Thu Jan  1 1970)\nclock offset is 0.000 msec, root delay is 0.000 msec\nroot dispersion is 101.71 msec, peer dispersion is 0.00 msec\nloopfilter state is 'NSET' (Never set), drift is 0.0000000000 s/s\nsystem poll interval is 64, never updated\n",
+      "expected": {
+        "synchronized": false,
+        "stratum": 16,
+        "nominal_freq_hz": 1000000000.0,
+        "actual_freq_hz": 1000000000.0,
+        "precision_hz": 8388608,
+        "reftime": "00000000.00000000",
+        "reftime_date": "00:00:00.000 UTC Thu Jan  1 1970",
+        "offset_ms": 0.0,
+        "root_delay_ms": 0.0,
+        "root_dispersion_ms": 101.71,
+        "peer_dispersion_ms": 0.0,
+        "loopfilter_state": "NSET",
+        "loopfilter_description": "Never set",
+        "drift": 0.0,
+        "poll_interval_seconds": 64
+      }
+    }
+  ]
+}

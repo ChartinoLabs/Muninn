@@ -1,0 +1,442 @@
+{
+  "os": "cisco_ios",
+  "command": "show ip nat statistics",
+  "schema": {
+    "name": "ShowIpNatStatisticsResult",
+    "fields": {
+      "total_active_translations": {
+        "type": "int",
+        "required": true
+      },
+      "static_translations": {
+        "type": "int",
+        "required": true
+      },
+      "dynamic_translations": {
+        "type": "int",
+        "required": true
+      },
+      "extended_translations": {
+        "type": "int",
+        "required": true
+      },
+      "peak_translations": {
+        "type": "int",
+        "required": false
+      },
+      "peak_occurred_ago": {
+        "type": "str",
+        "required": false
+      },
+      "outside_interfaces": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": false
+      },
+      "inside_interfaces": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": false
+      },
+      "hits": {
+        "type": "int",
+        "required": true
+      },
+      "misses": {
+        "type": "int",
+        "required": true
+      },
+      "cef_translated_packets": {
+        "type": "int",
+        "required": false
+      },
+      "cef_punted_packets": {
+        "type": "int",
+        "required": false
+      },
+      "reserved_port_setting": {
+        "type": "str",
+        "required": false
+      },
+      "reserved_port_provisioned": {
+        "type": "str",
+        "required": false
+      },
+      "dynamic_overload_mappings_configured": {
+        "type": "int",
+        "required": false
+      },
+      "reserved_portblock_stats": {
+        "type": {
+          "name": "ReservedPortblockStats",
+          "fields": {
+            "tcp_ports_received_from_tpm": {
+              "type": {
+                "name": "PortRange",
+                "fields": {
+                  "low": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "high": {
+                    "type": "int",
+                    "required": true
+                  }
+                }
+              },
+              "required": false
+            },
+            "udp_ports_received_from_tpm": {
+              "type": {
+                "type": "ref",
+                "name": "PortRange"
+              },
+              "required": false
+            },
+            "tcp_ports_available": {
+              "type": {
+                "type": "ref",
+                "name": "PortRange"
+              },
+              "required": false
+            },
+            "udp_ports_available": {
+              "type": {
+                "type": "ref",
+                "name": "PortRange"
+              },
+              "required": false
+            },
+            "tcp_ports_reserved_flag": {
+              "type": "int",
+              "required": false
+            },
+            "udp_ports_reserved_flag": {
+              "type": "int",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "expired_translations": {
+        "type": "int",
+        "required": false
+      },
+      "dynamic_mappings": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "DynamicMapping",
+              "fields": {
+                "access_list": {
+                  "type": "str",
+                  "required": false
+                },
+                "route_map": {
+                  "type": "str",
+                  "required": false
+                },
+                "pool": {
+                  "type": "str",
+                  "required": false
+                },
+                "interface": {
+                  "type": "str",
+                  "required": false
+                },
+                "refcount": {
+                  "type": "int",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "pools": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "NatPool",
+            "fields": {
+              "id": {
+                "type": "int",
+                "required": false
+              },
+              "netmask": {
+                "type": "str",
+                "required": true
+              },
+              "address_ranges": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "AddressRange",
+                    "fields": {
+                      "start_address": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "end_address": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "type": {
+                "type": "str",
+                "required": false
+              },
+              "total_addresses": {
+                "type": "int",
+                "required": false
+              },
+              "allocated_addresses": {
+                "type": "int",
+                "required": false
+              },
+              "allocated_percent": {
+                "type": "int",
+                "required": false
+              },
+              "misses": {
+                "type": "int",
+                "required": false
+              },
+              "longest_chain": {
+                "type": "int",
+                "required": false
+              },
+              "average_chain_length": {
+                "type": "int",
+                "required": false
+              },
+              "chains": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "total_doors": {
+        "type": "int",
+        "required": false
+      },
+      "appl_doors": {
+        "type": "int",
+        "required": false
+      },
+      "normal_doors": {
+        "type": "int",
+        "required": false
+      },
+      "queued_packets": {
+        "type": "int",
+        "required": false
+      },
+      "nat_limit_max_allowed": {
+        "type": "int",
+        "required": false
+      },
+      "nat_limit_used": {
+        "type": "int",
+        "required": false
+      },
+      "nat_limit_missed": {
+        "type": "int",
+        "required": false
+      },
+      "in_to_out_drops": {
+        "type": "int",
+        "required": false
+      },
+      "out_to_in_drops": {
+        "type": "int",
+        "required": false
+      },
+      "pool_stats_drop": {
+        "type": "int",
+        "required": false
+      },
+      "mapping_stats_drop": {
+        "type": "int",
+        "required": false
+      },
+      "port_block_alloc_fail": {
+        "type": "int",
+        "required": false
+      },
+      "ip_alias_add_fail": {
+        "type": "int",
+        "required": false
+      },
+      "limit_entry_add_fail": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Access-list to pool mapping with CEF counters and drop/fail counters",
+      "input": "\nDevice# show ip nat statistics\n\nTotal active translations: 3 (0 static, 3 dynamic; 3 extended)\nOutside interfaces:\nGigabitEthernet0/3/0\nInside interfaces:\nGigabitEthernet0/3/1\nHits: 3228980 Misses: 3\nCEF Translated packets: 0, CEF Punted packets: 0\nExpired translations: 0\nDynamic mappings:\n-- Inside Source\n[Id: 1] access-list 1 pool pool1 refcount 3\npool pool1: netmask 255.255.255.0\nstart 192.168.49.1 end 192.168.115.254\ntype generic, total addresses 254, allocated 0 (0%), misses 0\nlongest chain in pool: pool1's addr-hash: 0, average len 0,chains 0/256\nPool stats drop: 0 Mapping stats drop: 0\nPort block alloc fail: 0\nIP alias add fail: 0\nLimit entry add fail: 0\n",
+      "expected": {
+        "total_active_translations": 3,
+        "static_translations": 0,
+        "dynamic_translations": 3,
+        "extended_translations": 3,
+        "outside_interfaces": [
+          "GigabitEthernet0/3/0"
+        ],
+        "inside_interfaces": [
+          "GigabitEthernet0/3/1"
+        ],
+        "hits": 3228980,
+        "misses": 3,
+        "cef_translated_packets": 0,
+        "cef_punted_packets": 0,
+        "expired_translations": 0,
+        "dynamic_mappings": {
+          "inside_source": {
+            "1": {
+              "access_list": "1",
+              "pool": "pool1",
+              "refcount": 3
+            }
+          }
+        },
+        "pools": {
+          "pool1": {
+            "netmask": "255.255.255.0",
+            "address_ranges": {
+              "192.168.49.1": {
+                "start_address": "192.168.49.1",
+                "end_address": "192.168.115.254"
+              }
+            },
+            "type": "generic",
+            "total_addresses": 254,
+            "allocated_addresses": 0,
+            "allocated_percent": 0,
+            "misses": 0,
+            "longest_chain": 0,
+            "average_chain_length": 0,
+            "chains": "0/256"
+          }
+        },
+        "pool_stats_drop": 0,
+        "mapping_stats_drop": 0,
+        "port_block_alloc_fail": 0,
+        "ip_alias_add_fail": 0,
+        "limit_entry_add_fail": 0
+      }
+    },
+    {
+      "name": "Older IOS output with \"Total translations\" and a dynamic mapping without an Id",
+      "input": "\nRouter# show ip nat statistics\nTotal translations: 2 (0 static, 2 dynamic; 0 extended)\nOutside interfaces: Serial0\nInside interfaces: Ethernet1\nHits: 135  Misses: 5\nExpired translations: 2\nDynamic mappings:\n-- Inside Source\naccess-list 1 pool net-208 refcount 2\npool net-208: netmask 255.255.255.240\n        start 172.16.233.208 end 172.16.233.221\n        type generic, total addresses 14, allocated 2 (14%), misses 0\n",
+      "expected": {
+        "total_active_translations": 2,
+        "static_translations": 0,
+        "dynamic_translations": 2,
+        "extended_translations": 0,
+        "outside_interfaces": [
+          "Serial0"
+        ],
+        "inside_interfaces": [
+          "Ethernet1"
+        ],
+        "hits": 135,
+        "misses": 5,
+        "expired_translations": 2,
+        "dynamic_mappings": {
+          "inside_source": {
+            "access-list 1": {
+              "access_list": "1",
+              "pool": "net-208",
+              "refcount": 2
+            }
+          }
+        },
+        "pools": {
+          "net-208": {
+            "netmask": "255.255.255.240",
+            "address_ranges": {
+              "172.16.233.208": {
+                "start_address": "172.16.233.208",
+                "end_address": "172.16.233.221"
+              }
+            },
+            "type": "generic",
+            "total_addresses": 14,
+            "allocated_addresses": 2,
+            "allocated_percent": 14,
+            "misses": 0
+          }
+        }
+      }
+    },
+    {
+      "name": "Reserved port setting, dynamic overload mapping count and reserved portblock stats",
+      "input": "Total active translations: 0 (0 static, 0 dynamic; 0 extended)\nOutside interfaces:\nInside interfaces:\nHits: 0  Misses: 11000\nReserved port setting disabled provisioned no\nDynamic overload mapping configured: 0\nReserved portblock stats\ntotal tcp ports rcvd from tpm lo:0 hi:0\ntotal udp ports rcvd from tpm lo:0 hi:0\ntotal tcp ports available lo:0 hi:0\ntotal udp ports available lo:0 hi:0\ntcp ports reserved flag 0 udp ports reserved flag 0\nExpired translations: 1000\nDynamic mappings:\nnat-limit statistics:\nmax entry: max allowed 0, used 0, missed 0\nIn-to-out drops: 0  Out-to-in drops: 0\nPool stats drop: 0  Mapping stats drop: 0\nPort block alloc fail: 0\nIP alias add fail: 0\nLimit entry add fail: 0\n",
+      "expected": {
+        "total_active_translations": 0,
+        "static_translations": 0,
+        "dynamic_translations": 0,
+        "extended_translations": 0,
+        "hits": 0,
+        "misses": 11000,
+        "reserved_port_setting": "disabled",
+        "reserved_port_provisioned": "no",
+        "dynamic_overload_mappings_configured": 0,
+        "reserved_portblock_stats": {
+          "tcp_ports_received_from_tpm": {
+            "low": 0,
+            "high": 0
+          },
+          "udp_ports_received_from_tpm": {
+            "low": 0,
+            "high": 0
+          },
+          "tcp_ports_available": {
+            "low": 0,
+            "high": 0
+          },
+          "udp_ports_available": {
+            "low": 0,
+            "high": 0
+          },
+          "tcp_ports_reserved_flag": 0,
+          "udp_ports_reserved_flag": 0
+        },
+        "expired_translations": 1000,
+        "nat_limit_max_allowed": 0,
+        "nat_limit_used": 0,
+        "nat_limit_missed": 0,
+        "in_to_out_drops": 0,
+        "out_to_in_drops": 0,
+        "pool_stats_drop": 0,
+        "mapping_stats_drop": 0,
+        "port_block_alloc_fail": 0,
+        "ip_alias_add_fail": 0,
+        "limit_entry_add_fail": 0
+      }
+    }
+  ]
+}

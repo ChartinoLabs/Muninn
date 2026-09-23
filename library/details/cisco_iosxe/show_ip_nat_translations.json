@@ -1,0 +1,315 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip nat translations",
+  "schema": {
+    "name": "ShowPlatformNatTranslationsActiveResult",
+    "fields": {
+      "translations": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "type": "dict",
+              "key": "str",
+              "value": {
+                "type": "dict",
+                "key": "str",
+                "value": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "NatTranslationEntry",
+                    "fields": {
+                      "protocol": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "inside_global": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "inside_local": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "outside_local": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "outside_global": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "inside_global_port": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "inside_local_port": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "outside_local_port": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "outside_global_port": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "created": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "last_used": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "timeout": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "map_id_in": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "rule_id": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "flags": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "alg_application_type": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "wlan_flags": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "mac_address": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "input_interface": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "output_interface": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "entry_id": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "use_count": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "in_packets": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "in_bytes": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "out_packets": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "out_bytes": {
+                        "type": "int",
+                        "required": false
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_translations": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Static NAT entries without ports, with prompt echo and a truncated '--' outside global placeholder",
+      "input": "Router#show ip nat translations\nPro Inside global      Inside local       Outside local      Outside global\n--- 10.1.7.2     192.168.1.95       ---                ---\n--- 10.1.7.200     192.168.1.89       ---                --\nTotal number of translations: 2\n",
+      "expected": {
+        "translations": {
+          "static": {
+            "10.1.7.2": {
+              "no_port": {
+                "N/A": {
+                  "no_port": {
+                    "protocol": "static",
+                    "inside_global": "10.1.7.2",
+                    "inside_local": "192.168.1.95"
+                  }
+                }
+              }
+            },
+            "10.1.7.200": {
+              "no_port": {
+                "N/A": {
+                  "no_port": {
+                    "protocol": "static",
+                    "inside_global": "10.1.7.200",
+                    "inside_local": "192.168.1.89"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "total_translations": 2
+      }
+    },
+    {
+      "name": "Dynamic PAT entries for TCP and UDP with ports on all four addresses",
+      "input": "Router#show ip nat translations\nPro Inside global        Inside local       Outside local      Outside global\nudp 10.1.7.2:1220  192.168.1.95:1220  10.100.20.100:53    10.100.20.100:53\ntcp 10.1.7.2:11012 192.168.1.89:11012 10.26.102.100:23    10.26.102.100:23\ntcp 10.1.7.2:1067  192.168.1.95:1067  10.220.2.25:23    10.220.2.25:23\nTotal number of translations: 3\n",
+      "expected": {
+        "translations": {
+          "udp": {
+            "10.1.7.2": {
+              "1220": {
+                "10.100.20.100": {
+                  "53": {
+                    "protocol": "udp",
+                    "inside_global": "10.1.7.2",
+                    "inside_local": "192.168.1.95",
+                    "outside_local": "10.100.20.100",
+                    "outside_global": "10.100.20.100",
+                    "inside_global_port": 1220,
+                    "inside_local_port": 1220,
+                    "outside_local_port": 53,
+                    "outside_global_port": 53
+                  }
+                }
+              }
+            }
+          },
+          "tcp": {
+            "10.1.7.2": {
+              "11012": {
+                "10.26.102.100": {
+                  "23": {
+                    "protocol": "tcp",
+                    "inside_global": "10.1.7.2",
+                    "inside_local": "192.168.1.89",
+                    "outside_local": "10.26.102.100",
+                    "outside_global": "10.26.102.100",
+                    "inside_global_port": 11012,
+                    "inside_local_port": 11012,
+                    "outside_local_port": 23,
+                    "outside_global_port": 23
+                  }
+                }
+              },
+              "1067": {
+                "10.220.2.25": {
+                  "23": {
+                    "protocol": "tcp",
+                    "inside_global": "10.1.7.2",
+                    "inside_local": "192.168.1.95",
+                    "outside_local": "10.220.2.25",
+                    "outside_global": "10.220.2.25",
+                    "inside_global_port": 1067,
+                    "inside_local_port": 1067,
+                    "outside_local_port": 23,
+                    "outside_global_port": 23
+                  }
+                }
+              }
+            }
+          }
+        },
+        "total_translations": 3
+      }
+    },
+    {
+      "name": "Single ICMP translation without a total line",
+      "input": "Pro Inside global      Inside local       Outside local      Outside global\nicmp 100.100.100.100:1024 192.168.121.20:1260 192.168.21.20:1260 192.168.21.20:1024\n",
+      "expected": {
+        "translations": {
+          "icmp": {
+            "100.100.100.100": {
+              "1024": {
+                "192.168.21.20": {
+                  "1024": {
+                    "protocol": "icmp",
+                    "inside_global": "100.100.100.100",
+                    "inside_local": "192.168.121.20",
+                    "outside_local": "192.168.21.20",
+                    "outside_global": "192.168.21.20",
+                    "inside_global_port": 1024,
+                    "inside_local_port": 1260,
+                    "outside_local_port": 1260,
+                    "outside_global_port": 1024
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "UDP translations where some lines carry leading indentation",
+      "input": "      Device# show ip nat translations\n\nPro  Inside global         Inside local          Outside local         Outside global\nudp  10.5.5.1:1025          192.0.2.1:4000        ---                   ---\nudp  10.5.5.1:1024          192.0.2.3:4000        ---                   ---\n      udp  10.5.5.1:1026          192.0.2.2:4000        ---                   ---\n      Total number of translations: 3\n",
+      "expected": {
+        "translations": {
+          "udp": {
+            "10.5.5.1": {
+              "1025": {
+                "N/A": {
+                  "no_port": {
+                    "protocol": "udp",
+                    "inside_global": "10.5.5.1",
+                    "inside_local": "192.0.2.1",
+                    "inside_global_port": 1025,
+                    "inside_local_port": 4000
+                  }
+                }
+              },
+              "1024": {
+                "N/A": {
+                  "no_port": {
+                    "protocol": "udp",
+                    "inside_global": "10.5.5.1",
+                    "inside_local": "192.0.2.3",
+                    "inside_global_port": 1024,
+                    "inside_local_port": 4000
+                  }
+                }
+              },
+              "1026": {
+                "N/A": {
+                  "no_port": {
+                    "protocol": "udp",
+                    "inside_global": "10.5.5.1",
+                    "inside_local": "192.0.2.2",
+                    "inside_global_port": 1026,
+                    "inside_local_port": 4000
+                  }
+                }
+              }
+            }
+          }
+        },
+        "total_translations": 3
+      }
+    }
+  ]
+}

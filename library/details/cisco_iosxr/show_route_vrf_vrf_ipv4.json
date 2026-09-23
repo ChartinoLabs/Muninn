@@ -1,0 +1,93 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show route vrf <vrf> ipv4",
+  "schema": {
+    "name": "ShowRouteResult",
+    "fields": {
+      "routes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "Route",
+            "fields": {
+              "prefix": {
+                "type": "str",
+                "required": true
+              },
+              "mask": {
+                "type": "int",
+                "required": true
+              },
+              "protocol": {
+                "type": "str",
+                "required": true
+              },
+              "next_hops": {
+                "type": {
+                  "type": "list",
+                  "items": {
+                    "name": "RouteNextHop",
+                    "fields": {
+                      "next_hop": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "nexthop_vrf": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "distance": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "metric": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "uptime": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "interface": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "directly_connected": {
+                        "type": "bool",
+                        "required": true
+                      },
+                      "is_backup": {
+                        "type": "bool",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "gateway_of_last_resort": {
+        "type": {
+          "name": "GatewayOfLastResort",
+          "fields": {
+            "next_hop": {
+              "type": "str",
+              "required": true
+            },
+            "network": {
+              "type": "str",
+              "required": true
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": []
+}

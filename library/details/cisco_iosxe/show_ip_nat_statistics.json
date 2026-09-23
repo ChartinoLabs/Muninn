@@ -1,0 +1,585 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip nat statistics",
+  "schema": {
+    "name": "ShowIpNatStatisticsResult",
+    "fields": {
+      "total_active_translations": {
+        "type": "int",
+        "required": true
+      },
+      "static_translations": {
+        "type": "int",
+        "required": true
+      },
+      "dynamic_translations": {
+        "type": "int",
+        "required": true
+      },
+      "extended_translations": {
+        "type": "int",
+        "required": true
+      },
+      "peak_translations": {
+        "type": "int",
+        "required": false
+      },
+      "peak_occurred_ago": {
+        "type": "str",
+        "required": false
+      },
+      "outside_interfaces": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": false
+      },
+      "inside_interfaces": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": false
+      },
+      "hits": {
+        "type": "int",
+        "required": true
+      },
+      "misses": {
+        "type": "int",
+        "required": true
+      },
+      "cef_translated_packets": {
+        "type": "int",
+        "required": false
+      },
+      "cef_punted_packets": {
+        "type": "int",
+        "required": false
+      },
+      "reserved_port_setting": {
+        "type": "str",
+        "required": false
+      },
+      "reserved_port_provisioned": {
+        "type": "str",
+        "required": false
+      },
+      "dynamic_overload_mappings_configured": {
+        "type": "int",
+        "required": false
+      },
+      "reserved_portblock_stats": {
+        "type": {
+          "name": "ReservedPortblockStats",
+          "fields": {
+            "tcp_ports_received_from_tpm": {
+              "type": {
+                "name": "PortRange",
+                "fields": {
+                  "low": {
+                    "type": "int",
+                    "required": true
+                  },
+                  "high": {
+                    "type": "int",
+                    "required": true
+                  }
+                }
+              },
+              "required": false
+            },
+            "udp_ports_received_from_tpm": {
+              "type": {
+                "type": "ref",
+                "name": "PortRange"
+              },
+              "required": false
+            },
+            "tcp_ports_available": {
+              "type": {
+                "type": "ref",
+                "name": "PortRange"
+              },
+              "required": false
+            },
+            "udp_ports_available": {
+              "type": {
+                "type": "ref",
+                "name": "PortRange"
+              },
+              "required": false
+            },
+            "tcp_ports_reserved_flag": {
+              "type": "int",
+              "required": false
+            },
+            "udp_ports_reserved_flag": {
+              "type": "int",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "expired_translations": {
+        "type": "int",
+        "required": false
+      },
+      "dynamic_mappings": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "DynamicMapping",
+              "fields": {
+                "access_list": {
+                  "type": "str",
+                  "required": false
+                },
+                "route_map": {
+                  "type": "str",
+                  "required": false
+                },
+                "pool": {
+                  "type": "str",
+                  "required": false
+                },
+                "interface": {
+                  "type": "str",
+                  "required": false
+                },
+                "refcount": {
+                  "type": "int",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "pools": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "NatPool",
+            "fields": {
+              "id": {
+                "type": "int",
+                "required": false
+              },
+              "netmask": {
+                "type": "str",
+                "required": true
+              },
+              "address_ranges": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "AddressRange",
+                    "fields": {
+                      "start_address": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "end_address": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "type": {
+                "type": "str",
+                "required": false
+              },
+              "total_addresses": {
+                "type": "int",
+                "required": false
+              },
+              "allocated_addresses": {
+                "type": "int",
+                "required": false
+              },
+              "allocated_percent": {
+                "type": "int",
+                "required": false
+              },
+              "misses": {
+                "type": "int",
+                "required": false
+              },
+              "longest_chain": {
+                "type": "int",
+                "required": false
+              },
+              "average_chain_length": {
+                "type": "int",
+                "required": false
+              },
+              "chains": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "total_doors": {
+        "type": "int",
+        "required": false
+      },
+      "appl_doors": {
+        "type": "int",
+        "required": false
+      },
+      "normal_doors": {
+        "type": "int",
+        "required": false
+      },
+      "queued_packets": {
+        "type": "int",
+        "required": false
+      },
+      "nat_limit_max_allowed": {
+        "type": "int",
+        "required": false
+      },
+      "nat_limit_used": {
+        "type": "int",
+        "required": false
+      },
+      "nat_limit_missed": {
+        "type": "int",
+        "required": false
+      },
+      "in_to_out_drops": {
+        "type": "int",
+        "required": false
+      },
+      "out_to_in_drops": {
+        "type": "int",
+        "required": false
+      },
+      "pool_stats_drop": {
+        "type": "int",
+        "required": false
+      },
+      "mapping_stats_drop": {
+        "type": "int",
+        "required": false
+      },
+      "port_block_alloc_fail": {
+        "type": "int",
+        "required": false
+      },
+      "ip_alias_add_fail": {
+        "type": "int",
+        "required": false
+      },
+      "limit_entry_add_fail": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Access-list to pool mapping with pool usage and drop/fail counters",
+      "input": "\nasr1000#sh ip nat statistics\nTotal active translations: 0 (0 static, 0 dynamic; 0 extended)\nOutside interfaces:\nTenGigabitEthernet0/2/0\nInside interfaces:\nTenGigabitEthernet0/1/0\nHits: 3358708  Misses: 11050\nCEF Translated packets: 0, CEF Punted packets: 0\nExpired translations: 11013\nDynamic mappings:\n-- Inside Source\n[Id: 1] access-list test-robot pool test-robot refcount 0\npool test-robot: netmask 255.255.255.252\n    start 10.1.1.1 end 10.1.1.1\n    type generic, total addresses 1, allocated 0 (0%), misses 0\nPool stats drop: 0  Mapping stats drop: 0\nPort block alloc fail: 0\nIP alias add fail: 0\nLimit entry add fail: 0\n",
+      "expected": {
+        "total_active_translations": 0,
+        "static_translations": 0,
+        "dynamic_translations": 0,
+        "extended_translations": 0,
+        "outside_interfaces": [
+          "TenGigabitEthernet0/2/0"
+        ],
+        "inside_interfaces": [
+          "TenGigabitEthernet0/1/0"
+        ],
+        "hits": 3358708,
+        "misses": 11050,
+        "cef_translated_packets": 0,
+        "cef_punted_packets": 0,
+        "expired_translations": 11013,
+        "dynamic_mappings": {
+          "inside_source": {
+            "1": {
+              "access_list": "test-robot",
+              "pool": "test-robot",
+              "refcount": 0
+            }
+          }
+        },
+        "pools": {
+          "test-robot": {
+            "netmask": "255.255.255.252",
+            "address_ranges": {
+              "10.1.1.1": {
+                "start_address": "10.1.1.1",
+                "end_address": "10.1.1.1"
+              }
+            },
+            "type": "generic",
+            "total_addresses": 1,
+            "allocated_addresses": 0,
+            "allocated_percent": 0,
+            "misses": 0
+          }
+        },
+        "pool_stats_drop": 0,
+        "mapping_stats_drop": 0,
+        "port_block_alloc_fail": 0,
+        "ip_alias_add_fail": 0,
+        "limit_entry_add_fail": 0
+      }
+    },
+    {
+      "name": "Peak translations with occurrence time, no dynamic mappings",
+      "input": "\nC1841#sh ip nat statistics\nTotal active translations: 3339 (0 static, 3339 dynamic; 3339 extended)\nPeak translations: 8114, occurred 18:35:17 ago\nOutside interfaces:\nFastEthernet0/0\nInside interfaces:\nFastEthernet0/1\nHits: 28658670  Misses: 0\n",
+      "expected": {
+        "total_active_translations": 3339,
+        "static_translations": 0,
+        "dynamic_translations": 3339,
+        "extended_translations": 3339,
+        "peak_translations": 8114,
+        "peak_occurred_ago": "18:35:17",
+        "outside_interfaces": [
+          "FastEthernet0/0"
+        ],
+        "inside_interfaces": [
+          "FastEthernet0/1"
+        ],
+        "hits": 28658670,
+        "misses": 0
+      }
+    },
+    {
+      "name": "Access-list mapped to an interface, abbreviated command, indented interfaces",
+      "input": "\nr1#sh ip nat stat\nTotal active translations: 1 (0 static, 1 dynamic; 1 extended)\nOutside interfaces:\n  Serial0/0\nInside interfaces:\n  FastEthernet0/0\nHits: 3  Misses: 1\nCEF Translated packets: 4, CEF Punted packets: 0\nExpired translations: 0\nDynamic mappings:\n-- Inside Source\n[Id: 3] access-list 99 interface Serial0/0 refcount 1\nQueued Packets: 0\n",
+      "expected": {
+        "total_active_translations": 1,
+        "static_translations": 0,
+        "dynamic_translations": 1,
+        "extended_translations": 1,
+        "outside_interfaces": [
+          "Serial0/0"
+        ],
+        "inside_interfaces": [
+          "FastEthernet0/0"
+        ],
+        "hits": 3,
+        "misses": 1,
+        "cef_translated_packets": 4,
+        "cef_punted_packets": 0,
+        "expired_translations": 0,
+        "dynamic_mappings": {
+          "inside_source": {
+            "3": {
+              "access_list": "99",
+              "interface": "Serial0/0",
+              "refcount": 1
+            }
+          }
+        },
+        "queued_packets": 0
+      }
+    },
+    {
+      "name": "No translations or interfaces, with door and queued packet counters",
+      "input": "\nTotal active translations: 0 (0 static, 0 dynamic; 0 extended)\nPeak translations: 0\nOutside interfaces:\nInside interfaces:\nHits: 0  Misses: 0\nCEF Translated packets: 0, CEF Punted packets: 0\nExpired translations: 0\nDynamic mappings:\n\nTotal doors: 0\nAppl doors: 0\nNormal doors: 0\nQueued Packets: 0\n",
+      "expected": {
+        "total_active_translations": 0,
+        "static_translations": 0,
+        "dynamic_translations": 0,
+        "extended_translations": 0,
+        "peak_translations": 0,
+        "hits": 0,
+        "misses": 0,
+        "cef_translated_packets": 0,
+        "cef_punted_packets": 0,
+        "expired_translations": 0,
+        "total_doors": 0,
+        "appl_doors": 0,
+        "normal_doors": 0,
+        "queued_packets": 0
+      }
+    },
+    {
+      "name": "Route-map to pool mapping with pool id and nat-limit statistics",
+      "input": "\nshow ip nat statistics\nTotal active translations: 5 (0 static, 5 dynamic; 5 extended)\nOutside interfaces:\nGigabitEthernet0/0/1\nInside interfaces:\nGigabitEthernet0/0/0\nHits: 11178  Misses: 8\nExpired translations: 0\nDynamic mappings:\n-- Inside Source\n[Id: 1] route-map NAT-MAP pool inside-pool refcount 6\npool inside-pool: id 1, netmask 255.255.255.0\n    start 10.49.1.1 end 10.49.1.1\n    type generic, total addresses 1, allocated 1 (100%), misses 0\nnat-limit statistics:\nmax entry: max allowed 0, used 0, missed 0\nIn-to-out drops: 0  Out-to-in drops: 0\nPool stats drop: 0  Mapping stats drop: 0\nPort block alloc fail: 0\nIP alias add fail: 0\nLimit entry add fail: 0\n",
+      "expected": {
+        "total_active_translations": 5,
+        "static_translations": 0,
+        "dynamic_translations": 5,
+        "extended_translations": 5,
+        "outside_interfaces": [
+          "GigabitEthernet0/0/1"
+        ],
+        "inside_interfaces": [
+          "GigabitEthernet0/0/0"
+        ],
+        "hits": 11178,
+        "misses": 8,
+        "expired_translations": 0,
+        "dynamic_mappings": {
+          "inside_source": {
+            "1": {
+              "route_map": "NAT-MAP",
+              "pool": "inside-pool",
+              "refcount": 6
+            }
+          }
+        },
+        "pools": {
+          "inside-pool": {
+            "netmask": "255.255.255.0",
+            "id": 1,
+            "address_ranges": {
+              "10.49.1.1": {
+                "start_address": "10.49.1.1",
+                "end_address": "10.49.1.1"
+              }
+            },
+            "type": "generic",
+            "total_addresses": 1,
+            "allocated_addresses": 1,
+            "allocated_percent": 100,
+            "misses": 0
+          }
+        },
+        "nat_limit_max_allowed": 0,
+        "nat_limit_used": 0,
+        "nat_limit_missed": 0,
+        "in_to_out_drops": 0,
+        "out_to_in_drops": 0,
+        "pool_stats_drop": 0,
+        "mapping_stats_drop": 0,
+        "port_block_alloc_fail": 0,
+        "ip_alias_add_fail": 0,
+        "limit_entry_add_fail": 0
+      }
+    },
+    {
+      "name": "Large pool with longest addr-hash chain statistics",
+      "input": "\nGenie#show ip nat statistics\nTotal active translations: 3001 (1 static, 3000 dynamic; 1500 extended)\nOutside interfaces:\nVlan89\nInside interfaces:\nVlan88\nHits: 45392  Misses: 0\nCEF Translated packets: 0, CEF Punted packets: 0\nExpired translations: 1\nDynamic mappings:\n-- Inside Source\n[Id: 1] access-list test pool net-208 refcount 3000\npool net-208: id 1, netmask 255.255.0.0\n    start 10.55.0.1 end 10.55.100.254\n    type generic, total addresses 25854, allocated 1500 (5%), misses 0\nlongest chain in pool: net-208's addr-hash: 6, average len 5,chains 256/256\n",
+      "expected": {
+        "total_active_translations": 3001,
+        "static_translations": 1,
+        "dynamic_translations": 3000,
+        "extended_translations": 1500,
+        "outside_interfaces": [
+          "Vlan89"
+        ],
+        "inside_interfaces": [
+          "Vlan88"
+        ],
+        "hits": 45392,
+        "misses": 0,
+        "cef_translated_packets": 0,
+        "cef_punted_packets": 0,
+        "expired_translations": 1,
+        "dynamic_mappings": {
+          "inside_source": {
+            "1": {
+              "access_list": "test",
+              "pool": "net-208",
+              "refcount": 3000
+            }
+          }
+        },
+        "pools": {
+          "net-208": {
+            "netmask": "255.255.0.0",
+            "id": 1,
+            "address_ranges": {
+              "10.55.0.1": {
+                "start_address": "10.55.0.1",
+                "end_address": "10.55.100.254"
+              }
+            },
+            "type": "generic",
+            "total_addresses": 25854,
+            "allocated_addresses": 1500,
+            "allocated_percent": 5,
+            "misses": 0,
+            "longest_chain": 6,
+            "average_chain_length": 5,
+            "chains": "256/256"
+          }
+        }
+      }
+    },
+    {
+      "name": "Multiple inside/outside interfaces printed comma-separated across lines",
+      "input": "\nDevice# show ip nat statistics\n\nTotal active translations: 3 (0 static, 3 dynamic; 3 extended)\nOutside interfaces:\nTenGigabitEthernet2/0/0, TenGigabitEthernet2/1/0, TenGigabitEthernet2/2/0\nTenGigabitEthernet2/3/0\nInside interfaces:\nTenGigabitEthernet1/0/0, TenGigabitEthernet1/1/0, TenGigabitEthernet1/2/0\nTenGigabitEthernet1/3/0\nHits: 59230465  Misses: 3\nCEF Translated packets: 0, CEF Punted packets: 0\nExpired translations: 0\nDynamic mappings:\n-- Inside Source\n[Id: 1] access-list 102 pool mypool refcount 3\npool mypool: netmask 255.255.255.0\n        start 10.5.5.1 end 10.5.5.5\n        type generic, total addresses 5, allocated 1 (20%), misses 0\nnat-limit statistics:\nmax entry: max allowed 2147483647, used 3, missed 0\nPool stats drop: 0  Mapping stats drop: 0\nPort block alloc fail: 0\nIP alias add fail: 0\nLimit entry add fail: 0\n",
+      "expected": {
+        "total_active_translations": 3,
+        "static_translations": 0,
+        "dynamic_translations": 3,
+        "extended_translations": 3,
+        "outside_interfaces": [
+          "TenGigabitEthernet2/0/0",
+          "TenGigabitEthernet2/1/0",
+          "TenGigabitEthernet2/2/0",
+          "TenGigabitEthernet2/3/0"
+        ],
+        "inside_interfaces": [
+          "TenGigabitEthernet1/0/0",
+          "TenGigabitEthernet1/1/0",
+          "TenGigabitEthernet1/2/0",
+          "TenGigabitEthernet1/3/0"
+        ],
+        "hits": 59230465,
+        "misses": 3,
+        "cef_translated_packets": 0,
+        "cef_punted_packets": 0,
+        "expired_translations": 0,
+        "dynamic_mappings": {
+          "inside_source": {
+            "1": {
+              "access_list": "102",
+              "pool": "mypool",
+              "refcount": 3
+            }
+          }
+        },
+        "pools": {
+          "mypool": {
+            "netmask": "255.255.255.0",
+            "address_ranges": {
+              "10.5.5.1": {
+                "start_address": "10.5.5.1",
+                "end_address": "10.5.5.5"
+              }
+            },
+            "type": "generic",
+            "total_addresses": 5,
+            "allocated_addresses": 1,
+            "allocated_percent": 20,
+            "misses": 0
+          }
+        },
+        "nat_limit_max_allowed": 2147483647,
+        "nat_limit_used": 3,
+        "nat_limit_missed": 0,
+        "pool_stats_drop": 0,
+        "mapping_stats_drop": 0,
+        "port_block_alloc_fail": 0,
+        "ip_alias_add_fail": 0,
+        "limit_entry_add_fail": 0
+      }
+    }
+  ]
+}
