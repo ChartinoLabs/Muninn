@@ -185,6 +185,23 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         # ECMP next-hops have no natural unique key (same interface can appear with
         # different next-hops in equal-cost multipath).
         "cisco_iosxr/show_route_ipv4_isis/001_basic/expected.json",
+        # next_hops / paths mirror show_route_ipv4_isis: ECMP and connected paths
+        # have no natural unique key (connected paths lack a next-hop address,
+        # the same interface can carry several next hops).
+        "cisco_iosxr/show_route_ipv4/001_mixed_protocols_ecmp/expected.json",
+        "cisco_iosxr/show_route_ipv4/002_isis_frr_backup/expected.json",
+        "cisco_iosxr/show_route_ipv4/003_ospf_external_candidate_default/expected.json",
+        "cisco_iosxr/show_route_ipv4/004_single_route_no_legend/expected.json",
+        "cisco_iosxr/show_route_ipv4/005_truncated_capture_bgp/expected.json",
+        "cisco_iosxr/show_route_ipv4/006_static_null0_gateway_set/expected.json",
+        "cisco_iosxr/show_route_vrf_all_ipv4/001_multi_vrf_empty_vrf/expected.json",
+        "cisco_iosxr/show_route_vrf_VRF1_ipv4/001_nexthop_in_default_vrf/expected.json",
+        "cisco_iosxr/show_route_ipv4_prefix_connected/001_redist_advertisers/expected.json",
+        "cisco_iosxr/show_route_ipv4_prefix_default/001_isis_candidate_default/expected.json",
+        "cisco_iosxr/show_route_ipv4_prefix_detail/001_bgp_srv6_detail/expected.json",
+        "cisco_iosxr/show_route_ipv4_prefix_isis_frr/001_protected_backup_paths/expected.json",
+        "cisco_iosxr/show_route_vrf_ipv4_prefix_bgp_external/001_unindented_detail/expected.json",
+        "cisco_iosxr/show_route_vrf_ipv4_prefix_default/001_bgp_nexthop_vrf/expected.json",
         # --- Cisco FTD ---
         # next_hops is a list-of-dicts; no natural unique key for ECMP entries.
         "cisco_ftd/show_route/001_basic/expected.json",
