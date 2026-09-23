@@ -1,0 +1,238 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show ntp associations",
+  "schema": {
+    "name": "ShowNtpAssociationsResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "NtpPeerEntry",
+              "fields": {
+                "tally": {
+                  "type": "str",
+                  "required": false
+                },
+                "configured": {
+                  "type": "bool",
+                  "required": false
+                },
+                "address": {
+                  "type": "str",
+                  "required": true
+                },
+                "ref_clock": {
+                  "type": "str",
+                  "required": true
+                },
+                "stratum": {
+                  "type": "int",
+                  "required": true
+                },
+                "when_seconds": {
+                  "type": "int",
+                  "required": false
+                },
+                "poll_seconds": {
+                  "type": "int",
+                  "required": true
+                },
+                "reach": {
+                  "type": "int",
+                  "required": true
+                },
+                "reach_raw": {
+                  "type": "str",
+                  "required": true
+                },
+                "delay_ms": {
+                  "type": "float",
+                  "required": true
+                },
+                "offset_ms": {
+                  "type": "float",
+                  "required": true
+                },
+                "dispersion_ms": {
+                  "type": "float",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "NTP associations from an older IOS-XR release using the legacy master (synced)/selected tally legend",
+      "input": "\nRP/0/RP0/CPU0:router# show ntp associations\n\n      address         ref clock     st  when  poll reach  delay  offset    disp\n+~127.127.1.1      127.127.1.1       5     5  1024   37     0.0    0.00   438.3\n*~172.19.69.1      172.24.114.33     3    13  1024    1     2.0   67.16     0.0\n * master (synced), # master (unsynced), + selected, - candidate, ~ configured\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "127.127.1.1": {
+              "address": "127.127.1.1",
+              "ref_clock": "127.127.1.1",
+              "stratum": 5,
+              "poll_seconds": 1024,
+              "reach": 31,
+              "reach_raw": "37",
+              "delay_ms": 0.0,
+              "offset_ms": 0.0,
+              "dispersion_ms": 438.3,
+              "tally": "selected",
+              "configured": true,
+              "when_seconds": 5
+            },
+            "172.19.69.1": {
+              "address": "172.19.69.1",
+              "ref_clock": "172.24.114.33",
+              "stratum": 3,
+              "poll_seconds": 1024,
+              "reach": 1,
+              "reach_raw": "1",
+              "delay_ms": 2.0,
+              "offset_ms": 67.16,
+              "dispersion_ms": 0.0,
+              "tally": "master (synced)",
+              "configured": true,
+              "when_seconds": 13
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "NTP associations with VRF-qualified peers wrapped onto a second line, a duplicate address across VRFs, and unreachable peers with placeholder when values",
+      "input": "\nRP/0/RP0/CPU0:iosxrv9000-1#show ntp associations\nMon Nov  5 23:22:25.521 UTC\n\n      address         ref clock     st  when  poll reach  delay  offset    disp\n ~10.4.1.1 vrf VRF1\n\t\t   .INIT.           16     -  1024    0    0.00   0.000   15937\n ~10.4.1.1          .AUTH.           16     -  1024    0    0.00   0.000   15937\n ~10.16.2.2          127.127.1.1       9    52    64  377   69.18  -518066   4.702\n ~10.64.4.4          .AUTH.           16     -  1024    0    0.00   0.000   15937\n ~10.100.5.5 vrf VRF1\n\t\t   .AUTH.           16     -  1024    0    0.00   0.000   15937\n ~10.144.6.6 vrf VRF1\n\t\t   .AUTH.           16     -  1024    0    0.00   0.000   15937\n * sys_peer, # selected, + candidate, - outlayer, x falseticker, ~ configured\n",
+      "expected": {
+        "vrfs": {
+          "VRF1": {
+            "10.4.1.1": {
+              "address": "10.4.1.1",
+              "ref_clock": ".INIT.",
+              "stratum": 16,
+              "poll_seconds": 1024,
+              "reach": 0,
+              "reach_raw": "0",
+              "delay_ms": 0.0,
+              "offset_ms": 0.0,
+              "dispersion_ms": 15937.0,
+              "configured": true
+            },
+            "10.100.5.5": {
+              "address": "10.100.5.5",
+              "ref_clock": ".AUTH.",
+              "stratum": 16,
+              "poll_seconds": 1024,
+              "reach": 0,
+              "reach_raw": "0",
+              "delay_ms": 0.0,
+              "offset_ms": 0.0,
+              "dispersion_ms": 15937.0,
+              "configured": true
+            },
+            "10.144.6.6": {
+              "address": "10.144.6.6",
+              "ref_clock": ".AUTH.",
+              "stratum": 16,
+              "poll_seconds": 1024,
+              "reach": 0,
+              "reach_raw": "0",
+              "delay_ms": 0.0,
+              "offset_ms": 0.0,
+              "dispersion_ms": 15937.0,
+              "configured": true
+            }
+          },
+          "default": {
+            "10.4.1.1": {
+              "address": "10.4.1.1",
+              "ref_clock": ".AUTH.",
+              "stratum": 16,
+              "poll_seconds": 1024,
+              "reach": 0,
+              "reach_raw": "0",
+              "delay_ms": 0.0,
+              "offset_ms": 0.0,
+              "dispersion_ms": 15937.0,
+              "configured": true
+            },
+            "10.16.2.2": {
+              "address": "10.16.2.2",
+              "ref_clock": "127.127.1.1",
+              "stratum": 9,
+              "poll_seconds": 64,
+              "reach": 255,
+              "reach_raw": "377",
+              "delay_ms": 69.18,
+              "offset_ms": -518066.0,
+              "dispersion_ms": 4.702,
+              "configured": true,
+              "when_seconds": 52
+            },
+            "10.64.4.4": {
+              "address": "10.64.4.4",
+              "ref_clock": ".AUTH.",
+              "stratum": 16,
+              "poll_seconds": 1024,
+              "reach": 0,
+              "reach_raw": "0",
+              "delay_ms": 0.0,
+              "offset_ms": 0.0,
+              "dispersion_ms": 15937.0,
+              "configured": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "NTP associations with a sys_peer in the default VRF and a wrapped IPv6 candidate peer in a non-default VRF, with blank and whitespace-only preamble lines",
+      "input": "\nRP/0/RP0/CPU0:router# show ntp associations\n\nTue Oct  7 11:22:46.839 EST\n\n      address         ref clock     st  when  poll reach  delay  offset    disp\n*~192.168.128.5    10.81.254.131     2     1    64  377    7.98  -0.560   0.108\n+~2001:db8:429a:3189::2 vrf testAA\n\t\t   172.16.36.80      3    20    64  377    6.00  -2.832   0.046\n* sys_peer, # selected, + candidate, - outlayer, x falseticker, ~ configured\n",
+      "expected": {
+        "vrfs": {
+          "default": {
+            "192.168.128.5": {
+              "address": "192.168.128.5",
+              "ref_clock": "10.81.254.131",
+              "stratum": 2,
+              "poll_seconds": 64,
+              "reach": 255,
+              "reach_raw": "377",
+              "delay_ms": 7.98,
+              "offset_ms": -0.56,
+              "dispersion_ms": 0.108,
+              "tally": "sys_peer",
+              "configured": true,
+              "when_seconds": 1
+            }
+          },
+          "testAA": {
+            "2001:db8:429a:3189::2": {
+              "address": "2001:db8:429a:3189::2",
+              "ref_clock": "172.16.36.80",
+              "stratum": 3,
+              "poll_seconds": 64,
+              "reach": 255,
+              "reach_raw": "377",
+              "delay_ms": 6.0,
+              "offset_ms": -2.832,
+              "dispersion_ms": 0.046,
+              "tally": "candidate",
+              "configured": true,
+              "when_seconds": 20
+            }
+          }
+        }
+      }
+    }
+  ]
+}
