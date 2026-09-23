@@ -202,6 +202,14 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         "cisco_iosxr/show_route_ipv4_prefix_isis_frr/001_protected_backup_paths/expected.json",
         "cisco_iosxr/show_route_vrf_ipv4_prefix_bgp_external/001_unindented_detail/expected.json",
         "cisco_iosxr/show_route_vrf_ipv4_prefix_default/001_bgp_nexthop_vrf/expected.json",
+        "cisco_iosxr/show_route_ipv6/001_wrapped_ecmp_nexthop_vrf/expected.json",
+        "cisco_iosxr/show_route_ipv6/002_ipv4_mapped_prompt_log/expected.json",
+        "cisco_iosxr/show_route_ipv6/003_unindented_continuations_gateway/expected.json",
+        "cisco_iosxr/show_route_ipv6/004_isis_candidate_default/expected.json",
+        "cisco_iosxr/show_route_ipv6_local-srv6/001_srv6_endpoints/expected.json",
+        "cisco_iosxr/show_route_ipv6_prefix_detail/001_bgp_srv6_detail/expected.json",
+        "cisco_iosxr/show_route_ipv6_prefix_isis_frr/001_protected_ti_lfa_backup/expected.json",
+        "cisco_iosxr/show_route_vrf_ipv6_prefix/001_bgp_ipv4_mapped_nexthop/expected.json",
         # --- Cisco FTD ---
         # next_hops is a list-of-dicts; no natural unique key for ECMP entries.
         "cisco_ftd/show_route/001_basic/expected.json",
