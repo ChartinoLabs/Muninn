@@ -8,6 +8,7 @@ from typing_extensions import NotRequired
 
 from muninn.os import OS
 from muninn.parser import BaseParser
+from muninn.patterns import IPV4_ADDRESS, IPV4_PREFIX
 from muninn.registry import register
 from muninn.tags import ParserTag
 from muninn.utils import canonical_interface_name
@@ -47,6 +48,20 @@ class RipInterfaceEntry(TypedDict):
     receive_version: str
     triggered_rip: bool
     key_chain: NotRequired[str]
+
+
+class OspfNetwork(TypedDict):
+    """Schema for an OSPF '<network> <wildcard> area <area>' network line."""
+
+    network: str
+    wildcard: str
+    area: str
+
+
+class AddressSummary(TypedDict):
+    """Schema for '<prefix> for <interface>' summarization lines."""
+
+    interfaces: list[str]
 
 
 class InformationSource(TypedDict):
@@ -92,9 +107,10 @@ class ProtocolEntry(TypedDict):
     default_send_version: NotRequired[str]
     default_receive_version: NotRequired[str]
     interfaces: NotRequired[dict[str, RipInterfaceEntry]]
-    address_summarization: NotRequired[list[str]]
+    address_summarization: NotRequired[dict[str, AddressSummary]]
     maximum_path: NotRequired[int]
     routing_for_networks: NotRequired[list[str]]
+    ospf_networks: NotRequired[dict[str, OspfNetwork]]
     routing_on_interfaces_configured_explicitly: NotRequired[dict[str, list[str]]]
     passive_interfaces: NotRequired[list[str]]
     routing_information_sources: NotRequired[dict[str, InformationSource]]
@@ -160,6 +176,10 @@ _EXPLICIT_AREA_RE = re.compile(
 )
 
 _SOURCE_ROW_RE = re.compile(r"^(?P<gateway>\S+)\s+(?P<distance>\d+)\s+(?P<last>\S+)$")
+_OSPF_NETWORK_RE = re.compile(
+    rf"^(?P<network>{IPV4_ADDRESS}) (?P<wildcard>{IPV4_ADDRESS}) area (?P<area>\S+)$"
+)
+_SUMMARY_ROW_RE = re.compile(rf"^(?P<prefix>{IPV4_PREFIX}) for (?P<intf>\S+)$")
 _RIP_INTF_ROW_RE = re.compile(
     r"^(?P<intf>\S+)\s+(?P<send>\d(?: \d)?)\s+(?P<recv>\d(?: \d)?)\s+"
     r"(?P<trig>Yes|No)(?:\s+(?P<key>\S+))?$"
@@ -172,7 +192,6 @@ _LIST_SECTIONS = {
     "Routing for Networks:": "routing_for_networks",
     "Passive Interface(s):": "passive_interfaces",
     "Routing Information Sources:": "routing_information_sources",
-    "Redistributing External Routes from,": "redistributing",
 }
 
 _NEIGHBOR_COLUMNS = {
@@ -327,6 +346,24 @@ def _item_source(state: _State, proto: dict, raw: str) -> None:
         }
 
 
+def _item_network(state: _State, proto: dict, raw: str) -> None:
+    line = raw.strip()
+    if m := _OSPF_NETWORK_RE.match(line):
+        key = f"{m.group('network')} {m.group('wildcard')}"
+        proto.setdefault("ospf_networks", {})[key] = m.groupdict()
+    else:
+        proto.setdefault("routing_for_networks", []).append(line)
+
+
+def _item_summary(state: _State, proto: dict, raw: str) -> None:
+    # Only the "<prefix> for <interface>" form is seen in real output; the
+    # "None" placeholder and any other form are skipped.
+    if m := _SUMMARY_ROW_RE.match(raw.strip()):
+        summary = proto.setdefault("address_summarization", {})
+        entry = summary.setdefault(m.group("prefix"), {"interfaces": []})
+        entry["interfaces"].append(_canon(m.group("intf")))
+
+
 def _item_explicit(state: _State, proto: dict, raw: str) -> None:
     explicit = proto.setdefault("routing_on_interfaces_configured_explicitly", {})
     explicit.setdefault(state.area, []).append(_canon(raw.strip()))
@@ -342,17 +379,15 @@ _ITEM_HANDLERS: dict[str, Callable[[_State, dict, str], None]] = {
     "routing_information_sources": _item_source,
     "explicit": _item_explicit,
     "passive_interfaces": _item_passive,
+    "routing_for_networks": _item_network,
+    "address_summarization": _item_summary,
 }
 
 
 def _parse_item(state: _State, raw: str) -> None:
     """Handle a 4-space-indented item line under the current section."""
-    proto = cast(dict, state.proto)
-    section = state.section
-    if section in _ITEM_HANDLERS:
-        _ITEM_HANDLERS[section](state, proto, raw)
-    elif section and raw.strip() != "None":
-        proto.setdefault(section, []).append(raw.strip())
+    if state.section in _ITEM_HANDLERS:
+        _ITEM_HANDLERS[state.section](state, cast(dict, state.proto), raw)
 
 
 def _parse_key_line(state: _State, line: str) -> None:
