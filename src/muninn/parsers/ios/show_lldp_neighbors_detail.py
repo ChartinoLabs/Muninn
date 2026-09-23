@@ -1,4 +1,4 @@
-"""Parser for 'show lldp neighbors detail' command on IOS."""
+"""Parser for 'show lldp neighbors detail' command on IOS/IOS-XE."""
 
 import re
 from typing import ClassVar, Literal, TypedDict, cast
@@ -123,10 +123,11 @@ def _build_entry(
 
 
 @register(OS.CISCO_IOS, "show lldp neighbors detail")
+@register(OS.CISCO_IOSXE, "show lldp neighbors detail")
 class ShowLldpNeighborsDetailParser(
     BaseParser[ShowLldpNeighborsDetailResult],
 ):
-    """Parser for 'show lldp neighbors detail' command on IOS.
+    """Parser for 'show lldp neighbors detail' command on IOS/IOS-XE.
 
     Parses detailed LLDP neighbor information including system name,
     description, capabilities, and management addresses.
