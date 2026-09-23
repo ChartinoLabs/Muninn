@@ -270,7 +270,8 @@ class _Block:
                 "active": "active" in flags,
                 "passive": "passive" in flags,
             }
-        else:
+        elif " " not in line:
+            # Only a bare interface name; unseen source formats are skipped.
             intf = canonical_interface_name(line, os=OS.CISCO_IOSXR)
             af_sources.setdefault("interfaces", []).append(intf)
 
@@ -294,7 +295,11 @@ class _Block:
 
 
 @register(OS.CISCO_IOSXR, "show mpls ldp neighbor detail")
-@register(OS.CISCO_IOSXR, r"show mpls ldp neighbor (?P<interface>\S+) detail")
+@register(
+    OS.CISCO_IOSXR,
+    r"show mpls ldp neighbor (?P<interface>[A-Za-z][A-Za-z-]* ?\d\S*) detail",
+    doc_template="show mpls ldp neighbor <interface> detail",
+)
 class ShowMplsLdpNeighborDetailParser(BaseParser["ShowMplsLdpNeighborDetailResult"]):
     """Parser for 'show mpls ldp neighbor [<interface>] detail' on IOS-XR.
 
