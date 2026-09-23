@@ -3,24 +3,11 @@
 The schema is a superset of 'show l2vpn xconnect': the same group / xconnect
 keying, xconnect ``state`` and ``segment_1`` / ``segment_2`` fields, plus the
 per-segment detail (AC attributes, PW / EVPN signalling, the Local / Remote
-parameter table, status TLVs, timers and statistics).
+parameter table, timers and statistics).
 
-Formats handled without a fixture, evidenced by genieparser
-``ShowL2vpnXconnectDetail`` outputs whose content is genuine but whose
-indentation was edited (so they are not used as fixtures):
-
-- ``active in RG-ID`` on the AC line, PW Status TLV lines, ``Group ID`` /
-  ``Interface`` table rows, ``Last time PW went down`` and ``MAC withdraw
-  messages`` (Genie output 3).
-- ``Backup PW:`` blocks with ``Backup for neighbor``, and multi-line VCCV
-  CV/CC continuation rows (Genie outputs 3 and 5).
-
-Genie outputs 1 and 2 carry invalid values (mangled hex, IPs and timers), so
-formats seen only there (``MSTi``, ``(none)`` VCCV rows, ``Encap type ...,
-control word``) are not handled.
-
-Segments are separate blocks, so an xconnect showing only one segment keeps
-``segment_2`` absent rather than failing the parse.
+Only the formats in the committed fixtures are handled (an SRv6 EVPN VPWS and
+a BGP auto-discovered MPLS PW, both with interworking none). Lines in other
+formats are ignored.
 """
 
 import re
@@ -57,45 +44,15 @@ class FlowLabel(TypedDict):
     negotiated_rx: int
 
 
-class PwStatus(TypedDict):
-    """Incoming or outgoing PW Status TLV."""
-
-    code: str
-    status: str
-    message: str
-
-
-class MacWithdrawMessages(TypedDict):
-    """MAC withdraw message counters."""
-
-    sent: int
-    received: int
-
-
-class BackupFor(TypedDict):
-    """Primary PW that a backup PW protects."""
-
-    neighbor: str
-    pw_id: int
-    state: str
-
-
 class Parameters(TypedDict, total=False):
     """One side (Local or Remote) of the MPLS / EVPN / SRv6 parameter table."""
 
     label: int
-    group_id: str
-    interface: str
     mtu: int
     control_word: str
     pw_type: str
-    evpn_type: str
     ac_id: int
     ce_id: int
-    vccv_cv_type: str
-    vccv_cv_types: list[str]
-    vccv_cc_type: str
-    vccv_cc_types: list[str]
     udx2: list[str]
     locator: str
     locator_resolved: str
@@ -106,16 +63,12 @@ class DetailSegment(Segment):
     """Segment (AC, PW or EVPN) with its detail attributes."""
 
     state_detail: NotRequired[str]
-    rg_state: NotRequired[str]
-    rg_id: NotRequired[int]
     type: NotRequired[str]
     num_ranges: NotRequired[int]
     rewrite_tags: NotRequired[list[str]]
     vlan_ranges: NotRequired[list[list[int]]]
     mtu: NotRequired[int]
     xc_id: NotRequired[str]
-    interworking: NotRequired[str]
-    pw_class: NotRequired[str]
     encapsulation: NotRequired[str]
     auto_discovered: NotRequired[str]
     protocol: NotRequired[str]
@@ -124,36 +77,26 @@ class DetailSegment(Segment):
     encap_type: NotRequired[str]
     control_word: NotRequired[str]
     backup_disable_delay_seconds: NotRequired[int]
-    sequencing: NotRequired[str]
     lsp: NotRequired[str]
     ignore_mtu_mismatch: NotRequired[str]
     transmit_mtu_zero: NotRequired[str]
     reachability: NotRequired[str]
     load_balance_hashing: NotRequired[str]
     flow_label: NotRequired[FlowLabel]
-    pw_status_tlv_in_use: NotRequired[bool]
     local: NotRequired[Parameters]
     remote: NotRequired[Parameters]
-    incoming_status: NotRequired[PwStatus]
-    outgoing_status: NotRequired[PwStatus]
     mib_cpw_vc_index: NotRequired[int]
     create_time: NotRequired[str]
     create_time_ago: NotRequired[str]
     last_time_status_changed: NotRequired[str]
     last_time_status_changed_ago: NotRequired[str]
-    last_time_pw_went_down: NotRequired[str]
-    last_time_pw_went_down_ago: NotRequired[str]
-    mac_withdraw_messages: NotRequired[MacWithdrawMessages]
     statistics: NotRequired[Statistics]
-    backup_for: NotRequired[BackupFor]
-    backup_pw: NotRequired["DetailSegment"]
 
 
 class DetailXconnect(TypedDict):
     """One xconnect with detailed segments."""
 
     state: str
-    interworking: NotRequired[str]
     local_ce_id: NotRequired[int]
     remote_ce_id: NotRequired[int]
     discovery_state: NotRequired[str]
@@ -171,21 +114,18 @@ class ShowL2vpnXconnectDetailResult(TypedDict):
 
 
 _XC_RE = re.compile(
-    r"^Group (?P<group>\S+), XC (?P<name>\S+), state is (?P<state>.+?); "
-    r"Interworking (?:none|(?P<interworking>\S+))$"
+    r"^Group (?P<group>\S+), XC (?P<name>\S+), state is (?P<state>\S+); "
+    r"Interworking none$"
 )
 _SEGMENT_START_RES = (
-    re.compile(
-        r"^AC: (?P<interface>\S+), state is (?P<state>[^,]+?)"
-        r"(?:, (?P<rg_state>\w+) in RG-ID (?P<rg_id>\d+))?$"
-    ),
+    re.compile(r"^AC: (?P<interface>\S+), state is (?P<state>\S+)$"),
     re.compile(
         r"^PW: neighbor (?P<neighbor>\S+), PW ID (?P<pw_id>\d+), "
-        r"state is (?P<state>.+?) \( (?P<state_detail>.+?) \)$"
+        r"state is (?P<state>\S+) \( (?P<state_detail>.+?) \)$"
     ),
     re.compile(
         r"^EVPN: neighbor (?P<neighbor>\S+), PW ID: evi (?P<evi>\d+), "
-        r"ac-id (?P<ac_id>\d+), state is (?P<state>.+?) \( (?P<state_detail>.+?) \)$"
+        r"ac-id (?P<ac_id>\d+), state is (?P<state>\S+) \( (?P<state_detail>.+?) \)$"
     ),
 )
 
@@ -206,7 +146,7 @@ _FIELD_RES = (
     re.compile(r"^Type (?P<type>[^;]+); Num Ranges: (?P<num_ranges>\d+)$"),
     re.compile(
         r"^MTU (?P<mtu>\d+); XC ID (?P<xc_id>\S+); "
-        r"interworking (?:none|(?P<interworking>\S+))$"
+        r"interworking none$"
     ),
     re.compile(
         r"^packets: received (?P<statistics__packets_received>\d+), "
@@ -220,21 +160,20 @@ _FIELD_RES = (
         r"^drops: illegal VLAN (?P<statistics__drops_illegal_vlan>\d+), "
         r"illegal length (?P<statistics__drops_illegal_length>\d+)$"
     ),
-    re.compile(r"^PW class (?:not set|(?P<pw_class>\S+)), XC ID (?P<xc_id>\S+)$"),
+    re.compile(r"^PW class not set, XC ID (?P<xc_id>\S+)$"),
     re.compile(r"^XC ID (?P<xc_id>\S+)$"),
     re.compile(
         r"^Encapsulation (?P<encapsulation>[^,]+)"
-        r"(?:, Auto-discovered \((?P<auto_discovered>[^)]+)\))?"
-        r"(?:, protocol (?P<protocol>\S+))?$"
+        r"(?:, Auto-discovered \((?P<auto_discovered>[^)]+)\), "
+        r"protocol (?P<protocol>\S+))?$"
     ),
     re.compile(r"^Source address (?P<source_address>\S+)$"),
     re.compile(
         r"^PW type (?P<pw_type>[^,]+), control word (?P<control_word>\w+), "
-        r"interworking (?:none|(?P<interworking>\S+))$"
+        r"interworking none$"
     ),
     re.compile(r"^Encap type (?P<encap_type>[^,]+)$"),
     re.compile(r"^PW backup disable delay (?P<backup_disable_delay_seconds>\d+) sec$"),
-    re.compile(r"^Sequencing (?:not set|(?P<sequencing>.+))$"),
     re.compile(r"^LSP : (?P<lsp>\S+)$"),
     re.compile(r"^Ignore MTU mismatch: (?P<ignore_mtu_mismatch>\S+)$"),
     re.compile(r"^Transmit MTU zero: (?P<transmit_mtu_zero>\S+)$"),
@@ -249,27 +188,14 @@ _FIELD_RES = (
     re.compile(r"^MIB cpwVcIndex: (?P<mib_cpw_vc_index>\d+)$"),
     _ago("create_time", "Create time"),
     _ago("last_time_status_changed", "Last time status changed"),
-    _ago("last_time_pw_went_down", "Last time PW went down"),
-    re.compile(
-        r"^MAC withdraw messages: sent (?P<mac_withdraw_messages__sent>\d+), "
-        r"received (?P<mac_withdraw_messages__received>\d+)$"
-    ),
-    re.compile(
-        r"^Backup for neighbor (?P<backup_for__neighbor>\S+) "
-        r"PW ID (?P<backup_for__pw_id>\d+) \( (?P<backup_for__state>\w+) \)$"
-    ),
 )
 _REWRITE_TAGS_RE = re.compile(r"^Rewrite Tags: \[(?P<tags>.*)\]$")
 _VLAN_RANGES_RE = re.compile(r"^VLAN ranges: (?P<ranges>.+)$")
 _VLAN_RANGE_RE = re.compile(r"\[(\d+),\s*(\d+)\]")
-_STATUS_HEADER_RE = re.compile(r"^(?P<direction>Incoming|Outgoing) Status \(")
-_STATUS_CODE_RE = re.compile(
-    r"^Status code: (?P<code>\S+) \((?P<status>[^)]+)\) in (?P<message>.+) message$"
-)
 _DASH_RUN_RE = re.compile(r"-+")
 
 # Table values that mean "no value" and are omitted.
-_TABLE_PLACEHOLDERS = frozenset({"N/A", "unknown"})
+_TABLE_PLACEHOLDER = "N/A"
 _TABLE_INT_KEYS = frozenset({"label", "mtu", "ac_id", "ce_id"})
 _TABLE_LIST_KEYS = frozenset({"udx2"})
 
@@ -277,11 +203,6 @@ _TABLE_LIST_KEYS = frozenset({"udx2"})
 def _value(value: str) -> int | str:
     """Convert all-digit captures to ``int``."""
     return int(value) if value.isdigit() else value
-
-
-def _state_name(state: str) -> str:
-    """Spell a state like the legend-decoded 'show l2vpn xconnect' states."""
-    return state.replace(" ", "_")
 
 
 def _apply(target: dict, match: re.Match[str]) -> None:
@@ -308,27 +229,22 @@ class _Table:
         self.key = ""
 
     def add_row(self, line: str) -> None:
-        """Add one row, or continue the previous row when the key is blank."""
-        key = line[: self.local_start].strip()
-        if key:
+        """Add one row; a blank key continues the previous (list) row."""
+        if key := line[: self.local_start].strip():
             self.key = re.sub(r"\W+", "_", key).strip("_").lower()
         cells = (
             (self.local, line[self.local_start : self.remote_start].strip()),
             (self.remote, line[self.remote_start :].strip()),
         )
         for side, text in cells:
-            if text and text not in _TABLE_PLACEHOLDERS:
-                self._set(side, text, continued=not key)
+            if text and text != _TABLE_PLACEHOLDER:
+                self._set(side, text)
 
-    def _set(self, side: dict, text: str, *, continued: bool) -> None:
+    def _set(self, side: dict, text: str) -> None:
         """Store one cell in *side* under the current key."""
         if self.key in _TABLE_LIST_KEYS:
             side.setdefault(self.key, []).append(text)
-        elif continued:
-            side.setdefault(f"{self.key}s", []).append(text.strip("()"))
-        elif self.key == "interface":
-            side[self.key] = canonical_interface_name(text, os=OS.CISCO_IOSXR)
-        elif self.key in _TABLE_INT_KEYS and text.isdigit():
+        elif self.key in _TABLE_INT_KEYS:
             side[self.key] = int(text)
         else:
             side[self.key] = text
@@ -341,40 +257,28 @@ class _State:
         self.groups: dict[str, dict[str, dict]] = {}
         self.xconnect: dict | None = None
         self.target: dict = {}
-        self.segment: dict = {}
-        self.backup_next = False
-        self.status_key = ""
         self.table: _Table | None = None
 
     def start_xconnect(self, match: re.Match[str]) -> None:
         """Begin a new xconnect entry."""
-        self.xconnect = {"state": _state_name(match.group("state"))}
-        if match.group("interworking"):
-            self.xconnect["interworking"] = match.group("interworking")
+        self.xconnect = {"state": match.group("state")}
         group = self.groups.setdefault(match.group("group"), {})
         group[match.group("name")] = self.xconnect
         self.target = self.xconnect
-        self.backup_next = False
 
     def start_segment(self, match: re.Match[str]) -> None:
-        """Begin segment 1, segment 2 or a backup PW of the current segment."""
+        """Begin segment 1 or segment 2 of the current xconnect."""
         if self.xconnect is None:
             msg = f"Segment outside an xconnect: {match.group(0)!r}"
             raise ValueError(msg)
         segment: dict = {}
         _apply(segment, match)
-        segment["state"] = _state_name(segment["state"])
         if "interface" in segment:
             segment["interface"] = canonical_interface_name(
                 segment["interface"], os=OS.CISCO_IOSXR
             )
-        if self.backup_next:
-            self.segment["backup_pw"] = segment
-            self.backup_next = False
-        else:
-            slot = "segment_2" if "segment_1" in self.xconnect else "segment_1"
-            self.xconnect[slot] = segment
-            self.segment = segment
+        slot = "segment_2" if "segment_1" in self.xconnect else "segment_1"
+        self.xconnect[slot] = segment
         self.target = segment
 
     def table_line(self, line: str) -> bool:
@@ -392,8 +296,7 @@ class _State:
             self.target["remote"] = self.table.remote
             self.table = None
             return bool(is_rule)
-        if line.strip():
-            self.table.add_row(line)
+        self.table.add_row(line)
         return True
 
     def list_line(self, text: str) -> bool:
@@ -413,20 +316,10 @@ class _State:
         """Apply one non-table line to the current segment or xconnect."""
         if self.list_line(text):
             return
-        if m := _STATUS_HEADER_RE.match(text):
-            self.status_key = f"{m.group('direction').lower()}_status"
-        elif (m := _STATUS_CODE_RE.match(text)) and self.status_key:
-            self.target[self.status_key] = m.groupdict()
-            self.status_key = ""
-        elif text == "PW Status TLV in use":
-            self.target["pw_status_tlv_in_use"] = True
-        elif text == "Backup PW:":
-            self.backup_next = True
-        else:
-            for pattern in _FIELD_RES:
-                if m := pattern.match(text):
-                    _apply(self.target, m)
-                    return
+        for pattern in _FIELD_RES:
+            if m := pattern.match(text):
+                _apply(self.target, m)
+                return
 
     def line(self, line: str) -> None:
         """Dispatch one output line."""
