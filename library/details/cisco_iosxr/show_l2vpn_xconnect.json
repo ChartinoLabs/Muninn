@@ -1,0 +1,205 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show l2vpn xconnect",
+  "schema": {
+    "name": "ShowL2vpnXconnectResult",
+    "fields": {
+      "groups": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "Xconnect",
+              "fields": {
+                "state": {
+                  "type": "str",
+                  "required": true
+                },
+                "partially_programmed": {
+                  "type": "bool",
+                  "required": false
+                },
+                "seamless_inactive": {
+                  "type": "bool",
+                  "required": false
+                },
+                "segment_1": {
+                  "type": {
+                    "name": "Segment",
+                    "fields": {
+                      "state": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "partially_programmed": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "seamless_inactive": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "interface": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "neighbor": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "pw_id": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "evi": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "ac_id": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "description": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  },
+                  "required": true
+                },
+                "segment_2": {
+                  "type": {
+                    "type": "ref",
+                    "name": "Segment"
+                  },
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Single AC-PW xconnect with group and name on one line, extended legend and command echo",
+      "input": "\nshow l2vpn xconnect\n\nFri Sep 27 17:02:50.459 EDT\nLegend: ST = State, UP = Up, DN = Down, AD = Admin Down, UR = Unresolved,\n        SB = Standby, SR = Standby Ready, (PP) = Partially Programmed,\n        LU = Local Up, RU = Remote Up, CO = Connected\n\nXConnect                   Segment 1                       Segment 2\nGroup      Name       ST   Description            ST       Description            ST\n------------------------   -----------------------------   -----------------------------\nPW_XG      PW_TEST\n                      UP   Te0/0/0/0.1234         UP       10.60.1.1       12345  UP\n----------------------------------------------------------------------------------------\n",
+      "expected": {
+        "groups": {
+          "PW_XG": {
+            "PW_TEST": {
+              "state": "up",
+              "segment_1": {
+                "state": "up",
+                "interface": "TenGigabitEthernet0/0/0/0.1234"
+              },
+              "segment_2": {
+                "state": "up",
+                "neighbor": "10.60.1.1",
+                "pw_id": 12345
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "PW-Ether headend EVPN xconnects with None neighbor, DN(PP) segment state and wrapped names",
+      "input": "Thu Sep  5 15:14:55.283 GMT+4\nLegend: ST = State, UP = Up, DN = Down, AD = Admin Down, UR = Unresolved,\n        SB = Standby, SR = Standby Ready, (PP) = Partially Programmed,\n        LU = Local Up, RU = Remote Up, CO = Connected, (SI) = Seamless Inactive\n\nXConnect                   Segment 1                       Segment 2\nGroup      Name       ST   Description            ST       Description            ST\n------------------------   -----------------------------   -----------------------------\npaltel_type5\n           paltel_type5\n                      DN   Te0/1/0/11.57          UP       10.100.0.6      1111   DN\n----------------------------------------------------------------------------------------\naa_evpn_he_104\n           aa_evpn_he_104\n                      DN   PE104                  UP       EVPN 104,104,None      DN\n----------------------------------------------------------------------------------------\npa_evpn_he_106\n           pa_evpn_he_106\n                      DN   PE106                  UP       EVPN 106,106,None      DN\n----------------------------------------------------------------------------------------\nsa_evpn_he_105\n           sa_evpn_he_105\n                      DN   PE105                  UP       EVPN 105,105,None      DN\n----------------------------------------------------------------------------------------\nevpn_vpws_sa_100\n           evpn_vpws_sa_100\n                      UR   Te0/1/0/11.100         UR       EVPN 100,100,None      DN(PP)\n----------------------------------------------------------------------------------------\np2p_vpws_seam_mig\n           p2p_vpws_seam_mig\n                      UR   Te0/1/0/11.1979        UR       10.100.0.1      1979   DN\n----------------------------------------------------------------------------------------\n",
+      "expected": {
+        "groups": {
+          "paltel_type5": {
+            "paltel_type5": {
+              "state": "down",
+              "segment_1": {
+                "state": "up",
+                "interface": "TenGigabitEthernet0/1/0/11.57"
+              },
+              "segment_2": {
+                "state": "down",
+                "neighbor": "10.100.0.6",
+                "pw_id": 1111
+              }
+            }
+          },
+          "aa_evpn_he_104": {
+            "aa_evpn_he_104": {
+              "state": "down",
+              "segment_1": {
+                "state": "up",
+                "interface": "PE104"
+              },
+              "segment_2": {
+                "state": "down",
+                "evi": 104,
+                "ac_id": 104
+              }
+            }
+          },
+          "pa_evpn_he_106": {
+            "pa_evpn_he_106": {
+              "state": "down",
+              "segment_1": {
+                "state": "up",
+                "interface": "PE106"
+              },
+              "segment_2": {
+                "state": "down",
+                "evi": 106,
+                "ac_id": 106
+              }
+            }
+          },
+          "sa_evpn_he_105": {
+            "sa_evpn_he_105": {
+              "state": "down",
+              "segment_1": {
+                "state": "up",
+                "interface": "PE105"
+              },
+              "segment_2": {
+                "state": "down",
+                "evi": 105,
+                "ac_id": 105
+              }
+            }
+          },
+          "evpn_vpws_sa_100": {
+            "evpn_vpws_sa_100": {
+              "state": "unresolved",
+              "segment_1": {
+                "state": "unresolved",
+                "interface": "TenGigabitEthernet0/1/0/11.100"
+              },
+              "segment_2": {
+                "state": "down",
+                "partially_programmed": true,
+                "evi": 100,
+                "ac_id": 100
+              }
+            }
+          },
+          "p2p_vpws_seam_mig": {
+            "p2p_vpws_seam_mig": {
+              "state": "unresolved",
+              "segment_1": {
+                "state": "unresolved",
+                "interface": "TenGigabitEthernet0/1/0/11.1979"
+              },
+              "segment_2": {
+                "state": "down",
+                "neighbor": "10.100.0.1",
+                "pw_id": 1979
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

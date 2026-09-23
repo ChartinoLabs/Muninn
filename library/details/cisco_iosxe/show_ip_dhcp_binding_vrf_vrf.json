@@ -1,0 +1,46 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip dhcp binding vrf <vrf>",
+  "schema": {
+    "name": "ShowIpDhcpBindingResult",
+    "fields": {
+      "vrf": {
+        "type": "str",
+        "required": false
+      },
+      "bindings": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "DhcpBindingEntry",
+            "fields": {
+              "client_id": {
+                "type": "str",
+                "required": true
+              },
+              "lease_expiration": {
+                "type": "str",
+                "required": true
+              },
+              "type": {
+                "type": "str",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": false
+              },
+              "interface": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}

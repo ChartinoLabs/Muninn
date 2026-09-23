@@ -1,0 +1,76 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip dhcp binding",
+  "schema": {
+    "name": "ShowIpDhcpBindingResult",
+    "fields": {
+      "vrf": {
+        "type": "str",
+        "required": false
+      },
+      "bindings": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "DhcpBindingEntry",
+            "fields": {
+              "client_id": {
+                "type": "str",
+                "required": true
+              },
+              "lease_expiration": {
+                "type": "str",
+                "required": true
+              },
+              "type": {
+                "type": "str",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": false
+              },
+              "interface": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Bindings whose long client IDs wrap onto continuation lines",
+      "input": "Bindings from all pools not associated with VRF:\nIP address      Client-ID/ \t\tLease expiration \tType       State      Interface\n\t\tHardware address/\n\t\tUser name\n110.1.1.13      0063.6973.636f.2d35.    Infinite                Automatic  Active     GigabitEthernet1/0/23\n                6335.612e.6337.3737.\n                2e62.3764.352d.4769.\n                312f.302f.3437\n112.1.1.12      0063.6973.636f.2d35.    Mar 07 2025 02:39 PM    Automatic  Active     GigabitEthernet1/0/16\n                6335.612e.6337.3737.\n                2e62.3763.382d.4769.\n                312f.312f.32\n",
+      "expected": {
+        "bindings": {
+          "110.1.1.13": {
+            "client_id": "0063.6973.636f.2d35.6335.612e.6337.3737.2e62.3764.352d.4769.312f.302f.3437",
+            "lease_expiration": "Infinite",
+            "type": "Automatic",
+            "state": "Active",
+            "interface": "GigabitEthernet1/0/23"
+          },
+          "112.1.1.12": {
+            "client_id": "0063.6973.636f.2d35.6335.612e.6337.3737.2e62.3763.382d.4769.312f.312f.32",
+            "lease_expiration": "Mar 07 2025 02:39 PM",
+            "type": "Automatic",
+            "state": "Active",
+            "interface": "GigabitEthernet1/0/16"
+          }
+        }
+      }
+    },
+    {
+      "name": "Table header only, no bindings",
+      "input": "Bindings from all pools not associated with VRF:\nIP address      Client-ID/ \t\tLease expiration    Type       State      Interface\n\t\t        Hardware address/\n\t\t        User name\n",
+      "expected": {
+        "bindings": {}
+      }
+    }
+  ]
+}

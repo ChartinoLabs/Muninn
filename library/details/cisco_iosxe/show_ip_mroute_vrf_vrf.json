@@ -1,0 +1,202 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip mroute vrf <vrf>",
+  "schema": {
+    "name": "ShowIpMrouteResult",
+    "fields": {
+      "groups": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "GroupEntry",
+            "fields": {
+              "sources": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "SourceEntry",
+                    "fields": {
+                      "uptime": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "expires": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "rpf_neighbor": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "flags": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "incoming_interface": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "rpf_info": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "rp": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "outgoing_interfaces": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "OutgoingInterfaceEntry",
+                            "fields": {
+                              "state_mode": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "uptime": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "expires": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "pkts": {
+                                "type": "int",
+                                "required": false
+                              },
+                              "flags": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "vxlan_encap": {
+                                "type": {
+                                  "name": "VxlanEncap",
+                                  "fields": {
+                                    "version": {
+                                      "type": "str",
+                                      "required": true
+                                    },
+                                    "vni": {
+                                      "type": "int",
+                                      "required": true
+                                    },
+                                    "group": {
+                                      "type": "str",
+                                      "required": true
+                                    }
+                                  }
+                                },
+                                "required": false
+                              },
+                              "lisp_underlay": {
+                                "type": {
+                                  "name": "LispUnderlay",
+                                  "fields": {
+                                    "source": {
+                                      "type": "str",
+                                      "required": true
+                                    },
+                                    "group": {
+                                      "type": "str",
+                                      "required": true
+                                    }
+                                  }
+                                },
+                                "required": false
+                              },
+                              "next_hops": {
+                                "type": {
+                                  "type": "dict",
+                                  "key": "str",
+                                  "value": {
+                                    "name": "NextHopEntry",
+                                    "fields": {
+                                      "state_mode": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "uptime": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "expires": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "pkts": {
+                                        "type": "int",
+                                        "required": false
+                                      },
+                                      "flags": {
+                                        "type": "str",
+                                        "required": false
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": false
+                              }
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "extranet_receivers": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "ExtranetReceiverEntry",
+                            "fields": {
+                              "source": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "group": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "uptime": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "expires": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "oif_count": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "rp": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "flags": {
+                                "type": "str",
+                                "required": false
+                              }
+                            }
+                          }
+                        },
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}

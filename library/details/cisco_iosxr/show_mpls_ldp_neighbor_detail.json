@@ -1,0 +1,93 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show mpls ldp neighbor detail",
+  "schema": null,
+  "examples": [
+    {
+      "name": "LDP neighbor with graceful restart, link and targeted hello discovery, session protection and capabilities",
+      "input": "\nRP/0/RP0/CPU0:R2#show mpls ldp neighbor detail\n\nPeer LDP Identifier: 192.168.70.6:0\n  TCP connection: 192.168.70.6:15332 - 192.168.1.1:646\n  Graceful Restart: Yes (Reconnect Timeout: 120 sec, Recovery: 180 sec)\n  Session Holdtime: 180 sec\n  State: Oper; Msgs sent/rcvd: 851/232; Downstream-Unsolicited\n  Up time: 00:02:44\n  LDP Discovery Sources:\n    IPv4: (2)\n      Bundle-Ether1.3\n      Targeted Hello (192.168.1.1 -> 192.168.70.6, active/passive)\n    IPv6: (0)\n  Addresses bound to this peer:\n    IPv4: (15)\n      10.10.10.1     10.126.249.223  10.126.249.224  10.76.23.2\n      10.219.1.2       10.19.1.2       10.76.1.2       10.135.1.2\n      10.151.1.2       192.168.106.1    192.168.205.1    192.168.51.1\n      192.168.196.1     192.168.171.1    192.168.70.6\n    IPv6: (0)\n  Peer holdtime: 180 sec; KA interval: 60 sec; Peer state: Estab\n  NSR: Operational\n  Clients: Session Protection\n  Session Protection:\n    Enabled, state: Ready\n    Duration: 86400 sec\n  Capabilities:\n    Sent:\n      0x508  (MP: Point-to-Multipoint (P2MP))\n      0x509  (MP: Multipoint-to-Multipoint (MP2MP))\n      0x50b  (Typed Wildcard FEC)\n    Received:\n      0x508  (MP: Point-to-Multipoint (P2MP))\n      0x509  (MP: Multipoint-to-Multipoint (MP2MP))\n      0x50b  (Typed Wildcard FEC)\n",
+      "expected": {
+        "192.168.70.6:0": {
+          "tcp_connection": {
+            "peer_address": "192.168.70.6",
+            "peer_port": 15332,
+            "local_address": "192.168.1.1",
+            "local_port": 646
+          },
+          "graceful_restart": true,
+          "reconnect_timeout_seconds": 120,
+          "recovery_time_seconds": 180,
+          "session_holdtime_seconds": 180,
+          "state": "Oper",
+          "messages_sent": 851,
+          "messages_received": 232,
+          "advertisement_mode": "Downstream-Unsolicited",
+          "up_time": "00:02:44",
+          "discovery": {
+            "ipv4": 2,
+            "ipv6": 0
+          },
+          "discovery_sources": {
+            "ipv4": {
+              "interfaces": [
+                "Bundle-Ether1.3"
+              ],
+              "targeted": {
+                "192.168.70.6": {
+                  "local_address": "192.168.1.1",
+                  "active": true,
+                  "passive": true
+                }
+              }
+            }
+          },
+          "addresses": {
+            "ipv4": 15,
+            "ipv6": 0
+          },
+          "bound_addresses": {
+            "ipv4": [
+              "10.10.10.1",
+              "10.126.249.223",
+              "10.126.249.224",
+              "10.76.23.2",
+              "10.219.1.2",
+              "10.19.1.2",
+              "10.76.1.2",
+              "10.135.1.2",
+              "10.151.1.2",
+              "192.168.106.1",
+              "192.168.205.1",
+              "192.168.51.1",
+              "192.168.196.1",
+              "192.168.171.1",
+              "192.168.70.6"
+            ]
+          },
+          "peer_holdtime_seconds": 180,
+          "keepalive_interval_seconds": 60,
+          "peer_state": "Estab",
+          "nsr_state": "Operational",
+          "clients": [
+            "Session Protection"
+          ],
+          "session_protection": {
+            "enabled": true,
+            "state": "Ready",
+            "duration_seconds": 86400
+          },
+          "capabilities_sent": {
+            "0x508": "MP: Point-to-Multipoint (P2MP)",
+            "0x509": "MP: Multipoint-to-Multipoint (MP2MP)",
+            "0x50b": "Typed Wildcard FEC"
+          },
+          "capabilities_received": {
+            "0x508": "MP: Point-to-Multipoint (P2MP)",
+            "0x509": "MP: Multipoint-to-Multipoint (MP2MP)",
+            "0x50b": "Typed Wildcard FEC"
+          }
+        }
+      }
+    }
+  ]
+}

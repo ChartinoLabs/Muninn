@@ -1,0 +1,256 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip mroute",
+  "schema": {
+    "name": "ShowIpMrouteResult",
+    "fields": {
+      "groups": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "GroupEntry",
+            "fields": {
+              "sources": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "SourceEntry",
+                    "fields": {
+                      "uptime": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "expires": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "rpf_neighbor": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "flags": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "incoming_interface": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "rpf_info": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "rp": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "outgoing_interfaces": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "OutgoingInterfaceEntry",
+                            "fields": {
+                              "state_mode": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "uptime": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "expires": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "pkts": {
+                                "type": "int",
+                                "required": false
+                              },
+                              "flags": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "vxlan_encap": {
+                                "type": {
+                                  "name": "VxlanEncap",
+                                  "fields": {
+                                    "version": {
+                                      "type": "str",
+                                      "required": true
+                                    },
+                                    "vni": {
+                                      "type": "int",
+                                      "required": true
+                                    },
+                                    "group": {
+                                      "type": "str",
+                                      "required": true
+                                    }
+                                  }
+                                },
+                                "required": false
+                              },
+                              "lisp_underlay": {
+                                "type": {
+                                  "name": "LispUnderlay",
+                                  "fields": {
+                                    "source": {
+                                      "type": "str",
+                                      "required": true
+                                    },
+                                    "group": {
+                                      "type": "str",
+                                      "required": true
+                                    }
+                                  }
+                                },
+                                "required": false
+                              },
+                              "next_hops": {
+                                "type": {
+                                  "type": "dict",
+                                  "key": "str",
+                                  "value": {
+                                    "name": "NextHopEntry",
+                                    "fields": {
+                                      "state_mode": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "uptime": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "expires": {
+                                        "type": "str",
+                                        "required": true
+                                      },
+                                      "pkts": {
+                                        "type": "int",
+                                        "required": false
+                                      },
+                                      "flags": {
+                                        "type": "str",
+                                        "required": false
+                                      }
+                                    }
+                                  }
+                                },
+                                "required": false
+                              }
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "extranet_receivers": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "ExtranetReceiverEntry",
+                            "fields": {
+                              "source": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "group": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "uptime": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "expires": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "oif_count": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "rp": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "flags": {
+                                "type": "str",
+                                "required": false
+                              }
+                            }
+                          }
+                        },
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "LISP outgoing interface with multiple next hops, packet counters and OIF flags",
+      "input": "IP Multicast Routing Table\nFlags: D - Dense, S - Sparse, B - Bidir Group, s - SSM Group, C - Connected,\n       L - Local, P - Pruned, R - RP-bit set, F - Register flag,\n       T - SPT-bit set, J - Join SPT, M - MSDP created entry, E - Extranet,\n       X - Proxy Join Timer Running, A - Candidate for MSDP Advertisement,\n       U - URD, I - Received Source Specific Host Report,\n       Z - Multicast Tunnel, z - MDT-data group sender,\n       Y - Joined MDT-data group, y - Sending to MDT-data group,\n       G - Received BGP C-Mroute, g - Sent BGP C-Mroute,\n       N - Received BGP Shared-Tree Prune, n - BGP C-Mroute suppressed,\n       Q - Received BGP S-A Route, q - Sent BGP S-A Route,\n       V - RD & Vector, v - Vector, p - PIM Joins on route,\n       x - VxLAN group, c - PFP-SA cache created entry,\n       * - determined by Assert, # - iif-starg configured on rpf intf,\n       e - encap-helper tunnel flag, l - LISP decap ref count contributor\nOutgoing interface flags: H - Hardware switched, A - Assert winner, p - PIM Join\n                          t - LISP transit group\n Timers: Uptime/Expires\n Interface state: Interface, Next-Hop or VCD, State/Mode\n\n(192.168.1.10, 225.1.1.1), 02:00:04/00:01:51, flags: FTp\n  Incoming interface: Vlan2001, RPF nbr 0.0.0.0\n  Outgoing interface list:\n    LISP0.1, 100.99.99.99, Forward/Sparse, 02:00:04/00:02:43, Pkts:2, flags: p\n    LISP0.1, 100.22.22.22, Forward/Sparse, 02:00:04/00:03:24, Pkts:2, flags: p\n    LISP0.1, 100.33.33.33, Forward/Sparse, 02:00:04/00:02:48, Pkts:2, flags: p\n    LISP0.1, 100.154.154.154, Forward/Sparse, 02:00:04/00:03:28, Pkts:2, flags: p\n",
+      "expected": {
+        "groups": {
+          "225.1.1.1": {
+            "sources": {
+              "192.168.1.10": {
+                "uptime": "02:00:04",
+                "expires": "00:01:51",
+                "flags": "FTp",
+                "incoming_interface": "Vlan2001",
+                "rpf_neighbor": "0.0.0.0",
+                "outgoing_interfaces": {
+                  "LISP0.1": {
+                    "next_hops": {
+                      "100.99.99.99": {
+                        "state_mode": "Forward/Sparse",
+                        "uptime": "02:00:04",
+                        "expires": "00:02:43",
+                        "pkts": 2,
+                        "flags": "p"
+                      },
+                      "100.22.22.22": {
+                        "state_mode": "Forward/Sparse",
+                        "uptime": "02:00:04",
+                        "expires": "00:03:24",
+                        "pkts": 2,
+                        "flags": "p"
+                      },
+                      "100.33.33.33": {
+                        "state_mode": "Forward/Sparse",
+                        "uptime": "02:00:04",
+                        "expires": "00:02:48",
+                        "pkts": 2,
+                        "flags": "p"
+                      },
+                      "100.154.154.154": {
+                        "state_mode": "Forward/Sparse",
+                        "uptime": "02:00:04",
+                        "expires": "00:03:28",
+                        "pkts": 2,
+                        "flags": "p"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

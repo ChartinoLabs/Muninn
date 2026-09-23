@@ -1,0 +1,647 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show ospf interface",
+  "schema": {
+    "name": "ShowOspfInterfaceResult",
+    "fields": {
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "OspfProcessEntry",
+            "fields": {
+              "interfaces": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "OspfInterfaceEntry",
+                    "fields": {
+                      "status": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "line_protocol": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "ip_address": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "area": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "router_id": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "network_type": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "cost": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "sid": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "strict_spf_sid": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "label_stack": {
+                        "type": {
+                          "name": "LabelStackEntry",
+                          "fields": {
+                            "primary_label": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "backup_label": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "srte_label": {
+                              "type": "int",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "auto_path_capability": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "stub_host": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "igp_shortcut": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "ldp_sync_enabled": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "ldp_sync_status": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "transmit_delay": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "state": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "priority": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "mtu": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "max_packet_size": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "forward_reference": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "unnumbered": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "bandwidth": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "bfd_enabled": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "bfd_interval_msec": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "bfd_multiplier": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "bfd_mode": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "rib_lc_sync": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "ttl_security": {
+                        "type": {
+                          "name": "TtlSecurityEntry",
+                          "fields": {
+                            "enabled": {
+                              "type": "bool",
+                              "required": true
+                            },
+                            "hops": {
+                              "type": "int",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "hello_interval": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "dead_interval": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "wait_interval": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "retransmit_interval": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "nsf_enabled": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "hello_due_in": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "passive": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "flood_stats": {
+                        "type": {
+                          "name": "FloodStatsEntry",
+                          "fields": {
+                            "index": {
+                              "type": "str",
+                              "required": true
+                            },
+                            "queue_length": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "next": {
+                              "type": "str",
+                              "required": false
+                            },
+                            "last_scan_length": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "max_scan_length": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "last_scan_time_msec": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "max_scan_time_msec": {
+                              "type": "int",
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "ls_ack_list": {
+                        "type": {
+                          "name": "LsAckListEntry",
+                          "fields": {
+                            "current_length": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "high_water_mark": {
+                              "type": "int",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "neighbor_count": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "adjacent_neighbor_count": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "neighbors": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "NeighborEntry",
+                            "fields": {}
+                          }
+                        },
+                        "required": false
+                      },
+                      "suppress_hello_count": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "authentication": {
+                        "type": {
+                          "name": "AuthenticationEntry",
+                          "fields": {
+                            "type": {
+                              "type": "str",
+                              "required": true
+                            },
+                            "key_id": {
+                              "type": "int",
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "multi_area_interface_count": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "sr_mpls_forwarding_enabled": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "adjacency_hold_timer_expired_last": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "exchange_timer_expired_last": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Process mpls1 with a loopback stub host and point-to-point interfaces with BFD, SR SIDs, label stacks and NSF; includes device prompt and timestamp",
+      "input": "RP/0/RP0/CPU0:R1#show ospf interface\nMon Apr 12 11:05:23.351 JST\n\nInterfaces for OSPF mpls1\n\nLoopback0 is up, line protocol is up\n  Internet Address 25.97.1.1/32, Area 0, SID 0, Strict-SPF SID 0\n  Label stack Primary label 0 Backup label 0 SRTE label 0\n  Process ID mpls1, Router ID 25.97.1.1, Network Type LOOPBACK, Cost: 1\n  Loopback interface is treated as a stub Host\nGigabitEthernet0/0/0/0 is up, line protocol is up\n  Internet Address 100.10.0.1/30, Area 0, SID 0, Strict-SPF SID 0\n  Label stack Primary label 1 Backup label 3 SRTE label 10\n  Process ID mpls1, Router ID 25.97.1.1, Network Type POINT_TO_POINT, Cost: 1\n  Transmit Delay is 1 sec, State POINT_TO_POINT, MTU 1500, MaxPktSz 1500\n  Forward reference No, Unnumbered no,  Bandwidth 1000000\n  BFD enabled, BFD interval 150 msec, BFD multiplier 3, Mode: Default\n  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5\n  Non-Stop Forwarding (NSF) enabled\n    Hello due in 00:00:04:702\n  Index 1/1, flood queue length 0\n  Next 0(0)/0(0)\n  Last flood scan length is 1, maximum is 7\n  Last flood scan time is 0 msec, maximum is 1 msec\n  LS Ack List: current length 0, high water mark 19\n  Neighbor Count is 1, Adjacent neighbor count is 1\n    Adjacent with neighbor 100.100.100.100\n  Suppress hello for 0 neighbor(s)\n  Multi-area interface Count is 0\nGigabitEthernet0/0/0/1 is up, line protocol is up\n  Internet Address 100.20.0.1/30, Area 0, SID 0, Strict-SPF SID 0\n  Label stack Primary label 1 Backup label 3 SRTE label 10\n  Process ID mpls1, Router ID 25.97.1.1, Network Type POINT_TO_POINT, Cost: 1\n  Transmit Delay is 1 sec, State POINT_TO_POINT, MTU 1500, MaxPktSz 1500\n  Forward reference No, Unnumbered no,  Bandwidth 1000000\n  BFD enabled, BFD interval 150 msec, BFD multiplier 3, Mode: Default\n  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5\n  Non-Stop Forwarding (NSF) enabled\n    Hello due in 00:00:08:508\n  Index 2/2, flood queue length 0\n  Next 0(0)/0(0)\n  Last flood scan length is 3, maximum is 9\n  Last flood scan time is 0 msec, maximum is 1 msec\n  LS Ack List: current length 0, high water mark 14\n  Neighbor Count is 1, Adjacent neighbor count is 1\n    Adjacent with neighbor 95.95.95.95\n  Suppress hello for 0 neighbor(s)\n  Multi-area interface Count is 0\n",
+      "expected": {
+        "processes": {
+          "mpls1": {
+            "interfaces": {
+              "Loopback0": {
+                "status": "up",
+                "line_protocol": "up",
+                "ip_address": "25.97.1.1/32",
+                "area": "0",
+                "sid": 0,
+                "strict_spf_sid": 0,
+                "label_stack": {
+                  "primary_label": 0,
+                  "backup_label": 0,
+                  "srte_label": 0
+                },
+                "router_id": "25.97.1.1",
+                "network_type": "LOOPBACK",
+                "cost": 1,
+                "stub_host": true
+              },
+              "GigabitEthernet0/0/0/0": {
+                "status": "up",
+                "line_protocol": "up",
+                "ip_address": "100.10.0.1/30",
+                "area": "0",
+                "sid": 0,
+                "strict_spf_sid": 0,
+                "label_stack": {
+                  "primary_label": 1,
+                  "backup_label": 3,
+                  "srte_label": 10
+                },
+                "router_id": "25.97.1.1",
+                "network_type": "POINT_TO_POINT",
+                "cost": 1,
+                "transmit_delay": 1,
+                "state": "POINT_TO_POINT",
+                "mtu": 1500,
+                "max_packet_size": 1500,
+                "forward_reference": false,
+                "unnumbered": false,
+                "bandwidth": 1000000,
+                "bfd_enabled": true,
+                "bfd_interval_msec": 150,
+                "bfd_multiplier": 3,
+                "bfd_mode": "Default",
+                "hello_interval": 10,
+                "dead_interval": 40,
+                "wait_interval": 40,
+                "retransmit_interval": 5,
+                "nsf_enabled": true,
+                "hello_due_in": "00:00:04:702",
+                "flood_stats": {
+                  "index": "1/1",
+                  "queue_length": 0,
+                  "next": "0(0)/0(0)",
+                  "last_scan_length": 1,
+                  "max_scan_length": 7,
+                  "last_scan_time_msec": 0,
+                  "max_scan_time_msec": 1
+                },
+                "ls_ack_list": {
+                  "current_length": 0,
+                  "high_water_mark": 19
+                },
+                "neighbor_count": 1,
+                "adjacent_neighbor_count": 1,
+                "neighbors": {
+                  "100.100.100.100": {}
+                },
+                "suppress_hello_count": 0,
+                "multi_area_interface_count": 0
+              },
+              "GigabitEthernet0/0/0/1": {
+                "status": "up",
+                "line_protocol": "up",
+                "ip_address": "100.20.0.1/30",
+                "area": "0",
+                "sid": 0,
+                "strict_spf_sid": 0,
+                "label_stack": {
+                  "primary_label": 1,
+                  "backup_label": 3,
+                  "srte_label": 10
+                },
+                "router_id": "25.97.1.1",
+                "network_type": "POINT_TO_POINT",
+                "cost": 1,
+                "transmit_delay": 1,
+                "state": "POINT_TO_POINT",
+                "mtu": 1500,
+                "max_packet_size": 1500,
+                "forward_reference": false,
+                "unnumbered": false,
+                "bandwidth": 1000000,
+                "bfd_enabled": true,
+                "bfd_interval_msec": 150,
+                "bfd_multiplier": 3,
+                "bfd_mode": "Default",
+                "hello_interval": 10,
+                "dead_interval": 40,
+                "wait_interval": 40,
+                "retransmit_interval": 5,
+                "nsf_enabled": true,
+                "hello_due_in": "00:00:08:508",
+                "flood_stats": {
+                  "index": "2/2",
+                  "queue_length": 0,
+                  "next": "0(0)/0(0)",
+                  "last_scan_length": 3,
+                  "max_scan_length": 9,
+                  "last_scan_time_msec": 0,
+                  "max_scan_time_msec": 1
+                },
+                "ls_ack_list": {
+                  "current_length": 0,
+                  "high_water_mark": 14
+                },
+                "neighbor_count": 1,
+                "adjacent_neighbor_count": 1,
+                "neighbors": {
+                  "95.95.95.95": {}
+                },
+                "suppress_hello_count": 0,
+                "multi_area_interface_count": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Bundle-Ether interfaces with LDP sync, MD5 authentication and SR MPLS forwarding, a loopback, and a passive RSVP-TE igp-shortcut tunnel without cost",
+      "input": "Interfaces for OSPF 51\n\nBundle-Ether63001 is up, line protocol is up\n  Internet Address 172.25.12.129/31, Area 0, SID 0, Strict-SPF SID 0\n  Label stack Primary label 1 Backup label 3 SRTE label 10\n  auto path capability supported\n  Process ID 51, Router ID 172.25.12.4, Network Type POINT_TO_POINT, Cost: 10\n  LDP Sync Enabled, Sync Status: Achieved\n  Transmit Delay is 1 sec, State POINT_TO_POINT, MTU 9164, MaxPktSz 9000\n  Forward reference No, Unnumbered no,  Bandwidth 10000000\n  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5\n    Hello due in 00:00:04:871\n  Index 2/2, flood queue length 0\n  Next 0(0)/0(0)\n  Last flood scan length is 8, maximum is 8\n  Last flood scan time is 0 msec, maximum is 0 msec\n  LS Ack List: current length 0, high water mark 44\n  Neighbor Count is 1, Adjacent neighbor count is 1\n    Adjacent with neighbor 172.25.12.2\n  Suppress hello for 0 neighbor(s)\n  Message digest authentication enabled\n    Youngest key id is 1\n  Multi-area interface Count is 0\n  Segment Routing Forwarding MPLS enabled: Yes\n  Adjacency hold timer expired last : Never\n  Exchange timer expired last : Never\nBundle-Ether63002 is up, line protocol is up\n  Internet Address 172.25.12.131/31, Area 0, SID 0, Strict-SPF SID 0\n  Label stack Primary label 1 Backup label 3 SRTE label 10\n  auto path capability supported\n  Process ID 51, Router ID 172.25.12.4, Network Type POINT_TO_POINT, Cost: 10\n  LDP Sync Enabled, Sync Status: Achieved\n  Transmit Delay is 1 sec, State POINT_TO_POINT, MTU 9164, MaxPktSz 9000\n  Forward reference No, Unnumbered no,  Bandwidth 10000000\n  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5\n    Hello due in 00:00:02:836\n  Index 3/3, flood queue length 0\n  Next 0(0)/0(0)\n  Last flood scan length is 2, maximum is 6\n  Last flood scan time is 0 msec, maximum is 0 msec\n  LS Ack List: current length 0, high water mark 43\n  Neighbor Count is 1, Adjacent neighbor count is 1\n    Adjacent with neighbor 172.25.12.3\n  Suppress hello for 0 neighbor(s)\n  Message digest authentication enabled\n    Youngest key id is 1\n  Multi-area interface Count is 0\n  Segment Routing Forwarding MPLS enabled: Yes\n  Adjacency hold timer expired last : Never\n  Exchange timer expired last : Never\nLoopback0 is up, line protocol is up\n  Internet Address 172.25.12.4/32, Area 0, SID 0, Strict-SPF SID 0\n  Label stack Primary label 0 Backup label 0 SRTE label 0\n  Process ID 51, Router ID 172.25.12.4, Network Type LOOPBACK, Cost: 1\n  Loopback interface is treated as a stub Host\ntunnel-te10100 is up, line protocol is up\n  Internet Address 0.0.0.0/0, Area 0, SID 0, Strict-SPF SID 0\n  Label stack Primary label 0 Backup label 0 SRTE label 0\n  Process ID 51, Router ID 172.25.12.4, Network Type POINT_TO_POINT\n  Interface is a tunnel igp-shortcut (RSVP-TE)\n  Transmit Delay is 1 sec, State POINT_TO_POINT, MTU 0, MaxPktSz 576\n  Forward reference No, Unnumbered no,  Bandwidth 100000\n  RIB LC sync Yes\n  Timer intervals configured, Hello 10, Dead 40, Wait 0, Retransmit 5\n    No Hellos (Passive interface)\n  Index 0/0, flood queue length 0\n  Next 0(0)/0(0)\n  Last flood scan length is 0, maximum is 0\n  Last flood scan time is 0 msec, maximum is 0 msec\n  LS Ack List: current length 0, high water mark 0\n  Neighbor Count is 0, Adjacent neighbor count is 0\n  Suppress hello for 0 neighbor(s)\n  Message digest authentication enabled\n    Youngest key id is 1\n  Multi-area interface Count is 0\n  Segment Routing Forwarding MPLS enabled: No\n  Adjacency hold timer expired last : Never\n  Exchange timer expired last : Never\n",
+      "expected": {
+        "processes": {
+          "51": {
+            "interfaces": {
+              "Bundle-Ether63001": {
+                "status": "up",
+                "line_protocol": "up",
+                "ip_address": "172.25.12.129/31",
+                "area": "0",
+                "sid": 0,
+                "strict_spf_sid": 0,
+                "label_stack": {
+                  "primary_label": 1,
+                  "backup_label": 3,
+                  "srte_label": 10
+                },
+                "auto_path_capability": true,
+                "router_id": "172.25.12.4",
+                "network_type": "POINT_TO_POINT",
+                "cost": 10,
+                "ldp_sync_enabled": true,
+                "ldp_sync_status": "Achieved",
+                "transmit_delay": 1,
+                "state": "POINT_TO_POINT",
+                "mtu": 9164,
+                "max_packet_size": 9000,
+                "forward_reference": false,
+                "unnumbered": false,
+                "bandwidth": 10000000,
+                "hello_interval": 10,
+                "dead_interval": 40,
+                "wait_interval": 40,
+                "retransmit_interval": 5,
+                "hello_due_in": "00:00:04:871",
+                "flood_stats": {
+                  "index": "2/2",
+                  "queue_length": 0,
+                  "next": "0(0)/0(0)",
+                  "last_scan_length": 8,
+                  "max_scan_length": 8,
+                  "last_scan_time_msec": 0,
+                  "max_scan_time_msec": 0
+                },
+                "ls_ack_list": {
+                  "current_length": 0,
+                  "high_water_mark": 44
+                },
+                "neighbor_count": 1,
+                "adjacent_neighbor_count": 1,
+                "neighbors": {
+                  "172.25.12.2": {}
+                },
+                "suppress_hello_count": 0,
+                "authentication": {
+                  "type": "message_digest",
+                  "key_id": 1
+                },
+                "multi_area_interface_count": 0,
+                "sr_mpls_forwarding_enabled": true,
+                "adjacency_hold_timer_expired_last": "Never",
+                "exchange_timer_expired_last": "Never"
+              },
+              "Bundle-Ether63002": {
+                "status": "up",
+                "line_protocol": "up",
+                "ip_address": "172.25.12.131/31",
+                "area": "0",
+                "sid": 0,
+                "strict_spf_sid": 0,
+                "label_stack": {
+                  "primary_label": 1,
+                  "backup_label": 3,
+                  "srte_label": 10
+                },
+                "auto_path_capability": true,
+                "router_id": "172.25.12.4",
+                "network_type": "POINT_TO_POINT",
+                "cost": 10,
+                "ldp_sync_enabled": true,
+                "ldp_sync_status": "Achieved",
+                "transmit_delay": 1,
+                "state": "POINT_TO_POINT",
+                "mtu": 9164,
+                "max_packet_size": 9000,
+                "forward_reference": false,
+                "unnumbered": false,
+                "bandwidth": 10000000,
+                "hello_interval": 10,
+                "dead_interval": 40,
+                "wait_interval": 40,
+                "retransmit_interval": 5,
+                "hello_due_in": "00:00:02:836",
+                "flood_stats": {
+                  "index": "3/3",
+                  "queue_length": 0,
+                  "next": "0(0)/0(0)",
+                  "last_scan_length": 2,
+                  "max_scan_length": 6,
+                  "last_scan_time_msec": 0,
+                  "max_scan_time_msec": 0
+                },
+                "ls_ack_list": {
+                  "current_length": 0,
+                  "high_water_mark": 43
+                },
+                "neighbor_count": 1,
+                "adjacent_neighbor_count": 1,
+                "neighbors": {
+                  "172.25.12.3": {}
+                },
+                "suppress_hello_count": 0,
+                "authentication": {
+                  "type": "message_digest",
+                  "key_id": 1
+                },
+                "multi_area_interface_count": 0,
+                "sr_mpls_forwarding_enabled": true,
+                "adjacency_hold_timer_expired_last": "Never",
+                "exchange_timer_expired_last": "Never"
+              },
+              "Loopback0": {
+                "status": "up",
+                "line_protocol": "up",
+                "ip_address": "172.25.12.4/32",
+                "area": "0",
+                "sid": 0,
+                "strict_spf_sid": 0,
+                "label_stack": {
+                  "primary_label": 0,
+                  "backup_label": 0,
+                  "srte_label": 0
+                },
+                "router_id": "172.25.12.4",
+                "network_type": "LOOPBACK",
+                "cost": 1,
+                "stub_host": true
+              },
+              "tunnel-te10100": {
+                "status": "up",
+                "line_protocol": "up",
+                "ip_address": "0.0.0.0/0",
+                "area": "0",
+                "sid": 0,
+                "strict_spf_sid": 0,
+                "label_stack": {
+                  "primary_label": 0,
+                  "backup_label": 0,
+                  "srte_label": 0
+                },
+                "router_id": "172.25.12.4",
+                "network_type": "POINT_TO_POINT",
+                "igp_shortcut": "RSVP-TE",
+                "transmit_delay": 1,
+                "state": "POINT_TO_POINT",
+                "mtu": 0,
+                "max_packet_size": 576,
+                "forward_reference": false,
+                "unnumbered": false,
+                "bandwidth": 100000,
+                "rib_lc_sync": true,
+                "hello_interval": 10,
+                "dead_interval": 40,
+                "wait_interval": 0,
+                "retransmit_interval": 5,
+                "passive": true,
+                "flood_stats": {
+                  "index": "0/0",
+                  "queue_length": 0,
+                  "next": "0(0)/0(0)",
+                  "last_scan_length": 0,
+                  "max_scan_length": 0,
+                  "last_scan_time_msec": 0,
+                  "max_scan_time_msec": 0
+                },
+                "ls_ack_list": {
+                  "current_length": 0,
+                  "high_water_mark": 0
+                },
+                "neighbor_count": 0,
+                "adjacent_neighbor_count": 0,
+                "suppress_hello_count": 0,
+                "authentication": {
+                  "type": "message_digest",
+                  "key_id": 1
+                },
+                "multi_area_interface_count": 0,
+                "sr_mpls_forwarding_enabled": false,
+                "adjacency_hold_timer_expired_last": "Never",
+                "exchange_timer_expired_last": "Never"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

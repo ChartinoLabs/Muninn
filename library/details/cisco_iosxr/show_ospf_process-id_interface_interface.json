@@ -1,0 +1,313 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show ospf <process-id> interface <interface>",
+  "schema": {
+    "name": "ShowOspfInterfaceResult",
+    "fields": {
+      "processes": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "OspfProcessEntry",
+            "fields": {
+              "interfaces": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "OspfInterfaceEntry",
+                    "fields": {
+                      "status": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "line_protocol": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "ip_address": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "area": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "router_id": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "network_type": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "cost": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "sid": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "strict_spf_sid": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "label_stack": {
+                        "type": {
+                          "name": "LabelStackEntry",
+                          "fields": {
+                            "primary_label": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "backup_label": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "srte_label": {
+                              "type": "int",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "auto_path_capability": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "stub_host": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "igp_shortcut": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "ldp_sync_enabled": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "ldp_sync_status": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "transmit_delay": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "state": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "priority": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "mtu": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "max_packet_size": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "forward_reference": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "unnumbered": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "bandwidth": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "bfd_enabled": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "bfd_interval_msec": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "bfd_multiplier": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "bfd_mode": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "rib_lc_sync": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "ttl_security": {
+                        "type": {
+                          "name": "TtlSecurityEntry",
+                          "fields": {
+                            "enabled": {
+                              "type": "bool",
+                              "required": true
+                            },
+                            "hops": {
+                              "type": "int",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "hello_interval": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "dead_interval": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "wait_interval": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "retransmit_interval": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "nsf_enabled": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "hello_due_in": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "passive": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "flood_stats": {
+                        "type": {
+                          "name": "FloodStatsEntry",
+                          "fields": {
+                            "index": {
+                              "type": "str",
+                              "required": true
+                            },
+                            "queue_length": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "next": {
+                              "type": "str",
+                              "required": false
+                            },
+                            "last_scan_length": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "max_scan_length": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "last_scan_time_msec": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "max_scan_time_msec": {
+                              "type": "int",
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "ls_ack_list": {
+                        "type": {
+                          "name": "LsAckListEntry",
+                          "fields": {
+                            "current_length": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "high_water_mark": {
+                              "type": "int",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "neighbor_count": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "adjacent_neighbor_count": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "neighbors": {
+                        "type": {
+                          "type": "dict",
+                          "key": "str",
+                          "value": {
+                            "name": "NeighborEntry",
+                            "fields": {}
+                          }
+                        },
+                        "required": false
+                      },
+                      "suppress_hello_count": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "authentication": {
+                        "type": {
+                          "name": "AuthenticationEntry",
+                          "fields": {
+                            "type": {
+                              "type": "str",
+                              "required": true
+                            },
+                            "key_id": {
+                              "type": "int",
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "multi_area_interface_count": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "sr_mpls_forwarding_enabled": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "adjacency_hold_timer_expired_last": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "exchange_timer_expired_last": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}
