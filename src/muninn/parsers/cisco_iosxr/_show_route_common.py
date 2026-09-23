@@ -42,7 +42,6 @@ class Route(TypedDict):
     prefix: str
     mask: int
     protocol: str
-    candidate_default: bool
     next_hops: list[RouteNextHop]
 
 
@@ -53,24 +52,17 @@ class GatewayOfLastResort(TypedDict):
     network: str
 
 
-class RouteTable(TypedDict):
-    """Routes (and gateway of last resort) of a single VRF."""
+class ShowRouteResult(TypedDict):
+    """Routing table of a single VRF, keyed by ``prefix/length``."""
 
     routes: dict[str, Route]
     gateway_of_last_resort: NotRequired[GatewayOfLastResort]
 
 
-class ShowRouteResult(TypedDict):
-    """Routing table output.
+class ShowRouteVrfAllResult(TypedDict):
+    """``show route vrf all`` output: one routing table per ``VRF: <name>``."""
 
-    Single-table output populates ``routes`` (plus ``gateway_of_last_resort``
-    when set). Output carrying ``VRF: <name>`` section headers (for example
-    ``show route vrf all ipv4``) populates ``vrfs`` instead.
-    """
-
-    routes: NotRequired[dict[str, Route]]
-    gateway_of_last_resort: NotRequired[GatewayOfLastResort]
-    vrfs: NotRequired[dict[str, RouteTable]]
+    vrfs: dict[str, ShowRouteResult]
 
 
 class RedistAdvertiser(TypedDict):
@@ -240,12 +232,10 @@ def _handle_path_text(text: str, state: _TableState) -> bool:
 
 
 def _start_route(match: re.Match[str], state: _TableState) -> None:
-    code = match["code"]
     route = {
         "prefix": match["prefix"],
         "mask": int(match["mask"]),
-        "protocol": " ".join(code.replace("*", " ").split()),
-        "candidate_default": "*" in code,
+        "protocol": match["code"],
         "next_hops": [],
     }
     state.table["routes"][f"{match['prefix']}/{match['mask']}"] = route
@@ -270,15 +260,20 @@ def _handle_header(line: str, state: _TableState) -> bool:
     return False
 
 
-def parse_route_table(output: str, route_re: re.Pattern[str]) -> dict:
-    """Parse routing-table output into a ``ShowRouteResult``-shaped dict.
+def parse_route_table(
+    output: str, route_re: re.Pattern[str], *, vrf_all: bool = False
+) -> dict:
+    """Parse routing-table output.
 
+    Returns a ``ShowRouteResult``-shaped dict, or with ``vrf_all`` a
+    ``ShowRouteVrfAllResult``-shaped dict built from ``VRF: <name>`` sections.
     Lines that are not routes, paths, VRF headers or the gateway line (legend,
     timestamps, prompts, command echo, ``% No matching routes found``) are
     ignored.
 
     Raises:
-        ValueError: If neither routes nor VRF sections are found.
+        ValueError: If no routes (or, with ``vrf_all``, no VRF sections) are
+            found, or VRF sections appear in single-table output.
     """
     state = _TableState()
     for raw in output.splitlines():
@@ -291,8 +286,14 @@ def parse_route_table(output: str, route_re: re.Pattern[str]) -> dict:
         elif not _handle_path_text(line, state):
             state.connected_pending = False
 
-    if state.vrfs:
+    if vrf_all:
+        if not state.vrfs:
+            msg = "No 'VRF:' sections found in output"
+            raise ValueError(msg)
         return {"vrfs": state.vrfs}
+    if state.vrfs:
+        msg = "Unexpected 'VRF:' sections; use the 'show route vrf all' parser"
+        raise ValueError(msg)
     if not state.top["routes"]:
         msg = "No routes found in output"
         raise ValueError(msg)

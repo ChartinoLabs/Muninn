@@ -7,6 +7,7 @@ from muninn.parser import BaseParser
 from muninn.parsers.cisco_iosxr._show_route_common import (
     ShowRouteDetailResult,
     ShowRouteResult,
+    ShowRouteVrfAllResult,
     entry_re,
     parse_route_detail,
     parse_route_table,
@@ -26,8 +27,8 @@ class ShowRouteIpv4Parser(BaseParser[ShowRouteResult]):
     """Parser for 'show route [vrf <vrf>] ipv4' on Cisco IOS-XR.
 
     Parses the IPv4 routing table keyed by prefix, including ECMP and FRR
-    backup paths, candidate defaults and the gateway of last resort. Output of
-    ``show route vrf all ipv4`` (with ``VRF: <name>`` headers) is keyed by VRF.
+    backup paths and the gateway of last resort. Protocol codes are kept as
+    printed (``S*``, ``O*E2``, ``i L2``).
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.ROUTING})
@@ -40,12 +41,41 @@ class ShowRouteIpv4Parser(BaseParser[ShowRouteResult]):
             output: Raw CLI output from command.
 
         Returns:
-            Parsed routing table keyed by prefix (or by VRF, then prefix).
+            Parsed routing table keyed by prefix.
 
         Raises:
             ValueError: If no routes found in output.
         """
         return cast(ShowRouteResult, parse_route_table(output, _ROUTE_LINE_RE))
+
+
+@register(OS.CISCO_IOSXR, "show route vrf all ipv4")
+class ShowRouteVrfAllIpv4Parser(BaseParser[ShowRouteVrfAllResult]):
+    """Parser for 'show route vrf all ipv4' on Cisco IOS-XR.
+
+    Parses each ``VRF: <name>`` section into its own routing table, keyed by
+    VRF name, then prefix. VRFs with no routes map to an empty ``routes``.
+    """
+
+    tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.ROUTING})
+
+    @classmethod
+    def parse(cls, output: str) -> ShowRouteVrfAllResult:
+        """Parse 'show route vrf all ipv4' output on Cisco IOS-XR.
+
+        Args:
+            output: Raw CLI output from command.
+
+        Returns:
+            Routing tables keyed by VRF name.
+
+        Raises:
+            ValueError: If no VRF sections found in output.
+        """
+        return cast(
+            ShowRouteVrfAllResult,
+            parse_route_table(output, _ROUTE_LINE_RE, vrf_all=True),
+        )
 
 
 @register(
