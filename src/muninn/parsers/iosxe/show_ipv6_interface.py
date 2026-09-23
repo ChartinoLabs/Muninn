@@ -17,7 +17,6 @@ class GlobalUnicastAddress(TypedDict):
 
     subnet: str
     prefix_length: int
-    flags: NotRequired[list[str]]
 
 
 class Ipv6InterfaceEntry(TypedDict):
@@ -68,11 +67,10 @@ _LINK_LOCAL_RE = re.compile(
     r"(?:\s+\[(?P<flags>[^\]]+)\])?\s*$"
 )
 
-# "2001:db8::1, subnet is 2001:db8::/64 [EUI/TEN]"
+# "2001:db8::1, subnet is 2001:db8::/64"
 _GLOBAL_ADDRESS_RE = re.compile(
     r"^\s+(?P<address>[0-9A-Fa-f:.]+), subnet is "
-    r"(?P<subnet>[0-9A-Fa-f:.]+/(?P<prefix>\d+))"
-    r"(?:\s+\[(?P<flags>[^\]]+)\])?\s*$"
+    r"(?P<subnet>[0-9A-Fa-f:.]+/(?P<prefix>\d+))\s*$"
 )
 
 # "Joined group address(es):"
@@ -138,9 +136,7 @@ _STR_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
         "nd_ra_suppression",
     ),
     (
-        re.compile(
-            r"^\s*Hosts use (?P<v>.+?) (?:for|to obtain routable) addresses\.\s*$"
-        ),
+        re.compile(r"^\s*Hosts use (?P<v>.+?) for addresses\.\s*$"),
         "hosts_address_configuration",
     ),
 )
@@ -176,9 +172,6 @@ class ShowIpv6InterfaceParser(BaseParser[ShowIpv6InterfaceResult]):
             addr = GlobalUnicastAddress(
                 subnet=m.group("subnet"), prefix_length=int(m.group("prefix"))
             )
-            flags = _flags(m.group("flags"))
-            if flags:
-                addr["flags"] = flags
             entry.setdefault("global_unicast_addresses", {})[m.group("address")] = addr
             return True
 
