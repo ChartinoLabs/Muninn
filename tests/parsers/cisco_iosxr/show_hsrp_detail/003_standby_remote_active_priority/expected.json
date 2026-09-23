@@ -1,0 +1,55 @@
+{
+    "GigabitEthernet0/2/0/1": {
+        "ipv4_groups": {
+            "1": {
+                "group": 1,
+                "address_family": "ipv4",
+                "version": 1,
+                "state": "Standby",
+                "priority": 100,
+                "preempt": false,
+                "hello_time_msec": 3000,
+                "hold_time_msec": 10000,
+                "minimum_delay_sec": 1,
+                "reload_delay_sec": 5,
+                "virtual_ip": "10.1.1.1",
+                "virtual_ip_configured": true,
+                "active_router": "10.1.1.2",
+                "active_router_priority": 110,
+                "active_router_expires_in": "00:00:09",
+                "standby_router": "local",
+                "virtual_mac": "0000.0c07.ac01",
+                "virtual_mac_configured": false,
+                "virtual_mac_state": "reserved",
+                "state_changes": 4,
+                "last_state_change": "6d05h",
+                "state_change_history": [
+                    {
+                        "timestamp": "Mar 11 07:29:44.907 UTC",
+                        "from_state": "Init",
+                        "to_state": "Init",
+                        "reason": "Recovered from checkpoint"
+                    },
+                    {
+                        "timestamp": "Mar 11 07:29:49.519 UTC",
+                        "from_state": "Init",
+                        "to_state": "Listen",
+                        "reason": "Delay timer expired"
+                    },
+                    {
+                        "timestamp": "Mar 11 07:29:59.521 UTC",
+                        "from_state": "Listen",
+                        "to_state": "Speak",
+                        "reason": "Standby timer expired"
+                    },
+                    {
+                        "timestamp": "Mar 11 07:30:09.522 UTC",
+                        "from_state": "Speak",
+                        "to_state": "Standby",
+                        "reason": "Standby timer expired"
+                    }
+                ]
+            }
+        }
+    }
+}

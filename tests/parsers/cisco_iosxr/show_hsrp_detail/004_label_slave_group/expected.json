@@ -1,0 +1,81 @@
+{
+    "GigabitEthernet0/0/0/3": {
+        "ipv4_groups": {
+            "2": {
+                "group": 2,
+                "address_family": "ipv4",
+                "version": 1,
+                "label": "s1",
+                "slave_count": 1,
+                "state": "Active",
+                "priority": 100,
+                "preempt": true,
+                "hello_time_msec": 1000,
+                "hold_time_msec": 2000,
+                "configured_hello_time_msec": 1000,
+                "configured_hold_time_msec": 2000,
+                "minimum_delay_sec": 1,
+                "reload_delay_sec": 5,
+                "virtual_ip": "12.0.0.1",
+                "virtual_ip_configured": true,
+                "active_router": "local",
+                "standby_router": "unknown",
+                "virtual_mac": "549f.c66e.9aa3",
+                "virtual_mac_configured": true,
+                "virtual_mac_state": "active",
+                "authentication_type": "text",
+                "authentication_string": "ciscov4",
+                "state_changes": 5,
+                "last_state_change": "13:36:27",
+                "state_change_history": [
+                    {
+                        "timestamp": "Jun 12 14:04:35.644 UTC",
+                        "from_state": "Init",
+                        "to_state": "Init",
+                        "reason": "Recovered from checkpoint"
+                    },
+                    {
+                        "timestamp": "Jun 12 14:04:40.402 UTC",
+                        "from_state": "Init",
+                        "to_state": "Listen",
+                        "reason": "Delay timer expired"
+                    },
+                    {
+                        "timestamp": "Jun 12 14:04:42.403 UTC",
+                        "from_state": "Listen",
+                        "to_state": "Speak",
+                        "reason": "Active timer expired"
+                    },
+                    {
+                        "timestamp": "Jun 12 14:04:44.403 UTC",
+                        "from_state": "Speak",
+                        "to_state": "Standby",
+                        "reason": "Standby timer expired"
+                    },
+                    {
+                        "timestamp": "Jun 12 14:04:44.403 UTC",
+                        "from_state": "Standby",
+                        "to_state": "Active",
+                        "reason": "Active timer expired"
+                    }
+                ]
+            }
+        }
+    },
+    "GigabitEthernet0/0/0/3.20": {
+        "ipv4_groups": {
+            "20": {
+                "group": 20,
+                "address_family": "ipv4",
+                "version": 1,
+                "slave_to": "s1",
+                "state": "Active",
+                "virtual_ip": "19.0.0.1",
+                "virtual_ip_configured": true,
+                "virtual_mac": "0000.0c07.ac14",
+                "virtual_mac_configured": false,
+                "virtual_mac_state": "active"
+            }
+        }
+    }
+}

@@ -182,6 +182,12 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         # event_trace_history uses list-of-dicts; no natural unique key for event
         # trace entries (same event can repeat at the same timestamp).
         "cisco_iosxr/show_l2vpn_forwarding_message_counters/001_basic/expected.json",
+        # state_change_history uses list-of-dicts; no natural unique key for HSRP
+        # state transitions (several can share one timestamp).
+        "cisco_iosxr/show_hsrp_detail/001_ipv4_ipv6_coup_resign/expected.json",
+        "cisco_iosxr/show_hsrp_detail/002_version2_next_hello/expected.json",
+        "cisco_iosxr/show_hsrp_detail/003_standby_remote_active_priority/expected.json",
+        "cisco_iosxr/show_hsrp_detail/004_label_slave_group/expected.json",
         # ECMP next-hops have no natural unique key (same interface can appear with
         # different next-hops in equal-cost multipath).
         "cisco_iosxr/show_route_ipv4_isis/001_basic/expected.json",
