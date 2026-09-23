@@ -1,4 +1,4 @@
-"""Parser for 'show interfaces switchport' command on Cisco IOS."""
+"""Parser for 'show interfaces switchport' command on Cisco IOS and IOS-XE."""
 
 import re
 from typing import Any, ClassVar, TypedDict, cast
@@ -25,12 +25,15 @@ class SwitchportEntry(TypedDict):
     operational_mode_bundle: NotRequired[str]
     administrative_trunking_encapsulation: NotRequired[str]
     operational_trunking_encapsulation: NotRequired[str]
+    administrative_dot1q_ethertype: NotRequired[str]
+    operational_dot1q_ethertype: NotRequired[str]
     negotiation_of_trunking: NotRequired[str]
     access_vlan: NotRequired[int]
     access_vlan_name: NotRequired[str]
     trunk_native_vlan: NotRequired[int]
     trunk_native_vlan_name: NotRequired[str]
     administrative_native_vlan_tagging: NotRequired[str]
+    operational_native_vlan_tagging: NotRequired[str]
     voice_vlan: NotRequired[int]
     voice_vlan_name: NotRequired[str]
     trunk_vlans_allowed: NotRequired[str]
@@ -61,6 +64,10 @@ _NAME_RE = re.compile(r"^Name:\s+(\S+)\s*$")
 # Key-value line: label, colon, value (no leading whitespace on IOS)
 _KV_RE = re.compile(r"^([A-Za-z][A-Za-z0-9 \-/]+?)\s*:\s*(.*?)\s*$")
 
+# Continuation of a wrapped value: indented, non-blank, e.g.
+# "     470,480,490" (wrapped VLAN list) or "  10 (VLAN0010) 100 (VLAN0100)"
+_CONTINUATION_RE = re.compile(r"^\s+(\S.*?)\s*$")
+
 # Capture Mode flag line, e.g. "Capture Mode Disabled" (no colon)
 _CAPTURE_MODE_RE = re.compile(r"^Capture Mode\s+(Enabled|Disabled)\s*$")
 
@@ -84,10 +91,13 @@ _FIELD_LABEL_MAP: dict[str, str] = {
     "operational mode": "_operational_mode",
     "administrative trunking encapsulation": "administrative_trunking_encapsulation",
     "operational trunking encapsulation": "operational_trunking_encapsulation",
+    "administrative dot1q ethertype": "administrative_dot1q_ethertype",
+    "operational dot1q ethertype": "operational_dot1q_ethertype",
     "negotiation of trunking": "negotiation_of_trunking",
     "access mode vlan": "_access_vlan",
     "trunking native mode vlan": "_trunk_native_vlan",
     "administrative native vlan tagging": "administrative_native_vlan_tagging",
+    "operational native vlan tagging": "operational_native_vlan_tagging",
     "voice vlan": "_voice_vlan",
     "trunking vlans enabled": "trunk_vlans_allowed",
     "pruning vlans enabled": "pruning_vlans_enabled",
@@ -120,8 +130,11 @@ _OPTIONAL_STR_FIELDS: tuple[str, ...] = (
     "administrative_mode",
     "administrative_trunking_encapsulation",
     "operational_trunking_encapsulation",
+    "administrative_dot1q_ethertype",
+    "operational_dot1q_ethertype",
     "negotiation_of_trunking",
     "administrative_native_vlan_tagging",
+    "operational_native_vlan_tagging",
     "trunk_vlans_allowed",
     "pruning_vlans_enabled",
     "capture_mode",
@@ -255,8 +268,12 @@ def _process_kv_line(
     label: str,
     value: str,
     fields: dict[str, str],
-) -> None:
-    """Process a single key-value line and store in fields dict."""
+) -> str | None:
+    """Process a single key-value line and store in fields dict.
+
+    Returns:
+        The fields key the value was stored under, or None if unrecognized.
+    """
     normalized = _normalize_label(label)
 
     # Admin private-vlan sub-fields take precedence: their labels share the
@@ -264,11 +281,56 @@ def _process_kv_line(
     # bucket rather than treated as ordinary fields.
     if normalized.startswith(_ADMIN_PV_PREFIX) and normalized in _ADMIN_PV_MAP:
         fields[normalized] = value
-        return
+        return normalized
 
     dict_key = _FIELD_LABEL_MAP.get(normalized)
     if dict_key is not None:
         fields[dict_key] = value
+    return dict_key
+
+
+def _append_continuation(key: str, text: str, fields: dict[str, str]) -> None:
+    """Append a wrapped continuation line to the value stored under *key*.
+
+    Wrapped VLAN lists end with a comma and are joined directly; values
+    that start on the next line (empty label value) take the text as-is;
+    anything else is joined with a single space.
+    """
+    prev = fields.get(key, "")
+    if not prev or prev.endswith(","):
+        fields[key] = prev + text
+    else:
+        fields[key] = f"{prev} {text}"
+
+
+def _process_line(
+    line: str,
+    fields: dict[str, str],
+    last_key: str | None,
+) -> str | None:
+    """Process one line within an interface block.
+
+    Returns:
+        The fields key subsequent continuation lines should append to.
+    """
+    # Special-case: "Capture Mode Disabled" (no colon).
+    m_cap = _CAPTURE_MODE_RE.match(line)
+    if m_cap:
+        fields["capture_mode"] = m_cap.group(1)
+        return None
+
+    # Standard "Label: value" line
+    m_kv = _KV_RE.match(line)
+    if m_kv:
+        return _process_kv_line(m_kv.group(1), m_kv.group(2), fields)
+
+    # Indented continuation of the previous field's wrapped value
+    m_cont = _CONTINUATION_RE.match(line)
+    if m_cont and last_key is not None:
+        _append_continuation(last_key, m_cont.group(1), fields)
+        return last_key
+
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -277,8 +339,9 @@ def _process_kv_line(
 
 
 @register(OS.CISCO_IOS, "show interfaces switchport")
+@register(OS.CISCO_IOSXE, "show interfaces switchport")
 class ShowInterfacesSwitchportParser(BaseParser["ShowInterfacesSwitchportResult"]):
-    """Parser for 'show interfaces switchport' on Cisco IOS.
+    """Parser for 'show interfaces switchport' on Cisco IOS and IOS-XE.
 
     Parses switchport configuration for each interface including
     administrative/operational mode, trunking encapsulation, VLANs,
@@ -291,7 +354,7 @@ class ShowInterfacesSwitchportParser(BaseParser["ShowInterfacesSwitchportResult"
 
     @classmethod
     def parse(cls, output: str) -> ShowInterfacesSwitchportResult:
-        """Parse 'show interfaces switchport' output on Cisco IOS.
+        """Parse 'show interfaces switchport' output on Cisco IOS / IOS-XE.
 
         Args:
             output: Raw CLI output from the command.
@@ -305,6 +368,7 @@ class ShowInterfacesSwitchportParser(BaseParser["ShowInterfacesSwitchportResult"
         interfaces: dict[str, SwitchportEntry] = {}
         current_name: str | None = None
         current_fields: dict[str, str] = {}
+        last_key: str | None = None
 
         for line in output.splitlines():
             # Interface name header — flush previous block first
@@ -316,21 +380,13 @@ class ShowInterfacesSwitchportParser(BaseParser["ShowInterfacesSwitchportResult"
                     m_name.group(1), os=OS.CISCO_IOS
                 )
                 current_fields = {}
+                last_key = None
                 continue
 
             if current_name is None:
                 continue
 
-            # Special-case: "Capture Mode Disabled" (no colon).
-            m_cap = _CAPTURE_MODE_RE.match(line)
-            if m_cap:
-                current_fields["capture_mode"] = m_cap.group(1)
-                continue
-
-            # Standard "Label: value" line
-            m_kv = _KV_RE.match(line)
-            if m_kv:
-                _process_kv_line(m_kv.group(1), m_kv.group(2), current_fields)
+            last_key = _process_line(line, current_fields, last_key)
 
         # Flush trailing interface block
         if current_name is not None:
