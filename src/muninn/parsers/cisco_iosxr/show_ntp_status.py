@@ -15,11 +15,10 @@ from muninn.tags import ParserTag
 class ShowNtpStatusResult(TypedDict):
     """Schema for 'show ntp status' parsed output.
 
-    ``stratum``, ``refid`` and ``precision`` follow the Juniper Junos sibling
-    parser: ``precision`` is the log2 of the clock precision in seconds, so the
-    device's ``precision is 2**24`` (Hz) becomes ``-24``.  ``refid`` is omitted
-    when the device reports ``no reference clock``.  ``drift`` is in seconds
-    per second.
+    ``precision_hz`` is the device's ``precision is 2**N`` evaluated
+    (Cisco documents this value in Hz), so ``2**24`` becomes ``16777216``.
+    ``refid`` is omitted when the device reports ``no reference clock``.
+    ``drift`` is in seconds per second.
     """
 
     synchronized: bool
@@ -27,7 +26,7 @@ class ShowNtpStatusResult(TypedDict):
     refid: NotRequired[str]
     nominal_freq_hz: NotRequired[float]
     actual_freq_hz: NotRequired[float]
-    precision: NotRequired[int]
+    precision_hz: NotRequired[int]
     reftime: NotRequired[str]
     reftime_date: NotRequired[str]
     offset_ms: NotRequired[float]
@@ -53,7 +52,7 @@ _LINE_PATTERNS: tuple[re.Pattern[str], ...] = (
     re.compile(
         rf"^nominal freq is (?P<nominal_freq_hz>{_NUM}) Hz, "
         rf"actual freq is (?P<actual_freq_hz>{_NUM}) Hz, "
-        r"precision is 2\*\*(?P<precision>\d+)"
+        r"precision is 2\*\*(?P<precision_hz>\d+)"
     ),
     re.compile(
         r"^reference time is (?P<reftime>[0-9A-Fa-f]+\.[0-9A-Fa-f]+)"
@@ -84,7 +83,7 @@ _CONVERTERS: dict[str, Callable[[str], object]] = {
     "stratum": int,
     "nominal_freq_hz": float,
     "actual_freq_hz": float,
-    "precision": lambda v: -int(v),
+    "precision_hz": lambda v: 2 ** int(v),
     "offset_ms": float,
     "root_delay_ms": float,
     "root_dispersion_ms": float,
