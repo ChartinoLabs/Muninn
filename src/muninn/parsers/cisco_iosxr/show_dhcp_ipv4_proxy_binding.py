@@ -33,11 +33,17 @@ class ShowDhcpIpv4ProxyBindingResult(TypedDict):
 
 
 @register(OS.CISCO_IOSXR, "show dhcp ipv4 proxy binding")
+@register(
+    OS.CISCO_IOSXR,
+    r"show dhcp ipv4 proxy binding interface (?P<interface>[A-Za-z-]+ ?\d\S*)",
+    doc_template="show dhcp ipv4 proxy binding interface <interface>",
+)
 class ShowDhcpIpv4ProxyBindingParser(BaseParser[ShowDhcpIpv4ProxyBindingResult]):
     """Parser for 'show dhcp ipv4 proxy binding' on Cisco IOS-XR.
 
     Columns are split on whitespace rather than fixed widths because long
-    interface names overflow into the VRF column.
+    interface names overflow into the VRF column. A blank VRF cell is
+    keyed as ``default`` rather than dropping the row.
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.DHCP})
@@ -49,7 +55,7 @@ class ShowDhcpIpv4ProxyBindingParser(BaseParser[ShowDhcpIpv4ProxyBindingResult])
         r"(?P<state>\S+)\s+"
         r"(?P<lease>\d+)\s+"
         r"(?P<interface>\S+)\s+"
-        r"(?P<vrf>\S+)\s+"
+        r"(?:(?P<vrf>\S+)\s+)?"
         r"(?P<sublabel>0x[0-9a-fA-F]+)\s*$"
     )
 
@@ -75,7 +81,7 @@ class ShowDhcpIpv4ProxyBindingParser(BaseParser[ShowDhcpIpv4ProxyBindingResult])
             interface = canonical_interface_name(
                 match.group("interface"), os=OS.CISCO_IOSXR
             )
-            vrf = vrfs.setdefault(match.group("vrf"), {"interfaces": {}})
+            vrf = vrfs.setdefault(match.group("vrf") or "default", {"interfaces": {}})
             vrf["interfaces"].setdefault(interface, {})[match.group("mac").lower()] = {
                 "ip_address": match.group("ip"),
                 "state": match.group("state"),
