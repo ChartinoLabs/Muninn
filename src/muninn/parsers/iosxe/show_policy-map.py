@@ -23,7 +23,6 @@ class PoliceEntry(TypedDict):
     be_bytes: NotRequired[int]
     be_ms: NotRequired[int]
     rate_bps: NotRequired[int]
-    rate_pps: NotRequired[int]
     rate_percent: NotRequired[int]
     conform_actions: NotRequired[list[str]]
     exceed_actions: NotRequired[list[str]]
@@ -43,7 +42,6 @@ class PriorityEntry(TypedDict):
     """Schema for a priority action (bare ``priority`` sets only ``enabled``)."""
 
     enabled: bool
-    level: NotRequired[int]
     kbps: NotRequired[int]
     percent: NotRequired[int]
 
@@ -52,22 +50,20 @@ class BandwidthEntry(TypedDict):
     """Schema for a bandwidth allocation."""
 
     kbps: NotRequired[int]
-    percent: NotRequired[int]
     remaining_percent: NotRequired[int]
 
 
 class QueueLimitEntry(TypedDict):
     """Schema for a queue limit."""
 
-    packets: NotRequired[int]
-    bytes: NotRequired[int]
+    packets: int
 
 
 class WredClassEntry(TypedDict):
     """Schema for one row of the WRED threshold table."""
 
-    min_threshold: NotRequired[int]
-    max_threshold: NotRequired[int]
+    min_threshold: int
+    max_threshold: int
     mark_probability: str
 
 
@@ -108,15 +104,15 @@ _CLASS_RE = re.compile(r"^\s*Class (?P<name>\S+)\s*$")
 _POLICE_RE = re.compile(r"^\s*police (?P<spec>.+?)\s*$")
 _POLICE_CIR_RE = re.compile(
     r"^cir (?:percent (?P<cir_percent>\d+)|(?P<cir_bps>\d+))"
-    r"(?: bc (?P<bc>\d+)(?P<bc_ms> ms)?)?"
-    r"(?: pir (?:percent (?P<pir_percent>\d+)|(?P<pir_bps>\d+)))?"
-    r"(?: be (?P<be>\d+)(?P<be_ms> ms)?)?$"
+    r" bc (?P<bc>\d+)(?P<bc_ms> ms)?"
+    r" pir (?:percent (?P<pir_percent>\d+)|(?P<pir_bps>\d+))"
+    r" be (?P<be>\d+)(?P<be_ms> ms)?$"
 )
 _POLICE_RATE_RE = re.compile(
-    r"^rate (?:percent (?P<rate_percent>\d+)|(?P<rate>\d+)(?: (?P<unit>bps|pps))?)$"
+    r"^rate (?:percent (?P<rate_percent>\d+)|(?P<rate_bps>\d+))$"
 )
 _POLICE_POSITIONAL_RE = re.compile(
-    r"^(?P<cir_bps>\d+)(?: (?P<bc_bytes>\d+))?(?: (?P<be_bytes>\d+))?$"
+    r"^(?P<cir_bps>\d+) (?P<bc_bytes>\d+) (?P<be_bytes>\d+)$"
 )
 _POLICE_ACTION_RE = re.compile(
     r"^\s*(?P<kind>conform|exceed|violate)-action (?P<action>.+?)\s*$"
@@ -128,41 +124,32 @@ _SHAPE_CIR_RE = re.compile(
     r"(?: be (?P<be>\d+) \(bits\))?\s*$"
 )
 _PRIORITY_RE = re.compile(
-    r"^\s*priority(?: level (?P<level>\d+))?"
+    r"^\s*priority"
     r"(?: (?P<value>\d+) \((?P<unit>kbps|%)\))?\s*$"
 )
 _BANDWIDTH_RE = re.compile(
-    r"^\s*bandwidth (?P<remaining>remaining )?(?P<value>\d+) \((?P<unit>kbps|%)\)\s*$"
+    r"^\s*bandwidth "
+    r"(?:(?P<kbps>\d+) \(kbps\)|remaining (?P<remaining_percent>\d+) \(%\))\s*$"
 )
-_QUEUE_LIMIT_RE = re.compile(
-    r"^\s*queue-limit (?P<value>\d+) (?P<unit>packets|bytes)\s*$"
-)
+_QUEUE_LIMIT_RE = re.compile(r"^\s*queue-limit (?P<packets>\d+) packets\s*$")
 _SERVICE_POLICY_RE = re.compile(r"^\s*service-policy (?P<name>\S+)\s*$")
 _WRED_RE = re.compile(r"^\s*(?P<type>\S+) wred, exponential weight (?P<weight>\d+)\s*$")
 _WRED_ROW_RE = re.compile(
-    r"^\s*(?P<cls>\d+|rsvp)\s+(?P<min>\d+|-)\s+(?P<max>\d+|-)"
+    r"^\s*(?P<cls>\d+)\s+(?P<min>\d+)\s+(?P<max>\d+)"
     r"\s+(?P<prob>\d+/\d+)\s*$"
 )
 
 
 def _police_cir(m: re.Match[str]) -> dict[str, Any]:
-    """Build police fields from a 'cir ... [pir ...]' spec match."""
+    """Build police fields from a 'cir ... bc ... pir ... be ...' spec match."""
     police: dict[str, Any] = {}
     for key in ("cir_percent", "cir_bps", "pir_percent", "pir_bps"):
         if m.group(key):
             police[key] = int(m.group(key))
     for key in ("bc", "be"):
-        if m.group(key):
-            unit = "ms" if m.group(f"{key}_ms") else "bytes"
-            police[f"{key}_{unit}"] = int(m.group(key))
+        unit = "ms" if m.group(f"{key}_ms") else "bytes"
+        police[f"{key}_{unit}"] = int(m.group(key))
     return police
-
-
-def _police_rate(m: re.Match[str]) -> dict[str, Any]:
-    """Build police fields from a 'rate ...' spec match."""
-    if m.group("rate_percent"):
-        return {"rate_percent": int(m.group("rate_percent"))}
-    return {f"rate_{m.group('unit') or 'bps'}": int(m.group("rate"))}
 
 
 def _parse_police_spec(spec: str) -> PoliceEntry:
@@ -170,9 +157,7 @@ def _parse_police_spec(spec: str) -> PoliceEntry:
     police: dict[str, Any] = {}
     if m := _POLICE_CIR_RE.match(spec):
         police = _police_cir(m)
-    elif m := _POLICE_RATE_RE.match(spec):
-        police = _police_rate(m)
-    elif m := _POLICE_POSITIONAL_RE.match(spec):
+    elif (m := _POLICE_RATE_RE.match(spec)) or (m := _POLICE_POSITIONAL_RE.match(spec)):
         police = {k: int(v) for k, v in m.groupdict().items() if v}
     return cast(PoliceEntry, police)
 
@@ -212,24 +197,21 @@ def _try_wred(line: str, entry: dict[str, Any]) -> bool:
         }
         return True
     if "wred" in entry and (m := _WRED_ROW_RE.match(line)):
-        row: dict[str, Any] = {"mark_probability": m.group("prob")}
-        if m.group("min") != "-":
-            row["min_threshold"] = int(m.group("min"))
-        if m.group("max") != "-":
-            row["max_threshold"] = int(m.group("max"))
-        entry["wred"].setdefault("classes", {})[m.group("cls")] = row
+        entry["wred"].setdefault("classes", {})[m.group("cls")] = {
+            "min_threshold": int(m.group("min")),
+            "max_threshold": int(m.group("max")),
+            "mark_probability": m.group("prob"),
+        }
         return True
     return False
 
 
 def _try_priority(line: str, entry: dict[str, Any]) -> bool:
-    """Handle 'priority [level N] [value (kbps|%)]'."""
+    """Handle 'priority [value (kbps|%)]'."""
     m = _PRIORITY_RE.match(line)
     if not m:
         return False
     priority: dict[str, Any] = {"enabled": True}
-    if m.group("level"):
-        priority["level"] = int(m.group("level"))
     if m.group("value"):
         unit = "kbps" if m.group("unit") == "kbps" else "percent"
         priority[unit] = int(m.group("value"))
@@ -240,12 +222,10 @@ def _try_priority(line: str, entry: dict[str, Any]) -> bool:
 def _try_simple(line: str, entry: dict[str, Any]) -> bool:
     """Handle bandwidth, queue-limit, and service-policy lines."""
     if m := _BANDWIDTH_RE.match(line):
-        unit = "kbps" if m.group("unit") == "kbps" else "percent"
-        key = f"remaining_{unit}" if m.group("remaining") else unit
-        entry.setdefault("bandwidth", {})[key] = int(m.group("value"))
+        entry["bandwidth"] = {k: int(v) for k, v in m.groupdict().items() if v}
         return True
     if m := _QUEUE_LIMIT_RE.match(line):
-        entry["queue_limit"] = {m.group("unit"): int(m.group("value"))}
+        entry["queue_limit"] = {"packets": int(m.group("packets"))}
         return True
     if m := _SERVICE_POLICY_RE.match(line):
         entry["service_policy"] = m.group("name")
