@@ -4,6 +4,23 @@ The schema is a superset of 'show l2vpn xconnect': the same group / xconnect
 keying, xconnect ``state`` and ``segment_1`` / ``segment_2`` fields, plus the
 per-segment detail (AC attributes, PW / EVPN signalling, the Local / Remote
 parameter table, status TLVs, timers and statistics).
+
+Formats handled without a fixture, evidenced by genieparser
+``ShowL2vpnXconnectDetail`` outputs whose content is genuine but whose
+indentation was edited (so they are not used as fixtures):
+
+- ``active in RG-ID`` on the AC line, PW Status TLV lines, ``Group ID`` /
+  ``Interface`` table rows, ``Last time PW went down`` and ``MAC withdraw
+  messages`` (Genie output 3).
+- ``Backup PW:`` blocks with ``Backup for neighbor``, and multi-line VCCV
+  CV/CC continuation rows (Genie outputs 3 and 5).
+
+Genie outputs 1 and 2 carry invalid values (mangled hex, IPs and timers), so
+formats seen only there (``MSTi``, ``(none)`` VCCV rows, ``Encap type ...,
+control word``) are not handled.
+
+Segments are separate blocks, so an xconnect showing only one segment keeps
+``segment_2`` absent rather than failing the parse.
 """
 
 import re
@@ -98,7 +115,6 @@ class DetailSegment(Segment):
     mtu: NotRequired[int]
     xc_id: NotRequired[str]
     interworking: NotRequired[str]
-    msti: NotRequired[int]
     pw_class: NotRequired[str]
     encapsulation: NotRequired[str]
     auto_discovered: NotRequired[str]
@@ -142,7 +158,7 @@ class DetailXconnect(TypedDict):
     remote_ce_id: NotRequired[int]
     discovery_state: NotRequired[str]
     segment_1: DetailSegment
-    segment_2: DetailSegment
+    segment_2: NotRequired[DetailSegment]
 
 
 class ShowL2vpnXconnectDetailResult(TypedDict):
@@ -187,10 +203,10 @@ _FIELD_RES = (
         r"^Local CE ID: (?P<local_ce_id>\d+), Remote CE ID: (?P<remote_ce_id>\d+), "
         r"Discovery State: (?P<discovery_state>.+)$"
     ),
-    re.compile(r"^Type (?P<type>[^;]+?)(?:; Num Ranges: (?P<num_ranges>\d+))?$"),
+    re.compile(r"^Type (?P<type>[^;]+); Num Ranges: (?P<num_ranges>\d+)$"),
     re.compile(
         r"^MTU (?P<mtu>\d+); XC ID (?P<xc_id>\S+); "
-        r"interworking (?:none|(?P<interworking>\S+))(?:; MSTi (?P<msti>\d+))?$"
+        r"interworking (?:none|(?P<interworking>\S+))$"
     ),
     re.compile(
         r"^packets: received (?P<statistics__packets_received>\d+), "
@@ -216,9 +232,7 @@ _FIELD_RES = (
         r"^PW type (?P<pw_type>[^,]+), control word (?P<control_word>\w+), "
         r"interworking (?:none|(?P<interworking>\S+))$"
     ),
-    re.compile(
-        r"^Encap type (?P<encap_type>[^,]+)(?:, control word (?P<control_word>\w+))?$"
-    ),
+    re.compile(r"^Encap type (?P<encap_type>[^,]+)$"),
     re.compile(r"^PW backup disable delay (?P<backup_disable_delay_seconds>\d+) sec$"),
     re.compile(r"^Sequencing (?:not set|(?P<sequencing>.+))$"),
     re.compile(r"^LSP : (?P<lsp>\S+)$"),
@@ -311,8 +325,7 @@ class _Table:
         if self.key in _TABLE_LIST_KEYS:
             side.setdefault(self.key, []).append(text)
         elif continued:
-            if text != "(none)":
-                side.setdefault(f"{self.key}s", []).append(text.strip("()"))
+            side.setdefault(f"{self.key}s", []).append(text.strip("()"))
         elif self.key == "interface":
             side[self.key] = canonical_interface_name(text, os=OS.CISCO_IOSXR)
         elif self.key in _TABLE_INT_KEYS and text.isdigit():
@@ -448,8 +461,8 @@ class ShowL2vpnXconnectDetailParser(BaseParser[ShowL2vpnXconnectDetailResult]):
             Xconnects keyed by group and xconnect name.
 
         Raises:
-            ValueError: If no xconnect is found or an xconnect lacks one of
-                its two segments.
+            ValueError: If no xconnect is found or an xconnect has no
+                segment.
         """
         state = _State()
         for line in output.splitlines():
@@ -459,7 +472,7 @@ class ShowL2vpnXconnectDetailParser(BaseParser[ShowL2vpnXconnectDetailResult]):
             raise ValueError(msg)
         for group, xconnects in state.groups.items():
             for name, xconnect in xconnects.items():
-                if "segment_2" not in xconnect:
-                    msg = f"Xconnect {group}/{name} is missing a segment"
+                if "segment_1" not in xconnect:
+                    msg = f"Xconnect {group}/{name} has no segment"
                     raise ValueError(msg)
         return cast(ShowL2vpnXconnectDetailResult, {"groups": state.groups})
