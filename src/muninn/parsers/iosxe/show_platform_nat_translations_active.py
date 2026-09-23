@@ -1,15 +1,16 @@
 """Parser for 'show platform nat translations active' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict
+from typing import ClassVar, TypedDict, cast
 
 from typing_extensions import NotRequired
 
 from muninn.os import OS
 from muninn.parser import BaseParser
-from muninn.patterns import IPV4_ADDRESS
+from muninn.patterns import IPV4_ADDRESS, MAC_ADDRESS
 from muninn.registry import register
 from muninn.tags import ParserTag
+from muninn.utils import canonical_interface_name
 
 
 class NatTranslationEntry(TypedDict):
@@ -24,6 +25,23 @@ class NatTranslationEntry(TypedDict):
     inside_local_port: NotRequired[int]
     outside_local_port: NotRequired[int]
     outside_global_port: NotRequired[int]
+    created: NotRequired[str]
+    last_used: NotRequired[str]
+    timeout: NotRequired[str]
+    map_id_in: NotRequired[int]
+    rule_id: NotRequired[int]
+    flags: NotRequired[str]
+    alg_application_type: NotRequired[str]
+    wlan_flags: NotRequired[str]
+    mac_address: NotRequired[str]
+    input_interface: NotRequired[str]
+    output_interface: NotRequired[str]
+    entry_id: NotRequired[str]
+    use_count: NotRequired[int]
+    in_packets: NotRequired[int]
+    in_bytes: NotRequired[int]
+    out_packets: NotRequired[int]
+    out_bytes: NotRequired[int]
 
 
 NatTranslationTree = dict[
@@ -36,7 +54,7 @@ class ShowPlatformNatTranslationsActiveResult(TypedDict):
     """Schema for 'show platform nat translations active' parsed output."""
 
     translations: NatTranslationTree
-    total_translations: int
+    total_translations: NotRequired[int]
 
 
 # Translation entry with ports:
@@ -49,9 +67,9 @@ _TRANSLATION = re.compile(
     r"(?::(?P<ig_port>\d+))?\s+"
     rf"(?P<inside_local>{IPV4_ADDRESS})"
     r"(?::(?P<il_port>\d+))?\s+"
-    rf"(?P<outside_local>{IPV4_ADDRESS}|---)"
+    rf"(?P<outside_local>{IPV4_ADDRESS}|--+)"
     r"(?::(?P<ol_port>\d+))?\s+"
-    rf"(?P<outside_global>{IPV4_ADDRESS}|---)"
+    rf"(?P<outside_global>{IPV4_ADDRESS}|--+)"
     r"(?::(?P<og_port>\d+))?\s*$"
 )
 
@@ -59,6 +77,42 @@ _TRANSLATION = re.compile(
 _TOTAL = re.compile(r"^Total\s+number\s+of\s+translations:\s+(?P<total>\d+)\s*$")
 
 _SKIP = re.compile(r"^(?:Pro\s+Inside|---+\s+---)")
+
+# Per-translation detail lines printed by the ``verbose`` keyword.
+_DETAILS = (
+    re.compile(
+        r"^create:\s*(?P<created>.+?),\s*use:\s*(?P<last_used>.+?),"
+        r"\s*timeout:\s*(?P<timeout>\S+)$"
+    ),
+    re.compile(r"^Map-Id\(In\):\s*(?P<map_id_in>\d+)$"),
+    re.compile(r"^RuleID\s*:\s*(?P<rule_id>\d+)$"),
+    re.compile(r"^Flags:\s*(?P<flags>.+)$"),
+    re.compile(r"^ALG Application Type:\s*(?P<alg_application_type>.+)$"),
+    re.compile(r"^WLAN-Flags:\s*(?P<wlan_flags>.+)$"),
+    re.compile(
+        rf"^Mac-Address:\s*(?P<mac_address>{MAC_ADDRESS})\s+"
+        r"Input-IDB:\s*(?P<input_interface>\S*)$"
+    ),
+    re.compile(r"^entry-id:\s*(?P<entry_id>\S+),\s*use_count:\s*(?P<use_count>\d+)$"),
+    re.compile(
+        r"^In_pkts:\s*(?P<in_packets>\d+)\s+In_bytes:\s*(?P<in_bytes>\d+),"
+        r"\s*Out_pkts:\s*(?P<out_packets>\d+)\s+Out_bytes:\s*(?P<out_bytes>\d+)$"
+    ),
+    re.compile(r"^Output-IDB:\s*(?P<output_interface>\S*)$"),
+)
+
+_INT_DETAILS = frozenset(
+    {
+        "map_id_in",
+        "rule_id",
+        "use_count",
+        "in_packets",
+        "in_bytes",
+        "out_packets",
+        "out_bytes",
+    }
+)
+_INTERFACE_DETAILS = frozenset({"input_interface", "output_interface"})
 
 
 def _normalize_protocol(protocol: str) -> str:
@@ -70,9 +124,28 @@ def _normalize_protocol(protocol: str) -> str:
 
 def _normalize_address(value: str) -> str:
     """Normalize sentinel address values for parsed output."""
-    if value == "---":
+    if value.startswith("--"):
         return "N/A"
     return value
+
+
+def _apply_detail(entry: NatTranslationEntry, line: str) -> None:
+    """Merge a verbose detail line (if it is one) into *entry*."""
+    for pattern in _DETAILS:
+        match = pattern.match(line)
+        if not match:
+            continue
+        fields: dict[str, str | int] = cast(dict, entry)
+        for key, value in match.groupdict().items():
+            if value in ("", "NA"):
+                continue
+            if key in _INT_DETAILS:
+                fields[key] = int(value)
+            elif key in _INTERFACE_DETAILS:
+                fields[key] = canonical_interface_name(value, os=OS.CISCO_IOSXE)
+            else:
+                fields[key] = value
+        return
 
 
 def _port_key(port: str | None) -> str:
@@ -88,10 +161,10 @@ def _build_entry(match: re.Match[str]) -> NatTranslationEntry:
         "inside_local": match.group("inside_local"),
     }
     ol_addr = match.group("outside_local")
-    if ol_addr != "---":
+    if not ol_addr.startswith("--"):
         entry["outside_local"] = ol_addr
     og_addr = match.group("outside_global")
-    if og_addr != "---":
+    if not og_addr.startswith("--"):
         entry["outside_global"] = og_addr
 
     ig_port = match.group("ig_port")
@@ -116,7 +189,7 @@ def _build_entry(match: re.Match[str]) -> NatTranslationEntry:
 def _store_translation(
     translations: NatTranslationTree,
     match: re.Match[str],
-) -> None:
+) -> NatTranslationEntry:
     """Store a translation using hierarchical endpoint keys."""
     protocol = _normalize_protocol(match.group("protocol"))
     inside_global = match.group("inside_global")
@@ -133,12 +206,20 @@ def _store_translation(
     if outside_global not in translations[protocol][inside_global][inside_global_port]:
         translations[protocol][inside_global][inside_global_port][outside_global] = {}
 
+    entry = _build_entry(match)
     translations[protocol][inside_global][inside_global_port][outside_global][
         outside_global_port
-    ] = _build_entry(match)
+    ] = entry
+    return entry
 
 
 @register(OS.CISCO_IOS, "show ip nat translations")
+@register(OS.CISCO_IOSXE, "show ip nat translations")
+@register(
+    OS.CISCO_IOSXE,
+    r"show ip nat translations(?: vrf (?P<vrf>\S+))?(?: verbose)?",
+    doc_template="show ip nat translations [vrf <vrf>] [verbose]",
+)
 @register(OS.CISCO_IOSXE, "show platform nat translations active")
 class ShowPlatformNatTranslationsActiveParser(
     BaseParser[ShowPlatformNatTranslationsActiveResult],
@@ -176,8 +257,8 @@ class ShowPlatformNatTranslationsActiveParser(
             ValueError: If no NAT translation data is found.
         """
         translations: NatTranslationTree = {}
-        total_translations = 0
-        total_found = False
+        result: dict = {"translations": translations}
+        current: NatTranslationEntry | None = None
 
         for line in output.splitlines():
             stripped = line.strip()
@@ -186,19 +267,17 @@ class ShowPlatformNatTranslationsActiveParser(
 
             total_match = _TOTAL.match(stripped)
             if total_match:
-                total_translations = int(total_match.group("total"))
-                total_found = True
+                result["total_translations"] = int(total_match.group("total"))
                 continue
 
             trans_match = _TRANSLATION.match(stripped)
             if trans_match:
-                _store_translation(translations, trans_match)
+                current = _store_translation(translations, trans_match)
+            elif current is not None:
+                _apply_detail(current, stripped)
 
-        if not translations and not total_found:
+        if not translations and "total_translations" not in result:
             msg = "No NAT translation data found in output"
             raise ValueError(msg)
 
-        return ShowPlatformNatTranslationsActiveResult(
-            translations=translations,
-            total_translations=total_translations,
-        )
+        return cast(ShowPlatformNatTranslationsActiveResult, result)
