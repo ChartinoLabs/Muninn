@@ -1,0 +1,101 @@
+{
+    "interfaces": {
+        "GigabitEthernet1/0/2": {
+            "switchport": "Enabled",
+            "operational_mode": "trunk",
+            "operational_mode_bundle": "Port-channel12",
+            "access_vlan": 1,
+            "access_vlan_name": "default",
+            "trunk_native_vlan": 1,
+            "trunk_native_vlan_name": "default",
+            "administrative_mode": "trunk",
+            "administrative_trunking_encapsulation": "dot1q",
+            "operational_trunking_encapsulation": "dot1q",
+            "negotiation_of_trunking": "On",
+            "administrative_native_vlan_tagging": "enabled",
+            "trunk_vlans_allowed": "100-110",
+            "pruning_vlans_enabled": "2-1001",
+            "capture_mode": "Disabled",
+            "capture_vlans_allowed": "ALL",
+            "protected": "false",
+            "unknown_unicast_blocked": "disabled",
+            "unknown_multicast_blocked": "disabled",
+            "operational_private_vlan": "10 (VLAN0010) 100 (VLAN0100)",
+            "admin_private_vlan": {
+                "trunk_native_vlan_tagging": "enabled",
+                "trunk_encapsulation": "dot1q",
+                "trunk_mappings": "10 (VLAN0010) 100 (VLAN0100)"
+            }
+        },
+        "GigabitEthernet1/0/4": {
+            "switchport": "Enabled",
+            "operational_mode": "trunk",
+            "access_vlan": 1,
+            "access_vlan_name": "default",
+            "trunk_native_vlan": 1,
+            "trunk_native_vlan_name": "default",
+            "administrative_mode": "trunk",
+            "administrative_trunking_encapsulation": "dot1q",
+            "operational_trunking_encapsulation": "dot1q",
+            "negotiation_of_trunking": "On",
+            "administrative_native_vlan_tagging": "enabled",
+            "trunk_vlans_allowed": "200-211",
+            "pruning_vlans_enabled": "2-1001",
+            "capture_mode": "Disabled",
+            "capture_vlans_allowed": "ALL",
+            "protected": "false",
+            "unknown_unicast_blocked": "disabled",
+            "unknown_multicast_blocked": "disabled",
+            "admin_private_vlan": {
+                "trunk_native_vlan_tagging": "enabled",
+                "trunk_encapsulation": "dot1q"
+            }
+        },
+        "GigabitEthernet1/0/5": {
+            "switchport": "Enabled",
+            "operational_mode": "down",
+            "access_vlan": 1,
+            "access_vlan_name": "default",
+            "trunk_native_vlan": 1,
+            "trunk_native_vlan_name": "default",
+            "administrative_mode": "static access",
+            "administrative_trunking_encapsulation": "dot1q",
+            "negotiation_of_trunking": "Off",
+            "administrative_native_vlan_tagging": "enabled",
+            "trunk_vlans_allowed": "ALL",
+            "pruning_vlans_enabled": "2-1001",
+            "capture_mode": "Disabled",
+            "capture_vlans_allowed": "ALL",
+            "protected": "false",
+            "unknown_unicast_blocked": "disabled",
+            "unknown_multicast_blocked": "disabled",
+            "admin_private_vlan": {
+                "trunk_native_vlan_tagging": "enabled",
+                "trunk_encapsulation": "dot1q"
+            }
+        },
+        "Port-channel12": {
+            "switchport": "Enabled",
+            "operational_mode": "down",
+            "access_vlan": 100,
+            "access_vlan_name": "Falback-Data",
+            "trunk_native_vlan": 0,
+            "trunk_native_vlan_name": "Inactive",
+            "voice_vlan": 100,
+            "voice_vlan_name": "Fallback-Voice",
+            "administrative_mode": "trunk",
+            "administrative_trunking_encapsulation": "dot1q",
+            "negotiation_of_trunking": "On",
+            "administrative_native_vlan_tagging": "disabled",
+            "trunk_vlans_allowed": "100,101,110-120,121,130,170,180,333-355,366-400,540,601-605,606,607,1111,1113,1200-1234,1400-1456,1567",
+            "pruning_vlans_enabled": "2-1001",
+            "protected": "false",
+            "unknown_unicast_blocked": "disabled",
+            "unknown_multicast_blocked": "disabled",
+            "admin_private_vlan": {
+                "trunk_native_vlan_tagging": "enabled",
+                "trunk_encapsulation": "dot1q"
+            }
+        }
+    }
+}
