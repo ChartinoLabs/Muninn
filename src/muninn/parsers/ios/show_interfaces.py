@@ -872,6 +872,16 @@ def _parse_block(lines: list[str]) -> InterfaceEntry | None:
 
 @register(OS.CISCO_IOS, "show interfaces")
 @register(OS.CISCO_IOSXE, "show interfaces")
+@register(
+    OS.CISCO_IOS,
+    r"show interfaces (?P<interface>[A-Za-z][A-Za-z-]* ?\d\S*)",
+    doc_template="show interfaces <interface>",
+)
+@register(
+    OS.CISCO_IOSXE,
+    r"show interfaces (?P<interface>[A-Za-z][A-Za-z-]* ?\d\S*)",
+    doc_template="show interfaces <interface>",
+)
 class ShowInterfacesParser(BaseParser[ShowInterfacesResult]):
     """Parser for 'show interfaces' on IOS/IOS-XE."""
 
