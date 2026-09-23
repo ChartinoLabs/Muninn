@@ -26,7 +26,6 @@ class Ipv6InterfaceEntry(TypedDict):
     line_protocol: str
     ipv6_status: NotRequired[str]
     link_local_address: NotRequired[str]
-    link_local_flags: NotRequired[list[str]]
     global_unicast_addresses: NotRequired[dict[str, GlobalUnicastAddress]]
     multicast_groups: NotRequired[list[str]]
     mtu: NotRequired[int]
@@ -40,7 +39,6 @@ class Ipv6InterfaceEntry(TypedDict):
     nd_reachable_time_in_use_ms: NotRequired[int]
     nd_advertised_reachable_time_ms: NotRequired[int]
     nd_advertised_retransmit_interval_ms: NotRequired[int]
-    nd_ns_retransmit_interval_ms: NotRequired[int]
     nd_ra_interval_seconds: NotRequired[int]
     nd_ra_lifetime_seconds: NotRequired[int]
     nd_default_router_preference: NotRequired[str]
@@ -56,21 +54,19 @@ class ShowIpv6InterfaceResult(TypedDict):
 
 # "GigabitEthernet2 is up, line protocol is up"
 _HEADER_RE = re.compile(
-    r"^(?P<interface>\S+)\s+is\s+(?P<status>administratively down|up|down|deleted),"
-    r"\s+line\s+protocol\s+is\s+(?P<protocol>up|down)\s*$",
-    re.IGNORECASE,
+    r"^(?P<interface>\S+)\s+is\s+(?P<status>up|down),"
+    r"\s+line\s+protocol\s+is\s+(?P<protocol>up|down)\s*$"
 )
 
-# "IPv6 is enabled, link-local address is FE80::1 [TEN]"
+# "IPv6 is enabled, link-local address is FE80::1"
 _LINK_LOCAL_RE = re.compile(
-    r"^\s*IPv6 is (?P<ipv6_status>\S+), link-local address is (?P<address>\S+)"
-    r"(?:\s+\[(?P<flags>[^\]]+)\])?\s*$"
+    r"^\s*IPv6 is (?P<ipv6_status>\S+), link-local address is (?P<address>\S+)\s*$"
 )
 
 # "2001:db8::1, subnet is 2001:db8::/64"
 _GLOBAL_ADDRESS_RE = re.compile(
-    r"^\s+(?P<address>[0-9A-Fa-f:.]+), subnet is "
-    r"(?P<subnet>[0-9A-Fa-f:.]+/(?P<prefix>\d+))\s*$"
+    r"^\s+(?P<address>[0-9A-Fa-f:]+), subnet is "
+    r"(?P<subnet>[0-9A-Fa-f:]+/(?P<prefix>\d+))\s*$"
 )
 
 # "Joined group address(es):"
@@ -88,7 +84,7 @@ _ND_DAD_RE = re.compile(
 # "ND reachable time is 30000 milliseconds (using 30000)"
 _ND_REACHABLE_RE = re.compile(
     r"^\s*ND reachable time is (?P<time>\d+) milliseconds"
-    r"(?: \(using (?P<using>\d+)\))?\s*$"
+    r" \(using (?P<using>\d+)\)\s*$"
 )
 
 # Lines with a single integer value
@@ -107,10 +103,6 @@ _INT_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
     (
         re.compile(r"^\s*ND advertised retransmit interval is (?P<v>\d+)"),
         "nd_advertised_retransmit_interval_ms",
-    ),
-    (
-        re.compile(r"^\s*ND NS retransmit interval is (?P<v>\d+) milliseconds"),
-        "nd_ns_retransmit_interval_ms",
     ),
     (
         re.compile(r"^\s*ND router advertisements are sent every (?P<v>\d+) seconds"),
@@ -142,10 +134,6 @@ _STR_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
 )
 
 
-def _flags(raw: str | None) -> list[str] | None:
-    return raw.split("/") if raw else None
-
-
 @register(OS.CISCO_IOSXE, "show ipv6 interface")
 class ShowIpv6InterfaceParser(BaseParser[ShowIpv6InterfaceResult]):
     """Parser for 'show ipv6 interface' on IOS-XE.
@@ -162,9 +150,6 @@ class ShowIpv6InterfaceParser(BaseParser[ShowIpv6InterfaceResult]):
         if m:
             entry["ipv6_status"] = m.group("ipv6_status")
             entry["link_local_address"] = m.group("address")
-            flags = _flags(m.group("flags"))
-            if flags:
-                entry["link_local_flags"] = flags
             return True
 
         m = _GLOBAL_ADDRESS_RE.match(line)
@@ -189,8 +174,7 @@ class ShowIpv6InterfaceParser(BaseParser[ShowIpv6InterfaceResult]):
         m = _ND_REACHABLE_RE.match(line)
         if m:
             entry["nd_reachable_time_ms"] = int(m.group("time"))
-            if m.group("using"):
-                entry["nd_reachable_time_in_use_ms"] = int(m.group("using"))
+            entry["nd_reachable_time_in_use_ms"] = int(m.group("using"))
             return True
 
         return False
@@ -239,8 +223,8 @@ class ShowIpv6InterfaceParser(BaseParser[ShowIpv6InterfaceResult]):
                     header.group("interface"), os=OS.CISCO_IOSXE
                 )
                 current = Ipv6InterfaceEntry(
-                    status=header.group("status").lower(),
-                    line_protocol=header.group("protocol").lower(),
+                    status=header.group("status"),
+                    line_protocol=header.group("protocol"),
                 )
                 interfaces[name] = current
                 groups = None
