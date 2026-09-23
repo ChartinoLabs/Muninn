@@ -42,6 +42,7 @@ class Route(TypedDict):
     prefix: str
     mask: int
     protocol: str
+    description: NotRequired[str]
     next_hops: list[RouteNextHop]
 
 
@@ -232,16 +233,21 @@ def _handle_path_text(text: str, state: _TableState) -> bool:
 
 
 def _start_route(match: re.Match[str], state: _TableState) -> None:
-    route = {
+    route: dict = {
         "prefix": match["prefix"],
         "mask": int(match["mask"]),
         "protocol": match["code"],
-        "next_hops": [],
     }
+    rest = (match["rest"] or "").strip()
+    if rest.startswith(","):
+        # e.g. IPv6 local-srv6: "fc00::/48, SRv6 Endpoint uN (shift)"
+        route["description"] = rest[1:].strip()
+        rest = ""
+    route["next_hops"] = []
     state.table["routes"][f"{match['prefix']}/{match['mask']}"] = route
     state.route = route
     state.connected_pending = False
-    _handle_path_text((match["rest"] or "").strip(), state)
+    _handle_path_text(rest, state)
 
 
 def _handle_header(line: str, state: _TableState) -> bool:

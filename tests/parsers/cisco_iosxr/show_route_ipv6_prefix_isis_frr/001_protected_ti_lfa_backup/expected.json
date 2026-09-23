@@ -1,0 +1,41 @@
+{
+    "routes": {
+        "fc00:a000:1000::2/128": {
+            "prefix": "fc00:a000:1000::2",
+            "mask": 128,
+            "paths": [
+                {
+                    "directly_connected": false,
+                    "next_hop": "fe80::b602:16ff:fe07:a0e2",
+                    "from_address": "fc00:a000:1000::2",
+                    "interface": "Bundle-Ether12",
+                    "attributes": [
+                        "Protected"
+                    ],
+                    "metric": 10
+                },
+                {
+                    "directly_connected": false,
+                    "next_hop": "fe80::eaf:31ff:fec5:60dc",
+                    "from_address": "fc00:a000:1000::2",
+                    "interface": "Bundle-Ether111",
+                    "attributes": [
+                        "Backup (TI-LFA)"
+                    ],
+                    "repair_nodes": [
+                        "fc00:a000:1000::12"
+                    ],
+                    "metric": 30
+                }
+            ],
+            "known_via": "isis SRv6_Region",
+            "distance": 115,
+            "metric": 10,
+            "candidate_default": false,
+            "labeled_sr": false,
+            "route_type": "level-2",
+            "installed": "Jun 11 10:43:11.718",
+            "installed_age": "1d18h"
+        }
+    }
+}
