@@ -47,8 +47,8 @@ class OspfFloodListProcessEntry(TypedDict):
     interfaces: dict[str, InterfaceEntry]
 
 
+# Top-level result keyed by OSPF process ID.
 ShowIpOspfFloodListResult = dict[str, OspfFloodListProcessEntry]
-"""Top-level result keyed by OSPF process ID."""
 
 
 @register(OS.CISCO_IOSXE, "show ip ospf flood-list")
