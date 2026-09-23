@@ -7,7 +7,9 @@ parameter table, timers and statistics).
 
 Only the formats in the committed fixtures are handled (an SRv6 EVPN VPWS and
 a BGP auto-discovered MPLS PW, both with interworking none). Lines in other
-formats are ignored.
+formats are ignored, except that an unrecognised xconnect or segment header,
+or a third segment, raises ``ValueError`` so segment lines are never attributed
+to the wrong xconnect.
 """
 
 import re
@@ -101,7 +103,7 @@ class DetailXconnect(TypedDict):
     remote_ce_id: NotRequired[int]
     discovery_state: NotRequired[str]
     segment_1: DetailSegment
-    segment_2: NotRequired[DetailSegment]
+    segment_2: DetailSegment
 
 
 class ShowL2vpnXconnectDetailResult(TypedDict):
@@ -189,6 +191,8 @@ _FIELD_RES = (
     _ago("create_time", "Create time"),
     _ago("last_time_status_changed", "Last time status changed"),
 )
+# Header-shaped lines; one that no header regex matches fails the parse.
+_HEADER_SHAPE_RE = re.compile(r"^(?:Group \S+, XC |(?:AC|PW|EVPN): )")
 _REWRITE_TAGS_RE = re.compile(r"^Rewrite Tags: \[(?P<tags>.*)\]$")
 _VLAN_RANGES_RE = re.compile(r"^VLAN ranges: (?P<ranges>.+)$")
 _VLAN_RANGE_RE = re.compile(r"\[(\d+),\s*(\d+)\]")
@@ -268,8 +272,8 @@ class _State:
 
     def start_segment(self, match: re.Match[str]) -> None:
         """Begin segment 1 or segment 2 of the current xconnect."""
-        if self.xconnect is None:
-            msg = f"Segment outside an xconnect: {match.group(0)!r}"
+        if self.xconnect is None or "segment_2" in self.xconnect:
+            msg = f"Segment not attributable to an xconnect: {match.group(0)!r}"
             raise ValueError(msg)
         segment: dict = {}
         _apply(segment, match)
@@ -333,6 +337,9 @@ class _State:
             if m := pattern.match(text):
                 self.start_segment(m)
                 return
+        if _HEADER_SHAPE_RE.match(text):
+            msg = f"Unrecognised xconnect or segment header: {text!r}"
+            raise ValueError(msg)
         if self.xconnect is not None:
             self.field_line(text)
 
@@ -354,8 +361,8 @@ class ShowL2vpnXconnectDetailParser(BaseParser[ShowL2vpnXconnectDetailResult]):
             Xconnects keyed by group and xconnect name.
 
         Raises:
-            ValueError: If no xconnect is found or an xconnect has no
-                segment.
+            ValueError: If no xconnect is found, an xconnect does not have
+                exactly two segments, or a header line is unrecognised.
         """
         state = _State()
         for line in output.splitlines():
@@ -365,7 +372,7 @@ class ShowL2vpnXconnectDetailParser(BaseParser[ShowL2vpnXconnectDetailResult]):
             raise ValueError(msg)
         for group, xconnects in state.groups.items():
             for name, xconnect in xconnects.items():
-                if "segment_1" not in xconnect:
-                    msg = f"Xconnect {group}/{name} has no segment"
+                if "segment_2" not in xconnect:
+                    msg = f"Xconnect {group}/{name} does not have two segments"
                     raise ValueError(msg)
         return cast(ShowL2vpnXconnectDetailResult, {"groups": state.groups})
