@@ -28,10 +28,19 @@ class LdpInterfaceDiscovery(TypedDict):
     source_address: str
 
 
+class LdpTargetedDiscovery(TypedDict):
+    """Targeted hello discovery source, keyed by target address."""
+
+    local_address: str
+    active: bool
+    passive: bool
+
+
 class LdpDiscoverySources(TypedDict):
     """LDP discovery sources for a neighbor."""
 
     interfaces: NotRequired[dict[str, LdpInterfaceDiscovery]]
+    targeted: NotRequired[dict[str, LdpTargetedDiscovery]]
 
 
 class LdpNeighborEntry(TypedDict):
@@ -78,19 +87,30 @@ _INTF_SOURCE_RE = re.compile(
     rf"^(?P<intf>\S+)[,;]\s+Src IP addr:\s+(?P<addr>{IPV4_ADDRESS})$"
 )
 
+# Targeted Hello 2.2.2.2 -> 192.168.20.2, active, passive;
+_TARGETED_RE = re.compile(
+    rf"^Targeted Hello\s+(?P<local>{IPV4_ADDRESS})\s+->\s+"
+    rf"(?P<target>{IPV4_ADDRESS})(?P<flags>[^;]*);?$"
+)
+
 _DISCOVERY_HEADER = "LDP discovery sources:"
 _ADDRESSES_HEADER = "Addresses bound to peer LDP Ident:"
+
+
+def _tcp_connection(match: re.Match[str]) -> LdpTcpConnection:
+    """Build the TCP connection dict from a ``_TCP_RE`` match."""
+    return LdpTcpConnection(
+        peer_address=match.group("peer_addr"),
+        peer_port=int(match.group("peer_port")),
+        local_address=match.group("local_addr"),
+        local_port=int(match.group("local_port")),
+    )
 
 
 def _apply_session_line(entry: dict, line: str) -> bool:
     """Apply a TCP / state / up-time line to the entry; return True if matched."""
     if match := _TCP_RE.match(line):
-        entry["tcp_connection"] = LdpTcpConnection(
-            peer_address=match.group("peer_addr"),
-            peer_port=int(match.group("peer_port")),
-            local_address=match.group("local_addr"),
-            local_port=int(match.group("local_port")),
-        )
+        entry["tcp_connection"] = _tcp_connection(match)
     elif match := _STATE_RE.match(line):
         entry["state"] = match.group("state")
         entry["messages_sent"] = int(match.group("sent"))
@@ -103,19 +123,37 @@ def _apply_session_line(entry: dict, line: str) -> bool:
     return True
 
 
-def _apply_section_line(entry: dict, section: str | None, line: str) -> None:
-    """Apply a line inside the discovery-sources or bound-addresses block."""
+def _apply_discovery_line(entry: dict, line: str) -> dict | None:
+    """Record an interface or targeted hello source; return the new source dict."""
+    if match := _INTF_SOURCE_RE.match(line):
+        intf = canonical_interface_name(match.group("intf"), os=OS.CISCO_IOSXE)
+        kind, key = "interfaces", intf
+        source: dict = {"source_address": match.group("addr")}
+    elif match := _TARGETED_RE.match(line):
+        flags = {f.strip() for f in match.group("flags").split(",")}
+        kind, key = "targeted", match.group("target")
+        source = {
+            "local_address": match.group("local"),
+            "active": "active" in flags,
+            "passive": "passive" in flags,
+        }
+    else:
+        return None
+    entry.setdefault("discovery_sources", {}).setdefault(kind, {})[key] = source
+    return source
+
+
+def _apply_section_line(entry: dict, section: str | None, line: str) -> dict | None:
+    """Apply a line inside the discovery-sources or bound-addresses block.
+
+    Returns the discovery source dict created by the line, if any, so the
+    detail parser can attach the hello timers that follow it.
+    """
     if section == _DISCOVERY_HEADER:
-        if match := _INTF_SOURCE_RE.match(line):
-            intf = canonical_interface_name(match.group("intf"), os=OS.CISCO_IOSXE)
-            sources = entry.setdefault("discovery_sources", {})
-            sources.setdefault("interfaces", {})[intf] = LdpInterfaceDiscovery(
-                source_address=match.group("addr")
-            )
-    elif section == _ADDRESSES_HEADER:
-        addresses = IPV4_ADDRESS_RE.findall(line)
-        if addresses:
-            entry.setdefault("bound_addresses", []).extend(addresses)
+        return _apply_discovery_line(entry, line)
+    if section == _ADDRESSES_HEADER and (addresses := IPV4_ADDRESS_RE.findall(line)):
+        entry.setdefault("bound_addresses", []).extend(addresses)
+    return None
 
 
 @register(OS.CISCO_IOSXE, "show mpls ldp neighbor")

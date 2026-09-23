@@ -8,19 +8,19 @@ from typing_extensions import NotRequired
 
 from muninn.os import OS
 from muninn.parser import BaseParser
-from muninn.patterns import IPV4_ADDRESS, IPV4_ADDRESS_RE
+from muninn.parsers.iosxe.show_mpls_ldp_neighbor import (
+    _ADDRESSES_HEADER,
+    _DISCOVERY_HEADER,
+    _PEER_RE,
+    _TCP_RE,
+    LdpInterfaceDiscovery,
+    LdpTargetedDiscovery,
+    LdpTcpConnection,
+    _apply_section_line,
+    _tcp_connection,
+)
 from muninn.registry import register
 from muninn.tags import ParserTag
-from muninn.utils import canonical_interface_name
-
-
-class LdpTcpConnection(TypedDict):
-    """TCP transport connection for an LDP session."""
-
-    peer_address: str
-    peer_port: int
-    local_address: str
-    local_port: int
 
 
 class LdpPassword(TypedDict):
@@ -31,30 +31,26 @@ class LdpPassword(TypedDict):
     status: str
 
 
-class LdpInterfaceDiscovery(TypedDict):
-    """Link hello discovery source on an interface."""
+class LdpInterfaceDetailDiscovery(LdpInterfaceDiscovery):
+    """Link hello discovery source on an interface, with hello timers."""
 
-    source_address: str
     holdtime_ms: NotRequired[int]
     hello_interval_ms: NotRequired[int]
 
 
-class LdpTargetedDiscovery(TypedDict):
-    """Targeted hello discovery source, keyed by target address."""
+class LdpTargetedDetailDiscovery(LdpTargetedDiscovery):
+    """Targeted hello discovery source, with hello timers."""
 
-    local_address: str
-    active: bool
-    passive: bool
     holdtime_ms: NotRequired[int]
     holdtime_infinite: NotRequired[bool]
     hello_interval_ms: NotRequired[int]
 
 
-class LdpDiscoverySources(TypedDict):
-    """LDP discovery sources for a neighbor."""
+class LdpDetailDiscoverySources(TypedDict):
+    """LDP discovery sources for a neighbor, with hello timers."""
 
-    interfaces: NotRequired[dict[str, LdpInterfaceDiscovery]]
-    targeted: NotRequired[dict[str, LdpTargetedDiscovery]]
+    interfaces: NotRequired[dict[str, LdpInterfaceDetailDiscovery]]
+    targeted: NotRequired[dict[str, LdpTargetedDetailDiscovery]]
 
 
 class LdpSessionProtection(TypedDict):
@@ -79,7 +75,7 @@ class LdpNeighborDetailEntry(TypedDict):
     up_time: NotRequired[str]
     uid: NotRequired[int]
     peer_id: NotRequired[int]
-    discovery_sources: NotRequired[LdpDiscoverySources]
+    discovery_sources: NotRequired[LdpDetailDiscoverySources]
     bound_addresses: NotRequired[list[str]]
     peer_holdtime_ms: NotRequired[int]
     keepalive_interval_ms: NotRequired[int]
@@ -93,18 +89,6 @@ class LdpNeighborDetailEntry(TypedDict):
 
 ShowMplsLdpNeighborDetailResult = dict[str, LdpNeighborDetailEntry]
 
-
-# Peer LDP Ident: 10.169.197.252:0; Local LDP Ident 10.169.197.254:0
-_PEER_RE = re.compile(
-    r"^Peer LDP Ident:\s+(?P<peer>\S+:\d+);\s+"
-    r"Local LDP Ident:?\s+(?P<local>\S+:\d+)$"
-)
-
-# TCP connection: 10.169.197.252.646 - 10.169.197.254.44315
-_TCP_RE = re.compile(
-    rf"^TCP connection:\s+(?P<peer_addr>{IPV4_ADDRESS})\.(?P<peer_port>\d+)"
-    rf"\s+-\s+(?P<local_addr>{IPV4_ADDRESS})\.(?P<local_port>\d+)$"
-)
 
 # Password: not required, none, in use
 _PASSWORD_RE = re.compile(
@@ -149,17 +133,6 @@ _DURATION_RE = re.compile(r"^duration:\s+(?P<duration>\d+) seconds$")
 # NSR: Not Ready
 _NSR_RE = re.compile(r"^NSR:\s+(?P<nsr>.+)$")
 
-# GigabitEthernet0/0/0; Src IP addr: 10.169.197.93
-_INTF_SOURCE_RE = re.compile(
-    rf"^(?P<intf>\S+)[,;]\s+Src IP addr:\s+(?P<addr>{IPV4_ADDRESS})$"
-)
-
-# Targeted Hello 2.2.2.2 -> 192.168.20.2, active, passive;
-_TARGETED_RE = re.compile(
-    rf"^Targeted Hello\s+(?P<local>{IPV4_ADDRESS})\s+->\s+"
-    rf"(?P<target>{IPV4_ADDRESS})(?P<flags>[^;]*);?$"
-)
-
 # holdtime: 15000 ms, hello interval: 5000 ms
 # holdtime: infinite, hello interval: 10000 ms
 _HELLO_TIMERS_RE = re.compile(
@@ -170,8 +143,6 @@ _HELLO_TIMERS_RE = re.compile(
 # [ICCP (type 0x0405) MajVer 1 MinVer 0]
 _CAPABILITY_RE = re.compile(r"^\[(?P<capability>[^\]]+)\]$")
 
-_DISCOVERY = "LDP discovery sources:"
-_ADDRESSES = "Addresses bound to peer LDP Ident:"
 _CAPS_SENT = "Capabilities Sent:"
 _CAPS_RECEIVED = "Capabilities Received:"
 _SECTION_FIELDS = {
@@ -182,12 +153,7 @@ _NO_CAPABILITIES = "None"
 
 
 def _on_tcp(entry: dict, match: re.Match[str]) -> None:
-    entry["tcp_connection"] = LdpTcpConnection(
-        peer_address=match.group("peer_addr"),
-        peer_port=int(match.group("peer_port")),
-        local_address=match.group("local_addr"),
-        local_port=int(match.group("local_port")),
-    )
+    entry["tcp_connection"] = _tcp_connection(match)
 
 
 def _on_password(entry: dict, match: re.Match[str]) -> None:
@@ -265,7 +231,7 @@ class _Block:
 
     def feed(self, line: str) -> None:
         """Consume one stripped line belonging to this peer block."""
-        if line in (_DISCOVERY, _ADDRESSES, _CAPS_SENT, _CAPS_RECEIVED):
+        if line in (_DISCOVERY_HEADER, _ADDRESSES_HEADER, _CAPS_SENT, _CAPS_RECEIVED):
             self.section = line
             return
         for pattern, handler in _SESSION_HANDLERS:
@@ -277,12 +243,12 @@ class _Block:
         self._feed_section(line)
 
     def _feed_section(self, line: str) -> None:
-        if self.section == _DISCOVERY:
-            self._feed_discovery(line)
-        elif self.section == _ADDRESSES:
-            addresses = IPV4_ADDRESS_RE.findall(line)
-            if addresses:
-                self.entry.setdefault("bound_addresses", []).extend(addresses)
+        if self.section in (_DISCOVERY_HEADER, _ADDRESSES_HEADER):
+            source = _apply_section_line(self.entry, self.section, line)
+            if source is not None:
+                self.last_timed = source
+            elif (match := _HELLO_TIMERS_RE.match(line)) and self.last_timed:
+                self._apply_hello_timers(match)
         elif self.section in _SECTION_FIELDS:
             match = _CAPABILITY_RE.match(line)
             if match and match.group("capability") != _NO_CAPABILITIES:
@@ -291,31 +257,17 @@ class _Block:
         elif (match := _DURATION_RE.match(line)) and self.last_timed is not None:
             self.last_timed["duration_seconds"] = int(match.group("duration"))
 
-    def _feed_discovery(self, line: str) -> None:
-        sources = self.entry.get("discovery_sources", {})
-        if match := _INTF_SOURCE_RE.match(line):
-            intf = canonical_interface_name(match.group("intf"), os=OS.CISCO_IOSXE)
-            self.last_timed = {"source_address": match.group("addr")}
-            sources.setdefault("interfaces", {})[intf] = self.last_timed
-            self.entry["discovery_sources"] = sources
-        elif match := _TARGETED_RE.match(line):
-            flags = {f.strip() for f in match.group("flags").split(",")}
-            self.last_timed = {
-                "local_address": match.group("local"),
-                "active": "active" in flags,
-                "passive": "passive" in flags,
-            }
-            sources.setdefault("targeted", {})[match.group("target")] = self.last_timed
-            self.entry["discovery_sources"] = sources
-        elif (match := _HELLO_TIMERS_RE.match(line)) and self.last_timed is not None:
-            if match.group("infinite"):
-                self.last_timed["holdtime_infinite"] = True
-            else:
-                self.last_timed["holdtime_ms"] = int(match.group("holdtime"))
-            self.last_timed["hello_interval_ms"] = int(match.group("interval"))
+    def _apply_hello_timers(self, match: re.Match[str]) -> None:
+        timed = cast(dict, self.last_timed)
+        if match.group("infinite"):
+            timed["holdtime_infinite"] = True
+        else:
+            timed["holdtime_ms"] = int(match.group("holdtime"))
+        timed["hello_interval_ms"] = int(match.group("interval"))
 
 
 @register(OS.CISCO_IOSXE, "show mpls ldp neighbor detail")
+@register(OS.CISCO_IOSXE, r"show mpls ldp neighbor vrf (?P<vrf>\S+) detail")
 class ShowMplsLdpNeighborDetailParser(BaseParser["ShowMplsLdpNeighborDetailResult"]):
     """Parser for 'show mpls ldp neighbor detail' on IOS-XE.
 
