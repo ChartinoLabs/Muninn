@@ -168,6 +168,13 @@
                 },
                 "required": true
               },
+              "output_features": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              },
               "ipv4_wccp_redirect_outbound": {
                 "type": "bool",
                 "required": false
@@ -735,6 +742,227 @@
             "ipv4_wccp_redirect_inbound": false,
             "ipv4_wccp_redirect_exclude": false,
             "ip_clear_dont_fragment": false
+          }
+        }
+      }
+    },
+    {
+      "name": "Four SVIs with a multi-line \"Helper addresses are\" list and \"Multicast reserved groups joined\" lists that wrap onto one or more continuation lines (Genie ShowIpInterface golden_output_reserved_multicast_forms)",
+      "input": "SW-10.1.1.1#show ip interface\nVlan301 is up, line protocol is up\n  Internet address is 10.70.9.252/24\n  Broadcast address is 255.255.255.255\n  Address determined by non-volatile memory\n  MTU is 1500 bytes\n  Helper addresses are 10.70.7.32\n                       10.68.56.119\n  Directed broadcast forwarding is disabled\n  Outgoing Common access list is not set\n  Outgoing access list is TO_QIMS\n  Inbound Common access list is not set\n  Inbound  access list is FROM_QIMS\n  Proxy ARP is enabled\n  Local Proxy ARP is disabled\n  Security level is default\n  Split horizon is enabled\n  ICMP redirects are always sent\n  ICMP unreachables are always sent\n  ICMP mask replies are never sent\n  IP fast switching is enabled\n  IP Flow switching is disabled\n  IP CEF switching is enabled\n  IP CEF switching turbo vector\n  IP Null turbo vector\n  Associated unicast routing topologies:\n        Topology \"base\", operation state is UP\n  IP multicast fast switching is enabled\n  IP multicast distributed fast switching is disabled\n  IP route-cache flags are Fast, CEF\n  Router Discovery is disabled\n  IP output packet accounting is disabled\n  IP access violation accounting is disabled\n  TCP/IP header compression is disabled\n  RTP/IP header compression is disabled\n  Probe proxy name replies are disabled\n  Policy routing is disabled\n  Network address translation is disabled\n  BGP Policy Mapping is disabled\n  Input features: Access List, MCI Check\n  Output features: Access List\n  IPv4 WCCP Redirect outbound is disabled\n  IPv4 WCCP Redirect inbound is disabled\n  IPv4 WCCP Redirect exclude is disabled\nVlan302 is up, line protocol is up\n  Internet address is 10.70.9.252/24\n  Broadcast address is 255.255.255.255\n  Address determined by non-volatile memory\n  MTU is 1500 bytes\n  Helper addresses are 10.70.7.32\n                       10.68.56.119\n  Directed broadcast forwarding is disabled\n  Multicast reserved groups joined: 224.0.0.2 224.0.0.5 224.0.0.6\n  Outgoing Common access list is not set\n  Outgoing access list is TO_QIMS\n  Inbound Common access list is not set\n  Inbound  access list is FROM_QIMS\n  Proxy ARP is enabled\n  Local Proxy ARP is disabled\n  Security level is default\n  Split horizon is enabled\n  ICMP redirects are always sent\n  ICMP unreachables are always sent\n  ICMP mask replies are never sent\n  IP fast switching is enabled\n  IP Flow switching is disabled\n  IP CEF switching is enabled\n  IP CEF switching turbo vector\n  IP Null turbo vector\n  Associated unicast routing topologies:\n        Topology \"base\", operation state is UP\n  IP multicast fast switching is enabled\n  IP multicast distributed fast switching is disabled\n  IP route-cache flags are Fast, CEF\n  Router Discovery is disabled\n  IP output packet accounting is disabled\n  IP access violation accounting is disabled\n  TCP/IP header compression is disabled\n  RTP/IP header compression is disabled\n  Probe proxy name replies are disabled\n  Policy routing is disabled\n  Network address translation is disabled\n  BGP Policy Mapping is disabled\n  Input features: Access List, MCI Check\n  Output features: Access List\n  IPv4 WCCP Redirect outbound is disabled\n  IPv4 WCCP Redirect inbound is disabled\n  IPv4 WCCP Redirect exclude is disabled\nVlan303 is up, line protocol is up\n  Internet address is 10.70.9.252/24\n  Broadcast address is 255.255.255.255\n  Address determined by non-volatile memory\n  MTU is 1500 bytes\n  Helper addresses are 10.70.7.32\n                       10.68.56.119\n  Directed broadcast forwarding is disabled\n  Multicast reserved groups joined: 224.0.0.2 224.0.0.1 224.0.0.22 224.0.0.13\n      224.0.0.5\n  Outgoing Common access list is not set\n  Outgoing access list is TO_QIMS\n  Inbound Common access list is not set\n  Inbound  access list is FROM_QIMS\n  Proxy ARP is enabled\n  Local Proxy ARP is disabled\n  Security level is default\n  Split horizon is enabled\n  ICMP redirects are always sent\n  ICMP unreachables are always sent\n  ICMP mask replies are never sent\n  IP fast switching is enabled\n  IP Flow switching is disabled\n  IP CEF switching is enabled\n  IP CEF switching turbo vector\n  IP Null turbo vector\n  Associated unicast routing topologies:\n        Topology \"base\", operation state is UP\n  IP multicast fast switching is enabled\n  IP multicast distributed fast switching is disabled\n  IP route-cache flags are Fast, CEF\n  Router Discovery is disabled\n  IP output packet accounting is disabled\n  IP access violation accounting is disabled\n  TCP/IP header compression is disabled\n  RTP/IP header compression is disabled\n  Probe proxy name replies are disabled\n  Policy routing is disabled\n  Network address translation is disabled\n  BGP Policy Mapping is disabled\n  Input features: Access List, MCI Check\n  Output features: Access List\n  IPv4 WCCP Redirect outbound is disabled\n  IPv4 WCCP Redirect inbound is disabled\n  IPv4 WCCP Redirect exclude is disabled\nVlan304 is up, line protocol is up\n  Internet address is 10.70.9.252/24\n  Broadcast address is 255.255.255.255\n  Address determined by non-volatile memory\n  MTU is 1500 bytes\n  Helper addresses are 10.70.7.32\n                       10.68.56.119\n  Directed broadcast forwarding is disabled\n  Multicast reserved groups joined: 224.0.0.2 224.0.0.1 224.0.0.22 224.0.0.13\n      224.0.0.5 224.0.0.6 224.0.0.7 224.0.0.8\n      224.0.0.9 224.0.0.10\n  Outgoing Common access list is not set\n  Outgoing access list is TO_QIMS\n  Inbound Common access list is not set\n  Inbound  access list is FROM_QIMS\n  Proxy ARP is enabled\n  Local Proxy ARP is disabled\n  Security level is default\n  Split horizon is enabled\n  ICMP redirects are always sent\n  ICMP unreachables are always sent\n  ICMP mask replies are never sent\n  IP fast switching is enabled\n  IP Flow switching is disabled\n  IP CEF switching is enabled\n  IP CEF switching turbo vector\n  IP Null turbo vector\n  Associated unicast routing topologies:\n        Topology \"base\", operation state is UP\n  IP multicast fast switching is enabled\n  IP multicast distributed fast switching is disabled\n  IP route-cache flags are Fast, CEF\n  Router Discovery is disabled\n  IP output packet accounting is disabled\n  IP access violation accounting is disabled\n  TCP/IP header compression is disabled\n  RTP/IP header compression is disabled\n  Probe proxy name replies are disabled\n  Policy routing is disabled\n  Network address translation is disabled\n  BGP Policy Mapping is disabled\n  Input features: Access List, MCI Check\n  Output features: Access List\n  IPv4 WCCP Redirect outbound is disabled\n  IPv4 WCCP Redirect inbound is disabled\n  IPv4 WCCP Redirect exclude is disabled\n",
+      "expected": {
+        "interfaces": {
+          "Vlan301": {
+            "status": "up",
+            "line_protocol": "up",
+            "helper_addresses": [
+              "10.70.7.32",
+              "10.68.56.119"
+            ],
+            "multicast_groups": [],
+            "input_features": [
+              "Access List",
+              "MCI Check"
+            ],
+            "ip_address": "10.70.9.252",
+            "prefix_length": 24,
+            "broadcast_address": "255.255.255.255",
+            "address_determined_by": "non-volatile memory",
+            "mtu": 1500,
+            "directed_broadcast_forwarding": false,
+            "outgoing_access_list": "TO_QIMS",
+            "inbound_access_list": "FROM_QIMS",
+            "proxy_arp": true,
+            "local_proxy_arp": false,
+            "security_level": "default",
+            "split_horizon": true,
+            "icmp_redirects": "always sent",
+            "icmp_unreachables": "always sent",
+            "icmp_mask_replies": "never sent",
+            "ip_fast_switching": true,
+            "ip_flow_switching": false,
+            "ip_cef_switching": true,
+            "ip_multicast_fast_switching": true,
+            "ip_multicast_distributed_fast_switching": false,
+            "router_discovery": false,
+            "ip_output_packet_accounting": false,
+            "ip_access_violation_accounting": false,
+            "tcp_ip_header_compression": false,
+            "rtp_ip_header_compression": false,
+            "probe_proxy_name_replies": false,
+            "policy_routing": false,
+            "network_address_translation": false,
+            "bgp_policy_mapping": false,
+            "output_features": [
+              "Access List"
+            ],
+            "ipv4_wccp_redirect_outbound": false,
+            "ipv4_wccp_redirect_inbound": false,
+            "ipv4_wccp_redirect_exclude": false
+          },
+          "Vlan302": {
+            "status": "up",
+            "line_protocol": "up",
+            "helper_addresses": [
+              "10.70.7.32",
+              "10.68.56.119"
+            ],
+            "multicast_groups": [
+              "224.0.0.2",
+              "224.0.0.5",
+              "224.0.0.6"
+            ],
+            "input_features": [
+              "Access List",
+              "MCI Check"
+            ],
+            "ip_address": "10.70.9.252",
+            "prefix_length": 24,
+            "broadcast_address": "255.255.255.255",
+            "address_determined_by": "non-volatile memory",
+            "mtu": 1500,
+            "directed_broadcast_forwarding": false,
+            "outgoing_access_list": "TO_QIMS",
+            "inbound_access_list": "FROM_QIMS",
+            "proxy_arp": true,
+            "local_proxy_arp": false,
+            "security_level": "default",
+            "split_horizon": true,
+            "icmp_redirects": "always sent",
+            "icmp_unreachables": "always sent",
+            "icmp_mask_replies": "never sent",
+            "ip_fast_switching": true,
+            "ip_flow_switching": false,
+            "ip_cef_switching": true,
+            "ip_multicast_fast_switching": true,
+            "ip_multicast_distributed_fast_switching": false,
+            "router_discovery": false,
+            "ip_output_packet_accounting": false,
+            "ip_access_violation_accounting": false,
+            "tcp_ip_header_compression": false,
+            "rtp_ip_header_compression": false,
+            "probe_proxy_name_replies": false,
+            "policy_routing": false,
+            "network_address_translation": false,
+            "bgp_policy_mapping": false,
+            "output_features": [
+              "Access List"
+            ],
+            "ipv4_wccp_redirect_outbound": false,
+            "ipv4_wccp_redirect_inbound": false,
+            "ipv4_wccp_redirect_exclude": false
+          },
+          "Vlan303": {
+            "status": "up",
+            "line_protocol": "up",
+            "helper_addresses": [
+              "10.70.7.32",
+              "10.68.56.119"
+            ],
+            "multicast_groups": [
+              "224.0.0.2",
+              "224.0.0.1",
+              "224.0.0.22",
+              "224.0.0.13",
+              "224.0.0.5"
+            ],
+            "input_features": [
+              "Access List",
+              "MCI Check"
+            ],
+            "ip_address": "10.70.9.252",
+            "prefix_length": 24,
+            "broadcast_address": "255.255.255.255",
+            "address_determined_by": "non-volatile memory",
+            "mtu": 1500,
+            "directed_broadcast_forwarding": false,
+            "outgoing_access_list": "TO_QIMS",
+            "inbound_access_list": "FROM_QIMS",
+            "proxy_arp": true,
+            "local_proxy_arp": false,
+            "security_level": "default",
+            "split_horizon": true,
+            "icmp_redirects": "always sent",
+            "icmp_unreachables": "always sent",
+            "icmp_mask_replies": "never sent",
+            "ip_fast_switching": true,
+            "ip_flow_switching": false,
+            "ip_cef_switching": true,
+            "ip_multicast_fast_switching": true,
+            "ip_multicast_distributed_fast_switching": false,
+            "router_discovery": false,
+            "ip_output_packet_accounting": false,
+            "ip_access_violation_accounting": false,
+            "tcp_ip_header_compression": false,
+            "rtp_ip_header_compression": false,
+            "probe_proxy_name_replies": false,
+            "policy_routing": false,
+            "network_address_translation": false,
+            "bgp_policy_mapping": false,
+            "output_features": [
+              "Access List"
+            ],
+            "ipv4_wccp_redirect_outbound": false,
+            "ipv4_wccp_redirect_inbound": false,
+            "ipv4_wccp_redirect_exclude": false
+          },
+          "Vlan304": {
+            "status": "up",
+            "line_protocol": "up",
+            "helper_addresses": [
+              "10.70.7.32",
+              "10.68.56.119"
+            ],
+            "multicast_groups": [
+              "224.0.0.2",
+              "224.0.0.1",
+              "224.0.0.22",
+              "224.0.0.13",
+              "224.0.0.5",
+              "224.0.0.6",
+              "224.0.0.7",
+              "224.0.0.8",
+              "224.0.0.9",
+              "224.0.0.10"
+            ],
+            "input_features": [
+              "Access List",
+              "MCI Check"
+            ],
+            "ip_address": "10.70.9.252",
+            "prefix_length": 24,
+            "broadcast_address": "255.255.255.255",
+            "address_determined_by": "non-volatile memory",
+            "mtu": 1500,
+            "directed_broadcast_forwarding": false,
+            "outgoing_access_list": "TO_QIMS",
+            "inbound_access_list": "FROM_QIMS",
+            "proxy_arp": true,
+            "local_proxy_arp": false,
+            "security_level": "default",
+            "split_horizon": true,
+            "icmp_redirects": "always sent",
+            "icmp_unreachables": "always sent",
+            "icmp_mask_replies": "never sent",
+            "ip_fast_switching": true,
+            "ip_flow_switching": false,
+            "ip_cef_switching": true,
+            "ip_multicast_fast_switching": true,
+            "ip_multicast_distributed_fast_switching": false,
+            "router_discovery": false,
+            "ip_output_packet_accounting": false,
+            "ip_access_violation_accounting": false,
+            "tcp_ip_header_compression": false,
+            "rtp_ip_header_compression": false,
+            "probe_proxy_name_replies": false,
+            "policy_routing": false,
+            "network_address_translation": false,
+            "bgp_policy_mapping": false,
+            "output_features": [
+              "Access List"
+            ],
+            "ipv4_wccp_redirect_outbound": false,
+            "ipv4_wccp_redirect_inbound": false,
+            "ipv4_wccp_redirect_exclude": false
           }
         }
       }

@@ -1,0 +1,506 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show interfaces <interface>",
+  "schema": {
+    "name": "ShowInterfacesResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "line_protocol": {
+                "type": "str",
+                "required": true
+              },
+              "hardware": {
+                "type": "str",
+                "required": true
+              },
+              "mtu": {
+                "type": "int",
+                "required": true
+              },
+              "bandwidth_kbps": {
+                "type": "int",
+                "required": true
+              },
+              "delay_usec": {
+                "type": "int",
+                "required": true
+              },
+              "encapsulation": {
+                "type": "str",
+                "required": true
+              },
+              "line_protocol_reason": {
+                "type": "str",
+                "required": false
+              },
+              "description": {
+                "type": "str",
+                "required": false
+              },
+              "address": {
+                "type": "str",
+                "required": false
+              },
+              "bia": {
+                "type": "str",
+                "required": false
+              },
+              "ip_address": {
+                "type": "str",
+                "required": false
+              },
+              "ip_prefix_length": {
+                "type": "int",
+                "required": false
+              },
+              "unnumbered_interface": {
+                "type": "str",
+                "required": false
+              },
+              "reliability": {
+                "type": "str",
+                "required": false
+              },
+              "txload": {
+                "type": "str",
+                "required": false
+              },
+              "rxload": {
+                "type": "str",
+                "required": false
+              },
+              "loopback_set": {
+                "type": "bool",
+                "required": false
+              },
+              "keepalive": {
+                "type": "int",
+                "required": false
+              },
+              "duplex": {
+                "type": "str",
+                "required": false
+              },
+              "speed": {
+                "type": "str",
+                "required": false
+              },
+              "link_type": {
+                "type": "str",
+                "required": false
+              },
+              "media_type": {
+                "type": "str",
+                "required": false
+              },
+              "output_flow_control": {
+                "type": "str",
+                "required": false
+              },
+              "input_flow_control": {
+                "type": "str",
+                "required": false
+              },
+              "fec": {
+                "type": "str",
+                "required": false
+              },
+              "arp_type": {
+                "type": "str",
+                "required": false
+              },
+              "arp_timeout": {
+                "type": "str",
+                "required": false
+              },
+              "vlan_id": {
+                "type": "int",
+                "required": false
+              },
+              "outer_vlan_id": {
+                "type": "int",
+                "required": false
+              },
+              "inner_vlan_id": {
+                "type": "int",
+                "required": false
+              },
+              "autostate_enabled": {
+                "type": "bool",
+                "required": false
+              },
+              "last_input": {
+                "type": "str",
+                "required": false
+              },
+              "last_output": {
+                "type": "str",
+                "required": false
+              },
+              "output_hang": {
+                "type": "str",
+                "required": false
+              },
+              "last_clearing": {
+                "type": "str",
+                "required": false
+              },
+              "input_queue": {
+                "type": {
+                  "name": "InputQueueEntry",
+                  "fields": {
+                    "size": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "max": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "drops": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "flushes": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "output_queue": {
+                "type": {
+                  "name": "OutputQueueEntry",
+                  "fields": {
+                    "size": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "max": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "total_output_drops": {
+                "type": "int",
+                "required": false
+              },
+              "queueing_strategy": {
+                "type": "str",
+                "required": false
+              },
+              "rate_interval_seconds": {
+                "type": "int",
+                "required": false
+              },
+              "input_rate_bps": {
+                "type": "int",
+                "required": false
+              },
+              "input_rate_pps": {
+                "type": "int",
+                "required": false
+              },
+              "output_rate_bps": {
+                "type": "int",
+                "required": false
+              },
+              "output_rate_pps": {
+                "type": "int",
+                "required": false
+              },
+              "counters": {
+                "type": {
+                  "name": "CountersEntry",
+                  "fields": {
+                    "packets_input": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "bytes_input": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "no_buffer": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "broadcasts_received": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "ip_multicasts_received": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "runts": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "giants": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "throttles": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "input_errors": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "crc": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "frame": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "overrun": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "ignored": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "abort": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "watchdog": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "multicast": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "pause_input": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "dribble_condition": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "packets_output": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "bytes_output": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "underruns": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "output_broadcasts": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "output_ip_multicasts": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "output_errors": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "collisions": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "interface_resets": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "unknown_protocol_drops": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "babbles": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "late_collision": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "deferred": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "lost_carrier": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "no_carrier": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "pause_output": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "output_buffer_failures": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "output_buffers_swapped_out": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "carrier_transitions": {
+                      "type": "int",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "port_channel": {
+                "type": {
+                  "name": "PortChannelInfo",
+                  "fields": {
+                    "active_members": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "members": {
+                      "type": {
+                        "type": "dict",
+                        "key": "str",
+                        "value": {
+                          "name": "PortChannelMemberEntry",
+                          "fields": {
+                            "duplex": {
+                              "type": "str",
+                              "required": false
+                            },
+                            "speed": {
+                              "type": "str",
+                              "required": false
+                            }
+                          }
+                        }
+                      },
+                      "required": true
+                    },
+                    "pf_jumbo_members": {
+                      "type": "int",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "tunnel": {
+                "type": {
+                  "name": "TunnelInfo",
+                  "fields": {
+                    "source": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "source_interface": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "destination": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "protocol": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "ttl": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "transport_mtu": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "transmit_bandwidth_kbps": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "receive_bandwidth_kbps": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "linestate_evaluation": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "fast_tunneling": {
+                      "type": "bool",
+                      "required": false
+                    },
+                    "key_disabled": {
+                      "type": "bool",
+                      "required": false
+                    },
+                    "sequencing_disabled": {
+                      "type": "bool",
+                      "required": false
+                    },
+                    "checksumming_disabled": {
+                      "type": "bool",
+                      "required": false
+                    },
+                    "ipsec_profile": {
+                      "type": "str",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "serial_rts": {
+                "type": "str",
+                "required": false
+              },
+              "serial_cts": {
+                "type": "str",
+                "required": false
+              },
+              "serial_dtr": {
+                "type": "str",
+                "required": false
+              },
+              "serial_dcd": {
+                "type": "str",
+                "required": false
+              },
+              "serial_dsr": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}
