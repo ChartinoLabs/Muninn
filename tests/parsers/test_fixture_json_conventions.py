@@ -141,6 +141,14 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         "iosxe/show_ipv6_route/002_vrf_with_tags/expected.json",
         "iosxe/show_ipv6_route/003_vrf1_isis_rip/expected.json",
         "iosxe/show_ipv6_route/004_static_nexthop_only/expected.json",
+        # paths is a list-of-dicts; a local label can print identical path rows
+        # (same outgoing label/interface/next hop), so no natural unique key.
+        "iosxe/show_mpls_forwarding-table/001_te_tunnels_sr_merged/expected.json",
+        "iosxe/show_mpls_forwarding-table/002_wide_prefix_column/expected.json",
+        "iosxe/show_mpls_forwarding-table/003_flex_algo_wrapped_drop/expected.json",
+        "iosxe/show_mpls_forwarding-table_prefix/001_no_local_label/expected.json",
+        "iosxe/show_mpls_forwarding-table_prefix_algo/001_flex_algo/expected.json",
+        "iosxe/show_mpls_forwarding-table_vrf/001_mvpn_wrapped/expected.json",
         "iosxe/show_logging/001_basic/expected.json",
         "iosxe/show_logging/001_live_device/expected.json",
         "iosxe/show_logging/002_console_enabled_persistent_enabled/expected.json",
