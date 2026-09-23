@@ -1,4 +1,4 @@
-"""Parser for 'show lldp neighbors detail' command on IOS."""
+"""Parser for 'show lldp neighbors detail' command on IOS/IOS-XE."""
 
 import re
 from typing import ClassVar, Literal, TypedDict, cast
@@ -62,6 +62,11 @@ class LldpNeighborDetailEntry(TypedDict):
     system_capabilities: NotRequired[str]
     enabled_capabilities: NotRequired[str]
     management_addresses: NotRequired[list[str]]
+    auto_negotiation_supported: NotRequired[bool]
+    auto_negotiation_enabled: NotRequired[bool]
+    physical_media_capabilities: NotRequired[list[str]]
+    media_attachment_unit_type: NotRequired[int]
+    vlan_id: NotRequired[int]
 
 
 class ShowLldpNeighborsDetailResult(TypedDict):
@@ -119,23 +124,46 @@ def _build_entry(
     if mgmt:
         entry["management_addresses"] = cast(list[str], mgmt)
 
+    _add_link_fields(entry, fields)
     return entry
 
 
+def _add_link_fields(
+    entry: LldpNeighborDetailEntry,
+    fields: dict[str, str | int | list[str] | None],
+) -> None:
+    """Copy the 802.3 link-layer fields (autoneg, media, MAU, VLAN) into entry."""
+    autoneg = fields.get("auto_negotiation")
+    if isinstance(autoneg, str):
+        supported = autoneg == "supported, enabled"
+        entry["auto_negotiation_supported"] = supported
+        if supported:
+            entry["auto_negotiation_enabled"] = True
+    media = fields.get("physical_media_capabilities")
+    if media:
+        entry["physical_media_capabilities"] = cast(list[str], media)
+    for key in ("media_attachment_unit_type", "vlan_id"):
+        val = fields.get(key)
+        if isinstance(val, int):
+            entry[key] = val
+
+
 @register(OS.CISCO_IOS, "show lldp neighbors detail")
+@register(OS.CISCO_IOSXE, "show lldp neighbors detail")
 class ShowLldpNeighborsDetailParser(
     BaseParser[ShowLldpNeighborsDetailResult],
 ):
-    """Parser for 'show lldp neighbors detail' command on IOS.
+    """Parser for 'show lldp neighbors detail' command on IOS/IOS-XE.
 
     Parses detailed LLDP neighbor information including system name,
-    description, capabilities, and management addresses.
+    description, capabilities, management addresses and the 802.3 link
+    fields (auto-negotiation, physical media, MAU type, VLAN ID). The
+    LLDP-MED block is not parsed.
 
-    Output ``neighbors`` is a mapping from a natural identifier to each entry:
-    canonical local interface when ``Local Intf`` is present; otherwise the
-    remote port id (canonicalized when it looks like an interface name). If the
-    base key would collide, ``::<chassis_id>`` is appended (then ``#N`` if
-    needed).
+    Output ``neighbors`` is nested as ``outer key -> chassis id -> port id``,
+    where the outer key is the canonical local interface when ``Local Intf``
+    is present, otherwise the remote port id (canonicalized when it looks
+    like an interface name).
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.LLDP})
@@ -157,6 +185,13 @@ class ShowLldpNeighborsDetailParser(
     _ENA_CAP = re.compile(r"^Enabled Capabilities:\s+(?P<v>.+)$")
     _MGMT_HDR = re.compile(r"^Management Addresses:\s*$")
     _MGMT_IP = re.compile(r"^\s+(?:IP|IPV6):\s+(?P<v>\S+)")
+    _AUTONEG = re.compile(
+        # Only the two forms seen in real output ("supported, disabled" unconfirmed).
+        r"^Auto Negotiation - (?P<v>not supported|supported, enabled)$",
+    )
+    _MEDIA_HDR = re.compile(r"^Physical media capabilities:\s*$")
+    _MAU = re.compile(r"^Media Attachment Unit type:\s+(?P<v>\d+)$")
+    _VLAN = re.compile(r"^Vlan ID:\s+(?P<v>\d+)$")
     _TOTAL = re.compile(
         r"^Total entries displayed:\s*(?P<total>\d+)",
         re.I,
@@ -220,6 +255,40 @@ class ShowLldpNeighborsDetailParser(
         return addrs, idx
 
     @classmethod
+    def _collect_indented(
+        cls,
+        lines: list[str],
+        start: int,
+    ) -> tuple[list[str], int]:
+        """Collect stripped indented lines following a header."""
+        items: list[str] = []
+        idx = start
+        while idx < len(lines) and lines[idx][:1] in (" ", "\t"):
+            if stripped := lines[idx].strip():
+                items.append(stripped)
+            idx += 1
+        return items, idx
+
+    @classmethod
+    def _parse_link_fields(
+        cls,
+        stripped: str,
+        fields: dict[str, str | int | list[str] | None],
+    ) -> bool:
+        """Match autoneg / MAU type / VLAN ID lines. Returns True if consumed."""
+        if m := cls._AUTONEG.match(stripped):
+            fields["auto_negotiation"] = m.group("v")
+            return True
+        for pattern, key in (
+            (cls._MAU, "media_attachment_unit_type"),
+            (cls._VLAN, "vlan_id"),
+        ):
+            if m := pattern.match(stripped):
+                fields[key] = int(m.group("v"))
+                return True
+        return False
+
+    @classmethod
     def _parse_simple_fields(
         cls,
         stripped: str,
@@ -270,8 +339,15 @@ class ShowLldpNeighborsDetailParser(
         if cls._is_skippable(stripped):
             return idx + 1
 
-        if cls._parse_simple_fields(stripped, fields):
+        if cls._parse_simple_fields(stripped, fields) or cls._parse_link_fields(
+            stripped, fields
+        ):
             return idx + 1
+
+        if cls._MEDIA_HDR.match(stripped):
+            media, next_idx = cls._collect_indented(lines, idx + 1)
+            fields["physical_media_capabilities"] = media
+            return next_idx
 
         m = cls._TIME_REM.match(stripped)
         if m:
