@@ -1,7 +1,7 @@
 """Parser for 'show bfd sessions' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, TypedDict
+from typing import ClassVar, TypedDict, cast
 
 from typing_extensions import NotRequired
 
@@ -18,28 +18,36 @@ class BfdSessionEntry(TypedDict):
 
     interface: str
     state: str
-    echo_detect_time_ms: int
-    echo_interval_ms: int
-    echo_multiplier: int
-    async_detect_time_ms: int
-    async_interval_ms: int
-    async_multiplier: int
+    echo_detect_time_ms: NotRequired[int]
+    echo_interval_ms: NotRequired[int]
+    echo_multiplier: NotRequired[int]
+    async_detect_time_ms: NotRequired[int]
+    async_interval_ms: NotRequired[int]
+    async_multiplier: NotRequired[int]
     hardware_offload: bool
     npu: NotRequired[str]
 
 
+# Detect time column: "45ms(15ms*3)", bare "0s", or "n/a" (no timer data).
+def _timer(prefix: str) -> str:
+    """Build the regex for one timer column with ``prefix``-named groups."""
+    return (
+        rf"(?:(?P<{prefix}_total>\d+)(?P<{prefix}_unit>ms|s)"
+        rf"(?:\((?P<{prefix}_interval>\d+)(?P<{prefix}_int_unit>ms|s)\*"
+        rf"(?P<{prefix}_mult>\d+)\))?|n/a)"
+    )
+
+
 # First line of a BFD session entry:
 # Fo0/0/1/0           10.100.100.141  45ms(15ms*3)     6s(2s*3)         UP
+# Te0/5/0/1.400       10.150.100.1    0s               0s               DOWN
+# Gi0/0/0/26.120      10.0.221.98     n/a              n/a              DOWN DAMP
 _SESSION_LINE_PATTERN = re.compile(
     r"^(?P<interface>\S+)\s+"
     rf"(?P<dest_addr>{IPV4_ADDRESS})\s+"
-    r"(?P<echo_total>\d+)(?P<echo_unit>ms|s)\("
-    r"(?P<echo_interval>\d+)(?P<echo_int_unit>ms|s)\*"
-    r"(?P<echo_mult>\d+)\)\s+"
-    r"(?P<async_total>\d+)(?P<async_unit>ms|s)\("
-    r"(?P<async_interval>\d+)(?P<async_int_unit>ms|s)\*"
-    r"(?P<async_mult>\d+)\)\s+"
-    r"(?P<state>\S+)\s*$"
+    rf"{_timer('echo')}\s+"
+    rf"{_timer('async')}\s+"
+    r"(?P<state>\S+(?: \S+)*)\s*$"
 )
 
 # Second line of a BFD session entry (hardware/NPU info):
@@ -57,7 +65,22 @@ def _to_ms(value: int, unit: str) -> int:
     return value
 
 
+def _apply_timer(entry: BfdSessionEntry, match: re.Match[str], prefix: str) -> None:
+    """Write whichever timer fields the echo/async column provided."""
+    data = cast(dict[str, int], entry)
+    if match.group(f"{prefix}_total") is not None:
+        data[f"{prefix}_detect_time_ms"] = _to_ms(
+            int(match.group(f"{prefix}_total")), match.group(f"{prefix}_unit")
+        )
+    if match.group(f"{prefix}_interval") is not None:
+        data[f"{prefix}_interval_ms"] = _to_ms(
+            int(match.group(f"{prefix}_interval")), match.group(f"{prefix}_int_unit")
+        )
+        data[f"{prefix}_multiplier"] = int(match.group(f"{prefix}_mult"))
+
+
 @register(OS.CISCO_IOSXR, "show bfd sessions")
+@register(OS.CISCO_IOSXR, "show bfd session")
 class ShowBfdSessionsParser(BaseParser["dict[str, BfdSessionEntry]"]):
     """Parser for 'show bfd sessions' command on IOS-XR.
 
@@ -134,26 +157,10 @@ class ShowBfdSessionsParser(BaseParser["dict[str, BfdSessionEntry]"]):
         entry = BfdSessionEntry(
             interface=interface,
             state=match.group("state").upper(),
-            echo_detect_time_ms=_to_ms(
-                int(match.group("echo_total")),
-                match.group("echo_unit"),
-            ),
-            echo_interval_ms=_to_ms(
-                int(match.group("echo_interval")),
-                match.group("echo_int_unit"),
-            ),
-            echo_multiplier=int(match.group("echo_mult")),
-            async_detect_time_ms=_to_ms(
-                int(match.group("async_total")),
-                match.group("async_unit"),
-            ),
-            async_interval_ms=_to_ms(
-                int(match.group("async_interval")),
-                match.group("async_int_unit"),
-            ),
-            async_multiplier=int(match.group("async_mult")),
             hardware_offload=False,
         )
+        for prefix in ("echo", "async"):
+            _apply_timer(entry, match, prefix)
         return dest_addr, entry
 
     @staticmethod
