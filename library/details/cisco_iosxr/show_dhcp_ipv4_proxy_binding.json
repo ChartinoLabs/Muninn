@@ -1,0 +1,75 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show dhcp ipv4 proxy binding",
+  "schema": {
+    "name": "ShowDhcpIpv4ProxyBindingResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ProxyBindingVrf",
+            "fields": {
+              "interfaces": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "name": "ProxyBindingEntry",
+                      "fields": {
+                        "ip_address": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "state": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "lease_remaining_seconds": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "sublabel": {
+                          "type": "str",
+                          "required": true
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Single client in SELECTING state on an abbreviated subinterface name in a non-default VRF",
+      "input": "show dhcp ipv4 proxy binding\nMon Feb  6 09:51:21.930 UTC\n\n                                           Lease\n MAC Address      IP Address      State    Remaining       Interface          VRF      Sublabel\n--------------  --------------  ---------  ---------  -------------------  ---------  ----------\n58ac.7881.ab02  0.0.0.0         SELECTING  6          Gi0/0/0/0.2002       DHCP-VRF   0x0\n",
+      "expected": {
+        "vrfs": {
+          "DHCP-VRF": {
+            "interfaces": {
+              "GigabitEthernet0/0/0/0.2002": {
+                "58ac.7881.ab02": {
+                  "ip_address": "0.0.0.0",
+                  "state": "SELECTING",
+                  "lease_remaining_seconds": 6,
+                  "sublabel": "0x0"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

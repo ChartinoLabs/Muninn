@@ -1,0 +1,54 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show dhcp ipv4 proxy binding interface <interface>",
+  "schema": {
+    "name": "ShowDhcpIpv4ProxyBindingResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ProxyBindingVrf",
+            "fields": {
+              "interfaces": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "name": "ProxyBindingEntry",
+                      "fields": {
+                        "ip_address": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "state": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "lease_remaining_seconds": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "sublabel": {
+                          "type": "str",
+                          "required": true
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}
