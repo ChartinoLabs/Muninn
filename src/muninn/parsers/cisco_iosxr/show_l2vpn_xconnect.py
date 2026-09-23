@@ -4,6 +4,19 @@ Each xconnect row lists the group, the xconnect name and state, then a
 description and state for each of its two segments. Rows wrap across
 several lines depending on column widths, so each block between dashed
 separators is tokenised as a whole rather than split by column.
+
+Formats handled without a fixture (evidenced by genieparser
+``ShowL2vpnXconnect`` outputs whose whitespace was edited, so they are not
+used as fixtures):
+
+- Segment-2 state wrapped onto its own line after a long EVPN description
+  (Genie outputs 3 and 4).
+- Segment-1 pseudowire description with its state wrapped onto the next
+  line, and a ``Nonexistent`` segment 2 kept as ``description`` (Genie
+  output 5).
+
+XR always prints both segment columns (``Nonexistent`` when a segment is
+absent), so ``segment_2`` is Required.
 """
 
 import re
