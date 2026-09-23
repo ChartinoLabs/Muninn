@@ -40,8 +40,9 @@ class ShapeEntry(TypedDict):
 
 
 class PriorityEntry(TypedDict):
-    """Schema for a priority action (empty when no level or rate is given)."""
+    """Schema for a priority action (bare ``priority`` sets only ``enabled``)."""
 
+    enabled: bool
     level: NotRequired[int]
     kbps: NotRequired[int]
     percent: NotRequired[int]
@@ -226,7 +227,7 @@ def _try_priority(line: str, entry: dict[str, Any]) -> bool:
     m = _PRIORITY_RE.match(line)
     if not m:
         return False
-    priority: dict[str, int] = {}
+    priority: dict[str, Any] = {"enabled": True}
     if m.group("level"):
         priority["level"] = int(m.group("level"))
     if m.group("value"):
@@ -256,7 +257,14 @@ _CLASS_HANDLERS = (_try_police, _try_shape, _try_wred, _try_priority, _try_simpl
 
 
 @register(OS.CISCO_IOSXE, "show policy-map")
-@register(OS.CISCO_IOSXE, r"show policy-map (?P<policy_name>\S+)")
+# Single-token subcommands are excluded so e.g. a bare `show policy-map session`
+# never routes here; multi-token subcommands cannot match the single `\S+`.
+@register(
+    OS.CISCO_IOSXE,
+    r"show policy-map (?P<policy_name>"
+    r"(?!(?:interface|control-plane|multipoint|session|target|type|apn)$)\S+)",
+    doc_template="show policy-map <policy-name>",
+)
 class ShowPolicyMapParser(BaseParser[ShowPolicyMapResult]):
     """Parser for 'show policy-map [<policy-name>]' on IOS-XE.
 
