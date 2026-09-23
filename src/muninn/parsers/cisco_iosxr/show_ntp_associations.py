@@ -10,26 +10,20 @@ from muninn.parser import BaseParser
 from muninn.registry import register
 from muninn.tags import ParserTag
 
-# Tally codes per the legend printed by current IOS-XR releases:
+# Tally codes are mapped by symbol, using the Cisco IOS/IOS-XE sibling
+# vocabulary.  Current IOS-XR prints
 #   * sys_peer, # selected, + candidate, - outlayer, x falseticker
-# Values mirror the Cisco IOS/IOS-XE sibling parser where the meaning matches.
+# while older releases print a relabelled legend for the same symbols
+#   * master (synced), # master (unsynced), + selected, - candidate
+# The symbol is the NTP selection state; the legend is documentation, so the
+# same symbol always yields the same value regardless of release.
 _TALLY_CODES: dict[str, str] = {
     "*": "sys.peer",
     "#": "selected",
     "+": "candidate",
-    "-": "outlier",
+    "-": "outlyer",
     "x": "falseticker",
 }
-
-# Older IOS-XR releases print a different legend with different meanings:
-#   * master (synced), # master (unsynced), + selected, - candidate
-_LEGACY_TALLY_CODES: dict[str, str] = {
-    "*": "master_synced",
-    "#": "master_unsynced",
-    "+": "selected",
-    "-": "candidate",
-}
-_LEGACY_LEGEND_MARKER = "master (synced)"
 
 _DEFAULT_VRF = "default"
 
@@ -88,7 +82,7 @@ class ShowNtpAssociationsResult(TypedDict):
     vrfs: dict[str, dict[str, NtpPeerEntry]]
 
 
-def _build_entry(match: re.Match[str], tally_codes: dict[str, str]) -> NtpPeerEntry:
+def _build_entry(match: re.Match[str]) -> NtpPeerEntry:
     """Build a peer entry from a matched association row."""
     reach_token = match.group("reach")
     entry: NtpPeerEntry = {
@@ -102,7 +96,7 @@ def _build_entry(match: re.Match[str], tally_codes: dict[str, str]) -> NtpPeerEn
         "offset_ms": float(match.group("offset")),
         "dispersion_ms": float(match.group("disp")),
     }
-    tally = tally_codes.get(match.group("tally"))
+    tally = _TALLY_CODES.get(match.group("tally"))
     if tally is not None:
         entry["tally"] = tally
     if match.group("config") == "~":
@@ -117,8 +111,9 @@ def _build_entry(match: re.Match[str], tally_codes: dict[str, str]) -> NtpPeerEn
 class ShowNtpAssociationsParser(BaseParser[ShowNtpAssociationsResult]):
     """Parser for 'show ntp associations' command on Cisco IOS-XR.
 
-    Handles VRF-qualified peers whose rows wrap onto a second line, and both
-    the current (``sys_peer``) and legacy (``master (synced)``) tally legends.
+    Handles VRF-qualified peers whose rows wrap onto a second line.  Tally
+    symbols are decoded identically under both the current (``sys_peer``) and
+    legacy (``master (synced)``) legends.
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
@@ -136,9 +131,6 @@ class ShowNtpAssociationsParser(BaseParser[ShowNtpAssociationsResult]):
         Raises:
             ValueError: If no NTP peer entries are found.
         """
-        tally_codes = (
-            _LEGACY_TALLY_CODES if _LEGACY_LEGEND_MARKER in output else _TALLY_CODES
-        )
         vrfs: dict[str, dict[str, NtpPeerEntry]] = {}
         pending = ""
 
@@ -152,9 +144,7 @@ class ShowNtpAssociationsParser(BaseParser[ShowNtpAssociationsResult]):
             if not match:
                 continue
             vrf = match.group("vrf") or _DEFAULT_VRF
-            vrfs.setdefault(vrf, {})[match.group("address")] = _build_entry(
-                match, tally_codes
-            )
+            vrfs.setdefault(vrf, {})[match.group("address")] = _build_entry(match)
 
         if not vrfs:
             msg = "No NTP peer entries found in output"
