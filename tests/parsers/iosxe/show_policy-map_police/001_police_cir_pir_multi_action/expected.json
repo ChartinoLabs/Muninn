@@ -1,0 +1,27 @@
+{
+    "policy_maps": {
+        "police": {
+            "classes": {
+                "class-default": {
+                    "police": {
+                        "cir_bps": 1000000,
+                        "pir_bps": 2000000,
+                        "bc_bytes": 31250,
+                        "be_bytes": 31250,
+                        "conform_actions": [
+                            "transmit"
+                        ],
+                        "exceed_actions": [
+                            "set-prec-transmit 4",
+                            "set-frde-transmit"
+                        ],
+                        "violate_actions": [
+                            "set-prec-transmit 2",
+                            "set-frde-transmit"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}
