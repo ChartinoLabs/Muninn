@@ -117,6 +117,7 @@ _UNKNOWN_SENTINEL = "Unknown"
 
 
 @register(OS.CISCO_IOSXR, "show interfaces")
+@register(OS.CISCO_IOSXR, r"show interfaces (?P<interface>[A-Za-z][A-Za-z-]*\d\S*)")
 class ShowInterfacesParser(BaseParser[ShowInterfacesResult]):
     """Parser for 'show interfaces' command on Cisco IOS-XR.
 
@@ -133,8 +134,9 @@ class ShowInterfacesParser(BaseParser[ShowInterfacesResult]):
     # --- Interface header ---
     # "Loopback5 is up, line protocol is up"
     # "MgmtEth0/RSP0/CPU0/1 is administratively down, ..."
+    # Leading whitespace is tolerated (some captures indent every line).
     _INTF_HEADER = re.compile(
-        r"^(?P<name>\S+)\s+is\s+(?P<state>.+?),"
+        r"^\s*(?P<name>\S+)\s+is\s+(?P<state>.+?),"
         r"\s+line protocol is\s+(?P<protocol>.+?)\s*$"
     )
 
