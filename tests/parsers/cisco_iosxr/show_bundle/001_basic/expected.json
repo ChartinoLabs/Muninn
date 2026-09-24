@@ -1,0 +1,117 @@
+{
+    "bundles": {
+        "Bundle-Ether1": {
+            "status": "Up",
+            "local_links_active": 2,
+            "local_links_standby": 0,
+            "local_links_configured": 2,
+            "local_bandwidth_effective_kbps": 2000000,
+            "local_bandwidth_available_kbps": 2000000,
+            "mac_address": "001b.0cff.6a35",
+            "mac_address_source": "Chassis pool",
+            "inter_chassis_link": false,
+            "minimum_active_links": 1,
+            "minimum_active_bandwidth_kbps": 1,
+            "maximum_active_links": 8,
+            "wait_while_timer_enabled": true,
+            "wait_while_timer_ms": 2000,
+            "load_balancing": {
+                "link_order_signaling": "Not configured",
+                "hash_type": "Default"
+            },
+            "lacp": {
+                "status": "Operational",
+                "flap_suppression_timer_enabled": false,
+                "cisco_extensions": false,
+                "non_revertive": false
+            },
+            "mlacp": {
+                "status": "Not configured"
+            },
+            "ipv4_bfd": {
+                "status": "Not configured"
+            },
+            "ipv6_bfd": {
+                "status": "Not configured"
+            },
+            "members": {
+                "Local": {
+                    "GigabitEthernet0/0/0/0": {
+                        "state": "Active",
+                        "port_priority": "0x000a",
+                        "port_number": "0x0001",
+                        "bandwidth_kbps": 1000000,
+                        "state_reason": "Link is Active"
+                    },
+                    "GigabitEthernet0/0/0/1": {
+                        "state": "Active",
+                        "port_priority": "0x8000",
+                        "port_number": "0x0002",
+                        "bandwidth_kbps": 1000000,
+                        "state_reason": "Link is Active"
+                    }
+                }
+            }
+        },
+        "Bundle-Ether2": {
+            "status": "Up",
+            "local_links_active": 2,
+            "local_links_standby": 1,
+            "local_links_configured": 3,
+            "local_bandwidth_effective_kbps": 2000000,
+            "local_bandwidth_available_kbps": 2000000,
+            "mac_address": "001b.0cff.6a34",
+            "mac_address_source": "Chassis pool",
+            "inter_chassis_link": false,
+            "minimum_active_links": 2,
+            "minimum_active_bandwidth_kbps": 1,
+            "maximum_active_links": 2,
+            "wait_while_timer_enabled": true,
+            "wait_while_timer_ms": 2000,
+            "load_balancing": {
+                "link_order_signaling": "Not configured",
+                "hash_type": "Default"
+            },
+            "lacp": {
+                "status": "Operational",
+                "flap_suppression_timer_enabled": false,
+                "cisco_extensions": false,
+                "non_revertive": false
+            },
+            "mlacp": {
+                "status": "Not configured"
+            },
+            "ipv4_bfd": {
+                "status": "Not configured"
+            },
+            "ipv6_bfd": {
+                "status": "Not configured"
+            },
+            "members": {
+                "Local": {
+                    "GigabitEthernet0/0/0/2": {
+                        "state": "Standby",
+                        "port_priority": "0x8000",
+                        "port_number": "0x0005",
+                        "bandwidth_kbps": 1000000,
+                        "state_reason": "Link is Standby due to maximum-active links configuration"
+                    },
+                    "GigabitEthernet0/0/0/3": {
+                        "state": "Active",
+                        "port_priority": "0x8000",
+                        "port_number": "0x0004",
+                        "bandwidth_kbps": 1000000,
+                        "state_reason": "Link is Active"
+                    },
+                    "GigabitEthernet0/0/0/4": {
+                        "state": "Active",
+                        "port_priority": "0x8000",
+                        "port_number": "0x0003",
+                        "bandwidth_kbps": 1000000,
+                        "state_reason": "Link is Active"
+                    }
+                }
+            }
+        }
+    }
+}
