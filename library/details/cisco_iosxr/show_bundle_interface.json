@@ -1,0 +1,217 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show bundle <interface>",
+  "schema": {
+    "name": "ShowBundleResult",
+    "fields": {
+      "bundles": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "BundleEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "local_links_active": {
+                "type": "int",
+                "required": true
+              },
+              "local_links_standby": {
+                "type": "int",
+                "required": true
+              },
+              "local_links_configured": {
+                "type": "int",
+                "required": true
+              },
+              "local_bandwidth_effective_kbps": {
+                "type": "int",
+                "required": false
+              },
+              "local_bandwidth_available_kbps": {
+                "type": "int",
+                "required": false
+              },
+              "mac_address": {
+                "type": "str",
+                "required": false
+              },
+              "mac_address_source": {
+                "type": "str",
+                "required": false
+              },
+              "inter_chassis_link": {
+                "type": "bool",
+                "required": false
+              },
+              "minimum_active_links": {
+                "type": "int",
+                "required": false
+              },
+              "minimum_active_bandwidth_kbps": {
+                "type": "int",
+                "required": false
+              },
+              "maximum_active_links": {
+                "type": "int",
+                "required": false
+              },
+              "wait_while_timer_enabled": {
+                "type": "bool",
+                "required": false
+              },
+              "wait_while_timer_ms": {
+                "type": "int",
+                "required": false
+              },
+              "load_balancing": {
+                "type": {
+                  "name": "LoadBalancingEntry",
+                  "fields": {
+                    "link_order_signaling": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "hash_type": {
+                      "type": "str",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "lacp": {
+                "type": {
+                  "name": "LacpEntry",
+                  "fields": {
+                    "status": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "flap_suppression_timer_enabled": {
+                      "type": "bool",
+                      "required": false
+                    },
+                    "flap_suppression_timer_ms": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "cisco_extensions": {
+                      "type": "bool",
+                      "required": false
+                    },
+                    "non_revertive": {
+                      "type": "bool",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "mlacp": {
+                "type": {
+                  "name": "MlacpEntry",
+                  "fields": {
+                    "status": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "iccp_group": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "role": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "foreign_links_active": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "foreign_links_configured": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "switchover_type": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "recovery_delay_seconds": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "maximize_threshold": {
+                      "type": "str",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "ipv4_bfd": {
+                "type": {
+                  "name": "BfdEntry",
+                  "fields": {
+                    "status": {
+                      "type": "str",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "ipv6_bfd": {
+                "type": {
+                  "type": "ref",
+                  "name": "BfdEntry"
+                },
+                "required": false
+              },
+              "members": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "name": "MemberEntry",
+                      "fields": {
+                        "state": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "port_priority": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "port_number": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "bandwidth_kbps": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "state_reason": {
+                          "type": "str",
+                          "required": false
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}

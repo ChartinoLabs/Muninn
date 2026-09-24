@@ -1,0 +1,583 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ip protocols",
+  "schema": {
+    "name": "ShowIpProtocolsResult",
+    "fields": {
+      "nsf_aware": {
+        "type": "bool",
+        "required": false
+      },
+      "protocols": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ProtocolEntry",
+            "fields": {
+              "protocol": {
+                "type": "str",
+                "required": true
+              },
+              "instance": {
+                "type": "str",
+                "required": false
+              },
+              "output_delay_milliseconds": {
+                "type": "int",
+                "required": false
+              },
+              "incoming_metric_offset": {
+                "type": {
+                  "name": "IncomingMetricOffset",
+                  "fields": {
+                    "offset": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "access_list": {
+                      "type": "str",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "sending_updates_every_seconds": {
+                "type": "int",
+                "required": false
+              },
+              "next_update_due_seconds": {
+                "type": "int",
+                "required": false
+              },
+              "invalid_after_seconds": {
+                "type": "int",
+                "required": false
+              },
+              "hold_down_seconds": {
+                "type": "int",
+                "required": false
+              },
+              "flushed_after_seconds": {
+                "type": "int",
+                "required": false
+              },
+              "default_redistribution_metric": {
+                "type": "int",
+                "required": false
+              },
+              "router_id": {
+                "type": "str",
+                "required": false
+              },
+              "area_border_router": {
+                "type": "bool",
+                "required": false
+              },
+              "as_boundary_router": {
+                "type": "bool",
+                "required": false
+              },
+              "number_of_areas": {
+                "type": {
+                  "name": "AreaCounts",
+                  "fields": {
+                    "total": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "normal": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "stub": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "nssa": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "redistributing": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              },
+              "igp_synchronization": {
+                "type": "bool",
+                "required": false
+              },
+              "automatic_route_summarization": {
+                "type": "bool",
+                "required": false
+              },
+              "automatic_network_summarization": {
+                "type": "bool",
+                "required": false
+              },
+              "neighbors": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "NeighborEntry",
+                    "fields": {
+                      "route_map": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "default_send_version": {
+                "type": "str",
+                "required": false
+              },
+              "default_receive_version": {
+                "type": "str",
+                "required": false
+              },
+              "interfaces": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "RipInterfaceEntry",
+                    "fields": {
+                      "send_version": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "receive_version": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "triggered_rip": {
+                        "type": "bool",
+                        "required": true
+                      },
+                      "key_chain": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "address_summarization": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "AddressSummary",
+                    "fields": {
+                      "interfaces": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "maximum_path": {
+                "type": "int",
+                "required": false
+              },
+              "routing_for_networks": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              },
+              "ospf_networks": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "name": "OspfNetwork",
+                      "fields": {
+                        "area": {
+                          "type": "str",
+                          "required": true
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "routing_on_interfaces_configured_explicitly": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "list",
+                    "items": "str"
+                  }
+                },
+                "required": false
+              },
+              "passive_interfaces": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              },
+              "routing_information_sources": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "InformationSource",
+                    "fields": {
+                      "distance": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "last_update": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "distance": {
+                "type": {
+                  "name": "Distance",
+                  "fields": {
+                    "default": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "external": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "internal": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "local": {
+                      "type": "int",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Application, IS-IS (named tag) and BGP sections with NSF banner and passive interfaces",
+      "input": "\nshow ip protocols\n*** IP Routing is NSF aware ***\n\nRouting Protocol is \"application\"\n  Sending updates every 0 seconds\n  Invalid after 0 seconds, hold down 0, flushed after 0\n  Outgoing update filter list for all interfaces is not set\n  Incoming update filter list for all interfaces is not set\n  Maximum path: 32\n  Routing for Networks:\n  Routing Information Sources:\n    Gateway         Distance      Last Update\n  Distance: (default is 4)\n\nRouting Protocol is \"isis banana\"\n  Outgoing update filter list for all interfaces is not set\n  Incoming update filter list for all interfaces is not set\n  Redistributing: isis banana\n  Address Summarization:\n    None\n  Maximum path: 4\n  Routing for Networks:\n    TenGigabitEthernet0/0/26\n    TenGigabitEthernet0/0/27\n  Passive Interface(s):\n    Loopback0\n  Routing Information Sources:\n    Gateway         Distance      Last Update\n    10.60.6.3            115      05:56:34\n    10.60.6.2            115      05:56:34\n    10.60.6.4            115      05:56:34\n    10.60.6.9            115      05:56:34\n  Distance: (default is 115)\n\nRouting Protocol is \"bgp 9999\"\n  Outgoing update filter list for all interfaces is not set\n  Incoming update filter list for all interfaces is not set\n  IGP synchronization is disabled\n  Automatic route summarization is disabled\n  Maximum path: 1\n  Routing Information Sources:\n    Gateway         Distance      Last Update\n    10.60.6.3            200      12w5d\n    10.60.6.2            200      14w4d\n  Distance: external 20 internal 200 local 200\n",
+      "expected": {
+        "protocols": {
+          "application": {
+            "protocol": "application",
+            "sending_updates_every_seconds": 0,
+            "invalid_after_seconds": 0,
+            "hold_down_seconds": 0,
+            "flushed_after_seconds": 0,
+            "maximum_path": 32,
+            "distance": {
+              "default": 4
+            }
+          },
+          "isis banana": {
+            "protocol": "isis",
+            "instance": "banana",
+            "redistributing": [
+              "isis banana"
+            ],
+            "maximum_path": 4,
+            "routing_for_networks": [
+              "TenGigabitEthernet0/0/26",
+              "TenGigabitEthernet0/0/27"
+            ],
+            "passive_interfaces": [
+              "Loopback0"
+            ],
+            "routing_information_sources": {
+              "10.60.6.3": {
+                "distance": 115,
+                "last_update": "05:56:34"
+              },
+              "10.60.6.2": {
+                "distance": 115,
+                "last_update": "05:56:34"
+              },
+              "10.60.6.4": {
+                "distance": 115,
+                "last_update": "05:56:34"
+              },
+              "10.60.6.9": {
+                "distance": 115,
+                "last_update": "05:56:34"
+              }
+            },
+            "distance": {
+              "default": 115
+            }
+          },
+          "bgp 9999": {
+            "protocol": "bgp",
+            "instance": "9999",
+            "igp_synchronization": false,
+            "automatic_route_summarization": false,
+            "maximum_path": 1,
+            "routing_information_sources": {
+              "10.60.6.3": {
+                "distance": 200,
+                "last_update": "12w5d"
+              },
+              "10.60.6.2": {
+                "distance": 200,
+                "last_update": "14w4d"
+              }
+            },
+            "distance": {
+              "external": 20,
+              "internal": 200,
+              "local": 200
+            }
+          }
+        },
+        "nsf_aware": true
+      }
+    },
+    {
+      "name": "RIP with neighbors, per-interface version table, summarization, metric offset",
+      "input": "R1#show ip protocols\n*** IP Routing is NSF aware ***\n\nRouting Protocol is \"application\"\n  Sending updates every 0 seconds\n  Invalid after 0 seconds, hold down 0, flushed after 0\n  Outgoing update filter list for all interfaces is not set\n  Incoming update filter list for all interfaces is not set\n  Maximum path: 32\n  Routing for Networks:\n  Routing Information Sources:\n    Gateway         Distance      Last Update\n  Distance: (default is 4)\n\nRouting Protocol is \"rip\"\n  Output delay 50 milliseconds between packets\n  Outgoing update filter list for all interfaces is not set\n  Incoming update filter list for all interfaces is not set\n  Incoming routes will have 10 added to metric if on list 21\n  Sending updates every 10 seconds, next due in 8 seconds\n  Invalid after 21 seconds, hold down 22, flushed after 23\n  Default redistribution metric is 3\n  Redistributing: connected, static, rip\n  Neighbor(s):\n    10.1.2.2\n  Default version control: send version 2, receive version 2\n    Interface                           Send  Recv  Triggered RIP  Key-chain\n    GigabitEthernet3.100                2     2          No        1\n  Automatic network summarization is not in effect\n  Address Summarization:\n    172.16.0.0/17 for GigabitEthernet3.100\n  Maximum path: 4\n  Routing for Networks:\n    10.0.0.0\n  Passive Interface(s):\n    GigabitEthernet2.100\n  Routing Information Sources:\n    Gateway         Distance      Last Update\n    10.1.3.3             120      00:00:00\n    10.1.2.2             120      00:00:04\n  Distance: (default is 120)\n",
+      "expected": {
+        "protocols": {
+          "application": {
+            "protocol": "application",
+            "sending_updates_every_seconds": 0,
+            "invalid_after_seconds": 0,
+            "hold_down_seconds": 0,
+            "flushed_after_seconds": 0,
+            "maximum_path": 32,
+            "distance": {
+              "default": 4
+            }
+          },
+          "rip": {
+            "protocol": "rip",
+            "output_delay_milliseconds": 50,
+            "incoming_metric_offset": {
+              "offset": 10,
+              "access_list": "21"
+            },
+            "sending_updates_every_seconds": 10,
+            "next_update_due_seconds": 8,
+            "invalid_after_seconds": 21,
+            "hold_down_seconds": 22,
+            "flushed_after_seconds": 23,
+            "default_redistribution_metric": 3,
+            "redistributing": [
+              "connected",
+              "static",
+              "rip"
+            ],
+            "neighbors": {
+              "10.1.2.2": {}
+            },
+            "default_send_version": "2",
+            "default_receive_version": "2",
+            "interfaces": {
+              "GigabitEthernet3.100": {
+                "send_version": "2",
+                "receive_version": "2",
+                "triggered_rip": false,
+                "key_chain": "1"
+              }
+            },
+            "automatic_network_summarization": false,
+            "address_summarization": {
+              "172.16.0.0/17": {
+                "interfaces": [
+                  "GigabitEthernet3.100"
+                ]
+              }
+            },
+            "maximum_path": 4,
+            "routing_for_networks": [
+              "10.0.0.0"
+            ],
+            "passive_interfaces": [
+              "GigabitEthernet2.100"
+            ],
+            "routing_information_sources": {
+              "10.1.3.3": {
+                "distance": 120,
+                "last_update": "00:00:00"
+              },
+              "10.1.2.2": {
+                "distance": 120,
+                "last_update": "00:00:04"
+              }
+            },
+            "distance": {
+              "default": 120
+            }
+          }
+        },
+        "nsf_aware": true
+      }
+    },
+    {
+      "name": "OSPF ABR/ASBR with explicit interface areas and BGP neighbor route-map table",
+      "input": "\nshow ip protocols\n*** IP Routing is NSF aware ***\n\nRouting Protocol is \"application\"\n  Sending updates every 0 seconds\n  Invalid after 0 seconds, hold down 0, flushed after 0\n  Outgoing update filter list for all interfaces is not set\n  Incoming update filter list for all interfaces is not set\n  Maximum path: 32\n  Routing for Networks:\n  Routing Information Sources:\n    Gateway         Distance      Last Update\n  Distance: (default is 4)\n\nRouting Protocol is \"ospf 1\"\n  Outgoing update filter list for all interfaces is not set\n  Incoming update filter list for all interfaces is not set\n  Router ID 192.168.1.179\n  It is an area border and autonomous system boundary router\n Redistributing External Routes from,\n  Number of areas in this router is 2. 1 normal 0 stub 1 nssa\n  Address Summarization:\n  Maximum path: 4\n  Routing for Networks:\n    192.168.1.0 0.0.0.255 area 0.0.0.0\n    192.168.100.164 0.0.0.3 area 0.0.0.0\n    192.168.100.192 0.0.0.3 area 0.0.0.0\n  Routing on Interfaces Configured Explicitly (Area 0.0.0.0):\n    GigabitEthernet5\n  Routing on Interfaces Configured Explicitly (Area 4):\n    GigabitEthernet7\n  Passive Interface(s):\n    GigabitEthernet3\n    GigabitEthernet4\n    GigabitEthernet8\n    Loopback0\n    VoIP-Null0\n  Routing Information Sources:\n    Gateway         Distance      Last Update\n    192.168.1.177        110      21:33:11\n    192.168.1.176        110      21:32:48\n    192.168.1.178        110      21:36:07\n  Distance: (default is 110)\n\nRouting Protocol is \"bgp 202926\"\n  Outgoing update filter list for all interfaces is not set\n  Incoming update filter list for all interfaces is not set\n  IGP synchronization is disabled\n  Automatic route summarization is disabled\n  Neighbor(s):\n    Address          FiltIn FiltOut DistIn DistOut Weight RouteMap\n    10.0.1.211\n    10.0.1.221\n    10.0.2.212\n    10.0.2.222\n    10.205.188.34\n    10.205.37.149\n    172.16.121.101                                        ACCEPT_SCI_RICHEMONT\n    192.168.1.176                                         INTERNET_EDGE_IN\n    192.168.1.177                                         INTERNET_EDGE_IN\n    192.168.1.178\n  Maximum path: 2\n  Routing Information Sources:\n    Gateway         Distance      Last Update\n    192.168.1.177        200      21:33:06\n    192.168.1.176        200      21:32:43\n    10.0.2.212            20      21:35:39\n  Distance: external 20 internal 200 local 200\n",
+      "expected": {
+        "protocols": {
+          "application": {
+            "protocol": "application",
+            "sending_updates_every_seconds": 0,
+            "invalid_after_seconds": 0,
+            "hold_down_seconds": 0,
+            "flushed_after_seconds": 0,
+            "maximum_path": 32,
+            "distance": {
+              "default": 4
+            }
+          },
+          "ospf 1": {
+            "protocol": "ospf",
+            "instance": "1",
+            "router_id": "192.168.1.179",
+            "area_border_router": true,
+            "as_boundary_router": true,
+            "number_of_areas": {
+              "total": 2,
+              "normal": 1,
+              "stub": 0,
+              "nssa": 1
+            },
+            "maximum_path": 4,
+            "ospf_networks": {
+              "192.168.1.0": {
+                "0.0.0.255": {
+                  "area": "0.0.0.0"
+                }
+              },
+              "192.168.100.164": {
+                "0.0.0.3": {
+                  "area": "0.0.0.0"
+                }
+              },
+              "192.168.100.192": {
+                "0.0.0.3": {
+                  "area": "0.0.0.0"
+                }
+              }
+            },
+            "routing_on_interfaces_configured_explicitly": {
+              "0.0.0.0": [
+                "GigabitEthernet5"
+              ],
+              "4": [
+                "GigabitEthernet7"
+              ]
+            },
+            "passive_interfaces": [
+              "GigabitEthernet3",
+              "GigabitEthernet4",
+              "GigabitEthernet8",
+              "Loopback0",
+              "VoIP-Null0"
+            ],
+            "routing_information_sources": {
+              "192.168.1.177": {
+                "distance": 110,
+                "last_update": "21:33:11"
+              },
+              "192.168.1.176": {
+                "distance": 110,
+                "last_update": "21:32:48"
+              },
+              "192.168.1.178": {
+                "distance": 110,
+                "last_update": "21:36:07"
+              }
+            },
+            "distance": {
+              "default": 110
+            }
+          },
+          "bgp 202926": {
+            "protocol": "bgp",
+            "instance": "202926",
+            "igp_synchronization": false,
+            "automatic_route_summarization": false,
+            "neighbors": {
+              "10.0.1.211": {},
+              "10.0.1.221": {},
+              "10.0.2.212": {},
+              "10.0.2.222": {},
+              "10.205.188.34": {},
+              "10.205.37.149": {},
+              "172.16.121.101": {
+                "route_map": "ACCEPT_SCI_RICHEMONT"
+              },
+              "192.168.1.176": {
+                "route_map": "INTERNET_EDGE_IN"
+              },
+              "192.168.1.177": {
+                "route_map": "INTERNET_EDGE_IN"
+              },
+              "192.168.1.178": {}
+            },
+            "maximum_path": 2,
+            "routing_information_sources": {
+              "192.168.1.177": {
+                "distance": 200,
+                "last_update": "21:33:06"
+              },
+              "192.168.1.176": {
+                "distance": 200,
+                "last_update": "21:32:43"
+              },
+              "10.0.2.212": {
+                "distance": 20,
+                "last_update": "21:35:39"
+              }
+            },
+            "distance": {
+              "external": 20,
+              "internal": 200,
+              "local": 200
+            }
+          }
+        },
+        "nsf_aware": true
+      }
+    }
+  ]
+}

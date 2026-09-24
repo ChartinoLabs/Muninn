@@ -1,0 +1,339 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show bundle",
+  "schema": {
+    "name": "ShowBundleResult",
+    "fields": {
+      "bundles": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "BundleEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "local_links_active": {
+                "type": "int",
+                "required": true
+              },
+              "local_links_standby": {
+                "type": "int",
+                "required": true
+              },
+              "local_links_configured": {
+                "type": "int",
+                "required": true
+              },
+              "local_bandwidth_effective_kbps": {
+                "type": "int",
+                "required": false
+              },
+              "local_bandwidth_available_kbps": {
+                "type": "int",
+                "required": false
+              },
+              "mac_address": {
+                "type": "str",
+                "required": false
+              },
+              "mac_address_source": {
+                "type": "str",
+                "required": false
+              },
+              "inter_chassis_link": {
+                "type": "bool",
+                "required": false
+              },
+              "minimum_active_links": {
+                "type": "int",
+                "required": false
+              },
+              "minimum_active_bandwidth_kbps": {
+                "type": "int",
+                "required": false
+              },
+              "maximum_active_links": {
+                "type": "int",
+                "required": false
+              },
+              "wait_while_timer_enabled": {
+                "type": "bool",
+                "required": false
+              },
+              "wait_while_timer_ms": {
+                "type": "int",
+                "required": false
+              },
+              "load_balancing": {
+                "type": {
+                  "name": "LoadBalancingEntry",
+                  "fields": {
+                    "link_order_signaling": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "hash_type": {
+                      "type": "str",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "lacp": {
+                "type": {
+                  "name": "LacpEntry",
+                  "fields": {
+                    "status": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "flap_suppression_timer_enabled": {
+                      "type": "bool",
+                      "required": false
+                    },
+                    "flap_suppression_timer_ms": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "cisco_extensions": {
+                      "type": "bool",
+                      "required": false
+                    },
+                    "non_revertive": {
+                      "type": "bool",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "mlacp": {
+                "type": {
+                  "name": "MlacpEntry",
+                  "fields": {
+                    "status": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "iccp_group": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "role": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "foreign_links_active": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "foreign_links_configured": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "switchover_type": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "recovery_delay_seconds": {
+                      "type": "int",
+                      "required": false
+                    },
+                    "maximize_threshold": {
+                      "type": "str",
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              },
+              "ipv4_bfd": {
+                "type": {
+                  "name": "BfdEntry",
+                  "fields": {
+                    "status": {
+                      "type": "str",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "ipv6_bfd": {
+                "type": {
+                  "type": "ref",
+                  "name": "BfdEntry"
+                },
+                "required": false
+              },
+              "members": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "type": "dict",
+                    "key": "str",
+                    "value": {
+                      "name": "MemberEntry",
+                      "fields": {
+                        "state": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "port_priority": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "port_number": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "bandwidth_kbps": {
+                          "type": "int",
+                          "required": true
+                        },
+                        "state_reason": {
+                          "type": "str",
+                          "required": false
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Two LACP bundles with active and standby (max-active-links) members",
+      "input": "\nRP/0/RP0/CPU0:iosxrv9000-1#show bundle\nTue Apr  3 20:30:23.603 UTC\n\nBundle-Ether1\n  Status:                                    Up\n  Local links <active/standby/configured>:   2 / 0 / 2\n  Local bandwidth <effective/available>:     2000000 (2000000) kbps\n  MAC address (source):                      001b.0cff.6a35 (Chassis pool)\n  Inter-chassis link:                        No\n  Minimum active links / bandwidth:          1 / 1 kbps\n  Maximum active links:                      8\n  Wait while timer:                          2000 ms\n  Load balancing:\n    Link order signaling:                    Not configured\n    Hash type:                               Default\n    Locality threshold:                      None\n  LACP:                                      Operational\n    Flap suppression timer:                  Off\n    Cisco extensions:                        Disabled\n    Non-revertive:                           Disabled\n  mLACP:                                     Not configured\n  IPv4 BFD:                                  Not configured\n  IPv6 BFD:                                  Not configured\n\n  Port                  Device           State        Port ID         B/W, kbps\n  --------------------  ---------------  -----------  --------------  ----------\n  Gi0/0/0/0             Local            Active       0x000a, 0x0001     1000000\n      Link is Active\n  Gi0/0/0/1             Local            Active       0x8000, 0x0002     1000000\n      Link is Active\n\nBundle-Ether2\n  Status:                                    Up\n  Local links <active/standby/configured>:   2 / 1 / 3\n  Local bandwidth <effective/available>:     2000000 (2000000) kbps\n  MAC address (source):                      001b.0cff.6a34 (Chassis pool)\n  Inter-chassis link:                        No\n  Minimum active links / bandwidth:          2 / 1 kbps\n  Maximum active links:                      2\n  Wait while timer:                          2000 ms\n  Load balancing:\n    Link order signaling:                    Not configured\n    Hash type:                               Default\n    Locality threshold:                      None\n  LACP:                                      Operational\n    Flap suppression timer:                  Off\n    Cisco extensions:                        Disabled\n    Non-revertive:                           Disabled\n  mLACP:                                     Not configured\n  IPv4 BFD:                                  Not configured\n  IPv6 BFD:                                  Not configured\n\n  Port                  Device           State        Port ID         B/W, kbps\n  --------------------  ---------------  -----------  --------------  ----------\n  Gi0/0/0/2             Local            Standby      0x8000, 0x0005     1000000\n      Link is Standby due to maximum-active links configuration\n  Gi0/0/0/3             Local            Active       0x8000, 0x0004     1000000\n      Link is Active\n  Gi0/0/0/4             Local            Active       0x8000, 0x0003     1000000\n      Link is Active\n",
+      "expected": {
+        "bundles": {
+          "Bundle-Ether1": {
+            "status": "Up",
+            "local_links_active": 2,
+            "local_links_standby": 0,
+            "local_links_configured": 2,
+            "local_bandwidth_effective_kbps": 2000000,
+            "local_bandwidth_available_kbps": 2000000,
+            "mac_address": "001b.0cff.6a35",
+            "mac_address_source": "Chassis pool",
+            "inter_chassis_link": false,
+            "minimum_active_links": 1,
+            "minimum_active_bandwidth_kbps": 1,
+            "maximum_active_links": 8,
+            "wait_while_timer_enabled": true,
+            "wait_while_timer_ms": 2000,
+            "load_balancing": {
+              "link_order_signaling": "Not configured",
+              "hash_type": "Default"
+            },
+            "lacp": {
+              "status": "Operational",
+              "flap_suppression_timer_enabled": false,
+              "cisco_extensions": false,
+              "non_revertive": false
+            },
+            "mlacp": {
+              "status": "Not configured"
+            },
+            "ipv4_bfd": {
+              "status": "Not configured"
+            },
+            "ipv6_bfd": {
+              "status": "Not configured"
+            },
+            "members": {
+              "Local": {
+                "GigabitEthernet0/0/0/0": {
+                  "state": "Active",
+                  "port_priority": "0x000a",
+                  "port_number": "0x0001",
+                  "bandwidth_kbps": 1000000,
+                  "state_reason": "Link is Active"
+                },
+                "GigabitEthernet0/0/0/1": {
+                  "state": "Active",
+                  "port_priority": "0x8000",
+                  "port_number": "0x0002",
+                  "bandwidth_kbps": 1000000,
+                  "state_reason": "Link is Active"
+                }
+              }
+            }
+          },
+          "Bundle-Ether2": {
+            "status": "Up",
+            "local_links_active": 2,
+            "local_links_standby": 1,
+            "local_links_configured": 3,
+            "local_bandwidth_effective_kbps": 2000000,
+            "local_bandwidth_available_kbps": 2000000,
+            "mac_address": "001b.0cff.6a34",
+            "mac_address_source": "Chassis pool",
+            "inter_chassis_link": false,
+            "minimum_active_links": 2,
+            "minimum_active_bandwidth_kbps": 1,
+            "maximum_active_links": 2,
+            "wait_while_timer_enabled": true,
+            "wait_while_timer_ms": 2000,
+            "load_balancing": {
+              "link_order_signaling": "Not configured",
+              "hash_type": "Default"
+            },
+            "lacp": {
+              "status": "Operational",
+              "flap_suppression_timer_enabled": false,
+              "cisco_extensions": false,
+              "non_revertive": false
+            },
+            "mlacp": {
+              "status": "Not configured"
+            },
+            "ipv4_bfd": {
+              "status": "Not configured"
+            },
+            "ipv6_bfd": {
+              "status": "Not configured"
+            },
+            "members": {
+              "Local": {
+                "GigabitEthernet0/0/0/2": {
+                  "state": "Standby",
+                  "port_priority": "0x8000",
+                  "port_number": "0x0005",
+                  "bandwidth_kbps": 1000000,
+                  "state_reason": "Link is Standby due to maximum-active links configuration"
+                },
+                "GigabitEthernet0/0/0/3": {
+                  "state": "Active",
+                  "port_priority": "0x8000",
+                  "port_number": "0x0004",
+                  "bandwidth_kbps": 1000000,
+                  "state_reason": "Link is Active"
+                },
+                "GigabitEthernet0/0/0/4": {
+                  "state": "Active",
+                  "port_priority": "0x8000",
+                  "port_number": "0x0003",
+                  "bandwidth_kbps": 1000000,
+                  "state_reason": "Link is Active"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

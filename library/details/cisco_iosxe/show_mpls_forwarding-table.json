@@ -1,0 +1,818 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show mpls forwarding-table",
+  "schema": null,
+  "examples": [
+    {
+      "name": "MPLS-TE tunnels, SR prefix/adjacency SIDs, merged labels and multipath continuation rows",
+      "input": "R1#show mpls forwarding-table\nLocal      Outgoing   Prefix           Bytes Label   Outgoing   Next Hop\nLabel      Label      or Tunnel Id     Switched      interface\n16    [T]  Pop Label  65757/1[TE-Bind]               Tu65757    point2point\n      [T]  Pop Label  65757/1[TE-Bind]               Tu65757    point2point\n17    [T]  Pop Label  65758/1[TE-Bind]               Tu65758    point2point\n      [T]  Pop Label  65758/1[TE-Bind]               Tu65758    point2point\n19         No Label   30.30.30.0/24    0             Gi0/0/3    10.10.10.2\n21         No Label   45.45.45.0/24    0             Gi0/0/3    10.10.10.2\n           No Label   45.45.45.0/24    0             Te0/0/5    20.20.20.2\n22    [T]  Pop Label  10/1[TE-Bind]                  Tu10       point2point\n      [T]  Pop Label  10/1[TE-Bind]                  Tu10       point2point\n25    [T]  Pop Label  5.5.5.5/32                     Tu65758    point2point\n      [T]  Pop Label  5.5.5.5/32                     Tu65758    point2point\n      [T]  Pop Label  5.5.5.5/32                     Tu20       point2point\n      [T]  Pop Label  5.5.5.5/32                     Tu20       point2point\n      [T]  Pop Label  5.5.5.5/32                     Tu10       point2point\n      [T]  Pop Label  5.5.5.5/32                     Tu10       point2point\n      [T]  Pop Label  5.5.5.5/32                     Tu65757    point2point\n      [T]  Pop Label  5.5.5.5/32                     Tu65757    point2point\n26    [T]  No Label   60.60.60.0/24                  Tu65758    point2point\n      [T]  No Label   60.60.60.0/24                  Tu20       point2point\n      [T]  No Label   60.60.60.0/24                  Tu10       point2point\n      [T]  No Label   60.60.60.0/24                  Tu65757    point2point\n28    [T]  16061      6.6.6.6/32                     Tu20       point2point\n      [T]  16061      6.6.6.6/32                     Tu20       point2point\n      [T]  16061      6.6.6.6/32                     Tu10       point2point\n      [T]  16061      6.6.6.6/32                     Tu10       point2point\n29         No Label   90.90.90.0/24    0             Te0/0/5    20.20.20.2\n30         Pop Label  10.10.10.2-A     0             Gi0/0/3    10.10.10.2\n31         No Label   80.80.80.0/24    0             Gi0/0/3    10.10.10.2\n32    [T]  No Label   70.70.70.0/24                  Tu20       point2point\n      [T]  No Label   70.70.70.0/24                  Tu10       point2point\n34    [T]  Pop Label  20/1[TE-Bind]                  Tu20       point2point\n      [T]  Pop Label  20/1[TE-Bind]                  Tu20       point2point\n35         Pop Label  20.20.20.2-A     0             Te0/0/5    20.20.20.2\n42         No Label   50.50.50.0/24    0             Te0/0/5    20.20.20.2\n45    [M]  Pop Label  3.3.3.3/32       0             Te0/0/5    20.20.20.2\n46         No Label   40.40.40.0/24    0             Gi0/0/3    10.10.10.2\n           No Label   40.40.40.0/24    0             Te0/0/5    20.20.20.2\n47    [M]  Pop Label  2.2.2.2/32       0             Gi0/0/3    10.10.10.2\n48    [M]  16041      4.4.4.4/32       0             Gi0/0/3    10.10.10.2\n      [M]  16041      4.4.4.4/32       0             Te0/0/5    20.20.20.2\n16021 [M]  Pop Label  2.2.2.2/32       0             Gi0/0/3    10.10.10.2\n16022      Pop Label  0-2.2.2.2/32-2   0             Gi0/0/3    10.10.10.2\n16031 [M]  Pop Label  3.3.3.3/32       0             Te0/0/5    20.20.20.2\n16032      Pop Label  0-3.3.3.3/32-2   0             Te0/0/5    20.20.20.2\n16041 [M]  16041      4.4.4.4/32       0             Gi0/0/3    10.10.10.2\n      [M]  16041      4.4.4.4/32       0             Te0/0/5    20.20.20.2\n16042      16042      0-4.4.4.4/32-2   0             Gi0/0/3    10.10.10.2\n           16042      0-4.4.4.4/32-2   0             Te0/0/5    20.20.20.2\n16051 [T]  Pop Label  0-5.5.5.5/32-1                 Tu65758    point2point\n      [T]  Pop Label  0-5.5.5.5/32-1                 Tu65758    point2point\n      [T]  Pop Label  0-5.5.5.5/32-1                 Tu20       point2point\n      [T]  Pop Label  0-5.5.5.5/32-1                 Tu20       point2point\n16052      16052      0-5.5.5.5/32-2   0             Gi0/0/3    10.10.10.2\n           16052      0-5.5.5.5/32-2   0             Te0/0/5    20.20.20.2\n16061 [T]  16061      0-6.6.6.6/32-1                 Tu65758    point2point\n      [T]  16061      0-6.6.6.6/32-1                 Tu65758    point2point\n      [T]  16061      0-6.6.6.6/32-1                 Tu20       point2point\n      [T]  16061      0-6.6.6.6/32-1                 Tu20       point2point\n           16061      0-6.6.6.6/32-1                 Gi0/0/3    10.10.10.2\n           16061      0-6.6.6.6/32-1   0             Te0/0/5    20.20.20.2\n16062      16062      0-6.6.6.6/32-2   0             Gi0/0/3    10.10.10.2\n           16062      0-6.6.6.6/32-2   0             Te0/0/5    20.20.20.2\n\n[T]     Forwarding through a LSP tunnel.\n        View additional labelling info with the 'detail' option\n\nA  - Adjacency SID\n\n[M] - Merged\n",
+      "expected": {
+        "16": {
+          "paths": [
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "65757/1[TE-Bind]",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel65757",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "65757/1[TE-Bind]",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel65757",
+              "next_hop": "point2point"
+            }
+          ]
+        },
+        "17": {
+          "paths": [
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "65758/1[TE-Bind]",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel65758",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "65758/1[TE-Bind]",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel65758",
+              "next_hop": "point2point"
+            }
+          ]
+        },
+        "19": {
+          "paths": [
+            {
+              "outgoing_label": "No Label",
+              "prefix_or_id": "30.30.30.0/24",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "GigabitEthernet0/0/3",
+              "next_hop": "10.10.10.2"
+            }
+          ]
+        },
+        "21": {
+          "paths": [
+            {
+              "outgoing_label": "No Label",
+              "prefix_or_id": "45.45.45.0/24",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "GigabitEthernet0/0/3",
+              "next_hop": "10.10.10.2"
+            },
+            {
+              "outgoing_label": "No Label",
+              "prefix_or_id": "45.45.45.0/24",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "TenGigabitEthernet0/0/5",
+              "next_hop": "20.20.20.2"
+            }
+          ]
+        },
+        "22": {
+          "paths": [
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "10/1[TE-Bind]",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel10",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "10/1[TE-Bind]",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel10",
+              "next_hop": "point2point"
+            }
+          ]
+        },
+        "25": {
+          "paths": [
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "5.5.5.5/32",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel65758",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "5.5.5.5/32",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel65758",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "5.5.5.5/32",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel20",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "5.5.5.5/32",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel20",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "5.5.5.5/32",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel10",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "5.5.5.5/32",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel10",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "5.5.5.5/32",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel65757",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "5.5.5.5/32",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel65757",
+              "next_hop": "point2point"
+            }
+          ]
+        },
+        "26": {
+          "paths": [
+            {
+              "outgoing_label": "No Label",
+              "prefix_or_id": "60.60.60.0/24",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel65758",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "No Label",
+              "prefix_or_id": "60.60.60.0/24",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel20",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "No Label",
+              "prefix_or_id": "60.60.60.0/24",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel10",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "No Label",
+              "prefix_or_id": "60.60.60.0/24",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel65757",
+              "next_hop": "point2point"
+            }
+          ]
+        },
+        "28": {
+          "paths": [
+            {
+              "outgoing_label": "16061",
+              "prefix_or_id": "6.6.6.6/32",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel20",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "16061",
+              "prefix_or_id": "6.6.6.6/32",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel20",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "16061",
+              "prefix_or_id": "6.6.6.6/32",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel10",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "16061",
+              "prefix_or_id": "6.6.6.6/32",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel10",
+              "next_hop": "point2point"
+            }
+          ]
+        },
+        "29": {
+          "paths": [
+            {
+              "outgoing_label": "No Label",
+              "prefix_or_id": "90.90.90.0/24",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "TenGigabitEthernet0/0/5",
+              "next_hop": "20.20.20.2"
+            }
+          ]
+        },
+        "30": {
+          "paths": [
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "10.10.10.2-A",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "GigabitEthernet0/0/3",
+              "next_hop": "10.10.10.2"
+            }
+          ]
+        },
+        "31": {
+          "paths": [
+            {
+              "outgoing_label": "No Label",
+              "prefix_or_id": "80.80.80.0/24",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "GigabitEthernet0/0/3",
+              "next_hop": "10.10.10.2"
+            }
+          ]
+        },
+        "32": {
+          "paths": [
+            {
+              "outgoing_label": "No Label",
+              "prefix_or_id": "70.70.70.0/24",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel20",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "No Label",
+              "prefix_or_id": "70.70.70.0/24",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel10",
+              "next_hop": "point2point"
+            }
+          ]
+        },
+        "34": {
+          "paths": [
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "20/1[TE-Bind]",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel20",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "20/1[TE-Bind]",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel20",
+              "next_hop": "point2point"
+            }
+          ]
+        },
+        "35": {
+          "paths": [
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "20.20.20.2-A",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "TenGigabitEthernet0/0/5",
+              "next_hop": "20.20.20.2"
+            }
+          ]
+        },
+        "42": {
+          "paths": [
+            {
+              "outgoing_label": "No Label",
+              "prefix_or_id": "50.50.50.0/24",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "TenGigabitEthernet0/0/5",
+              "next_hop": "20.20.20.2"
+            }
+          ]
+        },
+        "45": {
+          "paths": [
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "3.3.3.3/32",
+              "lsp_tunnel": false,
+              "merged": true,
+              "bytes_switched": 0,
+              "outgoing_interface": "TenGigabitEthernet0/0/5",
+              "next_hop": "20.20.20.2"
+            }
+          ]
+        },
+        "46": {
+          "paths": [
+            {
+              "outgoing_label": "No Label",
+              "prefix_or_id": "40.40.40.0/24",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "GigabitEthernet0/0/3",
+              "next_hop": "10.10.10.2"
+            },
+            {
+              "outgoing_label": "No Label",
+              "prefix_or_id": "40.40.40.0/24",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "TenGigabitEthernet0/0/5",
+              "next_hop": "20.20.20.2"
+            }
+          ]
+        },
+        "47": {
+          "paths": [
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "2.2.2.2/32",
+              "lsp_tunnel": false,
+              "merged": true,
+              "bytes_switched": 0,
+              "outgoing_interface": "GigabitEthernet0/0/3",
+              "next_hop": "10.10.10.2"
+            }
+          ]
+        },
+        "48": {
+          "paths": [
+            {
+              "outgoing_label": "16041",
+              "prefix_or_id": "4.4.4.4/32",
+              "lsp_tunnel": false,
+              "merged": true,
+              "bytes_switched": 0,
+              "outgoing_interface": "GigabitEthernet0/0/3",
+              "next_hop": "10.10.10.2"
+            },
+            {
+              "outgoing_label": "16041",
+              "prefix_or_id": "4.4.4.4/32",
+              "lsp_tunnel": false,
+              "merged": true,
+              "bytes_switched": 0,
+              "outgoing_interface": "TenGigabitEthernet0/0/5",
+              "next_hop": "20.20.20.2"
+            }
+          ]
+        },
+        "16021": {
+          "paths": [
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "2.2.2.2/32",
+              "lsp_tunnel": false,
+              "merged": true,
+              "bytes_switched": 0,
+              "outgoing_interface": "GigabitEthernet0/0/3",
+              "next_hop": "10.10.10.2"
+            }
+          ]
+        },
+        "16022": {
+          "paths": [
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "0-2.2.2.2/32-2",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "GigabitEthernet0/0/3",
+              "next_hop": "10.10.10.2"
+            }
+          ]
+        },
+        "16031": {
+          "paths": [
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "3.3.3.3/32",
+              "lsp_tunnel": false,
+              "merged": true,
+              "bytes_switched": 0,
+              "outgoing_interface": "TenGigabitEthernet0/0/5",
+              "next_hop": "20.20.20.2"
+            }
+          ]
+        },
+        "16032": {
+          "paths": [
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "0-3.3.3.3/32-2",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "TenGigabitEthernet0/0/5",
+              "next_hop": "20.20.20.2"
+            }
+          ]
+        },
+        "16041": {
+          "paths": [
+            {
+              "outgoing_label": "16041",
+              "prefix_or_id": "4.4.4.4/32",
+              "lsp_tunnel": false,
+              "merged": true,
+              "bytes_switched": 0,
+              "outgoing_interface": "GigabitEthernet0/0/3",
+              "next_hop": "10.10.10.2"
+            },
+            {
+              "outgoing_label": "16041",
+              "prefix_or_id": "4.4.4.4/32",
+              "lsp_tunnel": false,
+              "merged": true,
+              "bytes_switched": 0,
+              "outgoing_interface": "TenGigabitEthernet0/0/5",
+              "next_hop": "20.20.20.2"
+            }
+          ]
+        },
+        "16042": {
+          "paths": [
+            {
+              "outgoing_label": "16042",
+              "prefix_or_id": "0-4.4.4.4/32-2",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "GigabitEthernet0/0/3",
+              "next_hop": "10.10.10.2"
+            },
+            {
+              "outgoing_label": "16042",
+              "prefix_or_id": "0-4.4.4.4/32-2",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "TenGigabitEthernet0/0/5",
+              "next_hop": "20.20.20.2"
+            }
+          ]
+        },
+        "16051": {
+          "paths": [
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "0-5.5.5.5/32-1",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel65758",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "0-5.5.5.5/32-1",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel65758",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "0-5.5.5.5/32-1",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel20",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "0-5.5.5.5/32-1",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel20",
+              "next_hop": "point2point"
+            }
+          ]
+        },
+        "16052": {
+          "paths": [
+            {
+              "outgoing_label": "16052",
+              "prefix_or_id": "0-5.5.5.5/32-2",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "GigabitEthernet0/0/3",
+              "next_hop": "10.10.10.2"
+            },
+            {
+              "outgoing_label": "16052",
+              "prefix_or_id": "0-5.5.5.5/32-2",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "TenGigabitEthernet0/0/5",
+              "next_hop": "20.20.20.2"
+            }
+          ]
+        },
+        "16061": {
+          "paths": [
+            {
+              "outgoing_label": "16061",
+              "prefix_or_id": "0-6.6.6.6/32-1",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel65758",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "16061",
+              "prefix_or_id": "0-6.6.6.6/32-1",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel65758",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "16061",
+              "prefix_or_id": "0-6.6.6.6/32-1",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel20",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "16061",
+              "prefix_or_id": "0-6.6.6.6/32-1",
+              "lsp_tunnel": true,
+              "merged": false,
+              "outgoing_interface": "Tunnel20",
+              "next_hop": "point2point"
+            },
+            {
+              "outgoing_label": "16061",
+              "prefix_or_id": "0-6.6.6.6/32-1",
+              "lsp_tunnel": false,
+              "merged": false,
+              "outgoing_interface": "GigabitEthernet0/0/3",
+              "next_hop": "10.10.10.2"
+            },
+            {
+              "outgoing_label": "16061",
+              "prefix_or_id": "0-6.6.6.6/32-1",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "TenGigabitEthernet0/0/5",
+              "next_hop": "20.20.20.2"
+            }
+          ]
+        },
+        "16062": {
+          "paths": [
+            {
+              "outgoing_label": "16062",
+              "prefix_or_id": "0-6.6.6.6/32-2",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "GigabitEthernet0/0/3",
+              "next_hop": "10.10.10.2"
+            },
+            {
+              "outgoing_label": "16062",
+              "prefix_or_id": "0-6.6.6.6/32-2",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "TenGigabitEthernet0/0/5",
+              "next_hop": "20.20.20.2"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Merged SR labels with the prefix column padded wide and no prompt echo",
+      "input": "\nLocal      Outgoing   Prefix           Bytes Label   Outgoing   Next Hop\nLabel      Label      or Tunnel Id     Switched      interface\n39    [M]  16052      10.169.14.241/32                                              0             Gi0/1/7    10.169.196.217\n16052 [M]  16052      10.169.14.241/32                                              0             Gi0/1/7    10.169.196.217\n",
+      "expected": {
+        "39": {
+          "paths": [
+            {
+              "outgoing_label": "16052",
+              "prefix_or_id": "10.169.14.241/32",
+              "lsp_tunnel": false,
+              "merged": true,
+              "bytes_switched": 0,
+              "outgoing_interface": "GigabitEthernet0/1/7",
+              "next_hop": "10.169.196.217"
+            }
+          ]
+        },
+        "16052": {
+          "paths": [
+            {
+              "outgoing_label": "16052",
+              "prefix_or_id": "10.169.14.241/32",
+              "lsp_tunnel": false,
+              "merged": true,
+              "bytes_switched": 0,
+              "outgoing_interface": "GigabitEthernet0/1/7",
+              "next_hop": "10.169.196.217"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "SR flex-algo prefix SIDs wrapped over two lines and drop entries without a next hop",
+      "input": "R1#show mpls forwarding-table\nLocal      Outgoing   Prefix           Bytes Label   Outgoing   Next Hop\nLabel      Label      or Tunnel Id     Switched      interface\n17         Pop Label  13.1.1.2-A       0             Et0/2      13.1.1.2\n19         Pop Label  12.1.1.2-A       0             Et0/1      12.1.1.2\n16021      No Label   2.2.2.2/32       0             drop\n16022      Pop Label  0-2.2.2.2/32-2 (1:100:1:0)  \\\n                                       0             Et0/1      12.1.1.2\n16023      Pop Label  0-2.2.2.2/32-32772 (2:100:128:0)  \\\n                                       0             Et0/1      12.1.1.2\n16025      Pop Label  0-2.2.2.2/32-38404 (3:200:128:0)  \\\n                                       0             Et0/1      12.1.1.2\n16031      No Label   3.3.3.3/32       0             drop\n16032      Pop Label  0-3.3.3.3/32-2 (4:100:1:0)  \\\n                                       0             Et0/2      13.1.1.2\n16033      Pop Label  0-3.3.3.3/32-32772 (5:100:128:0)  \\\n                                       0             Et0/2      13.1.1.2\n16035      Pop Label  0-3.3.3.3/32-38404 (6:220:128:0)  \\\n                                       0             Et0/2      13.1.1.2\n\n[T]     Forwarding through a LSP tunnel.\n        View additional labelling info with the 'detail' option\n\nA  - Adjacency SID\n\n[M] - Merged\n",
+      "expected": {
+        "17": {
+          "paths": [
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "13.1.1.2-A",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "Ethernet0/2",
+              "next_hop": "13.1.1.2"
+            }
+          ]
+        },
+        "19": {
+          "paths": [
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "12.1.1.2-A",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "Ethernet0/1",
+              "next_hop": "12.1.1.2"
+            }
+          ]
+        },
+        "16021": {
+          "paths": [
+            {
+              "outgoing_label": "No Label",
+              "prefix_or_id": "2.2.2.2/32",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "drop"
+            }
+          ]
+        },
+        "16022": {
+          "paths": [
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "0-2.2.2.2/32-2 (1:100:1:0)",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "Ethernet0/1",
+              "next_hop": "12.1.1.2"
+            }
+          ]
+        },
+        "16023": {
+          "paths": [
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "0-2.2.2.2/32-32772 (2:100:128:0)",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "Ethernet0/1",
+              "next_hop": "12.1.1.2"
+            }
+          ]
+        },
+        "16025": {
+          "paths": [
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "0-2.2.2.2/32-38404 (3:200:128:0)",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "Ethernet0/1",
+              "next_hop": "12.1.1.2"
+            }
+          ]
+        },
+        "16031": {
+          "paths": [
+            {
+              "outgoing_label": "No Label",
+              "prefix_or_id": "3.3.3.3/32",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "drop"
+            }
+          ]
+        },
+        "16032": {
+          "paths": [
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "0-3.3.3.3/32-2 (4:100:1:0)",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "Ethernet0/2",
+              "next_hop": "13.1.1.2"
+            }
+          ]
+        },
+        "16033": {
+          "paths": [
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "0-3.3.3.3/32-32772 (5:100:128:0)",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "Ethernet0/2",
+              "next_hop": "13.1.1.2"
+            }
+          ]
+        },
+        "16035": {
+          "paths": [
+            {
+              "outgoing_label": "Pop Label",
+              "prefix_or_id": "0-3.3.3.3/32-38404 (6:220:128:0)",
+              "lsp_tunnel": false,
+              "merged": false,
+              "bytes_switched": 0,
+              "outgoing_interface": "Ethernet0/2",
+              "next_hop": "13.1.1.2"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
