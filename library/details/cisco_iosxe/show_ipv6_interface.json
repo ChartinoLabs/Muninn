@@ -1,0 +1,341 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show ipv6 interface",
+  "schema": {
+    "name": "ShowIpv6InterfaceResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "Ipv6InterfaceEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "line_protocol": {
+                "type": "str",
+                "required": true
+              },
+              "ipv6_status": {
+                "type": "str",
+                "required": false
+              },
+              "link_local_address": {
+                "type": "str",
+                "required": false
+              },
+              "global_unicast_addresses": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "GlobalUnicastAddress",
+                    "fields": {
+                      "subnet": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "prefix_length": {
+                        "type": "int",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              },
+              "multicast_groups": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": false
+              },
+              "mtu": {
+                "type": "int",
+                "required": false
+              },
+              "vrf": {
+                "type": "str",
+                "required": false
+              },
+              "icmp_error_interval_ms": {
+                "type": "int",
+                "required": false
+              },
+              "icmp_redirects": {
+                "type": "str",
+                "required": false
+              },
+              "icmp_unreachables": {
+                "type": "str",
+                "required": false
+              },
+              "nd_dad": {
+                "type": "str",
+                "required": false
+              },
+              "nd_dad_attempts": {
+                "type": "int",
+                "required": false
+              },
+              "nd_reachable_time_ms": {
+                "type": "int",
+                "required": false
+              },
+              "nd_reachable_time_in_use_ms": {
+                "type": "int",
+                "required": false
+              },
+              "nd_advertised_reachable_time_ms": {
+                "type": "int",
+                "required": false
+              },
+              "nd_advertised_retransmit_interval_ms": {
+                "type": "int",
+                "required": false
+              },
+              "nd_ra_interval_seconds": {
+                "type": "int",
+                "required": false
+              },
+              "nd_ra_lifetime_seconds": {
+                "type": "int",
+                "required": false
+              },
+              "nd_default_router_preference": {
+                "type": "str",
+                "required": false
+              },
+              "nd_ra_suppression": {
+                "type": "str",
+                "required": false
+              },
+              "hosts_address_configuration": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Multiple interfaces (physical and loopback, some in a VRF) with global unicast addresses, joined groups, and ND settings",
+      "input": "\ncsr1kv-1#show ipv6 interface\nGigabitEthernet2 is up, line protocol is up\n    IPv6 is enabled, link-local address is FE80::F816:3EFF:FE19:ABBA\n    No Virtual link-local address(es):\n    Global unicast address(es):\n      2001:db8:8548:1::1, subnet is 2001:db8:8548:1::/64\n    Joined group address(es):\n        FF02::1\n        FF02::2\n        FF02::5\n        FF02::6\n        FF02::1:FF00:1\n        FF02::1:FF19:ABBA\n    MTU is 1500 bytes\n    ICMP error messages limited to one every 100 milliseconds\n    ICMP redirects are enabled\n    ICMP unreachables are sent\n    ND DAD is enabled, number of DAD attempts: 1\n    ND reachable time is 30000 milliseconds (using 30000)\n    ND advertised reachable time is 0 (unspecified)\n    ND advertised retransmit interval is 0 (unspecified)\n    ND router advertisements live for 1801 seconds\n    ND advertised default router preference is Medium\n    ND RAs are suppressed (periodic)\n    Hosts use stateless autoconfig for addresses.\nGigabitEthernet3 is up, line protocol is up\n    IPv6 is enabled, link-local address is FE80::F816:3EFF:FE72:8407\n    No Virtual link-local address(es):\n    Global unicast address(es):\n        2001:db8:888c:1::1, subnet is 2001:db8:888c:1::/64\n    Joined group address(es):\n        FF02::1\n        FF02::2\n        FF02::5\n        FF02::6\n        FF02::1:FF00:1\n        FF02::1:FF72:8407\n    MTU is 1500 bytes\n    VPN Routing/Forwarding \"vrf1\"\n    ICMP error messages limited to one every 100 milliseconds\n    ICMP redirects are enabled\n    ICMP unreachables are sent\n    ND DAD is enabled, number of DAD attempts: 1\n    ND reachable time is 30000 milliseconds (using 30000)\n    ND advertised reachable time is 0 (unspecified)\n    ND advertised retransmit interval is 0 (unspecified)\n    ND router advertisements are sent every 200 seconds\n    ND router advertisements live for 1800 seconds\n    ND advertised default router preference is Medium\n    Hosts use stateless autoconfig for addresses.\nGigabitEthernet4 is up, line protocol is up\n    IPv6 is enabled, link-local address is FE80::F816:3EFF:FE19:8682\n    No Virtual link-local address(es):\n    Global unicast address(es):\n        2001:db8:c56d:1::1, subnet is 2001:db8:c56d:1::/64\n    Joined group address(es):\n        FF02::1\n        FF02::2\n        FF02::5\n        FF02::6\n        FF02::1:FF00:1\n        FF02::1:FF19:8682\n    MTU is 1500 bytes\n    ICMP error messages limited to one every 100 milliseconds\n    ICMP redirects are enabled\n    ICMP unreachables are sent\n    ND DAD is enabled, number of DAD attempts: 1\n    ND reachable time is 30000 milliseconds (using 30000)\n    ND advertised reachable time is 0 (unspecified)\n    ND advertised retransmit interval is 0 (unspecified)\n    ND router advertisements are sent every 200 seconds\n    ND router advertisements live for 1800 seconds\n    ND advertised default router preference is Medium\n    Hosts use stateless autoconfig for addresses.\nGigabitEthernet5 is up, line protocol is up\n    IPv6 is enabled, link-local address is FE80::F816:3EFF:FEC7:8140\n    No Virtual link-local address(es):\n    Global unicast address(es):\n        2001:db8:c8d1:1::1, subnet is 2001:db8:c8d1:1::/64\n    Joined group address(es):\n        FF02::1\n        FF02::2\n        FF02::5\n        FF02::6\n        FF02::1:FF00:1\n        FF02::1:FFC7:8140\n    MTU is 1500 bytes\n    VPN Routing/Forwarding \"vrf1\"\n    ICMP error messages limited to one every 100 milliseconds\n    ICMP redirects are enabled\n    ICMP unreachables are sent\n    ND DAD is enabled, number of DAD attempts: 1\n    ND reachable time is 30000 milliseconds (using 30000)\n    ND advertised reachable time is 0 (unspecified)\n    ND advertised retransmit interval is 0 (unspecified)\n    ND router advertisements are sent every 200 seconds\n    ND router advertisements live for 1800 seconds\n    ND advertised default router preference is Medium\n    Hosts use stateless autoconfig for addresses.\nLoopback0 is up, line protocol is up\n    IPv6 is enabled, link-local address is FE80::21E:49FF:FE5D:CC00\n    No Virtual link-local address(es):\n    Global unicast address(es):\n        2001:1:1::1, subnet is 2001:1:1::1/128\n    Joined group address(es):\n        FF02::1\n        FF02::2\n        FF02::5\n        FF02::1:FF00:1\n        FF02::1:FF5D:CC00\n    MTU is 1514 bytes\n    ICMP error messages limited to one every 100 milliseconds\n    ICMP redirects are enabled\n    ICMP unreachables are sent\n    ND DAD is not supported\n    ND reachable time is 30000 milliseconds (using 30000)\n    ND advertised reachable time is 0 (unspecified)\n    ND advertised retransmit interval is 0 (unspecified)\n    ND router advertisements live for 1800 seconds\n    ND advertised default router preference is Medium\n    ND RAs are suppressed (periodic)\n    Hosts use stateless autoconfig for addresses.\nLoopback1 is up, line protocol is up\n    IPv6 is enabled, link-local address is FE80::21E:49FF:FE5D:CC00\n    No Virtual link-local address(es):\n    Global unicast address(es):\n        2001:11:11::11, subnet is 2001:11:11::11/128\n    Joined group address(es):\n        FF02::1\n        FF02::2\n        FF02::5\n        FF02::1:FF00:11\n        FF02::1:FF5D:CC00\n    MTU is 1514 bytes\n    VPN Routing/Forwarding \"vrf1\"\n    ICMP error messages limited to one every 100 milliseconds\n    ICMP redirects are enabled\n    ICMP unreachables are sent\n    ND DAD is not supported\n    ND reachable time is 30000 milliseconds (using 30000)\n    ND advertised reachable time is 0 (unspecified)\n    ND advertised retransmit interval is 0 (unspecified)\n    ND router advertisements live for 1800 seconds\n    ND advertised default router preference is Medium\n    ND RAs are suppressed (periodic)\n    Hosts use stateless autoconfig for addresses.\n",
+      "expected": {
+        "interfaces": {
+          "GigabitEthernet2": {
+            "status": "up",
+            "line_protocol": "up",
+            "ipv6_status": "enabled",
+            "link_local_address": "FE80::F816:3EFF:FE19:ABBA",
+            "global_unicast_addresses": {
+              "2001:db8:8548:1::1": {
+                "subnet": "2001:db8:8548:1::/64",
+                "prefix_length": 64
+              }
+            },
+            "multicast_groups": [
+              "FF02::1",
+              "FF02::2",
+              "FF02::5",
+              "FF02::6",
+              "FF02::1:FF00:1",
+              "FF02::1:FF19:ABBA"
+            ],
+            "mtu": 1500,
+            "icmp_error_interval_ms": 100,
+            "icmp_redirects": "enabled",
+            "icmp_unreachables": "sent",
+            "nd_dad": "enabled",
+            "nd_dad_attempts": 1,
+            "nd_reachable_time_ms": 30000,
+            "nd_reachable_time_in_use_ms": 30000,
+            "nd_advertised_reachable_time_ms": 0,
+            "nd_advertised_retransmit_interval_ms": 0,
+            "nd_ra_lifetime_seconds": 1801,
+            "nd_default_router_preference": "Medium",
+            "nd_ra_suppression": "periodic",
+            "hosts_address_configuration": "stateless autoconfig"
+          },
+          "GigabitEthernet3": {
+            "status": "up",
+            "line_protocol": "up",
+            "ipv6_status": "enabled",
+            "link_local_address": "FE80::F816:3EFF:FE72:8407",
+            "global_unicast_addresses": {
+              "2001:db8:888c:1::1": {
+                "subnet": "2001:db8:888c:1::/64",
+                "prefix_length": 64
+              }
+            },
+            "multicast_groups": [
+              "FF02::1",
+              "FF02::2",
+              "FF02::5",
+              "FF02::6",
+              "FF02::1:FF00:1",
+              "FF02::1:FF72:8407"
+            ],
+            "mtu": 1500,
+            "vrf": "vrf1",
+            "icmp_error_interval_ms": 100,
+            "icmp_redirects": "enabled",
+            "icmp_unreachables": "sent",
+            "nd_dad": "enabled",
+            "nd_dad_attempts": 1,
+            "nd_reachable_time_ms": 30000,
+            "nd_reachable_time_in_use_ms": 30000,
+            "nd_advertised_reachable_time_ms": 0,
+            "nd_advertised_retransmit_interval_ms": 0,
+            "nd_ra_interval_seconds": 200,
+            "nd_ra_lifetime_seconds": 1800,
+            "nd_default_router_preference": "Medium",
+            "hosts_address_configuration": "stateless autoconfig"
+          },
+          "GigabitEthernet4": {
+            "status": "up",
+            "line_protocol": "up",
+            "ipv6_status": "enabled",
+            "link_local_address": "FE80::F816:3EFF:FE19:8682",
+            "global_unicast_addresses": {
+              "2001:db8:c56d:1::1": {
+                "subnet": "2001:db8:c56d:1::/64",
+                "prefix_length": 64
+              }
+            },
+            "multicast_groups": [
+              "FF02::1",
+              "FF02::2",
+              "FF02::5",
+              "FF02::6",
+              "FF02::1:FF00:1",
+              "FF02::1:FF19:8682"
+            ],
+            "mtu": 1500,
+            "icmp_error_interval_ms": 100,
+            "icmp_redirects": "enabled",
+            "icmp_unreachables": "sent",
+            "nd_dad": "enabled",
+            "nd_dad_attempts": 1,
+            "nd_reachable_time_ms": 30000,
+            "nd_reachable_time_in_use_ms": 30000,
+            "nd_advertised_reachable_time_ms": 0,
+            "nd_advertised_retransmit_interval_ms": 0,
+            "nd_ra_interval_seconds": 200,
+            "nd_ra_lifetime_seconds": 1800,
+            "nd_default_router_preference": "Medium",
+            "hosts_address_configuration": "stateless autoconfig"
+          },
+          "GigabitEthernet5": {
+            "status": "up",
+            "line_protocol": "up",
+            "ipv6_status": "enabled",
+            "link_local_address": "FE80::F816:3EFF:FEC7:8140",
+            "global_unicast_addresses": {
+              "2001:db8:c8d1:1::1": {
+                "subnet": "2001:db8:c8d1:1::/64",
+                "prefix_length": 64
+              }
+            },
+            "multicast_groups": [
+              "FF02::1",
+              "FF02::2",
+              "FF02::5",
+              "FF02::6",
+              "FF02::1:FF00:1",
+              "FF02::1:FFC7:8140"
+            ],
+            "mtu": 1500,
+            "vrf": "vrf1",
+            "icmp_error_interval_ms": 100,
+            "icmp_redirects": "enabled",
+            "icmp_unreachables": "sent",
+            "nd_dad": "enabled",
+            "nd_dad_attempts": 1,
+            "nd_reachable_time_ms": 30000,
+            "nd_reachable_time_in_use_ms": 30000,
+            "nd_advertised_reachable_time_ms": 0,
+            "nd_advertised_retransmit_interval_ms": 0,
+            "nd_ra_interval_seconds": 200,
+            "nd_ra_lifetime_seconds": 1800,
+            "nd_default_router_preference": "Medium",
+            "hosts_address_configuration": "stateless autoconfig"
+          },
+          "Loopback0": {
+            "status": "up",
+            "line_protocol": "up",
+            "ipv6_status": "enabled",
+            "link_local_address": "FE80::21E:49FF:FE5D:CC00",
+            "global_unicast_addresses": {
+              "2001:1:1::1": {
+                "subnet": "2001:1:1::1/128",
+                "prefix_length": 128
+              }
+            },
+            "multicast_groups": [
+              "FF02::1",
+              "FF02::2",
+              "FF02::5",
+              "FF02::1:FF00:1",
+              "FF02::1:FF5D:CC00"
+            ],
+            "mtu": 1514,
+            "icmp_error_interval_ms": 100,
+            "icmp_redirects": "enabled",
+            "icmp_unreachables": "sent",
+            "nd_dad": "not supported",
+            "nd_reachable_time_ms": 30000,
+            "nd_reachable_time_in_use_ms": 30000,
+            "nd_advertised_reachable_time_ms": 0,
+            "nd_advertised_retransmit_interval_ms": 0,
+            "nd_ra_lifetime_seconds": 1800,
+            "nd_default_router_preference": "Medium",
+            "nd_ra_suppression": "periodic",
+            "hosts_address_configuration": "stateless autoconfig"
+          },
+          "Loopback1": {
+            "status": "up",
+            "line_protocol": "up",
+            "ipv6_status": "enabled",
+            "link_local_address": "FE80::21E:49FF:FE5D:CC00",
+            "global_unicast_addresses": {
+              "2001:11:11::11": {
+                "subnet": "2001:11:11::11/128",
+                "prefix_length": 128
+              }
+            },
+            "multicast_groups": [
+              "FF02::1",
+              "FF02::2",
+              "FF02::5",
+              "FF02::1:FF00:11",
+              "FF02::1:FF5D:CC00"
+            ],
+            "mtu": 1514,
+            "vrf": "vrf1",
+            "icmp_error_interval_ms": 100,
+            "icmp_redirects": "enabled",
+            "icmp_unreachables": "sent",
+            "nd_dad": "not supported",
+            "nd_reachable_time_ms": 30000,
+            "nd_reachable_time_in_use_ms": 30000,
+            "nd_advertised_reachable_time_ms": 0,
+            "nd_advertised_retransmit_interval_ms": 0,
+            "nd_ra_lifetime_seconds": 1800,
+            "nd_default_router_preference": "Medium",
+            "nd_ra_suppression": "periodic",
+            "hosts_address_configuration": "stateless autoconfig"
+          }
+        }
+      }
+    }
+  ]
+}
