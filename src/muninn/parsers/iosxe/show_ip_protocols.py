@@ -33,11 +33,6 @@ class IncomingMetricOffset(TypedDict):
 class NeighborEntry(TypedDict):
     """Schema for a configured neighbor (RIP address list or BGP table row)."""
 
-    filter_in: NotRequired[str]
-    filter_out: NotRequired[str]
-    distribute_in: NotRequired[str]
-    distribute_out: NotRequired[str]
-    weight: NotRequired[str]
     route_map: NotRequired[str]
 
 
@@ -47,14 +42,15 @@ class RipInterfaceEntry(TypedDict):
     send_version: str
     receive_version: str
     triggered_rip: bool
-    key_chain: NotRequired[str]
+    key_chain: str
 
 
 class OspfNetwork(TypedDict):
-    """Schema for an OSPF '<network> <wildcard> area <area>' network line."""
+    """Schema for an OSPF '<network> <wildcard> area <area>' network line.
 
-    network: str
-    wildcard: str
+    Stored as ``ospf_networks[<network>][<wildcard>]``.
+    """
+
     area: str
 
 
@@ -86,8 +82,6 @@ class ProtocolEntry(TypedDict):
     protocol: str
     instance: NotRequired[str]
     output_delay_milliseconds: NotRequired[int]
-    outgoing_update_filter_list: NotRequired[str]
-    incoming_update_filter_list: NotRequired[str]
     incoming_metric_offset: NotRequired[IncomingMetricOffset]
     sending_updates_every_seconds: NotRequired[int]
     next_update_due_seconds: NotRequired[int]
@@ -110,7 +104,7 @@ class ProtocolEntry(TypedDict):
     address_summarization: NotRequired[dict[str, AddressSummary]]
     maximum_path: NotRequired[int]
     routing_for_networks: NotRequired[list[str]]
-    ospf_networks: NotRequired[dict[str, OspfNetwork]]
+    ospf_networks: NotRequired[dict[str, dict[str, OspfNetwork]]]
     routing_on_interfaces_configured_explicitly: NotRequired[dict[str, list[str]]]
     passive_interfaces: NotRequired[list[str]]
     routing_information_sources: NotRequired[dict[str, InformationSource]]
@@ -129,10 +123,6 @@ _PROTOCOL_RE = re.compile(r'^Routing Protocol is "(?P<name>[^"]+)"$')
 
 _OUTPUT_DELAY_RE = re.compile(
     r"^Output delay (?P<delay>\d+) milliseconds between packets$"
-)
-_FILTER_RE = re.compile(
-    r"^(?P<dir>Outgoing|Incoming) update filter list for all interfaces is "
-    r"(?P<value>.+)$"
 )
 _METRIC_OFFSET_RE = re.compile(
     r"^Incoming routes will have (?P<offset>\d+) added to metric if on list "
@@ -182,7 +172,7 @@ _OSPF_NETWORK_RE = re.compile(
 _SUMMARY_ROW_RE = re.compile(rf"^(?P<prefix>{IPV4_PREFIX}) for (?P<intf>\S+)$")
 _RIP_INTF_ROW_RE = re.compile(
     r"^(?P<intf>\S+)\s+(?P<send>\d(?: \d)?)\s+(?P<recv>\d(?: \d)?)\s+"
-    r"(?P<trig>Yes|No)(?:\s+(?P<key>\S+))?$"
+    r"(?P<trig>Yes|No)\s+(?P<key>\S+)$"
 )
 
 # Section headers that introduce an indented list of items.
@@ -194,14 +184,8 @@ _LIST_SECTIONS = {
     "Routing Information Sources:": "routing_information_sources",
 }
 
-_NEIGHBOR_COLUMNS = {
-    "FiltIn": "filter_in",
-    "FiltOut": "filter_out",
-    "DistIn": "distribute_in",
-    "DistOut": "distribute_out",
-    "Weight": "weight",
-    "RouteMap": "route_map",
-}
+# Only the RouteMap column carries values in real output seen so far.
+_NEIGHBOR_COLUMNS = {"RouteMap": "route_map"}
 
 
 def _canon(name: str) -> str:
@@ -220,10 +204,6 @@ def _kv_simple(proto: dict, line: str) -> bool:
     """Handle single-value key lines; return True if the line was consumed."""
     if m := _OUTPUT_DELAY_RE.match(line):
         proto["output_delay_milliseconds"] = int(m.group("delay"))
-    elif m := _FILTER_RE.match(line):
-        if m.group("value") != "not set":
-            key = f"{m.group('dir').lower()}_update_filter_list"
-            proto[key] = m.group("value")
     elif m := _METRIC_OFFSET_RE.match(line):
         proto["incoming_metric_offset"] = {
             "offset": int(m.group("offset")),
@@ -332,9 +312,8 @@ def _item_rip_interface(state: _State, proto: dict, raw: str) -> None:
             "send_version": m.group("send"),
             "receive_version": m.group("recv"),
             "triggered_rip": m.group("trig") == "Yes",
+            "key_chain": m.group("key"),
         }
-        if m.group("key") and m.group("key") != "none":
-            row["key_chain"] = m.group("key")
         proto.setdefault("interfaces", {})[_canon(m.group("intf"))] = row
 
 
@@ -349,8 +328,9 @@ def _item_source(state: _State, proto: dict, raw: str) -> None:
 def _item_network(state: _State, proto: dict, raw: str) -> None:
     line = raw.strip()
     if m := _OSPF_NETWORK_RE.match(line):
-        key = f"{m.group('network')} {m.group('wildcard')}"
-        proto.setdefault("ospf_networks", {})[key] = m.groupdict()
+        networks = proto.setdefault("ospf_networks", {})
+        wildcards = networks.setdefault(m.group("network"), {})
+        wildcards[m.group("wildcard")] = {"area": m.group("area")}
     else:
         proto.setdefault("routing_for_networks", []).append(line)
 
