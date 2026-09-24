@@ -1,0 +1,69 @@
+{
+    "groups": {
+        "SRv6_VPWS": {
+            "SRv6_VPWS_Dual_Homing_AA": {
+                "state": "up",
+                "segment_1": {
+                    "interface": "Bundle-Ether36.1001",
+                    "state": "up",
+                    "type": "VLAN",
+                    "num_ranges": 1,
+                    "rewrite_tags": [],
+                    "vlan_ranges": [
+                        [
+                            1001,
+                            1001
+                        ]
+                    ],
+                    "mtu": 1500,
+                    "xc_id": "0xa0000001",
+                    "statistics": {
+                        "packets_received": 2358,
+                        "packets_sent": 2359,
+                        "bytes_received": 273372,
+                        "bytes_sent": 273772,
+                        "drops_illegal_vlan": 0,
+                        "drops_illegal_length": 0
+                    }
+                },
+                "segment_2": {
+                    "neighbor": "::ffff:10.0.0.1",
+                    "evi": 1001,
+                    "ac_id": 10001,
+                    "state": "up",
+                    "state_detail": "established",
+                    "xc_id": "0xc0000001",
+                    "encapsulation": "SRv6",
+                    "encap_type": "Ethernet",
+                    "ignore_mtu_mismatch": "Enabled",
+                    "transmit_mtu_zero": "Enabled",
+                    "reachability": "Up",
+                    "local": {
+                        "udx2": [
+                            "fc00:c000:2003:e005::"
+                        ],
+                        "ac_id": 10001,
+                        "mtu": 1514,
+                        "locator": "MAIN",
+                        "locator_resolved": "Yes",
+                        "srv6_headend": "H.Encaps.L2.Red"
+                    },
+                    "remote": {
+                        "udx2": [
+                            "fc00:c000:1001:e006::",
+                            "fc00:c000:1002:e006::"
+                        ],
+                        "ac_id": 10001,
+                        "mtu": 0
+                    },
+                    "statistics": {
+                        "packets_received": 2359,
+                        "packets_sent": 2358,
+                        "bytes_received": 273772,
+                        "bytes_sent": 273372
+                    }
+                }
+            }
+        }
+    }
+}
