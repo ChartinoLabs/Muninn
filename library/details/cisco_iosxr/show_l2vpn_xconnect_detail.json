@@ -1,0 +1,476 @@
+{
+  "os": "cisco_iosxr",
+  "command": "show l2vpn xconnect detail",
+  "schema": {
+    "name": "ShowL2vpnXconnectDetailResult",
+    "fields": {
+      "groups": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "DetailXconnect",
+              "fields": {
+                "state": {
+                  "type": "str",
+                  "required": true
+                },
+                "local_ce_id": {
+                  "type": "int",
+                  "required": false
+                },
+                "remote_ce_id": {
+                  "type": "int",
+                  "required": false
+                },
+                "discovery_state": {
+                  "type": "str",
+                  "required": false
+                },
+                "segment_1": {
+                  "type": {
+                    "name": "DetailSegment",
+                    "fields": {
+                      "state": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "partially_programmed": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "seamless_inactive": {
+                        "type": "bool",
+                        "required": false
+                      },
+                      "interface": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "neighbor": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "pw_id": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "evi": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "ac_id": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "description": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "state_detail": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "type": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "num_ranges": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "rewrite_tags": {
+                        "type": {
+                          "type": "list",
+                          "items": "str"
+                        },
+                        "required": false
+                      },
+                      "vlan_ranges": {
+                        "type": {
+                          "type": "list",
+                          "items": {
+                            "type": "list",
+                            "items": "int"
+                          }
+                        },
+                        "required": false
+                      },
+                      "mtu": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "xc_id": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "encapsulation": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "auto_discovered": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "protocol": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "source_address": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "pw_type": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "encap_type": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "control_word": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "backup_disable_delay_seconds": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "lsp": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "ignore_mtu_mismatch": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "transmit_mtu_zero": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "reachability": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "load_balance_hashing": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "flow_label": {
+                        "type": {
+                          "name": "FlowLabel",
+                          "fields": {
+                            "configured_tx": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "configured_rx": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "negotiated_tx": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "negotiated_rx": {
+                              "type": "int",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "local": {
+                        "type": {
+                          "name": "Parameters",
+                          "fields": {
+                            "label": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "mtu": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "control_word": {
+                              "type": "str",
+                              "required": false
+                            },
+                            "pw_type": {
+                              "type": "str",
+                              "required": false
+                            },
+                            "ac_id": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "ce_id": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "udx2": {
+                              "type": {
+                                "type": "list",
+                                "items": "str"
+                              },
+                              "required": false
+                            },
+                            "locator": {
+                              "type": "str",
+                              "required": false
+                            },
+                            "locator_resolved": {
+                              "type": "str",
+                              "required": false
+                            },
+                            "srv6_headend": {
+                              "type": "str",
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "remote": {
+                        "type": {
+                          "type": "ref",
+                          "name": "Parameters"
+                        },
+                        "required": false
+                      },
+                      "mib_cpw_vc_index": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "create_time": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "create_time_ago": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "last_time_status_changed": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "last_time_status_changed_ago": {
+                        "type": "str",
+                        "required": false
+                      },
+                      "statistics": {
+                        "type": {
+                          "name": "Statistics",
+                          "fields": {
+                            "packets_received": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "packets_sent": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "bytes_received": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "bytes_sent": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "drops_illegal_vlan": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "drops_illegal_length": {
+                              "type": "int",
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      }
+                    }
+                  },
+                  "required": true
+                },
+                "segment_2": {
+                  "type": {
+                    "type": "ref",
+                    "name": "DetailSegment"
+                  },
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "SRv6 EVPN VPWS xconnect with Bundle-Ether AC and multi-SID remote uDX2 table without closing rule",
+      "input": "show l2vpn xconnect detail\nWed Jun 14 09:56:45.965 UTC\n\nGroup SRv6_VPWS, XC SRv6_VPWS_Dual_Homing_AA, state is up; Interworking none\n  AC: Bundle-Ether36.1001, state is up\n    Type VLAN; Num Ranges: 1\n    Rewrite Tags: []\n    VLAN ranges: [1001, 1001]\n    MTU 1500; XC ID 0xa0000001; interworking none\n    Statistics:\n      packets: received 2358, sent 2359\n      bytes: received 273372, sent 273772\n      drops: illegal VLAN 0, illegal length 0\n  EVPN: neighbor ::ffff:10.0.0.1, PW ID: evi 1001, ac-id 10001, state is up ( established )\n    XC ID 0xc0000001\n    Encapsulation SRv6\n    Encap type Ethernet\n    Ignore MTU mismatch: Enabled\n    Transmit MTU zero: Enabled\n    Reachability: Up\n\n      SRv6              Local                        Remote\n      ----------------  ---------------------------- --------------------------\n      uDX2              fc00:c000:2003:e005::        fc00:c000:1001:e006::\n                                                     fc00:c000:1002:e006::\n      AC ID             10001                        10001\n      MTU               1514                         0\n      Locator           MAIN                         N/A\n      Locator Resolved  Yes                          N/A\n      SRv6 Headend      H.Encaps.L2.Red              N/A\n    Statistics:\n      packets: received 2359, sent 2358\n      bytes: received 273772, sent 273372\n",
+      "expected": {
+        "groups": {
+          "SRv6_VPWS": {
+            "SRv6_VPWS_Dual_Homing_AA": {
+              "state": "up",
+              "segment_1": {
+                "interface": "Bundle-Ether36.1001",
+                "state": "up",
+                "type": "VLAN",
+                "num_ranges": 1,
+                "rewrite_tags": [],
+                "vlan_ranges": [
+                  [
+                    1001,
+                    1001
+                  ]
+                ],
+                "mtu": 1500,
+                "xc_id": "0xa0000001",
+                "statistics": {
+                  "packets_received": 2358,
+                  "packets_sent": 2359,
+                  "bytes_received": 273372,
+                  "bytes_sent": 273772,
+                  "drops_illegal_vlan": 0,
+                  "drops_illegal_length": 0
+                }
+              },
+              "segment_2": {
+                "neighbor": "::ffff:10.0.0.1",
+                "evi": 1001,
+                "ac_id": 10001,
+                "state": "up",
+                "state_detail": "established",
+                "xc_id": "0xc0000001",
+                "encapsulation": "SRv6",
+                "encap_type": "Ethernet",
+                "ignore_mtu_mismatch": "Enabled",
+                "transmit_mtu_zero": "Enabled",
+                "reachability": "Up",
+                "local": {
+                  "udx2": [
+                    "fc00:c000:2003:e005::"
+                  ],
+                  "ac_id": 10001,
+                  "mtu": 1514,
+                  "locator": "MAIN",
+                  "locator_resolved": "Yes",
+                  "srv6_headend": "H.Encaps.L2.Red"
+                },
+                "remote": {
+                  "udx2": [
+                    "fc00:c000:1001:e006::",
+                    "fc00:c000:1002:e006::"
+                  ],
+                  "ac_id": 10001,
+                  "mtu": 0
+                },
+                "statistics": {
+                  "packets_received": 2359,
+                  "packets_sent": 2358,
+                  "bytes_received": 273772,
+                  "bytes_sent": 273372
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "BGP auto-discovered MPLS PW with CE IDs, flow label flags and CE-ID parameter row",
+      "input": "show l2vpn xconnect detail\n\nFri Sep 29 13:18:50.710 UTC\n\nGroup EVPL-ACCT1412-VRF0301412-CoS, XC VRF331412.12:14, state is up; Interworking none\n  Local CE ID: 12, Remote CE ID: 14, Discovery State: Advertised\n  AC: TenGigE0/0/0/2.1412, state is up\n    Type VLAN; Num Ranges: 1\n    Rewrite Tags: []\n    VLAN ranges: [1412, 1412]\n    MTU 9086; XC ID 0x120000a; interworking none\n    Statistics:\n      packets: received 281821766, sent 282110318\n      bytes: received 394493304868, sent 394895862950\n      drops: illegal VLAN 0, illegal length 0\n  PW: neighbor 8.33.10.3, PW ID 786446, state is up ( established )\n    PW class not set, XC ID 0xa0000005\n    Encapsulation MPLS, Auto-discovered (BGP), protocol BGP\n    Source address 8.33.10.8\n    PW type Ethernet VLAN, control word enabled, interworking none\n    PW backup disable delay 0 sec\n    Sequencing not set\n    LSP : Up\n    Load Balance Hashing: src-dst-ip\n    Flow Label flags configured (Tx=1,Rx=1), negotiated (Tx=1,Rx=1)\n\n      MPLS         Local                          Remote\n      ------------ ------------------------------ -----------------------------\n      Label        24438                          524283\n      MTU          9086                           9082\n      Control word enabled                        enabled\n      PW type      Ethernet VLAN                  Ethernet VLAN\n      CE-ID        12                             14\n      ------------ ------------------------------ -----------------------------\n    MIB cpwVcIndex: 2684354565\n    Create time: 26/07/2023 14:30:00 (9w1d ago)\n    Last time status changed: 12/09/2023 19:10:58 (2w2d ago)\n    Statistics:\n      packets: received 282110318, sent 281821766\n      bytes: received 394895862950, sent 394493304868\n",
+      "expected": {
+        "groups": {
+          "EVPL-ACCT1412-VRF0301412-CoS": {
+            "VRF331412.12:14": {
+              "state": "up",
+              "local_ce_id": 12,
+              "remote_ce_id": 14,
+              "discovery_state": "Advertised",
+              "segment_1": {
+                "interface": "TenGigabitEthernet0/0/0/2.1412",
+                "state": "up",
+                "type": "VLAN",
+                "num_ranges": 1,
+                "rewrite_tags": [],
+                "vlan_ranges": [
+                  [
+                    1412,
+                    1412
+                  ]
+                ],
+                "mtu": 9086,
+                "xc_id": "0x120000a",
+                "statistics": {
+                  "packets_received": 281821766,
+                  "packets_sent": 282110318,
+                  "bytes_received": 394493304868,
+                  "bytes_sent": 394895862950,
+                  "drops_illegal_vlan": 0,
+                  "drops_illegal_length": 0
+                }
+              },
+              "segment_2": {
+                "neighbor": "8.33.10.3",
+                "pw_id": 786446,
+                "state": "up",
+                "state_detail": "established",
+                "xc_id": "0xa0000005",
+                "encapsulation": "MPLS",
+                "auto_discovered": "BGP",
+                "protocol": "BGP",
+                "source_address": "8.33.10.8",
+                "pw_type": "Ethernet VLAN",
+                "control_word": "enabled",
+                "backup_disable_delay_seconds": 0,
+                "lsp": "Up",
+                "load_balance_hashing": "src-dst-ip",
+                "flow_label": {
+                  "configured_tx": 1,
+                  "configured_rx": 1,
+                  "negotiated_tx": 1,
+                  "negotiated_rx": 1
+                },
+                "local": {
+                  "label": 24438,
+                  "mtu": 9086,
+                  "control_word": "enabled",
+                  "pw_type": "Ethernet VLAN",
+                  "ce_id": 12
+                },
+                "remote": {
+                  "label": 524283,
+                  "mtu": 9082,
+                  "control_word": "enabled",
+                  "pw_type": "Ethernet VLAN",
+                  "ce_id": 14
+                },
+                "mib_cpw_vc_index": 2684354565,
+                "create_time": "26/07/2023 14:30:00",
+                "create_time_ago": "9w1d",
+                "last_time_status_changed": "12/09/2023 19:10:58",
+                "last_time_status_changed_ago": "2w2d",
+                "statistics": {
+                  "packets_received": 282110318,
+                  "packets_sent": 281821766,
+                  "bytes_received": 394895862950,
+                  "bytes_sent": 394493304868
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
