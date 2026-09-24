@@ -47,6 +47,9 @@ _ROW_RE = re.compile(
     r"(?:\s+\\|\s{2,}(?P<rest>\S.*?))\s*$"
 )
 
+# Second header line; table rows follow it until the first blank line.
+_HEADER_RE = re.compile(r"^Label\s+Label\s+or Tunnel Id\s+Switched\s+interface\s*$")
+
 # Trailing columns: bytes switched (optional), interface, next hop (optional).
 _REST_RE = re.compile(
     r"^(?:(?P<bytes>\d+)\s+)?(?P<interface>\S+)(?:\s+(?P<next_hop>\S+))?$"
@@ -68,6 +71,36 @@ def _fill_rest(path: dict, rest: str) -> None:
         path["next_hop"] = match.group("next_hop")
 
 
+def _table_lines(output: str) -> list[str]:
+    """Return the lines between the column header and the first blank line."""
+    lines = output.splitlines()
+    for index, line in enumerate(lines):
+        if _HEADER_RE.match(line):
+            table = lines[index + 1 :]
+            blank = next((i for i, row in enumerate(table) if not row.strip()), None)
+            return table[:blank]
+    return []
+
+
+def _parse_row(line: str) -> tuple[str | None, dict, bool]:
+    """Return (local label or None, path, wrapped) for a table row."""
+    match = _ROW_RE.match(line)
+    if not match:
+        msg = f"Unrecognized forwarding table row: {line!r}"
+        raise ValueError(msg)
+    flag = match.group("flag")
+    path: dict = {
+        "outgoing_label": match.group("outgoing_label"),
+        "prefix_or_id": match.group("prefix"),
+        "lsp_tunnel": flag == "T",
+        "merged": flag == "M",
+    }
+    rest = match.group("rest")
+    if rest is not None:
+        _fill_rest(path, rest)
+    return match.group("local_label"), path, rest is None
+
+
 @register(OS.CISCO_IOSXE, "show mpls forwarding-table")
 @register(OS.CISCO_IOSXE, r"show mpls forwarding-table vrf (?P<vrf>\S+)")
 @register(OS.CISCO_IOSXE, rf"show mpls forwarding-table (?P<prefix>{IPV4_ADDRESS})")
@@ -81,7 +114,9 @@ class ShowMplsForwardingTableParser(BaseParser[ShowMplsForwardingTableResult]):
 
     Returns a dict keyed by local label; each label holds the list of
     outgoing paths printed for it (continuation rows with a blank local
-    label belong to the preceding label).
+    label belong to the preceding label). Every line between the column
+    header and the first blank line must be a recognised table row;
+    anything else raises ``ValueError`` rather than being dropped.
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset(
@@ -99,34 +134,25 @@ class ShowMplsForwardingTableParser(BaseParser[ShowMplsForwardingTableResult]):
             Dict keyed by local label with the outgoing paths of each label.
 
         Raises:
-            ValueError: If no forwarding entries are found.
+            ValueError: If no forwarding entries are found, or a table row
+                is not recognised.
         """
         result: dict[str, dict] = {}
         local_label: str | None = None
         wrapped: dict | None = None
 
-        for line in output.splitlines():
+        for line in _table_lines(output):
             if wrapped is not None:
                 _fill_rest(wrapped, line)
                 wrapped = None
                 continue
-            match = _ROW_RE.match(line)
-            if not match:
-                continue
-            local_label = match.group("local_label") or local_label
+            row_label, path, is_wrapped = _parse_row(line)
+            local_label = row_label or local_label
             if local_label is None:
-                continue
-            flag = match.group("flag")
-            path: dict = {
-                "outgoing_label": match.group("outgoing_label"),
-                "prefix_or_id": match.group("prefix"),
-                "lsp_tunnel": flag == "T",
-                "merged": flag == "M",
-            }
-            if match.group("rest") is None:
+                msg = f"Forwarding path has no preceding local label: {line!r}"
+                raise ValueError(msg)
+            if is_wrapped:
                 wrapped = path
-            else:
-                _fill_rest(path, match.group("rest"))
             result.setdefault(local_label, {"paths": []})["paths"].append(path)
 
         if wrapped is not None:
