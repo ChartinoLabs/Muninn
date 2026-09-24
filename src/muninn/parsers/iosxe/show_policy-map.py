@@ -153,13 +153,17 @@ def _police_cir(m: re.Match[str]) -> dict[str, Any]:
 
 
 def _parse_police_spec(spec: str) -> PoliceEntry:
-    """Parse the arguments following the 'police' keyword."""
-    police: dict[str, Any] = {}
+    """Parse the arguments following the 'police' keyword.
+
+    Raises:
+        ValueError: If the spec matches none of the recognised police forms.
+    """
     if m := _POLICE_CIR_RE.match(spec):
-        police = _police_cir(m)
-    elif (m := _POLICE_RATE_RE.match(spec)) or (m := _POLICE_POSITIONAL_RE.match(spec)):
-        police = {k: int(v) for k, v in m.groupdict().items() if v}
-    return cast(PoliceEntry, police)
+        return cast(PoliceEntry, _police_cir(m))
+    if (m := _POLICE_RATE_RE.match(spec)) or (m := _POLICE_POSITIONAL_RE.match(spec)):
+        return cast(PoliceEntry, {k: int(v) for k, v in m.groupdict().items() if v})
+    msg = f"Unrecognised police line: 'police {spec}'"
+    raise ValueError(msg)
 
 
 def _try_police(line: str, entry: dict[str, Any]) -> bool:
@@ -269,7 +273,8 @@ class ShowPolicyMapParser(BaseParser[ShowPolicyMapResult]):
             Policy-maps keyed by name, each with its classes keyed by name.
 
         Raises:
-            ValueError: If no policy-map is found in the output.
+            ValueError: If no policy-map is found in the output, or a
+                ``police`` line matches none of the recognised forms.
         """
         policy_maps: dict[str, dict[str, Any]] = {}
         classes: dict[str, Any] | None = None
