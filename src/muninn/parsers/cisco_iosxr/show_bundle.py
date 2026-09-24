@@ -19,7 +19,6 @@ class LoadBalancingEntry(TypedDict):
 
     link_order_signaling: NotRequired[str]
     hash_type: NotRequired[str]
-    locality_threshold: NotRequired[str]
 
 
 class LacpEntry(TypedDict):
@@ -138,7 +137,8 @@ def _ints(pattern: re.Pattern[str], *keys: str) -> Callable[[str], _Fields]:
     def handler(value: str) -> _Fields:
         match = pattern.match(value)
         if not match:
-            return {}
+            msg = f"Unrecognised value for {', '.join(keys)}: {value!r}"
+            raise ValueError(msg)
         return {
             key: int(group) for key, group in zip(keys, match.groups(), strict=True)
         }
@@ -147,11 +147,8 @@ def _ints(pattern: re.Pattern[str], *keys: str) -> Callable[[str], _Fields]:
 
 
 def _text(key: str) -> Callable[[str], _Fields]:
-    """Build a handler storing the raw value under ``key``.
-
-    Empty values and the ``None`` placeholder are omitted.
-    """
-    return lambda value: {key: value} if value and value != "None" else {}
+    """Build a handler storing the raw value under ``key``."""
+    return lambda value: {key: value}
 
 
 _BOOLS = {"Yes": True, "No": False, "Enabled": True, "Disabled": False}
@@ -159,7 +156,14 @@ _BOOLS = {"Yes": True, "No": False, "Enabled": True, "Disabled": False}
 
 def _bool(key: str) -> Callable[[str], _Fields]:
     """Build a handler storing Yes/No or Enabled/Disabled as a bool."""
-    return lambda value: {key: _BOOLS[value]} if value in _BOOLS else {}
+
+    def handler(value: str) -> _Fields:
+        if value not in _BOOLS:
+            msg = f"Unrecognised value for {key}: {value!r}"
+            raise ValueError(msg)
+        return {key: _BOOLS[value]}
+
+    return handler
 
 
 def _timer(key: str) -> Callable[[str], _Fields]:
@@ -169,8 +173,7 @@ def _timer(key: str) -> Callable[[str], _Fields]:
     def handler(value: str) -> _Fields:
         if value == "Off":
             return {f"{key}_enabled": False}
-        fields = ms(value)
-        return {f"{key}_enabled": True, **fields} if fields else {}
+        return {f"{key}_enabled": True, **ms(value)}
 
     return handler
 
@@ -179,7 +182,8 @@ def _mac(value: str) -> _Fields:
     """Split 'MAC address (source)' into address and source."""
     match = _MAC_RE.match(value)
     if not match:
-        return {}
+        msg = f"Unrecognised MAC address value: {value!r}"
+        raise ValueError(msg)
     return {"mac_address": match["mac"], "mac_address_source": match["source"]}
 
 
@@ -219,7 +223,6 @@ _SECTIONS: dict[str, str] = {
 _SECTION_FIELDS: dict[str, Callable[[str], _Fields]] = {
     "link order signaling": _text("link_order_signaling"),
     "hash type": _text("hash_type"),
-    "locality threshold": _text("locality_threshold"),
     "flap suppression timer": _timer("flap_suppression_timer"),
     "cisco extensions": _bool("cisco_extensions"),
     "non revertive": _bool("non_revertive"),
@@ -334,7 +337,8 @@ class ShowBundleParser(BaseParser[ShowBundleResult]):
             Parsed bundles keyed by canonical bundle interface name.
 
         Raises:
-            ValueError: If no bundle is found or a bundle lacks required fields.
+            ValueError: If no bundle is found, a bundle lacks required fields,
+                or a recognised field has an unrecognised value format.
         """
         bundles: dict[str, dict] = {}
         state: _State | None = None
