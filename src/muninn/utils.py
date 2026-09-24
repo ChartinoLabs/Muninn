@@ -19,8 +19,11 @@ _IOS_FIVE_GIGE_PATTERN = re.compile(
 
 # IOS-XR abbreviated prefixes that netutils does not expand.
 _IOSXR_PREFIX_MAP: dict[str, str] = {
+    "be": "Bundle-Ether",
+    "bv": "BVI",
     "mg": "MgmtEth",
     "nu": "Null",
+    "pe": "PW-Ether",
     "tt": "tunnel-te",
 }
 _IOSXR_PREFIX_PATTERN = re.compile(
