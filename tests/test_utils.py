@@ -35,3 +35,28 @@ class TestCanonicalInterfaceNameAristaEOS:
     def test_non_vlan_passthrough(self, raw: str, expected: str) -> None:
         """Non-Vlan abbreviations defer to netutils canonicalization."""
         assert canonical_interface_name(raw, os=OS.ARISTA_EOS) == expected
+
+
+class TestCanonicalInterfaceNameCiscoIOSXR:
+    """Tests for Cisco IOS-XR-specific canonicalization quirks."""
+
+    @pytest.mark.parametrize(
+        ("raw", "expected"),
+        [
+            ("BE6", "Bundle-Ether6"),
+            ("BE1.10", "Bundle-Ether1.10"),
+            ("BV100", "BVI100"),
+            ("PE104", "PW-Ether104"),
+        ],
+    )
+    def test_abbreviated_prefix_rewrite(self, raw: str, expected: str) -> None:
+        """``BE``/``BV``/``PE`` expand to their IOS-XR full interface names."""
+        assert canonical_interface_name(raw, os=OS.CISCO_IOSXR) == expected
+
+    @pytest.mark.parametrize(
+        "raw",
+        ["Bundle-Ether1", "BVI10", "PW-Ether104"],
+    )
+    def test_full_name_passthrough(self, raw: str) -> None:
+        """Full IOS-XR interface names pass through unchanged."""
+        assert canonical_interface_name(raw, os=OS.CISCO_IOSXR) == raw
