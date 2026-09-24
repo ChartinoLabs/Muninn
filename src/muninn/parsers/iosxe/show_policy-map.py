@@ -138,6 +138,16 @@ _WRED_ROW_RE = re.compile(
     r"^\s*(?P<cls>\d+)\s+(?P<min>\d+)\s+(?P<max>\d+)"
     r"\s+(?P<prob>\d+/\d+)\s*$"
 )
+# Lines starting with an action keyword this parser handles; any such line that
+# no handler accepted is an unhandled form and must raise, not be dropped.
+_ACTION_KEYWORD_RE = re.compile(
+    r"^\s*(?:police|priority|bandwidth|queue-limit|service-policy|shape"
+    r"|random-detect|cir|(?:conform|exceed|violate)-action)\b"
+    r"|Rate Traffic Shaping|\bwred\b",
+    re.IGNORECASE,
+)
+# A four-column WRED table row (excluding the 'class ...' header).
+_WRED_ROW_LIKE_RE = re.compile(r"^\s*(?!class\s)\S+(?:\s+\S+){3}\s*$")
 
 
 def _police_cir(m: re.Match[str]) -> dict[str, Any]:
@@ -237,6 +247,19 @@ def _try_simple(line: str, entry: dict[str, Any]) -> bool:
     return False
 
 
+def _reject_unhandled_action(line: str, entry: dict[str, Any]) -> None:
+    """Raise if an unhandled class-body line is an action keyword or WRED row.
+
+    Raises:
+        ValueError: If the line is a known action in an unhandled form.
+    """
+    if _ACTION_KEYWORD_RE.search(line) or (
+        "wred" in entry and _WRED_ROW_LIKE_RE.match(line)
+    ):
+        msg = f"Unrecognised policy-map action line: '{line.strip()}'"
+        raise ValueError(msg)
+
+
 _CLASS_HANDLERS = (_try_police, _try_shape, _try_wred, _try_priority, _try_simple)
 
 
@@ -273,8 +296,9 @@ class ShowPolicyMapParser(BaseParser[ShowPolicyMapResult]):
             Policy-maps keyed by name, each with its classes keyed by name.
 
         Raises:
-            ValueError: If no policy-map is found in the output, or a
-                ``police`` line matches none of the recognised forms.
+            ValueError: If no policy-map is found in the output, or a class
+                line uses a known action keyword (police, priority, bandwidth,
+                queue-limit, service-policy, shaping, WRED) in an unhandled form.
         """
         policy_maps: dict[str, dict[str, Any]] = {}
         classes: dict[str, Any] | None = None
@@ -288,8 +312,10 @@ class ShowPolicyMapParser(BaseParser[ShowPolicyMapResult]):
                 entry = None
             elif classes is not None and (m := _CLASS_RE.match(line)):
                 entry = classes.setdefault(m.group("name"), {})
-            elif entry is not None:
-                any(handler(line, entry) for handler in _CLASS_HANDLERS)
+            elif entry is not None and not any(
+                handler(line, entry) for handler in _CLASS_HANDLERS
+            ):
+                _reject_unhandled_action(line, entry)
 
         if not policy_maps:
             msg = "No policy-map entries found in output"
