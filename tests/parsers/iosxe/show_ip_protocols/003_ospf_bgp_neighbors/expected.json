@@ -1,0 +1,123 @@
+{
+    "protocols": {
+        "application": {
+            "protocol": "application",
+            "sending_updates_every_seconds": 0,
+            "invalid_after_seconds": 0,
+            "hold_down_seconds": 0,
+            "flushed_after_seconds": 0,
+            "maximum_path": 32,
+            "distance": {
+                "default": 4
+            }
+        },
+        "ospf 1": {
+            "protocol": "ospf",
+            "instance": "1",
+            "router_id": "192.168.1.179",
+            "area_border_router": true,
+            "as_boundary_router": true,
+            "number_of_areas": {
+                "total": 2,
+                "normal": 1,
+                "stub": 0,
+                "nssa": 1
+            },
+            "maximum_path": 4,
+            "ospf_networks": {
+                "192.168.1.0": {
+                    "0.0.0.255": {
+                        "area": "0.0.0.0"
+                    }
+                },
+                "192.168.100.164": {
+                    "0.0.0.3": {
+                        "area": "0.0.0.0"
+                    }
+                },
+                "192.168.100.192": {
+                    "0.0.0.3": {
+                        "area": "0.0.0.0"
+                    }
+                }
+            },
+            "routing_on_interfaces_configured_explicitly": {
+                "0.0.0.0": [
+                    "GigabitEthernet5"
+                ],
+                "4": [
+                    "GigabitEthernet7"
+                ]
+            },
+            "passive_interfaces": [
+                "GigabitEthernet3",
+                "GigabitEthernet4",
+                "GigabitEthernet8",
+                "Loopback0",
+                "VoIP-Null0"
+            ],
+            "routing_information_sources": {
+                "192.168.1.177": {
+                    "distance": 110,
+                    "last_update": "21:33:11"
+                },
+                "192.168.1.176": {
+                    "distance": 110,
+                    "last_update": "21:32:48"
+                },
+                "192.168.1.178": {
+                    "distance": 110,
+                    "last_update": "21:36:07"
+                }
+            },
+            "distance": {
+                "default": 110
+            }
+        },
+        "bgp 202926": {
+            "protocol": "bgp",
+            "instance": "202926",
+            "igp_synchronization": false,
+            "automatic_route_summarization": false,
+            "neighbors": {
+                "10.0.1.211": {},
+                "10.0.1.221": {},
+                "10.0.2.212": {},
+                "10.0.2.222": {},
+                "10.205.188.34": {},
+                "10.205.37.149": {},
+                "172.16.121.101": {
+                    "route_map": "ACCEPT_SCI_RICHEMONT"
+                },
+                "192.168.1.176": {
+                    "route_map": "INTERNET_EDGE_IN"
+                },
+                "192.168.1.177": {
+                    "route_map": "INTERNET_EDGE_IN"
+                },
+                "192.168.1.178": {}
+            },
+            "maximum_path": 2,
+            "routing_information_sources": {
+                "192.168.1.177": {
+                    "distance": 200,
+                    "last_update": "21:33:06"
+                },
+                "192.168.1.176": {
+                    "distance": 200,
+                    "last_update": "21:32:43"
+                },
+                "10.0.2.212": {
+                    "distance": 20,
+                    "last_update": "21:35:39"
+                }
+            },
+            "distance": {
+                "external": 20,
+                "internal": 200,
+                "local": 200
+            }
+        }
+    },
+    "nsf_aware": true
+}
