@@ -1,7 +1,7 @@
 """Parser for 'show lldp neighbors detail' command on IOS/IOS-XE."""
 
 import re
-from typing import ClassVar, Literal, TypedDict, cast
+from typing import Any, ClassVar, Literal, TypedDict, cast
 
 from netutils.interface import canonical_interface_name
 from typing_extensions import NotRequired
@@ -50,6 +50,46 @@ _OPTIONAL_FIELD_PREFIXES = (
 )
 
 
+class LldpMedInventory(TypedDict):
+    """LLDP-MED inventory TLVs; ``-`` placeholder values are omitted."""
+
+    hardware_revision: NotRequired[str]
+    firmware_revision: NotRequired[str]
+    software_revision: NotRequired[str]
+    serial_number: NotRequired[str]
+    manufacturer: NotRequired[str]
+    model: NotRequired[str]
+    asset_id: NotRequired[str]
+
+
+class LldpMedNetworkPolicy(TypedDict):
+    """A single LLDP-MED network policy (e.g. Voice)."""
+
+    vlan: int
+    tagging: str
+    layer2_priority: int
+    dscp: int
+
+
+class LldpMedPower(TypedDict):
+    """LLDP-MED extended power-via-MDI requirements."""
+
+    device_type: str
+    source: str
+    priority: str
+    wattage: float
+
+
+class LldpMedInfo(TypedDict):
+    """LLDP-MED block; sections printed as ``- not advertised`` are omitted."""
+
+    capabilities: list[str]
+    device_type: str
+    inventory: NotRequired[LldpMedInventory]
+    network_policies: NotRequired[dict[str, LldpMedNetworkPolicy]]
+    power: NotRequired[LldpMedPower]
+
+
 class LldpNeighborDetailEntry(TypedDict):
     """Schema for a single LLDP neighbor detail entry."""
 
@@ -67,6 +107,7 @@ class LldpNeighborDetailEntry(TypedDict):
     physical_media_capabilities: NotRequired[list[str]]
     media_attachment_unit_type: NotRequired[int]
     vlan_id: NotRequired[int]
+    med: NotRequired[LldpMedInfo]
 
 
 class ShowLldpNeighborsDetailResult(TypedDict):
@@ -74,6 +115,114 @@ class ShowLldpNeighborsDetailResult(TypedDict):
 
     neighbors: dict[str, dict[str, dict[str, LldpNeighborDetailEntry]]]
     total_entries: NotRequired[int]
+
+
+_MED_HDR_RE = re.compile(r"^MED Information:$")
+_MED_SKIP_RE = re.compile(
+    r"^(?:MED Codes:|\([A-Z]{2}\) .*|"
+    r"(?:Inventory information|Network Policies|Power requirements|Location)"
+    r" - not advertised)$"
+)
+_MED_INVENTORY_RE = re.compile(
+    r"^(?P<k>H/W revision|F/W revision|S/W revision|Serial number|"
+    r"Manufacturer|Model|Asset id):\s*(?P<v>.*)$"
+)
+_MED_INVENTORY_KEYS = {
+    "H/W revision": "hardware_revision",
+    "F/W revision": "firmware_revision",
+    "S/W revision": "software_revision",
+    "Serial number": "serial_number",
+    "Manufacturer": "manufacturer",
+    "Model": "model",
+    "Asset id": "asset_id",
+}
+_MED_CAPS_RE = re.compile(r"^Capabilities:(?:\s+(?P<v>.+))?$")
+_MED_DEVICE_TYPE_RE = re.compile(r"^Device type:\s+(?P<v>.+)$")
+_MED_POLICY_RE = re.compile(
+    r"^Network Policy\((?P<app>[^)]+)\): VLAN (?P<vlan>\d+), (?P<tagging>tagged), "
+    r"Layer-2 priority: (?P<l2>\d+), DSCP: (?P<dscp>\d+)$"
+)
+_MED_POWER_RE = re.compile(
+    r"^(?P<type>PD) device, Power source: (?P<source>[^,]+), "
+    r"Power Priority: (?P<priority>[^,]+), Wattage: (?P<wattage>\d+\.\d+)$"
+)
+
+
+def _med_block_lines(lines: list[str], start: int) -> tuple[list[str], int]:
+    """Return stripped non-blank indented MED lines and the next index."""
+    items: list[str] = []
+    idx = start
+    while idx < len(lines) and (not lines[idx].strip() or lines[idx][:1] in " \t"):
+        if stripped := lines[idx].strip():
+            items.append(stripped)
+        idx += 1
+    return items, idx
+
+
+def _apply_med_line(
+    line: str,
+    med: dict[str, Any],
+    inventory: dict[str, str],
+    policies: dict[str, LldpMedNetworkPolicy],
+) -> None:
+    """Store one MED line into the accumulators; raise on unrecognised lines."""
+    if _MED_SKIP_RE.match(line):
+        return
+    if m := _MED_INVENTORY_RE.match(line):
+        if m.group("v") != "-":
+            inventory[_MED_INVENTORY_KEYS[m.group("k")]] = m.group("v")
+    elif m := _MED_CAPS_RE.match(line):
+        med["capabilities"] = m.group("v").split(", ") if m.group("v") else []
+    elif m := _MED_DEVICE_TYPE_RE.match(line):
+        med["device_type"] = m.group("v")
+    elif m := _MED_POLICY_RE.match(line):
+        policies[m.group("app").lower().replace(" ", "_")] = {
+            "vlan": int(m.group("vlan")),
+            "tagging": m.group("tagging"),
+            "layer2_priority": int(m.group("l2")),
+            "dscp": int(m.group("dscp")),
+        }
+    elif m := _MED_POWER_RE.match(line):
+        med["power"] = {
+            "device_type": m.group("type"),
+            "source": m.group("source"),
+            "priority": m.group("priority"),
+            "wattage": float(m.group("wattage")),
+        }
+    else:
+        msg = f"Unrecognised line in LLDP-MED block: {line!r}"
+        raise ValueError(msg)
+
+
+def _parse_med(lines: list[str], start: int) -> tuple[LldpMedInfo, int]:
+    """Parse the LLDP-MED block following ``MED Information:``.
+
+    Returns:
+        Tuple of (med_info, index_of_next_unprocessed).
+
+    Raises:
+        ValueError: On an unrecognised line or missing capabilities/device type.
+    """
+    med_lines, next_idx = _med_block_lines(lines, start)
+    med: dict[str, Any] = {}
+    inventory: dict[str, str] = {}
+    policies: dict[str, LldpMedNetworkPolicy] = {}
+    for line in med_lines:
+        _apply_med_line(line, med, inventory, policies)
+    if "capabilities" not in med or "device_type" not in med:
+        msg = "LLDP-MED block missing Capabilities or Device type"
+        raise ValueError(msg)
+    result: LldpMedInfo = {
+        "capabilities": med["capabilities"],
+        "device_type": med["device_type"],
+    }
+    if inventory:
+        result["inventory"] = cast(LldpMedInventory, inventory)
+    if policies:
+        result["network_policies"] = policies
+    if "power" in med:
+        result["power"] = med["power"]
+    return result, next_idx
 
 
 def _is_not_advertised(line: str) -> bool:
@@ -157,8 +306,8 @@ class ShowLldpNeighborsDetailParser(
 
     Parses detailed LLDP neighbor information including system name,
     description, capabilities, management addresses and the 802.3 link
-    fields (auto-negotiation, physical media, MAU type, VLAN ID). The
-    LLDP-MED block is not parsed.
+    fields (auto-negotiation, physical media, MAU type, VLAN ID), plus the
+    LLDP-MED block under ``med``.
 
     Output ``neighbors`` is nested as ``outer key -> chassis id -> port id``,
     where the outer key is the canonical local interface when ``Local Intf``
@@ -381,9 +530,13 @@ class ShowLldpNeighborsDetailParser(
             Tuple of (local_interface, port_id_raw, entry) or (None, None, None).
         """
         fields: dict[str, str | int | list[str] | None] = {}
+        med: LldpMedInfo | None = None
         idx = 0
 
         while idx < len(lines):
+            if _MED_HDR_RE.match(lines[idx].strip()):
+                med, idx = _parse_med(lines, idx + 1)
+                continue
             idx = cls._parse_block_line(lines, idx, fields)
 
         port_id_raw = fields.get("port_id")
@@ -391,6 +544,8 @@ class ShowLldpNeighborsDetailParser(
         entry = _build_entry(fields)
         if entry is None:
             return None, None, None
+        if med is not None:
+            entry["med"] = med
         pid = str(port_id_raw) if port_id_raw is not None else None
         return (
             str(local_intf) if local_intf else None,
