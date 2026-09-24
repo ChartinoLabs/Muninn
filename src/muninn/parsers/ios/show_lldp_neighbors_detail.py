@@ -51,7 +51,11 @@ _OPTIONAL_FIELD_PREFIXES = (
 
 
 class LldpMedInventory(TypedDict):
-    """LLDP-MED inventory TLVs; ``-`` placeholder values are omitted."""
+    """LLDP-MED inventory TLVs; ``-`` placeholder values are omitted.
+
+    ``Asset id`` is only recognised as the ``-`` placeholder; any real value
+    raises ``ValueError`` until a fixture shows one.
+    """
 
     hardware_revision: NotRequired[str]
     firmware_revision: NotRequired[str]
@@ -59,7 +63,6 @@ class LldpMedInventory(TypedDict):
     serial_number: NotRequired[str]
     manufacturer: NotRequired[str]
     model: NotRequired[str]
-    asset_id: NotRequired[str]
 
 
 class LldpMedNetworkPolicy(TypedDict):
@@ -119,13 +122,13 @@ class ShowLldpNeighborsDetailResult(TypedDict):
 
 _MED_HDR_RE = re.compile(r"^MED Information:$")
 _MED_SKIP_RE = re.compile(
-    r"^(?:MED Codes:|\([A-Z]{2}\) .*|"
+    r"^(?:MED Codes:|\([A-Z]{2}\) .*|Asset id: -|"
     r"(?:Inventory information|Network Policies|Power requirements|Location)"
     r" - not advertised)$"
 )
 _MED_INVENTORY_RE = re.compile(
     r"^(?P<k>H/W revision|F/W revision|S/W revision|Serial number|"
-    r"Manufacturer|Model|Asset id):\s*(?P<v>.*)$"
+    r"Manufacturer|Model):\s*(?P<v>.*)$"
 )
 _MED_INVENTORY_KEYS = {
     "H/W revision": "hardware_revision",
@@ -134,7 +137,6 @@ _MED_INVENTORY_KEYS = {
     "Serial number": "serial_number",
     "Manufacturer": "manufacturer",
     "Model": "model",
-    "Asset id": "asset_id",
 }
 _MED_CAPS_RE = re.compile(r"^Capabilities:(?:\s+(?P<v>.+))?$")
 _MED_DEVICE_TYPE_RE = re.compile(r"^Device type:\s+(?P<v>.+)$")
