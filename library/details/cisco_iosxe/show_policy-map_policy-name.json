@@ -1,0 +1,219 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show policy-map <policy-name>",
+  "schema": {
+    "name": "ShowPolicyMapResult",
+    "fields": {
+      "policy_maps": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PolicyMapEntry",
+            "fields": {
+              "classes": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "ClassEntry",
+                    "fields": {
+                      "police": {
+                        "type": {
+                          "name": "PoliceEntry",
+                          "fields": {
+                            "cir_bps": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "cir_percent": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "bc_bytes": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "bc_ms": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "pir_bps": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "pir_percent": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "be_bytes": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "be_ms": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "rate_bps": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "rate_percent": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "conform_actions": {
+                              "type": {
+                                "type": "list",
+                                "items": "str"
+                              },
+                              "required": false
+                            },
+                            "exceed_actions": {
+                              "type": {
+                                "type": "list",
+                                "items": "str"
+                              },
+                              "required": false
+                            },
+                            "violate_actions": {
+                              "type": {
+                                "type": "list",
+                                "items": "str"
+                              },
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "shape": {
+                        "type": {
+                          "name": "ShapeEntry",
+                          "fields": {
+                            "type": {
+                              "type": "str",
+                              "required": true
+                            },
+                            "cir_bps": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "bc_bits": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "be_bits": {
+                              "type": "int",
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "priority": {
+                        "type": {
+                          "name": "PriorityEntry",
+                          "fields": {
+                            "enabled": {
+                              "type": "bool",
+                              "required": true
+                            },
+                            "kbps": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "percent": {
+                              "type": "int",
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "bandwidth": {
+                        "type": {
+                          "name": "BandwidthEntry",
+                          "fields": {
+                            "kbps": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "remaining_percent": {
+                              "type": "int",
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "queue_limit": {
+                        "type": {
+                          "name": "QueueLimitEntry",
+                          "fields": {
+                            "packets": {
+                              "type": "int",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "wred": {
+                        "type": {
+                          "name": "WredEntry",
+                          "fields": {
+                            "type": {
+                              "type": "str",
+                              "required": true
+                            },
+                            "exponential_weight": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "classes": {
+                              "type": {
+                                "type": "dict",
+                                "key": "str",
+                                "value": {
+                                  "name": "WredClassEntry",
+                                  "fields": {
+                                    "min_threshold": {
+                                      "type": "int",
+                                      "required": true
+                                    },
+                                    "max_threshold": {
+                                      "type": "int",
+                                      "required": true
+                                    },
+                                    "mark_probability": {
+                                      "type": "str",
+                                      "required": true
+                                    }
+                                  }
+                                }
+                              },
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "service_policy": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}

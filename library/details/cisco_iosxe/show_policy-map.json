@@ -1,0 +1,343 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show policy-map",
+  "schema": {
+    "name": "ShowPolicyMapResult",
+    "fields": {
+      "policy_maps": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PolicyMapEntry",
+            "fields": {
+              "classes": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "ClassEntry",
+                    "fields": {
+                      "police": {
+                        "type": {
+                          "name": "PoliceEntry",
+                          "fields": {
+                            "cir_bps": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "cir_percent": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "bc_bytes": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "bc_ms": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "pir_bps": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "pir_percent": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "be_bytes": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "be_ms": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "rate_bps": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "rate_percent": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "conform_actions": {
+                              "type": {
+                                "type": "list",
+                                "items": "str"
+                              },
+                              "required": false
+                            },
+                            "exceed_actions": {
+                              "type": {
+                                "type": "list",
+                                "items": "str"
+                              },
+                              "required": false
+                            },
+                            "violate_actions": {
+                              "type": {
+                                "type": "list",
+                                "items": "str"
+                              },
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "shape": {
+                        "type": {
+                          "name": "ShapeEntry",
+                          "fields": {
+                            "type": {
+                              "type": "str",
+                              "required": true
+                            },
+                            "cir_bps": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "bc_bits": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "be_bits": {
+                              "type": "int",
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "priority": {
+                        "type": {
+                          "name": "PriorityEntry",
+                          "fields": {
+                            "enabled": {
+                              "type": "bool",
+                              "required": true
+                            },
+                            "kbps": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "percent": {
+                              "type": "int",
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "bandwidth": {
+                        "type": {
+                          "name": "BandwidthEntry",
+                          "fields": {
+                            "kbps": {
+                              "type": "int",
+                              "required": false
+                            },
+                            "remaining_percent": {
+                              "type": "int",
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "queue_limit": {
+                        "type": {
+                          "name": "QueueLimitEntry",
+                          "fields": {
+                            "packets": {
+                              "type": "int",
+                              "required": true
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "wred": {
+                        "type": {
+                          "name": "WredEntry",
+                          "fields": {
+                            "type": {
+                              "type": "str",
+                              "required": true
+                            },
+                            "exponential_weight": {
+                              "type": "int",
+                              "required": true
+                            },
+                            "classes": {
+                              "type": {
+                                "type": "dict",
+                                "key": "str",
+                                "value": {
+                                  "name": "WredClassEntry",
+                                  "fields": {
+                                    "min_threshold": {
+                                      "type": "int",
+                                      "required": true
+                                    },
+                                    "max_threshold": {
+                                      "type": "int",
+                                      "required": true
+                                    },
+                                    "mark_probability": {
+                                      "type": "str",
+                                      "required": true
+                                    }
+                                  }
+                                }
+                              },
+                              "required": false
+                            }
+                          }
+                        },
+                        "required": false
+                      },
+                      "service_policy": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Average rate shaping with cir in bps and bc/be in bits",
+      "input": "\n        Policy Map parent-policy2\n            Class class-default\n              Average Rate Traffic Shaping\n              cir 1000000 (bps) bc 2000000 (bits) be 300000 (bits)\n",
+      "expected": {
+        "policy_maps": {
+          "parent-policy2": {
+            "classes": {
+              "class-default": {
+                "shape": {
+                  "type": "average",
+                  "cir_bps": 1000000,
+                  "bc_bits": 2000000,
+                  "be_bits": 300000
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Priority and bandwidth in kbps, packet-based WRED threshold table and queue-limit",
+      "input": "\n      Policy Map child-policy\n        Class high-priority\n          priority 2000000 (kbps)\n        Class low-priority\n          priority 2000000 (kbps)\n        Class band-policy\n          bandwidth 150000 (kbps)\n        Class test-cir\n          bandwidth 800000 (kbps)\n        Class class-default\n           packet-based wred, exponential weight 4\n\n          class    min-threshold    max-threshold    mark-probablity\n          ----------------------------------------------------------\n          0       25               50               1/10\n          1       50               70               1/10\n          2       80               100              1/10\n          3       80               100              1/10\n          4       80               100              1/10\n          5       80               100              1/10\n          6       80               100              1/10\n          7       25               50               1/10\n          queue-limit 100 packets\n",
+      "expected": {
+        "policy_maps": {
+          "child-policy": {
+            "classes": {
+              "high-priority": {
+                "priority": {
+                  "enabled": true,
+                  "kbps": 2000000
+                }
+              },
+              "low-priority": {
+                "priority": {
+                  "enabled": true,
+                  "kbps": 2000000
+                }
+              },
+              "band-policy": {
+                "bandwidth": {
+                  "kbps": 150000
+                }
+              },
+              "test-cir": {
+                "bandwidth": {
+                  "kbps": 800000
+                }
+              },
+              "class-default": {
+                "wred": {
+                  "type": "packet-based",
+                  "exponential_weight": 4,
+                  "classes": {
+                    "0": {
+                      "mark_probability": "1/10",
+                      "min_threshold": 25,
+                      "max_threshold": 50
+                    },
+                    "1": {
+                      "mark_probability": "1/10",
+                      "min_threshold": 50,
+                      "max_threshold": 70
+                    },
+                    "2": {
+                      "mark_probability": "1/10",
+                      "min_threshold": 80,
+                      "max_threshold": 100
+                    },
+                    "3": {
+                      "mark_probability": "1/10",
+                      "min_threshold": 80,
+                      "max_threshold": 100
+                    },
+                    "4": {
+                      "mark_probability": "1/10",
+                      "min_threshold": 80,
+                      "max_threshold": 100
+                    },
+                    "5": {
+                      "mark_probability": "1/10",
+                      "min_threshold": 80,
+                      "max_threshold": 100
+                    },
+                    "6": {
+                      "mark_probability": "1/10",
+                      "min_threshold": 80,
+                      "max_threshold": 100
+                    },
+                    "7": {
+                      "mark_probability": "1/10",
+                      "min_threshold": 25,
+                      "max_threshold": 50
+                    }
+                  }
+                },
+                "queue_limit": {
+                  "packets": 100
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Single class with priority as a percentage",
+      "input": " Policy Map map1\n    Class cs1\n      priority 9 (%)\n",
+      "expected": {
+        "policy_maps": {
+          "map1": {
+            "classes": {
+              "cs1": {
+                "priority": {
+                  "enabled": true,
+                  "percent": 9
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
