@@ -78,6 +78,109 @@
                   "vlan_id": {
                     "type": "int",
                     "required": false
+                  },
+                  "med": {
+                    "type": {
+                      "name": "LldpMedInfo",
+                      "fields": {
+                        "capabilities": {
+                          "type": {
+                            "type": "list",
+                            "items": "str"
+                          },
+                          "required": true
+                        },
+                        "device_type": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "inventory": {
+                          "type": {
+                            "name": "LldpMedInventory",
+                            "fields": {
+                              "hardware_revision": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "firmware_revision": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "software_revision": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "serial_number": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "manufacturer": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "model": {
+                                "type": "str",
+                                "required": false
+                              }
+                            }
+                          },
+                          "required": false
+                        },
+                        "network_policies": {
+                          "type": {
+                            "type": "dict",
+                            "key": "str",
+                            "value": {
+                              "name": "LldpMedNetworkPolicy",
+                              "fields": {
+                                "vlan": {
+                                  "type": "int",
+                                  "required": true
+                                },
+                                "tagging": {
+                                  "type": "str",
+                                  "required": true
+                                },
+                                "layer2_priority": {
+                                  "type": "int",
+                                  "required": true
+                                },
+                                "dscp": {
+                                  "type": "int",
+                                  "required": true
+                                }
+                              }
+                            }
+                          },
+                          "required": false
+                        },
+                        "power": {
+                          "type": {
+                            "name": "LldpMedPower",
+                            "fields": {
+                              "device_type": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "source": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "priority": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "wattage": {
+                                "type": "float",
+                                "required": true
+                              }
+                            }
+                          },
+                          "required": false
+                        }
+                      }
+                    },
+                    "required": false
                   }
                 }
               }
@@ -118,7 +221,15 @@
                   "10base-T(FD)",
                   "10base-T(HD)"
                 ],
-                "vlan_id": 1
+                "vlan_id": 1,
+                "med": {
+                  "capabilities": [
+                    "NP",
+                    "LI",
+                    "PS"
+                  ],
+                  "device_type": "Network connectivity"
+                }
               }
             }
           },
@@ -310,7 +421,19 @@
                   "10base-T(FD)",
                   "10base-T(HD)"
                 ],
-                "media_attachment_unit_type": 16
+                "media_attachment_unit_type": 16,
+                "med": {
+                  "capabilities": [
+                    "PD"
+                  ],
+                  "device_type": "Endpoint Class I",
+                  "power": {
+                    "device_type": "PD",
+                    "source": "PSE",
+                    "priority": "High",
+                    "wattage": 25.0
+                  }
+                }
               }
             }
           },
@@ -339,7 +462,19 @@
                   "10base-T(FD)",
                   "10base-T(HD)"
                 ],
-                "media_attachment_unit_type": 30
+                "media_attachment_unit_type": 30,
+                "med": {
+                  "capabilities": [
+                    "PD"
+                  ],
+                  "device_type": "Endpoint Class I",
+                  "power": {
+                    "device_type": "PD",
+                    "source": "PSE",
+                    "priority": "High",
+                    "wattage": 25.0
+                  }
+                }
               }
             }
           },
@@ -424,7 +559,35 @@
                   "10base-T(FD)",
                   "10base-T(HD)"
                 ],
-                "media_attachment_unit_type": 16
+                "media_attachment_unit_type": 16,
+                "med": {
+                  "capabilities": [
+                    "NP",
+                    "PD",
+                    "IN"
+                  ],
+                  "device_type": "Endpoint Class III",
+                  "inventory": {
+                    "hardware_revision": "9.1.3.3",
+                    "firmware_revision": "5.0.9.0",
+                    "manufacturer": "NEC",
+                    "model": "DT730"
+                  },
+                  "network_policies": {
+                    "voice": {
+                      "vlan": 2046,
+                      "tagging": "tagged",
+                      "layer2_priority": 5,
+                      "dscp": 46
+                    }
+                  },
+                  "power": {
+                    "device_type": "PD",
+                    "source": "Unknown",
+                    "priority": "Unknown",
+                    "wattage": 6.3
+                  }
+                }
               }
             }
           }

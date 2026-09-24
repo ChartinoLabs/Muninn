@@ -78,6 +78,109 @@
                   "vlan_id": {
                     "type": "int",
                     "required": false
+                  },
+                  "med": {
+                    "type": {
+                      "name": "LldpMedInfo",
+                      "fields": {
+                        "capabilities": {
+                          "type": {
+                            "type": "list",
+                            "items": "str"
+                          },
+                          "required": true
+                        },
+                        "device_type": {
+                          "type": "str",
+                          "required": true
+                        },
+                        "inventory": {
+                          "type": {
+                            "name": "LldpMedInventory",
+                            "fields": {
+                              "hardware_revision": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "firmware_revision": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "software_revision": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "serial_number": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "manufacturer": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "model": {
+                                "type": "str",
+                                "required": false
+                              }
+                            }
+                          },
+                          "required": false
+                        },
+                        "network_policies": {
+                          "type": {
+                            "type": "dict",
+                            "key": "str",
+                            "value": {
+                              "name": "LldpMedNetworkPolicy",
+                              "fields": {
+                                "vlan": {
+                                  "type": "int",
+                                  "required": true
+                                },
+                                "tagging": {
+                                  "type": "str",
+                                  "required": true
+                                },
+                                "layer2_priority": {
+                                  "type": "int",
+                                  "required": true
+                                },
+                                "dscp": {
+                                  "type": "int",
+                                  "required": true
+                                }
+                              }
+                            }
+                          },
+                          "required": false
+                        },
+                        "power": {
+                          "type": {
+                            "name": "LldpMedPower",
+                            "fields": {
+                              "device_type": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "source": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "priority": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "wattage": {
+                                "type": "float",
+                                "required": true
+                              }
+                            }
+                          },
+                          "required": false
+                        }
+                      }
+                    },
+                    "required": false
                   }
                 }
               }
@@ -120,7 +223,43 @@
                   "Symm, Asym Pause(FD)",
                   "Symm Pause(FD)"
                 ],
-                "media_attachment_unit_type": 16
+                "media_attachment_unit_type": 16,
+                "med": {
+                  "capabilities": [
+                    "NP",
+                    "PD",
+                    "IN"
+                  ],
+                  "device_type": "Endpoint Class III",
+                  "inventory": {
+                    "hardware_revision": "12",
+                    "firmware_revision": "tnp62.8-3-1-21a.bin",
+                    "software_revision": "SCCP42.9-3-1ES27S",
+                    "serial_number": "FCH1610A5S5",
+                    "manufacturer": "Cisco Systems, Inc.",
+                    "model": "CP-7962G"
+                  },
+                  "network_policies": {
+                    "voice": {
+                      "vlan": 10,
+                      "tagging": "tagged",
+                      "layer2_priority": 5,
+                      "dscp": 46
+                    },
+                    "voice_signal": {
+                      "vlan": 10,
+                      "tagging": "tagged",
+                      "layer2_priority": 4,
+                      "dscp": 32
+                    }
+                  },
+                  "power": {
+                    "device_type": "PD",
+                    "source": "Unknown",
+                    "priority": "Unknown",
+                    "wattage": 6.3
+                  }
+                }
               }
             }
           }
@@ -167,7 +306,11 @@
                 "auto_negotiation_enabled": true,
                 "physical_media_capabilities": [
                   "1000baseT(FD)"
-                ]
+                ],
+                "med": {
+                  "capabilities": [],
+                  "device_type": "Endpoint Class I"
+                }
               }
             }
           }
