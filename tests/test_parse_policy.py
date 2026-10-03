@@ -158,8 +158,47 @@ def test_parse_error_when_all_candidates_fail(runtime: Muninn) -> None:
     runtime.registry.register_parser("nxos", "show version", BuiltInParser, "built_in")
     runtime.registry.register_parser("nxos", "show version", LocalParser, "local")
 
-    with pytest.raises(ParseError):
+    with pytest.raises(ParseError) as exc_info:
         runtime.parse("nxos", "show version", "show version output")
+
+    message = str(exc_info.value)
+    assert "os='cisco_nxos', command='show version'" in message
+    assert "no parser candidates produced a valid result" in message
+    assert "Attempted 2 candidate(s) in order" in message
+    assert "local:LocalParser -> returned an invalid result ({})" in message
+    assert "built_in:BuiltInParser -> raised RuntimeError: built-in failure" in message
+    assert message.index("local:LocalParser") < message.index("built_in:BuiltInParser")
+
+
+def test_parse_error_lists_candidates_returning_none_without_fallback(
+    runtime: Muninn,
+) -> None:
+    """ParseError names each candidate even when no candidate raised."""
+    runtime.configuration.set_fallback_on_invalid_result(False)
+
+    @register("nxos", "show version")
+    class BuiltInParser(BaseParser):
+        tags = frozenset({ParserTag.SYSTEM})
+
+        @classmethod
+        def parse(cls, output: str) -> dict[str, Any] | None:
+            return None
+
+    @register("nxos", "show version")
+    class LocalParser(BaseParser):
+        @classmethod
+        def parse(cls, output: str) -> dict[str, Any] | None:
+            return None
+
+    runtime.registry.register_parser("nxos", "show version", BuiltInParser, "built_in")
+    runtime.registry.register_parser("nxos", "show version", LocalParser, "local")
+
+    with pytest.raises(ParseError) as exc_info:
+        runtime.parse("nxos", "show version", "show version output")
+
+    message = str(exc_info.value)
+    assert "local:LocalParser -> returned None" in message
+    assert "built_in:BuiltInParser -> returned None" in message
 
 
 def test_execution_mode_is_loaded_from_environment(

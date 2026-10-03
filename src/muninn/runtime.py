@@ -182,7 +182,17 @@ class MuninnRuntime:
                 reason,
                 exc_info=True,
             )
-            return None, f"{source}:{parser_cls.__name__}:{reason}"
+            detail = str(exc)
+            outcome = f"raised {type(exc).__name__}"
+            return None, f"{outcome}: {detail}" if detail else outcome
+
+        if result is None and not fallback_on_invalid_result:
+            logger.debug(
+                "Parser %s source=%s returned None; trying next candidate",
+                parser_cls.__name__,
+                source,
+            )
+            return None, "returned None"
 
         if fallback_on_invalid_result and _is_invalid_result(result):
             reason = "invalid_result"
@@ -192,7 +202,7 @@ class MuninnRuntime:
                 source,
                 reason,
             )
-            return None, f"{source}:{parser_cls.__name__}:{reason}"
+            return None, f"returned an invalid result ({result!r})"
 
         logger.debug(
             "Parser selected %s source=%s for os=%s command=%r",
@@ -223,7 +233,7 @@ class MuninnRuntime:
 
         self._log_candidate_order(resolved_os, command, execution_mode, candidate_order)
 
-        failure_reasons: list[str] = []
+        attempts: list[str] = []
 
         for candidate in candidates:
             result, failure_reason = self._try_candidate(
@@ -233,19 +243,16 @@ class MuninnRuntime:
                 output,
                 fallback_on_invalid_result,
             )
-            if failure_reason is not None:
-                failure_reasons.append(failure_reason)
-                continue
-            if result is not None:
+            if failure_reason is None and result is not None:
                 return result
+            label = f"{candidate.source}:{candidate.parser_cls.__name__}"
+            attempts.append(f"{label} -> {failure_reason or 'no result'}")
 
-        failure_summary = "; ".join(failure_reasons)
-        if not failure_summary:
-            failure_summary = "no parser candidates produced a valid result"
         raise ParseError(
             resolved_os.value.name,
             command,
-            f"all parser candidates failed. {failure_summary}",
+            "no parser candidates produced a valid result. "
+            f"Attempted {len(attempts)} candidate(s) in order: " + "; ".join(attempts),
         )
 
 
