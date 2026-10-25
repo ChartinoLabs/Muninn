@@ -1,0 +1,1 @@
+Built-in parsers are now registered once per process and shared read-only by every `Muninn` runtime instead of being copied into each one, so creating many runtimes (for example one per test job) no longer costs about 0.4 MB and 70 ms each. Concurrent first calls to `load_builtin_parsers()` are serialized by a lock, and parsers registered on one runtime still never reach another.
