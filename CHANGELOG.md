@@ -4,6 +4,57 @@ All notable changes to Muninn are documented in this file.
 
 <!-- towncrier release notes start -->
 
+## 0.8.0 - 2026-10-25
+
+### Added Parsers
+
+- Added parser support for `show dhcp ipv4 proxy binding` and `show dhcp ipv4 proxy binding interface <interface>` on Cisco IOS-XR. ([#941](https://github.com/ChartinoLabs/Muninn/pull/941))
+- Added parser support for `show ip mroute` (including `vrf <vrf>` and `vrf <vrf> <group>` forms) on Cisco IOS-XE. ([#1409](https://github.com/ChartinoLabs/Muninn/pull/1409))
+- Added parser support for `show mpls forwarding-table` (including `vrf <vrf>`, `<prefix>` and `<prefix> <mask> algo <n>` variants) on Cisco IOS-XE. ([#1410](https://github.com/ChartinoLabs/Muninn/pull/1410))
+- Added parser support for `show ip nat translations` (including `vrf <vrf>` and `verbose` variants) on Cisco IOS-XE. ([#1411](https://github.com/ChartinoLabs/Muninn/pull/1411))
+- Added parser support for `show ip nat statistics` on Cisco IOS and IOS-XE. ([#1412](https://github.com/ChartinoLabs/Muninn/pull/1412))
+- Added parser support for `show ip protocols` on Cisco IOS-XE. ([#1413](https://github.com/ChartinoLabs/Muninn/pull/1413))
+- Added parser support for `show ipv6 interface` on Cisco IOS-XE. ([#1414](https://github.com/ChartinoLabs/Muninn/pull/1414))
+- Added parser support for `show interfaces switchport` on Cisco IOS-XE. ([#1415](https://github.com/ChartinoLabs/Muninn/pull/1415))
+- Added parser support for `show ip dhcp binding` and `show ip dhcp binding vrf <vrf>` on Cisco IOS-XE (re-using the Cisco IOS parser), and extended the parser to capture the `Interface` column, the VRF pool name, wrapped client IDs and header-only (no bindings) output. ([#1417](https://github.com/ChartinoLabs/Muninn/pull/1417))
+- Added parser support for `show policy-map` and `show policy-map <policy-name>` on Cisco IOS-XE. ([#1418](https://github.com/ChartinoLabs/Muninn/pull/1418))
+- Added parser support for `show mpls ldp neighbor` and `show mpls ldp neighbor vrf <vrf>` on Cisco IOS-XE. ([#1419](https://github.com/ChartinoLabs/Muninn/pull/1419))
+- Added parser support for `show mpls ldp neighbor detail` and `show mpls ldp neighbor vrf <vrf> detail` on Cisco IOS-XE, and targeted-hello discovery sources to `show mpls ldp neighbor`. ([#1420](https://github.com/ChartinoLabs/Muninn/pull/1420))
+- Added parser support for `show route ipv4` (plus `show route vrf <vrf> ipv4`, `show route vrf all ipv4` and `show route [vrf <vrf>] ipv4 <prefix> [detail]`) on Cisco IOS-XR. ([#1421](https://github.com/ChartinoLabs/Muninn/pull/1421))
+- Added parser support for `show route ipv6` (plus `show route vrf <vrf> ipv6`, `show route ipv6 local-srv6` and `show route [vrf <vrf>] ipv6 <prefix> [detail]`) on Cisco IOS-XR. ([#1422](https://github.com/ChartinoLabs/Muninn/pull/1422))
+- Added parser support for `show l2vpn xconnect` on Cisco IOS-XR. ([#1423](https://github.com/ChartinoLabs/Muninn/pull/1423))
+- Added parser support for `show l2vpn xconnect detail` on Cisco IOS-XR. ([#1424](https://github.com/ChartinoLabs/Muninn/pull/1424))
+- Added parser support for `show l2vpn bridge-domain detail` on Cisco IOS-XR. ([#1425](https://github.com/ChartinoLabs/Muninn/pull/1425))
+- Added parser support for `show ospf interface` and `show ospf <process-id> interface <interface>` on Cisco IOS-XR. ([#1426](https://github.com/ChartinoLabs/Muninn/pull/1426))
+- Added parser support for `show bundle` and `show bundle bundle-ether <n>` on Cisco IOS-XR. ([#1427](https://github.com/ChartinoLabs/Muninn/pull/1427))
+- Added parser support for `show hsrp detail` on Cisco IOS-XR. ([#1428](https://github.com/ChartinoLabs/Muninn/pull/1428))
+- Added parser support for `show mpls ldp neighbor detail` and `show mpls ldp neighbor <interface> detail` on Cisco IOS-XR. ([#1429](https://github.com/ChartinoLabs/Muninn/pull/1429))
+- Added parser support for `show ntp associations` on Cisco IOS-XR. ([#1430](https://github.com/ChartinoLabs/Muninn/pull/1430))
+- Added parser support for `show ntp status` on Cisco IOS-XR. ([#1431](https://github.com/ChartinoLabs/Muninn/pull/1431))
+
+### Updated Parsers
+
+- Registered `show lldp neighbors detail` on Cisco IOS-XE against the existing Cisco IOS parser, which now also captures auto-negotiation support/state, physical media capabilities, MAU type and VLAN ID. ([#1416](https://github.com/ChartinoLabs/Muninn/pull/1416))
+- Registered interface-scoped `show interfaces <interface>` and `show ip interface <interface>` on Cisco IOS-XE, and extended `show ip interface` to capture multi-line `Helper addresses are` lists, wrapped `Multicast reserved groups joined` lists, and the `Output features` line. ([#1432](https://github.com/ChartinoLabs/Muninn/pull/1432))
+- Registered `show bfd session` on Cisco IOS-XR against the existing `show bfd sessions` parser. `show interfaces` now tolerates indented interface header lines, and `show bfd sessions` now parses rows whose timer columns are `n/a` or a bare detect time and whose state spans multiple words. ([#1433](https://github.com/ChartinoLabs/Muninn/pull/1433))
+- The Cisco IOS / IOS-XE `show lldp neighbors detail` parser now parses the LLDP-MED block into an optional `med` key: capabilities, device type, inventory, network policies and power requirements. ([#1462](https://github.com/ChartinoLabs/Muninn/pull/1462))
+
+### Fixed Parsers
+
+- Fixed IOS-XR interface name canonicalization to expand the `BE`, `BV`, and `PE` abbreviations. IOS-XR parsers such as `show interface brief`, `show interfaces description`, `show ospf vrf all interface brief`, and `show l2vpn xconnect` now emit `Bundle-Ether`, `BVI`, and `PW-Ether` interface names instead of `BE`, `BV`, and `PE`. ([#1463](https://github.com/ChartinoLabs/Muninn/pull/1463))
+
+### Core Fixes
+
+- `ParseError` raised when every parser candidate fails now lists each attempted candidate (source and parser class, in order) along with why it failed, instead of a generic "no parser candidates produced a valid result" message. ([#1395](https://github.com/ChartinoLabs/Muninn/pull/1395))
+- Built-in parsers are now registered once per process and shared read-only by every `Muninn` runtime instead of being copied into each one, so creating many runtimes (for example one per test job) no longer costs about 0.4 MB and 70 ms each. Concurrent first calls to `load_builtin_parsers()` are serialized by a lock, and parsers registered on one runtime still never reach another. ([#1479](https://github.com/ChartinoLabs/Muninn/pull/1479))
+
+### Internal
+
+- Bump ty from 0.0.75 to 0.0.82; fix new redundant-condition diagnostics by removing always-true TypedDict checks and returning None instead of casting empty dicts to TypedDicts.
+- Normalise trailing whitespace, final newlines, and JSON indentation in existing parser test fixtures so the repository passes all pre-commit hooks.
+- Run the repository pre-commit hooks (whitespace, end-of-file, JSON formatting, and related checks) in CI.
+
+
 ## 0.7.0 - 2026-08-18
 
 ### Core Features
