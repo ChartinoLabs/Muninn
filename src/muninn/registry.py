@@ -105,15 +105,29 @@ def register(
 
 
 class RuntimeRegistry:
-    """Runtime-owned parser registry without module-level mutable state."""
+    """Runtime-owned parser registry layered over an optional shared base.
 
-    def __init__(self) -> None:
-        """Initialize an empty parser registry."""
+    The base holds parsers shared by many runtimes, such as the built-in
+    parsers, and is only ever read through this registry. Registrations made
+    here never reach the base, so runtimes sharing one base stay isolated.
+    """
+
+    def __init__(self, base: RuntimeRegistry | None = None) -> None:
+        """Initialize an empty parser registry over an optional read-only base."""
+        self._base = base
         self._literal_registry: dict[tuple[OS, str], list[ParserCandidate]] = {}
         self._pattern_registry: dict[OS, list[ParserCandidate]] = {}
 
+    def set_base(self, base: RuntimeRegistry | None) -> None:
+        """Layer this registry over ``base``, a registry it reads but never writes."""
+        if base is self:
+            msg = "A registry cannot use itself as its base"
+            raise ValueError(msg)
+        self._base = base
+
     def clear(self) -> None:
-        """Clear all registered parser candidates."""
+        """Clear all registered parser candidates, including the shared base."""
+        self._base = None
         self._literal_registry.clear()
         self._pattern_registry.clear()
 
@@ -158,12 +172,14 @@ class RuntimeRegistry:
         )
 
         if spec.is_pattern:
+            existing = self._pattern_candidates(resolved_os)
             candidates = self._pattern_registry.setdefault(resolved_os, [])
         else:
             key = (resolved_os, spec.match_text)
+            existing = self._literal_candidates(key)
             candidates = self._literal_registry.setdefault(key, [])
 
-        self._add_candidate(candidates, candidate)
+        self._add_candidate(existing, candidates, candidate)
 
     def get_parser_candidates(
         self,
@@ -200,7 +216,9 @@ class RuntimeRegistry:
 
     def list_command_specs(self) -> list[CommandSpec]:
         """List all registered command specifications."""
-        specs: list[CommandSpec] = []
+        specs: list[CommandSpec] = (
+            self._base.list_command_specs() if self._base is not None else []
+        )
         for candidates in self._literal_registry.values():
             specs.extend(candidate.command_spec for candidate in candidates)
         for candidates in self._pattern_registry.values():
@@ -219,8 +237,23 @@ class RuntimeRegistry:
             for spec in self.list_command_specs()
         ]
 
+    def _literal_candidates(self, key: tuple[OS, str]) -> list[ParserCandidate]:
+        own = self._literal_registry.get(key, [])
+        if self._base is None:
+            return own
+        base = self._base._literal_candidates(key)
+        return base + own if own else base
+
+    def _pattern_candidates(self, os: OS) -> list[ParserCandidate]:
+        own = self._pattern_registry.get(os, [])
+        if self._base is None:
+            return own
+        base = self._base._pattern_candidates(os)
+        return base + own if own else base
+
     def _add_candidate(
         self,
+        existing_candidates: list[ParserCandidate],
         candidates: list[ParserCandidate],
         candidate: ParserCandidate,
     ) -> None:
@@ -228,7 +261,7 @@ class RuntimeRegistry:
             existing.parser_cls is candidate.parser_cls
             and existing.source == candidate.source
             and existing.command_spec.match_text == candidate.command_spec.match_text
-            for existing in candidates
+            for existing in existing_candidates
         )
         if already_registered:
             return
@@ -236,7 +269,7 @@ class RuntimeRegistry:
         conflicting = next(
             (
                 existing
-                for existing in candidates
+                for existing in existing_candidates
                 if existing.source == candidate.source
                 and existing.command_spec.match_text
                 == candidate.command_spec.match_text
@@ -261,8 +294,7 @@ class RuntimeRegistry:
         normalized_command: str,
         source_order: tuple[ParserSource, ...],
     ) -> list[ParserCandidate]:
-        key = (os, normalized_command)
-        candidates = self._literal_registry.get(key, [])
+        candidates = self._literal_candidates((os, normalized_command))
         if not candidates:
             return []
 
@@ -280,7 +312,7 @@ class RuntimeRegistry:
         source_order: tuple[ParserSource, ...],
         original_command: str,
     ) -> list[ParserCandidate]:
-        candidates = self._pattern_registry.get(os, [])
+        candidates = self._pattern_candidates(os)
         if not candidates:
             return []
 

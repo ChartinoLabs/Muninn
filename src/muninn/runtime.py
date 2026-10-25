@@ -6,6 +6,7 @@ import importlib
 import logging
 import pkgutil
 import sys
+import threading
 from pathlib import Path
 from types import ModuleType
 from typing import Any, Protocol, cast
@@ -31,8 +32,72 @@ def _is_invalid_result(result: object) -> bool:
     return result is None or result == {}
 
 
+def _register_module_parsers(
+    registry: RuntimeRegistry,
+    module: ModuleType,
+    source: ParserSource,
+) -> None:
+    for value in vars(module).values():
+        if not isinstance(value, type):
+            continue
+        if BaseParser not in value.__bases__:
+            continue
+        if not hasattr(value, "_muninn_registrations"):
+            continue
+        for registration in value._muninn_registrations:
+            registry.register_parser(
+                registration.os,
+                registration.command,
+                value,
+                source=source,
+                doc_template=registration.doc_template,
+            )
+
+
+# The built-in parsers are identical for every runtime, so they are registered
+# once per process and shared read-only as the base of each runtime's registry.
+# Building them into a private copy per runtime cost about 0.4 MB and 70 ms
+# each, which adds up when hundreds of runtimes exist in one process.
+_builtin_registry: tuple[RuntimeRegistry, tuple[str, ...]] | None = None
+_builtin_registry_lock = threading.Lock()
+
+
+def _shared_builtin_registry() -> tuple[RuntimeRegistry, tuple[str, ...]]:
+    """Return the process-wide built-in registry, building it on first use.
+
+    The lock makes concurrent first calls build the registry exactly once.
+    It is built into a local variable and published with one assignment, so
+    a caller never sees a partially populated registry. Once built, callers
+    take the unlocked fast path. A failed build publishes nothing, and the
+    next call retries it.
+    """
+    global _builtin_registry  # noqa: PLW0603
+    shared = _builtin_registry
+    if shared is not None:
+        return shared
+
+    with _builtin_registry_lock:
+        if _builtin_registry is None:
+            import muninn.parsers
+
+            registry = RuntimeRegistry()
+            imported_modules: list[str] = []
+            for module_info in pkgutil.walk_packages(
+                muninn.parsers.__path__, prefix=muninn.parsers.__name__ + "."
+            ):
+                module = importlib.import_module(module_info.name)
+                _register_module_parsers(registry, module, source="built_in")
+                imported_modules.append(module_info.name)
+            _builtin_registry = (registry, tuple(imported_modules))
+        return _builtin_registry
+
+
 class MuninnRuntime:
-    """Standalone runtime with no shared module-level mutable state."""
+    """Runtime with its own configuration and parser registry.
+
+    Built-in parsers live in a process-wide registry that every runtime reads
+    but none writes, so parsers one runtime registers never reach another.
+    """
 
     def __init__(
         self,
@@ -45,41 +110,16 @@ class MuninnRuntime:
         self._autoload_builtins = autoload_builtins
         self._builtins_loaded = False
 
-    def _register_module_parsers(
-        self,
-        module: ModuleType,
-        source: ParserSource,
-    ) -> None:
-        for value in vars(module).values():
-            if not isinstance(value, type):
-                continue
-            if BaseParser not in value.__bases__:
-                continue
-            if not hasattr(value, "_muninn_registrations"):
-                continue
-            for registration in value._muninn_registrations:
-                self.registry.register_parser(
-                    registration.os,
-                    registration.command,
-                    value,
-                    source=source,
-                    doc_template=registration.doc_template,
-                )
-
     def load_builtin_parsers(self) -> list[str]:
-        """Discover and register built-in parsers into this runtime."""
-        import muninn.parsers
+        """Make the built-in parsers available to this runtime.
 
-        imported_modules: list[str] = []
-        for module_info in pkgutil.walk_packages(
-            muninn.parsers.__path__, prefix=muninn.parsers.__name__ + "."
-        ):
-            module = importlib.import_module(module_info.name)
-            self._register_module_parsers(module, source="built_in")
-            imported_modules.append(module_info.name)
-
+        The first call in a process imports and registers them; later calls,
+        from this or any other runtime, reuse that registry.
+        """
+        builtin_registry, imported_modules = _shared_builtin_registry()
+        self.registry.set_base(builtin_registry)
         self._builtins_loaded = True
-        return imported_modules
+        return list(imported_modules)
 
     def load_local_parsers(
         self,
@@ -105,7 +145,7 @@ class MuninnRuntime:
 
             for module_info in pkgutil.walk_packages([path_str]):
                 module = importlib.import_module(module_info.name)
-                self._register_module_parsers(module, source="local")
+                _register_module_parsers(self.registry, module, source="local")
                 imported_modules.append(module_info.name)
 
         return imported_modules
