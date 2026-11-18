@@ -1,0 +1,143 @@
+{
+  "os": "cisco_aci",
+  "command": "show vpc",
+  "schema": {
+    "name": "ShowVpcResult",
+    "fields": {
+      "domain_id": {
+        "type": "int",
+        "required": false
+      },
+      "peer_status": {
+        "type": "str",
+        "required": true
+      },
+      "keepalive_status": {
+        "type": "str",
+        "required": true
+      },
+      "configuration_consistency_status": {
+        "type": "str",
+        "required": true
+      },
+      "per_vlan_consistency_status": {
+        "type": "str",
+        "required": true
+      },
+      "vpc_role": {
+        "type": "str",
+        "required": true
+      },
+      "number_of_vpcs": {
+        "type": "int",
+        "required": true
+      },
+      "peer_gateway": {
+        "type": "str",
+        "required": true
+      },
+      "dual_active_excluded_vlans": {
+        "type": "str",
+        "required": false
+      },
+      "graceful_consistency_check": {
+        "type": "str",
+        "required": true
+      },
+      "auto_recovery_status": {
+        "type": "str",
+        "required": true
+      },
+      "delay_restore_status": {
+        "type": "str",
+        "required": false
+      },
+      "delay_restore_svi_status": {
+        "type": "str",
+        "required": false
+      },
+      "type_2_consistency_status": {
+        "type": "str",
+        "required": false
+      },
+      "configuration_inconsistency_reason": {
+        "type": "str",
+        "required": false
+      },
+      "type_2_inconsistency_reason": {
+        "type": "str",
+        "required": false
+      },
+      "operational_layer3_peer_router": {
+        "type": "str",
+        "required": false
+      },
+      "peer_links": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PeerLinkEntry",
+            "fields": {
+              "port": {
+                "type": "str",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "active_vlans": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "ACI leaf switch (N9K-C93180YC-FX), vPC status with no vPC domain configured; captured from a lab fabric, identifiers scrubbed",
+      "input": "Legend:\n\t\t(*) - local vPC is down, forwarding via vPC peer-link\n\nvPC domain id                     : Not configured\nPeer status                       : peer link not configured\nvPC keep-alive status             : Disabled\nConfiguration consistency status  : failed\nPer-vlan consistency status       : success\nConfiguration inconsistency reason: vPC peer-link does not exist\nType-2 consistency status         : failed\nType-2 inconsistency reason       : vPC peer-link does not exist\nvPC role                          : none established\nNumber of vPCs configured         : 0\nPeer Gateway                      : Disabled\nDual-active excluded VLANs        : -\nGraceful Consistency Check        : Disabled\nAuto-recovery status              : Enabled (timeout = 200 seconds)\nDelay-restore status              : Enabled (timeout = 120 seconds)\nDelay-restore SVI status          : Enabled (timeout = 0 seconds)\nOperational Layer3 Peer           : Disabled\n",
+      "expected": {
+        "peer_status": "peer link not configured",
+        "keepalive_status": "Disabled",
+        "configuration_consistency_status": "failed",
+        "per_vlan_consistency_status": "success",
+        "vpc_role": "none established",
+        "number_of_vpcs": 0,
+        "peer_gateway": "Disabled",
+        "graceful_consistency_check": "Disabled",
+        "auto_recovery_status": "Enabled (timeout = 200 seconds)",
+        "configuration_inconsistency_reason": "vPC peer-link does not exist",
+        "type_2_consistency_status": "failed",
+        "type_2_inconsistency_reason": "vPC peer-link does not exist",
+        "delay_restore_status": "Enabled (timeout = 120 seconds)",
+        "delay_restore_svi_status": "Enabled (timeout = 0 seconds)",
+        "operational_layer3_peer_router": "Disabled"
+      }
+    },
+    {
+      "name": "ACI spine switch (N9K-C9332C), vPC status with no vPC domain configured; captured from a lab fabric, identifiers scrubbed",
+      "input": "Legend:\n\t\t(*) - local vPC is down, forwarding via vPC peer-link\n\nvPC domain id                     : Not configured\nPeer status                       : peer link not configured\nvPC keep-alive status             : Disabled\nConfiguration consistency status  : failed\nPer-vlan consistency status       : success\nConfiguration inconsistency reason: vPC peer-link does not exist\nType-2 consistency status         : failed\nType-2 inconsistency reason       : vPC peer-link does not exist\nvPC role                          : none established\nNumber of vPCs configured         : 0\nPeer Gateway                      : Disabled\nDual-active excluded VLANs        : -\nGraceful Consistency Check        : Disabled\nAuto-recovery status              : Enabled (timeout = 240 seconds)\nOperational Layer3 Peer           : Disabled\n",
+      "expected": {
+        "peer_status": "peer link not configured",
+        "keepalive_status": "Disabled",
+        "configuration_consistency_status": "failed",
+        "per_vlan_consistency_status": "success",
+        "vpc_role": "none established",
+        "number_of_vpcs": 0,
+        "peer_gateway": "Disabled",
+        "graceful_consistency_check": "Disabled",
+        "auto_recovery_status": "Enabled (timeout = 240 seconds)",
+        "configuration_inconsistency_reason": "vPC peer-link does not exist",
+        "type_2_consistency_status": "failed",
+        "type_2_inconsistency_reason": "vPC peer-link does not exist",
+        "operational_layer3_peer_router": "Disabled"
+      }
+    }
+  ]
+}

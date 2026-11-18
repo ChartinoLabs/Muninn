@@ -1,0 +1,122 @@
+{
+  "os": "cisco_aci",
+  "command": "show lldp neighbors",
+  "schema": {
+    "name": "ShowLldpNeighborsResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "LldpNeighborEntry",
+              "fields": {
+                "hold_time": {
+                  "type": "int",
+                  "required": true
+                },
+                "port_id": {
+                  "type": "str",
+                  "required": true
+                },
+                "capabilities": {
+                  "type": "str",
+                  "required": false
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_entries": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "ACI leaf switch (N9K-C93180YC-FX), fabric LLDP neighbors; captured from a lab fabric, identifiers scrubbed",
+      "input": "Capability codes:\n  (R) Router, (B) Bridge, (T) Telephone, (C) DOCSIS Cable Device\n  (W) WLAN Access Point, (P) Repeater, (S) Station, (O) Other\nDevice ID            Local Intf      Hold-time  Capability  Port ID\nother-apic            Eth1/1          120                    eth2-1\nexample-fabric-apic-1   Eth1/48         120                    eth2-1\nexample-fabric-spine-0101   Eth1/49         120        BR          Eth1/1\nexample-fabric-spine-0102   Eth1/50         120        BR          Eth1/1\nTotal entries displayed: 4\n",
+      "expected": {
+        "neighbors": {
+          "Ethernet1/1": {
+            "other-apic": {
+              "hold_time": 120,
+              "port_id": "eth2-1"
+            }
+          },
+          "Ethernet1/48": {
+            "example-fabric-apic-1": {
+              "hold_time": 120,
+              "port_id": "eth2-1"
+            }
+          },
+          "Ethernet1/49": {
+            "example-fabric-spine-0101": {
+              "hold_time": 120,
+              "port_id": "Ethernet1/1",
+              "capabilities": "BR"
+            }
+          },
+          "Ethernet1/50": {
+            "example-fabric-spine-0102": {
+              "hold_time": 120,
+              "port_id": "Ethernet1/1",
+              "capabilities": "BR"
+            }
+          }
+        },
+        "total_entries": 4
+      }
+    },
+    {
+      "name": "ACI spine switch (N9K-C9332C), fabric LLDP neighbors; captured from a lab fabric, identifiers scrubbed",
+      "input": "Capability codes:\n  (R) Router, (B) Bridge, (T) Telephone, (C) DOCSIS Cable Device\n  (W) WLAN Access Point, (P) Repeater, (S) Station, (O) Other\nDevice ID            Local Intf      Hold-time  Capability  Port ID\nexample-fabric-leaf-0201   Eth1/1          120        BR          Eth1/50\nexample-fabric-leaf-0202   Eth1/2          120        BR          Eth1/50\nexample-fabric-leaf-0203   Eth1/3          120        BR          Eth1/50\nexample-fabric-leaf-0204   Eth1/4          120        BR          Eth1/50\nexample-fabric-leaf-0205   Eth1/5          120        BR          Eth1/50\nTotal entries displayed: 5\n",
+      "expected": {
+        "neighbors": {
+          "Ethernet1/1": {
+            "example-fabric-leaf-0201": {
+              "hold_time": 120,
+              "port_id": "Ethernet1/50",
+              "capabilities": "BR"
+            }
+          },
+          "Ethernet1/2": {
+            "example-fabric-leaf-0202": {
+              "hold_time": 120,
+              "port_id": "Ethernet1/50",
+              "capabilities": "BR"
+            }
+          },
+          "Ethernet1/3": {
+            "example-fabric-leaf-0203": {
+              "hold_time": 120,
+              "port_id": "Ethernet1/50",
+              "capabilities": "BR"
+            }
+          },
+          "Ethernet1/4": {
+            "example-fabric-leaf-0204": {
+              "hold_time": 120,
+              "port_id": "Ethernet1/50",
+              "capabilities": "BR"
+            }
+          },
+          "Ethernet1/5": {
+            "example-fabric-leaf-0205": {
+              "hold_time": 120,
+              "port_id": "Ethernet1/50",
+              "capabilities": "BR"
+            }
+          }
+        },
+        "total_entries": 5
+      }
+    }
+  ]
+}

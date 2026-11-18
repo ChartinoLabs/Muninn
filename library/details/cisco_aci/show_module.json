@@ -1,0 +1,133 @@
+{
+  "os": "cisco_aci",
+  "command": "show module",
+  "schema": {
+    "name": "ShowModuleResult",
+    "fields": {
+      "modules": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ModuleEntry",
+            "fields": {
+              "module_number": {
+                "type": "int",
+                "required": true
+              },
+              "ports": {
+                "type": "int",
+                "required": true
+              },
+              "module_type": {
+                "type": "str",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "model": {
+                "type": "str",
+                "required": false
+              },
+              "software_version": {
+                "type": "str",
+                "required": false
+              },
+              "hardware_version": {
+                "type": "str",
+                "required": false
+              },
+              "slot": {
+                "type": "str",
+                "required": false
+              },
+              "mac_address_range": {
+                "type": "str",
+                "required": false
+              },
+              "serial_number": {
+                "type": "str",
+                "required": false
+              },
+              "online_diag_status": {
+                "type": "str",
+                "required": false
+              },
+              "world_wide_name": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "xbar_modules": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "ref",
+            "name": "ModuleEntry"
+          }
+        },
+        "required": false
+      },
+      "fabric_modules": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "ref",
+            "name": "ModuleEntry"
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "ACI leaf switch (N9K-C93180YC-FX), fixed-chassis module, software, MAC range and diagnostics; captured from a lab fabric, identifiers scrubbed",
+      "input": "\nMod  Ports  Module-Type                         Model              Status\n---  -----  ----------------------------------- ------------------ ----------\n1    54     48x10/25G+6x40/100G Switch          N9K-C93180YC-FX    ok\n\n\nMod  Sw              Hw\n---  --------------  ------\n1    15.2(7g)        2.2\n\n\nMod  MAC-Address(es)                         Serial-Num\n---  --------------------------------------  ----------\n1    00-00-5e-00-53-00 to 00-00-5e-00-53-59  TST00000001\n\n\nMod  Online Diag Status\n---  ------------------\n1    pass\n",
+      "expected": {
+        "modules": {
+          "1": {
+            "module_number": 1,
+            "ports": 54,
+            "module_type": "48x10/25G+6x40/100G Switch",
+            "status": "ok",
+            "model": "N9K-C93180YC-FX",
+            "software_version": "15.2(7g)",
+            "hardware_version": "2.2",
+            "mac_address_range": "00-00-5e-00-53-00 to 00-00-5e-00-53-59",
+            "serial_number": "TST00000001",
+            "online_diag_status": "pass"
+          }
+        }
+      }
+    },
+    {
+      "name": "ACI spine switch (N9K-C9332C), fixed-chassis module, software, MAC range and diagnostics; captured from a lab fabric, identifiers scrubbed",
+      "input": "\nMod  Ports  Module-Type                         Model              Status\n---  -----  ----------------------------------- ------------------ ----------\n1    34     32x40/100G+2x10G Ethernet Switch    N9K-C9332C         ok\n\n\nMod  Sw              Hw\n---  --------------  ------\n1    14.2(3l)        1.0\n\n\nMod  MAC-Address(es)                         Serial-Num\n---  --------------------------------------  ----------\n1    00-00-5e-00-53-a0 to 00-00-5e-00-53-a0  TST00000003\n\n\nMod  Online Diag Status\n---  ------------------\n1    pass\n",
+      "expected": {
+        "modules": {
+          "1": {
+            "module_number": 1,
+            "ports": 34,
+            "module_type": "32x40/100G+2x10G Ethernet Switch",
+            "status": "ok",
+            "model": "N9K-C9332C",
+            "software_version": "14.2(3l)",
+            "hardware_version": "1.0",
+            "mac_address_range": "00-00-5e-00-53-a0 to 00-00-5e-00-53-a0",
+            "serial_number": "TST00000003",
+            "online_diag_status": "pass"
+          }
+        }
+      }
+    }
+  ]
+}

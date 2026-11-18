@@ -1,0 +1,501 @@
+{
+  "os": "cisco_aci",
+  "command": "show ip interface brief",
+  "schema": {
+    "name": "ShowIpInterfaceBriefResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfEntry",
+            "fields": {
+              "vrf_id": {
+                "type": "int",
+                "required": true
+              },
+              "interfaces": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "InterfaceBriefEntry",
+                    "fields": {
+                      "ip_address": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "protocol_status": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "link_status": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "admin_status": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "prefix_length": {
+                        "type": "int",
+                        "required": false
+                      },
+                      "unnumbered_source": {
+                        "type": "str",
+                        "required": false
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "ACI leaf switch (N9K-C93180YC-FX), overlay-1, black-hole and management VRFs with prefix lengths, unassigned and unnumbered addresses; captured from a lab fabric, identifiers scrubbed",
+      "input": "IP Interface Status for VRF \"black-hole\"(3)\nInterface            Address              Interface Status\nIP Interface Status for VRF \"overlay-1\"(4)\nInterface            Address              Interface Status\neth1/49              unassigned           protocol-up/link-up/admin-up\neth1/49.20           unnumbered           protocol-up/link-up/admin-up\n                     (lo0)\neth1/50              unassigned           protocol-up/link-up/admin-up\neth1/50.1            unnumbered           protocol-up/link-up/admin-up\n                     (lo0)\neth1/51              unassigned           protocol-down/link-down/admin-up\neth1/52              unassigned           protocol-down/link-down/admin-up\neth1/53              unassigned           protocol-down/link-down/admin-up\neth1/54              unassigned           protocol-down/link-down/admin-up\nvlan12               198.51.100.30/27     protocol-up/link-up/admin-up\nlo0                  203.0.113.65/32      protocol-up/link-up/admin-up\nlo1023               198.51.100.32/32     protocol-up/link-up/admin-up\n\nIP Interface Status for VRF \"management\"(2)\nInterface            Address              Interface Status\nmgmt0                192.0.2.193/24       protocol-up/link-up/admin-up\n",
+      "expected": {
+        "vrfs": {
+          "black-hole": {
+            "vrf_id": 3,
+            "interfaces": {}
+          },
+          "overlay-1": {
+            "vrf_id": 4,
+            "interfaces": {
+              "Ethernet1/49": {
+                "ip_address": "unassigned",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Ethernet1/49.20": {
+                "ip_address": "unnumbered",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "unnumbered_source": "Loopback0"
+              },
+              "Ethernet1/50": {
+                "ip_address": "unassigned",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Ethernet1/50.1": {
+                "ip_address": "unnumbered",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "unnumbered_source": "Loopback0"
+              },
+              "Ethernet1/51": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/52": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/53": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/54": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "VLAN12": {
+                "ip_address": "198.51.100.30",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "prefix_length": 27
+              },
+              "Loopback0": {
+                "ip_address": "203.0.113.65",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "prefix_length": 32
+              },
+              "Loopback1023": {
+                "ip_address": "198.51.100.32",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "prefix_length": 32
+              }
+            }
+          },
+          "management": {
+            "vrf_id": 2,
+            "interfaces": {
+              "mgmt0": {
+                "ip_address": "192.0.2.193",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "prefix_length": 24
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "ACI spine switch (N9K-C9332C), overlay-1, black-hole and management VRFs with prefix lengths, unassigned and unnumbered addresses; captured from a lab fabric, identifiers scrubbed",
+      "input": "IP Interface Status for VRF \"overlay-1\"(4)\nInterface            Address              Interface Status\neth1/1               unassigned           protocol-up/link-up/admin-up\neth1/1.1             unnumbered           protocol-up/link-up/admin-up\n                     (lo0)\neth1/2               unassigned           protocol-up/link-up/admin-up\neth1/2.35            unnumbered           protocol-up/link-up/admin-up\n                     (lo0)\neth1/3               unassigned           protocol-up/link-up/admin-up\neth1/3.4             unnumbered           protocol-up/link-up/admin-up\n                     (lo0)\neth1/4               unassigned           protocol-up/link-up/admin-up\neth1/4.3             unnumbered           protocol-up/link-up/admin-up\n                     (lo0)\neth1/5               unassigned           protocol-up/link-up/admin-up\neth1/5.2             unnumbered           protocol-up/link-up/admin-up\n                     (lo0)\neth1/6               unassigned           protocol-down/link-down/admin-up\neth1/7               unassigned           protocol-down/link-down/admin-up\neth1/8               unassigned           protocol-down/link-down/admin-up\neth1/9               unassigned           protocol-down/link-down/admin-up\neth1/10              unassigned           protocol-down/link-down/admin-up\neth1/11              unassigned           protocol-down/link-down/admin-up\neth1/12              unassigned           protocol-down/link-down/admin-up\neth1/13              unassigned           protocol-down/link-down/admin-up\neth1/14              unassigned           protocol-down/link-down/admin-up\neth1/15              unassigned           protocol-down/link-down/admin-up\neth1/16              unassigned           protocol-down/link-down/admin-up\neth1/17              unassigned           protocol-down/link-down/admin-up\neth1/18              unassigned           protocol-down/link-down/admin-up\neth1/19              unassigned           protocol-down/link-down/admin-up\neth1/20              unassigned           protocol-down/link-down/admin-up\neth1/21              unassigned           protocol-down/link-down/admin-up\neth1/22              unassigned           protocol-down/link-down/admin-up\neth1/23              unassigned           protocol-down/link-down/admin-up\neth1/24              unassigned           protocol-down/link-down/admin-up\neth1/25              unassigned           protocol-down/link-down/admin-up\neth1/26              unassigned           protocol-down/link-down/admin-up\neth1/27              unassigned           protocol-down/link-down/admin-up\neth1/28              unassigned           protocol-down/link-down/admin-up\neth1/29              unassigned           protocol-down/link-down/admin-up\neth1/30              unassigned           protocol-down/link-down/admin-up\neth1/31              unassigned           protocol-down/link-down/admin-up\neth1/32              unassigned           protocol-down/link-down/admin-up\neth1/33              unassigned           protocol-down/link-down/admin-up\neth1/34              unassigned           protocol-down/link-down/admin-up\nlo0                  203.0.113.69/32      protocol-up/link-up/admin-up\nlo1                  192.0.2.66/32        protocol-up/link-up/admin-up\nlo2                  192.0.2.71/32        protocol-up/link-up/admin-up\nlo3                  192.0.2.65/32        protocol-up/link-up/admin-up\nlo4                  192.0.2.70/32        protocol-up/link-up/admin-up\nlo5                  192.0.2.64/32        protocol-up/link-up/admin-up\nlo6                  192.0.2.69/32        protocol-up/link-up/admin-up\nlo7                  198.51.100.33/32     protocol-up/link-up/admin-up\nlo8                  198.51.100.34/32     protocol-up/link-up/admin-up\nlo9                  198.51.100.35/32     protocol-up/link-up/admin-up\n\nIP Interface Status for VRF \"black-hole\"(3)\nInterface            Address              Interface Status\nIP Interface Status for VRF \"management\"(2)\nInterface            Address              Interface Status\nmgmt0                192.0.2.192/24       protocol-up/link-up/admin-up\n",
+      "expected": {
+        "vrfs": {
+          "overlay-1": {
+            "vrf_id": 4,
+            "interfaces": {
+              "Ethernet1/1": {
+                "ip_address": "unassigned",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Ethernet1/1.1": {
+                "ip_address": "unnumbered",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "unnumbered_source": "Loopback0"
+              },
+              "Ethernet1/2": {
+                "ip_address": "unassigned",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Ethernet1/2.35": {
+                "ip_address": "unnumbered",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "unnumbered_source": "Loopback0"
+              },
+              "Ethernet1/3": {
+                "ip_address": "unassigned",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Ethernet1/3.4": {
+                "ip_address": "unnumbered",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "unnumbered_source": "Loopback0"
+              },
+              "Ethernet1/4": {
+                "ip_address": "unassigned",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Ethernet1/4.3": {
+                "ip_address": "unnumbered",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "unnumbered_source": "Loopback0"
+              },
+              "Ethernet1/5": {
+                "ip_address": "unassigned",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up"
+              },
+              "Ethernet1/5.2": {
+                "ip_address": "unnumbered",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "unnumbered_source": "Loopback0"
+              },
+              "Ethernet1/6": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/7": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/8": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/9": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/10": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/11": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/12": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/13": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/14": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/15": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/16": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/17": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/18": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/19": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/20": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/21": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/22": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/23": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/24": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/25": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/26": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/27": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/28": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/29": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/30": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/31": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/32": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/33": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Ethernet1/34": {
+                "ip_address": "unassigned",
+                "protocol_status": "down",
+                "link_status": "down",
+                "admin_status": "up"
+              },
+              "Loopback0": {
+                "ip_address": "203.0.113.69",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "prefix_length": 32
+              },
+              "Loopback1": {
+                "ip_address": "192.0.2.66",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "prefix_length": 32
+              },
+              "Loopback2": {
+                "ip_address": "192.0.2.71",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "prefix_length": 32
+              },
+              "Loopback3": {
+                "ip_address": "192.0.2.65",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "prefix_length": 32
+              },
+              "Loopback4": {
+                "ip_address": "192.0.2.70",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "prefix_length": 32
+              },
+              "Loopback5": {
+                "ip_address": "192.0.2.64",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "prefix_length": 32
+              },
+              "Loopback6": {
+                "ip_address": "192.0.2.69",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "prefix_length": 32
+              },
+              "Loopback7": {
+                "ip_address": "198.51.100.33",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "prefix_length": 32
+              },
+              "Loopback8": {
+                "ip_address": "198.51.100.34",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "prefix_length": 32
+              },
+              "Loopback9": {
+                "ip_address": "198.51.100.35",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "prefix_length": 32
+              }
+            }
+          },
+          "black-hole": {
+            "vrf_id": 3,
+            "interfaces": {}
+          },
+          "management": {
+            "vrf_id": 2,
+            "interfaces": {
+              "mgmt0": {
+                "ip_address": "192.0.2.192",
+                "protocol_status": "up",
+                "link_status": "up",
+                "admin_status": "up",
+                "prefix_length": 24
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,443 @@
+{
+  "os": "cisco_aci",
+  "command": "show environment",
+  "schema": {
+    "name": "ShowEnvironmentResult",
+    "fields": {
+      "fans": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "FanEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "model": {
+                "type": "str",
+                "required": false
+              },
+              "hw_version": {
+                "type": "str",
+                "required": false
+              },
+              "direction": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "fan_zone_speed": {
+        "type": "str",
+        "required": false
+      },
+      "fan_air_filter": {
+        "type": "str",
+        "required": false
+      },
+      "power_supplies": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "PowerSupplyEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "model": {
+                "type": "str",
+                "required": false
+              },
+              "actual_output_watts": {
+                "type": "int",
+                "required": false
+              },
+              "actual_input_watts": {
+                "type": "int",
+                "required": false
+              },
+              "total_capacity_watts": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "voltage": {
+        "type": "int",
+        "required": false
+      },
+      "modules": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ModuleEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "model": {
+                "type": "str",
+                "required": false
+              },
+              "actual_draw_watts": {
+                "type": "float",
+                "required": false
+              },
+              "power_allocated_watts": {
+                "type": "float",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "power_summary": {
+        "type": {
+          "name": "PowerSummary",
+          "fields": {
+            "redundancy_mode_configured": {
+              "type": "str",
+              "required": true
+            },
+            "redundancy_mode_operational": {
+              "type": "str",
+              "required": true
+            },
+            "total_capacity_watts": {
+              "type": "float",
+              "required": false
+            },
+            "total_grid_a_capacity_watts": {
+              "type": "float",
+              "required": false
+            },
+            "total_grid_b_capacity_watts": {
+              "type": "float",
+              "required": false
+            },
+            "total_power_all_inputs_watts": {
+              "type": "float",
+              "required": false
+            },
+            "total_power_output_watts": {
+              "type": "float",
+              "required": false
+            },
+            "total_power_input_watts": {
+              "type": "float",
+              "required": false
+            },
+            "total_power_allocated_watts": {
+              "type": "float",
+              "required": false
+            },
+            "total_power_available_watts": {
+              "type": "float",
+              "required": false
+            }
+          }
+        },
+        "required": false
+      },
+      "clocks": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "ClockEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "model": {
+                "type": "str",
+                "required": false
+              },
+              "hw_version": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false
+      },
+      "temperatures": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "type": "dict",
+            "key": "str",
+            "value": {
+              "name": "TemperatureSensorEntry",
+              "fields": {
+                "major_threshold_celsius": {
+                  "type": "int",
+                  "required": true
+                },
+                "minor_threshold_celsius": {
+                  "type": "int",
+                  "required": true
+                },
+                "current_temp_celsius": {
+                  "type": "int",
+                  "required": true
+                },
+                "status": {
+                  "type": "str",
+                  "required": true
+                }
+              }
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "ACI leaf switch (N9K-C93180YC-FX), power supplies (one absent), module power, fans and temperatures; captured from a lab fabric, identifiers scrubbed",
+      "input": "Power Supply:\nVoltage: 12.0 Volts\n\nPower                              Actual        Total\nSupply    Model                    Output     Capacity    Status\n                                 (Watts )     (Watts )\n-------  -------------------  -----------  -----------  --------------\n1        ------------               N/A W          0 W      Absent\n2        NXA-PAC-500W-PI            149 W        500 W        ok\n\n\n\n                                   Actual        Power\nModule     Model                     Draw    Allocated    Status\n                                  (Watts )     (Watts )\n--------  -------------------  -----------  -----------  --------------\n1         N9K-C93180YC-FX            149 W        492 W    Powered-Up\nfan1      NXA-FAN-30CFM-B              N/A          N/A    Powered-Up\nfan2      NXA-FAN-30CFM-B              N/A          N/A    Powered-Up\nfan3      NXA-FAN-30CFM-B              N/A          N/A    Powered-Up\nfan4      NXA-FAN-30CFM-B              N/A          N/A    Powered-Up\n\nN/A - Per module power not available\n\n\nPower Usage Summary:\n--------------------\nPower Supply redundancy mode (configured)                Non-Redundant(combined)\nPower Supply redundancy mode (operational)               Non-Redundant(combined)\n\nTotal Power Capacity (based on configured mode)               500  W\nTotal Power of all Inputs (cumulative)                        500  W\nTotal Power Output (actual draw)                              149  W\nTotal Power Allocated (budget)                                N/A\nTotal Power Available for additional modules                  N/A\n\nFan:\n------------------------------------------------------\nFan             Model                Hw         Status\n------------------------------------------------------\nFan1(sys_fan1)  NXA-FAN-30CFM-B      --         ok\nFan2(sys_fan2)  NXA-FAN-30CFM-B      --         ok\nFan3(sys_fan3)  NXA-FAN-30CFM-B      --         ok\nFan4(sys_fan4)  NXA-FAN-30CFM-B      --         ok\nFan_in_PS1      --                   --         Absent\nFan_in_PS2      --                   --         ok\nFan Speed: Zone 1:  0x80\nFan Air Filter : Absent\n\nTemperature:\n-----------------------------------------------------------------------------------\nModule   Sensor                       MajorThresh   MinorThres   CurTemp     Status\n                                      (Celsius)     (Celsius)    (Celsius)\n-----------------------------------------------------------------------------------\n1        Inlet(1)                      70            42           22         normal\n1        outlet(2)                     80            70           29         normal\n1        x86 processor(3)              90            80           41         normal\n1        Homewood(4)                   110           90           52         normal\n1        Homewood vrm(5)               120           110          42         normal\n",
+      "expected": {
+        "voltage": 12,
+        "power_supplies": {
+          "1": {
+            "status": "Absent",
+            "total_capacity_watts": 0
+          },
+          "2": {
+            "status": "ok",
+            "model": "NXA-PAC-500W-PI",
+            "actual_output_watts": 149,
+            "total_capacity_watts": 500
+          }
+        },
+        "modules": {
+          "1": {
+            "status": "Powered-Up",
+            "model": "N9K-C93180YC-FX",
+            "actual_draw_watts": 149.0,
+            "power_allocated_watts": 492.0
+          },
+          "fan1": {
+            "status": "Powered-Up",
+            "model": "NXA-FAN-30CFM-B"
+          },
+          "fan2": {
+            "status": "Powered-Up",
+            "model": "NXA-FAN-30CFM-B"
+          },
+          "fan3": {
+            "status": "Powered-Up",
+            "model": "NXA-FAN-30CFM-B"
+          },
+          "fan4": {
+            "status": "Powered-Up",
+            "model": "NXA-FAN-30CFM-B"
+          }
+        },
+        "power_summary": {
+          "redundancy_mode_configured": "Non-Redundant(combined)",
+          "redundancy_mode_operational": "Non-Redundant(combined)",
+          "total_capacity_watts": 500.0,
+          "total_power_all_inputs_watts": 500.0,
+          "total_power_output_watts": 149.0
+        },
+        "fan_zone_speed": "Zone 1:  0x80",
+        "fan_air_filter": "Absent",
+        "fans": {
+          "Fan1(sys_fan1)": {
+            "status": "ok",
+            "model": "NXA-FAN-30CFM-B"
+          },
+          "Fan2(sys_fan2)": {
+            "status": "ok",
+            "model": "NXA-FAN-30CFM-B"
+          },
+          "Fan3(sys_fan3)": {
+            "status": "ok",
+            "model": "NXA-FAN-30CFM-B"
+          },
+          "Fan4(sys_fan4)": {
+            "status": "ok",
+            "model": "NXA-FAN-30CFM-B"
+          },
+          "Fan_in_PS1": {
+            "status": "Absent"
+          },
+          "Fan_in_PS2": {
+            "status": "ok"
+          }
+        },
+        "temperatures": {
+          "1": {
+            "Inlet(1)": {
+              "major_threshold_celsius": 70,
+              "minor_threshold_celsius": 42,
+              "current_temp_celsius": 22,
+              "status": "normal"
+            },
+            "outlet(2)": {
+              "major_threshold_celsius": 80,
+              "minor_threshold_celsius": 70,
+              "current_temp_celsius": 29,
+              "status": "normal"
+            },
+            "x86 processor(3)": {
+              "major_threshold_celsius": 90,
+              "minor_threshold_celsius": 80,
+              "current_temp_celsius": 41,
+              "status": "normal"
+            },
+            "Homewood(4)": {
+              "major_threshold_celsius": 110,
+              "minor_threshold_celsius": 90,
+              "current_temp_celsius": 52,
+              "status": "normal"
+            },
+            "Homewood vrm(5)": {
+              "major_threshold_celsius": 120,
+              "minor_threshold_celsius": 110,
+              "current_temp_celsius": 42,
+              "status": "normal"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "ACI spine switch (N9K-C9332C), power supplies (one absent), module power, fans and temperatures; captured from a lab fabric, identifiers scrubbed",
+      "input": "Power Supply:\nVoltage: 12.0 Volts\n\nPower                              Actual        Total\nSupply    Model                    Output     Capacity    Status\n                                 (Watts )     (Watts )\n-------  -------------------  -----------  -----------  --------------\n1        NXA-PAC-1100W-PE2          226 W       1100 W        ok\n2        ------------               N/A W          0 W      Absent\n\n\n\n                                   Actual        Power\nModule     Model                     Draw    Allocated    Status\n                                  (Watts )     (Watts )\n--------  -------------------  -----------  -----------  --------------\n1         N9K-C9332C                 226 W        600 W    Powered-Up\nfan1      NXA_FAN_35CFM_PE             N/A          N/A    Powered-Up\nfan2      NXA_FAN_35CFM_PE             N/A          N/A    Powered-Up\nfan3      NXA_FAN_35CFM_PE             N/A          N/A    Powered-Up\nfan4      NXA_FAN_35CFM_PE             N/A          N/A    Powered-Up\nfan5      NXA_FAN_35CFM_PE             N/A          N/A    Powered-Up\n\nN/A - Per module power not available\n\n\nPower Usage Summary:\n--------------------\nPower Supply redundancy mode (configured)                Non-Redundant(combined)\nPower Supply redundancy mode (operational)               Non-Redundant(combined)\n\nTotal Power Capacity (based on configured mode)               1100 W\nTotal Power of all Inputs (cumulative)                        1100 W\nTotal Power Output (actual draw)                              226  W\nTotal Power Allocated (budget)                                N/A\nTotal Power Available for additional modules                  N/A\n\nFan:\n------------------------------------------------------\nFan             Model                Hw         Status\n------------------------------------------------------\nFan1(sys_fan1)  NXA_FAN_35CFM_PE     --         ok\nFan2(sys_fan2)  NXA_FAN_35CFM_PE     --         ok\nFan3(sys_fan3)  NXA_FAN_35CFM_PE     --         ok\nFan4(sys_fan4)  NXA_FAN_35CFM_PE     --         ok\nFan5(sys_fan5)  NXA_FAN_35CFM_PE     --         ok\nFan_in_PS1      --                   --         ok\nFan_in_PS2      --                   --         Absent\nFan Speed: Zone 1:  0xb3\nFan Air Filter : Absent\n\nTemperature:\n-----------------------------------------------------------------------------------\nModule   Sensor                       MajorThresh   MinorThres   CurTemp     Status\n                                      (Celsius)     (Celsius)    (Celsius)\n-----------------------------------------------------------------------------------\n1        Inlet(1)                      70            42           30         normal\n1        Outlet(2)                     80            70           35         normal\n1        x86 processor(3)              90            80           40         normal\n1        Bigsky(4)                     110           100          46         normal\n1        Bigsky vrm(5)                 110           90           40         normal\n",
+      "expected": {
+        "voltage": 12,
+        "power_supplies": {
+          "1": {
+            "status": "ok",
+            "model": "NXA-PAC-1100W-PE2",
+            "actual_output_watts": 226,
+            "total_capacity_watts": 1100
+          },
+          "2": {
+            "status": "Absent",
+            "total_capacity_watts": 0
+          }
+        },
+        "modules": {
+          "1": {
+            "status": "Powered-Up",
+            "model": "N9K-C9332C",
+            "actual_draw_watts": 226.0,
+            "power_allocated_watts": 600.0
+          },
+          "fan1": {
+            "status": "Powered-Up",
+            "model": "NXA_FAN_35CFM_PE"
+          },
+          "fan2": {
+            "status": "Powered-Up",
+            "model": "NXA_FAN_35CFM_PE"
+          },
+          "fan3": {
+            "status": "Powered-Up",
+            "model": "NXA_FAN_35CFM_PE"
+          },
+          "fan4": {
+            "status": "Powered-Up",
+            "model": "NXA_FAN_35CFM_PE"
+          },
+          "fan5": {
+            "status": "Powered-Up",
+            "model": "NXA_FAN_35CFM_PE"
+          }
+        },
+        "power_summary": {
+          "redundancy_mode_configured": "Non-Redundant(combined)",
+          "redundancy_mode_operational": "Non-Redundant(combined)",
+          "total_capacity_watts": 1100.0,
+          "total_power_all_inputs_watts": 1100.0,
+          "total_power_output_watts": 226.0
+        },
+        "fan_zone_speed": "Zone 1:  0xb3",
+        "fan_air_filter": "Absent",
+        "fans": {
+          "Fan1(sys_fan1)": {
+            "status": "ok",
+            "model": "NXA_FAN_35CFM_PE"
+          },
+          "Fan2(sys_fan2)": {
+            "status": "ok",
+            "model": "NXA_FAN_35CFM_PE"
+          },
+          "Fan3(sys_fan3)": {
+            "status": "ok",
+            "model": "NXA_FAN_35CFM_PE"
+          },
+          "Fan4(sys_fan4)": {
+            "status": "ok",
+            "model": "NXA_FAN_35CFM_PE"
+          },
+          "Fan5(sys_fan5)": {
+            "status": "ok",
+            "model": "NXA_FAN_35CFM_PE"
+          },
+          "Fan_in_PS1": {
+            "status": "ok"
+          },
+          "Fan_in_PS2": {
+            "status": "Absent"
+          }
+        },
+        "temperatures": {
+          "1": {
+            "Inlet(1)": {
+              "major_threshold_celsius": 70,
+              "minor_threshold_celsius": 42,
+              "current_temp_celsius": 30,
+              "status": "normal"
+            },
+            "Outlet(2)": {
+              "major_threshold_celsius": 80,
+              "minor_threshold_celsius": 70,
+              "current_temp_celsius": 35,
+              "status": "normal"
+            },
+            "x86 processor(3)": {
+              "major_threshold_celsius": 90,
+              "minor_threshold_celsius": 80,
+              "current_temp_celsius": 40,
+              "status": "normal"
+            },
+            "Bigsky(4)": {
+              "major_threshold_celsius": 110,
+              "minor_threshold_celsius": 100,
+              "current_temp_celsius": 46,
+              "status": "normal"
+            },
+            "Bigsky vrm(5)": {
+              "major_threshold_celsius": 110,
+              "minor_threshold_celsius": 90,
+              "current_temp_celsius": 40,
+              "status": "normal"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

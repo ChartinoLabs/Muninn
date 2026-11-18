@@ -1,0 +1,105 @@
+{
+  "os": "cisco_aci",
+  "command": "show vlan",
+  "schema": {
+    "name": "ShowVlanResult",
+    "fields": {
+      "vlans": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VlanEntry",
+            "fields": {
+              "vlan_id": {
+                "type": "int",
+                "required": true
+              },
+              "name": {
+                "type": "str",
+                "required": true
+              },
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "ports": {
+                "type": {
+                  "type": "list",
+                  "items": "str"
+                },
+                "required": true
+              },
+              "type": {
+                "type": "str",
+                "required": true
+              },
+              "vlan_mode": {
+                "type": "str",
+                "required": true
+              },
+              "private_vlan": {
+                "type": {
+                  "name": "PrivateVlanInfo",
+                  "fields": {
+                    "type": {
+                      "type": "str",
+                      "required": true
+                    },
+                    "primary_vlan": {
+                      "type": "str",
+                      "required": false
+                    },
+                    "secondary_vlans": {
+                      "type": {
+                        "type": "list",
+                        "items": "str"
+                      },
+                      "required": false
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "remote_span_vlans": {
+        "type": {
+          "type": "list",
+          "items": "int"
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "ACI leaf switch (N9K-C93180YC-FX), infra VLAN with one member port; captured from a lab fabric, identifiers scrubbed",
+      "input": "\n VLAN Name                             Status    Ports\n ---- -------------------------------- --------- -------------------------------\n 12   infra:default                    active    Eth1/48\n\n VLAN Type  Vlan-mode\n ---- ----- ----------\n 12   enet  CE\n",
+      "expected": {
+        "vlans": {
+          "12": {
+            "vlan_id": 12,
+            "name": "infra:default",
+            "status": "active",
+            "ports": [
+              "Ethernet1/48"
+            ],
+            "type": "enet",
+            "vlan_mode": "CE"
+          }
+        }
+      }
+    },
+    {
+      "name": "ACI spine switch (N9K-C9332C), no VLANs (empty tables); captured from a lab fabric, identifiers scrubbed",
+      "input": "\n VLAN Name                             Status    Ports\n ---- -------------------------------- --------- -------------------------------\n\n VLAN Type  Vlan-mode\n ---- ----- ----------\n",
+      "expected": {
+        "vlans": {}
+      }
+    }
+  ]
+}

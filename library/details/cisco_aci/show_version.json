@@ -1,0 +1,261 @@
+{
+  "os": "cisco_aci",
+  "command": "show version",
+  "schema": {
+    "name": "ShowVersionResult",
+    "fields": {
+      "bios_version": {
+        "type": "str",
+        "required": true
+      },
+      "bios_compile_time": {
+        "type": "str",
+        "required": false
+      },
+      "nxos_version": {
+        "type": "str",
+        "required": false
+      },
+      "nxos_image_file": {
+        "type": "str",
+        "required": false
+      },
+      "nxos_compile_time": {
+        "type": "str",
+        "required": false
+      },
+      "host_nxos_version": {
+        "type": "str",
+        "required": false
+      },
+      "nxos_boot_mode": {
+        "type": "str",
+        "required": false
+      },
+      "kickstart_version": {
+        "type": "str",
+        "required": false
+      },
+      "kickstart_image_file": {
+        "type": "str",
+        "required": false
+      },
+      "kickstart_compile_time": {
+        "type": "str",
+        "required": false
+      },
+      "system_version": {
+        "type": "str",
+        "required": false
+      },
+      "system_image_file": {
+        "type": "str",
+        "required": false
+      },
+      "system_compile_time": {
+        "type": "str",
+        "required": false
+      },
+      "pe_version": {
+        "type": "str",
+        "required": false
+      },
+      "loader_version": {
+        "type": "str",
+        "required": false
+      },
+      "chassis": {
+        "type": "str",
+        "required": true
+      },
+      "cpu": {
+        "type": "str",
+        "required": true
+      },
+      "memory_kb": {
+        "type": "int",
+        "required": true
+      },
+      "processor_board_id": {
+        "type": "str",
+        "required": true
+      },
+      "device_name": {
+        "type": "str",
+        "required": true
+      },
+      "bootflash_kb": {
+        "type": "int",
+        "required": true
+      },
+      "uptime": {
+        "type": {
+          "name": "UptimeInfo",
+          "fields": {
+            "days": {
+              "type": "int",
+              "required": true
+            },
+            "hours": {
+              "type": "int",
+              "required": true
+            },
+            "minutes": {
+              "type": "int",
+              "required": true
+            },
+            "seconds": {
+              "type": "int",
+              "required": true
+            }
+          }
+        },
+        "required": true
+      },
+      "last_reset": {
+        "type": {
+          "name": "LastResetInfo",
+          "fields": {
+            "reason": {
+              "type": "str",
+              "required": true
+            },
+            "system_version": {
+              "type": "str",
+              "required": false
+            },
+            "service": {
+              "type": "str",
+              "required": false
+            },
+            "timestamp": {
+              "type": "str",
+              "required": false
+            }
+          }
+        },
+        "required": true
+      },
+      "plugins": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "001_aci_device",
+      "input": "Cisco Nexus Operating System (NX-OS) Software\nTAC support: http://www.cisco.com/tac\nDocuments: http://www.cisco.com/en/US/products/ps9372/tsd_products_support_series_home.html\nCopyright (c) 2002-2014, Cisco Systems, Inc. All rights reserved.\nThe copyrights to certain works contained in this software are\nowned by other third parties and used and distributed under\nlicense. Certain components of this software are licensed under\nthe GNU General Public License (GPL) version 2.0 or the GNU\nLesser General Public License (LGPL) Version 2.1. A copy of each\nsuch license is available at\nhttp://www.opensource.org/licenses/gpl-2.0.php and\nhttp://www.opensource.org/licenses/lgpl-2.1.php\n\nSoftware\n  BIOS:      version 07.69\n  kickstart: version 15.3(2b) [build 15.3(2b)]\n  system:    version 15.3(2b) [build 15.3(2b)]\n  PE:        version 5.3(2b)\n  BIOS compile time:       04/07/2021\n  kickstart image file is: /bootflash/aci-n9000-dk9.15.3.2b.bin\n  kickstart compile time:  03/18/2024 22:00:16 [03/18/2024 22:00:16]\n  system image file is:    /bootflash/auto-s\n  system compile time:     03/18/2024 22:00:16 [03/18/2024 22:00:16]\n\n\nHardware\n  cisco N9K-C93180YC-EX (\"supervisor\")\n   Intel(R) Xeon(R) CPU  @ 1.80GHz with 24499200 kB of memory.\n  Processor Board ID FDO24210DKA\n\n  Device name: fl-wwops-corp-l3301f-aci\n  bootflash:    62522368 kB\n\nKernel uptime is 270 day(s), 14 hour(s), 05 minute(s), 29 second(s)\n\nLast reset at 512000 usecs after Wed Sep 11 22:05:08 2024 EDT\n  Reason: reset-by-installer\n  System version: 15.2(4d)\n  Service: Upgrade\n\nplugin\n  Core Plugin, Ethernet Plugin\n",
+      "expected": {
+        "bios_version": "07.69",
+        "bios_compile_time": "04/07/2021",
+        "kickstart_version": "15.3(2b)",
+        "kickstart_image_file": "/bootflash/aci-n9000-dk9.15.3.2b.bin",
+        "kickstart_compile_time": "03/18/2024 22:00:16 [03/18/2024 22:00:16]",
+        "system_version": "15.3(2b)",
+        "system_image_file": "/bootflash/auto-s",
+        "system_compile_time": "03/18/2024 22:00:16 [03/18/2024 22:00:16]",
+        "pe_version": "5.3(2b)",
+        "chassis": "cisco N9K-C93180YC-EX (\"supervisor\")",
+        "cpu": "Intel(R) Xeon(R) CPU  @ 1.80GHz",
+        "memory_kb": 24499200,
+        "processor_board_id": "FDO24210DKA",
+        "device_name": "fl-wwops-corp-l3301f-aci",
+        "bootflash_kb": 62522368,
+        "uptime": {
+          "days": 270,
+          "hours": 14,
+          "minutes": 5,
+          "seconds": 29
+        },
+        "last_reset": {
+          "timestamp": "Wed Sep 11 22:05:08 2024 EDT",
+          "reason": "reset-by-installer",
+          "system_version": "15.2(4d)",
+          "service": "Upgrade"
+        },
+        "plugins": [
+          "Core Plugin",
+          "Ethernet Plugin"
+        ]
+      }
+    },
+    {
+      "name": "ACI leaf switch (N9K-C93180YC-FX), version, hardware and last reset details; captured from a lab fabric, identifiers scrubbed",
+      "input": "Cisco Nexus Operating System (NX-OS) Software\nTAC support: http://www.cisco.com/tac\nDocuments: http://www.cisco.com/en/US/products/ps9372/tsd_products_support_series_home.html\nCopyright (c) 2002-2014, Cisco Systems, Inc. All rights reserved.\nThe copyrights to certain works contained in this software are\nowned by other third parties and used and distributed under\nlicense. Certain components of this software are licensed under\nthe GNU General Public License (GPL) version 2.0 or the GNU\nLesser General Public License (LGPL) Version 2.1. A copy of each\nsuch license is available at\nhttp://www.opensource.org/licenses/gpl-2.0.php and\nhttp://www.opensource.org/licenses/lgpl-2.1.php\n\nSoftware\n  BIOS:      version 05.47\n  kickstart: version 15.2(7g) [build 15.2(7g)]\n  system:    version 15.2(7g) [build 15.2(7g)]\n  PE:        version 5.2(7g)\n  BIOS compile time:       04/28/2022\n  kickstart image file is: /bootflash/aci-n9000-dk9.15.2.7g.bin\n  kickstart compile time:  02/14/2023 12:24:51 [02/14/2023 12:24:51]\n  system image file is:    /bootflash/auto-s\n  system compile time:     02/14/2023 12:24:51 [02/14/2023 12:24:51]\n\n\nHardware\n  cisco N9K-C93180YC-FX (\"supervisor\")\n   Intel(R) Xeon(R) CPU D-1528 @ 1.90GHz with 32694272 kB of memory.\n  Processor Board ID TST00000001\n\n  Device name: example-fabric-leaf-0201\n  bootflash:    125029376 kB\n\nKernel uptime is 241 day(s), 02 hour(s), 27 minute(s), 12 second(s)\n\nLast reset at 997000 usecs after Sun Mar 22 20:29:34 2026 UTC\n  Reason: reset-requested-by-cli-command-reload\n  System version: 15.2(7g)\n  Service: PolicyElem Ch reload\n\nplugin\n  Core Plugin, Ethernet Plugin\n",
+      "expected": {
+        "chassis": "cisco N9K-C93180YC-FX (\"supervisor\")",
+        "bios_version": "05.47",
+        "kickstart_version": "15.2(7g)",
+        "system_version": "15.2(7g)",
+        "pe_version": "5.2(7g)",
+        "bios_compile_time": "04/28/2022",
+        "kickstart_image_file": "/bootflash/aci-n9000-dk9.15.2.7g.bin",
+        "kickstart_compile_time": "02/14/2023 12:24:51 [02/14/2023 12:24:51]",
+        "system_image_file": "/bootflash/auto-s",
+        "system_compile_time": "02/14/2023 12:24:51 [02/14/2023 12:24:51]",
+        "cpu": "Intel(R) Xeon(R) CPU D-1528 @ 1.90GHz",
+        "memory_kb": 32694272,
+        "processor_board_id": "TST00000001",
+        "device_name": "example-fabric-leaf-0201",
+        "bootflash_kb": 125029376,
+        "uptime": {
+          "days": 241,
+          "hours": 2,
+          "minutes": 27,
+          "seconds": 12
+        },
+        "plugins": [
+          "Core Plugin",
+          "Ethernet Plugin"
+        ],
+        "last_reset": {
+          "timestamp": "Sun Mar 22 20:29:34 2026 UTC",
+          "reason": "reset-requested-by-cli-command-reload",
+          "system_version": "15.2(7g)",
+          "service": "PolicyElem Ch reload"
+        }
+      }
+    },
+    {
+      "name": "ACI spine switch (N9K-C9332C), version, hardware and last reset details; captured from a lab fabric, identifiers scrubbed",
+      "input": "Cisco Nexus Operating System (NX-OS) Software\nTAC support: http://www.cisco.com/tac\nDocuments: http://www.cisco.com/en/US/products/ps9372/tsd_products_support_series_home.html\nCopyright (c) 2002-2014, Cisco Systems, Inc. All rights reserved.\nThe copyrights to certain works contained in this software are\nowned by other third parties and used and distributed under\nlicense. Certain components of this software are licensed under\nthe GNU General Public License (GPL) version 2.0 or the GNU\nLesser General Public License (LGPL) Version 2.1. A copy of each\nsuch license is available at\nhttp://www.opensource.org/licenses/gpl-2.0.php and\nhttp://www.opensource.org/licenses/lgpl-2.1.php\n\nSoftware\n  BIOS:      version 05.39\n  kickstart: version 14.2(3l) [build 14.2(3l)]\n  system:    version 14.2(3l) [build 14.2(3l)]\n  PE:        version 4.2(3l)\n  BIOS compile time:       08/30/2019\n  kickstart image file is: /bootflash/aci-n9000-dk9.14.2.3l.bin\n  kickstart compile time:  12/20/2019 02:41:06 [12/20/2019 02:41:06]\n  system image file is:    /bootflash/auto-s\n  system compile time:     12/20/2019 02:41:06 [12/20/2019 02:41:06]\n\n\nHardware\n  cisco N9K-C9332C (\"supervisor\")\n   Intel(R) Xeon(R) CPU D-1526 @ 1.80GHz with 16204800 kB of memory.\n  Processor Board ID TST00000003\n\n  Device name: example-fabric-spine-0102\n  bootflash:    125029376 kB\n\nKernel uptime is 231 day(s), 02 hour(s), 22 minute(s), 17 second(s)\n\nLast reset at 244000 usecs after Wed Apr 01 20:38:19 2026 UTC\n  Reason: reset-requested-by-cli-command-reload\n  System version: 14.2(3l)\n  Service: PolicyElem Ch reload\n\nplugin\n  Core Plugin, Ethernet Plugin\n",
+      "expected": {
+        "chassis": "cisco N9K-C9332C (\"supervisor\")",
+        "bios_version": "05.39",
+        "kickstart_version": "14.2(3l)",
+        "system_version": "14.2(3l)",
+        "pe_version": "4.2(3l)",
+        "bios_compile_time": "08/30/2019",
+        "kickstart_image_file": "/bootflash/aci-n9000-dk9.14.2.3l.bin",
+        "kickstart_compile_time": "12/20/2019 02:41:06 [12/20/2019 02:41:06]",
+        "system_image_file": "/bootflash/auto-s",
+        "system_compile_time": "12/20/2019 02:41:06 [12/20/2019 02:41:06]",
+        "cpu": "Intel(R) Xeon(R) CPU D-1526 @ 1.80GHz",
+        "memory_kb": 16204800,
+        "processor_board_id": "TST00000003",
+        "device_name": "example-fabric-spine-0102",
+        "bootflash_kb": 125029376,
+        "uptime": {
+          "days": 231,
+          "hours": 2,
+          "minutes": 22,
+          "seconds": 17
+        },
+        "plugins": [
+          "Core Plugin",
+          "Ethernet Plugin"
+        ],
+        "last_reset": {
+          "timestamp": "Wed Apr 01 20:38:19 2026 UTC",
+          "reason": "reset-requested-by-cli-command-reload",
+          "system_version": "14.2(3l)",
+          "service": "PolicyElem Ch reload"
+        }
+      }
+    }
+  ]
+}

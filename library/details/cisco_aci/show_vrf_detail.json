@@ -1,0 +1,207 @@
+{
+  "os": "cisco_aci",
+  "command": "show vrf detail",
+  "schema": {
+    "name": "ShowVrfDetailResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfDetailEntry",
+            "fields": {
+              "vrf_id": {
+                "type": "int",
+                "required": true
+              },
+              "state": {
+                "type": "str",
+                "required": true
+              },
+              "vpn_id": {
+                "type": "str",
+                "required": false
+              },
+              "rd": {
+                "type": "str",
+                "required": false
+              },
+              "max_routes": {
+                "type": "int",
+                "required": true
+              },
+              "mid_threshold": {
+                "type": "int",
+                "required": true
+              },
+              "address_families": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "AddressFamilyEntry",
+                    "fields": {
+                      "table_id": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "fwd_id": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "state": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "ACI leaf switch (N9K-C93180YC-FX), ACI infra VRFs (black-hole, management, overlay-1); captured from a lab fabric, identifiers scrubbed",
+      "input": "VRF-Name: black-hole, VRF-ID: 3, State: Up\n    VPNID: unknown\n    RD: 0:0\n    Max Routes: 0  Mid-Threshold: 0\n    Table-ID: 0x80000003, AF: IPv6, Fwd-ID: 0x80000003, State: Up\n    Table-ID: 0x00000003, AF: IPv4, Fwd-ID: 0x00000003, State: Up\n\nVRF-Name: management, VRF-ID: 2, State: Up\n    VPNID: unknown\n    RD: 0:0\n    Max Routes: 0  Mid-Threshold: 0\n    Table-ID: 0x80000002, AF: IPv6, Fwd-ID: 0x80000002, State: Up\n    Table-ID: 0x00000002, AF: IPv4, Fwd-ID: 0x00000002, State: Up\n\nVRF-Name: overlay-1, VRF-ID: 4, State: Up\n    VPNID: unknown\n    RD: 0:0\n    Max Routes: 0  Mid-Threshold: 0\n    Table-ID: 0x80000004, AF: IPv6, Fwd-ID: 0x80000004, State: Up\n    Table-ID: 0x00000004, AF: IPv4, Fwd-ID: 0x00000004, State: Up\n",
+      "expected": {
+        "vrfs": {
+          "black-hole": {
+            "vrf_id": 3,
+            "state": "Up",
+            "max_routes": 0,
+            "mid_threshold": 0,
+            "vpn_id": "unknown",
+            "rd": "0:0",
+            "address_families": {
+              "IPv6": {
+                "table_id": "0x80000003",
+                "fwd_id": "0x80000003",
+                "state": "Up"
+              },
+              "IPv4": {
+                "table_id": "0x00000003",
+                "fwd_id": "0x00000003",
+                "state": "Up"
+              }
+            }
+          },
+          "management": {
+            "vrf_id": 2,
+            "state": "Up",
+            "max_routes": 0,
+            "mid_threshold": 0,
+            "vpn_id": "unknown",
+            "rd": "0:0",
+            "address_families": {
+              "IPv6": {
+                "table_id": "0x80000002",
+                "fwd_id": "0x80000002",
+                "state": "Up"
+              },
+              "IPv4": {
+                "table_id": "0x00000002",
+                "fwd_id": "0x00000002",
+                "state": "Up"
+              }
+            }
+          },
+          "overlay-1": {
+            "vrf_id": 4,
+            "state": "Up",
+            "max_routes": 0,
+            "mid_threshold": 0,
+            "vpn_id": "unknown",
+            "rd": "0:0",
+            "address_families": {
+              "IPv6": {
+                "table_id": "0x80000004",
+                "fwd_id": "0x80000004",
+                "state": "Up"
+              },
+              "IPv4": {
+                "table_id": "0x00000004",
+                "fwd_id": "0x00000004",
+                "state": "Up"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "ACI spine switch (N9K-C9332C), ACI infra VRFs (black-hole, management, overlay-1); captured from a lab fabric, identifiers scrubbed",
+      "input": "VRF-Name: black-hole, VRF-ID: 3, State: Up\n    VPNID: unknown\n    RD: 0:0\n    Max Routes: 0  Mid-Threshold: 0\n    Table-ID: 0x80000003, AF: IPv6, Fwd-ID: 0x80000003, State: Up\n    Table-ID: 0x00000003, AF: IPv4, Fwd-ID: 0x00000003, State: Up\n\nVRF-Name: management, VRF-ID: 2, State: Up\n    VPNID: unknown\n    RD: 0:0\n    Max Routes: 0  Mid-Threshold: 0\n    Table-ID: 0x80000002, AF: IPv6, Fwd-ID: 0x80000002, State: Up\n    Table-ID: 0x00000002, AF: IPv4, Fwd-ID: 0x00000002, State: Up\n\nVRF-Name: overlay-1, VRF-ID: 4, State: Up\n    VPNID: unknown\n    RD: 0:0\n    Max Routes: 0  Mid-Threshold: 0\n    Table-ID: 0x80000004, AF: IPv6, Fwd-ID: 0x80000004, State: Up\n    Table-ID: 0x00000004, AF: IPv4, Fwd-ID: 0x00000004, State: Up\n",
+      "expected": {
+        "vrfs": {
+          "black-hole": {
+            "vrf_id": 3,
+            "state": "Up",
+            "max_routes": 0,
+            "mid_threshold": 0,
+            "vpn_id": "unknown",
+            "rd": "0:0",
+            "address_families": {
+              "IPv6": {
+                "table_id": "0x80000003",
+                "fwd_id": "0x80000003",
+                "state": "Up"
+              },
+              "IPv4": {
+                "table_id": "0x00000003",
+                "fwd_id": "0x00000003",
+                "state": "Up"
+              }
+            }
+          },
+          "management": {
+            "vrf_id": 2,
+            "state": "Up",
+            "max_routes": 0,
+            "mid_threshold": 0,
+            "vpn_id": "unknown",
+            "rd": "0:0",
+            "address_families": {
+              "IPv6": {
+                "table_id": "0x80000002",
+                "fwd_id": "0x80000002",
+                "state": "Up"
+              },
+              "IPv4": {
+                "table_id": "0x00000002",
+                "fwd_id": "0x00000002",
+                "state": "Up"
+              }
+            }
+          },
+          "overlay-1": {
+            "vrf_id": 4,
+            "state": "Up",
+            "max_routes": 0,
+            "mid_threshold": 0,
+            "vpn_id": "unknown",
+            "rd": "0:0",
+            "address_families": {
+              "IPv6": {
+                "table_id": "0x80000004",
+                "fwd_id": "0x80000004",
+                "state": "Up"
+              },
+              "IPv4": {
+                "table_id": "0x00000004",
+                "fwd_id": "0x00000004",
+                "state": "Up"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

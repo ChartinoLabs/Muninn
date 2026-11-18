@@ -1,0 +1,1017 @@
+{
+  "os": "cisco_aci",
+  "command": "show interface status",
+  "schema": {
+    "name": "ShowInterfaceStatusResult",
+    "fields": {
+      "interfaces": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "InterfaceStatusEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "duplex": {
+                "type": "str",
+                "required": true
+              },
+              "speed": {
+                "type": "str",
+                "required": true
+              },
+              "name": {
+                "type": "str",
+                "required": false
+              },
+              "vlan": {
+                "type": "str",
+                "required": false
+              },
+              "type": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "tunnels": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "TunnelStatusEntry",
+            "fields": {
+              "status": {
+                "type": "str",
+                "required": true
+              },
+              "reason": {
+                "type": "str",
+                "required": true
+              },
+              "name": {
+                "type": "str",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "ACI leaf switch (N9K-C93180YC-FX), ports with ACI statuses (sfpabsent, out-of-ser, parentdown) and the iVXLAN tunnel table; captured from a lab fabric, identifiers scrubbed",
+      "input": "------------------------------------------------------------------------------------------------\n Port           Name                Status     Vlan       Duplex   Speed    Type\n------------------------------------------------------------------------------------------------\n mgmt0          --                  connected  routed     full     1G       --\n Eth1/1         --                  out-of-ser trunk      full     10G      SFP-H10GB-AOC3M\n Eth1/2         --                  sfpabsent  trunk      full     inherit  --\n Eth1/3         --                  sfpabsent  trunk      full     inherit  --\n Eth1/4         --                  sfpabsent  trunk      full     inherit  --\n Eth1/5         --                  sfpabsent  trunk      full     inherit  --\n Eth1/6         --                  sfpabsent  trunk      full     inherit  --\n Eth1/7         --                  sfpabsent  trunk      full     inherit  --\n Eth1/8         --                  sfpabsent  trunk      full     inherit  --\n Eth1/9         --                  sfpabsent  trunk      full     inherit  --\n Eth1/10        --                  sfpabsent  trunk      full     inherit  --\n Eth1/11        --                  sfpabsent  trunk      full     inherit  --\n Eth1/12        --                  sfpabsent  trunk      full     inherit  --\n Eth1/13        --                  sfpabsent  trunk      full     inherit  --\n Eth1/14        --                  sfpabsent  trunk      full     inherit  --\n Eth1/15        --                  sfpabsent  trunk      full     inherit  --\n Eth1/16        --                  sfpabsent  trunk      full     inherit  --\n Eth1/17        --                  sfpabsent  trunk      full     inherit  --\n Eth1/18        --                  sfpabsent  trunk      full     inherit  --\n Eth1/19        --                  sfpabsent  trunk      full     inherit  --\n Eth1/20        --                  sfpabsent  trunk      full     inherit  --\n Eth1/21        --                  sfpabsent  trunk      full     inherit  --\n Eth1/22        --                  sfpabsent  trunk      full     inherit  --\n Eth1/23        --                  sfpabsent  trunk      full     inherit  --\n Eth1/24        --                  sfpabsent  trunk      full     inherit  --\n Eth1/25        --                  sfpabsent  trunk      full     inherit  --\n Eth1/26        --                  sfpabsent  trunk      full     inherit  --\n Eth1/27        --                  sfpabsent  trunk      full     inherit  --\n Eth1/28        --                  sfpabsent  trunk      full     inherit  --\n Eth1/29        --                  sfpabsent  trunk      full     inherit  --\n Eth1/30        --                  sfpabsent  trunk      full     inherit  --\n Eth1/31        --                  sfpabsent  trunk      full     inherit  --\n Eth1/32        --                  sfpabsent  trunk      full     inherit  --\n Eth1/33        --                  sfpabsent  trunk      full     inherit  --\n Eth1/34        --                  sfpabsent  trunk      full     inherit  --\n Eth1/35        --                  sfpabsent  trunk      full     inherit  --\n Eth1/36        --                  sfpabsent  trunk      full     inherit  --\n Eth1/37        --                  sfpabsent  trunk      full     inherit  --\n Eth1/38        --                  sfpabsent  trunk      full     inherit  --\n Eth1/39        --                  sfpabsent  trunk      full     inherit  --\n Eth1/40        --                  sfpabsent  trunk      full     inherit  --\n Eth1/41        --                  sfpabsent  trunk      full     inherit  --\n Eth1/42        --                  sfpabsent  trunk      full     inherit  --\n Eth1/43        --                  sfpabsent  trunk      full     inherit  --\n Eth1/44        --                  sfpabsent  trunk      full     inherit  --\n Eth1/45        --                  sfpabsent  trunk      full     inherit  --\n Eth1/46        --                  sfpabsent  trunk      full     inherit  --\n Eth1/47        --                  sfpabsent  trunk      full     inherit  --\n Eth1/48        --                  connected  trunk      full     10G      SFP-H10GB-AOC3M\n Eth1/49        --                  connected  routed     full     40G      QSFP-H40G-CU3M\n Eth1/49.20     --                  connected  routed     full     40G      QSFP-H40G-CU3M\n Eth1/50        --                  connected  routed     full     40G      QSFP-H40G-CU3M\n Eth1/50.1      --                  connected  routed     full     40G      QSFP-H40G-CU3M\n Eth1/51        --                  sfpabsent  routed     full     inherit  --\n Eth1/52        --                  sfpabsent  routed     full     inherit  --\n Eth1/53        --                  sfpabsent  routed     full     inherit  --\n Eth1/54        --                  sfpabsent  routed     full     inherit  --\n Lo0            --                  connected  routed     auto     --       --\n Lo1023         --                  connected  routed     auto     --       --\n Vlan12         --                  connected  routed     auto     auto     --\n\n----------------------------------------------------------------\n Interface     Name                Status    Reason\n----------------------------------------------------------------\n Tunnel1       --                  up        no-reason\n Tunnel2       --                  up        no-reason\n Tunnel3       --                  up        no-reason\n Tunnel4       --                  up        no-reason\n Tunnel5       --                  up        no-reason\n Tunnel6       --                  up        no-reason\n Tunnel10      --                  up        no-reason\n Tunnel11      --                  up        no-reason\n Tunnel12      --                  up        no-reason\n Tunnel13      --                  up        no-reason\n Tunnel14      --                  up        no-reason\n",
+      "expected": {
+        "interfaces": {
+          "mgmt0": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "1G",
+            "vlan": "routed"
+          },
+          "Ethernet1/1": {
+            "status": "out-of-ser",
+            "duplex": "full",
+            "speed": "10G",
+            "vlan": "trunk",
+            "type": "SFP-H10GB-AOC3M"
+          },
+          "Ethernet1/2": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/3": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/4": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/5": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/6": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/7": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/8": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/9": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/10": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/11": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/12": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/13": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/14": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/15": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/16": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/17": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/18": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/19": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/20": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/21": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/22": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/23": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/24": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/25": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/26": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/27": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/28": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/29": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/30": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/31": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/32": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/33": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/34": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/35": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/36": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/37": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/38": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/39": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/40": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/41": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/42": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/43": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/44": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/45": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/46": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/47": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "trunk"
+          },
+          "Ethernet1/48": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "10G",
+            "vlan": "trunk",
+            "type": "SFP-H10GB-AOC3M"
+          },
+          "Ethernet1/49": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "40G",
+            "vlan": "routed",
+            "type": "QSFP-H40G-CU3M"
+          },
+          "Ethernet1/49.20": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "40G",
+            "vlan": "routed",
+            "type": "QSFP-H40G-CU3M"
+          },
+          "Ethernet1/50": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "40G",
+            "vlan": "routed",
+            "type": "QSFP-H40G-CU3M"
+          },
+          "Ethernet1/50.1": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "40G",
+            "vlan": "routed",
+            "type": "QSFP-H40G-CU3M"
+          },
+          "Ethernet1/51": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/52": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/53": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/54": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Loopback0": {
+            "status": "connected",
+            "duplex": "auto",
+            "speed": "--",
+            "vlan": "routed"
+          },
+          "Loopback1023": {
+            "status": "connected",
+            "duplex": "auto",
+            "speed": "--",
+            "vlan": "routed"
+          },
+          "Vlan12": {
+            "status": "connected",
+            "duplex": "auto",
+            "speed": "auto",
+            "vlan": "routed"
+          }
+        },
+        "tunnels": {
+          "Tunnel1": {
+            "status": "up",
+            "reason": "no-reason"
+          },
+          "Tunnel2": {
+            "status": "up",
+            "reason": "no-reason"
+          },
+          "Tunnel3": {
+            "status": "up",
+            "reason": "no-reason"
+          },
+          "Tunnel4": {
+            "status": "up",
+            "reason": "no-reason"
+          },
+          "Tunnel5": {
+            "status": "up",
+            "reason": "no-reason"
+          },
+          "Tunnel6": {
+            "status": "up",
+            "reason": "no-reason"
+          },
+          "Tunnel10": {
+            "status": "up",
+            "reason": "no-reason"
+          },
+          "Tunnel11": {
+            "status": "up",
+            "reason": "no-reason"
+          },
+          "Tunnel12": {
+            "status": "up",
+            "reason": "no-reason"
+          },
+          "Tunnel13": {
+            "status": "up",
+            "reason": "no-reason"
+          },
+          "Tunnel14": {
+            "status": "up",
+            "reason": "no-reason"
+          }
+        }
+      }
+    },
+    {
+      "name": "ACI spine switch (N9K-C9332C), ports with ACI statuses (sfpabsent, out-of-ser, parentdown) and the iVXLAN tunnel table; captured from a lab fabric, identifiers scrubbed",
+      "input": "----------------------------------------------------------------------------------------------\n Port           Name                Status     Vlan       Duplex   Speed    Type\n----------------------------------------------------------------------------------------------\n mgmt0          --                  connected  routed     full     1G       --\n Eth1/1         --                  connected  routed     full     40G      QSFP-H40G-CU3M\n Eth1/1.1       --                  connected  routed     full     40G      QSFP-H40G-CU3M\n Eth1/2         --                  connected  routed     full     40G      QSFP-H40G-CU3M\n Eth1/2.35      --                  connected  routed     full     40G      QSFP-H40G-CU3M\n Eth1/3         --                  connected  routed     full     40G      QSFP-H40G-CU3M\n Eth1/3.4       --                  connected  routed     full     40G      QSFP-H40G-CU3M\n Eth1/4         --                  connected  routed     full     40G      QSFP-H40G-CU3M\n Eth1/4.3       --                  connected  routed     full     40G      QSFP-H40G-CU3M\n Eth1/5         --                  connected  routed     full     40G      QSFP-H40G-CU3M\n Eth1/5.2       --                  connected  routed     full     40G      QSFP-H40G-CU3M\n Eth1/6         --                  sfpabsent  routed     full     inherit  --\n Eth1/6.6       --                  parentdown routed     full     inherit  --\n Eth1/7         --                  sfpabsent  routed     full     inherit  --\n Eth1/7.7       --                  parentdown routed     full     inherit  --\n Eth1/8         --                  sfpabsent  routed     full     inherit  --\n Eth1/8.8       --                  parentdown routed     full     inherit  --\n Eth1/9         --                  sfpabsent  routed     full     inherit  --\n Eth1/9.9       --                  parentdown routed     full     inherit  --\n Eth1/10        --                  sfpabsent  routed     full     inherit  --\n Eth1/10.10     --                  parentdown routed     full     inherit  --\n Eth1/11        --                  sfpabsent  routed     full     inherit  --\n Eth1/11.11     --                  parentdown routed     full     inherit  --\n Eth1/12        --                  sfpabsent  routed     full     inherit  --\n Eth1/12.12     --                  parentdown routed     full     inherit  --\n Eth1/13        --                  sfpabsent  routed     full     inherit  --\n Eth1/13.13     --                  parentdown routed     full     inherit  --\n Eth1/14        --                  sfpabsent  routed     full     inherit  --\n Eth1/14.14     --                  parentdown routed     full     inherit  --\n Eth1/15        --                  sfpabsent  routed     full     inherit  --\n Eth1/15.15     --                  parentdown routed     full     inherit  --\n Eth1/16        --                  sfpabsent  routed     full     inherit  --\n Eth1/16.16     --                  parentdown routed     full     inherit  --\n Eth1/17        --                  sfpabsent  routed     full     inherit  --\n Eth1/17.17     --                  parentdown routed     full     inherit  --\n Eth1/18        --                  sfpabsent  routed     full     inherit  --\n Eth1/18.18     --                  parentdown routed     full     inherit  --\n Eth1/19        --                  sfpabsent  routed     full     inherit  --\n Eth1/19.19     --                  parentdown routed     full     inherit  --\n Eth1/20        --                  sfpabsent  routed     full     inherit  --\n Eth1/20.20     --                  parentdown routed     full     inherit  --\n Eth1/21        --                  sfpabsent  routed     full     inherit  --\n Eth1/21.21     --                  parentdown routed     full     inherit  --\n Eth1/22        --                  sfpabsent  routed     full     inherit  --\n Eth1/22.22     --                  parentdown routed     full     inherit  --\n Eth1/23        --                  sfpabsent  routed     full     inherit  --\n Eth1/23.23     --                  parentdown routed     full     inherit  --\n Eth1/24        --                  sfpabsent  routed     full     inherit  --\n Eth1/24.24     --                  parentdown routed     full     inherit  --\n Eth1/25        --                  sfpabsent  routed     full     inherit  --\n Eth1/25.25     --                  parentdown routed     full     inherit  --\n Eth1/26        --                  sfpabsent  routed     full     inherit  --\n Eth1/26.26     --                  parentdown routed     full     inherit  --\n Eth1/27        --                  sfpabsent  routed     full     inherit  --\n Eth1/27.27     --                  parentdown routed     full     inherit  --\n Eth1/28        --                  sfpabsent  routed     full     inherit  --\n Eth1/28.28     --                  parentdown routed     full     inherit  --\n Eth1/29        --                  sfpabsent  routed     full     inherit  --\n Eth1/29.29     --                  parentdown routed     full     inherit  --\n Eth1/30        --                  sfpabsent  routed     full     inherit  --\n Eth1/30.30     --                  parentdown routed     full     inherit  --\n Eth1/31        --                  sfpabsent  routed     full     inherit  --\n Eth1/31.31     --                  parentdown routed     full     inherit  --\n Eth1/32        --                  sfpabsent  routed     full     inherit  --\n Eth1/32.32     --                  parentdown routed     full     inherit  --\n Eth1/33        --                  sfpabsent  routed     full     inherit  --\n Eth1/33.33     --                  parentdown routed     full     inherit  --\n Eth1/34        --                  sfpabsent  routed     full     inherit  --\n Eth1/34.34     --                  parentdown routed     full     inherit  --\n Lo0            --                  connected  routed     auto     --       --\n Lo1            --                  connected  routed     auto     --       --\n Lo2            --                  connected  routed     auto     --       --\n Lo3            --                  connected  routed     auto     --       --\n Lo4            --                  connected  routed     auto     --       --\n Lo5            --                  connected  routed     auto     --       --\n Lo6            --                  connected  routed     auto     --       --\n Lo7            --                  connected  routed     auto     --       --\n Lo8            --                  connected  routed     auto     --       --\n Lo9            --                  connected  routed     auto     --       --\n\n----------------------------------------------------------------\n Interface     Name                Status    Reason\n----------------------------------------------------------------\n Tunnel2       --                  up        no-reason\n Tunnel3       --                  up        no-reason\n Tunnel6       --                  up        no-reason\n Tunnel7       --                  up        no-reason\n Tunnel8       --                  up        no-reason\n Tunnel9       --                  up        no-reason\n Tunnel10      --                  up        no-reason\n Tunnel11      --                  up        no-reason\n",
+      "expected": {
+        "interfaces": {
+          "mgmt0": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "1G",
+            "vlan": "routed"
+          },
+          "Ethernet1/1": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "40G",
+            "vlan": "routed",
+            "type": "QSFP-H40G-CU3M"
+          },
+          "Ethernet1/1.1": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "40G",
+            "vlan": "routed",
+            "type": "QSFP-H40G-CU3M"
+          },
+          "Ethernet1/2": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "40G",
+            "vlan": "routed",
+            "type": "QSFP-H40G-CU3M"
+          },
+          "Ethernet1/2.35": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "40G",
+            "vlan": "routed",
+            "type": "QSFP-H40G-CU3M"
+          },
+          "Ethernet1/3": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "40G",
+            "vlan": "routed",
+            "type": "QSFP-H40G-CU3M"
+          },
+          "Ethernet1/3.4": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "40G",
+            "vlan": "routed",
+            "type": "QSFP-H40G-CU3M"
+          },
+          "Ethernet1/4": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "40G",
+            "vlan": "routed",
+            "type": "QSFP-H40G-CU3M"
+          },
+          "Ethernet1/4.3": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "40G",
+            "vlan": "routed",
+            "type": "QSFP-H40G-CU3M"
+          },
+          "Ethernet1/5": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "40G",
+            "vlan": "routed",
+            "type": "QSFP-H40G-CU3M"
+          },
+          "Ethernet1/5.2": {
+            "status": "connected",
+            "duplex": "full",
+            "speed": "40G",
+            "vlan": "routed",
+            "type": "QSFP-H40G-CU3M"
+          },
+          "Ethernet1/6": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/6.6": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/7": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/7.7": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/8": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/8.8": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/9": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/9.9": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/10": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/10.10": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/11": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/11.11": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/12": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/12.12": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/13": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/13.13": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/14": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/14.14": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/15": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/15.15": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/16": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/16.16": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/17": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/17.17": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/18": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/18.18": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/19": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/19.19": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/20": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/20.20": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/21": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/21.21": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/22": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/22.22": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/23": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/23.23": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/24": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/24.24": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/25": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/25.25": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/26": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/26.26": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/27": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/27.27": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/28": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/28.28": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/29": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/29.29": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/30": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/30.30": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/31": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/31.31": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/32": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/32.32": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/33": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/33.33": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/34": {
+            "status": "sfpabsent",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Ethernet1/34.34": {
+            "status": "parentdown",
+            "duplex": "full",
+            "speed": "inherit",
+            "vlan": "routed"
+          },
+          "Loopback0": {
+            "status": "connected",
+            "duplex": "auto",
+            "speed": "--",
+            "vlan": "routed"
+          },
+          "Loopback1": {
+            "status": "connected",
+            "duplex": "auto",
+            "speed": "--",
+            "vlan": "routed"
+          },
+          "Loopback2": {
+            "status": "connected",
+            "duplex": "auto",
+            "speed": "--",
+            "vlan": "routed"
+          },
+          "Loopback3": {
+            "status": "connected",
+            "duplex": "auto",
+            "speed": "--",
+            "vlan": "routed"
+          },
+          "Loopback4": {
+            "status": "connected",
+            "duplex": "auto",
+            "speed": "--",
+            "vlan": "routed"
+          },
+          "Loopback5": {
+            "status": "connected",
+            "duplex": "auto",
+            "speed": "--",
+            "vlan": "routed"
+          },
+          "Loopback6": {
+            "status": "connected",
+            "duplex": "auto",
+            "speed": "--",
+            "vlan": "routed"
+          },
+          "Loopback7": {
+            "status": "connected",
+            "duplex": "auto",
+            "speed": "--",
+            "vlan": "routed"
+          },
+          "Loopback8": {
+            "status": "connected",
+            "duplex": "auto",
+            "speed": "--",
+            "vlan": "routed"
+          },
+          "Loopback9": {
+            "status": "connected",
+            "duplex": "auto",
+            "speed": "--",
+            "vlan": "routed"
+          }
+        },
+        "tunnels": {
+          "Tunnel2": {
+            "status": "up",
+            "reason": "no-reason"
+          },
+          "Tunnel3": {
+            "status": "up",
+            "reason": "no-reason"
+          },
+          "Tunnel6": {
+            "status": "up",
+            "reason": "no-reason"
+          },
+          "Tunnel7": {
+            "status": "up",
+            "reason": "no-reason"
+          },
+          "Tunnel8": {
+            "status": "up",
+            "reason": "no-reason"
+          },
+          "Tunnel9": {
+            "status": "up",
+            "reason": "no-reason"
+          },
+          "Tunnel10": {
+            "status": "up",
+            "reason": "no-reason"
+          },
+          "Tunnel11": {
+            "status": "up",
+            "reason": "no-reason"
+          }
+        }
+      }
+    }
+  ]
+}

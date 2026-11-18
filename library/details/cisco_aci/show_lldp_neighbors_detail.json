@@ -1,0 +1,189 @@
+{
+  "os": "cisco_aci",
+  "command": "show lldp neighbors detail",
+  "schema": {
+    "name": "ShowLldpNeighborsDetailResult",
+    "fields": {
+      "neighbors": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "LldpNeighborDetailEntry",
+            "fields": {
+              "chassis_id": {
+                "type": "str",
+                "required": true
+              },
+              "port_id": {
+                "type": "str",
+                "required": true
+              },
+              "port_description": {
+                "type": "str",
+                "required": false
+              },
+              "system_name": {
+                "type": "str",
+                "required": false
+              },
+              "system_description": {
+                "type": "str",
+                "required": false
+              },
+              "time_remaining": {
+                "type": "int",
+                "required": false
+              },
+              "system_capabilities": {
+                "type": "str",
+                "required": false
+              },
+              "enabled_capabilities": {
+                "type": "str",
+                "required": false
+              },
+              "management_address": {
+                "type": "str",
+                "required": false
+              },
+              "management_address_ipv6": {
+                "type": "str",
+                "required": false
+              },
+              "vlan_id": {
+                "type": "int",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "total_entries": {
+        "type": "int",
+        "required": false
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "ACI leaf switch (N9K-C93180YC-FX), fabric LLDP neighbor details; captured from a lab fabric, identifiers scrubbed",
+      "input": "Capability codes:\n  (R) Router, (B) Bridge, (T) Telephone, (C) DOCSIS Cable Device\n  (W) WLAN Access Point, (P) Repeater, (S) Station, (O) Other\nDevice ID            Local Intf      Hold-time  Capability  Port ID\n\nChassis id: 0000.5e00.53c0\nPort id: 0000.5e00.53c0\nLocal Port id: Eth1/1\nPort Description: eth2-1\nSystem Name: other-apic\nSystem Description: topology/pod-1/node-1\nTime remaining: 99 seconds\nSystem Capabilities: not advertised\nEnabled Capabilities: not advertised\nManagement Address: 203.0.113.1\nVlan ID: not advertised\n\nChassis id: 0000.5e00.53c1\nPort id: 0000.5e00.53c1\nLocal Port id: Eth1/48\nPort Description: eth2-1\nSystem Name: example-fabric-apic-1\nSystem Description: topology/pod-1/node-1\nTime remaining: 101 seconds\nSystem Capabilities: not advertised\nEnabled Capabilities: not advertised\nManagement Address: 198.51.100.1\nVlan ID: not advertised\n\nChassis id: 0000.5e00.53c2\nPort id: Eth1/1\nLocal Port id: Eth1/49\nPort Description: topology/pod-1/paths-101/pathep-[eth1/1]\nSystem Name: example-fabric-spine-0101\nSystem Description: topology/pod-1/node-101\nTime remaining: 117 seconds\nSystem Capabilities: B, R\nEnabled Capabilities: B, R\nManagement Address: 192.0.2.191\nVlan ID: not advertised\n\nChassis id: 0000.5e00.53a1\nPort id: Eth1/1\nLocal Port id: Eth1/50\nPort Description: topology/pod-1/paths-102/pathep-[eth1/1]\nSystem Name: example-fabric-spine-0102\nSystem Description: topology/pod-1/node-102\nTime remaining: 99 seconds\nSystem Capabilities: B, R\nEnabled Capabilities: B, R\nManagement Address: 192.0.2.192\nVlan ID: 11\n\nTotal entries displayed: 4\n",
+      "expected": {
+        "neighbors": {
+          "Ethernet1/1": {
+            "chassis_id": "0000.5e00.53c0",
+            "port_id": "0000.5e00.53c0",
+            "port_description": "eth2-1",
+            "system_name": "other-apic",
+            "system_description": "topology/pod-1/node-1",
+            "time_remaining": 99,
+            "system_capabilities": "not advertised",
+            "enabled_capabilities": "not advertised",
+            "management_address": "203.0.113.1"
+          },
+          "Ethernet1/48": {
+            "chassis_id": "0000.5e00.53c1",
+            "port_id": "0000.5e00.53c1",
+            "port_description": "eth2-1",
+            "system_name": "example-fabric-apic-1",
+            "system_description": "topology/pod-1/node-1",
+            "time_remaining": 101,
+            "system_capabilities": "not advertised",
+            "enabled_capabilities": "not advertised",
+            "management_address": "198.51.100.1"
+          },
+          "Ethernet1/49": {
+            "chassis_id": "0000.5e00.53c2",
+            "port_id": "Ethernet1/1",
+            "port_description": "topology/pod-1/paths-101/pathep-[eth1/1]",
+            "system_name": "example-fabric-spine-0101",
+            "system_description": "topology/pod-1/node-101",
+            "time_remaining": 117,
+            "system_capabilities": "B, R",
+            "enabled_capabilities": "B, R",
+            "management_address": "192.0.2.191"
+          },
+          "Ethernet1/50": {
+            "chassis_id": "0000.5e00.53a1",
+            "port_id": "Ethernet1/1",
+            "port_description": "topology/pod-1/paths-102/pathep-[eth1/1]",
+            "system_name": "example-fabric-spine-0102",
+            "system_description": "topology/pod-1/node-102",
+            "time_remaining": 99,
+            "system_capabilities": "B, R",
+            "enabled_capabilities": "B, R",
+            "management_address": "192.0.2.192",
+            "vlan_id": 11
+          }
+        },
+        "total_entries": 4
+      }
+    },
+    {
+      "name": "ACI spine switch (N9K-C9332C), fabric LLDP neighbor details; captured from a lab fabric, identifiers scrubbed",
+      "input": "Capability codes:\n  (R) Router, (B) Bridge, (T) Telephone, (C) DOCSIS Cable Device\n  (W) WLAN Access Point, (P) Repeater, (S) Station, (O) Other\nDevice ID            Local Intf      Hold-time  Capability  Port ID\n\nChassis id: 0000.5e00.5331\nPort id: Eth1/50\nLocal Port id: Eth1/1\nPort Description: topology/pod-1/paths-201/pathep-[eth1/50]\nSystem Name: example-fabric-leaf-0201\nSystem Description: topology/pod-1/node-201\nTime remaining: 111 seconds\nSystem Capabilities: B, R\nEnabled Capabilities: B, R\nManagement Address: 192.0.2.193\nVlan ID: not advertised\n\nChassis id: 0000.5e00.53c3\nPort id: Eth1/50\nLocal Port id: Eth1/2\nPort Description: topology/pod-1/paths-202/pathep-[eth1/50]\nSystem Name: example-fabric-leaf-0202\nSystem Description: topology/pod-1/node-202\nTime remaining: 93 seconds\nSystem Capabilities: B, R\nEnabled Capabilities: B, R\nManagement Address: 192.0.2.194\nVlan ID: not advertised\n\nChassis id: 0000.5e00.53c4\nPort id: Eth1/50\nLocal Port id: Eth1/3\nPort Description: topology/pod-1/paths-203/pathep-[eth1/50]\nSystem Name: example-fabric-leaf-0203\nSystem Description: topology/pod-1/node-203\nTime remaining: 93 seconds\nSystem Capabilities: B, R\nEnabled Capabilities: B, R\nManagement Address: 192.0.2.195\nVlan ID: not advertised\n\nChassis id: 0000.5e00.53c5\nPort id: Eth1/50\nLocal Port id: Eth1/4\nPort Description: topology/pod-1/paths-204/pathep-[eth1/50]\nSystem Name: example-fabric-leaf-0204\nSystem Description: topology/pod-1/node-204\nTime remaining: 112 seconds\nSystem Capabilities: B, R\nEnabled Capabilities: B, R\nManagement Address: 192.0.2.196\nVlan ID: not advertised\n\nChassis id: 0000.5e00.53c6\nPort id: Eth1/50\nLocal Port id: Eth1/5\nPort Description: topology/pod-1/paths-205/pathep-[eth1/50]\nSystem Name: example-fabric-leaf-0205\nSystem Description: topology/pod-1/node-205\nTime remaining: 115 seconds\nSystem Capabilities: B, R\nEnabled Capabilities: B, R\nManagement Address: 192.0.2.197\nVlan ID: not advertised\n\nTotal entries displayed: 5\n",
+      "expected": {
+        "neighbors": {
+          "Ethernet1/1": {
+            "chassis_id": "0000.5e00.5331",
+            "port_id": "Ethernet1/50",
+            "port_description": "topology/pod-1/paths-201/pathep-[eth1/50]",
+            "system_name": "example-fabric-leaf-0201",
+            "system_description": "topology/pod-1/node-201",
+            "time_remaining": 111,
+            "system_capabilities": "B, R",
+            "enabled_capabilities": "B, R",
+            "management_address": "192.0.2.193"
+          },
+          "Ethernet1/2": {
+            "chassis_id": "0000.5e00.53c3",
+            "port_id": "Ethernet1/50",
+            "port_description": "topology/pod-1/paths-202/pathep-[eth1/50]",
+            "system_name": "example-fabric-leaf-0202",
+            "system_description": "topology/pod-1/node-202",
+            "time_remaining": 93,
+            "system_capabilities": "B, R",
+            "enabled_capabilities": "B, R",
+            "management_address": "192.0.2.194"
+          },
+          "Ethernet1/3": {
+            "chassis_id": "0000.5e00.53c4",
+            "port_id": "Ethernet1/50",
+            "port_description": "topology/pod-1/paths-203/pathep-[eth1/50]",
+            "system_name": "example-fabric-leaf-0203",
+            "system_description": "topology/pod-1/node-203",
+            "time_remaining": 93,
+            "system_capabilities": "B, R",
+            "enabled_capabilities": "B, R",
+            "management_address": "192.0.2.195"
+          },
+          "Ethernet1/4": {
+            "chassis_id": "0000.5e00.53c5",
+            "port_id": "Ethernet1/50",
+            "port_description": "topology/pod-1/paths-204/pathep-[eth1/50]",
+            "system_name": "example-fabric-leaf-0204",
+            "system_description": "topology/pod-1/node-204",
+            "time_remaining": 112,
+            "system_capabilities": "B, R",
+            "enabled_capabilities": "B, R",
+            "management_address": "192.0.2.196"
+          },
+          "Ethernet1/5": {
+            "chassis_id": "0000.5e00.53c6",
+            "port_id": "Ethernet1/50",
+            "port_description": "topology/pod-1/paths-205/pathep-[eth1/50]",
+            "system_name": "example-fabric-leaf-0205",
+            "system_description": "topology/pod-1/node-205",
+            "time_remaining": 115,
+            "system_capabilities": "B, R",
+            "enabled_capabilities": "B, R",
+            "management_address": "192.0.2.197"
+          }
+        },
+        "total_entries": 5
+      }
+    }
+  ]
+}

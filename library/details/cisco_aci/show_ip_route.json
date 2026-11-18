@@ -1,0 +1,298 @@
+{
+  "os": "cisco_aci",
+  "command": "show ip route",
+  "schema": {
+    "name": "ShowIpRouteResult",
+    "fields": {
+      "vrfs": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "VrfRoutes",
+            "fields": {
+              "routes": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "Route",
+                    "fields": {
+                      "prefix": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "mask": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "ubest": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "mbest": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "attached": {
+                        "type": "bool",
+                        "required": true
+                      },
+                      "direct": {
+                        "type": "bool",
+                        "required": true
+                      },
+                      "pervasive": {
+                        "type": "bool",
+                        "required": true
+                      },
+                      "pending": {
+                        "type": "bool",
+                        "required": true
+                      },
+                      "next_hops": {
+                        "type": {
+                          "type": "list",
+                          "items": {
+                            "name": "NextHop",
+                            "fields": {
+                              "best": {
+                                "type": "bool",
+                                "required": true
+                              },
+                              "best_ucast": {
+                                "type": "bool",
+                                "required": true
+                              },
+                              "best_mcast": {
+                                "type": "bool",
+                                "required": true
+                              },
+                              "next_hop": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "preference": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "metric": {
+                                "type": "int",
+                                "required": true
+                              },
+                              "uptime": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "protocol": {
+                                "type": "str",
+                                "required": true
+                              },
+                              "next_hop_vrf": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "interface": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "process": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "route_type": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "tag": {
+                                "type": "int",
+                                "required": false
+                              },
+                              "segid": {
+                                "type": "int",
+                                "required": false
+                              },
+                              "tunnelid": {
+                                "type": "str",
+                                "required": false
+                              },
+                              "encap": {
+                                "type": "str",
+                                "required": false
+                              }
+                            }
+                          }
+                        },
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "ACI fabric routes with attached, direct, and pervasive flags, overlay VRF references, and large tag values",
+      "input": "IP Route Table for VRF \"tn-L2-PBR:vrf-L2-PBR\"\n'*' denotes best ucast next-hop\n'**' denotes best mcast next-hop\n'[x/y]' denotes [preference/metric]\n'%<string>' in via output denotes VRF <string>\n\n192.168.1.0/24, ubest/mbest: 1/0, attached, direct, pervasive\n    *via 10.11.200.98%overlay-1, [1/0], 02w00d, static, tag 4294967294\n192.168.1.1/32, ubest/mbest: 1/0, attached, pervasive\n    *via 192.168.1.1, vlan60, [0/0], 02w00d, local, local\n192.168.100.0/24, ubest/mbest: 1/0, attached, direct, pervasive\n    *via 10.11.200.98%overlay-1, [1/0], 02w00d, static, tag 4294967294\n192.168.100.1/32, ubest/mbest: 1/0, attached, pervasive\n    *via 192.168.100.1, vlan14, [0/0], 02w00d, local, local\n192.168.254.0/24, ubest/mbest: 1/0, attached, direct, pervasive\n    *via 10.11.200.98%overlay-1, [1/0], 02w00d, static, tag 4294967294\n192.168.254.1/32, ubest/mbest: 1/0, attached, pervasive\n    *via 192.168.254.1, vlan39, [0/0], 02w00d, local, local\n",
+      "expected": {
+        "vrfs": {
+          "tn-L2-PBR:vrf-L2-PBR": {
+            "routes": {
+              "192.168.1.0/24": {
+                "prefix": "192.168.1.0",
+                "mask": 24,
+                "ubest": 1,
+                "mbest": 0,
+                "attached": true,
+                "direct": false,
+                "pervasive": false,
+                "pending": false,
+                "next_hops": [
+                  {
+                    "best": true,
+                    "best_ucast": true,
+                    "best_mcast": false,
+                    "next_hop": "10.11.200.98",
+                    "preference": 1,
+                    "metric": 0,
+                    "uptime": "02w00d",
+                    "protocol": "static",
+                    "next_hop_vrf": "overlay-1",
+                    "tag": 4294967294
+                  }
+                ]
+              },
+              "192.168.1.1/32": {
+                "prefix": "192.168.1.1",
+                "mask": 32,
+                "ubest": 1,
+                "mbest": 0,
+                "attached": true,
+                "direct": false,
+                "pervasive": false,
+                "pending": false,
+                "next_hops": [
+                  {
+                    "best": true,
+                    "best_ucast": true,
+                    "best_mcast": false,
+                    "next_hop": "192.168.1.1",
+                    "preference": 0,
+                    "metric": 0,
+                    "uptime": "02w00d",
+                    "protocol": "local",
+                    "interface": "VLAN60",
+                    "route_type": "local"
+                  }
+                ]
+              },
+              "192.168.100.0/24": {
+                "prefix": "192.168.100.0",
+                "mask": 24,
+                "ubest": 1,
+                "mbest": 0,
+                "attached": true,
+                "direct": false,
+                "pervasive": false,
+                "pending": false,
+                "next_hops": [
+                  {
+                    "best": true,
+                    "best_ucast": true,
+                    "best_mcast": false,
+                    "next_hop": "10.11.200.98",
+                    "preference": 1,
+                    "metric": 0,
+                    "uptime": "02w00d",
+                    "protocol": "static",
+                    "next_hop_vrf": "overlay-1",
+                    "tag": 4294967294
+                  }
+                ]
+              },
+              "192.168.100.1/32": {
+                "prefix": "192.168.100.1",
+                "mask": 32,
+                "ubest": 1,
+                "mbest": 0,
+                "attached": true,
+                "direct": false,
+                "pervasive": false,
+                "pending": false,
+                "next_hops": [
+                  {
+                    "best": true,
+                    "best_ucast": true,
+                    "best_mcast": false,
+                    "next_hop": "192.168.100.1",
+                    "preference": 0,
+                    "metric": 0,
+                    "uptime": "02w00d",
+                    "protocol": "local",
+                    "interface": "VLAN14",
+                    "route_type": "local"
+                  }
+                ]
+              },
+              "192.168.254.0/24": {
+                "prefix": "192.168.254.0",
+                "mask": 24,
+                "ubest": 1,
+                "mbest": 0,
+                "attached": true,
+                "direct": false,
+                "pervasive": false,
+                "pending": false,
+                "next_hops": [
+                  {
+                    "best": true,
+                    "best_ucast": true,
+                    "best_mcast": false,
+                    "next_hop": "10.11.200.98",
+                    "preference": 1,
+                    "metric": 0,
+                    "uptime": "02w00d",
+                    "protocol": "static",
+                    "next_hop_vrf": "overlay-1",
+                    "tag": 4294967294
+                  }
+                ]
+              },
+              "192.168.254.1/32": {
+                "prefix": "192.168.254.1",
+                "mask": 32,
+                "ubest": 1,
+                "mbest": 0,
+                "attached": true,
+                "direct": false,
+                "pervasive": false,
+                "pending": false,
+                "next_hops": [
+                  {
+                    "best": true,
+                    "best_ucast": true,
+                    "best_mcast": false,
+                    "next_hop": "192.168.254.1",
+                    "preference": 0,
+                    "metric": 0,
+                    "uptime": "02w00d",
+                    "protocol": "local",
+                    "interface": "VLAN39",
+                    "route_type": "local"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
