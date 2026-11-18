@@ -75,6 +75,7 @@ class ShowVersionResult(TypedDict):
     plugins: list[str]
 
 
+@register(OS.CISCO_ACI, "show version")
 @register(OS.CISCO_NXOS, "show version")
 class ShowVersionParser(BaseParser[ShowVersionResult]):
     """Parser for 'show version' command on NX-OS.

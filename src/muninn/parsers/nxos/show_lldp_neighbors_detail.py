@@ -61,6 +61,7 @@ def _normalize_interface_description(value: str) -> str:
     return stripped
 
 
+@register(OS.CISCO_ACI, "show lldp neighbors detail")
 @register(OS.CISCO_NXOS, "show lldp neighbors detail")
 class ShowLldpNeighborsDetailParser(BaseParser[ShowLldpNeighborsDetailResult]):
     """Parser for 'show lldp neighbors detail' command on NX-OS.

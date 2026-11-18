@@ -30,6 +30,20 @@ class CiscoNXOS(OperatingSystem):
     aliases = ("nxos", "cisco_nxos", "nexus", "nx-os", "nx_os")
 
 
+class CiscoACI(OperatingSystem):
+    """Cisco ACI leaf and spine switches.
+
+    ACI fabric switches run an NX-OS-derived OS. Many show commands produce
+    the same output as on NX-OS, so the NX-OS parsers known to work on ACI
+    also register for this OS. Commands that exist only on ACI get their own
+    parsers here. The APIC is managed over REST and has no CLI parsers.
+    """
+
+    name = "cisco_aci"
+    display_name = "Cisco ACI"
+    aliases = ("aci", "cisco_aci", "aci-nxos", "aci_nxos")
+
+
 class CiscoIOSXE(OperatingSystem):
     """Cisco IOS-XE (Catalyst switches, ISR/ASR routers)."""
 
@@ -115,6 +129,7 @@ class OS(Enum):
     """
 
     CISCO_NXOS = CiscoNXOS
+    CISCO_ACI = CiscoACI
     CISCO_IOSXE = CiscoIOSXE
     CISCO_IOSXR = CiscoIOSXR
     CISCO_IOS = CiscoIOS

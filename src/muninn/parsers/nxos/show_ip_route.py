@@ -249,6 +249,7 @@ def _process_nexthop(
     return current_route_key
 
 
+@register(OS.CISCO_ACI, "show ip route")
 @register(OS.CISCO_NXOS, "show ip route")
 class ShowIpRouteParser(BaseParser[ShowIpRouteResult]):
     """Parser for 'show ip route' command on NX-OS.

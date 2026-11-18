@@ -27,6 +27,7 @@ class ShowLldpNeighborsResult(TypedDict):
     total_entries: NotRequired[int]
 
 
+@register(OS.CISCO_ACI, "show lldp neighbors")
 @register(OS.CISCO_NXOS, "show lldp neighbors")
 class ShowLldpNeighborsParser(BaseParser[ShowLldpNeighborsResult]):
     """Parser for 'show lldp neighbors' command on NX-OS."""

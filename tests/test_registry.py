@@ -1,5 +1,6 @@
 """Tests for muninn.registry module."""
 
+from types import ModuleType
 from typing import Any, ClassVar
 
 import pytest
@@ -15,6 +16,7 @@ from muninn.registry import (
     _normalize_command,
     register,
 )
+from muninn.runtime import MuninnRuntime, _register_module_parsers
 from muninn.tags import ParserTag
 
 _TEST_TAGS: frozenset[ParserTag] = frozenset({ParserTag.SYSTEM})
@@ -83,6 +85,87 @@ class TestRegisterDecorator:
         assert registration.os is OS.CISCO_NXOS
         assert registration.command == "  SHOW VERSION  "
         assert registration.doc_template is None
+
+
+class TestStackedRegistration:
+    """Tests for one parser registered for several OSes via stacked decorators."""
+
+    @staticmethod
+    def _stacked_parser() -> type[BaseParser]:
+        @register(OS.CISCO_ACI, "show version")
+        @register(OS.CISCO_NXOS, "show version")
+        class ShowVersionParser(BaseParser):
+            tags = _TEST_TAGS
+
+            @classmethod
+            def parse(cls, output: str) -> dict[str, Any]:
+                return {"version": "1.0"}
+
+        return ShowVersionParser
+
+    def test_records_every_registration(self) -> None:
+        """Each stacked decorator adds its own registration."""
+        parser_cls = self._stacked_parser()
+        registrations = parser_cls._muninn_registrations  # ty: ignore[unresolved-attribute]
+        assert [r.os for r in registrations] == [OS.CISCO_NXOS, OS.CISCO_ACI]
+
+    def test_os_attribute_is_the_primary_registration(self) -> None:
+        """The decorator closest to the class sets os and command."""
+        parser_cls = self._stacked_parser()
+        assert parser_cls.os is OS.CISCO_NXOS
+        assert parser_cls.command == "show version"
+
+        registry = RuntimeRegistry()
+        module = ModuleType("stacked_parsers")
+        module.ShowVersionParser = parser_cls  # ty: ignore[unresolved-attribute]
+        _register_module_parsers(registry, module, source="built_in")
+
+        assert parser_cls.os is OS.CISCO_NXOS
+
+    def test_resolves_for_each_os_without_ambiguity(self) -> None:
+        """The parser is the single candidate for each OS it registers for."""
+        parser_cls = self._stacked_parser()
+        registry = RuntimeRegistry()
+        module = ModuleType("stacked_parsers")
+        module.ShowVersionParser = parser_cls  # ty: ignore[unresolved-attribute]
+        _register_module_parsers(registry, module, source="built_in")
+
+        for os_name in ("nxos", "aci"):
+            candidates = registry.get_parser_candidates(os_name, "show version")
+            assert [c.parser_cls for c in candidates] == [parser_cls]
+
+        assert set(registry.list_parsers()) == {
+            (OS.CISCO_NXOS, "show version"),
+            (OS.CISCO_ACI, "show version"),
+        }
+        with pytest.raises(ParserNotFoundError):
+            registry.get_parser_candidates("iosxe", "show version")
+
+
+class TestAciBuiltins:
+    """Tests for the NX-OS built-in parsers opted in for ACI."""
+
+    @pytest.fixture
+    def runtime(self) -> MuninnRuntime:
+        """Create a runtime with the built-in parsers loaded."""
+        runtime = MuninnRuntime()
+        runtime.load_builtin_parsers()
+        return runtime
+
+    def test_aci_resolves_to_the_nxos_parser(self, runtime: MuninnRuntime) -> None:
+        """An opted-in command has one ACI candidate: the NX-OS parser."""
+        aci = runtime.registry.get_parser_candidates("aci", "show version")
+        nxos = runtime.registry.get_parser_candidates("nxos", "show version")
+        assert [c.parser_cls for c in aci] == [c.parser_cls for c in nxos]
+        assert aci[0].command_spec.os is OS.CISCO_ACI
+        assert aci[0].parser_cls.os is OS.CISCO_NXOS
+
+    def test_unopted_nxos_command_is_not_found_for_aci(
+        self, runtime: MuninnRuntime
+    ) -> None:
+        """ACI is its own OS: NX-OS parsers not opted in do not resolve."""
+        with pytest.raises(ParserNotFoundError):
+            runtime.registry.get_parser_candidates("aci", "show vlan access-map")
 
 
 class TestRuntimeRegistry:

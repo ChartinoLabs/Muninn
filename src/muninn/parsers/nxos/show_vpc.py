@@ -23,7 +23,7 @@ class PeerLinkEntry(TypedDict):
 class ShowVpcResult(TypedDict):
     """Schema for 'show vpc' parsed output on NX-OS."""
 
-    domain_id: int
+    domain_id: NotRequired[int]
     peer_status: str
     keepalive_status: str
     configuration_consistency_status: str
@@ -34,8 +34,9 @@ class ShowVpcResult(TypedDict):
     dual_active_excluded_vlans: NotRequired[str]
     graceful_consistency_check: str
     auto_recovery_status: str
-    delay_restore_status: str
-    delay_restore_svi_status: str
+    delay_restore_status: NotRequired[str]
+    delay_restore_svi_status: NotRequired[str]
+    type_2_consistency_status: NotRequired[str]
     configuration_inconsistency_reason: NotRequired[str]
     type_2_inconsistency_reason: NotRequired[str]
     operational_layer3_peer_router: NotRequired[str]
@@ -76,6 +77,11 @@ _KV_PATTERNS: list[tuple[re.Pattern[str], str, type]] = [
         _STR,
     ),
     (
+        re.compile(r"^Type-2 consistency status\s*:\s*(.+?)\s*$"),
+        "type_2_consistency_status",
+        _STR,
+    ),
+    (
         re.compile(r"^Type-2 inconsistency reason\s*:\s*(.+?)\s*$"),
         "type_2_inconsistency_reason",
         _STR,
@@ -113,7 +119,8 @@ _KV_PATTERNS: list[tuple[re.Pattern[str], str, type]] = [
         _STR,
     ),
     (
-        re.compile(r"^Operational Layer3 Peer-router\s*:\s*(.+?)\s*$"),
+        # ACI switches print "Operational Layer3 Peer" without "-router".
+        re.compile(r"^Operational Layer3 Peer(?:-router)?\s*:\s*(.+?)\s*$"),
         "operational_layer3_peer_router",
         _STR,
     ),
@@ -161,6 +168,7 @@ def _parse_peer_link_line(stripped: str) -> tuple[str, PeerLinkEntry] | None:
     return (link_id, entry)
 
 
+@register(OS.CISCO_ACI, "show vpc")
 @register(OS.CISCO_NXOS, "show vpc")
 class ShowVpcParser(BaseParser["ShowVpcResult"]):
     """Parser for 'show vpc' command on NX-OS.
@@ -180,8 +188,9 @@ class ShowVpcParser(BaseParser["ShowVpcResult"]):
         Returns:
             Parsed vPC status and peer-link information.
         """
+        # No domain_id default: a switch without a vPC domain prints
+        # "vPC domain id : Not configured", and the key is then omitted.
         result: dict[str, Any] = {
-            "domain_id": 0,
             "peer_status": "",
             "keepalive_status": "",
             "configuration_consistency_status": "",
@@ -191,8 +200,6 @@ class ShowVpcParser(BaseParser["ShowVpcResult"]):
             "peer_gateway": "",
             "graceful_consistency_check": "",
             "auto_recovery_status": "",
-            "delay_restore_status": "",
-            "delay_restore_svi_status": "",
         }
 
         peer_links: dict[str, PeerLinkEntry] = {}

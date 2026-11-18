@@ -20,6 +20,7 @@ class InterfaceBriefEntry(TypedDict):
     protocol_status: str
     link_status: str
     admin_status: str
+    prefix_length: NotRequired[int]
     unnumbered_source: NotRequired[str]
 
 
@@ -36,6 +37,7 @@ class ShowIpInterfaceBriefResult(TypedDict):
     vrfs: dict[str, VrfEntry]
 
 
+@register(OS.CISCO_ACI, "show ip interface brief")
 @register(OS.CISCO_NXOS, "show ip interface brief")
 class ShowIpInterfaceBriefParser(BaseParser[ShowIpInterfaceBriefResult]):
     """Parser for 'show ip interface brief' command on NX-OS.
@@ -54,9 +56,13 @@ class ShowIpInterfaceBriefParser(BaseParser[ShowIpInterfaceBriefResult]):
     # Pattern for interface entries
     # Eth1/1               10.1.1.11       protocol-down/link-down/admin-up
     # tunnel-te11          unnumbered      protocol-up/link-up/admin-up
+    # ACI switches print the prefix length and "unassigned":
+    # vlan12               192.0.2.30/27        protocol-up/link-up/admin-up
+    # eth1/51              unassigned           protocol-down/link-down/admin-up
     _INTERFACE_PATTERN = re.compile(
         r"^(?P<interface>\S+)\s+"
-        rf"(?P<ip_address>{IPV4_ADDRESS}|unnumbered|forward-enabled)\s+"
+        rf"(?P<ip_address>{IPV4_ADDRESS}|unnumbered|unassigned|forward-enabled)"
+        r"(?:/(?P<prefix_length>\d{1,2}))?\s+"
         r"protocol-(?P<protocol>up|down)/link-(?P<link>up|down)/admin-(?P<admin>up|down)"
     )
 
@@ -91,13 +97,19 @@ class ShowIpInterfaceBriefParser(BaseParser[ShowIpInterfaceBriefResult]):
             "link_status": intf_match.group("link").lower(),
             "admin_status": intf_match.group("admin").lower(),
         }
+        prefix_length = intf_match.group("prefix_length")
+        if prefix_length is not None:
+            entry["prefix_length"] = int(prefix_length)
         vrfs[current_vrf]["interfaces"][interface] = entry
         return interface
 
     @classmethod
     def _is_skip_line(cls, stripped: str) -> bool:
         """Check if a line should be skipped."""
-        return not stripped or ("Interface" in stripped and "IP Address" in stripped)
+        # NX-OS heads the column "IP Address"; ACI switches head it "Address".
+        return not stripped or (
+            stripped.startswith("Interface") and "Address" in stripped
+        )
 
     @classmethod
     def _handle_unnumbered(

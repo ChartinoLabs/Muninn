@@ -4,6 +4,7 @@ import pytest
 
 from muninn.os import (
     OS,
+    CiscoACI,
     CiscoIOSXE,
     CiscoNXOS,
     OperatingSystem,
@@ -24,6 +25,12 @@ class TestOperatingSystem:
         assert "nx-os" in CiscoNXOS.aliases
         assert "cisco_nxos" in CiscoNXOS.aliases
 
+    def test_cisco_aci_is_separate_from_nxos(self) -> None:
+        """CiscoACI is its own OS and shares no alias with CiscoNXOS."""
+        assert CiscoACI.name == "cisco_aci"
+        assert "aci" in CiscoACI.aliases
+        assert not set(CiscoACI.aliases) & set(CiscoNXOS.aliases)
+
     def test_cisco_iosxe_has_name(self) -> None:
         """CiscoIOSXE has a canonical name."""
         assert CiscoIOSXE.name == "cisco_iosxe"
@@ -42,6 +49,7 @@ class TestDisplayName:
         ("os_member", "expected"),
         [
             (OS.CISCO_NXOS, "Cisco NX-OS"),
+            (OS.CISCO_ACI, "Cisco ACI"),
             (OS.CISCO_IOSXE, "Cisco IOS-XE"),
             (OS.CISCO_IOSXR, "Cisco IOS-XR"),
             (OS.CISCO_IOS, "Cisco IOS"),
@@ -111,6 +119,11 @@ class TestResolveOS:
             ("ios-xe", OS.CISCO_IOSXE),
             ("IOSXE", OS.CISCO_IOSXE),
             ("  nxos  ", OS.CISCO_NXOS),  # whitespace stripped
+            ("aci", OS.CISCO_ACI),
+            ("ACI", OS.CISCO_ACI),
+            ("cisco_aci", OS.CISCO_ACI),
+            ("aci-nxos", OS.CISCO_ACI),
+            ("aci_nxos", OS.CISCO_ACI),
         ],
         ids=[
             "nxos_lowercase",
@@ -121,6 +134,11 @@ class TestResolveOS:
             "iosxe_hyphen",
             "iosxe_uppercase",
             "nxos_whitespace",
+            "aci_lowercase",
+            "aci_uppercase",
+            "aci_full",
+            "aci_nxos_hyphen",
+            "aci_nxos_underscore",
         ],
     )
     def test_resolve_string_alias(self, alias: str, expected: OS) -> None:
