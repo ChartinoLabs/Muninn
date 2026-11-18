@@ -101,10 +101,10 @@ _FAN_WITH_DIR = re.compile(
 _FAN_NO_DIR = re.compile(
     r"^(?P<name>\S+)\s+(?P<model>\S+)?\s+(?P<hw>\S+)\s+(?P<status>\S+)\s*$"
 )
-_FAN_ZONE_SPEED = re.compile(r"^Fan Zone Speed:\s*(?P<value>.+)$")
+_FAN_ZONE_SPEED = re.compile(r"^Fan (?:Zone )?Speed:\s*(?P<value>.+)$")
 _FAN_AIR_FILTER = re.compile(r"^Fan Air Filter\s*:\s*(?P<value>\S+)")
 
-_VOLTAGE = re.compile(r"^Voltage:\s*(?P<volts>\d+)\s*Volts", re.I)
+_VOLTAGE = re.compile(r"^Voltage:\s*(?P<volts>\d+)(?:\.0+)?\s*Volts", re.I)
 
 _PS_WITH_INPUT = re.compile(
     r"^(?P<id>\d+)\s+(?P<model>\S+)\s+"
@@ -112,12 +112,12 @@ _PS_WITH_INPUT = re.compile(
 )
 _PS_NO_INPUT = re.compile(
     r"^(?P<id>\d+)\s+(?P<model>\S+)\s+"
-    r"(?P<output>\d+)\s*W\s+(?P<capacity>\d+)\s*W\s+(?P<status>\S+)"
+    r"(?P<output>\d+|N/A)\s*W\s+(?P<capacity>\d+)\s*W\s+(?P<status>\S+)"
 )
 
 _MODULE_ROW = re.compile(
     r"^(?P<id>\S+)\s+(?P<model>\S+)\s+"
-    r"(?P<draw>[\d.]+|N/A)\s*W?\s+(?P<alloc>[\d.]+)\s*W\s+(?P<status>\S+(?:-\S+)?)"
+    r"(?P<draw>[\d.]+|N/A)\s*W?\s+(?P<alloc>[\d.]+|N/A)\s*W?\s+(?P<status>\S+(?:-\S+)?)"
 )
 
 _CLOCK_ROW = re.compile(
@@ -247,7 +247,9 @@ def _build_ps_entry(match: re.Match[str], has_input: bool) -> PowerSupplyEntry:
     model = _normalize(match.group("model"))
     if model:
         entry["model"] = model
-    entry["actual_output_watts"] = int(match.group("output"))
+    output = match.group("output")
+    if output != "N/A":
+        entry["actual_output_watts"] = int(output)
     if has_input:
         entry["actual_input_watts"] = int(match.group("input"))
     entry["total_capacity_watts"] = int(match.group("capacity"))
@@ -292,6 +294,21 @@ def _parse_power_supply_section(lines: list[str], idx: int, result: dict) -> int
     return idx
 
 
+def _build_module_entry(match: re.Match[str]) -> ModuleEntry:
+    """Build a ModuleEntry from a module power row match."""
+    entry: ModuleEntry = {"status": match.group("status")}
+    model = _normalize(match.group("model"))
+    if model:
+        entry["model"] = model
+    draw_str = match.group("draw")
+    if draw_str != "N/A":
+        entry["actual_draw_watts"] = float(draw_str)
+    alloc_str = match.group("alloc")
+    if alloc_str != "N/A":
+        entry["power_allocated_watts"] = float(alloc_str)
+    return entry
+
+
 def _parse_module_section(lines: list[str], idx: int, result: dict) -> int:
     """Parse the Module power section. Returns the new line index."""
     modules: dict[str, ModuleEntry] = {}
@@ -308,16 +325,7 @@ def _parse_module_section(lines: list[str], idx: int, result: dict) -> int:
             continue
 
         if match := _MODULE_ROW.match(line):
-            mod_id = match.group("id")
-            entry: ModuleEntry = {"status": match.group("status")}
-            model = _normalize(match.group("model"))
-            if model:
-                entry["model"] = model
-            draw_str = match.group("draw")
-            if draw_str != "N/A":
-                entry["actual_draw_watts"] = float(draw_str)
-            entry["power_allocated_watts"] = float(match.group("alloc"))
-            modules[mod_id] = entry
+            modules[match.group("id")] = _build_module_entry(match)
             idx += 1
             continue
 

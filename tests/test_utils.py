@@ -60,3 +60,21 @@ class TestCanonicalInterfaceNameCiscoIOSXR:
     def test_full_name_passthrough(self, raw: str) -> None:
         """Full IOS-XR interface names pass through unchanged."""
         assert canonical_interface_name(raw, os=OS.CISCO_IOSXR) == raw
+
+
+class TestCanonicalInterfaceNameCiscoACI:
+    """ACI switches use NX-OS interface naming."""
+
+    @pytest.mark.parametrize(
+        "raw",
+        ["mgmt0", "Eth1/1", "eth1/49.20", "lo0", "Vlan12", "Tunnel1"],
+    )
+    def test_matches_nxos(self, raw: str) -> None:
+        """ACI canonicalization gives the same names as NX-OS."""
+        assert canonical_interface_name(raw, os=OS.CISCO_ACI) == (
+            canonical_interface_name(raw, os=OS.CISCO_NXOS)
+        )
+
+    def test_mgmt0_preserved(self) -> None:
+        """``mgmt0`` keeps its NX-OS form instead of becoming ``Management0``."""
+        assert canonical_interface_name("mgmt0", os=OS.CISCO_ACI) == "mgmt0"

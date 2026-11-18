@@ -48,6 +48,9 @@ _NA_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset(
 # (e.g. OSPF authentication type, interface reason) rather than a null placeholder.
 _NONE_LIKE_PLACEHOLDER_EXEMPT_EXPECTED_FILES: Final[frozenset[str]] = frozenset(
     {
+        # ACI and NX-OS print "none" as the literal Reason for an up interface.
+        "aci/show_interface_brief/001_leaf_n9k_c93180yc_fx/expected.json",
+        "aci/show_interface_brief/002_spine_n9k_c9332c/expected.json",
         "arista_eos/show_version/004_ceos_lab/expected.json",
         # IOS-XR controller output uses "None" as a vendor-defined operational
         # mode for flowcontrol (None / Tx / Rx / Both).

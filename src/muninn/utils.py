@@ -90,9 +90,10 @@ def canonical_interface_name(name: str, *, os: OS | None = None) -> str:
 
     Args:
         name: Raw interface name (e.g. ``"Eth1/1"``, ``"mgmt0"``).
-        os: Operating system context.  When *OS.CISCO_NXOS*, the NX-OS
-            native ``mgmt0`` form is preserved instead of being expanded
-            to ``Management0``.
+        os: Operating system context.  When *OS.CISCO_NXOS* or
+            *OS.CISCO_ACI* (ACI switches use NX-OS interface naming), the
+            NX-OS native ``mgmt0`` form is preserved instead of being
+            expanded to ``Management0``.
 
     Returns:
         Canonical interface name string.
@@ -100,7 +101,7 @@ def canonical_interface_name(name: str, *, os: OS | None = None) -> str:
     if os in _NETUTILS_PASSTHROUGH_OSES:
         return name
 
-    if os is OS.CISCO_NXOS and _is_nxos_native_passthrough(name):
+    if os in {OS.CISCO_NXOS, OS.CISCO_ACI} and _is_nxos_native_passthrough(name):
         return name
 
     if os in {OS.CISCO_IOS, OS.CISCO_IOSXE}:

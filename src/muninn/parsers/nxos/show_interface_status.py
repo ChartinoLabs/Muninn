@@ -23,10 +23,19 @@ class InterfaceStatusEntry(TypedDict):
     type: NotRequired[str]
 
 
+class TunnelStatusEntry(TypedDict):
+    """Schema for a tunnel status entry (ACI iVXLAN tunnels)."""
+
+    status: str
+    reason: str
+    name: NotRequired[str]
+
+
 class ShowInterfaceStatusResult(TypedDict):
     """Schema for 'show interface status' parsed output."""
 
     interfaces: dict[str, InterfaceStatusEntry]
+    tunnels: NotRequired[dict[str, TunnelStatusEntry]]
 
 
 @register(OS.CISCO_ACI, "show interface status")
@@ -44,16 +53,42 @@ class ShowInterfaceStatusParser(BaseParser[ShowInterfaceStatusResult]):
     # Eth1/1        managed by puppet  disabled  routed    auto    auto
     #              SFP-H10GB-CU2M
     # mgmt0         --                 connected routed    full    100     --
+    # ACI switches also print sfpabsent, out-of-ser and parentdown.
     _INTERFACE_PATTERN = re.compile(
         r"^(?P<port>(?:Eth|mgmt|Po|Lo|Vlan|nve|Ser|Tu|Fa|Gi)\S*)\s+"
         r"(?P<name>.{14,}?)\s+"
         r"(?P<status>connected|disabled|sfpAbsent|xcvrAbsen|notconnec|noOperMem|"
-        r"linkFlapE|channelDo|down|up)\s+"
+        r"linkFlapE|channelDo|sfpabsent|out-of-ser|parentdown|down|up)\s+"
         r"(?P<vlan>\d+|routed|trunk|f-path|--)\s+"
         r"(?P<duplex>full|half|auto)\s+"
         r"(?P<speed>\S+)\s*"
         r"(?P<type>\S.*)?$"
     )
+
+    # ACI switches add a separate tunnel table:
+    # Interface     Name                Status    Reason
+    # Tunnel1       --                  up        no-reason
+    _TUNNEL_PATTERN = re.compile(
+        r"^(?P<port>Tunnel\S+)\s+"
+        r"(?P<name>.+?)\s{2,}"
+        r"(?P<status>\S+)\s+"
+        r"(?P<reason>\S.*?)\s*$"
+    )
+
+    @classmethod
+    def _parse_tunnel(cls, line: str, tunnels: dict[str, TunnelStatusEntry]) -> None:
+        """Parse a tunnel table line into ``tunnels`` if it matches."""
+        match = cls._TUNNEL_PATTERN.match(line)
+        if not match:
+            return
+        entry: TunnelStatusEntry = {
+            "status": match.group("status"),
+            "reason": match.group("reason"),
+        }
+        name = cls._normalize_value(match.group("name"))
+        if name:
+            entry["name"] = name
+        tunnels[match.group("port")] = entry
 
     @classmethod
     def _normalize_value(cls, value: str | None) -> str | None:
@@ -73,6 +108,25 @@ class ShowInterfaceStatusParser(BaseParser[ShowInterfaceStatusResult]):
         return value
 
     @classmethod
+    def _build_entry(cls, match: re.Match[str]) -> InterfaceStatusEntry:
+        """Build an InterfaceStatusEntry from an interface row match."""
+        entry: InterfaceStatusEntry = {
+            "status": match.group("status"),
+            "duplex": match.group("duplex"),
+            "speed": match.group("speed"),
+        }
+        name = cls._normalize_value(match.group("name"))
+        if name:
+            entry["name"] = name
+        vlan = cls._normalize_value(match.group("vlan"))
+        if vlan:
+            entry["vlan"] = vlan
+        intf_type = cls._normalize_value(match.group("type"))
+        if intf_type:
+            entry["type"] = intf_type
+        return entry
+
+    @classmethod
     def parse(cls, output: str) -> ShowInterfaceStatusResult:
         """Parse 'show interface status' output on NX-OS.
 
@@ -86,6 +140,7 @@ class ShowInterfaceStatusParser(BaseParser[ShowInterfaceStatusResult]):
             ValueError: If no interfaces found.
         """
         interfaces: dict[str, InterfaceStatusEntry] = {}
+        tunnels: dict[str, TunnelStatusEntry] = {}
 
         for line in output.splitlines():
             # Skip header, dashes, and empty lines
@@ -93,6 +148,7 @@ class ShowInterfaceStatusParser(BaseParser[ShowInterfaceStatusResult]):
             if (
                 not stripped
                 or stripped.startswith("Port")
+                or stripped.startswith("Interface")
                 or stripped.startswith("---")
             ):
                 continue
@@ -100,30 +156,15 @@ class ShowInterfaceStatusParser(BaseParser[ShowInterfaceStatusResult]):
             match = cls._INTERFACE_PATTERN.match(stripped)
             if match:
                 port = canonical_interface_name(match.group("port"), os=OS.CISCO_NXOS)
-                name = cls._normalize_value(match.group("name"))
-                status = match.group("status")
-                vlan = cls._normalize_value(match.group("vlan"))
-                duplex = match.group("duplex")
-                speed = match.group("speed")
-                intf_type = cls._normalize_value(match.group("type"))
-
-                entry: InterfaceStatusEntry = {
-                    "status": status,
-                    "duplex": duplex,
-                    "speed": speed,
-                }
-
-                if name:
-                    entry["name"] = name
-                if vlan:
-                    entry["vlan"] = vlan
-                if intf_type:
-                    entry["type"] = intf_type
-
-                interfaces[port] = entry
+                interfaces[port] = cls._build_entry(match)
+            else:
+                cls._parse_tunnel(stripped, tunnels)
 
         if not interfaces:
             msg = "No interfaces found in output"
             raise ValueError(msg)
 
-        return ShowInterfaceStatusResult(interfaces=interfaces)
+        result = ShowInterfaceStatusResult(interfaces=interfaces)
+        if tunnels:
+            result["tunnels"] = tunnels
+        return result

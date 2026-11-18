@@ -61,8 +61,22 @@ class VlanEntry(TypedDict):
     secondary_vlan: NotRequired[str]
 
 
+class TunnelEntry(TypedDict):
+    """Schema for a tunnel interface entry (ACI iVXLAN tunnels)."""
+
+    status: str
+    encap_type: str
+    mtu: int
+    ip_address: NotRequired[str]
+
+
 ShowInterfaceBriefEntry: TypeAlias = (
-    EthernetEntry | PortChannelEntry | ManagementEntry | LoopbackEntry | VlanEntry
+    EthernetEntry
+    | PortChannelEntry
+    | ManagementEntry
+    | LoopbackEntry
+    | VlanEntry
+    | TunnelEntry
 )
 
 ShowInterfaceBriefResult: TypeAlias = dict[str, ShowInterfaceBriefEntry]
@@ -78,7 +92,8 @@ class ShowInterfaceBriefParser(BaseParser[ShowInterfaceBriefResult]):
     """Parser for 'show interface brief' command on NX-OS.
 
     Parses multi-section output covering Ethernet, Port-channel,
-    Management, Loopback, and VLAN interface summaries.
+    Management, Loopback, VLAN, and (on ACI switches) tunnel interface
+    summaries.
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.INTERFACES})
@@ -165,6 +180,22 @@ class ShowInterfaceBriefParser(BaseParser[ShowInterfaceBriefResult]):
         r"(?P<reason>.+?)\s*$"
     )
 
+    # Tunnel section header (ACI switches):
+    # Interface                Status     IP Address        Encap type      MTU
+    _TUNNEL_HEADER = re.compile(
+        r"Interface\s+Status\s+IP\s+Address\s+Encap\s+type\s+MTU"
+    )
+
+    # Tunnel data line:
+    # Tunnel1                  up         --                ivxlan          9000
+    _TUNNEL_PATTERN = re.compile(
+        r"^(?P<interface>Tunnel\S+)\s+"
+        r"(?P<status>\S+)\s+"
+        r"(?P<ip_address>\S+)\s+"
+        r"(?P<encap_type>\S+)\s+"
+        r"(?P<mtu>\d+)\s*$"
+    )
+
     @classmethod
     def _detect_section(cls, line: str) -> str | None:
         """Detect which section a header line belongs to.
@@ -185,6 +216,8 @@ class ShowInterfaceBriefParser(BaseParser[ShowInterfaceBriefResult]):
             return "vlan"
         if cls._LOOPBACK_HEADER.search(line):
             return "loopback"
+        if cls._TUNNEL_HEADER.search(line):
+            return "tunnel"
         return None
 
     @classmethod
@@ -308,6 +341,24 @@ class ShowInterfaceBriefParser(BaseParser[ShowInterfaceBriefResult]):
 
         return interface, entry
 
+    @classmethod
+    def _parse_tunnel(cls, line: str) -> tuple[str, TunnelEntry] | None:
+        """Parse a tunnel interface line."""
+        match = cls._TUNNEL_PATTERN.match(line)
+        if not match:
+            return None
+
+        entry: TunnelEntry = {
+            "status": match.group("status"),
+            "encap_type": match.group("encap_type"),
+            "mtu": int(match.group("mtu")),
+        }
+        ip_addr = match.group("ip_address")
+        if ip_addr != "--":
+            entry["ip_address"] = ip_addr
+
+        return match.group("interface"), entry
+
     # Map section names to their parser method names
     _SECTION_PARSERS: dict[str, str] = {
         "ethernet": "_parse_ethernet",
@@ -315,6 +366,7 @@ class ShowInterfaceBriefParser(BaseParser[ShowInterfaceBriefResult]):
         "management": "_parse_management",
         "loopback": "_parse_loopback",
         "vlan": "_parse_vlan",
+        "tunnel": "_parse_tunnel",
     }
 
     # Lines that are sub-headers to skip
