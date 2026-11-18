@@ -19,8 +19,11 @@ class BaseParser(ABC, Generic[T_co]):
     raw CLI output into structured data.
 
     Attributes:
-        os: Operating system this parser is registered for.
-        command: The command this parser handles.
+        os: Operating system of the parser's primary registration. A parser
+            can register for several OSes by stacking ``@register``; this
+            holds the first one applied (the decorator closest to the class).
+            The runtime registry resolves the parser for all of them.
+        command: The command of the parser's primary registration.
         tags: Descriptive tags for categorizing the parser (e.g., "routing", "ospf").
     """
 

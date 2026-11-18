@@ -81,12 +81,23 @@ def register(
     *,
     doc_template: str | None = None,
 ) -> Callable[[type[BaseParser[object]]], type[BaseParser[object]]]:
-    """Class decorator that annotates parser classes with registration metadata."""
+    """Class decorator that annotates parser classes with registration metadata.
+
+    Stack the decorator to register one parser for several OSes, for example an
+    NX-OS parser whose output format also holds on ACI switches. Every
+    registration is kept in ``_muninn_registrations``, and the runtime registers
+    each one, so the parser resolves for every OS it is registered for.
+
+    ``cls.os`` and ``cls.command`` describe the parser's primary registration,
+    which is the first one applied: the decorator written closest to the class.
+    Further registrations never overwrite them.
+    """
     resolved_os = resolve_os(os)
 
     def decorator(cls: type[BaseParser[object]]) -> type[BaseParser[object]]:
-        cls.os = resolved_os
-        cls.command = _normalize_command(command)
+        if "os" not in vars(cls):
+            cls.os = resolved_os
+            cls.command = _normalize_command(command)
         registrable_cls = cast(_RegistrableParserClass, cls)
         registrations = []
         if hasattr(registrable_cls, "_muninn_registrations"):
@@ -162,8 +173,12 @@ class RuntimeRegistry:
             tags=tags,
         )
 
-        parser_cls.os = resolved_os
-        parser_cls.command = spec.doc_template
+        # Only the primary registration (see ``register``) sets these, so a
+        # parser registered for several OSes keeps describing its primary one.
+        primary_os = vars(parser_cls).get("os")
+        if primary_os is None or primary_os is resolved_os:
+            parser_cls.os = resolved_os
+            parser_cls.command = spec.doc_template
 
         candidate = ParserCandidate(
             parser_cls=parser_cls,

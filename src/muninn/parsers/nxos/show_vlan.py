@@ -302,6 +302,7 @@ def _find_sections(lines: list[str]) -> dict[str, tuple[int, int]]:
     return result
 
 
+@register(OS.CISCO_ACI, "show vlan")
 @register(OS.CISCO_NXOS, "show vlan")
 class ShowVlanParser(BaseParser[ShowVlanResult]):
     """Parser for 'show vlan' on NX-OS."""

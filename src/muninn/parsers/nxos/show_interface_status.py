@@ -29,6 +29,7 @@ class ShowInterfaceStatusResult(TypedDict):
     interfaces: dict[str, InterfaceStatusEntry]
 
 
+@register(OS.CISCO_ACI, "show interface status")
 @register(OS.CISCO_NXOS, "show interface status")
 class ShowInterfaceStatusParser(BaseParser[ShowInterfaceStatusResult]):
     """Parser for 'show interface status' command on NX-OS.

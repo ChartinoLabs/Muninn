@@ -23,27 +23,25 @@ class OperatingSystem:
 
 
 class CiscoNXOS(OperatingSystem):
-    """Cisco NX-OS (Nexus switches, including ACI leaf and spine switches).
-
-    ACI fabric switches run an NX-OS-derived OS whose CLI output matches
-    the NX-OS parsers, so the ``aci`` aliases resolve here. The APIC is
-    managed over REST and has no CLI parsers, so the alias never selects
-    anything for it.
-    """
+    """Cisco NX-OS (Nexus switches)."""
 
     name = "cisco_nxos"
     display_name = "Cisco NX-OS"
-    aliases = (
-        "nxos",
-        "cisco_nxos",
-        "nexus",
-        "nx-os",
-        "nx_os",
-        "aci",
-        "cisco_aci",
-        "aci-nxos",
-        "aci_nxos",
-    )
+    aliases = ("nxos", "cisco_nxos", "nexus", "nx-os", "nx_os")
+
+
+class CiscoACI(OperatingSystem):
+    """Cisco ACI leaf and spine switches.
+
+    ACI fabric switches run an NX-OS-derived OS. Many show commands produce
+    the same output as on NX-OS, so the NX-OS parsers known to work on ACI
+    also register for this OS. Commands that exist only on ACI get their own
+    parsers here. The APIC is managed over REST and has no CLI parsers.
+    """
+
+    name = "cisco_aci"
+    display_name = "Cisco ACI"
+    aliases = ("aci", "cisco_aci", "aci-nxos", "aci_nxos")
 
 
 class CiscoIOSXE(OperatingSystem):
@@ -126,11 +124,12 @@ class OS(Enum):
     Example:
         >>> OS.CISCO_NXOS.value.name
         'cisco_nxos'
-        >>> OS.CISCO_NXOS.value.aliases[:3]
-        ('nxos', 'cisco_nxos', 'nexus')
+        >>> OS.CISCO_NXOS.value.aliases
+        ('nxos', 'cisco_nxos', 'nexus', 'nx-os', 'nx_os')
     """
 
     CISCO_NXOS = CiscoNXOS
+    CISCO_ACI = CiscoACI
     CISCO_IOSXE = CiscoIOSXE
     CISCO_IOSXR = CiscoIOSXR
     CISCO_IOS = CiscoIOS

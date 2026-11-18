@@ -237,7 +237,6 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         "nxos/show_ip_route/001_ospf_single_vrf/expected.json",
         "nxos/show_ip_route/002_mixed_protocols_vxlan/expected.json",
         "nxos/show_ip_route/003_bgp_cross_vrf_special_names/expected.json",
-        "nxos/show_ip_route/004_aci_pervasive_overlay_vrf/expected.json",
         "nxos/show_ip_route/005_bgp_ecmp_vxlan_elb_allbest/expected.json",
         "nxos/show_ip_route/006_multi_vrf_route_not_found/expected.json",
         "nxos/show_ip_route/007_non_best_paths_time_suffix/expected.json",
@@ -245,6 +244,8 @@ _LIST_OF_DICTS_EXEMPT_EXPECTED_FILES: frozenset[str] = frozenset(
         "nxos/show_ipv6_route/001_multi_vrf_mixed_protocols/expected.json",
         "nxos/show_ipv6_route/002_vxlan_overlay/expected.json",
         "nxos/show_ipv6_route/003_eigrp_subinterfaces/expected.json",
+        # --- Cisco ACI (NX-OS parsers registered for ACI) ---
+        "aci/show_ip_route/001_aci_pervasive_overlay_vrf/expected.json",
         # --- Juniper Junos ---
         # software_packages uses list-of-dicts because package names are not
         # unique (real device output can list the same package name twice).

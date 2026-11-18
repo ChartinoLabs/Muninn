@@ -2,9 +2,9 @@
 
 import pytest
 
-import muninn
 from muninn.os import (
     OS,
+    CiscoACI,
     CiscoIOSXE,
     CiscoNXOS,
     OperatingSystem,
@@ -25,6 +25,12 @@ class TestOperatingSystem:
         assert "nx-os" in CiscoNXOS.aliases
         assert "cisco_nxos" in CiscoNXOS.aliases
 
+    def test_cisco_aci_is_separate_from_nxos(self) -> None:
+        """CiscoACI is its own OS and shares no alias with CiscoNXOS."""
+        assert CiscoACI.name == "cisco_aci"
+        assert "aci" in CiscoACI.aliases
+        assert not set(CiscoACI.aliases) & set(CiscoNXOS.aliases)
+
     def test_cisco_iosxe_has_name(self) -> None:
         """CiscoIOSXE has a canonical name."""
         assert CiscoIOSXE.name == "cisco_iosxe"
@@ -43,6 +49,7 @@ class TestDisplayName:
         ("os_member", "expected"),
         [
             (OS.CISCO_NXOS, "Cisco NX-OS"),
+            (OS.CISCO_ACI, "Cisco ACI"),
             (OS.CISCO_IOSXE, "Cisco IOS-XE"),
             (OS.CISCO_IOSXR, "Cisco IOS-XR"),
             (OS.CISCO_IOS, "Cisco IOS"),
@@ -112,11 +119,11 @@ class TestResolveOS:
             ("ios-xe", OS.CISCO_IOSXE),
             ("IOSXE", OS.CISCO_IOSXE),
             ("  nxos  ", OS.CISCO_NXOS),  # whitespace stripped
-            ("aci", OS.CISCO_NXOS),
-            ("ACI", OS.CISCO_NXOS),
-            ("cisco_aci", OS.CISCO_NXOS),
-            ("aci-nxos", OS.CISCO_NXOS),
-            ("aci_nxos", OS.CISCO_NXOS),
+            ("aci", OS.CISCO_ACI),
+            ("ACI", OS.CISCO_ACI),
+            ("cisco_aci", OS.CISCO_ACI),
+            ("aci-nxos", OS.CISCO_ACI),
+            ("aci_nxos", OS.CISCO_ACI),
         ],
         ids=[
             "nxos_lowercase",
@@ -137,15 +144,6 @@ class TestResolveOS:
     def test_resolve_string_alias(self, alias: str, expected: OS) -> None:
         """Resolves string aliases to correct OS enum member."""
         assert resolve_os(alias) is expected
-
-    def test_aci_alias_selects_nxos_parsers(self) -> None:
-        """An ``aci`` switch parses with the same parser as an NX-OS device."""
-        mn = muninn.Muninn()
-        mn.load_builtin_parsers()
-        output = "18:57:38.347 UTC Mon Oct 19 2015\n"
-        expected = mn.parse("nxos", "show clock", output)
-        assert expected
-        assert mn.parse("aci", "show clock", output) == expected
 
     def test_unknown_alias_raises_value_error(self) -> None:
         """Unknown string alias raises ValueError."""

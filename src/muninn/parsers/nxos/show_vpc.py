@@ -161,6 +161,7 @@ def _parse_peer_link_line(stripped: str) -> tuple[str, PeerLinkEntry] | None:
     return (link_id, entry)
 
 
+@register(OS.CISCO_ACI, "show vpc")
 @register(OS.CISCO_NXOS, "show vpc")
 class ShowVpcParser(BaseParser["ShowVpcResult"]):
     """Parser for 'show vpc' command on NX-OS.

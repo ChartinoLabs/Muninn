@@ -450,6 +450,7 @@ def _parse_temperature_section(lines: list[str], idx: int, result: dict) -> int:
     return idx
 
 
+@register(OS.CISCO_ACI, "show environment")
 @register(OS.CISCO_NXOS, "show environment")
 class ShowEnvironmentParser(BaseParser[ShowEnvironmentResult]):
     """Parser for 'show environment' command on NX-OS.

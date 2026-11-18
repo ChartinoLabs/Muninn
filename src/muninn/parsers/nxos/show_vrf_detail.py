@@ -37,6 +37,7 @@ class ShowVrfDetailResult(TypedDict):
     vrfs: dict[str, VrfDetailEntry]
 
 
+@register(OS.CISCO_ACI, "show vrf detail")
 @register(OS.CISCO_NXOS, "show vrf detail")
 class ShowVrfDetailParser(BaseParser[ShowVrfDetailResult]):
     """Parser for 'show vrf detail' command.

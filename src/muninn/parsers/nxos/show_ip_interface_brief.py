@@ -36,6 +36,7 @@ class ShowIpInterfaceBriefResult(TypedDict):
     vrfs: dict[str, VrfEntry]
 
 
+@register(OS.CISCO_ACI, "show ip interface brief")
 @register(OS.CISCO_NXOS, "show ip interface brief")
 class ShowIpInterfaceBriefParser(BaseParser[ShowIpInterfaceBriefResult]):
     """Parser for 'show ip interface brief' command on NX-OS.

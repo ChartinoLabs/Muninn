@@ -72,6 +72,7 @@ ShowInterfaceBriefResult: TypeAlias = dict[str, ShowInterfaceBriefEntry]
 _SEPARATOR = re.compile(r"^-{10,}$")
 
 
+@register(OS.CISCO_ACI, "show interface brief")
 @register(OS.CISCO_NXOS, "show interface brief")
 class ShowInterfaceBriefParser(BaseParser[ShowInterfaceBriefResult]):
     """Parser for 'show interface brief' command on NX-OS.

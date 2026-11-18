@@ -326,6 +326,7 @@ def _process_header(
     return idx + 1
 
 
+@register(OS.CISCO_ACI, "show module")
 @register(OS.CISCO_NXOS, "show module")
 class ShowModuleParser(BaseParser[ShowModuleResult]):
     """Parser for 'show module' command.
