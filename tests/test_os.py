@@ -2,6 +2,7 @@
 
 import pytest
 
+import muninn
 from muninn.os import (
     OS,
     CiscoIOSXE,
@@ -111,6 +112,11 @@ class TestResolveOS:
             ("ios-xe", OS.CISCO_IOSXE),
             ("IOSXE", OS.CISCO_IOSXE),
             ("  nxos  ", OS.CISCO_NXOS),  # whitespace stripped
+            ("aci", OS.CISCO_NXOS),
+            ("ACI", OS.CISCO_NXOS),
+            ("cisco_aci", OS.CISCO_NXOS),
+            ("aci-nxos", OS.CISCO_NXOS),
+            ("aci_nxos", OS.CISCO_NXOS),
         ],
         ids=[
             "nxos_lowercase",
@@ -121,11 +127,25 @@ class TestResolveOS:
             "iosxe_hyphen",
             "iosxe_uppercase",
             "nxos_whitespace",
+            "aci_lowercase",
+            "aci_uppercase",
+            "aci_full",
+            "aci_nxos_hyphen",
+            "aci_nxos_underscore",
         ],
     )
     def test_resolve_string_alias(self, alias: str, expected: OS) -> None:
         """Resolves string aliases to correct OS enum member."""
         assert resolve_os(alias) is expected
+
+    def test_aci_alias_selects_nxos_parsers(self) -> None:
+        """An ``aci`` switch parses with the same parser as an NX-OS device."""
+        mn = muninn.Muninn()
+        mn.load_builtin_parsers()
+        output = "18:57:38.347 UTC Mon Oct 19 2015\n"
+        expected = mn.parse("nxos", "show clock", output)
+        assert expected
+        assert mn.parse("aci", "show clock", output) == expected
 
     def test_unknown_alias_raises_value_error(self) -> None:
         """Unknown string alias raises ValueError."""

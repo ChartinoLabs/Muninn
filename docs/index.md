@@ -77,7 +77,7 @@ result: ShowIpOspfNeighborResult = ShowIpOspfNeighborParser.parse(raw_output)
 
 | Platform | OS Aliases |
 |----------|-----------|
-| Cisco NX-OS | `nxos`, `cisco_nxos`, `nexus`, `nx-os` |
+| Cisco NX-OS (including ACI leaf/spine switches) | `nxos`, `cisco_nxos`, `nexus`, `nx-os`, `aci`, `cisco_aci` |
 | Cisco IOS-XE | `iosxe`, `cisco_iosxe`, `ios-xe` |
 | Cisco IOS | `ios`, `cisco_ios` |
 | Cisco IOS-XR | `iosxr`, `cisco_iosxr`, `ios-xr` |
