@@ -4,6 +4,25 @@ All notable changes to Muninn are documented in this file.
 
 <!-- towncrier release notes start -->
 
+## 0.9.0 - 2026-11-18
+
+### Updated Parsers
+
+- Extended NX-OS parsers for ACI switch output: `show interface brief` parses the tunnel section, `show interface status` returns the tunnel table under `tunnels`, `show ip interface brief` returns `prefix_length` when the address has one, and `show vpc` returns `type_2_consistency_status` and reads ACI's `Operational Layer3 Peer` label. ([#1497](https://github.com/ChartinoLabs/Muninn/pull/1497))
+
+### Fixed Parsers
+
+- Fixed NX-OS parsers dropping rows from ACI switch output: `show interface status` now accepts the `sfpabsent`, `out-of-ser` and `parentdown` statuses, `show ip interface brief` now reads `unassigned` and prefixed addresses (such as `192.0.2.30/27`) and the `Address` column header, and `show environment` now reads `12.0 Volts`, `N/A W` power supplies, `N/A` module allocations and the `Fan Speed:` line. ([#1497](https://github.com/ChartinoLabs/Muninn/pull/1497))
+
+### Core Features
+
+- Added Cisco ACI (`cisco_aci`, aliases `aci`, `aci-nxos` and `aci_nxos`) as its own OS for ACI leaf and spine switches; interface names canonicalize as on NX-OS. A parser can now register for several OSes by stacking `@register`; `cls.os` and `cls.command` keep the primary registration (the decorator closest to the class). The NX-OS parsers for `show version`, `show vlan`, `show vpc`, `show environment`, `show interface brief`, `show interface status`, `show ip interface brief`, `show ip route`, `show lldp neighbors`, `show lldp neighbors detail`, `show module` and `show vrf detail` are registered for ACI too. Other NX-OS parsers do not resolve for ACI. ([#1497](https://github.com/ChartinoLabs/Muninn/pull/1497))
+
+### Breaking Changes
+
+- `show vpc` on NX-OS no longer returns `domain_id: 0` when no vPC domain is configured, or empty `delay_restore_status` and `delay_restore_svi_status` values when the device does not print those lines; the keys are now omitted instead. ([#1497](https://github.com/ChartinoLabs/Muninn/pull/1497))
+
+
 ## 0.8.0 - 2026-10-25
 
 ### Added Parsers
