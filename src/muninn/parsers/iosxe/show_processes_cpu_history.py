@@ -184,24 +184,18 @@ def _parse_section(section_lines: list[str]) -> HistorySection | None:
     average = _decode_digit_lines(digit_lines, graph_start_col, num_slots)
 
     if not _has_max_legend(section_lines, ruler_idx):
-        return cast(
-            HistorySection,
-            {"period": period, "samples": num_slots, "average": average},
-        )
+        return {"period": period, "samples": num_slots, "average": average}
 
     maximum = _decode_graph_bars(
         section_lines, first_scale_idx, ruler_idx, graph_start_col, num_slots
     )
     _clamp_max_to_avg(maximum, average)
-    return cast(
-        HistorySection,
-        {
-            "period": period,
-            "samples": num_slots,
-            "average": average,
-            "maximum": maximum,
-        },
-    )
+    return {
+        "period": period,
+        "samples": num_slots,
+        "average": average,
+        "maximum": maximum,
+    }
 
 
 def _skip_trailing_blanks(lines: list[str], pos: int) -> int:

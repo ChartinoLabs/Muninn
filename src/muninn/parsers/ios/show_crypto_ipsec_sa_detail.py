@@ -1,7 +1,7 @@
 """Parser for 'show crypto ipsec sa detail' command on Cisco IOS."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -61,4 +61,4 @@ class ShowCryptoIpsecSaDetailParser(BaseParser[ShowCryptoIpsecSaDetailResult]):
         if not interfaces:
             msg = "No IPsec SA interface sections parsed"
             raise ValueError(msg)
-        return cast(ShowCryptoIpsecSaDetailResult, {"interfaces": interfaces})
+        return {"interfaces": interfaces}

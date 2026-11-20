@@ -1,7 +1,7 @@
 """Parser for 'show isis neighbors' command on Arista EOS."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -110,4 +110,4 @@ class ShowIsisNeighborsParser(BaseParser[ShowIsisNeighborsResult]):
             msg = "No IS-IS neighbors found in output"
             raise ValueError(msg)
 
-        return cast(ShowIsisNeighborsResult, {"instances": instances})
+        return {"instances": instances}

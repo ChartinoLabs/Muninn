@@ -162,4 +162,4 @@ class ShowCryptoPkiTrustpointParser(
             msg = "No trustpoint entries found in output"
             raise ValueError(msg)
 
-        return cast(ShowCryptoPkiTrustpointResult, {"trustpoints": trustpoints})
+        return {"trustpoints": trustpoints}

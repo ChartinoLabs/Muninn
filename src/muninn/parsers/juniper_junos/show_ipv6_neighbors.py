@@ -1,7 +1,7 @@
 """Parser for 'show ipv6 neighbors' command on Juniper Junos."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -97,9 +97,7 @@ class ShowIpv6NeighborsParser(BaseParser[ShowIpv6NeighborsResult]):
             msg = "No IPv6 neighbor entries found in output"
             raise ValueError(msg)
 
-        result: ShowIpv6NeighborsResult = cast(
-            ShowIpv6NeighborsResult, {"ipv6_neighbors": neighbors}
-        )
+        result: ShowIpv6NeighborsResult = {"ipv6_neighbors": neighbors}
         if total_entries is not None:
             result["total_entries"] = total_entries
         return result

@@ -1,7 +1,7 @@
 """Parser for 'show meraki migration' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -51,10 +51,7 @@ class ShowMerakiMigrationParser(BaseParser[ShowMerakiMigrationResult]):
         if not mode:
             msg = "Meraki migration status not found"
             raise ValueError(msg)
-        return cast(
-            ShowMerakiMigrationResult,
-            {
-                "current_booted_mode": mode,
-                "migration_in_progress": mig,
-            },
-        )
+        return {
+            "current_booted_mode": mode,
+            "migration_in_progress": mig,
+        }

@@ -172,7 +172,4 @@ class ShowCryptoPkiCertificatePemParser(
                 "be from 'show crypto pki certificate pem'."
             )
             raise ValueError(msg)
-        return cast(
-            ShowCryptoPkiCertificatePemResult,
-            {"trustpoints": state.trustpoints},
-        )
+        return {"trustpoints": state.trustpoints}

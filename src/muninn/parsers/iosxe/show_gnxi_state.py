@@ -1,7 +1,7 @@
 """Parser for 'show gnxi state' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -54,4 +54,4 @@ class ShowGnxiStateParser(BaseParser[ShowGnxiStateResult]):
         if not rows:
             msg = "No gNXI state rows parsed"
             raise ValueError(msg)
-        return cast(ShowGnxiStateResult, {"rows": rows})
+        return {"rows": rows}

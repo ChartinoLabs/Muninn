@@ -1,7 +1,7 @@
 """Parser for 'show arp no-resolve' command on Juniper Junos."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -85,4 +85,4 @@ class ShowArpNoResolveParser(BaseParser[ShowArpNoResolveResult]):
             msg = "No ARP entries found in output"
             raise ValueError(msg)
 
-        return cast(ShowArpNoResolveResult, {"arp_entries": arp_entries})
+        return {"arp_entries": arp_entries}

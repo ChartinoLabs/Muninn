@@ -1,7 +1,7 @@
 """Parser for 'show ip ospf fast-reroute' command on IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -167,4 +167,4 @@ class ShowIpOspfFastRerouteParser(
         if current_pid is not None:
             _finalize_process(processes, current_pid, configured, current_areas)
 
-        return cast(ShowIpOspfFastRerouteResult, {"processes": processes})
+        return {"processes": processes}

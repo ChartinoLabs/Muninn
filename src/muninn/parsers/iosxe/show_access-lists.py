@@ -211,4 +211,4 @@ class ShowAccessListsParser(BaseParser[ShowAccessListsResult]):
             msg = "No access lists found in output"
             raise ValueError(msg)
 
-        return cast(ShowAccessListsResult, {"access_lists": access_lists})
+        return {"access_lists": access_lists}

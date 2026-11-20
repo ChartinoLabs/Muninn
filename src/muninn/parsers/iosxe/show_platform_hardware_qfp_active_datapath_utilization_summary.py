@@ -170,10 +170,7 @@ class ShowPlatformHardwareQfpActiveDatapathUtilizationSummaryParser(
             msg = "No 'CPP <n>:' header found in output"
             raise ValueError(msg)
 
-        return cast(
-            ShowPlatformHardwareQfpActiveDatapathUtilizationSummaryResult,
-            {"cpps": cpps},
-        )
+        return {"cpps": cpps}
 
     @staticmethod
     def _try_header(line: str) -> tuple[str | None, list[str]]:

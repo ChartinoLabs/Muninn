@@ -1,7 +1,7 @@
 """Parser for 'show ipv4 interface' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -203,7 +203,7 @@ class ShowIPv4InterfaceParser(BaseParser[ShowIPv4InterfaceResult]):
             msg = "No interface entries found in output"
             raise ValueError(msg)
 
-        return cast(ShowIPv4InterfaceResult, {"interfaces": interfaces})
+        return {"interfaces": interfaces}
 
     @classmethod
     def _parse_detail_line(cls, line: str, entry: IPv4InterfaceEntry) -> None:

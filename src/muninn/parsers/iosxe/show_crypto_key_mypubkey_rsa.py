@@ -241,4 +241,4 @@ class ShowCryptoKeyMypubkeyRsaParser(BaseParser[ShowCryptoKeyMypubkeyRsaResult])
             msg = "No public RSA key entries found in output."
             raise ValueError(msg)
 
-        return cast(ShowCryptoKeyMypubkeyRsaResult, {"keys": keys})
+        return {"keys": keys}

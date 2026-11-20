@@ -175,10 +175,7 @@ class ShowIpSlaStatisticsParser(BaseParser[ShowIpSlaStatisticsResult]):
             msg = "No IP SLA operations found in output"
             raise ValueError(msg)
 
-        return cast(
-            ShowIpSlaStatisticsResult,
-            {"operations": operations},
-        )
+        return {"operations": operations}
 
     @classmethod
     def _process_line(

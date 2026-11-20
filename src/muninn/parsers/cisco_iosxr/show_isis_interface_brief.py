@@ -1,7 +1,7 @@
 """Parser for 'show isis interface brief' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -123,7 +123,7 @@ class ShowIsisInterfaceBriefParser(
             msg = "No IS-IS instances found in output"
             raise ValueError(msg)
 
-        return cast(ShowIsisInterfaceBriefResult, {"instances": instances})
+        return {"instances": instances}
 
     @classmethod
     def _build_entry(cls, match: re.Match[str]) -> InterfaceBriefEntry:

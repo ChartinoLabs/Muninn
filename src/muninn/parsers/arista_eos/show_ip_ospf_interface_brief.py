@@ -1,7 +1,7 @@
 """Parser for 'show ip ospf interface brief' command on Arista EOS."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -93,4 +93,4 @@ class ShowIpOspfInterfaceBriefParser(
             msg = "No OSPF interface entries found in output"
             raise ValueError(msg)
 
-        return cast(ShowIpOspfInterfaceBriefResult, {"interfaces": interfaces})
+        return {"interfaces": interfaces}

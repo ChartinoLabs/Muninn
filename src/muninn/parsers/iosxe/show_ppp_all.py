@@ -1,7 +1,7 @@
 """Parser for 'show ppp all' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -64,4 +64,4 @@ class ShowPppAllParser(BaseParser[ShowPppAllResult]):
         if not sessions:
             msg = "No PPP sessions parsed"
             raise ValueError(msg)
-        return cast(ShowPppAllResult, {"sessions": sessions})
+        return {"sessions": sessions}

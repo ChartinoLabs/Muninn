@@ -235,7 +235,7 @@ class ShowInterfacesParser(BaseParser[ShowInterfacesResult]):
             msg = "No interfaces found in output"
             raise ValueError(msg)
 
-        return cast(ShowInterfacesResult, {"interfaces": interfaces})
+        return {"interfaces": interfaces}
 
     @classmethod
     def _parse_physical_link_level(cls, line: str, result: dict[str, object]) -> bool:

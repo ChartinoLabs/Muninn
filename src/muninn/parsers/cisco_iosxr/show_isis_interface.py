@@ -318,21 +318,21 @@ class ShowIsisInterfaceParser(BaseParser["ShowIsisInterfaceResult"]):
         if adj_match:
             count = int(adj_match.group("count"))
             key = f"level{lvl}_adjacency_count"
-            intf[key] = count  # type: ignore[literal-required]  # ty: ignore[invalid-key]
+            intf[key] = count  # type: ignore[literal-required]  # ty: ignore[non-literal-typed-dict-key]
             return True
 
         hello_int_match = _HELLO_INTERVAL_PATTERN.match(line)
         if hello_int_match:
             interval = hello_int_match.group("interval").strip()
             key = f"level{lvl}_hello_interval"
-            intf[key] = interval  # type: ignore[literal-required]  # ty: ignore[invalid-key]
+            intf[key] = interval  # type: ignore[literal-required]  # ty: ignore[non-literal-typed-dict-key]
             return True
 
         hello_mult_match = _HELLO_MULTIPLIER_PATTERN.match(line)
         if hello_mult_match:
             mult = int(hello_mult_match.group("multiplier"))
             key = f"level{lvl}_hello_multiplier"
-            intf[key] = mult  # type: ignore[literal-required]  # ty: ignore[invalid-key]
+            intf[key] = mult  # type: ignore[literal-required]  # ty: ignore[non-literal-typed-dict-key]
             return True
 
         # Section boundary exits level
@@ -429,12 +429,12 @@ class ShowIsisInterfaceParser(BaseParser["ShowIsisInterfaceResult"]):
 
         for prefix, key in cls._STR_FIELDS:
             if stripped.startswith(prefix):
-                intf[key] = stripped.split(":", 1)[1].strip()  # type: ignore[literal-required]  # ty: ignore[invalid-key]
+                intf[key] = stripped.split(":", 1)[1].strip()  # type: ignore[literal-required]  # ty: ignore[non-literal-typed-dict-key]
                 return
 
         for prefix, key in cls._INT_FIELDS:
             if stripped.startswith(prefix):
-                intf[key] = int(stripped.split(":", 1)[1].strip())  # type: ignore[literal-required]  # ty: ignore[invalid-key]
+                intf[key] = int(stripped.split(":", 1)[1].strip())  # type: ignore[literal-required]  # ty: ignore[non-literal-typed-dict-key]
                 return
 
         ct_match = _CIRCUIT_TYPE_PATTERN.match(line)

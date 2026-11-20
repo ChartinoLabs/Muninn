@@ -190,4 +190,4 @@ class ShowDlepCountersParser(BaseParser[ShowDlepCountersResult]):
         if not sections:
             msg = "No DLEP counter sections parsed"
             raise ValueError(msg)
-        return cast(ShowDlepCountersResult, {"sections": sections})
+        return {"sections": sections}

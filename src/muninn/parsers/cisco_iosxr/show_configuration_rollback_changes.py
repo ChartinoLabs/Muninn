@@ -1,7 +1,7 @@
 """Parser for 'show configuration rollback changes last' on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -162,10 +162,7 @@ class ShowConfigurationRollbackChangesParser(
             msg = "No IOS XR Configuration version header found in output"
             raise ValueError(msg)
 
-        return cast(
-            ShowConfigurationRollbackChangesResult,
-            {
-                "ios_xr_version": ios_xr_version,
-                "sections": sections,
-            },
-        )
+        return {
+            "ios_xr_version": ios_xr_version,
+            "sections": sections,
+        }

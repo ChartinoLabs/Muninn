@@ -1,7 +1,7 @@
 """Parser for 'show ospf vrf all interface brief' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -110,7 +110,7 @@ class ShowOspfVrfAllInterfaceBriefParser(
             msg = "No OSPF interface data found in output"
             raise ValueError(msg)
 
-        return cast("ShowOspfVrfAllInterfaceBriefResult", {"processes": processes})
+        return {"processes": processes}
 
     @staticmethod
     def _try_section(

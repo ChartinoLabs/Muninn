@@ -11,7 +11,7 @@ structure when multiple AF blocks appear.
 
 import re
 from collections.abc import Callable
-from typing import Any, ClassVar, NotRequired, TypedDict, cast
+from typing import Any, ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -504,4 +504,4 @@ class ShowBgpSummaryParser(BaseParser["ShowBgpSummaryResult"]):
             af_entry = _parse_af_block(section_lines)
             address_families[af_name] = af_entry
 
-        return cast(ShowBgpSummaryResult, {"address_families": address_families})
+        return {"address_families": address_families}

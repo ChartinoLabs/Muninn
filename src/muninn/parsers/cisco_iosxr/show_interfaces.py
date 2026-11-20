@@ -364,7 +364,7 @@ class ShowInterfacesParser(BaseParser[ShowInterfacesResult]):
             msg = "No interface entries found in output"
             raise ValueError(msg)
 
-        return cast(ShowInterfacesResult, {"interfaces": interfaces})
+        return {"interfaces": interfaces}
 
     @classmethod
     def _finalize_entry(

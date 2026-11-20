@@ -185,7 +185,4 @@ class ShowMacSecurityParticipantsDetailParser(
             msg = "No MACsec participant interfaces found in output"
             raise ValueError(msg)
 
-        return cast(
-            ShowMacSecurityParticipantsDetailResult,
-            {"interfaces": interfaces},
-        )
+        return {"interfaces": interfaces}

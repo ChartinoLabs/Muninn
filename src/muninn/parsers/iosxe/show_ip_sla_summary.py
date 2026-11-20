@@ -202,4 +202,4 @@ class ShowIpSlaSummaryParser(BaseParser[ShowIpSlaSummaryResult]):
                 "does not appear to be from 'show ip sla summary'."
             )
             raise ValueError(msg)
-        return cast(ShowIpSlaSummaryResult, {"operations": operations})
+        return {"operations": operations}

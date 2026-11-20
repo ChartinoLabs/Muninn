@@ -1,7 +1,7 @@
 """Parser for 'show controllers fabric fia drops egress location' on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -85,7 +85,4 @@ class ShowControllersFabricFiaDropsEgressLocationParser(
             msg = "No FIA instances found in output"
             raise ValueError(msg)
 
-        return cast(
-            ShowControllersFabricFiaDropsEgressLocationResult,
-            {"fia_instances": fia_instances},
-        )
+        return {"fia_instances": fia_instances}

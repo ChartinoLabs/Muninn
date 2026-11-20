@@ -1,7 +1,7 @@
 """Parser for 'show debug condition' command on IOS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -82,7 +82,7 @@ class ShowDebugConditionParser(BaseParser[ShowDebugConditionResult]):
 
             cls._try_flags_line(line, current_id, conditions)
 
-        return cast(ShowDebugConditionResult, {"conditions": conditions})
+        return {"conditions": conditions}
 
     @staticmethod
     def _try_condition_header(

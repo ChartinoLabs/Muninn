@@ -295,7 +295,4 @@ class ShowCryptoPkiTrustpointStatusParser(
             )
             raise ValueError(msg)
 
-        return cast(
-            ShowCryptoPkiTrustpointStatusResult,
-            {"trustpoints": trustpoints},
-        )
+        return {"trustpoints": trustpoints}

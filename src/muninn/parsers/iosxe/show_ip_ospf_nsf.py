@@ -157,4 +157,4 @@ class ShowIpOspfNsfParser(BaseParser[ShowIpOspfNsfResult]):
             msg = "No OSPF processes found in output"
             raise ValueError(msg)
 
-        return cast(ShowIpOspfNsfResult, {"processes": processes})
+        return {"processes": processes}

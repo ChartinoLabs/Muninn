@@ -221,4 +221,4 @@ class ShowIpOspfTopologyInfoParser(
             msg = "No OSPF processes found in output"
             raise ValueError(msg)
 
-        return cast(ShowIpOspfTopologyInfoResult, {"processes": processes})
+        return {"processes": processes}

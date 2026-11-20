@@ -1,7 +1,7 @@
 """Parser for 'show ospf3 neighbor' command on Juniper Junos."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -124,4 +124,4 @@ class ShowOspf3NeighborParser(BaseParser[ShowOspf3NeighborResult]):
             msg = "No OSPFv3 neighbors found in output"
             raise ValueError(msg)
 
-        return cast(ShowOspf3NeighborResult, {"neighbors": neighbors})
+        return {"neighbors": neighbors}

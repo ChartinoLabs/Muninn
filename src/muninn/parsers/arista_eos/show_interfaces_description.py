@@ -1,7 +1,7 @@
 """Parser for 'show interfaces description' command on Arista EOS."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -75,7 +75,7 @@ class ShowInterfacesDescriptionParser(
             msg = "No interfaces found in output"
             raise ValueError(msg)
 
-        return cast(ShowInterfacesDescriptionResult, {"interfaces": interfaces})
+        return {"interfaces": interfaces}
 
     @staticmethod
     def _parse_row(

@@ -187,4 +187,4 @@ class ShowIpOspfDatabaseOpaqueLinkParser(
             msg = "No OSPF processes found in output"
             raise ValueError(msg)
 
-        return cast(ShowIpOspfDatabaseOpaqueLinkResult, {"processes": processes})
+        return {"processes": processes}

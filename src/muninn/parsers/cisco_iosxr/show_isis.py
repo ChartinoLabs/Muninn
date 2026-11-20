@@ -562,13 +562,13 @@ class ShowIsisParser(BaseParser["ShowIsisResult"]):
         for pattern, key in _STR_FIELD_PATTERNS:
             m = pattern.match(line)
             if m:
-                current[key] = m.group("val")  # type: ignore[literal-required]  # ty: ignore[invalid-key]
+                current[key] = m.group("val")  # type: ignore[literal-required]  # ty: ignore[non-literal-typed-dict-key]
                 return
 
         for pattern, key in _INT_FIELD_PATTERNS:
             m = pattern.match(line)
             if m:
-                current[key] = int(m.group("val"))  # type: ignore[literal-required]  # ty: ignore[invalid-key]
+                current[key] = int(m.group("val"))  # type: ignore[literal-required]  # ty: ignore[non-literal-typed-dict-key]
                 return
 
         m = _LSP_FULL_PATTERN.match(line)

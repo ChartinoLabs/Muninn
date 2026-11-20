@@ -289,4 +289,4 @@ class ShowLldpNeighborsDetailParser(
             msg = "No LLDP neighbor details found in output"
             raise ValueError(msg)
 
-        return cast(ShowLldpNeighborsDetailResult, {"neighbors": neighbors})
+        return {"neighbors": neighbors}

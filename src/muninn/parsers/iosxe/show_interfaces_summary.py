@@ -117,7 +117,7 @@ class ShowInterfacesSummaryParser(BaseParser[ShowInterfacesSummaryResult]):
             msg = "No interfaces found in 'show interfaces summary' output"
             raise ValueError(msg)
 
-        return cast(ShowInterfacesSummaryResult, {"interfaces": interfaces})
+        return {"interfaces": interfaces}
 
 
 def _build_entry(

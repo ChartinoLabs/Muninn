@@ -1,7 +1,7 @@
 """Parser for 'admin show environment power' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -286,12 +286,9 @@ class AdminShowEnvironmentPowerParser(
             msg = "No power supply or consumer data found in output"
             raise ValueError(msg)
 
-        return cast(
-            AdminShowEnvironmentPowerResult,
-            {
-                "chassis_summary": chassis_summary,
-                "power_supplies": power_supplies,
-                "power_group_totals": power_group_totals,
-                "power_consumers": power_consumers,
-            },
-        )
+        return {
+            "chassis_summary": chassis_summary,
+            "power_supplies": power_supplies,
+            "power_group_totals": power_group_totals,
+            "power_consumers": power_consumers,
+        }

@@ -14,7 +14,7 @@ multiple ``Address Family:`` sections.  Within each AF section, an optional
 
 import re
 from collections.abc import Callable
-from typing import Any, ClassVar, NotRequired, TypedDict, cast
+from typing import Any, ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -513,4 +513,4 @@ class ShowBgpInstanceAllSummaryParser(
         for inst_name, inst_lines in instance_sections:
             instances[inst_name] = _parse_instance_block(inst_lines)
 
-        return cast(ShowBgpInstanceAllSummaryResult, {"instances": instances})
+        return {"instances": instances}

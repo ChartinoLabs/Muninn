@@ -1,7 +1,7 @@
 """Parser for 'show endpoint-tracker static-route' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -66,4 +66,4 @@ class ShowEndpointTrackerStaticRouteParser(
         if not rows:
             msg = "No endpoint-tracker static-route rows parsed"
             raise ValueError(msg)
-        return cast(ShowEndpointTrackerStaticRouteResult, {"rows": rows})
+        return {"rows": rows}

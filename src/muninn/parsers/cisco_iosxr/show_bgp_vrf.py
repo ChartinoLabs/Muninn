@@ -594,7 +594,7 @@ def _apply_optional_fields(
     """Apply optional header fields and totals to the result dict."""
     for key, coerce in _OPTIONAL_HEADER_KEYS:
         if key in header:
-            result[key] = coerce(header[key])  # type: ignore[literal-required]  # ty: ignore[invalid-key]
+            result[key] = coerce(header[key])  # type: ignore[literal-required]  # ty: ignore[non-literal-typed-dict-key]
     if total_prefixes is not None:
         result["total_prefixes"] = total_prefixes
     if total_paths is not None:

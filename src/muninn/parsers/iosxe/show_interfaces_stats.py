@@ -1,7 +1,7 @@
 """Parser for 'show interfaces stats' command on IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -142,4 +142,4 @@ class ShowInterfacesStatsParser(BaseParser[ShowInterfacesStatsResult]):
             msg = "No interfaces found in 'show interfaces stats' output"
             raise ValueError(msg)
 
-        return cast(ShowInterfacesStatsResult, {"interfaces": interfaces})
+        return {"interfaces": interfaces}

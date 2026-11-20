@@ -1,7 +1,7 @@
 """Parser for 'show endpoint-tracker records' command on IOS-XE."""
 
 import re
-from typing import ClassVar, NotRequired, TypedDict, cast
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -78,4 +78,4 @@ class ShowEndpointTrackerRecordsParser(BaseParser[ShowEndpointTrackerRecordsResu
         if not rows:
             msg = "No endpoint-tracker records parsed"
             raise ValueError(msg)
-        return cast(ShowEndpointTrackerRecordsResult, {"rows": rows})
+        return {"rows": rows}
