@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
     
     
       
@@ -31,10 +31,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -995,7 +995,7 @@
 <p>The mode is determined automatically based on whether the command string contains named regex groups.</p>
 <h2 id="literal-command-registration">Literal Command Registration<a class="headerlink" href="#literal-command-registration" title="Permanent link">&para;</a></h2>
 <p>If the command does not contain a named regex group (<code>(?P&lt;...&gt;)</code>), Muninn treats it as a literal command.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nd">@register</span><span class="p">(</span><span class="n">OS</span><span class="o">.</span><span class="n">CISCO_NXOS</span><span class="p">,</span> <span class="s2">&quot;show ip bgp summary&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nd">@register</span><span class="p">(</span><span class="n">OS</span><span class="o">.</span><span class="n">CISCO_NXOS</span><span class="p">,</span> <span class="s2">"show ip bgp summary"</span><span class="p">)</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">ShowIpBgpSummaryParser</span><span class="p">(</span><span class="n">BaseParser</span><span class="p">):</span> <span class="o">...</span>
 </code></pre></div>
 <p>Literal registrations are normalized before lookup:</p>
@@ -1005,13 +1005,13 @@
 <li>Leading and trailing whitespace is stripped</li>
 </ul>
 <p>These all resolve to the same parser:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">mn</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;nxos&quot;</span><span class="p">,</span> <span class="s2">&quot;show ip bgp summary&quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">mn</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;nxos&quot;</span><span class="p">,</span> <span class="s2">&quot;SHOW IP BGP SUMMARY&quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">mn</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">&quot;nxos&quot;</span><span class="p">,</span> <span class="s2">&quot;  show   ip   bgp   summary  &quot;</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">mn</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">"nxos"</span><span class="p">,</span> <span class="s2">"show ip bgp summary"</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">mn</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">"nxos"</span><span class="p">,</span> <span class="s2">"SHOW IP BGP SUMMARY"</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">mn</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">"nxos"</span><span class="p">,</span> <span class="s2">"  show   ip   bgp   summary  "</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="regex-command-registration">Regex Command Registration<a class="headerlink" href="#regex-command-registration" title="Permanent link">&para;</a></h2>
 <p>If the command contains at least one named regex group, Muninn treats it as a regex pattern:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nd">@register</span><span class="p">(</span><span class="n">OS</span><span class="o">.</span><span class="n">CISCO_IOS</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;show ip ospf (?P&lt;process_id&gt;\d+)&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nd">@register</span><span class="p">(</span><span class="n">OS</span><span class="o">.</span><span class="n">CISCO_IOS</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"show ip ospf (?P&lt;process_id&gt;\d+)"</span><span class="p">)</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">ShowIpOspfProcessParser</span><span class="p">(</span><span class="n">BaseParser</span><span class="p">):</span> <span class="o">...</span>
 </code></pre></div>
 <p>This matches concrete commands like <code>show ip ospf 1</code> and <code>show ip ospf 100</code>.</p>
@@ -1021,8 +1021,8 @@
 </div>
 <h3 id="full-command-matching">Full-Command Matching<a class="headerlink" href="#full-command-matching" title="Permanent link">&para;</a></h3>
 <p>Muninn always matches against the entire normalized command. You don't need anchors - these behave identically:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nd">@register</span><span class="p">(</span><span class="n">OS</span><span class="o">.</span><span class="n">CISCO_IOS</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;show ip ospf (?P&lt;process_id&gt;\d+)&quot;</span><span class="p">)</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nd">@register</span><span class="p">(</span><span class="n">OS</span><span class="o">.</span><span class="n">CISCO_IOS</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;^show ip ospf (?P&lt;process_id&gt;\d+)$&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nd">@register</span><span class="p">(</span><span class="n">OS</span><span class="o">.</span><span class="n">CISCO_IOS</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"show ip ospf (?P&lt;process_id&gt;\d+)"</span><span class="p">)</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nd">@register</span><span class="p">(</span><span class="n">OS</span><span class="o">.</span><span class="n">CISCO_IOS</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"^show ip ospf (?P&lt;process_id&gt;\d+)$"</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="lookup-priority">Lookup Priority<a class="headerlink" href="#lookup-priority" title="Permanent link">&para;</a></h2>
 <ol>
@@ -1032,12 +1032,12 @@
 <p>An exact command always wins over a broader pattern.</p>
 <h2 id="ambiguity-rules">Ambiguity Rules<a class="headerlink" href="#ambiguity-rules" title="Permanent link">&para;</a></h2>
 <p>If more than one regex pattern matches within the same source tier, Muninn raises <code>ParserAmbiguityError</code> instead of guessing:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># These both match &quot;show ip ospf 5&quot; - Muninn raises an error</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nd">@register</span><span class="p">(</span><span class="n">OS</span><span class="o">.</span><span class="n">CISCO_IOS</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;show ip ospf (?P&lt;token&gt;\S+)&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># These both match "show ip ospf 5" - Muninn raises an error</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nd">@register</span><span class="p">(</span><span class="n">OS</span><span class="o">.</span><span class="n">CISCO_IOS</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"show ip ospf (?P&lt;token&gt;\S+)"</span><span class="p">)</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">GenericParser</span><span class="p">(</span><span class="n">BaseParser</span><span class="p">):</span> <span class="o">...</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="nd">@register</span><span class="p">(</span><span class="n">OS</span><span class="o">.</span><span class="n">CISCO_IOS</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;show ip ospf (?P&lt;process_id&gt;\d+)&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="nd">@register</span><span class="p">(</span><span class="n">OS</span><span class="o">.</span><span class="n">CISCO_IOS</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"show ip ospf (?P&lt;process_id&gt;\d+)"</span><span class="p">)</span>
 <a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="k">class</span><span class="w"> </span><span class="nc">ProcessParser</span><span class="p">(</span><span class="n">BaseParser</span><span class="p">):</span> <span class="o">...</span>
 </code></pre></div>
 <p>When authoring regex registrations:</p>
@@ -1050,15 +1050,15 @@
 <p>Every registration exposes a documentation-friendly command template.</p>
 <p>For <strong>literal commands</strong>, the template defaults to the normalized command string.</p>
 <p>For <strong>simple regex patterns</strong>, Muninn derives a template automatically from the named groups:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nd">@register</span><span class="p">(</span><span class="n">OS</span><span class="o">.</span><span class="n">CISCO_IOS</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;show ip ospf (?P&lt;process_id&gt;\d+) vrf (?P&lt;vrf_name&gt;\S+)&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nd">@register</span><span class="p">(</span><span class="n">OS</span><span class="o">.</span><span class="n">CISCO_IOS</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"show ip ospf (?P&lt;process_id&gt;\d+) vrf (?P&lt;vrf_name&gt;\S+)"</span><span class="p">)</span>
 </code></pre></div>
 <p>Produces the template: <code>show ip ospf &lt;process-id&gt; vrf &lt;vrf-name&gt;</code></p>
 <h3 id="explicit-doc_template">Explicit <code>doc_template</code><a class="headerlink" href="#explicit-doc_template" title="Permanent link">&para;</a></h3>
 <p>Complex patterns (optional groups, alternation, nested groups) require an explicit <code>doc_template</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nd">@register</span><span class="p">(</span>
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    <span class="n">OS</span><span class="o">.</span><span class="n">CISCO_IOS</span><span class="p">,</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="sa">r</span><span class="s2">&quot;show ip bgp(?: vrf (?P&lt;vrf_name&gt;\S+))? summary&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="n">doc_template</span><span class="o">=</span><span class="s2">&quot;show ip bgp [vrf &lt;vrf-name&gt;] summary&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="sa">r</span><span class="s2">"show ip bgp(?: vrf (?P&lt;vrf_name&gt;\S+))? summary"</span><span class="p">,</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="n">doc_template</span><span class="o">=</span><span class="s2">"show ip bgp [vrf &lt;vrf-name&gt;] summary"</span><span class="p">,</span>
 <a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="p">)</span>
 <a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">ShowIpBgpSummaryParser</span><span class="p">(</span><span class="n">BaseParser</span><span class="p">):</span> <span class="o">...</span>
 </code></pre></div>
@@ -1124,10 +1124,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "content.code.annotate", "navigation.instant", "navigation.instant.progress", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "content.code.annotate", "navigation.instant", "navigation.instant.progress", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
     
   </body>
