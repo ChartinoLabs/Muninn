@@ -1,9 +1,7 @@
 """Parser for 'show lldp neighbors detail' command on Arista EOS."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -291,4 +289,4 @@ class ShowLldpNeighborsDetailParser(
             msg = "No LLDP neighbor details found in output"
             raise ValueError(msg)
 
-        return cast(ShowLldpNeighborsDetailResult, {"neighbors": neighbors})
+        return {"neighbors": neighbors}

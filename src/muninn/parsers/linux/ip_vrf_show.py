@@ -1,7 +1,7 @@
 """Parser for 'ip vrf show' command on Linux."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -60,7 +60,7 @@ class IpVrfShowParser(BaseParser[IpVrfShowResult]):
         vrfs: dict[str, VrfEntry] = {}
 
         if _NO_VRF_SENTINEL in output:
-            return cast(IpVrfShowResult, {"vrfs": vrfs})
+            return {"vrfs": vrfs}
 
         for line in output.splitlines():
             match = _VRF_LINE_RE.match(line.strip())
@@ -73,4 +73,4 @@ class IpVrfShowParser(BaseParser[IpVrfShowResult]):
             msg = "No VRFs found in output"
             raise ValueError(msg)
 
-        return cast(IpVrfShowResult, {"vrfs": vrfs})
+        return {"vrfs": vrfs}

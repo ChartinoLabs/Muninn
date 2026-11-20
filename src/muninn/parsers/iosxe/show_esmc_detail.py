@@ -1,7 +1,7 @@
 """Parser for 'show esmc detail' command on IOS-XE."""
 
 import re
-from typing import ClassVar, Literal, TypedDict, cast
+from typing import ClassVar, Literal, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -94,7 +94,7 @@ def _parse_esmc_detail(output: str) -> ShowEsmcDetailResult:
     if not interfaces:
         msg = "No ESMC interface detail parsed"
         raise ValueError(msg)
-    return cast(ShowEsmcDetailResult, {"interfaces": interfaces})
+    return {"interfaces": interfaces}
 
 
 @register(OS.CISCO_IOSXE, "show esmc detail")

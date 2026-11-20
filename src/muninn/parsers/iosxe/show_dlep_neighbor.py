@@ -1,7 +1,7 @@
 """Parser for 'show dlep neighbor' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -135,4 +135,4 @@ class ShowDlepNeighborParser(BaseParser[ShowDlepNeighborResult]):
         if not blocks:
             msg = "No DLEP neighbor blocks parsed"
             raise ValueError(msg)
-        return cast(ShowDlepNeighborResult, {"blocks": blocks})
+        return {"blocks": blocks}

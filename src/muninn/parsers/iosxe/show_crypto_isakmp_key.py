@@ -1,7 +1,7 @@
 """Parser for 'show crypto isakmp key' command on Cisco IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -99,4 +99,4 @@ class ShowCryptoIsakmpKeyParser(BaseParser[ShowCryptoIsakmpKeyResult]):
                 preshared_key=preshared_key,
             )
 
-        return cast(ShowCryptoIsakmpKeyResult, {"keys": keys})
+        return {"keys": keys}

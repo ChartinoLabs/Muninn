@@ -1,9 +1,7 @@
 """Parser for 'show chassis cluster status' command on Juniper Junos."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -151,10 +149,7 @@ class ShowChassisClusterStatusParser(
             msg = "No redundancy groups found in output"
             raise ValueError(msg)
 
-        return cast(
-            ShowChassisClusterStatusResult,
-            {
-                "cluster_id": cluster_id,
-                "redundancy_groups": redundancy_groups,
-            },
-        )
+        return {
+            "cluster_id": cluster_id,
+            "redundancy_groups": redundancy_groups,
+        }

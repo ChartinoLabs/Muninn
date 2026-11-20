@@ -1,7 +1,7 @@
 """Parser for 'show spanning-tree inconsistentports' command on IOS."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -91,7 +91,4 @@ class ShowSpanningTreeInconsistentPortsParser(
             )
             raise ValueError(msg)
 
-        return cast(
-            ShowSpanningTreeInconsistentPortsResult,
-            {"vlans": vlans, "inconsistent_count": count},
-        )
+        return {"vlans": vlans, "inconsistent_count": count}

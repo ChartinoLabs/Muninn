@@ -1,9 +1,7 @@
 """Parser for 'show ip route ospf' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -283,7 +281,7 @@ def _parse_output(output: str) -> ShowIpRouteOspfResult:
 
         _process_line(line, stripped, state)
 
-    return cast(ShowIpRouteOspfResult, {"vrf": state.vrf, "routes": state.routes})
+    return {"vrf": state.vrf, "routes": state.routes}
 
 
 @register(OS.CISCO_IOSXE, "show ip route ospf")

@@ -4,9 +4,7 @@ Command: ``show platform hardware qfp active datapath utilization summary``.
 """
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -172,10 +170,7 @@ class ShowPlatformHardwareQfpActiveDatapathUtilizationSummaryParser(
             msg = "No 'CPP <n>:' header found in output"
             raise ValueError(msg)
 
-        return cast(
-            ShowPlatformHardwareQfpActiveDatapathUtilizationSummaryResult,
-            {"cpps": cpps},
-        )
+        return {"cpps": cpps}
 
     @staticmethod
     def _try_header(line: str) -> tuple[str | None, list[str]]:

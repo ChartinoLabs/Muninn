@@ -1,9 +1,7 @@
 """Parser for 'show ip mroute vrf all detail' command on Arista EOS."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser

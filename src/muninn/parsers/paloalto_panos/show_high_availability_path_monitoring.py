@@ -1,7 +1,7 @@
 """Parser for 'show high-availability path-monitoring' command on Palo Alto PAN-OS."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -133,11 +133,8 @@ class ShowHighAvailabilityPathMonitoringParser(
 
         total, hold = _validate_required(total_paths, hold_time)
 
-        return cast(
-            ShowHighAvailabilityPathMonitoringResult,
-            {
-                "total_paths_monitored": total,
-                "hold_time_ms": hold,
-                "paths": paths,
-            },
-        )
+        return {
+            "total_paths_monitored": total,
+            "hold_time_ms": hold,
+            "paths": paths,
+        }

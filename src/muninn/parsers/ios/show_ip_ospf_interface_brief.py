@@ -1,7 +1,7 @@
 """Parser for 'show ip ospf interface brief' command on IOS."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -107,4 +107,4 @@ class ShowIpOspfInterfaceBriefParser(
 
             interfaces[name] = entry
 
-        return cast(ShowIpOspfInterfaceBriefResult, {"interfaces": interfaces})
+        return {"interfaces": interfaces}

@@ -1,7 +1,7 @@
 """Parser for 'show rsvp interface' command on Juniper Junos."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -145,4 +145,4 @@ class ShowRsvpInterfaceParser(BaseParser[ShowRsvpInterfaceResult]):
             msg = "No RSVP interfaces found in output"
             raise ValueError(msg)
 
-        return cast(ShowRsvpInterfaceResult, {"interfaces": interfaces})
+        return {"interfaces": interfaces}

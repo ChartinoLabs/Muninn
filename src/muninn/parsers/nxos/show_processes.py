@@ -1,9 +1,7 @@
 """Parser for 'show processes' command on NX-OS."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -101,4 +99,4 @@ class ShowProcessesParser(BaseParser[ShowProcessesResult]):
             msg = "No process entries found in output"
             raise ValueError(msg)
 
-        return cast(ShowProcessesResult, {"processes": processes})
+        return {"processes": processes}

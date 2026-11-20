@@ -1,9 +1,8 @@
 """Parser for 'show vrrp' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict
-
-from typing_extensions import NotRequired
+from collections.abc import Callable
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -289,7 +288,7 @@ def _apply_state_change_reason(entry: VrrpGroupEntry, match: re.Match[str]) -> N
     entry["state_change_reason"] = match.group("reason")
 
 
-_FieldApplier = type(_apply_state)
+_FieldApplier = Callable[[VrrpGroupEntry, re.Match[str]], None]
 
 _FIELD_DISPATCH: dict[str, _FieldApplier] = {
     "state": _apply_state,

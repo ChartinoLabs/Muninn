@@ -1,7 +1,7 @@
 """Parser for 'show environment temperature' command on Arista EOS."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -105,7 +105,4 @@ class ShowEnvironmentTemperatureParser(
             msg = "No temperature sensor data found in output"
             raise ValueError(msg)
 
-        return cast(
-            ShowEnvironmentTemperatureResult,
-            {"system_status": system_status, "sensors": sensors},
-        )
+        return {"system_status": system_status, "sensors": sensors}

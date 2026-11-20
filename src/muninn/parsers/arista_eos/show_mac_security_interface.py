@@ -1,7 +1,7 @@
 """Parser for 'show mac security interface' command on Arista EOS."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -47,15 +47,11 @@ class ShowMacSecurityInterfaceParser(
     def _parse_row(cls, match: re.Match[str]) -> tuple[str, MacSecurityInterfaceEntry]:
         """Extract interface name and entry from a regex match."""
         interface = canonical_interface_name(match.group("interface"), os=OS.ARISTA_EOS)
-        return interface, cast(
-            MacSecurityInterfaceEntry,
-            {
-                "sci": match.group("sci"),
-                "controlled_port": match.group("controlled_port")
-                == _CONTROLLED_PORT_TRUE,
-                "key_in_use": match.group("key_in_use"),
-            },
-        )
+        return interface, {
+            "sci": match.group("sci"),
+            "controlled_port": match.group("controlled_port") == _CONTROLLED_PORT_TRUE,
+            "key_in_use": match.group("key_in_use"),
+        }
 
     @classmethod
     def _find_data_lines(cls, output: str) -> list[str]:

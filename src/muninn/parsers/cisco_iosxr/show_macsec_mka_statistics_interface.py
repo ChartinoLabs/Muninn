@@ -715,7 +715,7 @@ def _parse_ca_stats_line(raw_key: str, value: str, stats: CaStatistics) -> None:
         "group_caks_received": "group_caks_received",
     }
     if norm in field_map:
-        stats[field_map[norm]] = _parse_int(value)  # type: ignore[literal-required]  # ty: ignore[invalid-key]
+        stats[field_map[norm]] = _parse_int(value)  # type: ignore[literal-required]  # ty: ignore[non-literal-typed-dict-key]
 
 
 def _parse_sa_stats_line(raw_key: str, value: str, stats: SaStatistics) -> None:
@@ -730,7 +730,7 @@ def _parse_sa_stats_line(raw_key: str, value: str, stats: SaStatistics) -> None:
         "ppk_retrieved": "ppk_retrieved",
     }
     if norm in field_map:
-        stats[field_map[norm]] = _parse_int(value)  # type: ignore[literal-required]  # ty: ignore[invalid-key]
+        stats[field_map[norm]] = _parse_int(value)  # type: ignore[literal-required]  # ty: ignore[non-literal-typed-dict-key]
 
 
 def _parse_mkpdu_line(raw_key: str, value: str, state: _ParseState) -> None:
@@ -758,7 +758,7 @@ def _apply_mkpdu_sub_counter(
         "ppk_capable": "ppk_capable",
     }
     if norm_key in sub_map:
-        target[sub_map[norm_key]] = value  # type: ignore[literal-required]  # ty: ignore[invalid-key]
+        target[sub_map[norm_key]] = value  # type: ignore[literal-required]  # ty: ignore[non-literal-typed-dict-key]
 
 
 def _parse_sakuse_failures_line(
@@ -784,7 +784,7 @@ def _parse_mka_idb_line(raw_key: str, value: str, stats: MkaIdbStatistics) -> No
     norm = _normalize_key(raw_key)
     # Try exact match first
     if norm in _MKA_IDB_EXACT_MAP:
-        stats[_MKA_IDB_EXACT_MAP[norm]] = _parse_int(value)  # type: ignore[literal-required]  # ty: ignore[invalid-key]
+        stats[_MKA_IDB_EXACT_MAP[norm]] = _parse_int(value)  # type: ignore[literal-required]  # ty: ignore[non-literal-typed-dict-key]
         return
     _dispatch_substring(norm, stats, _parse_int(value), _MKA_IDB_MAP)
 

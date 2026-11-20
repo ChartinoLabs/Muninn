@@ -1,7 +1,7 @@
 """Parser for 'show pppoe statistics' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -94,13 +94,10 @@ class _PppoeAcc:
         if not self.events and not self.stats:
             msg = "No PPPoE statistics tables parsed"
             raise ValueError(msg)
-        return cast(
-            ShowPppoeStatisticsResult,
-            {
-                "pppoe_events": self.events,
-                "pppoe_statistics": self.stats,
-            },
-        )
+        return {
+            "pppoe_events": self.events,
+            "pppoe_statistics": self.stats,
+        }
 
 
 def _parse_pppoe_statistics(output: str) -> ShowPppoeStatisticsResult:

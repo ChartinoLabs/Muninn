@@ -1,9 +1,8 @@
 """Parser for 'show vrrp all' and 'show vrrp detail' commands on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict
-
-from typing_extensions import NotRequired
+from collections.abc import Callable
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -244,7 +243,7 @@ def _apply_state_duration(entry: VrrpGroupEntry, match: re.Match[str]) -> None:
     entry["state_duration_secs"] = mins * 60.0 + secs
 
 
-_FieldApplier = type(_apply_state)
+_FieldApplier = Callable[[VrrpGroupEntry, re.Match[str]], None]
 
 _FIELD_DISPATCH: dict[str, _FieldApplier] = {
     "state": _apply_state,

@@ -1,9 +1,7 @@
 """Parser for 'show ip sla summary' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -204,4 +202,4 @@ class ShowIpSlaSummaryParser(BaseParser[ShowIpSlaSummaryResult]):
                 "does not appear to be from 'show ip sla summary'."
             )
             raise ValueError(msg)
-        return cast(ShowIpSlaSummaryResult, {"operations": operations})
+        return {"operations": operations}

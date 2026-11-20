@@ -116,7 +116,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.11", "3.12", "3.13"]
     steps:
       - name: Check out code
         uses: actions/checkout@v7
@@ -130,7 +130,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.11", "3.12", "3.13"]
     steps:
       - name: Check out code
         uses: actions/checkout@v7
@@ -141,10 +141,15 @@ jobs:
         run: uv run pytest --cov=src --cov-report=term-missing
   unit-test-lowest-deps:
     runs-on: ubuntu-latest
+    # Job-level so `uv run` keeps the matrix interpreter and the lowest
+    # resolution instead of re-syncing to .python-version and the lock.
+    env:
+      UV_PYTHON: ${{ matrix.python-version }}
+      UV_RESOLUTION: lowest-direct
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10", "3.13"]
+        python-version: ["3.11", "3.13"]
     steps:
       - name: Check out code
         uses: actions/checkout@v7
@@ -153,12 +158,12 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@v10.4.0
         with:
           version: "latest"
           enable-cache: true
       - name: Install with lowest direct dependency versions
-        run: uv sync --group dev --resolution lowest-direct
+        run: uv sync --group dev
       - name: Run unit tests with lowest dependency versions
         run: uv run pytest
   docs-build:

@@ -1,7 +1,7 @@
 """Parser for 'show sdwan security-info' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -52,4 +52,4 @@ class ShowSdwanSecurityInfoParser(BaseParser[ShowSdwanSecurityInfoResult]):
         if not settings:
             msg = "No security-info lines parsed"
             raise ValueError(msg)
-        return cast(ShowSdwanSecurityInfoResult, {"settings": settings})
+        return {"settings": settings}

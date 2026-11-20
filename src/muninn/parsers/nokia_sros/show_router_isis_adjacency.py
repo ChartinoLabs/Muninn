@@ -1,7 +1,7 @@
 """Parser for 'show router isis adjacency' command on Nokia SR OS."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -143,11 +143,8 @@ class ShowRouterIsisAdjacencyParser(BaseParser[ShowRouterIsisAdjacencyResult]):
             msg = "No IS-IS adjacency entries found in output"
             raise ValueError(msg)
 
-        return cast(
-            ShowRouterIsisAdjacencyResult,
-            {
-                "router_context": router_context,
-                "isis_instance": isis_instance,
-                "adjacencies": adjacencies,
-            },
-        )
+        return {
+            "router_context": router_context,
+            "isis_instance": isis_instance,
+            "adjacencies": adjacencies,
+        }

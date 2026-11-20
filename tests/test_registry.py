@@ -80,8 +80,8 @@ class TestRegisterDecorator:
 
         assert ShowVersionParser.os is OS.CISCO_NXOS
         assert ShowVersionParser.command == "show version"
-        assert len(ShowVersionParser._muninn_registrations) == 1  # ty: ignore[unresolved-attribute]
-        registration = ShowVersionParser._muninn_registrations[0]  # ty: ignore[unresolved-attribute]
+        assert len(ShowVersionParser._muninn_registrations) == 1  # ty: ignore[missing-attribute]
+        registration = ShowVersionParser._muninn_registrations[0]  # ty: ignore[missing-attribute]
         assert registration.os is OS.CISCO_NXOS
         assert registration.command == "  SHOW VERSION  "
         assert registration.doc_template is None
@@ -106,7 +106,7 @@ class TestStackedRegistration:
     def test_records_every_registration(self) -> None:
         """Each stacked decorator adds its own registration."""
         parser_cls = self._stacked_parser()
-        registrations = parser_cls._muninn_registrations  # ty: ignore[unresolved-attribute]
+        registrations = parser_cls._muninn_registrations  # ty: ignore[missing-attribute]
         assert [r.os for r in registrations] == [OS.CISCO_NXOS, OS.CISCO_ACI]
 
     def test_os_attribute_is_the_primary_registration(self) -> None:
@@ -117,7 +117,7 @@ class TestStackedRegistration:
 
         registry = RuntimeRegistry()
         module = ModuleType("stacked_parsers")
-        module.ShowVersionParser = parser_cls  # ty: ignore[unresolved-attribute]
+        module.ShowVersionParser = parser_cls  # ty: ignore[missing-attribute]
         _register_module_parsers(registry, module, source="built_in")
 
         assert parser_cls.os is OS.CISCO_NXOS
@@ -127,7 +127,7 @@ class TestStackedRegistration:
         parser_cls = self._stacked_parser()
         registry = RuntimeRegistry()
         module = ModuleType("stacked_parsers")
-        module.ShowVersionParser = parser_cls  # ty: ignore[unresolved-attribute]
+        module.ShowVersionParser = parser_cls  # ty: ignore[missing-attribute]
         _register_module_parsers(registry, module, source="built_in")
 
         for os_name in ("nxos", "aci"):

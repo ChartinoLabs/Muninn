@@ -1,9 +1,7 @@
 """Parser for 'show interfaces' command on Juniper Junos."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -237,7 +235,7 @@ class ShowInterfacesParser(BaseParser[ShowInterfacesResult]):
             msg = "No interfaces found in output"
             raise ValueError(msg)
 
-        return cast(ShowInterfacesResult, {"interfaces": interfaces})
+        return {"interfaces": interfaces}
 
     @classmethod
     def _parse_physical_link_level(cls, line: str, result: dict[str, object]) -> bool:

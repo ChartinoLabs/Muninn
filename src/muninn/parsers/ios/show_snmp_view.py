@@ -1,9 +1,7 @@
 """Parser for 'show snmp view' command on IOS."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -93,7 +91,7 @@ class ShowSnmpViewParser(BaseParser[ShowSnmpViewResult]):
             if mask not in _MASK_PLACEHOLDERS:
                 entry["mask"] = mask
 
-            view = views.setdefault(view_name, cast(ViewEntry, {"subtrees": {}}))
+            view = views.setdefault(view_name, {"subtrees": {}})
             view["subtrees"][subtree] = entry
 
         if not views:

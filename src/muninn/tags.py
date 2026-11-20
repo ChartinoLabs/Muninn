@@ -1,9 +1,9 @@
 """Parser tag enumeration for categorizing parsers."""
 
-from enum import Enum
+from enum import StrEnum
 
 
-class ParserTag(str, Enum):
+class ParserTag(StrEnum):
     """Categorization tags for parsers with display-friendly values."""
 
     AAA = "AAA"

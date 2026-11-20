@@ -1,7 +1,7 @@
 """Parser for 'show ip ospf database database-summary detail' on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -73,10 +73,7 @@ class ShowIpOspfDatabaseDatabaseSummaryDetailParser(
             msg = "No OSPF database summary entries found in output"
             raise ValueError(msg)
 
-        return cast(
-            ShowIpOspfDatabaseDatabaseSummaryDetailResult,
-            {"processes": processes},
-        )
+        return {"processes": processes}
 
 
 def _parse_output(output: str) -> dict[str, ProcessEntry]:

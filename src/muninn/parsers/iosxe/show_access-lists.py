@@ -1,9 +1,7 @@
 """Parser for 'show access-lists' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -213,4 +211,4 @@ class ShowAccessListsParser(BaseParser[ShowAccessListsResult]):
             msg = "No access lists found in output"
             raise ValueError(msg)
 
-        return cast(ShowAccessListsResult, {"access_lists": access_lists})
+        return {"access_lists": access_lists}

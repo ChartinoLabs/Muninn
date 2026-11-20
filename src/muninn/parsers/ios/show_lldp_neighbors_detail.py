@@ -1,10 +1,9 @@
 """Parser for 'show lldp neighbors detail' command on IOS/IOS-XE."""
 
 import re
-from typing import Any, ClassVar, Literal, TypedDict, cast
+from typing import Any, ClassVar, Literal, NotRequired, TypedDict, cast
 
 from netutils.interface import canonical_interface_name
-from typing_extensions import NotRequired
 
 from muninn.os import OS
 from muninn.parser import BaseParser

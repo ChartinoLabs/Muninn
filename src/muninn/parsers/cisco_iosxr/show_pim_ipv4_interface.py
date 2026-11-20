@@ -1,7 +1,7 @@
 """Parser for 'show pim ipv4 interface' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -108,4 +108,4 @@ class ShowPimIpv4InterfaceParser(BaseParser["ShowPimIpv4InterfaceResult"]):
             msg = "No PIM interfaces found in output"
             raise ValueError(msg)
 
-        return cast("ShowPimIpv4InterfaceResult", {"vrfs": vrfs})
+        return {"vrfs": vrfs}

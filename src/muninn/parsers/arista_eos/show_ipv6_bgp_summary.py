@@ -16,9 +16,7 @@ The parsed result is keyed by VRF name so the schema covers all forms.
 """
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -230,4 +228,4 @@ class ShowIpv6BgpSummaryParser(BaseParser[ShowIpv6BgpSummaryResult]):
         """
         vrf_sections = _split_vrf_sections(output)
         vrfs = {name: _parse_vrf_section(lines) for name, lines in vrf_sections.items()}
-        return cast(ShowIpv6BgpSummaryResult, {"vrfs": vrfs})
+        return {"vrfs": vrfs}

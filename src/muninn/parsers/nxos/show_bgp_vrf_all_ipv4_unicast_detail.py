@@ -1,9 +1,7 @@
 """Parser for 'show bgp vrf all ipv4 unicast detail' command on NX-OS."""
 
 import re
-from typing import Any, ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser

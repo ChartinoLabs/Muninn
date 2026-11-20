@@ -1,7 +1,7 @@
 """Parser for 'show sdwan version' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -42,4 +42,4 @@ class ShowSdwanVersionParser(BaseParser[ShowSdwanVersionResult]):
         if not ver:
             msg = "SD-WAN version string not found"
             raise ValueError(msg)
-        return cast(ShowSdwanVersionResult, {"version": ver})
+        return {"version": ver}

@@ -1,9 +1,7 @@
 """Parser for 'show crypto ipsec profile' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -118,7 +116,7 @@ def _parse_transform_set_line(line: str) -> tuple[str, TransformSet] | None:
     if match is None:
         return None
     transforms = match.group("transforms").split()
-    return match.group("name"), cast(TransformSet, {"transforms": transforms})
+    return match.group("name"), {"transforms": transforms}
 
 
 def _is_transform_sets_close(line: str) -> bool:
@@ -240,4 +238,4 @@ class ShowCryptoIpsecProfileParser(BaseParser[ShowCryptoIpsecProfileResult]):
                 "appear to be from 'show crypto ipsec profile'."
             )
             raise ValueError(msg)
-        return cast(ShowCryptoIpsecProfileResult, {"profiles": profiles})
+        return {"profiles": profiles}

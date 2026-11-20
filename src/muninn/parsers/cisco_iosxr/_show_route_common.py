@@ -11,9 +11,7 @@ regex:
 
 import re
 from collections.abc import Callable
-from typing import TypedDict
-
-from typing_extensions import NotRequired
+from typing import NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.utils import canonical_interface_name
