@@ -1,7 +1,9 @@
 """Parser for 'show install inactive' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, TypedDict
+from typing import ClassVar, TypedDict, cast
+
+from typing_extensions import NotRequired
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -18,20 +20,30 @@ class SdrInfo(TypedDict):
 class ShowInstallInactiveResult(TypedDict):
     """Schema for 'show install inactive' parsed output on IOS-XR.
 
+    IOS-XR prints one of two layouts, and the result carries the keys of
+    the layout it was given:
+
     Top-level keys:
-        sdrs: Dict keyed by SDR name (e.g. "Owner") mapping to
-            SDR details including the list of inactive packages.
+        sdrs: Classic layout. Dict keyed by SDR name (e.g. "Owner")
+            mapping to SDR details including the list of inactive packages.
+        package_count: IOS-XR 7.x layout. The count from the
+            "N inactive package(s) found:" header.
+        inactive_packages: IOS-XR 7.x layout. The inactive packages, in
+            the order the device lists them.
     """
 
-    sdrs: dict[str, SdrInfo]
+    sdrs: NotRequired[dict[str, SdrInfo]]
+    package_count: NotRequired[int]
+    inactive_packages: NotRequired[list[str]]
 
 
 @register(OS.CISCO_IOSXR, "show install inactive")
 class ShowInstallInactiveParser(BaseParser[ShowInstallInactiveResult]):
     """Parser for 'show install inactive' command on Cisco IOS-XR.
 
-    Parses the inactive installed packages per SDR (Secure Domain Router),
-    listing packages available for activation or removal.
+    Parses the inactive installed packages, listing packages available for
+    activation or removal. The classic layout groups them per SDR (Secure
+    Domain Router); the IOS-XR 7.x layout is a flat, counted list.
     """
 
     tags: ClassVar[frozenset[ParserTag]] = frozenset({ParserTag.SYSTEM})
@@ -40,6 +52,8 @@ class ShowInstallInactiveParser(BaseParser[ShowInstallInactiveResult]):
     _INACTIVE_PACKAGES_HEADER = re.compile(r"^\s+Inactive Packages:\s*$")
     _PACKAGE = re.compile(r"^\s+(?P<package>\S+)\s*$")
     _SDR_NAME = re.compile(r"^\s+(?P<sdr_name>\S+)\s*$")
+    # IOS-XR 7.x: "14 inactive package(s) found:" followed by indented packages.
+    _FLAT_HEADER = re.compile(r"^(?P<count>\d+) inactive package\(s\) found:\s*$")
 
     @classmethod
     def parse(cls, output: str) -> ShowInstallInactiveResult:
@@ -53,8 +67,12 @@ class ShowInstallInactiveParser(BaseParser[ShowInstallInactiveResult]):
             packages.
 
         Raises:
-            ValueError: If no SDR information can be parsed.
+            ValueError: If neither layout can be parsed.
         """
+        flat = cls._parse_flat(output)
+        if flat is not None:
+            return flat
+
         sdrs: dict[str, SdrInfo] = {}
         current_sdr: str | None = None
         in_sdrs = False
@@ -86,6 +104,29 @@ class ShowInstallInactiveParser(BaseParser[ShowInstallInactiveResult]):
             raise ValueError(msg)
 
         return ShowInstallInactiveResult(sdrs=sdrs)
+
+    @classmethod
+    def _parse_flat(cls, output: str) -> ShowInstallInactiveResult | None:
+        """Parse the IOS-XR 7.x layout, or return None if it is not that layout."""
+        lines = iter(output.splitlines())
+        for line in lines:
+            if header := cls._FLAT_HEADER.match(line.strip()):
+                break
+        else:
+            return None
+
+        packages = [
+            match.group("package")
+            for line in lines
+            if (match := cls._PACKAGE.match(line))
+        ]
+        return cast(
+            ShowInstallInactiveResult,
+            {
+                "package_count": int(header.group("count")),
+                "inactive_packages": packages,
+            },
+        )
 
     @classmethod
     def _handle_sdr_line(
