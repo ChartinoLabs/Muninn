@@ -16,9 +16,7 @@ the same pattern (regex matchers, speaker/neighbor table extraction).
 
 import re
 from collections.abc import Callable
-from typing import Any, ClassVar, TypedDict
-
-from typing_extensions import NotRequired
+from typing import Any, ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser

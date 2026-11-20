@@ -2,9 +2,7 @@
 
 import re
 from dataclasses import dataclass, field
-from typing import ClassVar, TypedDict
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser

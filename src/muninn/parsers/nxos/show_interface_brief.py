@@ -1,9 +1,7 @@
 """Parser for 'show interface brief' command on NX-OS."""
 
 import re
-from typing import ClassVar, TypeAlias, TypedDict
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypeAlias, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser

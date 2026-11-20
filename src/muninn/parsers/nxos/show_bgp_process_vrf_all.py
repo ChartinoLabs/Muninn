@@ -3,9 +3,7 @@
 from __future__ import annotations
 
 import re
-from typing import Any, ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import Any, ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
