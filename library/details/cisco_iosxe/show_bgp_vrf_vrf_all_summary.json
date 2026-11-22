@@ -1,0 +1,229 @@
+{
+  "os": "cisco_iosxe",
+  "command": "show bgp vrf <vrf> all summary",
+  "schema": {
+    "name": "ShowIpBgpSummaryResult",
+    "fields": {
+      "address_families": {
+        "type": {
+          "type": "dict",
+          "key": "str",
+          "value": {
+            "name": "AddressFamilyEntry",
+            "fields": {
+              "router_id": {
+                "type": "str",
+                "required": true
+              },
+              "local_as": {
+                "type": "str",
+                "required": true
+              },
+              "table_version": {
+                "type": "int",
+                "required": true
+              },
+              "main_routing_table_version": {
+                "type": "int",
+                "required": true
+              },
+              "memory": {
+                "type": {
+                  "name": "MemoryInfo",
+                  "fields": {
+                    "network_entries": {
+                      "type": {
+                        "name": "MemoryNetworkEntries",
+                        "fields": {
+                          "count": {
+                            "type": "int",
+                            "required": true
+                          },
+                          "bytes": {
+                            "type": "int",
+                            "required": true
+                          }
+                        }
+                      },
+                      "required": false
+                    },
+                    "path_entries": {
+                      "type": {
+                        "name": "MemoryPathEntries",
+                        "fields": {
+                          "count": {
+                            "type": "int",
+                            "required": true
+                          },
+                          "bytes": {
+                            "type": "int",
+                            "required": true
+                          }
+                        }
+                      },
+                      "required": false
+                    },
+                    "path_attribute_entries": {
+                      "type": {
+                        "name": "MemoryPathAttributeEntries",
+                        "fields": {
+                          "count": {
+                            "type": "int",
+                            "required": true
+                          },
+                          "bestpath_count": {
+                            "type": "int",
+                            "required": true
+                          },
+                          "bytes": {
+                            "type": "int",
+                            "required": true
+                          }
+                        }
+                      },
+                      "required": false
+                    },
+                    "rrinfo_entries": {
+                      "type": {
+                        "name": "MemoryGenericEntries",
+                        "fields": {
+                          "count": {
+                            "type": "int",
+                            "required": true
+                          },
+                          "bytes": {
+                            "type": "int",
+                            "required": true
+                          }
+                        }
+                      },
+                      "required": false
+                    },
+                    "as_path_entries": {
+                      "type": {
+                        "type": "ref",
+                        "name": "MemoryGenericEntries"
+                      },
+                      "required": false
+                    },
+                    "community_entries": {
+                      "type": {
+                        "type": "ref",
+                        "name": "MemoryGenericEntries"
+                      },
+                      "required": false
+                    },
+                    "extended_community_entries": {
+                      "type": {
+                        "type": "ref",
+                        "name": "MemoryGenericEntries"
+                      },
+                      "required": false
+                    },
+                    "route_map_cache_entries": {
+                      "type": {
+                        "type": "ref",
+                        "name": "MemoryGenericEntries"
+                      },
+                      "required": false
+                    },
+                    "filter_list_cache_entries": {
+                      "type": {
+                        "type": "ref",
+                        "name": "MemoryGenericEntries"
+                      },
+                      "required": false
+                    },
+                    "total_bytes": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": true
+              },
+              "activity": {
+                "type": {
+                  "name": "ActivityInfo",
+                  "fields": {
+                    "prefixes_current": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "prefixes_total": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "paths_current": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "paths_total": {
+                      "type": "int",
+                      "required": true
+                    },
+                    "scan_interval_secs": {
+                      "type": "int",
+                      "required": true
+                    }
+                  }
+                },
+                "required": false
+              },
+              "neighbors": {
+                "type": {
+                  "type": "dict",
+                  "key": "str",
+                  "value": {
+                    "name": "NeighborEntry",
+                    "fields": {
+                      "version": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "remote_as": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "msg_rcvd": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "msg_sent": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "tbl_ver": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "in_queue": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "out_queue": {
+                        "type": "int",
+                        "required": true
+                      },
+                      "up_down": {
+                        "type": "str",
+                        "required": true
+                      },
+                      "state_pfxrcd": {
+                        "type": "str",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "required": true
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "examples": []
+}
