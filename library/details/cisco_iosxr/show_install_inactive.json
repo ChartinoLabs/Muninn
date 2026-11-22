@@ -21,7 +21,18 @@
             }
           }
         },
-        "required": true
+        "required": false
+      },
+      "package_count": {
+        "type": "int",
+        "required": false
+      },
+      "inactive_packages": {
+        "type": {
+          "type": "list",
+          "items": "str"
+        },
+        "required": false
       }
     }
   },
@@ -37,6 +48,29 @@
             ]
           }
         }
+      }
+    },
+    {
+      "name": "IOS-XR 7.x flat layout with a count header and 14 inactive SMU packages",
+      "input": "Mon Jan  8 14:22:31.456 UTC\n14 inactive package(s) found:\n    asr9k-mpls-x64-1.0.0.3-r71121.CSCwu08799\n    asr9k-bgp-x64-1.0.0.8-r71121.CSCwu14807\n    asr9k-iosxr-fwding-64-1.0.0.22-r71121.CSCwu14817\n    asr9k-iosxr-routing-64-1.0.0.2-r71121.CSCwv19178\n    asr9k-iosxr-infra-64-1.0.0.16-r71121.CSCwu36622\n    asr9k-isis-x64-1.0.0.4-r71121.CSCwu13271\n    asr9k-iosxr-fwding-64-1.0.0.27-r71121.CSCwv36143\n    asr9k-mcast-x64-1.0.0.4-r71121.CSCwv19180\n    asr9k-iosxr-infra-64-1.0.0.15-r71121.CSCwv19171\n    asr9k-ospf-x64-1.0.0.3-r71121.CSCwv40741\n    asr9k-mgbl-x64-1.0.0.2-r71121.CSCwv19173\n    asr9k-mpls-te-rsvp-x64-1.0.0.1-r71121.CSCwv19181\n    asr9k-iosxr-infra-64-1.0.0.17-r71121.CSCwv19170\n    asr9k-isis-x64-1.0.0.5-r71121.CSCwv45645\n",
+      "expected": {
+        "package_count": 14,
+        "inactive_packages": [
+          "asr9k-mpls-x64-1.0.0.3-r71121.CSCwu08799",
+          "asr9k-bgp-x64-1.0.0.8-r71121.CSCwu14807",
+          "asr9k-iosxr-fwding-64-1.0.0.22-r71121.CSCwu14817",
+          "asr9k-iosxr-routing-64-1.0.0.2-r71121.CSCwv19178",
+          "asr9k-iosxr-infra-64-1.0.0.16-r71121.CSCwu36622",
+          "asr9k-isis-x64-1.0.0.4-r71121.CSCwu13271",
+          "asr9k-iosxr-fwding-64-1.0.0.27-r71121.CSCwv36143",
+          "asr9k-mcast-x64-1.0.0.4-r71121.CSCwv19180",
+          "asr9k-iosxr-infra-64-1.0.0.15-r71121.CSCwv19171",
+          "asr9k-ospf-x64-1.0.0.3-r71121.CSCwv40741",
+          "asr9k-mgbl-x64-1.0.0.2-r71121.CSCwv19173",
+          "asr9k-mpls-te-rsvp-x64-1.0.0.1-r71121.CSCwv19181",
+          "asr9k-iosxr-infra-64-1.0.0.17-r71121.CSCwv19170",
+          "asr9k-isis-x64-1.0.0.5-r71121.CSCwv45645"
+        ]
       }
     }
   ]
