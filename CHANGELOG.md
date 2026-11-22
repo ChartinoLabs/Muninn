@@ -4,6 +4,13 @@ All notable changes to Muninn are documented in this file.
 
 <!-- towncrier release notes start -->
 
+## 0.10.1 - 2026-11-22
+
+### Fixed Parsers
+
+- Parse the IOS-XR 7.x `show install inactive` output for an empty software repository ("No inactive package(s) in software repository") as zero inactive packages instead of failing. ([#1504](https://github.com/ChartinoLabs/Muninn/pull/1504))
+
+
 ## 0.10.0 - 2026-11-22
 
 ### Fixed Parsers
