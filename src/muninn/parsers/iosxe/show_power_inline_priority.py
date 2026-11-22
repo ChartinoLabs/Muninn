@@ -1,9 +1,7 @@
 """Parser for 'show power inline priority' command on IOS-XE."""
 
 import re
-from typing import ClassVar, Final, TypedDict
-
-from typing_extensions import NotRequired
+from typing import ClassVar, Final, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser

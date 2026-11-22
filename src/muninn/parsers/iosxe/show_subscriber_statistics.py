@@ -1,7 +1,7 @@
 """Parser for 'show subscriber statistics' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -58,4 +58,4 @@ class ShowSubscriberStatisticsParser(BaseParser[ShowSubscriberStatisticsResult])
         if not metrics:
             msg = "No subscriber statistics lines parsed"
             raise ValueError(msg)
-        return cast(ShowSubscriberStatisticsResult, {"metrics": metrics})
+        return {"metrics": metrics}

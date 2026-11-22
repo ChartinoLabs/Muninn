@@ -1,7 +1,7 @@
 """Parser for 'show sdwan tenant-summary' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -75,14 +75,11 @@ class _SdwanTenantAcc:
         if not self.tenants and self.max_t == 0 and self.active == 0:
             msg = "No SD-WAN tenant summary data"
             raise ValueError(msg)
-        return cast(
-            ShowSdwanTenantSummaryResult,
-            {
-                "max_tenants": self.max_t,
-                "num_active_tenants": self.active,
-                "tenants": self.tenants,
-            },
-        )
+        return {
+            "max_tenants": self.max_t,
+            "num_active_tenants": self.active,
+            "tenants": self.tenants,
+        }
 
 
 def _parse_sdwan_tenant_summary(output: str) -> ShowSdwanTenantSummaryResult:

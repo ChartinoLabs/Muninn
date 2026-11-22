@@ -1,9 +1,7 @@
 """Parser for 'show ipv6 interface brief' command on IOS."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -92,4 +90,4 @@ class ShowIpv6InterfaceBriefParser(
             msg = "No valid interface entries found in output"
             raise ValueError(msg)
 
-        return cast(ShowIpv6InterfaceBriefResult, {"interfaces": interfaces})
+        return {"interfaces": interfaces}

@@ -1,7 +1,7 @@
 """Parser for 'show redundancy history reverse' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -89,4 +89,4 @@ class ShowRedundancyHistoryReverseParser(
             msg = "No history entries found in output"
             raise ValueError(msg)
 
-        return cast(ShowRedundancyHistoryReverseResult, {"entries": entries})
+        return {"entries": entries}

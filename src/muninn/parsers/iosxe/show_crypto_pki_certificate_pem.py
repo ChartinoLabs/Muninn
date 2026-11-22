@@ -1,9 +1,7 @@
 """Parser for 'show crypto pki certificate pem' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -174,7 +172,4 @@ class ShowCryptoPkiCertificatePemParser(
                 "be from 'show crypto pki certificate pem'."
             )
             raise ValueError(msg)
-        return cast(
-            ShowCryptoPkiCertificatePemResult,
-            {"trustpoints": state.trustpoints},
-        )
+        return {"trustpoints": state.trustpoints}

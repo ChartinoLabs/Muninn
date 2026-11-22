@@ -1,9 +1,7 @@
 """Parser for 'show vrf' command on Arista EOS."""
 
 import re
-from typing import ClassVar, NamedTuple, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NamedTuple, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser

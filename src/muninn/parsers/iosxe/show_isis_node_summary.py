@@ -1,7 +1,7 @@
 """Parser for 'show isis node summary' command on Cisco IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -133,4 +133,4 @@ class ShowIsisNodeSummaryParser(BaseParser["ShowIsisNodeSummaryResult"]):
                 for level_key, nodes in levels.items()
             }
 
-        return cast(ShowIsisNodeSummaryResult, {"tags": result_tags})
+        return {"tags": result_tags}

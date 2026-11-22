@@ -1,7 +1,7 @@
 """Parser for 'show diagnostic status' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -85,4 +85,4 @@ class ShowDiagnosticStatusParser(BaseParser[ShowDiagnosticStatusResult]):
         if not cards:
             msg = "No diagnostic status entries parsed"
             raise ValueError(msg)
-        return cast(ShowDiagnosticStatusResult, {"cards": cards})
+        return {"cards": cards}

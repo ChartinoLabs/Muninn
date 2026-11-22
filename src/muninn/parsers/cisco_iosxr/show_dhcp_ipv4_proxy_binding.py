@@ -1,7 +1,7 @@
 """Parser for 'show dhcp ipv4 proxy binding' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -93,4 +93,4 @@ class ShowDhcpIpv4ProxyBindingParser(BaseParser[ShowDhcpIpv4ProxyBindingResult])
             msg = "No DHCPv4 proxy bindings found in output"
             raise ValueError(msg)
 
-        return cast(ShowDhcpIpv4ProxyBindingResult, {"vrfs": vrfs})
+        return {"vrfs": vrfs}

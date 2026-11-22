@@ -9,9 +9,7 @@ Output is keyed by canonical local interface name.
 """
 
 import re
-from typing import ClassVar, Literal, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, Literal, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser

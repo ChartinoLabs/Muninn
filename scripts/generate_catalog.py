@@ -14,8 +14,6 @@ import typing
 from pathlib import Path
 from typing import Any
 
-import typing_extensions
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -45,7 +43,7 @@ def _type_to_schema(t: Any, globalns: dict[str, object], seen: set[int]) -> obje
     args = typing.get_args(t)
 
     # NotRequired[X] → unwrap
-    if origin is typing_extensions.NotRequired:
+    if origin is typing.NotRequired:
         return _type_to_schema(args[0], globalns, seen)
 
     # TypedDict → recurse

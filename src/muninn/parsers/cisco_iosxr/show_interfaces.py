@@ -1,9 +1,7 @@
 """Parser for 'show interfaces' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -366,7 +364,7 @@ class ShowInterfacesParser(BaseParser[ShowInterfacesResult]):
             msg = "No interface entries found in output"
             raise ValueError(msg)
 
-        return cast(ShowInterfacesResult, {"interfaces": interfaces})
+        return {"interfaces": interfaces}
 
     @classmethod
     def _finalize_entry(

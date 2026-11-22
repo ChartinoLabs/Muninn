@@ -1,9 +1,7 @@
 """Parser for 'show ip ospf database opaque-link' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -189,4 +187,4 @@ class ShowIpOspfDatabaseOpaqueLinkParser(
             msg = "No OSPF processes found in output"
             raise ValueError(msg)
 
-        return cast(ShowIpOspfDatabaseOpaqueLinkResult, {"processes": processes})
+        return {"processes": processes}
