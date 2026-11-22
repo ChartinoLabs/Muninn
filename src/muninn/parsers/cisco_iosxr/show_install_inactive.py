@@ -25,7 +25,8 @@ class ShowInstallInactiveResult(TypedDict):
         sdrs: Classic layout. Dict keyed by SDR name (e.g. "Owner")
             mapping to SDR details including the list of inactive packages.
         package_count: IOS-XR 7.x layout. The count from the
-            "N inactive package(s) found:" header.
+            "N inactive package(s) found:" header, or 0 when the device
+            reports "No inactive package(s)".
         inactive_packages: IOS-XR 7.x layout. The inactive packages, in
             the order the device lists them.
     """
@@ -52,6 +53,11 @@ class ShowInstallInactiveParser(BaseParser[ShowInstallInactiveResult]):
     _SDR_NAME = re.compile(r"^\s+(?P<sdr_name>\S+)\s*$")
     # IOS-XR 7.x: "14 inactive package(s) found:" followed by indented packages.
     _FLAT_HEADER = re.compile(r"^(?P<count>\d+) inactive package\(s\) found:\s*$")
+    # IOS-XR 7.x with an empty repository:
+    # "No inactive package(s) in software repository".
+    _NO_PACKAGES = re.compile(
+        r"^No inactive package\(s\)(?: in software repository)?\s*$"
+    )
 
     @classmethod
     def parse(cls, output: str) -> ShowInstallInactiveResult:
@@ -108,6 +114,8 @@ class ShowInstallInactiveParser(BaseParser[ShowInstallInactiveResult]):
         """Parse the IOS-XR 7.x layout, or return None if it is not that layout."""
         lines = iter(output.splitlines())
         for line in lines:
+            if cls._NO_PACKAGES.match(line.strip()):
+                return {"package_count": 0, "inactive_packages": []}
             if header := cls._FLAT_HEADER.match(line.strip()):
                 break
         else:
