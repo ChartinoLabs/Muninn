@@ -1,7 +1,7 @@
 """Parser for 'show interfaces brief' / 'show interface brief' on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -92,4 +92,4 @@ class ShowInterfacesBriefParser(BaseParser[ShowInterfacesBriefResult]):
             msg = "No interface entries found in output"
             raise ValueError(msg)
 
-        return cast(ShowInterfacesBriefResult, {"interfaces": interfaces})
+        return {"interfaces": interfaces}

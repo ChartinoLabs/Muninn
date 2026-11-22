@@ -1,9 +1,7 @@
 """Parser for 'show dlep counters' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -192,4 +190,4 @@ class ShowDlepCountersParser(BaseParser[ShowDlepCountersResult]):
         if not sections:
             msg = "No DLEP counter sections parsed"
             raise ValueError(msg)
-        return cast(ShowDlepCountersResult, {"sections": sections})
+        return {"sections": sections}

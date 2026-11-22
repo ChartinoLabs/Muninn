@@ -1,9 +1,7 @@
 """Parser for 'show network-clocks synchronization' command on IOS-XE."""
 
 import re
-from typing import ClassVar, Final, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, Final, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -128,10 +126,7 @@ def _parse_network_clocks_synchronization(
     if not acc.settings and not acc.interfaces:
         msg = "No network-clocks synchronization data parsed"
         raise ValueError(msg)
-    return cast(
-        ShowNetworkClocksSynchronizationResult,
-        {"settings": acc.settings, "interfaces": acc.interfaces},
-    )
+    return {"settings": acc.settings, "interfaces": acc.interfaces}
 
 
 @register(OS.CISCO_IOSXE, "show network-clocks synchronization")

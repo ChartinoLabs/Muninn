@@ -1,7 +1,7 @@
 """Parser for 'show ip ospf request-list' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -147,4 +147,4 @@ class ShowIpOspfRequestListParser(BaseParser[ShowIpOspfRequestListResult]):
             msg = "No OSPF processes found in output"
             raise ValueError(msg)
 
-        return cast(ShowIpOspfRequestListResult, {"processes": result})
+        return {"processes": result}

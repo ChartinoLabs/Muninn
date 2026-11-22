@@ -1,7 +1,7 @@
 """Parser for 'show subscriber session' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -84,7 +84,4 @@ class ShowSubscriberSessionParser(BaseParser[ShowSubscriberSessionResult]):
         if total is None:
             msg = "Total sessions line not found"
             raise ValueError(msg)
-        return cast(
-            ShowSubscriberSessionResult,
-            {"total_sessions": total, "sessions": sessions},
-        )
+        return {"total_sessions": total, "sessions": sessions}

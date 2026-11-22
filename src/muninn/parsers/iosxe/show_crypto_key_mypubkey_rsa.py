@@ -1,9 +1,7 @@
 """Parser for 'show crypto key mypubkey rsa' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -243,4 +241,4 @@ class ShowCryptoKeyMypubkeyRsaParser(BaseParser[ShowCryptoKeyMypubkeyRsaResult])
             msg = "No public RSA key entries found in output."
             raise ValueError(msg)
 
-        return cast(ShowCryptoKeyMypubkeyRsaResult, {"keys": keys})
+        return {"keys": keys}

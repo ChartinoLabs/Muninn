@@ -1,7 +1,7 @@
 """Parser for 'show errdisable flap-values' command on IOS."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -74,4 +74,4 @@ class ShowErrdisableFlapValuesParser(BaseParser[ShowErrdisableFlapValuesResult])
                 "time_seconds": int(match.group("time_seconds")),
             }
 
-        return cast(ShowErrdisableFlapValuesResult, {"reasons": reasons})
+        return {"reasons": reasons}

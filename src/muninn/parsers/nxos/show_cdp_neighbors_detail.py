@@ -3,9 +3,7 @@
 import re
 from collections.abc import Iterable
 from dataclasses import dataclass, field
-from typing import Any, ClassVar, Literal, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import Any, ClassVar, Literal, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser

@@ -1,7 +1,7 @@
 """Parser for 'show crypto pki certificate storage' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -65,7 +65,4 @@ class ShowCryptoPkiCertificateStorageParser(
             msg = "No trustpoint certificate storage entries found in output"
             raise ValueError(msg)
 
-        return cast(
-            ShowCryptoPkiCertificateStorageResult,
-            {"trustpoints": trustpoints},
-        )
+        return {"trustpoints": trustpoints}

@@ -1,9 +1,7 @@
 """Parser for 'show endpoint-tracker' command on IOS."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -109,4 +107,4 @@ class ShowEndpointTrackerParser(
 
             interfaces[interface]["trackers"][record_name] = entry
 
-        return cast(ShowEndpointTrackerResult, {"interfaces": interfaces})
+        return {"interfaces": interfaces}

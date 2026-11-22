@@ -1,9 +1,7 @@
 """Parser for 'show pppatm session' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -147,15 +145,12 @@ class _PppAtmAcc:
         if self.sessions_total is None and not self.sessions:
             msg = "No PPPoATM session data parsed"
             raise ValueError(msg)
-        return cast(
-            ShowPppAtmSessionResult,
-            {
-                "summary_lines": self.summary_lines,
-                "sessions_in_state": self.sessions_in_state,
-                "sessions_total": self.sessions_total,
-                "sessions": self.sessions,
-            },
-        )
+        return {
+            "summary_lines": self.summary_lines,
+            "sessions_in_state": self.sessions_in_state,
+            "sessions_total": self.sessions_total,
+            "sessions": self.sessions,
+        }
 
 
 def _parse_pppatm_session(output: str) -> ShowPppAtmSessionResult:

@@ -10,9 +10,7 @@ IPv6).
 
 import re
 from collections.abc import Callable
-from typing import ClassVar, TypedDict
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser

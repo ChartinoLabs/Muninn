@@ -14,9 +14,7 @@ as continuation lines with status codes but no repeated network field.
 
 import re
 from collections.abc import Callable
-from typing import ClassVar, TypedDict
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -549,7 +547,7 @@ def _apply_optional_fields(
     """Apply optional header fields and totals to the result dict."""
     for key, coerce in _OPTIONAL_HEADER_KEYS:
         if key in header:
-            result[key] = coerce(header[key])  # type: ignore[literal-required]  # ty: ignore[invalid-key]
+            result[key] = coerce(header[key])  # type: ignore[literal-required]  # ty: ignore[non-literal-typed-dict-key]
     if total_prefixes is not None:
         result["total_prefixes"] = total_prefixes
     if total_paths is not None:

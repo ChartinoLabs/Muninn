@@ -1,9 +1,7 @@
 """Parser for 'show mac security participants detail' command on Arista EOS."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -187,7 +185,4 @@ class ShowMacSecurityParticipantsDetailParser(
             msg = "No MACsec participant interfaces found in output"
             raise ValueError(msg)
 
-        return cast(
-            ShowMacSecurityParticipantsDetailResult,
-            {"interfaces": interfaces},
-        )
+        return {"interfaces": interfaces}

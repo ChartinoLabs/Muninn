@@ -1,9 +1,7 @@
 """Parser for 'show ospf neighbor' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -109,7 +107,7 @@ class ShowOspfNeighborParser(BaseParser["ShowOspfNeighborResult"]):
             msg = "No OSPF neighbors found in output"
             raise ValueError(msg)
 
-        return cast("ShowOspfNeighborResult", {"processes": processes})
+        return {"processes": processes}
 
     @classmethod
     def _process_line(

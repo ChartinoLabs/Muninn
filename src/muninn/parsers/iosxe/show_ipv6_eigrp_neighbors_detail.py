@@ -1,9 +1,7 @@
 """Parser for 'show ipv6 eigrp neighbors detail' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser

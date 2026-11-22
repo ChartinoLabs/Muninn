@@ -1,9 +1,7 @@
 """Parser for 'show arp' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -94,4 +92,4 @@ class ShowArpParser(BaseParser[ShowArpResult]):
             msg = "No ARP entries found in output"
             raise ValueError(msg)
 
-        return cast(ShowArpResult, {"arp_entries": arp_entries})
+        return {"arp_entries": arp_entries}

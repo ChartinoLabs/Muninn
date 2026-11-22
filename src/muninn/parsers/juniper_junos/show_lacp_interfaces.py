@@ -1,9 +1,7 @@
 """Parser for 'show lacp interfaces' command on Juniper Junos."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -142,10 +140,7 @@ class ShowLacpInterfacesParser(BaseParser[ShowLacpInterfacesResult]):
             msg = "No aggregated interfaces found in output"
             raise ValueError(msg)
 
-        return cast(
-            ShowLacpInterfacesResult,
-            {"aggregated_interfaces": aggregated},
-        )
+        return {"aggregated_interfaces": aggregated}
 
     @classmethod
     def _parse_state_line(
@@ -173,7 +168,7 @@ class ShowLacpInterfacesParser(BaseParser[ShowLacpInterfacesResult]):
         )
 
         if member_name not in members:
-            members[member_name] = cast(MemberInterfaceEntry, {})
+            members[member_name] = {}
 
         member_dict = cast(dict[str, object], members[member_name])
         member_dict[role] = role_entry
@@ -197,7 +192,7 @@ class ShowLacpInterfacesParser(BaseParser[ShowLacpInterfacesResult]):
         )
 
         if member_name not in members:
-            members[member_name] = cast(MemberInterfaceEntry, {})
+            members[member_name] = {}
 
         member_dict = cast(dict[str, object], members[member_name])
         member_dict["protocol"] = protocol_entry

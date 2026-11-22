@@ -1,9 +1,7 @@
 """Parser for 'show interface logical' command on Palo Alto PAN-OS."""
 
 import re
-from typing import ClassVar, Literal, TypeAlias, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, Literal, NotRequired, TypeAlias, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser

@@ -1,9 +1,7 @@
 """Parser for 'show bgp neighbor' command on Juniper Junos."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -649,4 +647,4 @@ class ShowBgpNeighborParser(BaseParser["ShowBgpNeighborResult"]):
             msg = "No BGP neighbors found in output"
             raise ValueError(msg)
 
-        return cast(ShowBgpNeighborResult, {"neighbors": neighbors})
+        return {"neighbors": neighbors}

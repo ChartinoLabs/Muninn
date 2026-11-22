@@ -1,7 +1,7 @@
 """Parser for 'show subscriber lite-session' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
+from typing import ClassVar, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -76,7 +76,4 @@ class ShowSubscriberLiteSessionParser(BaseParser[ShowSubscriberLiteSessionResult
         if total == 0 and not sessions:
             msg = "No lite session data parsed"
             raise ValueError(msg)
-        return cast(
-            ShowSubscriberLiteSessionResult,
-            {"total_lite_sessions_up": total, "sessions": sessions},
-        )
+        return {"total_lite_sessions_up": total, "sessions": sessions}

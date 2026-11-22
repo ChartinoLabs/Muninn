@@ -1,9 +1,7 @@
 """Parser for 'show ip ospf events' command on IOS-XE."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict, cast
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -97,14 +95,11 @@ class ShowIpOspfEventsParser(BaseParser["ShowIpOspfEventsResult"]):
             msg = "Missing required field: router_id"
             raise ValueError(msg)
 
-        return cast(
-            "ShowIpOspfEventsResult",
-            {
-                "router_id": router_id,
-                "process_id": process_id,
-                "events": events,
-            },
-        )
+        return {
+            "router_id": router_id,
+            "process_id": process_id,
+            "events": events,
+        }
 
     @classmethod
     def _parse_event_block(cls, block: str) -> EventEntry | None:
