@@ -4,6 +4,13 @@ All notable changes to Muninn are documented in this file.
 
 <!-- towncrier release notes start -->
 
+## 0.11.0 - 2026-11-22
+
+### Added Parsers
+
+- Added parser support for `show bgp vrf <vrf> all summary` on Cisco IOS-XE. ([#1506](https://github.com/ChartinoLabs/Muninn/pull/1506))
+
+
 ## 0.10.1 - 2026-11-22
 
 ### Fixed Parsers
