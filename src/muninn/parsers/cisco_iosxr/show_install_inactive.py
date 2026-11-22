@@ -1,9 +1,7 @@
 """Parser for 'show install inactive' command on Cisco IOS-XR."""
 
 import re
-from typing import ClassVar, TypedDict, cast
-
-from typing_extensions import NotRequired
+from typing import ClassVar, NotRequired, TypedDict
 
 from muninn.os import OS
 from muninn.parser import BaseParser
@@ -120,13 +118,10 @@ class ShowInstallInactiveParser(BaseParser[ShowInstallInactiveResult]):
             for line in lines
             if (match := cls._PACKAGE.match(line))
         ]
-        return cast(
-            ShowInstallInactiveResult,
-            {
-                "package_count": int(header.group("count")),
-                "inactive_packages": packages,
-            },
-        )
+        return {
+            "package_count": int(header.group("count")),
+            "inactive_packages": packages,
+        }
 
     @classmethod
     def _handle_sdr_line(
