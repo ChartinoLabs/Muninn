@@ -4,6 +4,27 @@ All notable changes to Muninn are documented in this file.
 
 <!-- towncrier release notes start -->
 
+## 0.10.0 - 2026-11-22
+
+### Fixed Parsers
+
+- Parse the IOS-XR 7.x layout of `show install inactive` on Cisco IOS-XR, which lists inactive packages under an "N inactive package(s) found:" header instead of per SDR. ([#1499](https://github.com/ChartinoLabs/Muninn/pull/1499))
+- Read route targets from Cisco IOS-XR `show vrf all` output that prints the AFI and SAFI on the same line; previously every VRF came back with no address families. ([#1500](https://github.com/ChartinoLabs/Muninn/pull/1500))
+
+### Core Fixes
+
+- The minimum supported netutils is now 1.17.3. With netutils 1.17.2, 17 parser tests failed on interface name canonicalization (for example `TenGigE0/0/0/20`).
+- `ParserTag` and `ExecutionMode` are now `enum.StrEnum` subclasses, so `str()` and f-strings give the member's value (for example `"BGP"`) instead of the qualified name (`"ParserTag.BGP"`). Equality with plain strings is unchanged. This also fixes the parser library in the docs, which listed tags as `ParserTag.BGP`.
+
+### Breaking Changes
+
+- Muninn now requires Python 3.11 or later. Python 3.10 is no longer supported, and `typing_extensions` is no longer a direct dependency.
+
+### Internal
+
+- Updated the development and docs dependencies (ruff 0.17.6, ty 0.0.107, pre-commit 4.7.0, mkdocs-material 9.8.2), the locked runtime dependencies (pydantic-settings 2.16.3, pydantic 2.14.4), and the GitHub Actions (setup-uv v10.4.0, setup-python v7). Fixed the diagnostics ty 0.0.107 reports: removed 112 redundant casts, typed the VRRP field dispatch tables with `Callable`, and updated the renamed rule codes in ignore comments.
+
+
 ## 0.9.0 - 2026-11-18
 
 ### Updated Parsers
