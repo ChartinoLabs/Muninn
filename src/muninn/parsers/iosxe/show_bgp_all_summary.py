@@ -3,6 +3,9 @@
 This command produces output identical in format to 'show ip bgp summary'
 with multiple address-family sections.  We reuse the existing parsing
 logic and register it under the additional command name.
+
+'show bgp vrf <vrf> all summary' prints the same per-address-family layout
+scoped to one VRF, so it is registered on this parser as well.
 """
 
 from typing import ClassVar
@@ -24,6 +27,7 @@ __all__ = ["ShowBgpAllSummaryParser"]
 
 @register(OS.CISCO_IOSXE, "show bgp all summary")
 @register(OS.CISCO_IOSXE, "show ip bgp all summary")
+@register(OS.CISCO_IOSXE, r"show bgp vrf (?P<vrf>\S+) all summary")
 class ShowBgpAllSummaryParser(BaseParser["ShowIpBgpSummaryResult"]):
     """Parser for 'show bgp all summary' command on IOS-XE.
 
