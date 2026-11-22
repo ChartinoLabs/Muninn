@@ -36,9 +36,11 @@ class ShowVrfAllResult(TypedDict):
 # VRF header line pattern: starts with non-space VRF name followed by RD
 _VRF_LINE = re.compile(r"^(?P<name>\S+)\s+(?P<rd>.+?)\s*$")
 
-# Route target continuation line
+# Route target continuation line. The SAFI follows the AFI on the same line
+# at normal terminal width, and wraps onto its own line on a narrow terminal.
 _RT_LINE = re.compile(
-    r"^\s+(?P<type>import|export)\s+(?P<value>\S+)\s+(?P<afi>IPV[46])\s*$"
+    r"^\s+(?P<type>import|export)\s+(?P<value>\S+)\s+(?P<afi>IPV[46])"
+    r"(?:\s+(?P<safi>[A-Za-z]+))?\s*$"
 )
 
 # SAFI continuation line (e.g., "Unicast", "Multicast")
@@ -158,6 +160,8 @@ class ShowVrfAllParser(BaseParser["ShowVrfAllResult"]):
                 value=rt_match.group("value"),
                 afi=rt_match.group("afi").lower(),
             )
+            if safi := rt_match.group("safi"):
+                state.commit_rt_with_safi(safi.lower())
             return
 
         # SAFI continuation line (e.g., "Unicast")
